@@ -15,23 +15,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.compose_multiplatform
+import org.example.hit.heal.utils.SampleScreen
 
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
-                }
-            }
-        }
-    }
+    SampleScreen()
 }
