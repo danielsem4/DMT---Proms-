@@ -1,4 +1,4 @@
-package org.example.hit.heal.utils
+package org.example.hit.heal.presentaion
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,8 +30,6 @@ fun BaseScreen(
     onNextClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val primaryColor = Color(0xFF6FCF97)
-    val backgroundColor = Color(0xFFDFF5E9)
 
     Column(
         modifier = Modifier
