@@ -47,7 +47,7 @@ fun BaseScreen(
             Text(
                 text = title,
                 color = Color.White,
-                style = MaterialTheme.typography.h6
+                style = MaterialTheme.typography.h5
             )
         }
 
@@ -56,7 +56,7 @@ fun BaseScreen(
             modifier = Modifier
                 .weight(1f)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             content()
