@@ -15,13 +15,11 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun BaseScreen(
@@ -87,18 +85,5 @@ fun BaseScreen(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun SampleScreen() {
-    BaseScreen(
-        title = "Sample",
-        onPrevClick = { /* Handle previous */ },
-        onNextClick = { /* Handle next */ }
-    ) {
-        Text(text = "How do you feel?")
-        TextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
     }
 }
