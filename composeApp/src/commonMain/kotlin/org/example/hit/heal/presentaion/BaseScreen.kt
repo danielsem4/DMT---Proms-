@@ -15,12 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.example.hit.heal.presentaion.components.RoundedButton
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun BaseScreen(
@@ -69,7 +71,7 @@ fun BaseScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 12.dp),
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     onPrevClick?.let {
@@ -82,5 +84,19 @@ fun BaseScreen(
                 }
             }
         }
+    }
+}
+
+
+@Preview
+@Composable
+fun SampleScreen() {
+    BaseScreen(
+        title = "Sample",
+        onPrevClick = { /* Handle previous */ },
+        onNextClick = { /* Handle next */ }
+    ) {
+        Text(text = "How do you feel?")
+        TextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
     }
 }
