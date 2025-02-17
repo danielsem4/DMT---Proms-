@@ -29,7 +29,7 @@ fun BaseScreen(
     title: String,
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable() (ColumnScope.() -> Unit)
 ) {
     MaterialTheme {
 
@@ -59,9 +59,7 @@ fun BaseScreen(
 
             // Dynamic Content
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(16.dp),
+                modifier = Modifier.padding(8.dp).weight(1f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -69,23 +67,26 @@ fun BaseScreen(
             }
 
             // Bottom Navigation Bar
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                onPrevClick?.let {
-                    RoundedButton("Previous", Modifier, it)
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                onNextClick?.let {
-                    RoundedButton("Next", Modifier, it)
+            if (onPrevClick != null || onNextClick != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    onPrevClick?.let {
+                        RoundedButton("Previous", Modifier, it)
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    onNextClick?.let {
+                        RoundedButton("Next", Modifier, it)
+                    }
                 }
             }
         }
     }
 }
+
 
 @Preview
 @Composable
