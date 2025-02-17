@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentaion.components
+package org.example.hit.heal.presentaion
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.example.hit.heal.presentaion.BaseScreen
+import org.example.hit.heal.presentaion.components.CustomSlider
 
 @Composable
 fun EvaluationSlider(onPrevClick: (() -> Unit)? = null, onNextClick: (() -> Unit)? = null) {
