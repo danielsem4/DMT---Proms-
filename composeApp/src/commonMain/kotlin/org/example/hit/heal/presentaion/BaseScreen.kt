@@ -13,9 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -24,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.example.hit.heal.presentaion.components.RoundedButton
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -78,21 +76,11 @@ fun BaseScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 onPrevClick?.let {
-                    Button(
-                        onClick = it, colors = ButtonDefaults.buttonColors(primaryColor),
-                        shape = RoundedCornerShape(50)
-                    ) {
-                        Text("Previous", color = Color.White)
-                    }
+                    RoundedButton("Previous", Modifier, it)
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 onNextClick?.let {
-                    Button(
-                        onClick = it, colors = ButtonDefaults.buttonColors(primaryColor),
-                        shape = RoundedCornerShape(50)
-                    ) {
-                        Text("Next", color = Color.White)
-                    }
+                    RoundedButton("Next", Modifier, it)
                 }
             }
         }
