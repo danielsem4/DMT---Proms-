@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentaion
+package org.example.hit.heal.presentaion.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.BasicTextField

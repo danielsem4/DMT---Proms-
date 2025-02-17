@@ -12,5 +12,5 @@ fun App() {
     val viewModel = remember { EvaluationViewModel() }
     EvaluationsList(viewModel, onItemClick = { evaluation ->
         println("Clicked: ${evaluation.name}")
-    })
+    },{},{})
 }

@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentaion
+package org.example.hit.heal.presentaion.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
