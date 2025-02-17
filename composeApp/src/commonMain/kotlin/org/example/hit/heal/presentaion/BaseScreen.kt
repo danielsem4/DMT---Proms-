@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.example.hit.heal.presentaion.components.RoundedButton
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun BaseScreen(
@@ -83,18 +82,5 @@ fun BaseScreen(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun SampleScreen() {
-    BaseScreen(
-        title = "Sample",
-        onPrevClick = { /* Handle previous */ },
-        onNextClick = { /* Handle next */ }
-    ) {
-        Text(text = "How do you feel?")
-        TextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
     }
 }
