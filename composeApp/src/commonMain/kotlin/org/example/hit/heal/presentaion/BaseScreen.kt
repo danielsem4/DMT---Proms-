@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -30,60 +33,66 @@ fun BaseScreen(
     onNextClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    MaterialTheme {
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor)
-    ) {
-        // Top Bar
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(primaryColor)
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = title,
-                color = Color.White,
-                style = MaterialTheme.typography.h6
-            )
-        }
+        val statusBarValues = WindowInsets.safeDrawing.asPaddingValues()
 
-        // Dynamic Content
         Column(
             modifier = Modifier
-                .weight(1f)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .background(backgroundColor)
+                .padding(bottom = statusBarValues.calculateBottomPadding())
         ) {
-            content()
-        }
-
-        // Bottom Navigation Bar
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            onPrevClick?.let {
-                Button(
-                    onClick = it, colors = ButtonDefaults.buttonColors(primaryColor),
-                    shape = RoundedCornerShape(50)
-                ) {
-                    Text("Previous", color = Color.White)
-                }
+            // Top Bar
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(primaryColor)
+                    .padding(12.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = title,
+                    color = Color.White,
+                    style = MaterialTheme.typography.h6,
+                    modifier = Modifier.padding(top = statusBarValues.calculateTopPadding())
+                )
             }
-            Spacer(modifier = Modifier.weight(1f))
-            onNextClick?.let {
-                Button(
-                    onClick = it, colors = ButtonDefaults.buttonColors(primaryColor),
-                    shape = RoundedCornerShape(50)
-                ) {
-                    Text("Next", color = Color.White)
+
+            // Dynamic Content
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                content()
+            }
+
+            // Bottom Navigation Bar
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                onPrevClick?.let {
+                    Button(
+                        onClick = it, colors = ButtonDefaults.buttonColors(primaryColor),
+                        shape = RoundedCornerShape(50)
+                    ) {
+                        Text("Previous", color = Color.White)
+                    }
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                onNextClick?.let {
+                    Button(
+                        onClick = it, colors = ButtonDefaults.buttonColors(primaryColor),
+                        shape = RoundedCornerShape(50)
+                    ) {
+                        Text("Next", color = Color.White)
+                    }
                 }
             }
         }
