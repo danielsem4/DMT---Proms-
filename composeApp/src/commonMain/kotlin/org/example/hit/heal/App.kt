@@ -1,15 +1,13 @@
 package org.example.hit.heal
 
-import androidx.compose.runtime.Composable
-import org.example.hit.heal.presentaion.EvaluationSlider
+import QuestionnaireScreen
+import androidx.compose.runtime.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+import org.example.hit.heal.presentaion.SampleScreen
 
 @Composable
 @Preview
 fun App() {
-//    val viewModel = remember { EvaluationViewModel() }
-//    EvaluationsList(viewModel, onItemClick = { evaluation ->
-//        println("Clicked: ${evaluation.name}")
-//    },{},{})
-    EvaluationSlider {  }
+    QuestionnaireScreen()
 }
