@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.example.hit.heal.presentaion.primaryColor
 
 @Composable
 fun CustomSlider(start: Int, end: Int, onValueChange: ((Int) -> Unit)? = null) {
@@ -34,7 +36,7 @@ fun CustomSlider(start: Int, end: Int, onValueChange: ((Int) -> Unit)? = null) {
                 .weight(1f)
                 .height(40.dp)
                 .padding(horizontal = 8.dp)
-                .background(Color(0xFFE0E0E0), shape = RoundedCornerShape(50))
+                .background(Color.LightGray, shape = RoundedCornerShape(50))
                 .pointerInput(Unit) {
                     detectHorizontalDragGestures { _, dragAmount ->
                         val newValue = (sliderValue + dragAmount / 20)
@@ -47,9 +49,11 @@ fun CustomSlider(start: Int, end: Int, onValueChange: ((Int) -> Unit)? = null) {
                 modifier = Modifier
                     .fillMaxWidth(sliderValue / (end - start).toFloat())
                     .height(40.dp)
-                    .background(Color(0xFF6FCF97), shape = RoundedCornerShape(50))
+                    .background(primaryColor, shape = RoundedCornerShape(50))
             )
         }
         Text(text = end.toString())
     }
+    Text("value: $sliderValue", fontSize = 30.sp)
 }
+
