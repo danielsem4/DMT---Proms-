@@ -1,4 +1,4 @@
-package org.example.hit.heal.domain
+package org.example.hit.heal.evaluations.domain
 
 // ENUM for Frequency
 enum class Frequency {

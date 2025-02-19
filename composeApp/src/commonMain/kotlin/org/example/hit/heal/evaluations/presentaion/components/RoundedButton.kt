@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentaion.components
+package org.example.hit.heal.evaluations.presentaion.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.presentaion.primaryColor
+import org.example.hit.heal.evaluations.presentaion.primaryColor
 
 @Composable
 fun RoundedButton(text: String, modifier: Modifier, onclick: () -> Unit) {

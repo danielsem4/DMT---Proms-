@@ -1,4 +1,4 @@
-package org.example.hit.heal.domain
+package org.example.hit.heal.evaluations.domain
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

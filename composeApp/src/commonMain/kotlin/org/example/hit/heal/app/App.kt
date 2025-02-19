@@ -1,10 +1,8 @@
-package org.example.hit.heal
+package org.example.hit.heal.app
 
 import QuestionnaireScreen
 import androidx.compose.runtime.*
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
-import org.example.hit.heal.presentaion.SampleScreen
 
 @Composable
 @Preview

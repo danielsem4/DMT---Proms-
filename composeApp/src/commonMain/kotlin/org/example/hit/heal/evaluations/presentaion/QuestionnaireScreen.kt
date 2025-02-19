@@ -24,8 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.presentaion.BaseScreen
-import org.example.hit.heal.presentaion.primaryColor
+import org.example.hit.heal.app.BaseScreen
+import org.example.hit.heal.evaluations.presentaion.primaryColor
 
 @Composable
 fun QuestionnaireScreen(onNextClick: (() -> Unit)? = null, onPrevClick: (() -> Unit)? = null) {

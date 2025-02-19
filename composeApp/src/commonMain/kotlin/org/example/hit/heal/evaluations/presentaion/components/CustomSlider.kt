@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentaion.components
+package org.example.hit.heal.evaluations.presentaion.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.presentaion.primaryColor
+import org.example.hit.heal.evaluations.presentaion.primaryColor
 
 @Composable
 fun CustomSlider(start: Int, end: Int, onValueChange: ((Int) -> Unit)? = null) {
