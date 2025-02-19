@@ -1,11 +1,15 @@
 package org.example.hit.heal.app
 
-import QuestionnaireScreen
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import org.example.hit.heal.evaluations.presentaion.DynamicScrollScreen
+import org.example.hit.heal.evaluations.presentaion.ReportExample
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
 fun App() {
-    QuestionnaireScreen()
+    DynamicScrollScreen(
+        content = ReportExample(),
+        onPrev = {}, onNext = {}
+    )
 }
