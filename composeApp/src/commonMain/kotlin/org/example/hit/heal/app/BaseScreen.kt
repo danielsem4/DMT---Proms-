@@ -62,7 +62,7 @@ fun BaseScreen(
             // Dynamic Content
             Column(
                 modifier = Modifier.padding(8.dp).weight(1f),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 content()
