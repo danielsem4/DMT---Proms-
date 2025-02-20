@@ -1,13 +1,16 @@
 package org.example.hit.heal.evaluations.presentaion.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Slider
+import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,43 +20,60 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.evaluations.presentaion.primaryColor
 
 @Composable
-fun CustomSlider(start: Int, end: Int, onValueChange: ((Int) -> Unit)? = null) {
-    var sliderValue by remember { mutableStateOf((end - start) / 2) }
-
-    Row(
-        modifier = Modifier.fillMaxWidth(0.9f),
-        verticalAlignment = Alignment.CenterVertically
+fun RoundedFilledSlider(start: Float, end: Float, onValueChange: ((Float) -> Unit)? = null) {
+    var sliderValue by remember { mutableStateOf(start) }
+    val range = end - start
+    val fillFraction = (sliderValue - start) / range
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(16.dp)
     ) {
-        Text(text = start.toString())
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .height(40.dp)
-                .padding(horizontal = 8.dp)
-                .background(Color.LightGray, shape = RoundedCornerShape(50))
-                .pointerInput(Unit) {
-                    detectHorizontalDragGestures { _, dragAmount ->
-                        val newValue = (sliderValue + dragAmount / 20)
-                        sliderValue = newValue.toInt().coerceIn(start, end)
-                        onValueChange?.invoke(sliderValue)
-                    }
-                }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
         ) {
+            Text(
+                text = start.toInt().toString(),
+                fontSize = 20.sp,
+                modifier = Modifier.padding(end = 8.dp)
+            )
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(sliderValue / (end - start).toFloat())
-                    .height(40.dp)
-                    .background(primaryColor, shape = RoundedCornerShape(50))
+                    .weight(1f)
+                    .height(36.dp)
+                    .background(Color.LightGray, RoundedCornerShape(12.dp))
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(fillFraction)
+                        .fillMaxHeight()
+                        .background(Color(0xFF6FCF97), RoundedCornerShape(12.dp))
+                )
+                Slider(
+                    value = sliderValue,
+                    onValueChange = { newValue ->
+                        sliderValue = newValue
+                        onValueChange?.invoke(newValue)
+                    },
+                    valueRange = start..end,
+                    colors = SliderDefaults.colors(
+                        thumbColor = Color.Transparent,
+                        activeTrackColor = Color.Transparent,
+                        inactiveTrackColor = Color.Transparent
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            Text(
+                text = end.toInt().toString(),
+                fontSize = 20.sp,
+                modifier = Modifier.padding(start = 8.dp)
             )
         }
-        Text(text = end.toString())
     }
-    Text("value: $sliderValue", fontSize = 30.sp)
 }
 

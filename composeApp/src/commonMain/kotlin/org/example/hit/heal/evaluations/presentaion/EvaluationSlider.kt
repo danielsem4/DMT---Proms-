@@ -11,12 +11,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.example.hit.heal.app.BaseScreen
-import org.example.hit.heal.evaluations.presentaion.components.CustomSlider
+import org.example.hit.heal.evaluations.presentaion.components.RoundedFilledSlider
 
 @Composable
 fun EvaluationSlider(onPrevClick: (() -> Unit)? = null, onNextClick: (() -> Unit)? = null) {
-    var sliderValue by remember { mutableStateOf(5) }
+    var sliderValue by remember { mutableStateOf(5f) }
 
     BaseScreen(
         title = "Evaluation", onPrevClick, onNextClick
@@ -25,6 +26,8 @@ fun EvaluationSlider(onPrevClick: (() -> Unit)? = null, onNextClick: (() -> Unit
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CustomSlider(0, 10) { sliderValue = it }
+        RoundedFilledSlider(0f, 10f) { sliderValue = it }
+
+        Text("Value: ${sliderValue.toInt()}", fontSize = 30.sp)
     }
 }
