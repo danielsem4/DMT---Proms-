@@ -43,15 +43,14 @@ fun DynamicScrollScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White, shape = RoundedCornerShape(16.dp))
-                .padding(8.dp),
+                .background(Color.White, shape = RoundedCornerShape(16.dp)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Header Box
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(primaryColor, shape = RoundedCornerShape(16.dp))
+                    .background(primaryColor, shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                     .padding(vertical = 8.dp),
                 contentAlignment = Alignment.Center
             ) {
