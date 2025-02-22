@@ -38,6 +38,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
+            val voyagerVersion = "1.1.0-beta02"
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -46,6 +47,10 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.bundles.voyager.common)
+            implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
+            implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

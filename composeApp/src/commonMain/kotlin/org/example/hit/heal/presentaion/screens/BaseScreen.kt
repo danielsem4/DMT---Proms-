@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentaion
+package org.example.hit.heal.presentaion.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.example.hit.heal.presentaion.backgroundColor
 import org.example.hit.heal.presentaion.components.RoundedButton
+import org.example.hit.heal.presentaion.primaryColor
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -29,6 +31,8 @@ fun BaseScreen(
     title: String,
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
+    prevButtonText: String = "Previous",
+    nextButtonText: String = "Next",
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
     MaterialTheme {
@@ -75,11 +79,11 @@ fun BaseScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     onPrevClick?.let {
-                        RoundedButton("Previous", Modifier, it)
+                        RoundedButton(prevButtonText, Modifier, it)
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     onNextClick?.let {
-                        RoundedButton("Next", Modifier, it)
+                        RoundedButton(nextButtonText, Modifier, it)
                     }
                 }
             }
