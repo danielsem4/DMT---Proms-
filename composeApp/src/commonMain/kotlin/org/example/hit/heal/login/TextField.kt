@@ -1,4 +1,5 @@
-package org.example.hit.heal.login
+package org.example
+
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +13,9 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -102,6 +106,7 @@ fun RoundedTextField(
         shape = RoundedCornerShape(33.dp)
     )
 }
+
 @Composable
 fun PasswordTextField(
     password: String, onValueChange: (String) -> Unit
@@ -113,12 +118,12 @@ fun PasswordTextField(
         value = password,
         onValueChange = onValueChange,
         label = { Text("Password") },
-        leadingIcon = Res.drawable.lock,
+        leadingIcon = Icons.Outlined.Lock,
         iconModifier = Modifier.size(24.dp),
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
-                    painter = painterResource(if (passwordVisible) Res.drawable.eye else Res.drawable.closed_eye),
+                    imageVector = if (passwordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
                     tint = bgGreen
@@ -129,6 +134,7 @@ fun PasswordTextField(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
     )
 }
+
 @Composable
 fun EmailTextField(email: String, onValueChange: (String) -> Unit) = RoundedTextField(
     value = email,
