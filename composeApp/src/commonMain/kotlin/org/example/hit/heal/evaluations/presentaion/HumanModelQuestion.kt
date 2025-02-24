@@ -1,19 +1,26 @@
 package org.example.hit.heal.evaluations.presentaion
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,8 +28,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -31,7 +40,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dmt_proms.composeapp.generated.resources.Res
-import dmt_proms.composeapp.generated.resources.body_image
+import dmt_proms.composeapp.generated.resources.body_back
+import dmt_proms.composeapp.generated.resources.body_front
 import org.example.hit.heal.app.BaseScreen
 import org.jetbrains.compose.resources.painterResource
 
@@ -40,7 +50,10 @@ fun HumanModelQuestion(
     onPrev: () -> Unit,
     onNext: () -> Unit
 ) {
-    val bodyImage: Painter = painterResource(Res.drawable.body_image) // Replace with actual image resource
+    var isFrontView: Boolean by remember { mutableStateOf(true) }
+    val bodyImage: Painter = painterResource(
+        if (isFrontView) Res.drawable.body_front else Res.drawable.body_back
+    )
 
     // Define the pain points (positions are relative to the image)
     val painPoints = listOf(
@@ -55,6 +68,12 @@ fun HumanModelQuestion(
 
     var selectedPoints by remember { mutableStateOf(mutableSetOf<Offset>()) }
     var parentSize by remember { mutableStateOf(IntSize.Zero) }
+
+
+    // Animate the rotation angle based on isFlipped state
+    val rotationAngle by animateFloatAsState(
+        targetValue = if (isFrontView) 180f else 0f
+    )
 
     BaseScreen(
         title = "Evaluation",
@@ -90,7 +109,9 @@ fun HumanModelQuestion(
                     painter = bodyImage,
                     contentDescription = "Human Body",
                     contentScale = ContentScale.Fit,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize().graphicsLayer {
+                        rotationY = rotationAngle
+                    }
                 )
 
                 // Draw dots
@@ -127,6 +148,23 @@ fun HumanModelQuestion(
                             }
                     )
                 }
+            }
+
+            Spacer(Modifier.height(40.dp))
+
+            IconButton(
+                onClick = {
+                    println("Clicked flip body")
+                    isFrontView = !isFrontView
+                },
+                modifier = Modifier.rotate(rotationAngle) // Apply rotation animation
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Refresh,
+                    contentDescription = "Flip image",
+                    tint = primaryColor,
+                    modifier = Modifier.size(50.dp)
+                )
             }
         }
     }
