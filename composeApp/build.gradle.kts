@@ -47,6 +47,9 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(compose.materialIconsExtended)
+            implementation("br.com.devsrsouza.compose.icons:font-awesome:1.1.1")
+
+
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
