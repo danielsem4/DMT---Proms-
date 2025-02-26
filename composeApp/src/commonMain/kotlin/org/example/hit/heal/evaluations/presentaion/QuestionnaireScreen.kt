@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -24,8 +25,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.app.BaseScreen
-import org.example.hit.heal.evaluations.presentaion.primaryColor
+import org.example.hit.heal.core.presentation.BaseScreen
+import org.example.hit.heal.core.presentation.Colors
 
 @Composable
 fun QuestionnaireScreen(onNextClick: (() -> Unit)? = null, onPrevClick: (() -> Unit)? = null) {
@@ -60,9 +61,9 @@ fun QuestionnaireScreen(onNextClick: (() -> Unit)? = null, onPrevClick: (() -> U
 @Composable
 fun OptionItem(option: String, isSelected: Boolean, onSelect: () -> Unit) {
     // Set background, text, and icon colors based on the selection state
-    val backgroundColor = if (isSelected) primaryColor else Color.White
+    val backgroundColor = if (isSelected) Colors.primaryColor else Color.White
     val textColor = if (isSelected) Color.White else Color.Black
-    val iconTint = if (isSelected) Color.White else primaryColor
+    val iconTint = if (isSelected) Color.White else Colors.primaryColor
 
     // Set icon based on selection state
     val icon = if (isSelected) Icons.Filled.CheckCircle else Icons.Outlined.CheckCircle

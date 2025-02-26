@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:composeApp/src/commonMain/kotlin/org/example/hit/heal/app/BaseScreen.kt
-package org.example.hit.heal.app
-========
 package org.example.hit.heal.core.presentation
->>>>>>>> main:ui/core/src/commonMain/kotlin/org/example/hit/heal/core/presentation/BaseScreen.kt
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,11 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-<<<<<<<< HEAD:composeApp/src/commonMain/kotlin/org/example/hit/heal/app/BaseScreen.kt
-import org.example.hit.heal.evaluations.presentaion.backgroundColor
-import org.example.hit.heal.evaluations.presentaion.components.RoundedButton
-import org.example.hit.heal.evaluations.presentaion.primaryColor
-========
 import dmt_proms.ui.core.generated.resources.Res
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
 import dmt_proms.ui.core.generated.resources.next
@@ -38,7 +29,6 @@ import org.example.hit.heal.core.presentation.Colors.backgroundColor
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
->>>>>>>> main:ui/core/src/commonMain/kotlin/org/example/hit/heal/core/presentation/BaseScreen.kt
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

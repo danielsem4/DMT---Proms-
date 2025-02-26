@@ -13,12 +13,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.evaluations.presentaion.primaryColor
+import org.example.hit.heal.core.presentation.Colors
+import org.example.hit.heal.core.presentation.Colors.primaryColor
 
 @Composable
 fun SimpleRadioButtonGroup(
     modifier: Modifier = Modifier,
-    textColor: Color = primaryColor,
+    textColor: Color = Colors.primaryColor,
     textSize: TextUnit = 24.sp,
     maxLines: Int = Int.MAX_VALUE,
     minLines: Int = 1,

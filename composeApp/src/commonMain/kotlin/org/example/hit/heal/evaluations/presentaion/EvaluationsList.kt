@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDate
-import org.example.hit.heal.app.BaseScreen
+import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.evaluations.domain.Evaluation
 import org.example.hit.heal.evaluations.domain.EvaluationViewModel
 

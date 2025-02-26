@@ -21,7 +21,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.evaluations.presentaion.primaryColor
+import org.example.hit.heal.core.presentation.Colors
+import org.example.hit.heal.core.presentation.Colors.primaryColor
 
 @Composable
 fun OnOffToggle() {
@@ -37,7 +38,7 @@ fun OnOffToggle() {
             modifier = Modifier
                 .weight(1f)
                 .background(
-                    if (isOn) primaryColor else Color.White,
+                    if (isOn) Colors.primaryColor else Color.White,
                     shape = RoundedCornerShape(16.dp)
                 )
                 .border(2.dp, Color.Black, shape = RoundedCornerShape(16.dp))

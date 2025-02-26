@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.sp
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.body_back
 import dmt_proms.composeapp.generated.resources.body_front
-import org.example.hit.heal.app.BaseScreen
+import org.example.hit.heal.core.presentation.BaseScreen
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
