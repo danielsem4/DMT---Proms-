@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.hit.heal.core.presentation.BaseScreen
-import org.example.hit.heal.evaluations.presentaion.components.RoundedFilledSlider
+import org.example.hit.heal.core.presentation.components.RoundedFilledSlider
 
 @Composable
 fun EvaluationSlider(onPrevClick: (() -> Unit)? = null, onNextClick: (() -> Unit)? = null) {

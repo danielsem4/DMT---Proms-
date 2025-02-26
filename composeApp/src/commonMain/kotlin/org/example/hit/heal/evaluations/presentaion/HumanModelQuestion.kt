@@ -40,8 +40,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dmt_proms.composeapp.generated.resources.Res
-import dmt_proms.composeapp.generated.resources.body_back
-import dmt_proms.composeapp.generated.resources.body_front
+import dmt_proms.composeapp.generated.resources.body_back_removed
+import dmt_proms.composeapp.generated.resources.body_front_removed
 import org.example.hit.heal.core.presentation.BaseScreen
 import org.jetbrains.compose.resources.painterResource
 
@@ -59,7 +59,7 @@ fun HumanModelQuestion(
 
     // Determine the current image and selected points based on the view
     val bodyImage: Painter = painterResource(
-        if (isFrontView) Res.drawable.body_front else Res.drawable.body_back
+        if (isFrontView) Res.drawable.body_front_removed else Res.drawable.body_back_removed
     )
     val selectedPoints = if (isFrontView) selectedFrontPoints else selectedBackPoints
 

@@ -10,8 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.example.hit.heal.evaluations.presentaion.components.OnOffToggle
-import org.example.hit.heal.evaluations.presentaion.components.SimpleRadioButtonGroup
+import org.example.hit.heal.core.presentation.components.OnOffToggle
+import org.example.hit.heal.core.presentation.components.SimpleRadioButtonGroup
 
 @Composable
 fun ReportExample(): @Composable() (ColumnScope.() -> Unit) {

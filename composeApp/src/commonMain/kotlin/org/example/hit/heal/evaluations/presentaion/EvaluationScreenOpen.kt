@@ -13,7 +13,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.example.hit.heal.core.presentation.BaseScreen
-import org.example.hit.heal.evaluations.presentaion.components.CustomMultilineTextField
+import org.example.hit.heal.core.presentation.components.CustomMultilineTextField
 
 @Composable
 fun EvaluationScreenOpen(onPrevClick: (() -> Unit)? = null, onNextClick: (() -> Unit)? = null) {

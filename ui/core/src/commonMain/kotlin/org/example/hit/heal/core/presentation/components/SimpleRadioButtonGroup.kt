@@ -1,4 +1,4 @@
-package org.example.hit.heal.evaluations.presentaion.components
+package org.example.hit.heal.core.presentation.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,13 +13,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.core.presentation.Colors
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 
 @Composable
 fun SimpleRadioButtonGroup(
     modifier: Modifier = Modifier,
-    textColor: Color = Colors.primaryColor,
+    textColor: Color = primaryColor,
     textSize: TextUnit = 24.sp,
     maxLines: Int = Int.MAX_VALUE,
     minLines: Int = 1,
