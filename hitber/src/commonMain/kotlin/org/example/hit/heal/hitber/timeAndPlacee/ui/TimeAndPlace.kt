@@ -15,6 +15,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,26 +26,20 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.shapes.ShapeScreen
-import org.example.hit.heal.hitber.timeAndPlacee.ui.components.questions.FifthQuestion
-import org.example.hit.heal.hitber.timeAndPlacee.ui.components.questions.FirstQuestion
-import org.example.hit.heal.hitber.timeAndPlacee.ui.components.questions.ForthQuestion
-import org.example.hit.heal.hitber.timeAndPlacee.ui.components.questions.SecondQuestion
-import org.example.hit.heal.hitber.timeAndPlacee.ui.components.questions.SeventhQuestion
-import org.example.hit.heal.hitber.timeAndPlacee.ui.components.questions.SixthQuestion
-import org.example.hit.heal.hitber.timeAndPlacee.ui.components.questions.ThirdQuestion
+import org.example.hit.heal.hitber.timeAndPlacee.ui.components.Questions
+
 
 class TimeAndPlace : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
+        val viewModel: ActivityViewModel = remember { ActivityViewModel() }
 
         BaseScreen(title = "זמן ומקום", onPrevClick = null, onNextClick = null, content = {
 
-            Box(
-                modifier = Modifier.fillMaxSize() // Box תופס את כל שטח המסך
-            ) {
-
+            Box(modifier = Modifier.fillMaxSize()) {
                 Text(
                     "בחר את התשובה הנכונה. לבחירת התשובה הנכונה יש ללחוץ על השאלה",
                     fontSize = 24.sp,
@@ -58,23 +53,14 @@ class TimeAndPlace : Screen {
                     verticalArrangement = Arrangement.spacedBy(25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
-
-                    // שאלות בתוך ה-Column
-                    FirstQuestion()
-                    SecondQuestion()
-                    ThirdQuestion()
-                    ForthQuestion()
-                    FifthQuestion()
-                    SixthQuestion()
-                    SeventhQuestion()
+                    Questions(viewModel)
                 }
 
-                // כפתור בתחתית המסך
+
                 Button(
                     modifier = Modifier
                         .width(200.dp)
-                        .align(Alignment.BottomCenter) // ממקם את הכפתור בתחתית
+                        .align(Alignment.BottomCenter)
                         .padding(bottom = 16.dp),
                     onClick = { navigator?.push(ShapeScreen()) },
                     colors = ButtonDefaults.buttonColors(primaryColor),
@@ -82,9 +68,17 @@ class TimeAndPlace : Screen {
                 ) {
                     Text("הבא", color = Color.Black, fontSize = 15.sp)
                 }
+
+                Text(
+                    text = "1/10",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = primaryColor,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                )
             }
         })
     }
-
 }
 

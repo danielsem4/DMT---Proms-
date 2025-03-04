@@ -33,90 +33,84 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.hitber.ActivityViewModel
 
-data class DropDownItem(
-    val text: String
-)
+data class DropDownItem(val text: String)
 
 @Composable
 fun TimeAndPlaceQuestion(
     question: String,
     dropDownItems: List<DropDownItem>,
+    viewModel: ActivityViewModel,
     modifier: Modifier = Modifier,
     onItemClick: (DropDownItem) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf<DropDownItem?>(null) }
-    var isClicked by remember { mutableStateOf(false) }
+
+    val isFocused = question == viewModel.timeAndPlaceFocusedQuestion.value
+    val borderColor = if (isFocused) primaryColor else Color.Gray
+    val textColor = if (isFocused) primaryColor else Color.Black
+    val selectedItem = viewModel.timeAndPlaceAnswersMap.value[question]
 
     val questionOffset by animateDpAsState(
-        targetValue = if (expanded || selectedItem != null) -35.dp else 0.dp // שאלה עולה אם פתחנו את ה-Dropdown או אם נבחרה תשובה
+        targetValue = if (expanded || selectedItem != null) -30.dp else 0.dp
     )
 
-    val borderColor = if (isClicked) primaryColor else Color.Gray
-    val textColor = if (isClicked) primaryColor else Color.Black
-
     Column(modifier = modifier.fillMaxWidth()) {
-
-        // עטיפת השאלה באליפסה שחורה עם אפשרות ללחיצה
         Box(
             modifier = Modifier
-                .fillMaxWidth() // שהמסגרת תהיה לכל רוחב המסך
-                .height(80.dp) // גובה מוגדל למסגרת
+                .fillMaxWidth()
+                .height(80.dp)
                 .background(Color.White, shape = RoundedCornerShape(20.dp))
                 .padding(16.dp),
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth() // שהמסגרת תהיה לכל רוחב המסך
-                    .height(55.dp) // גובה מוגדל למסגרת
-                    .border(2.dp, borderColor, shape = RoundedCornerShape(8)) // מסגרת שחורה מסביב
-                    .padding(14.dp)
+                    .fillMaxWidth()
+                    .height(45.dp)
+                    .border(1.dp, borderColor, shape = RoundedCornerShape(8))
+                    .padding(10.dp)
                     .clickable {
                         expanded = !expanded
-                        isClicked = !isClicked // שינוי מצב הלחיצה
+                        viewModel.timeAndPlaceSetFocusedQuestion(question)
                     },
-                horizontalArrangement = Arrangement.SpaceBetween, // זה ידאג לחלק את ה-Row
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Box(modifier = Modifier.weight(1f)){
-                Text(
-                    text = question,
-                    style = MaterialTheme.typography.h6.copy(fontSize = 12.sp),
-                    color = textColor,
-                    modifier = Modifier.offset(y = questionOffset) // השאלה תזוז למעלה כאן
-                )
-                selectedItem?.let {
+                Box(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = it.text,
-                        style = MaterialTheme.typography.body1.copy(fontSize = 12.sp))
-                }}
-                    Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "Dropdown Icon")
-
+                        text = question,
+                        style = MaterialTheme.typography.h6.copy(fontSize = 12.sp),
+                        color = textColor,
+                        modifier = Modifier.offset(y = questionOffset)
+                    )
+                    selectedItem?.let {
+                        Text(
+                            text = it.text,
+                            style = MaterialTheme.typography.body1.copy(fontSize = 12.sp)
+                        )
+                    }
+                }
+                Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "Dropdown Icon")
             }
         }
 
-
-
-        // dropdown menu
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            // מגביל את הגובה של ה-dropdown menu ומוסיף גלילה אם נדרש
             Box(
-                modifier = Modifier.heightIn(max = 300.dp) // גבול גובה
+                modifier = Modifier.heightIn(max = 300.dp)
             ) {
                 Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState()) // הוספת גלילה
+                    modifier = Modifier.verticalScroll(rememberScrollState())
                 ) {
                     dropDownItems.forEach { item ->
                         DropdownMenuItem(onClick = {
-                            selectedItem = item  // שמירת הפריט שנבחר
-                            onItemClick(item)  // קריאה לפונקציה עם הפריט שנבחר
+                            viewModel.timeAndPlaceSetAnswer(question, item)
+                            onItemClick(item)
                             expanded = false
-                            isClicked = false
                         }) {
                             Text(text = item.text, modifier = Modifier.fillMaxWidth())
                         }
