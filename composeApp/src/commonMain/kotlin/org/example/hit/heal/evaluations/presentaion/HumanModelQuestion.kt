@@ -43,6 +43,7 @@ import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.body_back_removed
 import dmt_proms.composeapp.generated.resources.body_front_removed
 import org.example.hit.heal.core.presentation.BaseScreen
+import org.example.hit.heal.core.presentation.Colors
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -128,7 +129,7 @@ fun HumanModelQuestion(
                         val isSelected = selectedPoints.contains(point)
 
                         drawCircle(
-                            color = if (isSelected) Color(0xFF6FCF97) else Color.Gray,
+                            color = if (isSelected) Colors.primaryColor else Color.Gray,
                             radius = 30f,
                             center = Offset(x, y)
                         )
