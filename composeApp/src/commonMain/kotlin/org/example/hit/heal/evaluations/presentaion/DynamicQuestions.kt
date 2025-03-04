@@ -51,8 +51,11 @@ fun DynamicScrollScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(primaryColor, shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                    .padding(vertical = 8.dp),
+                    .background(
+                        primaryColor,
+                        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                    )
+                    .padding(vertical = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -77,4 +80,9 @@ fun DynamicScrollScreen(
             }
         }
     }
+}
+
+@Composable
+fun SampleDyn() {
+    DynamicScrollScreen(ReportExample())
 }
