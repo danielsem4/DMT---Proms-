@@ -1,6 +1,7 @@
 package org.example.hit.heal.hitber.timeAndPlacee.ui.components
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,16 +14,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,8 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.drop_down
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
+import org.jetbrains.compose.resources.painterResource
 
 data class DropDownItem(val text: String)
 
@@ -90,7 +92,11 @@ fun TimeAndPlaceQuestion(
                         )
                     }
                 }
-                Icon(imageVector = Icons.Filled.ArrowDropDown, contentDescription = "Dropdown Icon")
+                Image(
+                    painter = painterResource(Res.drawable.drop_down),
+                    contentDescription = "drop down icon",
+                    modifier = Modifier.size(20.dp)
+                )
             }
         }
 

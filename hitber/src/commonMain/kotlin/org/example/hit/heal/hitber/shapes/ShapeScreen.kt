@@ -1,20 +1,23 @@
 package org.example.hit.heal.hitber.shapes
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +30,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.zIndex
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.profile
 import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.jetbrains.compose.resources.painterResource
 
 class ShapeScreen : Screen {
     @Composable
@@ -62,11 +70,11 @@ class ShapeScreen : Screen {
                         modifier = Modifier.width(200.dp).align(Alignment.BottomCenter)
                             .padding(bottom = 16.dp),
                         onClick = { navigator?.push(ActionShapesScreen()) },
-                        colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
+                        colors = ButtonDefaults.buttonColors(primaryColor),
                         shape = RoundedCornerShape(50)
                     ) {
                         Text(
-                            "המשך", color = Color.White, fontSize = 24.sp,
+                            "המשך", color = Color.White, fontSize = 15.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -85,52 +93,58 @@ class ShapeScreen : Screen {
         })
 
         if (showDialog) {
-            AlertDialog(
-                onDismissRequest = { showDialog = false },
-                title = {
-                    Text(
-                        text = "משימה",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = primaryColor,
-                        modifier = Modifier.fillMaxWidth(), // תופס את כל הרוחב, ממורכז אוטומטית
-                        textAlign = TextAlign.Center                    )
-                },
-                text = {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                        modifier = Modifier.padding(16.dp)
+            Dialog(onDismissRequest =  { showDialog = false }) {
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Image(
+                        painter = painterResource(Res.drawable.profile),
+                        contentDescription = "profile icon",
+                        modifier = Modifier
+                            .size(50.dp)
+                            .align(Alignment.TopCenter)
+                            .zIndex(1f)
+                    )
+                    Card(
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = 8.dp,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(top = 25.dp)
                     ) {
-                        Text(
-                            text = "בפניך 5 צורות, יש לזכור אותן להמשך המשימה בסיום לחץ על המשך",
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = primaryColor,
-                            modifier = Modifier.padding(bottom = 16.dp) // רווח מתחת לטקסט
-                        )
-
-                    }
-                },
-                confirmButton = {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center // ממרכז את הכפתור
-                    ) {
-                        TextButton(
-                            onClick = {
-                                showDialog = false
-                            },
-                            shape = RoundedCornerShape(20.dp),
-                            colors = ButtonDefaults.textButtonColors(backgroundColor = primaryColor),
+                        Column(
+                            modifier = Modifier
+                                .padding(20.dp)
+                                .fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text("הבנתי", color = Color.White)
+                            Text(
+                                text = "משימה",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = primaryColor,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "בפניך 5 צורות, יש לזכור אותן להמשך המשימה בסיום לחץ על המשך",
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = primaryColor,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(24.dp))
+                            Button(
+                                onClick = {   showDialog = false  },
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
+
+                            ) {
+                                Text("הבנתי", color = Color.White)
+                            }
                         }
                     }
                 }
-            )
+            }
         }
-
 
     }
 }

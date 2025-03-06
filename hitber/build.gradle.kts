@@ -34,6 +34,8 @@ kotlin {
             implementation (libs.navigator.tabs)
             implementation (libs.navigator.transitions)
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
             implementation(projects.ui.core)
             implementation(compose.runtime)
             implementation(compose.foundation)
