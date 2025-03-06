@@ -25,7 +25,8 @@ import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import org.example.EmailTextField
 import org.example.PasswordTextField
-import org.example.hit.heal.presentaion.BaseScreen
+import org.example.hit.heal.core.presentation.BaseScreen
+
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -55,18 +56,7 @@ fun LoginScreen(
                     .padding(bottom = 20.dp)
             )
 
-            // Email Input Field
-//            OutlinedTextField(
-//                value = email,
-//                onValueChange = { email = it },
-//                label = { Text("Email") },
-//                leadingIcon = {
-//                    Icon(imageVector = Icons.Default.Email, contentDescription = "Email Icon")
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .background(Color.White, shape = RoundedCornerShape(12.dp))
-//            )
+
             EmailTextField(
                 email = email,
                 onValueChange = { email = it }
