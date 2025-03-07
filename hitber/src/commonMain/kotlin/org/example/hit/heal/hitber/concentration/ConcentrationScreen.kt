@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.delay
@@ -44,7 +45,7 @@ class ConcentrationScreen : Screen {
 
         val navigator = LocalNavigator.current
         //val viewModel: ActivityViewModel = koinViewModel()
-        val viewModel: ActivityViewModel = remember { ActivityViewModel() }
+        val viewModel: ActivityViewModel = viewModel()
 
         val buttonVisible by viewModel.concentrationStartButtonIsVisible.collectAsState()
         val number by viewModel.number.collectAsState()
@@ -84,20 +85,22 @@ class ConcentrationScreen : Screen {
                             fontWeight = FontWeight.Bold
                         )
                     }
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight(0.8f)
-                            .background(color = Color.White)
-                    )
                 }
 
                 if (!buttonVisible) {
-                    if(isFinished) Text(
-                        "תודה, אנא עבור לשאלה הבאה", color = primaryColor, fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
+                    if (isFinished)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(0.8f)
+                                .background(color = Color.White)
+                        ) {
+                            Text(
+                                "תודה, אנא עבור לשאלה הבאה", color = primaryColor, fontSize = 30.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.align(Alignment.Center))
+                        }
+
                     else
                     RandomNumberScreen(
                         number = number,

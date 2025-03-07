@@ -15,13 +15,13 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import org.example.hit.heal.core.presentation.BaseScreen
@@ -35,7 +35,7 @@ class TimeAndPlace : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-        val viewModel: ActivityViewModel = remember { ActivityViewModel() }
+        val viewModel: ActivityViewModel = viewModel()
 
         BaseScreen(title = "זמן ומקום", onPrevClick = null, onNextClick = null, content = {
 

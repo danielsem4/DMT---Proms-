@@ -10,7 +10,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.example.hit.heal.hitber.shapes.shapeSets
 import org.example.hit.heal.hitber.timeAndPlacee.ui.components.DropDownItem
+import org.jetbrains.compose.resources.DrawableResource
+import kotlin.random.Random
 
 
 class ActivityViewModel : ViewModel() {
@@ -46,6 +49,9 @@ class ActivityViewModel : ViewModel() {
 
     private val _isFinished = MutableStateFlow(false)
     val isFinished : StateFlow<Boolean> = _isFinished.asStateFlow()
+    
+    private val _selectedSet = MutableStateFlow(shapeSets.random())
+    val selectedSet : StateFlow<List<DrawableResource>> = _selectedSet.asStateFlow()
 
     // להתחיל את המשחק (הסתרת כפתור ההתחלה)
     fun concentrationStartButtonSetVisible(visible: Boolean) {
@@ -67,5 +73,9 @@ class ActivityViewModel : ViewModel() {
             }
             _isFinished.value = true
         }
+    }
+
+    fun setRandomShapeSet(){
+        _selectedSet.value = shapeSets[Random.nextInt(shapeSets.size)]
     }
 }

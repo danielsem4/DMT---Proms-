@@ -51,7 +51,7 @@ class WritingScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        "בחלק זה עליך להרכיב משפט מהמילים המוצגות לפניך. לשיבוץ מילה במשפט יש לגרור אותה למשבצת שתבחר, אם תרצה לשנות את המיקום של מילה שכבר שובצה צריך שוב לגרור אותה מהמחסן מילים ולשבץ אותה מחדש",
+                        "בחלק זה עליך להרכיב משפט מהמילים המוצגות לפניך. לשיבוץ מילה במשפט יש לגרור אותה למשבצת שתבחר.",
                         color = Color.Black,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -59,17 +59,17 @@ class WritingScreen : Screen {
                             .padding(bottom = 120.dp)
                     )
 
-                    val words = "סבתא, ארוחת, עם, אתמול, אכלתי, ערב".split(", ")
-                    DraggableWords(words = words)
-                    WordSlots()
+                    WordsLayout()
 
                 }
+
+                // כפתור המשך
                 Button(
                     modifier = Modifier
                         .width(200.dp)
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 16.dp),
-                    onClick = {navigator?.push(ActionShapesScreen()) },
+                    onClick = { navigator?.push(ActionShapesScreen()) },
                     colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
                     shape = RoundedCornerShape(50)
                 ) {
@@ -79,15 +79,46 @@ class WritingScreen : Screen {
                     )
                 }
             }
-
-
         })
-
     }
 }
 
 @Composable
-fun DraggableWords(words: List<String>) {
+fun WordsLayout() {
+    val words = listOf("סבתא", "ארוחת", "עם", "אתמול", "אכלתי", "ערב")
+    var copiedWords by remember { mutableStateOf(listOf<String>()) } // רשימה של מילים גרירות
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // הצגת המילים הסטטיות (שלא נגררות)
+        StaticWords(words = words, onWordDragged = { word ->
+            // כאשר מתחילים לגרור את המילה, אנו יוצרים עותק שלה
+            copiedWords = copiedWords + word
+        })
+
+        // הצגת המילים הגרירות (העותקים שנגררו)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            copiedWords.forEach { word ->
+                DraggableWord(word = word) // אפשר לגרור את העותקים
+            }
+        }
+
+        // הצגת אזורי השיבוץ (Slots)
+        WordSlots()
+    }
+}
+
+@Composable
+fun StaticWords(words: List<String>, onWordDragged: (String) -> Unit) {
+    // הצגת המילים ככפתורים קבועים, שלא ניתן לגרור אותם
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -96,25 +127,48 @@ fun DraggableWords(words: List<String>) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         words.forEach { word ->
-            DraggableWord(word = word)
+            WordButton(word = word, onWordDragged = onWordDragged)
         }
+    }
+}
+
+@Composable
+fun WordButton(word: String, onWordDragged: (String) -> Unit) {
+    // כפתור המייצג מילה, לא ניתן לגרור אותו
+    Button(
+        onClick = { /* לא פעולה כרגע */ },
+        modifier = Modifier
+            .width(120.dp)
+            .height(60.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
+        shape = RoundedCornerShape(50.dp)
+    ) {
+        Text(
+            text = word,
+            color = Color.White,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 
 @Composable
 fun DraggableWord(word: String) {
     var offset by remember { mutableStateOf(Offset(0f, 0f)) }
+    var isDragged by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
             .pointerInput(Unit) {
                 detectDragGestures { _, dragAmount ->
                     offset = Offset(offset.x + dragAmount.x, offset.y + dragAmount.y)
+                    isDragged = true
                 }
             }
     ) {
+        // יצירת כפתור לגרירה
         Button(
-            onClick = { /* פעולה כשלוחצים על המילה (כפתור) */ },
+            onClick = { /* פעולה אם נלחץ על המילה */ },
             modifier = Modifier
                 .width(120.dp)
                 .height(60.dp)
@@ -142,7 +196,7 @@ fun WordSlots() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         repeat(6) { index ->
-            WordSlot()
+            WordSlot() // הצגת אזורי השיבוץ
         }
     }
 }
@@ -156,4 +210,3 @@ fun WordSlot() {
             .background(Color.Gray, shape = RoundedCornerShape(10.dp))
     )
 }
-
