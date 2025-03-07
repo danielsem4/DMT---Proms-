@@ -1,7 +1,6 @@
-package org.example.hit.heal
+package com.clock.test.presentation
 
 import androidx.compose.runtime.Composable
-import com.clock.test.presentation.LandingScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

@@ -15,30 +15,29 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "clock_test"
             isStatic = true
         }
     }
-    
+
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
             implementation(projects.ui.core)
-            implementation(projects.clockTest)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -57,11 +56,11 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.hit.heal"
+    namespace = "com.clock.test"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.example.hit.heal"
+        applicationId = "com.clock.test"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -89,11 +88,11 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "org.example.hit.heal.MainKt"
+        mainClass = "com.clock.test.core.presentation.AppKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.hit.heal"
+            packageName = "com.clock.test"
             packageVersion = "1.0.0"
         }
     }
