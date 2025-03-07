@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-    <string name="clock_test">מבחן השעון</string>
+    <string name="clock_test_title">מבחן השעון</string>
+    <string name="hit_logo_description">לוגו HIT</string>
+    <string name="clock_icon_description">אייקון שעון</string>
+    <string name="start_button_text">התחל</string>
+    <string name="footer_text">ההוראות מנוסחות בלשון זכר, אך פונות לכלל המינים</string>
+    <string name="version">גרסא</string>
+
 </resources>

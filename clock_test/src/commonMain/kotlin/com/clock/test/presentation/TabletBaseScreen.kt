@@ -28,11 +28,10 @@ import org.example.hit.heal.core.presentation.components.RoundedButton
 @Composable
 fun TabletBaseScreen(
     title: String,
-    content: @Composable() (ColumnScope.() -> Unit),
+    content: @Composable ColumnScope.() -> Unit,
     vararg buttons: TabletButton
 ) {
     MaterialTheme {
-
         val statusBarValues = WindowInsets.safeDrawing.asPaddingValues()
 
         Column(
@@ -85,5 +84,6 @@ fun TabletBaseScreen(
         }
     }
 }
+
 
 data class TabletButton(val text: String, val onClick: () -> Unit)
