@@ -34,7 +34,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.shapes.ActionShapesScreen
 
 class WritingScreen : Screen {
     @Composable
@@ -69,7 +68,7 @@ class WritingScreen : Screen {
                         .width(200.dp)
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 16.dp),
-                    onClick = { navigator?.push(ActionShapesScreen()) },
+                    onClick = {  },
                     colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
                     shape = RoundedCornerShape(50)
                 ) {

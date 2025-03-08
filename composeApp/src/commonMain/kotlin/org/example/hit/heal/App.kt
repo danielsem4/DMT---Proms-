@@ -1,15 +1,19 @@
 package org.example.hit.heal
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.painterResource
+import cafe.adriel.voyager.navigator.Navigator
+import org.example.hit.heal.hitber.shapes.ShapeScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.KoinContext
 
 @Composable
 @Preview
 fun App() {
+
+    MaterialTheme {
+        KoinContext { Navigator (screen = ShapeScreen()) }
+    }
+
 
 }

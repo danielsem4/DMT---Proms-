@@ -1,6 +1,7 @@
 package org.example.hit.heal.hitber.shapes
 
 import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.asterisk
 import dmt_proms.hitber.generated.resources.check
 import dmt_proms.hitber.generated.resources.close
 import dmt_proms.hitber.generated.resources.cone
@@ -52,4 +53,22 @@ val shapeSets = listOf(
         Res.drawable.right_triangle,
         Res.drawable.star
     )
+)
+
+val shapeList = listOf(
+    Res.drawable.ellipse,
+    Res.drawable.rectangle,
+    Res.drawable.pentagon,
+    Res.drawable.star,
+    Res.drawable.hash_tag,
+    Res.drawable.rhomb,
+    Res.drawable.cone,
+    Res.drawable.plus,
+    Res.drawable.hexagon,
+    Res.drawable.right_triangle,
+    Res.drawable.asterisk,
+    Res.drawable.check,
+    Res.drawable.trapezoid,
+    Res.drawable.triangle,
+    Res.drawable.close
 )

@@ -9,12 +9,13 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import cafe.adriel.voyager.navigator.Navigator
-import org.example.hit.heal.hitber.shapes.ShapeScreen
+import org.example.hit.heal.hitber.di.initKoin
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initKoin()
+
 
         setContent {
 
@@ -29,27 +30,29 @@ class MainActivity : ComponentActivity() {
                 navigationBarStyle = if (!inDarkTheme) SystemBarStyle.dark(darkColor.hashCode())
                 else SystemBarStyle.light(lightColor.hashCode(), lightColor.hashCode())
             )
-            Navigator(screen = ShapeScreen())
+            App()
         }
     }
 }
 
-@Preview( name = "Tablet Preview",
+@Preview(
+    name = "Tablet Preview",
     showBackground = true,
     widthDp = 900,
-    heightDp = 600)
+    heightDp = 600
+)
 @Composable
 fun AppTabletPreview() {
-   //EntryScreen().Content()
+    //EntryScreen().Content()
     //TimeAndPlace().Content()
-    ShapeScreen().Content()
-    //ActionShapesScreen().Content()
+    // ShapeScreen().Content()
+   // ActionShapesScreen().Content()
     //ConcentrationScreen().Content()
     //NamingScreen().Content()
     //RepetitionScreen().Content()
     //UnderstandingScreen().Content()
     //DragAndDropScreen().Content()
-   // WritingScreen().Content()
-   // BuildShapeScreen().Content()
+    // WritingScreen().Content()
+    // BuildShapeScreen().Content()
 
 }
