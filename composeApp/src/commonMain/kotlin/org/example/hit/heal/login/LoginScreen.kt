@@ -11,6 +11,8 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,17 +28,20 @@ import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import org.example.EmailTextField
 import org.example.PasswordTextField
+import org.example.hit.heal.Home.AuthViewModel
 import org.example.hit.heal.core.presentation.BaseScreen
 
 import org.jetbrains.compose.resources.painterResource
 
+
 @Composable
 fun LoginScreen(
+    viewModel: AuthViewModel = hiltViewModel(), // Assuming you're using Hilt for dependency injection
     onLoginSuccess: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-//    var passwordVisible by remember { mutableStateOf(false) }
+    val loginState by viewModel.loginState.collectAsState()
 
     BaseScreen(title = "Login") {
         Column(
@@ -56,7 +62,6 @@ fun LoginScreen(
                     .padding(bottom = 20.dp)
             )
 
-
             EmailTextField(
                 email = email,
                 onValueChange = { email = it }
@@ -71,12 +76,11 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(100.dp))
 
-
             // Login Button
             Button(
                 onClick = {
                     if (email.isNotEmpty() && password.isNotEmpty()) {
-                        onLoginSuccess()
+                        viewModel.login(email, password)
                     }
                 },
                 modifier = Modifier
@@ -87,6 +91,91 @@ fun LoginScreen(
             ) {
                 Text("Login", fontSize = 20.sp, color = Color.White)
             }
+
+            // Display error message if login failed
+            if (loginState is LoginState.Error) {
+                Text(
+                    text = (loginState as LoginState.Error).message,
+                    color = Color.Red,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
+        }
+    }
+
+    // Navigate to the next screen upon successful login
+    LaunchedEffect(loginState) {
+        if (loginState is LoginState.Success) {
+            onLoginSuccess()
         }
     }
 }
+
+
+
+
+
+
+
+//
+//@Composable
+//fun LoginScreen(
+//    onLoginSuccess: () -> Unit
+//) {
+//    var email by remember { mutableStateOf("") }
+//    var password by remember { mutableStateOf("") }
+////    var passwordVisible by remember { mutableStateOf(false) }
+//
+//    BaseScreen(title = "Login") {
+//        Column(
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(16.dp)
+//        ) {
+//            Spacer(modifier = Modifier.height(20.dp))
+//
+//            // Login Image
+//            Image(
+//                painter = painterResource(Res.drawable.med_presc),
+//                contentDescription = "Login Illustration",
+//                contentScale = ContentScale.Fit,
+//                modifier = Modifier
+//                    .size(120.dp)
+//                    .padding(bottom = 20.dp)
+//            )
+//
+//
+//            EmailTextField(
+//                email = email,
+//                onValueChange = { email = it }
+//            )
+//
+//            Spacer(modifier = Modifier.height(16.dp))
+//
+//            PasswordTextField(
+//                password = password,
+//                onValueChange = { password = it }
+//            )
+//
+//            Spacer(modifier = Modifier.height(100.dp))
+//
+//
+//            // Login Button
+//            Button(
+//                onClick = {
+//                    if (email.isNotEmpty() && password.isNotEmpty()) {
+//                        onLoginSuccess()
+//                    }
+//                },
+//                modifier = Modifier
+//                    .fillMaxWidth(0.8f)
+//                    .height(50.dp),
+//                shape = RoundedCornerShape(33.dp),
+//                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF6FCF97))
+//            ) {
+//                Text("Login", fontSize = 20.sp, color = Color.White)
+//            }
+//        }
+//    }
+//}
