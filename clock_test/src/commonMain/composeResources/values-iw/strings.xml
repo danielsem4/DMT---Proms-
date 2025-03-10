@@ -9,9 +9,13 @@
 
     <!-- Drawing Screen -->
     <string name="draw_screen_title">צייר</string>
-    <string name="draw_instruction">צייר שעון עם כל המספרים שמראה את השעה</string>
+    <string name="draw_instruction">צייר שעון עם כל המספרים שמראה את השעה %1$s</string>
     <string name="erase_button_text">מחק</string>
     <string name="clear_all_button_text">מחק הכל</string>
     <string name="finish_button_text">סיום</string>
 
+    <string name="completion_screen_title">משימה ראשונה</string>
+    <string name="completion_screen_message">סיימת את השלב הראשון, כעת נעבור לשלב הבא</string>
+    <string name="completion_screen_message_next">לפניך משימה של כדקה שעון, אנא עקוב אחר ההנחיות בעמוד הבא בשביל להתחיל את המבחן יש ללחוץ על כפתור המשך</string>
+    <string name="next_button_text">המשך</string>
 </resources>

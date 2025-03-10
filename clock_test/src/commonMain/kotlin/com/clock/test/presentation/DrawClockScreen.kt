@@ -35,6 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dmt_proms.clock_test.generated.resources.Res
 import dmt_proms.clock_test.generated.resources.clear_all_button_text
 import dmt_proms.clock_test.generated.resources.draw_instruction
@@ -52,6 +54,7 @@ data class DrawClockScreen(
 
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
         // Title with time placeholder
         val formattedTitle = stringResource(Res.string.draw_screen_title, time)
         // Instructions with time placeholder
@@ -181,7 +184,13 @@ data class DrawClockScreen(
                         RoundedButton(
                             text = stringResource(Res.string.finish_button_text),
                             modifier = Modifier.weight(1f),
-                            onClick = onFinishClick
+                            onClick = {
+                                navigator.push(CompletionScreen(
+                                    onNextClick = {
+                                        // Here you can navigate to the next screen in the flow
+                                    }
+                                ))
+                            }
                         )
                     }
                 }
