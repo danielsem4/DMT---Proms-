@@ -15,11 +15,11 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,28 +33,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.error_icon
 import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.concentration.ConcentrationScreen
-import org.jetbrains.compose.resources.DrawableResource
+import org.example.hit.heal.hitber.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 
-class ActionShapesScreen() : Screen {
+class ActionShapesScreen : Screen {
     @Composable
     override fun Content() {
         val viewModel: ActivityViewModel = koinViewModel()
 
         val navigator = LocalNavigator.current
-        val selectedShapes = viewModel.selectedShapes.collectAsState()
+        val selectedShapes by viewModel.selectedShapes.collectAsState()
         val isFinished by viewModel.isFinished.collectAsState()
         var showDialog by remember { mutableStateOf(false) }
-        var showDialog1 by remember { mutableStateOf(true) }
-        val correctCount = viewModel.correctShapesCount.collectAsState()
-        val listShapes = viewModel.listShapes.collectAsState()
-        val selectedSet = viewModel.selectedSet.collectAsState()
+        val listShapes by viewModel.listShapes.collectAsState()
 
         BaseScreen(title = "צורות", onPrevClick = null, onNextClick = null, content = {
             Box(
@@ -73,7 +72,6 @@ class ActionShapesScreen() : Screen {
                             .padding(bottom = 30.dp)
                     )
 
-
                     Box(
                         modifier = Modifier.fillMaxWidth()
                             .fillMaxHeight(0.8f)
@@ -84,8 +82,8 @@ class ActionShapesScreen() : Screen {
                             columns = GridCells.Fixed(5),
                             modifier = Modifier.fillMaxSize()
                         ) {
-                            items(listShapes.value) { shapeRes ->
-                                val isSelected = selectedShapes.value.contains(shapeRes)
+                            items(listShapes) { shapeRes ->
+                                val isSelected = selectedShapes.contains(shapeRes)
                                 val shapeColor = if (isSelected) primaryColor else Color.Transparent
 
                                 Image(
@@ -100,7 +98,6 @@ class ActionShapesScreen() : Screen {
                                 )
                             }
                         }
-
                     }
 
                 }
@@ -112,15 +109,9 @@ class ActionShapesScreen() : Screen {
                     onClick = {
                         viewModel.calculateCorrectShapesCount()
                         viewModel.updateTask()
-                        showDialog1 = true
+                        viewModel.resetSelectedShapes()
+                        showDialog = true
 
-                        if (isFinished) {
-                            navigator?.push(ConcentrationScreen())
-                        } else {
-
-                            showDialog = true
-                            viewModel.onAttempt()
-                        }
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
                     shape = RoundedCornerShape(50)
@@ -130,45 +121,33 @@ class ActionShapesScreen() : Screen {
                         fontWeight = FontWeight.Bold
                     )
                 }
+
+                Text(
+                    text = "2/10",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = primaryColor,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                )
             }
 
 
         })
         if (showDialog) {
-            DialogTask(onDismiss = { showDialog = false })
+            DialogTask(
+                icon = Res.drawable.error_icon,
+                title = "בחר 5 צורות",
+                text = "אנא בחר את 5 הצורות שראית לפני מספר שאלות",
+                onDismiss = { showDialog = false })
         }
+        LaunchedEffect(isFinished) {
+            if (isFinished) {
+                navigator?.push(ConcentrationScreen())
+                viewModel.setIsFinished(false)
 
-        if (showDialog1) {
-            dialog(
-                onDismiss = { showDialog1 = false },
-                correctCount = correctCount.value,
-                select = selectedSet.value,
-                finish = isFinished
-            )
+            }
         }
     }
 }
 
-@Composable
-fun dialog(onDismiss: () -> Unit, correctCount: Int, finish:Boolean, select: List<DrawableResource>) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(text = "תשובות נכונות") },
-        text = {
-            Column {
-                Text("מספר תשובות נכונות: $correctCount")
-                Text("finish?: $finish")
-                Text("צורות נכונות:")
-                select.forEach { shape ->
-                    // הצג את המשאב של הצורה (כגון תמונה או תיאור)
-                    Image(painter = painterResource(shape), contentDescription = "Correct Shape")
-                }
-            }
-        },
-        confirmButton = {
-            Button(onClick = onDismiss) {
-                Text("אישור")
-            }
-        }
-    )
-}

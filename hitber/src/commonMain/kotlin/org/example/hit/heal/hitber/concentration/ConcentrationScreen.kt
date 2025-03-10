@@ -15,7 +15,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.delay
@@ -37,6 +35,7 @@ import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.naming.NamingScreen
+import org.koin.compose.viewmodel.koinViewModel
 
 
 class ConcentrationScreen : Screen {
@@ -44,17 +43,11 @@ class ConcentrationScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        //val viewModel: ActivityViewModel = koinViewModel()
-        val viewModel: ActivityViewModel = viewModel()
-
-        val buttonVisible by viewModel.concentrationStartButtonIsVisible.collectAsState()
+        val viewModel: ActivityViewModel = koinViewModel()
+        val buttonVisible by viewModel.startButtonIsVisible.collectAsState()
         val number by viewModel.number.collectAsState()
         val isFinished by viewModel.isFinished.collectAsState()
         val coroutineScope = rememberCoroutineScope()
-
-        LaunchedEffect(Unit) {
-            viewModel.startRandomNumberGeneration(coroutineScope)
-        }
 
         BaseScreen(title = "ריכוז", onPrevClick = null, onNextClick = null, content = {
             Column(
@@ -76,7 +69,9 @@ class ConcentrationScreen : Screen {
                 if (buttonVisible) {
                     Button(
                         modifier = Modifier.width(200.dp).padding(bottom = 20.dp),
-                        onClick = { viewModel.concentrationStartButtonSetVisible(false) },
+                        onClick = { viewModel.startButtonSetVisible(false)
+                            viewModel.startRandomNumberGeneration(coroutineScope)
+                             },
                         colors = ButtonDefaults.buttonColors(primaryColor),
                         shape = RoundedCornerShape(50)
                     ) {
@@ -104,7 +99,7 @@ class ConcentrationScreen : Screen {
                     else
                     RandomNumberScreen(
                         number = number,
-                        onNumberClicked = { viewModel.addConcentrationAnswer(it) })
+                        onNumberClicked = { viewModel.addAnswer(it) })
 
                 }
 

@@ -31,9 +31,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.profile
 import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -67,8 +70,7 @@ class ShapeScreen : Screen {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 )
                 {
-                    shapeSet.forEach {
-                            shapeRes ->
+                    shapeSet.forEach { shapeRes ->
                         Image(
                             painter = painterResource(shapeRes),
                             contentDescription = "Shape",
@@ -106,11 +108,15 @@ class ShapeScreen : Screen {
         })
 
         if (showDialog) {
-            DialogTask(onDismiss = { showDialog = false })
-            }
+            DialogTask(
+                icon = Res.drawable.profile,
+                title = "משימה",
+                text = "בפניך 5 צורות, יש לזכור אותן להמשך המשימה בסיום לחץ על המשך",
+                onDismiss = { showDialog = false })
         }
-
     }
+
+}
 
 
 

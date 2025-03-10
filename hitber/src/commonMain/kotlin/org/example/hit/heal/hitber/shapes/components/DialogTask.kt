@@ -1,4 +1,4 @@
-package org.example.hit.heal.hitber.shapes
+package org.example.hit.heal.hitber.shapes.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -23,17 +23,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.profile
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun DialogTask(onDismiss: () -> Unit) {
+fun DialogTask(icon: DrawableResource, title: String,text: String, onDismiss: () -> Unit) {
     Dialog(onDismissRequest =  onDismiss) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
-                painter = painterResource(Res.drawable.profile),
+                painter = painterResource(icon),
                 contentDescription = "profile icon",
                 modifier = Modifier
                     .size(50.dp)
@@ -54,7 +53,7 @@ fun DialogTask(onDismiss: () -> Unit) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "משימה",
+                        text = title,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         color = primaryColor,
@@ -62,7 +61,7 @@ fun DialogTask(onDismiss: () -> Unit) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
-                        text = "בפניך 5 צורות, יש לזכור אותן להמשך המשימה בסיום לחץ על המשך",
+                        text = text,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = primaryColor,

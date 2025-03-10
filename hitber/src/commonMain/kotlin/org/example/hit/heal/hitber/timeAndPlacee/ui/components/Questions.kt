@@ -1,10 +1,13 @@
 package org.example.hit.heal.hitber.timeAndPlacee.ui.components
 
+import DropDownItem
+import TimeAndPlaceQuestion
 import androidx.compose.runtime.Composable
 import org.example.hit.heal.hitber.ActivityViewModel
 
 @Composable
 fun Questions(viewModel: ActivityViewModel) {
+
     val questionsData = listOf(
         QuestionData(
             question = "איזה יום היום?",
@@ -42,7 +45,7 @@ fun Questions(viewModel: ActivityViewModel) {
             dropDownItems = questionData.answers.map { DropDownItem(it) },
             viewModel = viewModel,
             onItemClick = { selectedAnswer ->
-                viewModel.timeAndPlaceSetAnswer(questionData.question, selectedAnswer)
+                viewModel.setAnswers(questionData.question, selectedAnswer)
             }
         )
     }

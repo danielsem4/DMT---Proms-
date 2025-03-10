@@ -1,4 +1,4 @@
-package org.example.hit.heal.hitber.shapes
+package org.example.hit.heal.hitber.shapes.components
 
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.asterisk

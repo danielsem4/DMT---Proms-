@@ -37,7 +37,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
-
+            implementation(compose.material3)
             implementation(projects.hitber)
             implementation(projects.ui.core)
             implementation(libs.koin.compose)
