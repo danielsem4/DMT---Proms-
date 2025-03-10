@@ -12,8 +12,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App() {
     Navigator(screen = LandingScreen()) { navigator ->
         LaunchedEffect(Unit) {
-            delay(1500)
-            navigator.push(ClockTestScreen(onStartClick = {}))
+            delay(100)
+            navigator.push(ClockTestScreen(onStartClick = {
+                navigator.push(DrawClockScreen(onFinishClick = {
+
+                }))
+            }))
         }
         FadeTransition(navigator)
     }

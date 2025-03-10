@@ -6,4 +6,11 @@
     <string name="start_button_text">Start</string>
     <string name="footer_text">Good luck</string>
     <string name="version">version</string>
+
+    <!-- Drawing Screen -->
+    <string name="draw_screen_title">Draw</string>
+    <string name="draw_instruction">Draw a clock with all the numbers that show the time %1$s</string>
+    <string name="erase_button_text">Erase</string>
+    <string name="clear_all_button_text">Clear All</string>
+    <string name="finish_button_text">Finish</string>
 </resources>

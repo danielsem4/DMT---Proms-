@@ -7,4 +7,11 @@
     <string name="footer_text">ההוראות מנוסחות בלשון זכר, אך פונות לכלל המינים</string>
     <string name="version">גרסא</string>
 
+    <!-- Drawing Screen -->
+    <string name="draw_screen_title">צייר</string>
+    <string name="draw_instruction">צייר שעון עם כל המספרים שמראה את השעה</string>
+    <string name="erase_button_text">מחק</string>
+    <string name="clear_all_button_text">מחק הכל</string>
+    <string name="finish_button_text">סיום</string>
+
 </resources>

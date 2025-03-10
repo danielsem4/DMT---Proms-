@@ -28,6 +28,7 @@ import org.example.hit.heal.core.presentation.components.RoundedButton
 @Composable
 fun TabletBaseScreen(
     title: String,
+    topRightText: String? = null,
     content: @Composable ColumnScope.() -> Unit,
     vararg buttons: TabletButton
 ) {
@@ -51,9 +52,19 @@ fun TabletBaseScreen(
                 Text(
                     text = title,
                     color = Color.White,
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.h2,
                     modifier = Modifier.padding(top = statusBarValues.calculateTopPadding())
                 )
+                topRightText?.let {
+                    Text(
+                        text = it,
+                        color = Color.White,
+                        style = MaterialTheme.typography.h5,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(end = 16.dp, top = statusBarValues.calculateTopPadding())
+                    )
+                }
             }
 
             // Dynamic Content
