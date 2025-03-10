@@ -12,7 +12,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun App() {
     Navigator(screen = LandingScreen()) { navigator ->
         LaunchedEffect(Unit) {
-            delay(100)
+            delay(1000)
             navigator.push(ClockTestScreen(onStartClick = {
                 navigator.push(DrawClockScreen(onFinishClick = {
 

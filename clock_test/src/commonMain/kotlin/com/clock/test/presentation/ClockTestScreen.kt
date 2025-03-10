@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,9 +23,11 @@ import cafe.adriel.voyager.core.screen.Screen
 import com.clock.test.domain.VersionInfo
 import dmt_proms.clock_test.generated.resources.Res
 import dmt_proms.clock_test.generated.resources.clock
+import dmt_proms.clock_test.generated.resources.clock_icon_description
 import dmt_proms.clock_test.generated.resources.clock_test_title
 import dmt_proms.clock_test.generated.resources.footer_text
 import dmt_proms.clock_test.generated.resources.hit_logo
+import dmt_proms.clock_test.generated.resources.hit_logo_description
 import dmt_proms.clock_test.generated.resources.start_button_text
 import dmt_proms.clock_test.generated.resources.version
 import org.example.hit.heal.core.presentation.Colors.primaryColor
@@ -49,63 +50,73 @@ data class ClockTestScreen(
     private fun innerComponents() {
         Box(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.weight(1f))
+
                 // Title
                 Text(
                     text = stringResource(Res.string.clock_test_title),
-                    fontSize = MaterialTheme.typography.h1.fontSize,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 64.sp,
+                    fontWeight = FontWeight.Normal,
                     color = primaryColor
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(48.dp))
 
-                // Clock Icon (Local Image)
+                // Clock Icon
                 Image(
-                    painter = painterResource(Res.drawable.clock), // Ensure this resource exists
-                    contentDescription = "Clock Icon",
-                    modifier = Modifier.size(200.dp)
+                    painter = painterResource(Res.drawable.clock),
+                    contentDescription = stringResource(Res.string.clock_icon_description),
+                    modifier = Modifier.size(160.dp)
+                )
+
+                Spacer(modifier = Modifier.height(48.dp))
+
+                // Start Button
+                RoundedButton(
+                    text = stringResource(Res.string.start_button_text),
+                    modifier = Modifier
+                        .width(280.dp)
+                        .height(64.dp),
+                    onClick = onStartClick,
+                    fontSize = 24.sp
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Start Button
-                RoundedButton(
-                    Res.string.start_button_text,
-                    modifier = Modifier
-                        .width(180.dp)
-                        .height(60.dp),
-                    onStartClick
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
                 // Footer Text
                 Text(
                     text = stringResource(Res.string.footer_text),
-                    fontSize = 32.sp,
+                    fontSize = 28.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    modifier = Modifier.padding(horizontal = 48.dp)
                 )
+
+                Spacer(modifier = Modifier.weight(1f))
             }
+
+            // Logo at bottom left
             Image(
-                painter = painterResource(Res.drawable.hit_logo), "hit",
+                painter = painterResource(Res.drawable.hit_logo),
+                contentDescription = stringResource(Res.string.hit_logo_description),
                 modifier = Modifier
                     .align(Alignment.BottomStart)
-                    .size(200.dp)
+                    .padding(16.dp)
+                    .size(80.dp)
             )
 
+            // Version at bottom right
             Text(
-                text = stringResource(Res.string.version) + " " + VersionInfo.VERSION_NAME,
-                fontSize = MaterialTheme.typography.subtitle1.fontSize,
-                modifier = Modifier.align(Alignment.BottomEnd).padding(8.dp),
-                color = Color.Gray
+                text = "${stringResource(Res.string.version)} ${VersionInfo.VERSION_NAME}",
+                fontSize = 20.sp,
+                color = Color.Gray,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(16.dp)
             )
         }
     }

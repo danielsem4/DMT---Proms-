@@ -25,7 +25,6 @@ class FinalScreen : Screen {
     override fun Content() {
         TabletBaseScreen(
             title = stringResource(Res.string.final_screen_title),
-            topRightText = "3/3",
             content = {
                 Column(
                     modifier = Modifier
