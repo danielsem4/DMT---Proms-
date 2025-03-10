@@ -29,7 +29,6 @@ import dmt_proms.clock_test.generated.resources.clock_screen_title
 import dmt_proms.clock_test.generated.resources.next_button_text
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
-import kotlin.math.roundToInt
 
 data class ClockScreen(
     private val onFinishClick: () -> Unit
@@ -86,8 +85,8 @@ data class ClockScreen(
                         onClick = {
                             if (!isNextClicked) {
                                 isNextClicked = true
-                            } else if (currentHours.roundToInt() == 12 && currentMinutes.roundToInt() == 0) {
-                                onFinishClick()
+                            } else {
+                                navigator.push(FinalScreen())
                             }
                         }
                     )

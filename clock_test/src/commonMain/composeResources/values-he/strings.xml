@@ -23,4 +23,8 @@
     <string name="clock_instruction">כעת, כוון את השעון שעה 1:25 דקות, לאחר מכן יש ללחוץ על כפתור המשך</string>
     <string name="clock_instruction_twelve">כעת, כוון את השעון לשעה 12:00 בדיוק, לאחר מכן יש ללחוץ על כפתור המשך</string>
 
+    <string name="final_screen_title">משימה ראשונה</string>
+    <string name="final_screen_message">המשימה הגיעה לסיומה, תודה רבה על שיתוף הפעולה</string>
+    <string name="exit_button_text">יציאה</string>
+
 </resources>

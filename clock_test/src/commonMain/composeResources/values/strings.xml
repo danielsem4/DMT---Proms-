@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-    <string name="clock_test_title">Clock test</string>
-    <string name="hit_logo_description">Hit Logo</string>
+    <string name="clock_test_title">Clock Test</string>
+    <string name="hit_logo_description">HIT Logo</string>
     <string name="clock_icon_description">Clock Icon</string>
     <string name="start_button_text">Start</string>
-    <string name="footer_text">Good luck</string>
-    <string name="version">version</string>
+    <string name="footer_text">Instructions are written in masculine form but address all genders</string>
+    <string name="version">Version</string>
 
     <!-- Drawing Screen -->
     <string name="draw_screen_title">Draw</string>
-    <string name="draw_instruction">Draw a clock with all the numbers that show the time %1$s</string>
+    <string name="draw_instruction">Draw a clock with all numbers showing the time %1$s</string>
     <string name="erase_button_text">Erase</string>
     <string name="clear_all_button_text">Clear All</string>
     <string name="finish_button_text">Finish</string>
 
     <string name="completion_screen_title">First Task</string>
     <string name="completion_screen_message">You have completed the first stage, now we will move to the next stage</string>
-    <string name="completion_screen_message_next">Before you, there is a task of about a minute, please follow the instructions in the next stage to start the test, click on the continue button</string>
-    <string name="next_button_text">Next</string>
+    <string name="completion_screen_message_next">You have a one-minute clock task ahead, please follow the instructions on the next page to start the test, press the continue button</string>
+    <string name="next_button_text">Continue</string>
 
     <string name="clock_screen_title">Clock Setting</string>
-    <string name="clock_instruction">Now, set the clock to 1:25, then click the continue button</string>
-    <string name="clock_instruction_twelve">כעת, כוון את השעון לשעה 12:00 בדיוק, לאחר מכן יש ללחוץ על כפתור המשך</string>
-    
+    <string name="clock_instruction">Now, set the clock to 1:25, then press the continue button</string>
+    <string name="clock_instruction_twelve">Now, set the clock to exactly 12:00, then press the continue button</string>
+
+    <string name="final_screen_title">First Task</string>
+    <string name="final_screen_message">The task has been completed, thank you for your cooperation</string>
+    <string name="exit_button_text">Exit</string>
 </resources>
