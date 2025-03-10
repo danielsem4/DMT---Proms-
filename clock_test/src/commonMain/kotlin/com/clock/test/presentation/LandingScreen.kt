@@ -10,14 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import dmt_proms.clock_test.generated.resources.Res
+import dmt_proms.clock_test.generated.resources.clock_test_title
 import dmt_proms.clock_test.generated.resources.hit_logo
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 class LandingScreen :Screen{
     @Composable
     override fun Content() {
 
-        TabletBaseScreen(title = "Landing Screen", content = {
+        TabletBaseScreen(title = stringResource( Res.string.clock_test_title), content = {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center

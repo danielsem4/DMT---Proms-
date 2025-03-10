@@ -60,6 +60,7 @@ data class DrawClockScreen(
         // Manage drawn paths
         val paths = remember { mutableStateListOf<Path>() }
         var currentPath by remember { mutableStateOf<Path?>(null) }
+        var currentPathPoints by remember { mutableStateOf<List<androidx.compose.ui.geometry.Offset>>(emptyList()) }
 
         TabletBaseScreen(
             title = formattedTitle,
@@ -100,30 +101,41 @@ data class DrawClockScreen(
                                 .pointerInput(Unit) {
                                     detectDragGestures(
                                         onDragStart = { offset ->
-                                            // Create a new path and move to the starting point
+                                            currentPathPoints = listOf(offset)
                                             currentPath = Path().apply {
                                                 moveTo(offset.x, offset.y)
                                             }
-                                            // Add the new path to the list of paths
-                                            paths.add(currentPath!!)
                                         },
                                         onDrag = { change, _ ->
-                                            currentPath?.lineTo(
-                                                change.position.x,
-                                                change.position.y
-                                            )
+                                            currentPathPoints = currentPathPoints + change.position
+                                            currentPath = Path().apply {
+                                                moveTo(currentPathPoints.first().x, currentPathPoints.first().y)
+                                                currentPathPoints.forEach { point ->
+                                                    lineTo(point.x, point.y)
+                                                }
+                                            }
                                         },
                                         onDragEnd = {
+                                            currentPath?.let { paths.add(it) }
                                             currentPath = null
+                                            currentPathPoints = emptyList()
                                         },
                                         onDragCancel = {
                                             currentPath = null
+                                            currentPathPoints = emptyList()
                                         }
                                     )
                                 }
                                 .clipToBounds()
                         ) {
                             paths.forEach { path ->
+                                drawPath(
+                                    path = path,
+                                    color = Colors.primaryColor,
+                                    style = Stroke(width = 4.dp.toPx())
+                                )
+                            }
+                            currentPath?.let { path ->
                                 drawPath(
                                     path = path,
                                     color = Colors.primaryColor,
@@ -137,7 +149,9 @@ data class DrawClockScreen(
 
                     // Buttons Row
                     Row(
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight(.5f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(60.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         RoundedButton(
