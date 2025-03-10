@@ -18,4 +18,9 @@
     <string name="completion_screen_message">You have completed the first stage, now we will move to the next stage</string>
     <string name="completion_screen_message_next">Before you, there is a task of about a minute, please follow the instructions in the next stage to start the test, click on the continue button</string>
     <string name="next_button_text">Next</string>
+
+    <string name="clock_screen_title">Clock Setting</string>
+    <string name="clock_instruction">Now, set the clock to 1:25, then click the continue button</string>
+    <string name="clock_instruction_twelve">כעת, כוון את השעון לשעה 12:00 בדיוק, לאחר מכן יש ללחוץ על כפתור המשך</string>
+    
 </resources>

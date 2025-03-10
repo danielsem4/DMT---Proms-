@@ -19,4 +19,8 @@
     <string name="completion_screen_message_next">לפניך משימה של כדקה שעון, אנא עקוב אחר ההנחיות בעמוד הבא בשביל להתחיל את המבחן יש ללחוץ על כפתור המשך</string>
     <string name="next_button_text">המשך</string>
 
+    <string name="clock_screen_title">כוונון שעון</string>
+    <string name="clock_instruction">כעת, כוון את השעון שעה 1:25 דקות, לאחר מכן יש ללחוץ על כפתור המשך</string>
+    <string name="clock_instruction_twelve">כעת, כוון את השעון לשעה 12:00 בדיוק, לאחר מכן יש ללחוץ על כפתור המשך</string>
+
 </resources>
