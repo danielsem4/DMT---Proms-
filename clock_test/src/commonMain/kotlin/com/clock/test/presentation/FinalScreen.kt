@@ -11,8 +11,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.clock.test.presentation.components.InstructionBox
-import com.clock.test.utils.exitApplication
 import dmt_proms.clock_test.generated.resources.Res
 import dmt_proms.clock_test.generated.resources.exit_button_text
 import dmt_proms.clock_test.generated.resources.final_screen_message
@@ -23,6 +24,8 @@ import org.jetbrains.compose.resources.stringResource
 class FinalScreen : Screen {
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        
         TabletBaseScreen(
             title = stringResource(Res.string.final_screen_title),
             content = {
@@ -46,7 +49,7 @@ class FinalScreen : Screen {
                             .fillMaxWidth(0.3f)
                             .height(60.dp),
                         onClick = {
-                            exitApplication()
+                            navigator.popUntilRoot()
                         }
                     )
                     

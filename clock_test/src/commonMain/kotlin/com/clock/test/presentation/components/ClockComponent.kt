@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
@@ -41,6 +40,8 @@ fun ClockComponent(
     var isDraggingHour by remember { mutableStateOf(false) }
     var isDraggingMinute by remember { mutableStateOf(false) }
     val textMeasurer = rememberTextMeasurer()
+    val hourHandSizeRatio = 0.2f
+    val minuteHandSizeRatio = 0.4f
 
     Box(
         modifier = modifier.aspectRatio(1f)
@@ -52,12 +53,18 @@ fun ClockComponent(
                     detectDragGestures(
                         onDragStart = { offset ->
                             val center = Offset(size.width / 2f, size.height / 2f)
-                            val hourHandEnd = getHandEndPoint(center, hourAngle, size.width * 0.3f)
-                            val minuteHandEnd = getHandEndPoint(center, minuteAngle, size.width * 0.4f)
-                            
+                            val hourHandEnd =
+                                getHandEndPoint(center, hourAngle, size.width * hourHandSizeRatio)
+                            val minuteHandEnd =
+                                getHandEndPoint(
+                                    center,
+                                    minuteAngle,
+                                    size.width * minuteHandSizeRatio
+                                )
+
                             val distanceToHour = (offset - hourHandEnd).getDistance()
                             val distanceToMinute = (offset - minuteHandEnd).getDistance()
-                            
+
                             when {
                                 distanceToHour < 50f -> isDraggingHour = true
                                 distanceToMinute < 50f -> isDraggingMinute = true
@@ -67,13 +74,14 @@ fun ClockComponent(
                             val center = Offset(size.width / 2f, size.height / 2f)
                             val dragPosition = change.position
                             val angle = calculateAngle(center, dragPosition)
-                            
+
                             when {
                                 isDraggingHour -> {
                                     hourAngle = angle
                                     val hours = (hourAngle / (2 * PI) * 12).toFloat()
                                     onTimeChange(hours, (minuteAngle / (2 * PI) * 60).toFloat())
                                 }
+
                                 isDraggingMinute -> {
                                     minuteAngle = angle
                                     val minutes = (minuteAngle / (2 * PI) * 60).toFloat()
@@ -112,7 +120,7 @@ fun ClockComponent(
             drawClockHandWithArrow(
                 center = center,
                 angle = hourAngle,
-                length = size.width * 0.3f,
+                length = size.width * hourHandSizeRatio,
                 strokeWidth = 12.dp.toPx(),
                 color = Colors.primaryColor,
                 isHourHand = true
@@ -122,7 +130,7 @@ fun ClockComponent(
             drawClockHandWithArrow(
                 center = center,
                 angle = minuteAngle,
-                length = size.width * 0.4f,
+                length = size.width * minuteHandSizeRatio,
                 strokeWidth = 8.dp.toPx(),
                 color = Colors.primaryColor,
                 isHourHand = false
@@ -138,7 +146,11 @@ fun ClockComponent(
     }
 }
 
-private fun DrawScope.drawNumber(text: String, position: Int, textMeasurer: androidx.compose.ui.text.TextMeasurer) {
+private fun DrawScope.drawNumber(
+    text: String,
+    position: Int,
+    textMeasurer: androidx.compose.ui.text.TextMeasurer
+) {
     val center = Offset(size.width / 2, size.height / 2)
     val radius = size.minDimension / 2 - 40.dp.toPx()
     val angle = (position * 360f / 60f - 90f) * (PI / 180f)
@@ -146,7 +158,7 @@ private fun DrawScope.drawNumber(text: String, position: Int, textMeasurer: andr
         x = center.x + (radius * cos(angle)).toFloat(),
         y = center.y + (radius * sin(angle)).toFloat()
     )
-    
+
     val textLayoutResult = textMeasurer.measure(
         text = text,
         style = TextStyle(
@@ -155,7 +167,7 @@ private fun DrawScope.drawNumber(text: String, position: Int, textMeasurer: andr
             color = Colors.primaryColor
         )
     )
-    
+
     drawText(
         textLayoutResult = textLayoutResult,
         topLeft = Offset(
@@ -173,7 +185,7 @@ private fun DrawScope.drawDot(position: Int) {
         x = center.x + (radius * cos(angle)).toFloat(),
         y = center.y + (radius * sin(angle)).toFloat()
     )
-    
+
     drawCircle(
         color = Colors.primaryColor,
         radius = 2.dp.toPx(),
@@ -190,7 +202,7 @@ private fun DrawScope.drawClockHandWithArrow(
     isHourHand: Boolean
 ) {
     val endPoint = getHandEndPoint(center, angle, length)
-    
+
     // Draw main hand line
     drawLine(
         color = color,
@@ -199,38 +211,38 @@ private fun DrawScope.drawClockHandWithArrow(
         strokeWidth = strokeWidth,
         cap = StrokeCap.Round
     )
-    
+
     // Draw arrow
     val arrowPath = Path().apply {
         val arrowLength = if (isHourHand) 15.dp.toPx() else 20.dp.toPx()
         val arrowWidth = if (isHourHand) 10.dp.toPx() else 12.dp.toPx()
         val arrowOffset = 0.dp.toPx() // Remove offset to place arrow at the end point
-        
+
         // Calculate the arrow base point at the end point
         val arrowBase = endPoint
-        
+
         // Calculate arrow points
         val angleInDegrees = angle * 180f / PI.toFloat()
         val leftPointAngle = (angleInDegrees - 150) * PI.toFloat() / 180f
         val rightPointAngle = (angleInDegrees + 150) * PI.toFloat() / 180f
-        
+
         val leftPoint = Offset(
             arrowBase.x + (arrowLength * cos(leftPointAngle)).toFloat(),
             arrowBase.y + (arrowLength * sin(leftPointAngle)).toFloat()
         )
-        
+
         val rightPoint = Offset(
             arrowBase.x + (arrowLength * cos(rightPointAngle)).toFloat(),
             arrowBase.y + (arrowLength * sin(rightPointAngle)).toFloat()
         )
-        
+
         // Draw the arrow
         moveTo(arrowBase.x, arrowBase.y)
         lineTo(leftPoint.x, leftPoint.y)
         lineTo(rightPoint.x, rightPoint.y)
         close()
     }
-    
+
     drawPath(
         path = arrowPath,
         color = color
@@ -251,12 +263,3 @@ private fun calculateAngle(center: Offset, point: Offset): Float {
     )
 }
 
-private fun DrawScope.rotate(
-    degrees: Float,
-    pivot: Offset = Offset.Zero,
-    block: DrawScope.() -> Unit
-) {
-    rotate(degrees, pivot) {
-        block()
-    }
-} 

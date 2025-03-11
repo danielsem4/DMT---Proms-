@@ -20,7 +20,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
-import com.clock.test.domain.VersionInfo
 import dmt_proms.clock_test.generated.resources.Res
 import dmt_proms.clock_test.generated.resources.clock
 import dmt_proms.clock_test.generated.resources.clock_icon_description
@@ -29,7 +28,6 @@ import dmt_proms.clock_test.generated.resources.footer_text
 import dmt_proms.clock_test.generated.resources.hit_logo
 import dmt_proms.clock_test.generated.resources.hit_logo_description
 import dmt_proms.clock_test.generated.resources.start_button_text
-import dmt_proms.clock_test.generated.resources.version
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.painterResource
@@ -107,16 +105,6 @@ data class ClockTestScreen(
                     .align(Alignment.BottomStart)
                     .padding(16.dp)
                     .size(80.dp)
-            )
-
-            // Version at bottom right
-            Text(
-                text = "${stringResource(Res.string.version)} ${VersionInfo.VERSION_NAME}",
-                fontSize = 20.sp,
-                color = Color.Gray,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
             )
         }
     }

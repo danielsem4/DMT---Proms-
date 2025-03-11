@@ -17,6 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -26,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -40,8 +44,9 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import dmt_proms.clock_test.generated.resources.Res
 import dmt_proms.clock_test.generated.resources.clear_all_button_text
 import dmt_proms.clock_test.generated.resources.draw_instruction
+import dmt_proms.clock_test.generated.resources.draw_mode
 import dmt_proms.clock_test.generated.resources.draw_screen_title
-import dmt_proms.clock_test.generated.resources.erase_button_text
+import dmt_proms.clock_test.generated.resources.erase_mode
 import dmt_proms.clock_test.generated.resources.finish_button_text
 import org.example.hit.heal.core.presentation.Colors
 import org.example.hit.heal.core.presentation.components.RoundedButton
@@ -55,15 +60,13 @@ data class DrawClockScreen(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        // Title with time placeholder
         val formattedTitle = stringResource(Res.string.draw_screen_title, time)
-        // Instructions with time placeholder
         val instructions = stringResource(Res.string.draw_instruction, time)
 
-        // Manage drawn paths
         val paths = remember { mutableStateListOf<Path>() }
         var currentPath by remember { mutableStateOf<Path?>(null) }
-        var currentPathPoints by remember { mutableStateOf<List<androidx.compose.ui.geometry.Offset>>(emptyList()) }
+        var currentPathPoints by remember { mutableStateOf<List<Offset>>(emptyList()) }
+        var isEraseMode by remember { mutableStateOf(false) }
 
         TabletBaseScreen(
             title = formattedTitle,
@@ -72,12 +75,14 @@ data class DrawClockScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     // Instructions Text
                     Box(
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight(.1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(.08f),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -86,7 +91,7 @@ data class DrawClockScreen(
                             fontWeight = FontWeight.SemiBold,
                             color = Colors.primaryColor,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(bottom = 24.dp)
+                            modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
 
@@ -94,7 +99,7 @@ data class DrawClockScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(.8f)
+                            .fillMaxHeight(.85f)
                             .border(2.dp, Colors.primaryColor, RoundedCornerShape(8.dp))
                             .background(Color.White)
                     ) {
@@ -104,24 +109,38 @@ data class DrawClockScreen(
                                 .pointerInput(Unit) {
                                     detectDragGestures(
                                         onDragStart = { offset ->
-                                            currentPathPoints = listOf(offset)
-                                            currentPath = Path().apply {
-                                                moveTo(offset.x, offset.y)
+                                            if (!isEraseMode) {
+                                                currentPathPoints = listOf(offset)
+                                                currentPath = Path().apply {
+                                                    moveTo(offset.x, offset.y)
+                                                }
                                             }
                                         },
                                         onDrag = { change, _ ->
-                                            currentPathPoints = currentPathPoints + change.position
-                                            currentPath = Path().apply {
-                                                moveTo(currentPathPoints.first().x, currentPathPoints.first().y)
-                                                currentPathPoints.forEach { point ->
-                                                    lineTo(point.x, point.y)
+                                            if (isEraseMode) {
+                                                // Find and remove paths near the touch point
+                                                val touchPoint = change.position
+                                                paths.removeAll { path ->
+                                                    // Check if the touch point is near the path
+                                                    val bounds = path.getBounds()
+                                                    bounds.contains(touchPoint)
+                                                }
+                                            } else {
+                                                currentPathPoints = currentPathPoints + change.position
+                                                currentPath = Path().apply {
+                                                    moveTo(currentPathPoints.first().x, currentPathPoints.first().y)
+                                                    currentPathPoints.forEach { point ->
+                                                        lineTo(point.x, point.y)
+                                                    }
                                                 }
                                             }
                                         },
                                         onDragEnd = {
-                                            currentPath?.let { paths.add(it) }
-                                            currentPath = null
-                                            currentPathPoints = emptyList()
+                                            if (!isEraseMode) {
+                                                currentPath?.let { paths.add(it) }
+                                                currentPath = null
+                                                currentPathPoints = emptyList()
+                                            }
                                         },
                                         onDragCancel = {
                                             currentPath = null
@@ -148,35 +167,34 @@ data class DrawClockScreen(
                         }
                     }
 
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(8.dp))
 
                     // Buttons Row
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(60.dp),
+                            .height(50.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         RoundedButton(
                             text = stringResource(Res.string.clear_all_button_text),
                             modifier = Modifier.weight(1f),
                             onClick = {
-                                // Clear all paths
                                 paths.clear()
                             }
                         )
 
                         Spacer(Modifier.width(8.dp))
 
+                        // Toggle Draw/Erase Mode Button
                         RoundedButton(
-                            text = stringResource(Res.string.erase_button_text),
+                            text = if (isEraseMode) Res.string.draw_mode else Res.string.erase_mode,
                             modifier = Modifier.weight(1f),
                             onClick = {
-                                // Remove the last path if it exists
-                                if (paths.isNotEmpty()) {
-                                    paths.removeLast()
-                                }
-                            }
+                                isEraseMode = !isEraseMode
+                            },
+                            fontSize = 24.sp,
+                            icon = if (isEraseMode) Icons.Default.Create else Icons.Default.Delete
                         )
 
                         Spacer(Modifier.width(8.dp))
