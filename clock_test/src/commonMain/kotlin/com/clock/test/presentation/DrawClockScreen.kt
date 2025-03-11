@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -52,20 +53,31 @@ import dmt_proms.clock_test.generated.resources.finish_button_text
 import org.example.hit.heal.core.presentation.Colors
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 class DrawClockScreen : Screen {
-    private val time = ClockTime(11, 10)
-
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val formattedTitle = stringResource(Res.string.draw_screen_title, time)
-        val instructions = stringResource(Res.string.draw_instruction, time)
+        val viewModel = koinInject<TestViewModel>()
+        
+        // איפוס השעה ל-12:0 בעת טעינת המסך
+        viewModel.updateTime(ClockTime(12, 0))
+        
+        val currentTime by viewModel.currentTime.collectAsState()
+        val formattedTitle = stringResource(Res.string.draw_screen_title, currentTime.toString())
+        val instructions = stringResource(Res.string.draw_instruction, currentTime.toString())
 
         val paths = remember { mutableStateListOf<Path>() }
         var currentPath by remember { mutableStateOf<Path?>(null) }
         var currentPathPoints by remember { mutableStateOf<List<Offset>>(emptyList()) }
         var isEraseMode by remember { mutableStateOf(false) }
+
+        // פונקציה לעדכון ה-ViewModel עם נתיבי הציור
+        fun updatePathsInViewModel() {
+            // שומר את רשימת ה-paths ישירות ב-ViewModel
+            viewModel.updateDrawnPaths(paths.toList())
+        }
 
         TabletBaseScreen(
             title = formattedTitle,
@@ -137,6 +149,7 @@ class DrawClockScreen : Screen {
                                                 currentPath?.let { paths.add(it) }
                                                 currentPath = null
                                                 currentPathPoints = emptyList()
+                                                updatePathsInViewModel()
                                             }
                                         },
                                         onDragCancel = {
@@ -178,6 +191,7 @@ class DrawClockScreen : Screen {
                             modifier = Modifier.weight(1f),
                             onClick = {
                                 paths.clear()
+                                viewModel.clearDrawnPaths()
                             }
                         )
 

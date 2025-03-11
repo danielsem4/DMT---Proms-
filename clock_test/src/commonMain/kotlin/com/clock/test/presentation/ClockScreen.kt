@@ -10,10 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -30,13 +28,21 @@ import dmt_proms.clock_test.generated.resources.clock_screen_title
 import dmt_proms.clock_test.generated.resources.next_button_text
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 class ClockScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        var currentTime by remember { mutableStateOf(ClockTime(12, 0)) }
-        var isSecondStep by remember { mutableStateOf(false) }
+        val viewModel = koinInject<TestViewModel>()
+        
+        // איפוס השעה ל-12:0 אם זה השלב הראשון
+        val isSecondStep by viewModel.isSecondStep.collectAsState()
+        if (!isSecondStep) {
+            viewModel.updateTime(ClockTime(12, 0))
+        }
+        
+        val currentTime by viewModel.currentTime.collectAsState()
 
         TabletBaseScreen(
             title = stringResource(Res.string.clock_screen_title),
@@ -59,7 +65,7 @@ class ClockScreen : Screen {
                             modifier = Modifier.weight(0.4f),
                             initialTime = currentTime,
                             onTimeChange = { newTime ->
-                                currentTime = newTime
+                                viewModel.updateTime(newTime)
                             }
                         )
 
@@ -82,7 +88,7 @@ class ClockScreen : Screen {
                             .height(60.dp),
                         onClick = {
                             if (!isSecondStep) {
-                                isSecondStep = true
+                                viewModel.setSecondStep(true)
                             } else {
                                 navigator.push(FinalScreen())
                             }

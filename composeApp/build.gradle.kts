@@ -1,4 +1,3 @@
-
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -35,6 +34,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.core)
+            implementation(libs.koin.android)
         }
         commonMain.dependencies {
             implementation(projects.ui.core)
@@ -67,8 +68,6 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
-
-    dynamicFeatures += setOf(":clock_test")
 
     packaging {
         resources {

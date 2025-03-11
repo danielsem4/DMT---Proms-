@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.clock.test.presentation.components.ClockTime
 import com.clock.test.presentation.components.InstructionBox
 import dmt_proms.clock_test.generated.resources.Res
 import dmt_proms.clock_test.generated.resources.completion_screen_message
@@ -24,12 +25,17 @@ import dmt_proms.clock_test.generated.resources.completion_screen_title
 import dmt_proms.clock_test.generated.resources.next_button_text
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 class CompletionScreen : Screen {
     @Composable
     override fun Content() {
         var isFirstMessage by remember { mutableStateOf(true) }
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinInject<TestViewModel>()
+        
+        // איפוס המצב של שלב השעון לפני השימוש
+        viewModel.setSecondStep(false)
         
         TabletBaseScreen(
             title = stringResource(Res.string.completion_screen_title),
@@ -58,6 +64,8 @@ class CompletionScreen : Screen {
                             if (isFirstMessage) {
                                 isFirstMessage = false
                             } else {
+                                // איפוס השעה ל-12:0 לפני המעבר למסך השעון
+                                viewModel.updateTime(ClockTime(12, 0))
                                 navigator.push(ClockScreen())
                             }
                         }

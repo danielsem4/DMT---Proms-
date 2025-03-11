@@ -44,8 +44,8 @@ fun ClockComponent(
     onTimeChange: (ClockTime) -> Unit = {}
 ) {
     // Compute initial angles: adjust so 12:00 corresponds to -PI/2 radians.
-    val initialHourAngle =
-        ((initialTime.hours % 12f) / 12f) * (2 * PI.toFloat()) - (PI.toFloat() / 2)
+    val hoursForAngle = if (initialTime.hours % 12 == 0) 12f else initialTime.hours % 12f
+    val initialHourAngle = (hoursForAngle / 12f) * (2 * PI.toFloat()) - (PI.toFloat() / 2)
     val initialMinuteAngle = (initialTime.minutes / 60f) * (2 * PI.toFloat()) - (PI.toFloat() / 2)
     var hourAngle by remember { mutableStateOf(initialHourAngle) }
     var minuteAngle by remember { mutableStateOf(initialMinuteAngle) }
@@ -93,7 +93,11 @@ fun ClockComponent(
                             val normalizedMinute =
                                 ((minuteAngle + (PI.toFloat() / 2) + 2 * PI.toFloat()) % (2 * PI.toFloat()))
                             val computedMinutes = (normalizedMinute / (2 * PI.toFloat()) * 60f).toInt()
-                            onTimeChange(ClockTime(computedHours, computedMinutes))
+                            
+                            // אם השעה היא 0, נציג אותה כ-12
+                            val finalHours = if (computedHours == 0) 12 else computedHours
+                            
+                            onTimeChange(ClockTime(finalHours, computedMinutes))
                         },
                         onDragEnd = {
                             isDraggingHour = false
