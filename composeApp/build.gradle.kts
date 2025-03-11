@@ -67,6 +67,9 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
+    dynamicFeatures += setOf(":clock_test")
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
