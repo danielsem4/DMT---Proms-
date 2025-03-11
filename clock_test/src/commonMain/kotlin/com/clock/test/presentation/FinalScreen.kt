@@ -38,7 +38,8 @@ class FinalScreen : Screen {
                     Spacer(modifier = Modifier.weight(1f))
                     
                     InstructionBox(
-                        textResource = Res.string.final_screen_message
+                        textResource = Res.string.final_screen_message,
+                        modifier = Modifier.fillMaxWidth(0.8f)
                     )
                     
                     Spacer(modifier = Modifier.weight(1f))

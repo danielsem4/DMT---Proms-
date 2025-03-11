@@ -25,9 +25,7 @@ import dmt_proms.clock_test.generated.resources.next_button_text
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
 
-data class CompletionScreen(
-    private val onNextClick: () -> Unit
-) : Screen {
+class CompletionScreen : Screen {
     @Composable
     override fun Content() {
         var isFirstMessage by remember { mutableStateOf(true) }
@@ -60,12 +58,7 @@ data class CompletionScreen(
                             if (isFirstMessage) {
                                 isFirstMessage = false
                             } else {
-                                navigator.push(ClockScreen(
-                                    onFinishClick = {
-                                        // Handle finish click from clock screen
-                                        onNextClick()
-                                    }
-                                ))
+                                navigator.push(ClockScreen())
                             }
                         }
                     )

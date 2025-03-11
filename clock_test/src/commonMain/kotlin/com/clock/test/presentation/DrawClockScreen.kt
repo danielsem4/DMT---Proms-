@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.clock.test.presentation.components.ClockTime
 import dmt_proms.clock_test.generated.resources.Res
 import dmt_proms.clock_test.generated.resources.clear_all_button_text
 import dmt_proms.clock_test.generated.resources.draw_instruction
@@ -52,10 +53,8 @@ import org.example.hit.heal.core.presentation.Colors
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
 
-data class DrawClockScreen(
-    private val onFinishClick: () -> Unit
-) : Screen {
-    private val time: String = "11:10"
+class DrawClockScreen : Screen {
+    private val time = ClockTime(11, 10)
 
     @Composable
     override fun Content() {
@@ -118,10 +117,8 @@ data class DrawClockScreen(
                                         },
                                         onDrag = { change, _ ->
                                             if (isEraseMode) {
-                                                // Find and remove paths near the touch point
                                                 val touchPoint = change.position
                                                 paths.removeAll { path ->
-                                                    // Check if the touch point is near the path
                                                     val bounds = path.getBounds()
                                                     bounds.contains(touchPoint)
                                                 }
@@ -186,7 +183,6 @@ data class DrawClockScreen(
 
                         Spacer(Modifier.width(8.dp))
 
-                        // Toggle Draw/Erase Mode Button
                         RoundedButton(
                             text = if (isEraseMode) Res.string.draw_mode else Res.string.erase_mode,
                             modifier = Modifier.weight(1f),
@@ -203,11 +199,7 @@ data class DrawClockScreen(
                             text = stringResource(Res.string.finish_button_text),
                             modifier = Modifier.weight(1f),
                             onClick = {
-                                navigator.push(CompletionScreen(
-                                    onNextClick = {
-                                        // Here you can navigate to the next screen in the flow
-                                    }
-                                ))
+                                navigator.push(CompletionScreen())
                             }
                         )
                     }

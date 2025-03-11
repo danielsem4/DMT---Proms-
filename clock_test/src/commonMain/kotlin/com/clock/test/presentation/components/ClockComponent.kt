@@ -31,12 +31,16 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 // Data class representing clock time
-data class ClockTime(val hours: Float, val minutes: Float)
+data class ClockTime(val hours: Int, val minutes: Int) {
+    override fun toString(): String {
+        return "$hours:${minutes.toString().padStart(2, '0')}"
+    }
+}
 
 @Composable
 fun ClockComponent(
     modifier: Modifier = Modifier,
-    initialTime: ClockTime = ClockTime(12f, 0f),
+    initialTime: ClockTime = ClockTime(12, 0),
     onTimeChange: (ClockTime) -> Unit = {}
 ) {
     // Compute initial angles: adjust so 12:00 corresponds to -PI/2 radians.
@@ -85,10 +89,10 @@ fun ClockComponent(
                             // Normalize angles: shift by PI/2 so that -PI/2 => 0
                             val normalizedHour =
                                 ((hourAngle + (PI.toFloat() / 2) + 2 * PI.toFloat()) % (2 * PI.toFloat()))
-                            val computedHours = normalizedHour / (2 * PI.toFloat()) * 12f
+                            val computedHours = (normalizedHour / (2 * PI.toFloat()) * 12f).toInt()
                             val normalizedMinute =
                                 ((minuteAngle + (PI.toFloat() / 2) + 2 * PI.toFloat()) % (2 * PI.toFloat()))
-                            val computedMinutes = normalizedMinute / (2 * PI.toFloat()) * 60f
+                            val computedMinutes = (normalizedMinute / (2 * PI.toFloat()) * 60f).toInt()
                             onTimeChange(ClockTime(computedHours, computedMinutes))
                         },
                         onDragEnd = {

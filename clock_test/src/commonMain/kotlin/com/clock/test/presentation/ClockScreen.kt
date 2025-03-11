@@ -31,18 +31,16 @@ import dmt_proms.clock_test.generated.resources.next_button_text
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
 
-data class ClockScreen(
-    private val onFinishClick: () -> Unit
-) : Screen {
+class ClockScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        var currentTime by remember { mutableStateOf(ClockTime(12f, 0f)) }
-        var isNextClicked by remember { mutableStateOf(false) }
+        var currentTime by remember { mutableStateOf(ClockTime(12, 0)) }
+        var isSecondStep by remember { mutableStateOf(false) }
 
         TabletBaseScreen(
             title = stringResource(Res.string.clock_screen_title),
-            topRightText = if (isNextClicked) "3/3" else "2/3",
+            topRightText = if (isSecondStep) "3/3" else "2/3",
             content = {
                 Column(
                     modifier = Modifier
@@ -68,7 +66,7 @@ data class ClockScreen(
                         Spacer(modifier = Modifier.width(32.dp))
 
                         InstructionBox(
-                            textResource = if (isNextClicked) 
+                            textResource = if (isSecondStep) 
                                 Res.string.clock_instruction_twelve
                             else Res.string.clock_instruction,
                             modifier = Modifier.weight(0.6f)
@@ -83,8 +81,8 @@ data class ClockScreen(
                             .fillMaxWidth(0.3f)
                             .height(60.dp),
                         onClick = {
-                            if (!isNextClicked) {
-                                isNextClicked = true
+                            if (!isSecondStep) {
+                                isSecondStep = true
                             } else {
                                 navigator.push(FinalScreen())
                             }
