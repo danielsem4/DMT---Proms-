@@ -20,8 +20,8 @@
     <string name="next_button_text">המשך</string>
 
     <string name="clock_screen_title">כוונון שעון</string>
-    <string name="clock_instruction">כעת, כוון את השעון שעה 1:25 דקות, לאחר מכן יש ללחוץ על כפתור המשך</string>
-    <string name="clock_instruction_twelve">כעת, כוון את השעון לשעה 12:00 בדיוק, לאחר מכן יש ללחוץ על כפתור המשך</string>
+    <string name="clock_instruction">כעת, לפניך שעון שמראה את השעה 12:00, עליך לכוון את השעון באמצעות הזזת המחוגים 40 דקות קדימה, לאחר מכן יש ללחוץ על כפתור ההמשך</string>
+    <string name="clock_instruction_twelve">כעת, כוון את השעון שעה ו25 דקות קדימה, לאחר מכן יש ללחוץ על כפתור ההמשך</string>
 
     <string name="final_screen_title">משימה ראשונה</string>
     <string name="final_screen_message">המשימה הגיעה לסיומה, תודה רבה על שיתוף הפעולה</string>
