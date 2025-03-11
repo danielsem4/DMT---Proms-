@@ -26,4 +26,7 @@
     <string name="final_screen_title">First Task</string>
     <string name="final_screen_message">The task has been completed, thank you for your cooperation</string>
     <string name="exit_button_text">Exit</string>
+
+    <string name="draw_mode">Draw</string>
+    <string name="erase_mode">Erase</string>
 </resources>

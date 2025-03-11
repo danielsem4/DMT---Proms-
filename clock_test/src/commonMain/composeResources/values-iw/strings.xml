@@ -26,4 +26,7 @@
     <string name="final_screen_title">משימה ראשונה</string>
     <string name="final_screen_message">המשימה הגיעה לסיומה, תודה רבה על שיתוף הפעולה</string>
     <string name="exit_button_text">יציאה</string>
+
+    <string name="draw_mode">ציור</string>
+    <string name="erase_mode">מחיקה</string>
 </resources>
