@@ -21,6 +21,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.clock.test.presentation.components.ClockComponent
+import com.clock.test.presentation.components.ClockTime
 import com.clock.test.presentation.components.InstructionBox
 import dmt_proms.clock_test.generated.resources.Res
 import dmt_proms.clock_test.generated.resources.clock_instruction
@@ -36,8 +37,7 @@ data class ClockScreen(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        var currentHours by remember { mutableStateOf(0f) }
-        var currentMinutes by remember { mutableStateOf(0f) }
+        var currentTime by remember { mutableStateOf(ClockTime(12f, 0f)) }
         var isNextClicked by remember { mutableStateOf(false) }
 
         TabletBaseScreen(
@@ -59,9 +59,9 @@ data class ClockScreen(
                     ) {
                         ClockComponent(
                             modifier = Modifier.weight(0.4f),
-                            onTimeChange = { hours, minutes ->
-                                currentHours = hours
-                                currentMinutes = minutes
+                            initialTime = currentTime,
+                            onTimeChange = { newTime ->
+                                currentTime = newTime
                             }
                         )
 

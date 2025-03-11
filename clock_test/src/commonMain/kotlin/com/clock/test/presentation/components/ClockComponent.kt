@@ -30,13 +30,21 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
+// Data class representing clock time
+data class ClockTime(val hours: Float, val minutes: Float)
+
 @Composable
 fun ClockComponent(
     modifier: Modifier = Modifier,
-    onTimeChange: (hours: Float, minutes: Float) -> Unit = { _, _ -> }
+    initialTime: ClockTime = ClockTime(12f, 0f),
+    onTimeChange: (ClockTime) -> Unit = {}
 ) {
-    var hourAngle by remember { mutableStateOf(0f) }
-    var minuteAngle by remember { mutableStateOf(0f) }
+    // Compute initial angles: adjust so 12:00 corresponds to -PI/2 radians.
+    val initialHourAngle =
+        ((initialTime.hours % 12f) / 12f) * (2 * PI.toFloat()) - (PI.toFloat() / 2)
+    val initialMinuteAngle = (initialTime.minutes / 60f) * (2 * PI.toFloat()) - (PI.toFloat() / 2)
+    var hourAngle by remember { mutableStateOf(initialHourAngle) }
+    var minuteAngle by remember { mutableStateOf(initialMinuteAngle) }
     var isDraggingHour by remember { mutableStateOf(false) }
     var isDraggingMinute by remember { mutableStateOf(false) }
     val textMeasurer = rememberTextMeasurer()
@@ -55,39 +63,33 @@ fun ClockComponent(
                             val center = Offset(size.width / 2f, size.height / 2f)
                             val hourHandEnd =
                                 getHandEndPoint(center, hourAngle, size.width * hourHandSizeRatio)
-                            val minuteHandEnd =
-                                getHandEndPoint(
-                                    center,
-                                    minuteAngle,
-                                    size.width * minuteHandSizeRatio
-                                )
-
+                            val minuteHandEnd = getHandEndPoint(
+                                center,
+                                minuteAngle,
+                                size.width * minuteHandSizeRatio
+                            )
                             val distanceToHour = (offset - hourHandEnd).getDistance()
                             val distanceToMinute = (offset - minuteHandEnd).getDistance()
-
-                            when {
-                                distanceToHour < 50f -> isDraggingHour = true
-                                distanceToMinute < 50f -> isDraggingMinute = true
-                            }
+                            if (distanceToHour < 50f) isDraggingHour = true
+                            if (distanceToMinute < 50f) isDraggingMinute = true
                         },
                         onDrag = { change, _ ->
                             val center = Offset(size.width / 2f, size.height / 2f)
-                            val dragPosition = change.position
-                            val angle = calculateAngle(center, dragPosition)
-
-                            when {
-                                isDraggingHour -> {
-                                    hourAngle = angle
-                                    val hours = (hourAngle / (2 * PI) * 12).toFloat()
-                                    onTimeChange(hours, (minuteAngle / (2 * PI) * 60).toFloat())
-                                }
-
-                                isDraggingMinute -> {
-                                    minuteAngle = angle
-                                    val minutes = (minuteAngle / (2 * PI) * 60).toFloat()
-                                    onTimeChange((hourAngle / (2 * PI) * 12).toFloat(), minutes)
-                                }
+                            val angle = calculateAngle(center, change.position)
+                            if (isDraggingHour) {
+                                hourAngle = angle
                             }
+                            if (isDraggingMinute) {
+                                minuteAngle = angle
+                            }
+                            // Normalize angles: shift by PI/2 so that -PI/2 => 0
+                            val normalizedHour =
+                                ((hourAngle + (PI.toFloat() / 2) + 2 * PI.toFloat()) % (2 * PI.toFloat()))
+                            val computedHours = normalizedHour / (2 * PI.toFloat()) * 12f
+                            val normalizedMinute =
+                                ((minuteAngle + (PI.toFloat() / 2) + 2 * PI.toFloat()) % (2 * PI.toFloat()))
+                            val computedMinutes = normalizedMinute / (2 * PI.toFloat()) * 60f
+                            onTimeChange(ClockTime(computedHours, computedMinutes))
                         },
                         onDragEnd = {
                             isDraggingHour = false
@@ -96,20 +98,18 @@ fun ClockComponent(
                     )
                 }
         ) {
-            // Draw clock circle
+            // Draw clock face circle
             drawCircle(
                 color = Colors.primaryColor,
                 style = Stroke(width = 8.dp.toPx()),
                 radius = size.minDimension / 2 - 8.dp.toPx()
             )
 
-            // Draw numbers and dots
+            // Draw numbers and dots on clock face
             for (i in 1..60) {
                 if (i % 5 == 0) {
-                    // Draw main numbers
                     drawNumber((i / 5).toString(), i, textMeasurer)
                 } else {
-                    // Draw dots between numbers
                     drawDot(i)
                 }
             }
@@ -158,7 +158,6 @@ private fun DrawScope.drawNumber(
         x = center.x + (radius * cos(angle)).toFloat(),
         y = center.y + (radius * sin(angle)).toFloat()
     )
-
     val textLayoutResult = textMeasurer.measure(
         text = text,
         style = TextStyle(
@@ -167,7 +166,6 @@ private fun DrawScope.drawNumber(
             color = Colors.primaryColor
         )
     )
-
     drawText(
         textLayoutResult = textLayoutResult,
         topLeft = Offset(
@@ -185,7 +183,6 @@ private fun DrawScope.drawDot(position: Int) {
         x = center.x + (radius * cos(angle)).toFloat(),
         y = center.y + (radius * sin(angle)).toFloat()
     )
-
     drawCircle(
         color = Colors.primaryColor,
         radius = 2.dp.toPx(),
@@ -202,8 +199,6 @@ private fun DrawScope.drawClockHandWithArrow(
     isHourHand: Boolean
 ) {
     val endPoint = getHandEndPoint(center, angle, length)
-
-    // Draw main hand line
     drawLine(
         color = color,
         start = center,
@@ -211,38 +206,24 @@ private fun DrawScope.drawClockHandWithArrow(
         strokeWidth = strokeWidth,
         cap = StrokeCap.Round
     )
-
-    // Draw arrow
     val arrowPath = Path().apply {
         val arrowLength = if (isHourHand) 15.dp.toPx() else 20.dp.toPx()
-        val arrowWidth = if (isHourHand) 10.dp.toPx() else 12.dp.toPx()
-        val arrowOffset = 0.dp.toPx() // Remove offset to place arrow at the end point
-
-        // Calculate the arrow base point at the end point
-        val arrowBase = endPoint
-
-        // Calculate arrow points
         val angleInDegrees = angle * 180f / PI.toFloat()
         val leftPointAngle = (angleInDegrees - 150) * PI.toFloat() / 180f
         val rightPointAngle = (angleInDegrees + 150) * PI.toFloat() / 180f
-
         val leftPoint = Offset(
-            arrowBase.x + (arrowLength * cos(leftPointAngle)).toFloat(),
-            arrowBase.y + (arrowLength * sin(leftPointAngle)).toFloat()
+            endPoint.x + (arrowLength * cos(leftPointAngle)),
+            endPoint.y + (arrowLength * sin(leftPointAngle))
         )
-
         val rightPoint = Offset(
-            arrowBase.x + (arrowLength * cos(rightPointAngle)).toFloat(),
-            arrowBase.y + (arrowLength * sin(rightPointAngle)).toFloat()
+            endPoint.x + (arrowLength * cos(rightPointAngle)),
+            endPoint.y + (arrowLength * sin(rightPointAngle))
         )
-
-        // Draw the arrow
-        moveTo(arrowBase.x, arrowBase.y)
+        moveTo(endPoint.x, endPoint.y)
         lineTo(leftPoint.x, leftPoint.y)
         lineTo(rightPoint.x, rightPoint.y)
         close()
     }
-
     drawPath(
         path = arrowPath,
         color = color
@@ -251,15 +232,12 @@ private fun DrawScope.drawClockHandWithArrow(
 
 private fun getHandEndPoint(center: Offset, angle: Float, length: Float): Offset {
     return Offset(
-        x = center.x + (length * cos(angle)).toFloat(),
-        y = center.y + (length * sin(angle)).toFloat()
+        x = center.x + (length * cos(angle)),
+        y = center.y + (length * sin(angle))
     )
 }
 
 private fun calculateAngle(center: Offset, point: Offset): Float {
-    return atan2(
-        point.y - center.y,
-        point.x - center.x
-    )
+    return atan2(point.y - center.y, point.x - center.x)
 }
 
