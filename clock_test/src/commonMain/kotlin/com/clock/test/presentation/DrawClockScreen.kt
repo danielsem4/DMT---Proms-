@@ -48,6 +48,7 @@ import dmt_proms.clock_test.generated.resources.clear_all_button_text
 import dmt_proms.clock_test.generated.resources.draw_instruction
 import dmt_proms.clock_test.generated.resources.draw_mode
 import dmt_proms.clock_test.generated.resources.draw_screen_title
+import dmt_proms.clock_test.generated.resources.drawing_instruction
 import dmt_proms.clock_test.generated.resources.erase_mode
 import dmt_proms.clock_test.generated.resources.finish_button_text
 import org.example.hit.heal.core.presentation.Colors
@@ -60,10 +61,10 @@ class DrawClockScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinInject<TestViewModel>()
-        
+
         // איפוס השעה ל-12:0 בעת טעינת המסך
         viewModel.updateTime(ClockTime(12, 0))
-        
+
         val currentTime by viewModel.currentTime.collectAsState()
         val formattedTitle = stringResource(Res.string.draw_screen_title, currentTime.toString())
         val instructions = stringResource(Res.string.draw_instruction, currentTime.toString())
@@ -72,6 +73,7 @@ class DrawClockScreen : Screen {
         var currentPath by remember { mutableStateOf<Path?>(null) }
         var currentPathPoints by remember { mutableStateOf<List<Offset>>(emptyList()) }
         var isEraseMode by remember { mutableStateOf(false) }
+        var isDrawing by remember { mutableStateOf(false) }
 
         // פונקציה לעדכון ה-ViewModel עם נתיבי הציור
         fun updatePathsInViewModel() {
@@ -125,6 +127,7 @@ class DrawClockScreen : Screen {
                                                 currentPath = Path().apply {
                                                     moveTo(offset.x, offset.y)
                                                 }
+                                                isDrawing = true // start drawing: hide instruction text
                                             }
                                         },
                                         onDrag = { change, _ ->
@@ -151,10 +154,12 @@ class DrawClockScreen : Screen {
                                                 currentPathPoints = emptyList()
                                                 updatePathsInViewModel()
                                             }
+                                            isDrawing = false // finish drawing: show instruction text
                                         },
                                         onDragCancel = {
                                             currentPath = null
                                             currentPathPoints = emptyList()
+                                            isDrawing = false // finish drawing: show instruction text
                                         }
                                     )
                                 }
@@ -174,6 +179,17 @@ class DrawClockScreen : Screen {
                                     style = Stroke(width = 4.dp.toPx())
                                 )
                             }
+                        }
+                        // Overlay text for drawing instruction when not drawing
+                        if (!isDrawing) {
+                            Text(
+                                text = stringResource(Res.string.drawing_instruction),
+                                fontSize = 26.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Colors.primaryColor,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.align(Alignment.TopCenter).padding(8.dp)
+                            )
                         }
                     }
 

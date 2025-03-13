@@ -29,4 +29,5 @@
 
     <string name="draw_mode">Draw</string>
     <string name="erase_mode">Erase</string>
+    <string name="drawing_instruction">While drawing, make sure only your finger/stylus is on the tablet. If you placed your hand on the tablet, lift it and draw again.</string>
 </resources>

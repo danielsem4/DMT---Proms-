@@ -30,4 +30,6 @@
     <string name="draw_mode">ציור</string>
     <string name="erase_mode">מחיקה</string>
 
+    <string name="drawing_instruction">בעת הציור חשוב לוודא שרק האצבע/העט על גבי הטאבלט, במידה והנחתם את היד על הטאבלט יש להרים אותה ולצייר שוב</string>
+
 </resources>
