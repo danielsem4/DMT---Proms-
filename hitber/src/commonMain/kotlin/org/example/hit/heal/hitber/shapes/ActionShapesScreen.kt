@@ -51,7 +51,7 @@ class ActionShapesScreen : Screen {
 
         val navigator = LocalNavigator.current
         val selectedShapes by viewModel.selectedShapes.collectAsState()
-        val isFinished by viewModel.isFinished.collectAsState()
+        val isFinished by viewModel.isFinishedTask.collectAsState()
         var showDialog by remember { mutableStateOf(false) }
         val listShapes by viewModel.listShapes.collectAsState()
 
@@ -109,8 +109,13 @@ class ActionShapesScreen : Screen {
                     onClick = {
                         viewModel.calculateCorrectShapesCount()
                         viewModel.updateTask()
-                        viewModel.resetSelectedShapes()
-                        showDialog = true
+                        viewModel.setAnswersShapes()
+
+                        if (isFinished) {
+                            showDialog = false
+                        } else {
+                            showDialog = true
+                        }
 
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
@@ -141,13 +146,13 @@ class ActionShapesScreen : Screen {
                 text = "אנא בחר את 5 הצורות שראית לפני מספר שאלות",
                 onDismiss = { showDialog = false })
         }
+
         LaunchedEffect(isFinished) {
             if (isFinished) {
                 navigator?.push(ConcentrationScreen())
-                viewModel.setIsFinished(false)
-
             }
         }
+
     }
 }
 

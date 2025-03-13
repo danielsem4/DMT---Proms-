@@ -45,7 +45,7 @@ fun Questions(viewModel: ActivityViewModel) {
             dropDownItems = questionData.answers.map { DropDownItem(it) },
             viewModel = viewModel,
             onItemClick = { selectedAnswer ->
-                viewModel.setAnswers(questionData.question, selectedAnswer)
+                viewModel.setAnswersTimeAndPlace(questionData.question, selectedAnswer)
             }
         )
     }

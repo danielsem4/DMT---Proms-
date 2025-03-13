@@ -30,6 +30,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.kotlinx.datetime)
             implementation(compose.material3)
             implementation (libs.navigator)
             implementation (libs.navigator.tabs)

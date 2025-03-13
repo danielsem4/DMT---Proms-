@@ -98,6 +98,15 @@ class NamingScreen : Screen {
                         fontWeight = FontWeight.Bold
                     )
                 }
+
+                Text(
+                    text = "4/10",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = primaryColor,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                )
             }
 
 

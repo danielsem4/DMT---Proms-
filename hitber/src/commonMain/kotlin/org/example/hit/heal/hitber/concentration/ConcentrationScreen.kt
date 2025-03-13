@@ -47,7 +47,6 @@ class ConcentrationScreen : Screen {
         val buttonVisible by viewModel.startButtonIsVisible.collectAsState()
         val number by viewModel.number.collectAsState()
         val isFinished by viewModel.isFinished.collectAsState()
-        val coroutineScope = rememberCoroutineScope()
 
         BaseScreen(title = "ריכוז", onPrevClick = null, onNextClick = null, content = {
             Column(
@@ -69,9 +68,10 @@ class ConcentrationScreen : Screen {
                 if (buttonVisible) {
                     Button(
                         modifier = Modifier.width(200.dp).padding(bottom = 20.dp),
-                        onClick = { viewModel.startButtonSetVisible(false)
-                            viewModel.startRandomNumberGeneration(coroutineScope)
-                             },
+                        onClick = {
+                            viewModel.startButtonSetVisible(false)
+                            viewModel.startRandomNumberGeneration()
+                        },
                         colors = ButtonDefaults.buttonColors(primaryColor),
                         shape = RoundedCornerShape(50)
                     ) {
@@ -80,10 +80,8 @@ class ConcentrationScreen : Screen {
                             fontWeight = FontWeight.Bold
                         )
                     }
-                }
-
-                if (!buttonVisible) {
-                    if (isFinished)
+                } else {
+                    if (isFinished) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -93,13 +91,13 @@ class ConcentrationScreen : Screen {
                             Text(
                                 "תודה, אנא עבור לשאלה הבאה", color = primaryColor, fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
-                                modifier = Modifier.align(Alignment.Center))
+                                modifier = Modifier.align(Alignment.Center)
+                            )
                         }
-
-                    else
-                    RandomNumberScreen(
-                        number = number,
-                        onNumberClicked = { viewModel.addAnswer(it) })
+                    } else
+                        RandomNumberScreen(
+                            number = number,
+                            onNumberClicked = { viewModel.setAnswersConcentration(it) })
 
                 }
 

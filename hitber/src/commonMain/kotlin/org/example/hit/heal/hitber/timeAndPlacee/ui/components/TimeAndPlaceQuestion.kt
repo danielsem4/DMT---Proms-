@@ -167,7 +167,7 @@ fun TimeAndPlaceQuestion(
     onItemClick: (DropDownItem) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val selectedItem = viewModel.answersMap.value[question]
+    val selectedItem = viewModel.answersTimeAndPlace.value[question]
 
     Box(  modifier = Modifier
                 .fillMaxWidth()
@@ -208,7 +208,7 @@ fun TimeAndPlaceQuestion(
             dropDownItems.forEach { item ->
                 DropdownMenuItem(
                     onClick = {
-                        viewModel.setAnswers(question, item)
+                        viewModel.setAnswersTimeAndPlace(question, item)
                         onItemClick(item)
                         expanded = false
                     }
