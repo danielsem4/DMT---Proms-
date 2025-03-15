@@ -33,10 +33,10 @@ class CompletionScreen : Screen {
         var isFirstMessage by remember { mutableStateOf(true) }
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinInject<TestViewModel>()
-        
-        // איפוס המצב של שלב השעון לפני השימוש
+
+        // Reset the state of the clock step before use
         viewModel.setSecondStep(false)
-        
+
         TabletBaseScreen(
             title = stringResource(Res.string.completion_screen_title),
             topRightText = "1/3",
@@ -46,15 +46,15 @@ class CompletionScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
-                    
+
                     InstructionBox(
-                        textResource = if (isFirstMessage) 
+                        textResource = if (isFirstMessage)
                             Res.string.completion_screen_message
                         else Res.string.completion_screen_message_next
                     )
-                    
+
                     Spacer(modifier = Modifier.weight(1f))
-                    
+
                     RoundedButton(
                         text = stringResource(Res.string.next_button_text),
                         modifier = Modifier
@@ -64,16 +64,16 @@ class CompletionScreen : Screen {
                             if (isFirstMessage) {
                                 isFirstMessage = false
                             } else {
-                                // איפוס השעה ל-12:0 לפני המעבר למסך השעון
+                                // Reset the time to 12:0 before navigating to the clock screen
                                 viewModel.updateTime(ClockTime(12, 0))
                                 navigator.push(ClockScreen())
                             }
                         }
                     )
-                    
+
                     Spacer(modifier = Modifier.height(32.dp))
                 }
             }
         )
     }
-} 
+}

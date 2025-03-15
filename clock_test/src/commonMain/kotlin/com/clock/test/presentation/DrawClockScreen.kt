@@ -62,7 +62,7 @@ class DrawClockScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinInject<TestViewModel>()
 
-        // איפוס השעה ל-12:0 בעת טעינת המסך
+        // Reset the time to 12:0 when the screen loads
         viewModel.updateTime(ClockTime(12, 0))
 
         val currentTime by viewModel.currentTime.collectAsState()
@@ -75,9 +75,9 @@ class DrawClockScreen : Screen {
         var isEraseMode by remember { mutableStateOf(false) }
         var isDrawing by remember { mutableStateOf(false) }
 
-        // פונקציה לעדכון ה-ViewModel עם נתיבי הציור
+        // Function to update the ViewModel with the drawing paths
         fun updatePathsInViewModel() {
-            // שומר את רשימת ה-paths ישירות ב-ViewModel
+            // Saves the list of paths directly in the ViewModel
             viewModel.updateDrawnPaths(paths.toList())
         }
 

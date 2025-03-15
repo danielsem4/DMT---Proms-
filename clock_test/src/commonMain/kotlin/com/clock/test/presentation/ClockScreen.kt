@@ -35,13 +35,13 @@ class ClockScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinInject<TestViewModel>()
-        
-        // איפוס השעה ל-12:0 אם זה השלב הראשון
+
+        // Reset the time to 12:0 if this is the first step
         val isSecondStep by viewModel.isSecondStep.collectAsState()
         if (!isSecondStep) {
             viewModel.updateTime(ClockTime(12, 0))
         }
-        
+
         val currentTime by viewModel.currentTime.collectAsState()
 
         TabletBaseScreen(
@@ -72,7 +72,7 @@ class ClockScreen : Screen {
                         Spacer(modifier = Modifier.width(32.dp))
 
                         InstructionBox(
-                            textResource = if (isSecondStep) 
+                            textResource = if (isSecondStep)
                                 Res.string.clock_instruction_twelve
                             else Res.string.clock_instruction,
                             modifier = Modifier.weight(0.6f)
@@ -100,4 +100,4 @@ class ClockScreen : Screen {
             }
         )
     }
-} 
+}

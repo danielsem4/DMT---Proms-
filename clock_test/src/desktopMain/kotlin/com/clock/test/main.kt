@@ -1,4 +1,4 @@
-package org.example.hit.heal
+package com.clock.test
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
