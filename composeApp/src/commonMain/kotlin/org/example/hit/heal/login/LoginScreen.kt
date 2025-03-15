@@ -29,19 +29,28 @@ import dmt_proms.composeapp.generated.resources.med_presc
 import org.example.EmailTextField
 import org.example.PasswordTextField
 import org.example.hit.heal.Home.AuthViewModel
+import org.example.hit.heal.Home.LoginState
 import org.example.hit.heal.core.presentation.BaseScreen
 
 import org.jetbrains.compose.resources.painterResource
 
 
+
+
+
+
+
+
+
 @Composable
 fun LoginScreen(
-    viewModel: AuthViewModel = hiltViewModel(), // Assuming you're using Hilt for dependency injection
+    viewModel: AuthViewModel = hiltViewModel(),
     onLoginSuccess: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val loginState by viewModel.loginState.collectAsState()
+
 
     BaseScreen(title = "Login") {
         Column(
@@ -54,13 +63,14 @@ fun LoginScreen(
 
             // Login Image
             Image(
-                painter = painterResource(Res.drawable.med_presc), // Replace with actual image resource
+                painter = painterResource(Res.drawable.med_presc),
                 contentDescription = "Login Illustration",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(120.dp)
                     .padding(bottom = 20.dp)
             )
+
 
             EmailTextField(
                 email = email,
@@ -75,6 +85,7 @@ fun LoginScreen(
             )
 
             Spacer(modifier = Modifier.height(100.dp))
+
 
             // Login Button
             Button(
@@ -91,91 +102,18 @@ fun LoginScreen(
             ) {
                 Text("Login", fontSize = 20.sp, color = Color.White)
             }
-
-            // Display error message if login failed
             if (loginState is LoginState.Error) {
-                Text(
+                androidx.compose.material3.Text(
                     text = (loginState as LoginState.Error).message,
                     color = Color.Red,
                     modifier = Modifier.padding(top = 16.dp)
                 )
             }
-        }
-    }
-
-    // Navigate to the next screen upon successful login
-    LaunchedEffect(loginState) {
-        if (loginState is LoginState.Success) {
-            onLoginSuccess()
+            LaunchedEffect(loginState) {
+                if (loginState is LoginState.Success) {
+                    onLoginSuccess()
+                }
+            }
         }
     }
 }
-
-
-
-
-
-
-
-//
-//@Composable
-//fun LoginScreen(
-//    onLoginSuccess: () -> Unit
-//) {
-//    var email by remember { mutableStateOf("") }
-//    var password by remember { mutableStateOf("") }
-////    var passwordVisible by remember { mutableStateOf(false) }
-//
-//    BaseScreen(title = "Login") {
-//        Column(
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(16.dp)
-//        ) {
-//            Spacer(modifier = Modifier.height(20.dp))
-//
-//            // Login Image
-//            Image(
-//                painter = painterResource(Res.drawable.med_presc),
-//                contentDescription = "Login Illustration",
-//                contentScale = ContentScale.Fit,
-//                modifier = Modifier
-//                    .size(120.dp)
-//                    .padding(bottom = 20.dp)
-//            )
-//
-//
-//            EmailTextField(
-//                email = email,
-//                onValueChange = { email = it }
-//            )
-//
-//            Spacer(modifier = Modifier.height(16.dp))
-//
-//            PasswordTextField(
-//                password = password,
-//                onValueChange = { password = it }
-//            )
-//
-//            Spacer(modifier = Modifier.height(100.dp))
-//
-//
-//            // Login Button
-//            Button(
-//                onClick = {
-//                    if (email.isNotEmpty() && password.isNotEmpty()) {
-//                        onLoginSuccess()
-//                    }
-//                },
-//                modifier = Modifier
-//                    .fillMaxWidth(0.8f)
-//                    .height(50.dp),
-//                shape = RoundedCornerShape(33.dp),
-//                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF6FCF97))
-//            ) {
-//                Text("Login", fontSize = 20.sp, color = Color.White)
-//            }
-//        }
-//    }
-//}
