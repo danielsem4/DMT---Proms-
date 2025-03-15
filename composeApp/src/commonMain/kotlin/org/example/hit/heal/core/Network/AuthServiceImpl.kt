@@ -23,7 +23,7 @@ class AuthServiceImpl(private val httpClient: HttpClient) : AuthApi {
 
     private val baseUrl = "https://generic2.hitheal.org.il/api/v1"
 
-    override suspend fun login(loginRequest: LoginRequest): NetworkResult<LoginResponse> {
+    override suspend fun login(loginRequest: LoginRequest): NetworkResult<SuccessfulLoginResponse> {
         return try {
             val response = httpClient.post("$baseUrl/login") { // Added /login to the base url
                 contentType(ContentType.Application.Json)
@@ -31,7 +31,7 @@ class AuthServiceImpl(private val httpClient: HttpClient) : AuthApi {
             }
 
             if (response.status.isSuccess()) {
-                val loginResponse = response.body<LoginResponse>()
+                val loginResponse = response.body<SuccessfulLoginResponse>()
                 NetworkResult.Success(loginResponse)
             } else {
                 NetworkResult.Error("Login failed with status code: ${response.status.value}")
@@ -50,7 +50,6 @@ class AuthServiceImpl(private val httpClient: HttpClient) : AuthApi {
         }
     }
 }
-
 // Example of how to create the HttpClient
 val client = HttpClient {
     install(HttpSend)
