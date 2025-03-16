@@ -63,9 +63,9 @@ class DrawClockScreen : Screen {
         val viewModel = koinInject<TestViewModel>()
 
         // Reset the time to 12:0 when the screen loads
-        viewModel.updateTime(ClockTime(12, 0))
+        viewModel.updateFirstTime(ClockTime(12, 0))
 
-        val currentTime by viewModel.currentTime.collectAsState()
+        val currentTime by viewModel.drawTime.collectAsState()
         val formattedTitle = stringResource(Res.string.draw_screen_title, currentTime.toString())
         val instructions = stringResource(Res.string.draw_instruction, currentTime.toString())
 

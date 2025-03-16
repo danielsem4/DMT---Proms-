@@ -8,18 +8,28 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class TestViewModel {
     // Clock test data
-    private val _currentTime = MutableStateFlow(ClockTime(12, 0))
-    val currentTime: StateFlow<ClockTime> = _currentTime.asStateFlow()
+    private val firstClockTime = MutableStateFlow(ClockTime(12, 0))
+    private val secondClockTime = MutableStateFlow(ClockTime(12, 0))
+    private val _drawTime = MutableStateFlow(ClockTime(12, 0))
 
     private val _isSecondStep = MutableStateFlow(false)
-    val isSecondStep: StateFlow<Boolean> = _isSecondStep.asStateFlow()
-
     // Draw clock test data
     private val _drawnPaths = MutableStateFlow<List<Path>>(emptyList())
 
+    // Use asStateFlow to expose the clock times
+    val drawTime = _drawTime.asStateFlow()
+    val firstClockTimeState: StateFlow<ClockTime> = firstClockTime.asStateFlow()
+    val secondClockTimeState: StateFlow<ClockTime> = secondClockTime.asStateFlow()
+    val isSecondStep: StateFlow<Boolean> = _isSecondStep.asStateFlow()
+    val drawnPaths: StateFlow<List<Path>> = _drawnPaths.asStateFlow() // Expose drawn paths
+
     // Functions to update clock test data
-    fun updateTime(newTime: ClockTime) {
-        _currentTime.value = newTime
+    fun updateFirstTime(newTime: ClockTime) {
+        firstClockTime.value = newTime
+    }
+
+    fun updateSecondTime(newTime: ClockTime) {
+        secondClockTime.value = newTime
     }
 
     fun setSecondStep(isSecond: Boolean) {
@@ -34,11 +44,4 @@ class TestViewModel {
     fun clearDrawnPaths() {
         _drawnPaths.value = emptyList()
     }
-
-    // Reset all data
-    fun resetAll() {
-        _currentTime.value = ClockTime(12, 0)
-        _isSecondStep.value = false
-        _drawnPaths.value = emptyList()
-    }
-} 
+}

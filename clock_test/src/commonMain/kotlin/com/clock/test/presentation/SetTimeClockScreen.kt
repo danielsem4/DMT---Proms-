@@ -30,7 +30,7 @@ import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 
-class ClockScreen : Screen {
+class SetTimeClockScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -39,10 +39,10 @@ class ClockScreen : Screen {
         // Reset the time to 12:0 if this is the first step
         val isSecondStep by viewModel.isSecondStep.collectAsState()
         if (!isSecondStep) {
-            viewModel.updateTime(ClockTime(12, 0))
+            viewModel.updateFirstTime(ClockTime(12, 0))
         }
 
-        val currentTime by viewModel.currentTime.collectAsState()
+        val currentTime by viewModel.drawTime.collectAsState()
 
         TabletBaseScreen(
             title = stringResource(Res.string.clock_screen_title),
@@ -65,7 +65,11 @@ class ClockScreen : Screen {
                             modifier = Modifier.weight(0.4f),
                             initialTime = currentTime,
                             onTimeChange = { newTime ->
-                                viewModel.updateTime(newTime)
+                                if (!isSecondStep) {
+                                    viewModel.updateFirstTime(newTime)
+                                } else {
+                                    viewModel.updateSecondTime(newTime)
+                                }
                             }
                         )
 

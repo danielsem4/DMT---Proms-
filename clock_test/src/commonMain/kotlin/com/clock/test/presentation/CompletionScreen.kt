@@ -65,8 +65,8 @@ class CompletionScreen : Screen {
                                 isFirstMessage = false
                             } else {
                                 // Reset the time to 12:0 before navigating to the clock screen
-                                viewModel.updateTime(ClockTime(12, 0))
-                                navigator.push(ClockScreen())
+                                viewModel.updateFirstTime(ClockTime(12, 0))
+                                navigator.push(SetTimeClockScreen())
                             }
                         }
                     )
