@@ -11,7 +11,19 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
-//    SampleScreen()
-//    LoginScreen{}
-    HomeScreen{}
+    var isLoggedIn by remember { mutableStateOf(false) }
+
+    if (!isLoggedIn) {
+        LoginScreen(
+            onLoginSuccess = {
+                isLoggedIn = true
+            }
+        )
+    } else {
+        HomeScreen(
+            onLogout = {
+                isLoggedIn = false
+            }
+        )
+    }
 }
