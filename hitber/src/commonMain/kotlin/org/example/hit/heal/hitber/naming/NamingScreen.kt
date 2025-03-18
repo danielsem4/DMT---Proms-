@@ -64,7 +64,7 @@ class NamingScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        "כתוב מה מוצג בתמונה. לכתיבת התשובה יש ללחוץ על השאלה",
+                        "כתוב מה מוצג בתמונה. לכתיבת התשובה יש ללחוץ על השאלה. בסיום לחץ על המשך",
                         color = Color.Black,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -74,7 +74,7 @@ class NamingScreen : Screen {
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(100.dp),
+                        horizontalArrangement = Arrangement.spacedBy(200.dp),
                         modifier = Modifier.padding(bottom = 20.dp)
                     ) {
 
@@ -109,29 +109,26 @@ class NamingScreen : Screen {
                             Image(
                                 painter = painterResource(firstImage),
                                 contentDescription = "First Image",
-                                modifier = Modifier.size(300.dp).background(color = Color.White)
+                                modifier = Modifier.size(400.dp).background(color = Color.White)
                             )
                             Image(
                                 painter = painterResource(secondImage),
                                 contentDescription = "Second Image",
-                                modifier = Modifier.size(300.dp).background(color = Color.White)
+                                modifier = Modifier.size(400.dp).background(color = Color.White)
                             )
                         }
 
                     }
                 }
                 Button(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .align(Alignment.BottomCenter)
+                    modifier = Modifier.width(200.dp).align(Alignment.BottomCenter)
                         .padding(bottom = 16.dp),
-                    onClick = {viewModel.setAnswersNaming(answer1, answer2)
-                        navigator?.push(RepetitionScreen()) },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
+                    onClick = { navigator?.push(RepetitionScreen()) },
+                    colors = ButtonDefaults.buttonColors(primaryColor),
                     shape = RoundedCornerShape(50)
                 ) {
                     Text(
-                        "המשך", color = Color.White, fontSize = 24.sp,
+                        "המשך", color = Color.White, fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }

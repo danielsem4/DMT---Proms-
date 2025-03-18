@@ -74,7 +74,7 @@ class ShapeScreen : Screen {
                         Image(
                             painter = painterResource(shapeRes),
                             contentDescription = "Shape",
-                            modifier = Modifier.size(100.dp)
+                            modifier = Modifier.size(150.dp)
                         )
                     }
                 }
