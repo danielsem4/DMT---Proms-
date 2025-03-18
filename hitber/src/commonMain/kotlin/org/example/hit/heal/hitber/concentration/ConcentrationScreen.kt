@@ -47,6 +47,8 @@ class ConcentrationScreen : Screen {
         val buttonVisible by viewModel.startButtonIsVisible.collectAsState()
         val number by viewModel.number.collectAsState()
         val isFinished by viewModel.isFinished.collectAsState()
+        val isNumberClickable by viewModel.isNumberClickable.collectAsState()
+
 
         BaseScreen(title = "ריכוז", onPrevClick = null, onNextClick = null, content = {
             Column(
@@ -97,6 +99,7 @@ class ConcentrationScreen : Screen {
                     } else
                         RandomNumberScreen(
                             number = number,
+                            isClickable = isNumberClickable,
                             onNumberClicked = { viewModel.setAnswersConcentration(it) })
 
                 }
@@ -140,7 +143,7 @@ class ConcentrationScreen : Screen {
 
 
 @Composable
-fun RandomNumberScreen(number: Int, onNumberClicked: (Int) -> Unit) {
+fun RandomNumberScreen(number: Int, isClickable: Boolean, onNumberClicked: (Int) -> Unit) {
     var isClicked by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
@@ -149,7 +152,7 @@ fun RandomNumberScreen(number: Int, onNumberClicked: (Int) -> Unit) {
             .fillMaxWidth()
             .fillMaxHeight(0.8f)
             .background(if (isClicked) primaryColor else Color.White)
-            .clickable {
+            .clickable(enabled = isClickable) {
                 isClicked = true
                 onNumberClicked(number)
                 coroutineScope.launch {

@@ -19,7 +19,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +50,7 @@ class ActionShapesScreen : Screen {
 
         val navigator = LocalNavigator.current
         val selectedShapes by viewModel.selectedShapes.collectAsState()
-        val isFinished by viewModel.isFinishedTask.collectAsState()
+        val attempt by viewModel.attempt.collectAsState()
         var showDialog by remember { mutableStateOf(false) }
         val listShapes by viewModel.listShapes.collectAsState()
 
@@ -111,10 +110,10 @@ class ActionShapesScreen : Screen {
                         viewModel.updateTask()
                         viewModel.setAnswersShapes()
 
-                        if (isFinished) {
-                            showDialog = false
-                        } else {
+                        if (attempt < 3) {
                             showDialog = true
+                        } else {
+                            navigator?.push(ConcentrationScreen())
                         }
 
                     },
@@ -146,12 +145,12 @@ class ActionShapesScreen : Screen {
                 text = "אנא בחר את 5 הצורות שראית לפני מספר שאלות",
                 onDismiss = { showDialog = false })
         }
-
-        LaunchedEffect(isFinished) {
-            if (isFinished) {
-                navigator?.push(ConcentrationScreen())
-            }
-        }
+//
+//        LaunchedEffect(isFinished) {
+//            if (isFinished) {
+//                navigator?.push(ConcentrationScreen())
+//            }
+//        }
 
     }
 }

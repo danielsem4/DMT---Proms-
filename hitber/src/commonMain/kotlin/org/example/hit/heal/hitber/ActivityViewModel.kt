@@ -44,12 +44,12 @@ class ActivityViewModel : ViewModel() {
     private val _selectedShapes = MutableStateFlow<List<DrawableResource>>(emptyList())
     val selectedShapes: StateFlow<List<DrawableResource>> = _selectedShapes.asStateFlow()
 
-    private val _isFinishedTask = MutableStateFlow(false)
-    val isFinishedTask: StateFlow<Boolean> = _isFinishedTask.asStateFlow()
+    private val _attempt = MutableStateFlow(1)
+    val attempt: StateFlow<Int> = _attempt.asStateFlow()
 
     private val _answersShapes = MutableStateFlow<List<Triple<Int,List<DrawableResource>, Int>>>(emptyList())
 
-    private var attempt = 1
+//    private var attempt = 1
     private var correctShapesCount = 0
     private var distractorToRemove = 0
 
@@ -82,47 +82,43 @@ class ActivityViewModel : ViewModel() {
 
     fun updateTask() {
         when (correctShapesCount) {
-            5 -> finishTask()
+            5 -> _attempt.value=3
 
             4 -> {
-                when (attempt) {
-                    1, 2 -> attempt++
-                    3 -> finishTask()
+                when (attempt.value) {
+                    1, 2 -> _attempt.value++
                 }
             }
 
             3 -> {
-                when (attempt++) {
+                when (_attempt.value++) {
                     1 -> distractorToRemove = 1
                     2 -> distractorToRemove = 2
-                    3 -> finishTask()
                 }
                 removeDistractors(distractorToRemove)
             }
 
             2 -> {
-                when (attempt++) {
+                when (_attempt.value++) {
                     1 -> distractorToRemove = 2
                     2 -> distractorToRemove = 2
-                    3 -> finishTask()
                 }
                 removeDistractors(distractorToRemove)
             }
 
             1, 0 -> {
-                when (attempt++) {
+                when (_attempt.value++) {
                     1 -> distractorToRemove =  3
                     2 -> distractorToRemove = 2
-                    3 -> finishTask()
                 }
                 removeDistractors(distractorToRemove)
             }
         }
     }
 
-    private fun finishTask() {
-        _isFinishedTask.value = true
-    }
+//    private fun finishTask() {
+//        _attempt.value = 3
+//    }
 
     private fun removeDistractors(count: Int) {
         val distractors = _listShapes.value.filter { it !in selectedSet.value }
@@ -132,7 +128,7 @@ class ActivityViewModel : ViewModel() {
     }
 
     fun setAnswersShapes(){
-        _answersShapes.value += Triple(attempt-1, selectedShapes.value, correctShapesCount)
+        _answersShapes.value += Triple(_attempt.value-1, selectedShapes.value, correctShapesCount)
         resetSelectedShapes()
         println("תשובות שנשמרו: ${_answersShapes.value}")
 
@@ -156,6 +152,10 @@ class ActivityViewModel : ViewModel() {
     private val _number = MutableStateFlow((0..9).random())
     val number: StateFlow<Int> = _number.asStateFlow()
 
+    private val _isNumberClickable = MutableStateFlow(true)
+    val isNumberClickable: StateFlow<Boolean> = _isNumberClickable.asStateFlow()
+
+
     private val _isFinished = MutableStateFlow(false)
     val isFinished: StateFlow<Boolean> = _isFinished.asStateFlow()
 
@@ -164,8 +164,11 @@ class ActivityViewModel : ViewModel() {
     }
 
     fun setAnswersConcentration(answer: Int) {
-        val reactionTime = (Clock.System.now().toEpochMilliseconds() - numberAppearedAt) / 1000.0
-        _answersConcentration.value += Pair(reactionTime, answer)
+        if (_isNumberClickable.value) {
+            val reactionTime = (Clock.System.now().toEpochMilliseconds() - numberAppearedAt) / 1000.0
+            _answersConcentration.value += Pair(reactionTime, answer)
+            _isNumberClickable.value = false
+        }
     }
 
     fun startRandomNumberGeneration() {
@@ -174,6 +177,7 @@ class ActivityViewModel : ViewModel() {
                 delay(2500)
                 numberAppearedAt = Clock.System.now().toEpochMilliseconds()
                 _number.value = (0..9).random()
+                _isNumberClickable.value = true
                 elapsedTime += 2.5
             }
             _isFinished.value = true
