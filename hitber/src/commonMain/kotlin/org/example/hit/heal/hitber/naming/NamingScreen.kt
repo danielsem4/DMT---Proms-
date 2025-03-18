@@ -1,11 +1,14 @@
 package org.example.hit.heal.hitber.naming
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -14,6 +17,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,15 +33,26 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.repetition.RepetitionScreen
+import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class NamingScreen : Screen {
     @Composable
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        var text1 by remember { mutableStateOf("") }
-        var text2 by remember { mutableStateOf("") }
+        val viewModel: ActivityViewModel = koinViewModel()
+       // val viewModel: ActivityViewModel = viewModel()
+
+        var answer1 by remember { mutableStateOf("") }
+        var answer2 by remember { mutableStateOf("") }
+        val selectedCouple by viewModel.selectedCouple.collectAsState()
+
+        LaunchedEffect(Unit) {
+            viewModel.setRandomCouple()
+        }
 
 
         BaseScreen(title = "שיום", onPrevClick = null, onNextClick = null, content = {
@@ -61,9 +77,10 @@ class NamingScreen : Screen {
                         horizontalArrangement = Arrangement.spacedBy(100.dp),
                         modifier = Modifier.padding(bottom = 20.dp)
                     ) {
+
                         TextField(
-                            value = text1,
-                            onValueChange = { text1 = it },
+                            value = answer1,
+                            onValueChange = { answer1 = it },
                             label = { Text("מה מופיע בתמונה?", color = Color.Black) },
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = primaryColor,
@@ -73,8 +90,8 @@ class NamingScreen : Screen {
                         )
 
                         TextField(
-                            value = text2,
-                            onValueChange = { text2 = it },
+                            value = answer2,
+                            onValueChange = { answer2 = it },
                             label = { Text("מה מופיע בתמונה?", color = Color.Black) },
                             colors = TextFieldDefaults.outlinedTextFieldColors(
                                 focusedBorderColor = primaryColor,
@@ -83,13 +100,33 @@ class NamingScreen : Screen {
                             shape = RoundedCornerShape(0.dp)
                         )
                     }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(40.dp)) {
+
+                        selectedCouple?.let { (firstImage, secondImage) ->
+                            Image(
+                                painter = painterResource(firstImage),
+                                contentDescription = "First Image",
+                                modifier = Modifier.size(300.dp).background(color = Color.White)
+                            )
+                            Image(
+                                painter = painterResource(secondImage),
+                                contentDescription = "Second Image",
+                                modifier = Modifier.size(300.dp).background(color = Color.White)
+                            )
+                        }
+
+                    }
                 }
                 Button(
                     modifier = Modifier
                         .width(200.dp)
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 16.dp),
-                    onClick = {navigator?.push(RepetitionScreen()) },
+                    onClick = {viewModel.setAnswersNaming(answer1, answer2)
+                        navigator?.push(RepetitionScreen()) },
                     colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
                     shape = RoundedCornerShape(50)
                 ) {

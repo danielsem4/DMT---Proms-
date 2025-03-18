@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import org.example.hit.heal.hitber.naming.components.imageCouples
+import org.example.hit.heal.hitber.naming.components.imageNames
 import org.example.hit.heal.hitber.shapes.components.shapeList
 import org.example.hit.heal.hitber.shapes.components.shapeSets
 import org.jetbrains.compose.resources.DrawableResource
@@ -17,16 +19,9 @@ import org.jetbrains.compose.resources.DrawableResource
 class ActivityViewModel : ViewModel() {
 
     //Time and Place Question (1/10)
-//    private val _focusedQuestion = MutableStateFlow<String?>(null)
-//    val focusedQuestion: StateFlow<String?> = _focusedQuestion.asStateFlow()
-
     private val _answersTimeAndPlace = MutableStateFlow<Map<String, DropDownItem>>(emptyMap())
     val answersTimeAndPlace: StateFlow<Map<String, DropDownItem>> =
         _answersTimeAndPlace.asStateFlow()
-
-//    fun setFocusedQuestion(question: String?) {
-//        _focusedQuestion.value = question
-//    }
 
     fun setAnswersTimeAndPlace(question: String, answer: DropDownItem) {
         _answersTimeAndPlace.value = _answersTimeAndPlace.value.toMutableMap().apply {
@@ -47,17 +42,15 @@ class ActivityViewModel : ViewModel() {
     private val _attempt = MutableStateFlow(1)
     val attempt: StateFlow<Int> = _attempt.asStateFlow()
 
-    private val _answersShapes = MutableStateFlow<List<Triple<Int,List<DrawableResource>, Int>>>(emptyList())
+    private val _answersShapes =
+        MutableStateFlow<List<Triple<Int, List<DrawableResource>, Int>>>(emptyList())
 
-//    private var attempt = 1
     private var correctShapesCount = 0
     private var distractorToRemove = 0
 
 
     fun setRandomShapeSet() {
-        if (_selectedSet.value.isEmpty()) {
-            _selectedSet.value = shapeSets.random()
-        }
+        _selectedSet.value = shapeSets.random()
     }
 
     fun setSelectedShapes(shape: DrawableResource) {
@@ -75,14 +68,13 @@ class ActivityViewModel : ViewModel() {
     }
 
 
-
     fun calculateCorrectShapesCount() {
         correctShapesCount = selectedShapes.value.count { it in selectedSet.value }
     }
 
     fun updateTask() {
         when (correctShapesCount) {
-            5 -> _attempt.value=3
+            5 -> _attempt.value = 3
 
             4 -> {
                 when (attempt.value) {
@@ -108,17 +100,13 @@ class ActivityViewModel : ViewModel() {
 
             1, 0 -> {
                 when (_attempt.value++) {
-                    1 -> distractorToRemove =  3
+                    1 -> distractorToRemove = 3
                     2 -> distractorToRemove = 2
                 }
                 removeDistractors(distractorToRemove)
             }
         }
     }
-
-//    private fun finishTask() {
-//        _attempt.value = 3
-//    }
 
     private fun removeDistractors(count: Int) {
         val distractors = _listShapes.value.filter { it !in selectedSet.value }
@@ -127,8 +115,8 @@ class ActivityViewModel : ViewModel() {
         _listShapes.value = updatedList
     }
 
-    fun setAnswersShapes(){
-        _answersShapes.value += Triple(_attempt.value-1, selectedShapes.value, correctShapesCount)
+    fun setAnswersShapes() {
+        _answersShapes.value += Triple(_attempt.value - 1, selectedShapes.value, correctShapesCount)
         resetSelectedShapes()
         println("תשובות שנשמרו: ${_answersShapes.value}")
 
@@ -165,7 +153,8 @@ class ActivityViewModel : ViewModel() {
 
     fun setAnswersConcentration(answer: Int) {
         if (_isNumberClickable.value) {
-            val reactionTime = (Clock.System.now().toEpochMilliseconds() - numberAppearedAt) / 1000.0
+            val reactionTime =
+                (Clock.System.now().toEpochMilliseconds() - numberAppearedAt) / 1000.0
             _answersConcentration.value += Pair(reactionTime, answer)
             _isNumberClickable.value = false
         }
@@ -185,10 +174,22 @@ class ActivityViewModel : ViewModel() {
     }
 
     //naming Question (4/10)
-    private val _answersNaming = MutableStateFlow<List<Pair<Pair<String, String>, Pair<String, String>>>>(emptyList())
-    val answersNaming: StateFlow<List<Pair<Pair<String, String>, Pair<String, String>>>> = _answersNaming.asStateFlow()
+    private val _selectedCouple = MutableStateFlow<Pair<DrawableResource, DrawableResource>?>(null)
+    val selectedCouple: StateFlow<Pair<DrawableResource, DrawableResource>?> = _selectedCouple.asStateFlow()
 
-    fun setAnswersNaming(answer1: String, answer2: String,a: String, b: String) {
-        _answersNaming.value += Pair(Pair(answer1, a), Pair(answer2, b))
+    private val _answersNaming =
+        MutableStateFlow<Pair<Pair<String, String>, Pair<String, String>>?>(null)
+
+    fun setAnswersNaming(answer1: String, answer2: String) {
+        val currentCouple = _selectedCouple.value ?: return
+        val (image1, image2) = currentCouple
+
+        val correct1 = imageNames[image1] ?: "?"
+        val correct2 = imageNames[image2] ?: "?"
+        _answersNaming.value = Pair(Pair(answer1, correct1), Pair(answer2, correct2))
+    }
+
+    fun setRandomCouple() {
+        _selectedCouple.value = imageCouples.random()
     }
 }

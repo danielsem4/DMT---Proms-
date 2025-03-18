@@ -145,12 +145,6 @@ class ActionShapesScreen : Screen {
                 text = "אנא בחר את 5 הצורות שראית לפני מספר שאלות",
                 onDismiss = { showDialog = false })
         }
-//
-//        LaunchedEffect(isFinished) {
-//            if (isFinished) {
-//                navigator?.push(ConcentrationScreen())
-//            }
-//        }
 
     }
 }
