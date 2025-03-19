@@ -62,6 +62,9 @@ class DrawClockScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinInject<TestViewModel>()
 
+        // Start timing for drawing when the screen loads
+        viewModel.startDrawingTimer()
+
         // Reset the time to 12:0 when the screen loads
         viewModel.updateFirstTime(ClockTime(12, 0))
 
@@ -229,6 +232,8 @@ class DrawClockScreen : Screen {
                             text = stringResource(Res.string.finish_button_text),
                             modifier = Modifier.weight(1f),
                             onClick = {
+                                // Stop timing for drawing before navigating
+                                viewModel.stopDrawingTimer()
                                 navigator.replace(CompletionScreen())
                             }
                         )

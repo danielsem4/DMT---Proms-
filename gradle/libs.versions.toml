@@ -18,6 +18,7 @@ koinAndroid = "4.0.0"
 koinCompose = "4.0.0"
 kotlin = "2.1.0"
 kotlinx-coroutines = "1.10.1"
+kotlinxDatetime = "0.6.2"
 uiGraphicsAndroid = "1.7.8"
 kotlinStdlib = "2.1.0"
 runner = "1.5.2"
@@ -46,6 +47,7 @@ androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graph
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }

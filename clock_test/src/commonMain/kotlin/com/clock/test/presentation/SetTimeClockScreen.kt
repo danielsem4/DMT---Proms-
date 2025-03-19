@@ -36,6 +36,9 @@ class SetTimeClockScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinInject<TestViewModel>()
 
+        // Start timing for setting the first clock when the screen loads
+        viewModel.startSettingFirstClockTimer()
+
         // Reset the time to 12:0 if this is the first step
         val isSecondStep by viewModel.isSecondStep.collectAsState()
         if (!isSecondStep) {
@@ -93,7 +96,13 @@ class SetTimeClockScreen : Screen {
                         onClick = {
                             if (!isSecondStep) {
                                 viewModel.setSecondStep(true)
+                                // Stop timing for setting the first clock
+                                viewModel.stopSettingFirstClockTimer()
+                                // Start timing for setting the second clock
+                                viewModel.startSettingSecondClockTimer()
                             } else {
+                                // Stop timing for setting the second clock
+                                viewModel.stopSettingSecondClockTimer()
                                 navigator.replace(FinalScreen())
                             }
                         }

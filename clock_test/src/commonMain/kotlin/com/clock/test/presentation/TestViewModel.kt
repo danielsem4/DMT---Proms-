@@ -5,6 +5,7 @@ import com.clock.test.presentation.components.ClockTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.datetime.Clock
 
 class TestViewModel {
     // Clock test data
@@ -15,6 +16,12 @@ class TestViewModel {
     private val _isSecondStep = MutableStateFlow(false)
     // Draw clock test data
     private val _drawnPaths = MutableStateFlow<List<Path>>(emptyList())
+
+    // Time tracking
+    private var startTime: Long = 0
+    private var timeSpentDrawing: Long = 0
+    private var timeSpentSettingFirstClock: Long = 0
+    private var timeSpentSettingSecondClock: Long = 0
 
     // Use asStateFlow to expose the clock times
     val drawTime = _drawTime.asStateFlow()
@@ -44,4 +51,39 @@ class TestViewModel {
     fun clearDrawnPaths() {
         _drawnPaths.value = emptyList()
     }
+
+    // Start timing for drawing
+    fun startDrawingTimer() {
+        startTime = Clock.System.now().epochSeconds
+    }
+
+    // Stop timing for drawing and save the time spent
+    fun stopDrawingTimer() {
+        timeSpentDrawing += (Clock.System.now().epochSeconds- startTime)
+    }
+
+    // Start timing for setting the first clock
+    fun startSettingFirstClockTimer() {
+        startTime = Clock.System.now().epochSeconds
+    }
+
+    // Stop timing for setting the first clock and save the time spent
+    fun stopSettingFirstClockTimer() {
+        timeSpentSettingFirstClock += (Clock.System.now().epochSeconds- startTime)
+    }
+
+    // Start timing for setting the second clock
+    fun startSettingSecondClockTimer() {
+        startTime = Clock.System.now().epochSeconds
+    }
+
+    // Stop timing for setting the second clock and save the time spent
+    fun stopSettingSecondClockTimer() {
+        timeSpentSettingSecondClock += (Clock.System.now().epochSeconds- startTime)
+    }
+
+    // Get time spent in each activity
+    fun getTimeSpentDrawing(): Long = timeSpentDrawing
+    fun getTimeSpentSettingFirstClock(): Long = timeSpentSettingFirstClock
+    fun getTimeSpentSettingSecondClock(): Long = timeSpentSettingSecondClock
 }
