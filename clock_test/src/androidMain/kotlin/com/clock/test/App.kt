@@ -6,7 +6,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-// מחלקת האפליקציה שמאתחלת את Koin
+// This is the entry point for the Android application - initialize Koin
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
