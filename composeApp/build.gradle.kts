@@ -50,6 +50,9 @@ kotlin {
             implementation(libs.bundles.voyager.common)
             implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
             implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
+
+
 
         }
         desktopMain.dependencies {
@@ -87,6 +90,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.material3.android)
     debugImplementation(compose.uiTooling)
 }
 

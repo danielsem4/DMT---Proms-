@@ -13,13 +13,14 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.example.hit.heal.presentaion.components.ReportMedicationDialog
 import org.example.hit.heal.presentaion.screens.BaseScreen
 import org.example.hit.heal.presentaion.components.SearchBar
 
 
 class Medication(val name: String)
 
-class MedicationScreen () : Screen {
+class MedicationScreen (private val isReport: Boolean) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -42,6 +43,10 @@ class MedicationScreen () : Screen {
                 it.name.contains(searchQuery, ignoreCase = true)
             }
         }
+
+        var selectedMedication by remember { mutableStateOf<Medication?>(null) }
+        var showDialog by remember { mutableStateOf(false) }
+
         BaseScreen(title = "Medications") {
             Column(
                 modifier = Modifier
@@ -56,6 +61,7 @@ class MedicationScreen () : Screen {
                     onItemClicked = { keyboardController?.hide() },
                     modifier = Modifier
                         .fillMaxWidth()
+
                 )
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -66,7 +72,14 @@ class MedicationScreen () : Screen {
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { navigator.push(MedicationChooseScreen(medication.name)) }
+                                .clickable {
+                                 if (isReport) {
+                                     selectedMedication = medication
+                                     showDialog = true
+                                 } else {
+                                     navigator.push(MedicationReportDetailsScreen(medication.name))
+                                 }
+                            }
                                 .clip(RoundedCornerShape(10.dp)),
                             backgroundColor = Color.White,
                             elevation = 0.dp
@@ -75,12 +88,19 @@ class MedicationScreen () : Screen {
                             Text(
                                 text = medication.name,
                                 modifier = Modifier.padding(16.dp),
-                                style = MaterialTheme.typography.body1
+
                             )
                         }
                     }
                 }
             }
+        }
+
+        if (showDialog && selectedMedication != null) {
+            ReportMedicationDialog(
+                medicationName = selectedMedication!!.name,
+                onDismiss = { showDialog = false }
+            )
         }
     }
 }
