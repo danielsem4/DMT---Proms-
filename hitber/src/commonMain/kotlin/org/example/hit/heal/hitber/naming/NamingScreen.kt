@@ -123,7 +123,8 @@ class NamingScreen : Screen {
                 Button(
                     modifier = Modifier.width(200.dp).align(Alignment.BottomCenter)
                         .padding(bottom = 16.dp),
-                    onClick = { navigator?.push(RepetitionScreen()) },
+                    onClick = { viewModel.setAnswersNaming(answer1, answer2)
+                        navigator?.push(RepetitionScreen()) },
                     colors = ButtonDefaults.buttonColors(primaryColor),
                     shape = RoundedCornerShape(50)
                 ) {

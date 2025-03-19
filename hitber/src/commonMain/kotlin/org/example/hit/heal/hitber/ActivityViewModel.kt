@@ -1,6 +1,7 @@
 package org.example.hit.heal.hitber
 
 import DropDownItem
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -13,6 +14,7 @@ import org.example.hit.heal.hitber.naming.components.imageCouples
 import org.example.hit.heal.hitber.naming.components.imageNames
 import org.example.hit.heal.hitber.shapes.components.shapeList
 import org.example.hit.heal.hitber.shapes.components.shapeSets
+import org.example.hit.heal.hitber.understanding.components.fridgeItems
 import org.jetbrains.compose.resources.DrawableResource
 
 
@@ -192,4 +194,25 @@ class ActivityViewModel : ViewModel() {
     fun setRandomCouple() {
         _selectedCouple.value = imageCouples.random()
     }
+
+    //Understanding Question (6/10)
+    val itemPositions = fridgeItems.map { mutableStateOf(Pair(0f, 0f)) }
+
+    fun updateItemPosition(index: Int, dragAmount: Pair<Float, Float>) {
+        val currentPosition = itemPositions[index].value
+
+        // מחשבים את כמות התזוזה בהתאם לקנה המידה של המערכת.
+        val scaleFactor = 0.4f  // חישוב קנה מידה קטן יותר
+        val newX = currentPosition.first - dragAmount.first * scaleFactor
+        val newY = currentPosition.second + dragAmount.second * scaleFactor
+
+        // עדכון המיקום
+        itemPositions[index].value = Pair(newX, newY)
+    }
+
+
+
+
+
+
 }
