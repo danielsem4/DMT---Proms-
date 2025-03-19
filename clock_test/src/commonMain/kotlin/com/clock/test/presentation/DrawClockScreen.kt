@@ -229,7 +229,7 @@ class DrawClockScreen : Screen {
                             text = stringResource(Res.string.finish_button_text),
                             modifier = Modifier.weight(1f),
                             onClick = {
-                                navigator.push(CompletionScreen())
+                                navigator.replace(CompletionScreen())
                             }
                         )
                     }

@@ -50,7 +50,7 @@ class FinalScreen : Screen {
                             .fillMaxWidth(0.3f)
                             .height(60.dp),
                         onClick = {
-                            navigator.popUntilRoot()
+                            navigator.pop()
                         }
                     )
                     

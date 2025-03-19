@@ -26,7 +26,7 @@ class LandingScreen : Screen {
 
         LaunchedEffect(Unit) {
             delay(2000) // wait 2 seconds
-            navigator.push(DrawClockScreen())
+            navigator.replace(DrawClockScreen())
         }
 
         TabletBaseScreen(

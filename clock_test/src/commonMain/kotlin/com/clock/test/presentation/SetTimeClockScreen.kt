@@ -94,7 +94,7 @@ class SetTimeClockScreen : Screen {
                             if (!isSecondStep) {
                                 viewModel.setSecondStep(true)
                             } else {
-                                navigator.push(FinalScreen())
+                                navigator.replace(FinalScreen())
                             }
                         }
                     )
