@@ -1,16 +1,15 @@
 package org.example.hit.heal.hitber.understanding
 
+import TabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,7 +39,6 @@ import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.close_fridge
 import dmt_proms.hitber.generated.resources.open_fridge
 import dmt_proms.hitber.generated.resources.table
-import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.dragAndDrop.DragAndDropScreen
@@ -53,18 +51,17 @@ class UnderstandingScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        var isClicked by remember { mutableStateOf(false) }
+        var isClicked by remember { mutableStateOf(true) }
         var fridgeSize by remember { mutableStateOf(0f to 0f) }
         val viewModel: ActivityViewModel = viewModel()
 
-        BaseScreen(title = "הבנת הוראות", onPrevClick = null, onNextClick = null, content = {
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+        TabletBaseScreen(
+            title = "הבנת הוראות",
+            onNextClick = { navigator?.push(DragAndDropScreen()) },
+            question = 6,
+            buttonText = "המשך",
+            buttonColor = primaryColor,
+            content = {
                     Text(
                         "בחלק זה תתבקש לבצע מטלה. לשמיעת המטלה לחץ על הקשב. בסיום לחץ על המשך.",
                         color = Color.Black,
@@ -75,9 +72,10 @@ class UnderstandingScreen : Screen {
                     )
 
                     Button(
-                        onClick = {}, modifier = Modifier,
-                        colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
-                        shape = RoundedCornerShape(50)
+                        onClick = {},
+                        colors = ButtonDefaults.buttonColors(primaryColor),
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        shape = RoundedCornerShape(30)
                     ) {
                         Text(
                             "הקשב", color = Color.White, fontSize = 20.sp,
@@ -86,8 +84,7 @@ class UnderstandingScreen : Screen {
                     }
 
                     Row(
-                        modifier = Modifier.fillMaxWidth()
-                            .fillMaxHeight(0.9f)
+                        modifier = Modifier
                             .background(color = Color.White, shape = RoundedCornerShape(4))
                     ) {
                         Box(
@@ -129,7 +126,7 @@ class UnderstandingScreen : Screen {
                                                         Pair(dragAmount.x, dragAmount.y)
                                                     )
                                                 }
-                                            } .zIndex(1f)
+                                            }.zIndex(1f)
                                     ) {
                                         Image(
                                             painter = painterResource(item.image),
@@ -145,7 +142,7 @@ class UnderstandingScreen : Screen {
                         Box(
                             modifier = Modifier
                                 .weight(1f)
-                                .fillMaxHeight()  .zIndex(-1f)
+                                .fillMaxHeight().zIndex(-1f)
                         ) {
                             Image(
                                 painter = painterResource(Res.drawable.table),
@@ -154,34 +151,7 @@ class UnderstandingScreen : Screen {
                             )
                         }
                     }
-                }
-
-                Button(
-                    modifier = Modifier.width(200.dp).align(Alignment.BottomCenter)
-                        .padding(bottom = 16.dp),
-                    onClick = { navigator?.push(DragAndDropScreen()) },
-                    colors = ButtonDefaults.buttonColors(primaryColor),
-                    shape = RoundedCornerShape(50)
-                ) {
-                    Text(
-                        "המשך", color = Color.White, fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Text(
-                    text = "6/10",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = primaryColor,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                )
-
-            }
-
-
-        })
+            })
 
     }
 }

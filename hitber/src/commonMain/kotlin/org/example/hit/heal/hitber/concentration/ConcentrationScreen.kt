@@ -1,13 +1,10 @@
 package org.example.hit.heal.hitber.concentration
 
+import TabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,7 +28,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.naming.NamingScreen
@@ -49,45 +45,48 @@ class ConcentrationScreen : Screen {
         val isFinished by viewModel.isFinished.collectAsState()
         val isNumberClickable by viewModel.isNumberClickable.collectAsState()
 
-
-        BaseScreen(title = "ריכוז", onPrevClick = null, onNextClick = null, content = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-
+        TabletBaseScreen(
+            title = "ריכוז",
+            onNextClick = { if (isFinished) navigator?.push(NamingScreen()) },
+            question = 3,
+            buttonText = "המשך",
+            buttonColor = if (isFinished) primaryColor else Color.Gray,
+            content = {
                 Text(
                     "בדקה הקרובה יופיעו במרכז המסך מספרים, בכל פעם שתראה את הספרה 7 עליך ללחוץ על המסך. להתחלת המטלה יש ללחוץ על התחל. בסיום המטלה תופיע ההודעה תודה. לחץ על המשך",
                     color = Color.Black,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 20.dp)
-
                 )
 
                 if (buttonVisible) {
                     Button(
-                        modifier = Modifier.width(200.dp).padding(bottom = 20.dp),
+                        modifier = Modifier.width(300.dp).padding(bottom = 20.dp)
+                            .align(Alignment.CenterHorizontally),
                         onClick = {
                             viewModel.startButtonSetVisible(false)
                             viewModel.startRandomNumberGeneration()
                         },
                         colors = ButtonDefaults.buttonColors(primaryColor),
-                        shape = RoundedCornerShape(50)
+                        shape = RoundedCornerShape(30)
                     ) {
                         Text(
-                            "התחל", color = Color.White, fontSize = 15.sp,
+                            "התחל", color = Color.White, fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
+
                     }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(color = Color.White)
+                    )
                 } else {
                     if (isFinished) {
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .fillMaxHeight(0.8f)
+                                .fillMaxSize()
                                 .background(color = Color.White)
                         ) {
                             Text(
@@ -101,46 +100,10 @@ class ConcentrationScreen : Screen {
                             number = number,
                             isClickable = isNumberClickable,
                             onNumberClicked = { viewModel.setAnswersConcentration(it) })
-
                 }
-
-
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Button(
-                        modifier = Modifier.width(200.dp).align(Alignment.BottomCenter)
-                            .padding(bottom = 16.dp),
-                        onClick = { if (isFinished) navigator?.push(NamingScreen()) },
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = if (isFinished) primaryColor else Color.Gray
-                        ),
-                        shape = RoundedCornerShape(50)
-                    ) {
-                        Text(
-                            "המשך", color = Color.White, fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    Text(
-                        text = "3/10",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = primaryColor,
-                        modifier = Modifier
-                            .align(Alignment.BottomStart)
-                    )
-                }
-
-
-            }
-
-        })
-
+            })
     }
 }
-
 
 @Composable
 fun RandomNumberScreen(number: Int, isClickable: Boolean, onNumberClicked: (Int) -> Unit) {
@@ -149,8 +112,7 @@ fun RandomNumberScreen(number: Int, isClickable: Boolean, onNumberClicked: (Int)
 
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.8f)
+            .fillMaxSize()
             .background(if (isClicked) primaryColor else Color.White)
             .clickable(enabled = isClickable) {
                 isClicked = true

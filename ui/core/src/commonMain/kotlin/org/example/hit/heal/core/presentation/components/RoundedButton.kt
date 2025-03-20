@@ -17,13 +17,13 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RoundedButton(text: String, modifier: Modifier, onclick: () -> Unit) {
-    Button(
-        onClick = onclick, colors = ButtonDefaults.buttonColors(Colors.primaryColor),
-        shape = RoundedCornerShape(50),
-        modifier = modifier,
-    ) {
-        Text(text, color = Color.White, fontSize = 32.sp, modifier = Modifier.padding(horizontal = 8.dp))
-    }
+        Button(
+            onClick = onclick, colors = ButtonDefaults.buttonColors(Colors.primaryColor),
+            shape = RoundedCornerShape(50),
+            modifier = modifier,
+        ) {
+            Text(text, color = Color.White, fontSize = 32.sp, modifier = Modifier.padding(horizontal = 8.dp))
+        }
 }
 
 @Composable

@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import org.example.hit.heal.hitber.di.initKoin
-import org.example.hit.heal.hitber.understanding.UnderstandingScreen
+import org.example.hit.heal.hitber.shapes.ActionShapesScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,19 +39,19 @@ class MainActivity : ComponentActivity() {
 @Preview(
     name = "Tablet Preview",
     showBackground = true,
-    widthDp = 2000,
-    heightDp = 1200
+    widthDp = 1280,
+    heightDp = 800
 )
 @Composable
 fun AppTabletPreview() {
     //EntryScreen().Content()
     //TimeAndPlace().Content()
-    // ShapeScreen().Content()
-   // ActionShapesScreen().Content()
+    //ShapeScreen().Content()
+   ActionShapesScreen().Content()
     //ConcentrationScreen().Content()
     //NamingScreen().Content()
     //RepetitionScreen().Content()
-    UnderstandingScreen().Content()
+    //UnderstandingScreen().Content()
     //DragAndDropScreen().Content()
     // WritingScreen().Content()
     // BuildShapeScreen().Content()

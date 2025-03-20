@@ -1,22 +1,18 @@
 package org.example.hit.heal.hitber.shapes
 
+import TabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -30,23 +26,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.error_icon
-import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.concentration.ConcentrationScreen
 import org.example.hit.heal.hitber.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
 
 
 class ActionShapesScreen : Screen {
+    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     override fun Content() {
-        val viewModel: ActivityViewModel = koinViewModel()
+
+       // val viewModel: ActivityViewModel = koinViewModel()
+        val viewModel: ActivityViewModel = viewModel()
 
         val navigator = LocalNavigator.current
         val selectedShapes by viewModel.selectedShapes.collectAsState()
@@ -54,88 +52,59 @@ class ActionShapesScreen : Screen {
         var showDialog by remember { mutableStateOf(false) }
         val listShapes by viewModel.listShapes.collectAsState()
 
-        BaseScreen(title = "צורות", onPrevClick = null, onNextClick = null, content = {
+        TabletBaseScreen(title = "צורות", onNextClick = {
+            viewModel.calculateCorrectShapesCount()
+            viewModel.updateTask()
+            viewModel.setAnswersShapes()
+
+            if (attempt < 3) {
+                showDialog = true
+            } else {
+                navigator?.push(ConcentrationScreen())
+            }
+
+        }, question = 2, buttonText = "המשך", buttonColor = primaryColor, content = {
+            Text(
+                "לפניך מספר צורות, עליך לבחור את 5 הצורות שראית לפני מספר דקות באמצעות לחיצה עליהן, אם אינך זוכר אפשר לנחש. בסיום לחץ על המשך.",
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+                    .padding(bottom = 30.dp)
+            )
+
             Box(
                 modifier = Modifier.fillMaxSize()
+                    .background(Color.White, shape = RoundedCornerShape(4))
+                    .padding(16.dp)
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    verticalArrangement = Arrangement.spacedBy(40.dp)
                 ) {
-                    Text(
-                        "לפניך מספר צורות, עליך לבחור את 5 הצורות שראית לפני מספר דקות באמצעות לחיצה עליהן, אם אינך זוכר אפשר לנחש. בסיןם לחץ על המשך.",
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                            .padding(bottom = 30.dp)
-                    )
+                    val chunkedShapes = listShapes.chunked(5)
 
-                    Box(
-                        modifier = Modifier.fillMaxWidth()
-                            .fillMaxHeight(0.8f)
-                            .background(color = Color.White, shape = RoundedCornerShape(4))
-                    )
-                    {
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(5),
-                            modifier = Modifier.fillMaxSize()
+                    chunkedShapes.forEach { rowShapes ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth().weight(1f),
+                            horizontalArrangement = Arrangement.spacedBy(40.dp)
                         ) {
-                            items(listShapes) { shapeRes ->
+                            rowShapes.forEach { shapeRes ->
                                 val isSelected = selectedShapes.contains(shapeRes)
                                 val shapeColor = if (isSelected) primaryColor else Color.Transparent
 
                                 Image(
                                     painter = painterResource(shapeRes),
                                     contentDescription = "Shape",
-                                    modifier = Modifier.size(150.dp)
-                                        .padding(10.dp)
-                                        .background(shapeColor)
-                                        .clickable {
-                                            viewModel.setSelectedShapes(shapeRes)
-                                        }
+                                    modifier = Modifier
+                                        .background(shapeColor).weight(1f)
+                                        .clickable { viewModel.setSelectedShapes(shapeRes) }
                                 )
                             }
                         }
                     }
-
                 }
-                Button(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 16.dp),
-                    onClick = {
-                        viewModel.calculateCorrectShapesCount()
-                        viewModel.updateTask()
-                        viewModel.setAnswersShapes()
-
-                        if (attempt < 3) {
-                            showDialog = true
-                        } else {
-                            navigator?.push(ConcentrationScreen())
-                        }
-
-                    },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
-                    shape = RoundedCornerShape(50)
-                ) {
-                    Text(
-                        "המשך", color = Color.White, fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Text(
-                    text = "2/10",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = primaryColor,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                )
             }
-
 
         })
         if (showDialog) {

@@ -1,21 +1,12 @@
 package org.example.hit.heal.hitber.shapes
 
+import TabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,14 +17,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.profile
-import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.shapes.components.DialogTask
@@ -46,7 +34,6 @@ class ShapeScreen : Screen {
 
         val navigator = LocalNavigator.current
         val viewModel: ActivityViewModel = koinViewModel()
-
         var showDialog by remember { mutableStateOf(true) }
         val shapeSet by viewModel.selectedSet.collectAsState()
 
@@ -54,17 +41,15 @@ class ShapeScreen : Screen {
             viewModel.setRandomShapeSet()
         }
 
-        BaseScreen(title = "צורות", onPrevClick = null, onNextClick = null, content = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        TabletBaseScreen(
+            title = "צורות",
+            onNextClick = { navigator?.push(ActionShapesScreen()) },
+            question = 2,
+            buttonText = "המשך", buttonColor = primaryColor,
+            content = {
 
                 Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .fillMaxHeight(0.8f)
+                    modifier = Modifier.fillMaxSize()
                         .background(color = Color.White),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly,
@@ -78,34 +63,7 @@ class ShapeScreen : Screen {
                         )
                     }
                 }
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Button(
-                        modifier = Modifier.width(200.dp).align(Alignment.BottomCenter)
-                            .padding(bottom = 16.dp),
-                        onClick = { navigator?.push(ActionShapesScreen()) },
-                        colors = ButtonDefaults.buttonColors(primaryColor),
-                        shape = RoundedCornerShape(50)
-                    ) {
-                        Text(
-                            "המשך", color = Color.White, fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
-                    Text(
-                        text = "2/10",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = primaryColor,
-                        modifier = Modifier
-                            .align(Alignment.BottomStart)
-                    )
-                }
-            }
-
-        })
+            })
 
         if (showDialog) {
             DialogTask(
@@ -115,7 +73,6 @@ class ShapeScreen : Screen {
                 onDismiss = { showDialog = false })
         }
     }
-
 }
 
 
