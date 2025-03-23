@@ -8,6 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.example.hit.heal.hitber.naming.components.imageCouples
@@ -177,7 +178,8 @@ class ActivityViewModel : ViewModel() {
 
     //naming Question (4/10)
     private val _selectedCouple = MutableStateFlow<Pair<DrawableResource, DrawableResource>?>(null)
-    val selectedCouple: StateFlow<Pair<DrawableResource, DrawableResource>?> = _selectedCouple.asStateFlow()
+    val selectedCouple: StateFlow<Pair<DrawableResource, DrawableResource>?> =
+        _selectedCouple.asStateFlow()
 
     private val _answersNaming =
         MutableStateFlow<Pair<Pair<String, String>, Pair<String, String>>?>(null)
@@ -200,19 +202,39 @@ class ActivityViewModel : ViewModel() {
 
     fun updateItemPosition(index: Int, dragAmount: Pair<Float, Float>) {
         val currentPosition = itemPositions[index].value
-
-        // מחשבים את כמות התזוזה בהתאם לקנה המידה של המערכת.
-        val scaleFactor = 0.4f  // חישוב קנה מידה קטן יותר
+        val scaleFactor = 0.4f
         val newX = currentPosition.first - dragAmount.first * scaleFactor
         val newY = currentPosition.second + dragAmount.second * scaleFactor
 
-        // עדכון המיקום
         itemPositions[index].value = Pair(newX, newY)
     }
 
+    private val _score = MutableStateFlow(0)
 
+    private var isFridgeOpened = false
+    private var isItemMoved = false
+    private var isItemPlaced = false
 
+    fun openFridge() {
+        if (!isFridgeOpened) {
+            _score.update { it + 1 }
+            isFridgeOpened = true
+        }
+    }
 
+    fun moveItem() {
+        if (!isItemMoved) {
+            _score.update { it + 1 }
+            isItemMoved = true
+        }
+    }
+
+    fun placeItem() {
+        if (!isItemPlaced) {
+            _score.update { it + 1 }
+            isItemPlaced = true
+        }
+    }
 
 
 }

@@ -18,16 +18,14 @@ data class FridgeItem(
 )
 
 val fridgeItems = listOf(
-    FridgeItem(Res.drawable.peas, 0.07f, 0.055f),
-    FridgeItem(Res.drawable.milk, 0.19f, 0.22f),
-    FridgeItem(Res.drawable.Cottage, 0.07f, 0.14f),
-    FridgeItem(Res.drawable.yogurt, 0.12f, 0.14f),
-    FridgeItem(Res.drawable.grapes, 0.07f, 0.18f),
-    FridgeItem(Res.drawable.coca_cola, 0.12f, 0.18f),
-    FridgeItem(Res.drawable.chicken, 0.1f, 0.25f),
-    FridgeItem(Res.drawable.orange_juice, 0.21f, 0.15f)
-
-
-)
+    FridgeItem(Res.drawable.peas, 0.2f, 0.18f),
+    FridgeItem(Res.drawable.Cottage, 0.15f, 0.4f),
+    FridgeItem(Res.drawable.yogurt, 0.35f, 0.4f),
+    FridgeItem(Res.drawable.grapes, 0.15f, 0.52f),
+    FridgeItem(Res.drawable.coca_cola, 0.35f, 0.52f),
+    FridgeItem(Res.drawable.chicken, 0.25f, 0.65f),
+    FridgeItem(Res.drawable.orange_juice, 0.7f, 0.47f),
+    FridgeItem(Res.drawable.milk, 0.6f, 0.6f)
+    )
 
 

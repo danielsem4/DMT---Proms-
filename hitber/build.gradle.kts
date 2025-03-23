@@ -30,7 +30,6 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.androidx.foundation)
             implementation(libs.kotlinx.datetime)
             implementation(compose.material3)
             implementation (libs.navigator)

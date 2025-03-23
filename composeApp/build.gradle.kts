@@ -37,7 +37,6 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
-            implementation(libs.androidx.foundation)
             implementation(libs.kotlinx.datetime)
             implementation(compose.material3)
             implementation(projects.hitber)
