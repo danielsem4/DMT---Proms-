@@ -7,7 +7,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.example.hit.heal.hitber.presentation.naming.components.imageCouples
@@ -15,7 +14,6 @@ import org.example.hit.heal.hitber.presentation.naming.components.imageNames
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeList
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeSets
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.DropDownItem
-import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
 import org.example.hit.heal.hitber.presentation.understanding.components.audioList
 import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
 import org.jetbrains.compose.resources.DrawableResource
@@ -203,17 +201,21 @@ class ActivityViewModel : ViewModel() {
     private val _audioResourceId = MutableStateFlow<StringResource?>(null)
     val audioResourceId: StateFlow<StringResource?> get() = _audioResourceId.asStateFlow()
 
+    private val _selectedItem = MutableStateFlow<DrawableResource?>(null)
+    val selectedItem: StateFlow<DrawableResource?> get() = _selectedItem.asStateFlow()
 
-    fun playRandomAudio() {
+    private val _selectedNapkin = MutableStateFlow<DrawableResource?>(null) // שמירה על צבע המפית
+    val selectedNapkin: StateFlow<DrawableResource?> get() = _selectedNapkin.asStateFlow()
+
+
+    fun setRandomAudio() {
         if (_audioResourceId.value == null) {
             val randomAudio = audioList.random()
-            _audioResourceId.value = randomAudio
+            _audioResourceId.value = randomAudio.audioResId
+            _selectedItem.value = randomAudio.itemResId
+            _selectedNapkin.value = randomAudio.napkinColorResId
         }
     }
-
-
-    fun stopAudio(){
-        AudioPlayer().stop()    }
 
     val itemPositions = fridgeItems.map { mutableStateOf(Pair(0f, 0f)) }
 
@@ -227,31 +229,43 @@ class ActivityViewModel : ViewModel() {
     }
 
     private val _score = MutableStateFlow(0)
+    val score: StateFlow<Int> get() = _score
 
-    private var isFridgeOpened = false
-    private var isItemMoved = false
-    private var isItemPlaced = false
+    // מידע על פעולות המילוי
+    private val _isFridgeOpened = MutableStateFlow(false)
+    val isFridgeOpened: StateFlow<Boolean> get() = _isFridgeOpened.asStateFlow()
 
-    fun openFridge() {
-        if (!isFridgeOpened) {
-            _score.update { it + 1 }
-            isFridgeOpened = true
-        }
+    private val _isItemMovedCorrectly = MutableStateFlow(false)
+    val isItemMovedCorrectly: StateFlow<Boolean> get() = _isItemMovedCorrectly.asStateFlow()
+
+    private val _isNapkinPlacedCorrectly = MutableStateFlow(false)
+    val isNapkinPlacedCorrectly: StateFlow<Boolean> get() = _isNapkinPlacedCorrectly.asStateFlow()
+
+    // פונקציה לעדכון הנקודות
+    private fun updateScore() {
+        _score.value = listOf(
+            _isFridgeOpened.value,
+            _isItemMovedCorrectly.value,
+            _isNapkinPlacedCorrectly.value
+        ).count { it }
+        println("Current score: ${_score.value}")
     }
 
-    fun moveItem() {
-        if (!isItemMoved) {
-            _score.update { it + 1 }
-            isItemMoved = true
-        }
+    // פונקציות לעדכון כל פעולה
+    fun setFridgeOpened() {
+        _isFridgeOpened.value = true
+        println("Fridge opened")
+        updateScore()
     }
 
-    fun placeItem() {
-        if (!isItemPlaced) {
-            _score.update { it + 1 }
-            isItemPlaced = true
-        }
+    fun setItemMovedCorrectly() {
+        _isItemMovedCorrectly.value = true
+        println("Item placed correctly:")
+        updateScore()
     }
 
-
+    fun setNapkinPlacedCorrectly() {
+        _isNapkinPlacedCorrectly.value = true
+        updateScore()
+    }
 }

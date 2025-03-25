@@ -1,14 +1,23 @@
 package org.example.hit.heal.hitber.presentation.understanding
 
 import TabletBaseScreen
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -28,18 +37,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.close_fridge
+import dmt_proms.hitber.generated.resources.dialog_speaker
 import dmt_proms.hitber.generated.resources.open_fridge
 import dmt_proms.hitber.generated.resources.speaker
 import dmt_proms.hitber.generated.resources.table
@@ -63,20 +75,30 @@ class UnderstandingScreen : Screen {
         var tableSize by remember { mutableStateOf(0f to 0f) }
         val viewModel: ActivityViewModel = viewModel()
         val audioResourceId by viewModel.audioResourceId.collectAsState()
+        val itemResourceId by viewModel.selectedItem.collectAsState()
+        val napkinResourceId by viewModel.selectedNapkin.collectAsState()
+
+        val fridgeOpen by viewModel.isFridgeOpened.collectAsState()
+        val correctItem by viewModel.isItemMovedCorrectly.collectAsState()
+        val napkinPlaced by viewModel.isNapkinPlacedCorrectly.collectAsState()
+
         val audioUrl = audioResourceId?.let { stringResource(it) }
         val density = LocalDensity.current
         val audioPlayer = remember { AudioPlayer() }
+        var isDialogVisible by remember { mutableStateOf(false) }
 
         LaunchedEffect(isAudioClicked) {
-            audioUrl?.let {
-                if (isAudioClicked) {
-                    audioPlayer.play(it)
-
-                } else {
-                    audioPlayer.stop()
+            if (isAudioClicked) {
+                audioUrl?.let {
+                    isDialogVisible = true
+                    audioPlayer.play(it) {
+                        isDialogVisible = false
+                    }
+                    isAudioClicked = false
                 }
             }
         }
+
 
 
         TabletBaseScreen(
@@ -97,10 +119,10 @@ class UnderstandingScreen : Screen {
 
                 Button(
                     onClick = {
-                        viewModel.playRandomAudio()  // עדכון ה- audioResourceId
-                        isAudioClicked = !isAudioClicked
+                        viewModel.setRandomAudio()
+                        isAudioClicked = true
 
-                              },
+                    },
 
                     colors = ButtonDefaults.buttonColors(primaryColor),
                     modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -133,7 +155,8 @@ class UnderstandingScreen : Screen {
                             .fillMaxHeight().align(Alignment.CenterStart)
                             .clickable {
                                 isFridgeOpen = !isFridgeOpen
-                                viewModel.openFridge()
+                                if(!fridgeOpen){
+                                viewModel.setFridgeOpened()}
                             }
                     ) {
                         Image(
@@ -169,13 +192,17 @@ class UnderstandingScreen : Screen {
                                         )
                                         .size(itemWidthDp, itemHeightDp)
                                         .pointerInput(Unit) {
-                                            detectDragGestures { _, dragAmount ->
-                                                viewModel.updateItemPosition(
-                                                    index,
-                                                    Pair(dragAmount.x, dragAmount.y)
-                                                )
+                                            detectDragGestures { change, dragAmount ->
+                                                viewModel.updateItemPosition(index, Pair(dragAmount.x, dragAmount.y))
+
+                                                if (change.positionChanged()) {
+                                                    if (item.image == itemResourceId && !correctItem) {
+                                                        viewModel.setItemMovedCorrectly()
+                                                    }
+                                                }
                                             }
-                                        }.zIndex(1f)
+                                        }
+                                        .zIndex(1f)
                                 ) {
                                     Image(
                                         painter = painterResource(item.image),
@@ -200,10 +227,10 @@ class UnderstandingScreen : Screen {
                             modifier = Modifier.fillMaxSize()
                         )
 
-                        napkins.forEachIndexed { index, item ->
-                            val itemWidthPx = tableSize.first * 0.2f  // גודל המפיות על השולחן
+                        napkins.forEachIndexed { _, item ->
+                            val itemWidthPx = tableSize.first * 0.2f
                             val itemHeightPx = tableSize.second * 0.1f
-                            val xPx = tableSize.first * item.xRatio  // יחס המיקום של המפיות
+                            val xPx = tableSize.first * item.xRatio
                             val yPx = tableSize.second * item.yRatio
 
                             val itemWidthDp = with(density) { itemWidthPx.toDp() }
@@ -231,7 +258,39 @@ class UnderstandingScreen : Screen {
                 }
             }
         )
+        if (isDialogVisible) {
+            AudioPlayingDialog()
+        }
     }
 
 }
 
+@Composable
+fun AudioPlayingDialog() {
+    val speakerYOffset by rememberInfiniteTransition().animateFloat(
+        initialValue = 0f,
+        targetValue = 10f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 500, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+    Dialog(
+        onDismissRequest = {},
+        content = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth().height(80.dp).background(Color.White, shape = RoundedCornerShape(4))
+            ) {
+                Image(
+                    painter = painterResource(Res.drawable.dialog_speaker),
+                    contentDescription = "Speaker",
+                    modifier = Modifier
+                        .size(40.dp)
+                        .offset(y = speakerYOffset.dp) // האנימציה של הרמקול
+                )
+            }
+        }
+    )
+}
