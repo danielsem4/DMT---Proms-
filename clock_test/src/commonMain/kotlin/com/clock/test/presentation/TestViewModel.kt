@@ -1,5 +1,9 @@
 package com.clock.test.presentation
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
 import com.clock.test.presentation.components.ClockTime
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +20,13 @@ class TestViewModel {
     private val _isSecondStep = MutableStateFlow(false)
     // Draw clock test data
     private val _drawnPaths = MutableStateFlow<List<Path>>(emptyList())
+
+    var clockDrawing by mutableStateOf<ImageBitmap?>(null)
+        private set
+
+    fun saveBitmap(image: ImageBitmap) {
+        clockDrawing = image
+    }
 
     // Time tracking
     private var startTime: Long = 0

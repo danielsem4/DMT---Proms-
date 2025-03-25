@@ -31,14 +31,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -62,10 +70,7 @@ class DrawClockScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinInject<TestViewModel>()
 
-        // Start timing for drawing when the screen loads
         viewModel.startDrawingTimer()
-
-        // Reset the time to 12:0 when the screen loads
         viewModel.updateFirstTime(ClockTime(12, 0))
 
         val currentTime by viewModel.drawTime.collectAsState()
@@ -77,11 +82,38 @@ class DrawClockScreen : Screen {
         var currentPathPoints by remember { mutableStateOf<List<Offset>>(emptyList()) }
         var isEraseMode by remember { mutableStateOf(false) }
         var isDrawing by remember { mutableStateOf(false) }
+        var canvasSize by remember { mutableStateOf(Size.Zero) }
+        val density = LocalDensity.current
 
-        // Function to update the ViewModel with the drawing paths
         fun updatePathsInViewModel() {
-            // Saves the list of paths directly in the ViewModel
             viewModel.updateDrawnPaths(paths.toList())
+        }
+
+        fun drawPathsToBitmap(): ImageBitmap {
+            val bitmap = ImageBitmap(canvasSize.width.toInt(), canvasSize.height.toInt())
+            val canvas = Canvas(bitmap)
+            val drawScope = CanvasDrawScope()
+
+            drawScope.draw(
+                density = density,
+                layoutDirection = LayoutDirection.Ltr,
+                canvas = canvas,
+                size = canvasSize
+            ) {
+                drawRect(
+                    color = Color.White,
+                    size = size
+                )
+                paths.forEach { path ->
+                    drawPath(
+                        path = path,
+                        color = Colors.primaryColor,
+                        style = Stroke(width = 4.dp.toPx())
+                    )
+                }
+            }
+
+            return bitmap
         }
 
         TabletBaseScreen(
@@ -94,7 +126,6 @@ class DrawClockScreen : Screen {
                         .padding(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Instructions Text
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -111,13 +142,15 @@ class DrawClockScreen : Screen {
                         )
                     }
 
-                    // Drawing Area
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(.85f)
+                            .fillMaxHeight(.75f)
                             .border(2.dp, Colors.primaryColor, RoundedCornerShape(8.dp))
                             .background(Color.White)
+                            .onSizeChanged {
+                                canvasSize = it.toSize()
+                            }
                     ) {
                         Canvas(
                             modifier = Modifier
@@ -130,16 +163,13 @@ class DrawClockScreen : Screen {
                                                 currentPath = Path().apply {
                                                     moveTo(offset.x, offset.y)
                                                 }
-                                                isDrawing = true // start drawing: hide instruction text
+                                                isDrawing = true
                                             }
                                         },
                                         onDrag = { change, _ ->
                                             if (isEraseMode) {
                                                 val touchPoint = change.position
-                                                paths.removeAll { path ->
-                                                    val bounds = path.getBounds()
-                                                    bounds.contains(touchPoint)
-                                                }
+                                                paths.removeAll { it.getBounds().contains(touchPoint) }
                                             } else {
                                                 currentPathPoints = currentPathPoints + change.position
                                                 currentPath = Path().apply {
@@ -157,12 +187,12 @@ class DrawClockScreen : Screen {
                                                 currentPathPoints = emptyList()
                                                 updatePathsInViewModel()
                                             }
-                                            isDrawing = false // finish drawing: show instruction text
+                                            isDrawing = false
                                         },
                                         onDragCancel = {
                                             currentPath = null
                                             currentPathPoints = emptyList()
-                                            isDrawing = false // finish drawing: show instruction text
+                                            isDrawing = false
                                         }
                                     )
                                 }
@@ -183,7 +213,7 @@ class DrawClockScreen : Screen {
                                 )
                             }
                         }
-                        // Overlay text for drawing instruction when not drawing
+
                         if (!isDrawing) {
                             Text(
                                 text = stringResource(Res.string.drawing_instruction),
@@ -198,7 +228,6 @@ class DrawClockScreen : Screen {
 
                     Spacer(Modifier.height(8.dp))
 
-                    // Buttons Row
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -232,7 +261,7 @@ class DrawClockScreen : Screen {
                             text = stringResource(Res.string.finish_button_text),
                             modifier = Modifier.weight(1f),
                             onClick = {
-                                // Stop timing for drawing before navigating
+                                viewModel.saveBitmap(drawPathsToBitmap())
                                 viewModel.stopDrawingTimer()
                                 navigator.replace(CompletionScreen())
                             }
