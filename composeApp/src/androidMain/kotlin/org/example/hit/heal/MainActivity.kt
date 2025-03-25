@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import org.example.hit.heal.hitber.di.initKoin
-import org.example.hit.heal.hitber.understanding.UnderstandingScreen
+import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

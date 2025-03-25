@@ -1,4 +1,3 @@
-// קובץ ה-di שלך
 package org.example.hit.heal.hitber.di
 
 import org.example.hit.heal.hitber.ActivityViewModel

@@ -1,6 +1,5 @@
 package org.example.hit.heal.hitber
 
-import DropDownItem
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,13 +10,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import org.example.hit.heal.hitber.naming.components.imageCouples
-import org.example.hit.heal.hitber.naming.components.imageNames
-import org.example.hit.heal.hitber.shapes.components.shapeList
-import org.example.hit.heal.hitber.shapes.components.shapeSets
-import org.example.hit.heal.hitber.understanding.components.fridgeItems
+import org.example.hit.heal.hitber.presentation.naming.components.imageCouples
+import org.example.hit.heal.hitber.presentation.naming.components.imageNames
+import org.example.hit.heal.hitber.presentation.shapes.components.shapeList
+import org.example.hit.heal.hitber.presentation.shapes.components.shapeSets
+import org.example.hit.heal.hitber.presentation.timeAndPlace.components.DropDownItem
+import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
+import org.example.hit.heal.hitber.presentation.understanding.components.audioList
+import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
 import org.jetbrains.compose.resources.DrawableResource
-
+import org.jetbrains.compose.resources.StringResource
 
 class ActivityViewModel : ViewModel() {
 
@@ -198,6 +200,21 @@ class ActivityViewModel : ViewModel() {
     }
 
     //Understanding Question (6/10)
+    private val _audioResourceId = MutableStateFlow<StringResource?>(null)
+    val audioResourceId: StateFlow<StringResource?> get() = _audioResourceId.asStateFlow()
+
+
+    fun playRandomAudio() {
+        if (_audioResourceId.value == null) {
+            val randomAudio = audioList.random()
+            _audioResourceId.value = randomAudio
+        }
+    }
+
+
+    fun stopAudio(){
+        AudioPlayer().stop()    }
+
     val itemPositions = fridgeItems.map { mutableStateOf(Pair(0f, 0f)) }
 
     fun updateItemPosition(index: Int, dragAmount: Pair<Float, Float>) {
