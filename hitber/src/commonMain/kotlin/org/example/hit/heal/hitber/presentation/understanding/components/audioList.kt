@@ -33,8 +33,8 @@ data class AudioItem(
 val audioList = listOf(
     AudioItem(
         Res.string.seventh_question_default_milk_to_red_napkin_hitbear,
-        Res.drawable.milk,         // תווך המפרט את הפריט (לדוג' תמונה של חלב)
-        Res.drawable.red_napkin    // המפית האדומה
+        Res.drawable.milk,
+        Res.drawable.red_napkin
     ),
     AudioItem(
         Res.string.seventh_question_grapes_to_blue_napkin_hitbear,

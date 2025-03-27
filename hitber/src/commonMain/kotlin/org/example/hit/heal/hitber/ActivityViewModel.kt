@@ -1,12 +1,13 @@
 package org.example.hit.heal.hitber
 
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.example.hit.heal.hitber.presentation.naming.components.imageCouples
@@ -216,16 +217,31 @@ class ActivityViewModel : ViewModel() {
             _selectedNapkin.value = randomAudio.napkinColorResId
         }
     }
+    private val _itemLastPositions = MutableStateFlow<Map<Int, Offset>>(emptyMap())
+    val itemLastPositions: StateFlow<Map<Int, Offset>> = _itemLastPositions.asStateFlow()
 
-    val itemPositions = fridgeItems.map { mutableStateOf(Pair(0f, 0f)) }
+    fun updateItemLastPosition(index: Int, position: Offset) {
+        _itemLastPositions.value = _itemLastPositions.value.toMutableMap().apply {
+            this[index] = position
+        }
+    }
+
+
+    private val _itemPositions = MutableStateFlow(List(fridgeItems.size) { Pair(0f, 0f) })
+    val itemPositions = _itemPositions.asStateFlow()
 
     fun updateItemPosition(index: Int, dragAmount: Pair<Float, Float>) {
-        val currentPosition = itemPositions[index].value
-        val scaleFactor = 0.4f
-        val newX = currentPosition.first - dragAmount.first * scaleFactor
-        val newY = currentPosition.second + dragAmount.second * scaleFactor
-
-        itemPositions[index].value = Pair(newX, newY)
+        _itemPositions.update { currentList ->
+            currentList.mapIndexed { i, position ->
+                if (i == index) {
+                    val newX = position.first - dragAmount.first
+                    val newY = position.second + dragAmount.second
+                    Pair(newX, newY)
+                } else {
+                    position
+                }
+            }
+        }
     }
 
     private val _score = MutableStateFlow(0)

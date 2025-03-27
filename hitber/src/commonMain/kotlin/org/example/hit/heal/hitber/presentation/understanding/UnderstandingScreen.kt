@@ -1,23 +1,15 @@
 package org.example.hit.heal.hitber.presentation.understanding
 
 import TabletBaseScreen
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -35,23 +27,25 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.close_fridge
-import dmt_proms.hitber.generated.resources.dialog_speaker
 import dmt_proms.hitber.generated.resources.open_fridge
 import dmt_proms.hitber.generated.resources.speaker
 import dmt_proms.hitber.generated.resources.table
@@ -59,33 +53,48 @@ import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
+import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayingDialog
 import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
 import org.example.hit.heal.hitber.presentation.understanding.components.napkins
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import kotlin.math.abs
 
 
 class UnderstandingScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
+        val density = LocalDensity.current
+        val viewModel: ActivityViewModel = viewModel()
+
         var isFridgeOpen by remember { mutableStateOf(true) }
         var isAudioClicked by remember { mutableStateOf(false) }
         var fridgeSize by remember { mutableStateOf(0f to 0f) }
         var tableSize by remember { mutableStateOf(0f to 0f) }
-        val viewModel: ActivityViewModel = viewModel()
         val audioResourceId by viewModel.audioResourceId.collectAsState()
         val itemResourceId by viewModel.selectedItem.collectAsState()
         val napkinResourceId by viewModel.selectedNapkin.collectAsState()
 
+        val audioPlayer = remember { AudioPlayer() }
+        val audioUrl = audioResourceId?.let { stringResource(it) }
+
         val fridgeOpen by viewModel.isFridgeOpened.collectAsState()
         val correctItem by viewModel.isItemMovedCorrectly.collectAsState()
-        val napkinPlaced by viewModel.isNapkinPlacedCorrectly.collectAsState()
 
-        val audioUrl = audioResourceId?.let { stringResource(it) }
-        val density = LocalDensity.current
-        val audioPlayer = remember { AudioPlayer() }
         var isDialogVisible by remember { mutableStateOf(false) }
+        val itemPositions by viewModel.itemPositions.collectAsState()
+        val itemLastPositions by viewModel.itemLastPositions.collectAsState()
+
+        val selectedNapkin = napkins.find { it.image == napkinResourceId }
+        var napkinPosition by remember { mutableStateOf(Offset.Zero) }
+        var itemPosition by remember { mutableStateOf(Offset.Zero) }
+
+        val napkinWidthPx = tableSize.first * 0.2f
+        val napkinHeightPx = tableSize.second * 0.1f
+
+        val itemWidthPx = fridgeSize.first * 0.2f
+        val itemHeightPx = fridgeSize.second * 0.1f
 
         LaunchedEffect(isAudioClicked) {
             if (isAudioClicked) {
@@ -99,11 +108,17 @@ class UnderstandingScreen : Screen {
             }
         }
 
-
-
         TabletBaseScreen(
             title = "הבנת הוראות",
-            onNextClick = { navigator?.push(DragAndDropScreen()) },
+            onNextClick = {
+
+                if (selectedNapkin != null) {
+                    if (isNapkinNearPosition(napkinPosition, itemLastPositions)) {
+                        viewModel.setNapkinPlacedCorrectly()
+                    }
+                }
+                navigator?.push(DragAndDropScreen())
+            },
             question = 6,
             buttonText = "המשך",
             buttonColor = primaryColor,
@@ -123,7 +138,6 @@ class UnderstandingScreen : Screen {
                         isAudioClicked = true
 
                     },
-
                     colors = ButtonDefaults.buttonColors(primaryColor),
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     shape = RoundedCornerShape(30)
@@ -155,8 +169,9 @@ class UnderstandingScreen : Screen {
                             .fillMaxHeight().align(Alignment.CenterStart)
                             .clickable {
                                 isFridgeOpen = !isFridgeOpen
-                                if(!fridgeOpen){
-                                viewModel.setFridgeOpened()}
+                                if (!fridgeOpen) {
+                                    viewModel.setFridgeOpened()
+                                }
                             }
                     ) {
                         Image(
@@ -172,8 +187,6 @@ class UnderstandingScreen : Screen {
 
                         if (isFridgeOpen) {
                             fridgeItems.forEachIndexed { index, item ->
-                                val itemWidthPx = fridgeSize.first * 0.2f
-                                val itemHeightPx = fridgeSize.second * 0.1f
                                 val xPx = fridgeSize.first * item.xRatio
                                 val yPx = fridgeSize.second * item.yRatio
 
@@ -182,7 +195,7 @@ class UnderstandingScreen : Screen {
                                 val xDp = with(density) { xPx.toDp() }
                                 val yDp = with(density) { yPx.toDp() }
 
-                                val currentPosition by viewModel.itemPositions[index]
+                                val currentPosition = itemPositions[index]
 
                                 Box(
                                     modifier = Modifier
@@ -193,7 +206,17 @@ class UnderstandingScreen : Screen {
                                         .size(itemWidthDp, itemHeightDp)
                                         .pointerInput(Unit) {
                                             detectDragGestures { change, dragAmount ->
-                                                viewModel.updateItemPosition(index, Pair(dragAmount.x, dragAmount.y))
+                                                val dragAmountXInDp =
+                                                    with(density) { dragAmount.x.toDp() }
+                                                val dragAmountYInDp =
+                                                    with(density) { dragAmount.y.toDp() }
+                                                viewModel.updateItemPosition(
+                                                    index,
+                                                    Pair(
+                                                        dragAmountXInDp.value,
+                                                        dragAmountYInDp.value
+                                                    )
+                                                )
 
                                                 if (change.positionChanged()) {
                                                     if (item.image == itemResourceId && !correctItem) {
@@ -201,6 +224,9 @@ class UnderstandingScreen : Screen {
                                                     }
                                                 }
                                             }
+                                        }.onGloballyPositioned { coordinates ->
+                                            itemPosition = coordinates.positionInRoot()
+                                            viewModel.updateItemLastPosition(index, itemPosition)
                                         }
                                         .zIndex(1f)
                                 ) {
@@ -213,10 +239,11 @@ class UnderstandingScreen : Screen {
                             }
                         }
                     }
+
                     Box(
                         modifier = Modifier
-                            .size(500.dp)
-                            .align(Alignment.BottomEnd)
+                            .align(Alignment.BottomEnd).fillMaxHeight(0.6f).fillMaxWidth(0.4f)
+
                             .zIndex(-1f).onSizeChanged { size ->
                                 tableSize = size.width.toFloat() to size.height.toFloat()
                             }
@@ -224,12 +251,12 @@ class UnderstandingScreen : Screen {
                         Image(
                             painter = painterResource(Res.drawable.table),
                             contentDescription = "table",
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.FillBounds
+
                         )
 
                         napkins.forEachIndexed { _, item ->
-                            val itemWidthPx = tableSize.first * 0.2f
-                            val itemHeightPx = tableSize.second * 0.1f
                             val xPx = tableSize.first * item.xRatio
                             val yPx = tableSize.second * item.yRatio
 
@@ -243,7 +270,11 @@ class UnderstandingScreen : Screen {
                                     .offset(
                                         x = xDp,
                                         y = yDp
-                                    )
+                                    ).onGloballyPositioned { coordinates ->
+                                        if (selectedNapkin?.image == item.image) {
+                                            napkinPosition = coordinates.positionInRoot()
+                                        }
+                                    }
                                     .size(itemWidthDp, itemHeightDp)
                                     .zIndex(1f)
                             ) {
@@ -258,39 +289,28 @@ class UnderstandingScreen : Screen {
                 }
             }
         )
+
         if (isDialogVisible) {
             AudioPlayingDialog()
         }
     }
 
-}
+    private fun isOverlap(napkinPosition: Offset, itemPosition: Offset, ): Boolean {
+        val dx = abs(napkinPosition.x - itemPosition.x)
+        val dy = abs(napkinPosition.y - itemPosition.y)
 
-@Composable
-fun AudioPlayingDialog() {
-    val speakerYOffset by rememberInfiniteTransition().animateFloat(
-        initialValue = 0f,
-        targetValue = 10f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 500, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        )
-    )
-    Dialog(
-        onDismissRequest = {},
-        content = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth().height(80.dp).background(Color.White, shape = RoundedCornerShape(4))
-            ) {
-                Image(
-                    painter = painterResource(Res.drawable.dialog_speaker),
-                    contentDescription = "Speaker",
-                    modifier = Modifier
-                        .size(40.dp)
-                        .offset(y = speakerYOffset.dp) // האנימציה של הרמקול
-                )
-            }
+        val isXOverlapping = dx <= 35f
+        val isYOverlapping = dy <= 35f
+        println("isXOverlapping: $isXOverlapping, isYOverlapping: $isYOverlapping")
+        return isXOverlapping && isYOverlapping
+    }
+
+    private fun isNapkinNearPosition(
+        napkinPosition: Offset,
+        itemPositions: Map<Int, Offset>,
+    ): Boolean {
+        return itemPositions.values.any { position ->
+            isOverlap(napkinPosition, position,)
         }
-    )
+    }
 }
