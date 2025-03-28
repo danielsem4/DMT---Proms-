@@ -28,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
@@ -89,12 +88,6 @@ class UnderstandingScreen : Screen {
         val selectedNapkin = napkins.find { it.image == napkinResourceId }
         var napkinPosition by remember { mutableStateOf(Offset.Zero) }
         var itemPosition by remember { mutableStateOf(Offset.Zero) }
-
-        val napkinWidthPx = tableSize.first * 0.2f
-        val napkinHeightPx = tableSize.second * 0.1f
-
-        val itemWidthPx = fridgeSize.first * 0.2f
-        val itemHeightPx = fridgeSize.second * 0.1f
 
         LaunchedEffect(isAudioClicked) {
             if (isAudioClicked) {
@@ -187,6 +180,9 @@ class UnderstandingScreen : Screen {
 
                         if (isFridgeOpen) {
                             fridgeItems.forEachIndexed { index, item ->
+                                val itemWidthPx = fridgeSize.first * 0.2f
+                                val itemHeightPx = fridgeSize.second * 0.1f
+
                                 val xPx = fridgeSize.first * item.xRatio
                                 val yPx = fridgeSize.second * item.yRatio
 
@@ -257,11 +253,14 @@ class UnderstandingScreen : Screen {
                         )
 
                         napkins.forEachIndexed { _, item ->
+                            val napkinWidthPx = tableSize.first * 0.2f
+                            val napkinHeightPx = tableSize.second * 0.1f
+
                             val xPx = tableSize.first * item.xRatio
                             val yPx = tableSize.second * item.yRatio
 
-                            val itemWidthDp = with(density) { itemWidthPx.toDp() }
-                            val itemHeightDp = with(density) { itemHeightPx.toDp() }
+                            val napkinWidthDp = with(density) { napkinWidthPx.toDp() }
+                            val napkinHeightDp = with(density) { napkinHeightPx.toDp() }
                             val xDp = with(density) { xPx.toDp() }
                             val yDp = with(density) { yPx.toDp() }
 
@@ -275,7 +274,7 @@ class UnderstandingScreen : Screen {
                                             napkinPosition = coordinates.positionInRoot()
                                         }
                                     }
-                                    .size(itemWidthDp, itemHeightDp)
+                                    .size(napkinWidthDp, napkinHeightDp)
                                     .zIndex(1f)
                             ) {
                                 Image(
@@ -295,22 +294,20 @@ class UnderstandingScreen : Screen {
         }
     }
 
-    private fun isOverlap(napkinPosition: Offset, itemPosition: Offset, ): Boolean {
-        val dx = abs(napkinPosition.x - itemPosition.x)
-        val dy = abs(napkinPosition.y - itemPosition.y)
-
-        val isXOverlapping = dx <= 35f
-        val isYOverlapping = dy <= 35f
-        println("isXOverlapping: $isXOverlapping, isYOverlapping: $isYOverlapping")
-        return isXOverlapping && isYOverlapping
-    }
-
     private fun isNapkinNearPosition(
         napkinPosition: Offset,
-        itemPositions: Map<Int, Offset>,
+        itemPositions: Map<Int, Offset>
     ): Boolean {
         return itemPositions.values.any { position ->
-            isOverlap(napkinPosition, position,)
+            val dx = abs(napkinPosition.x - position.x)
+            val dy = abs(napkinPosition.y - position.y)
+
+            val isXOverlapping = dx <= 35f
+            val isYOverlapping = dy <= 35f
+
+            println("isXOverlapping: $isXOverlapping, isYOverlapping: $isYOverlapping")
+
+            isXOverlapping && isYOverlapping
         }
     }
 }

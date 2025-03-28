@@ -217,6 +217,7 @@ class ActivityViewModel : ViewModel() {
             _selectedNapkin.value = randomAudio.napkinColorResId
         }
     }
+
     private val _itemLastPositions = MutableStateFlow<Map<Int, Offset>>(emptyMap())
     val itemLastPositions: StateFlow<Map<Int, Offset>> = _itemLastPositions.asStateFlow()
 
@@ -225,7 +226,6 @@ class ActivityViewModel : ViewModel() {
             this[index] = position
         }
     }
-
 
     private val _itemPositions = MutableStateFlow(List(fridgeItems.size) { Pair(0f, 0f) })
     val itemPositions = _itemPositions.asStateFlow()
@@ -245,9 +245,7 @@ class ActivityViewModel : ViewModel() {
     }
 
     private val _score = MutableStateFlow(0)
-    val score: StateFlow<Int> get() = _score
 
-    // מידע על פעולות המילוי
     private val _isFridgeOpened = MutableStateFlow(false)
     val isFridgeOpened: StateFlow<Boolean> get() = _isFridgeOpened.asStateFlow()
 
@@ -255,9 +253,7 @@ class ActivityViewModel : ViewModel() {
     val isItemMovedCorrectly: StateFlow<Boolean> get() = _isItemMovedCorrectly.asStateFlow()
 
     private val _isNapkinPlacedCorrectly = MutableStateFlow(false)
-    val isNapkinPlacedCorrectly: StateFlow<Boolean> get() = _isNapkinPlacedCorrectly.asStateFlow()
 
-    // פונקציה לעדכון הנקודות
     private fun updateScore() {
         _score.value = listOf(
             _isFridgeOpened.value,
@@ -267,16 +263,13 @@ class ActivityViewModel : ViewModel() {
         println("Current score: ${_score.value}")
     }
 
-    // פונקציות לעדכון כל פעולה
     fun setFridgeOpened() {
         _isFridgeOpened.value = true
-        println("Fridge opened")
         updateScore()
     }
 
     fun setItemMovedCorrectly() {
         _isItemMovedCorrectly.value = true
-        println("Item placed correctly:")
         updateScore()
     }
 

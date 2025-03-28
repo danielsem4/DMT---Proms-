@@ -14,8 +14,8 @@ data class Napkin(
 )
 
 val napkins = listOf(
-    Napkin(Res.drawable.red_napkin, 0.1f, 0.18f),
-    Napkin(Res.drawable.yellow_napkin, 0.45f, 0.15f),
-    Napkin(Res.drawable.green_napkin, 0.3f, 0.2f),
-    Napkin(Res.drawable.blue_napkin, 0.65f, 0.17f),
+    Napkin(Res.drawable.red_napkin, 0.1f, 0.08f),
+    Napkin(Res.drawable.yellow_napkin, 0.45f, 0.05f),
+    Napkin(Res.drawable.green_napkin, 0.3f, 0.1f),
+    Napkin(Res.drawable.blue_napkin, 0.65f, 0.07f),
 )

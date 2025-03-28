@@ -11,11 +11,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,15 +35,37 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun AudioPlayingDialog() {
     val transition = rememberInfiniteTransition()
-
-    val currentStep by transition.animateFloat(
+    val offsetY by transition.animateFloat(
         initialValue = 0f,
-        targetValue = 3f,
+        targetValue = 10f,
         animationSpec = infiniteRepeatable(
-            animation = tween(600, easing = LinearEasing),
+            animation = tween(durationMillis = 1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+    val adjustedOffsetY = offsetY + 5f
+    val phase by transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 5f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1800, easing = LinearEasing),
             repeatMode = RepeatMode.Restart
         )
     )
+
+    fun fadeEffect(start: Float, peak: Float, end: Float): Float {
+        return when {
+            phase < start -> 0f
+            phase < peak -> (phase - start) / (peak - start)
+            phase < end -> 1f
+            phase < end + 1 -> 1f - ((phase - end) / 1f)
+            else -> 0f
+        }
+    }
+
+    val firstCircleAlpha = fadeEffect(0f, 0.5f, 1f)
+    val secondCircleAlpha = fadeEffect(1f, 1.5f, 2f)
+    val thirdCircleAlpha = fadeEffect(2f, 2.5f, 3f)
 
     Dialog(onDismissRequest = {}) {
         Row(
@@ -53,59 +74,48 @@ fun AudioPlayingDialog() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp)
-                .background(Color.White, shape = RoundedCornerShape(4.dp))
+                .background(Color.White, shape = RoundedCornerShape(20.dp))
         ) {
             Image(
                 painter = painterResource(Res.drawable.dialog_speaker),
                 contentDescription = "Speaker",
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(70.dp).offset(y = offsetY.dp)
             )
 
-            Spacer(modifier = Modifier.width(4.dp)) // רווח קטן בין הרמקול לעיגולים
-
-            // ציור כל שלושת חצאי העיגולים בתוך Canvas אחד עם סדר משתנה
-            Canvas(modifier = Modifier.size(80.dp)) {
+            Canvas(modifier = Modifier) {
                 val centerX = size.width / 2
                 val centerY = size.height / 2
-                val step = currentStep.toInt() // עיגול ערך לשלב שלם
 
-                // פונקציה שמחשבת שקיפות לפי השלב
-                fun alphaForStep(stepIndex: Int) = if (step == stepIndex) 1f else 0f
-
-                // עיגול ראשון (קטן)
                 drawArc(
-                    color = primaryColor.copy(alpha = alphaForStep(0)),
-                    startAngle = 90f,
+                    color = primaryColor.copy(alpha = firstCircleAlpha),
+                    startAngle = 270f,
                     sweepAngle = 180f,
                     useCenter = false,
-                    topLeft = Offset(centerX - 10, centerY - 10),
-                    size = Size(30f, 30f),
-                    style = Stroke(width = 3f)
+                    topLeft = Offset(centerX - 25, centerY - 25 + adjustedOffsetY),
+                    size = Size(50f, 50f),
+                    style = Stroke(width = 5f)
                 )
 
-                // עיגול שני (בינוני)
                 drawArc(
-                    color = primaryColor.copy(alpha = alphaForStep(1)),
-                    startAngle = 90f,
+                    color = primaryColor.copy(alpha = secondCircleAlpha),
+                    startAngle = 270f,
                     sweepAngle = 180f,
                     useCenter = false,
-                    topLeft = Offset(centerX - 20, centerY - 20),
-                    size = Size(60f, 60f),
-                    style = Stroke(width = 3f)
-                )
-
-                // עיגול שלישי (גדול)
-                drawArc(
-                    color = primaryColor.copy(alpha = alphaForStep(2)),
-                    startAngle = 90f,
-                    sweepAngle = 180f,
-                    useCenter = false,
-                    topLeft = Offset(centerX - 30, centerY - 30),
+                    topLeft = Offset(centerX - 45, centerY - 45 + adjustedOffsetY),
                     size = Size(90f, 90f),
-                    style = Stroke(width = 3f)
+                    style = Stroke(width = 5f)
+                )
+
+                drawArc(
+                    color = primaryColor.copy(alpha = thirdCircleAlpha),
+                    startAngle = 270f,
+                    sweepAngle = 180f,
+                    useCenter = false,
+                    topLeft = Offset(centerX - 65, centerY - 65 + adjustedOffsetY),
+                    size = Size(130f, 130f),
+                    style = Stroke(width = 5f)
                 )
             }
         }
     }
 }
-
