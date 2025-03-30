@@ -1,20 +1,16 @@
 package org.example.hit.heal.hitber.presentation.dragAndDrop
 
+import TabletBaseScreen
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,120 +19,108 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import org.example.hit.heal.core.presentation.BaseScreen
+import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.writing.WritingScreen
-import kotlin.math.roundToInt
+import org.jetbrains.compose.resources.stringResource
 
 class DragAndDropScreen : Screen {
-        @Composable
-        override fun Content() {
-            val navigator = LocalNavigator.current
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.current
+        val viewModel: ActivityViewModel = viewModel()
+        var screenSize by remember { mutableStateOf(0f to 0f) }
+        val circlePositions by viewModel.circlePositions.collectAsState()
+        val circleColors = listOf(Color.Black, Color.Green, Color.Blue, Color.Yellow)
+        val instructionsResourceId by viewModel.instructionsResourceId.collectAsState()
+        val instructions = instructionsResourceId?.let { stringResource(it) }
 
-            var circleGreenPosition by remember { mutableStateOf(Offset(150f, 50f)) }  // למעלה
-            var circleYellowPosition by remember { mutableStateOf(Offset(50f, 150f)) } // שמאל
-            var circleBlackPosition by remember { mutableStateOf(Offset(150f, 250f)) } // למטה
-            var circleBluePosition by remember { mutableStateOf(Offset(250f, 150f)) } // ימינה
-
-            BaseScreen(title = "גרור ושחרר", onPrevClick = null, onNextClick = null, content = {
-                Box(
+        LaunchedEffect(Unit) {
+            viewModel.setRandomInstructions()
+        }
+        TabletBaseScreen(
+            title = "גרור ושחרר",
+            onNextClick = { navigator?.push(WritingScreen()) },
+            buttonText = "המשך",
+            buttonColor = primaryColor,
+            question = 7,
+            content = {
+                if (instructions != null) {
+                    Text(
+                        instructions,
+                        color = Color.Black,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                            .padding(bottom = 30.dp)
+                    )
+                }
+                Canvas(
                     modifier = Modifier.fillMaxSize()
+                        .background(color = Color.White, shape = RoundedCornerShape(4))
+                        .onSizeChanged { size ->
+                            screenSize = size.width.toFloat() to size.height.toFloat()
+                        }
+                        .pointerInput(Unit) {
+                            detectDragGestures { change, dragAmount ->
+                                change.consume()
+
+                                val draggedIndex = circlePositions.indexOfFirst { (x, y) ->
+                                    val center = Offset(x * screenSize.first, y * screenSize.second)
+                                    center.distanceTo(change.position) < 50f  // משתמשים בפונקציה המתוקנת
+                                }
+
+                                if (draggedIndex != -1) {
+                                    viewModel.updateCirclePosition(
+                                        draggedIndex,
+                                        Offset(
+                                            dragAmount.x / screenSize.first,
+                                            dragAmount.y / screenSize.second
+                                        )
+                                    )
+                                }
+                            }
+                        }
+
+
                 ) {
-                    // ריבוע אדום
-                    Box(
-                        modifier = Modifier
-                            .size(150.dp)
-                            .border(10.dp, Color.Red)
-                            .align(Alignment.Center)
+                    val (screenWidth, screenHeight) = screenSize
+
+                    // ריבוע יעד אדום
+                    drawRect(
+                        color = Color.Red,
+                        topLeft = Offset(
+                            (screenWidth - 150.dp.toPx()) / 2,  // הזזה שמאלה ב- 75.dp
+                            (screenHeight - 150.dp.toPx()) / 2  // הזזה למעלה ב- 75.dp
+                        ),
+                        size = androidx.compose.ui.geometry.Size(150.dp.toPx(), 150.dp.toPx()),
+                        style = Stroke(width = 10.dp.toPx()) // עובי המסגרת
                     )
 
-                    // עיגול ירוק
-                    Box(
-                        modifier = Modifier
-                            .size(50.dp)
-                            .background(Color.Green, CircleShape)
-                            .offset { IntOffset(circleGreenPosition.x.roundToInt(), circleGreenPosition.y.roundToInt()) }
-                            .pointerInput(Unit) {
-                                detectDragGestures { _, dragAmount ->
-                                    circleGreenPosition = Offset(
-                                        circleGreenPosition.x + dragAmount.x,
-                                        circleGreenPosition.y + dragAmount.y
-                                    )
-                                }
-                            }
-                    )
 
-                    // עיגול צהוב
-                    Box(
-                        modifier = Modifier
-                            .size(50.dp)
-                            .background(Color.Yellow, CircleShape)
-                            .offset { IntOffset(circleYellowPosition.x.roundToInt(), circleYellowPosition.y.roundToInt()) }
-                            .pointerInput(Unit) {
-                                detectDragGestures { _, dragAmount ->
-                                    circleYellowPosition = Offset(
-                                        circleYellowPosition.x + dragAmount.x,
-                                        circleYellowPosition.y + dragAmount.y
-                                    )
-                                }
-                            }
-                    )
-
-                    // עיגול שחור
-                    Box(
-                        modifier = Modifier
-                            .size(50.dp)
-                            .background(Color.Black, CircleShape)
-                            .offset { IntOffset(circleBlackPosition.x.roundToInt(), circleBlackPosition.y.roundToInt()) }
-                            .pointerInput(Unit) {
-                                detectDragGestures { _, dragAmount ->
-                                    circleBlackPosition = Offset(
-                                        circleBlackPosition.x + dragAmount.x,
-                                        circleBlackPosition.y + dragAmount.y
-                                    )
-                                }
-                            }
-                    )
-
-                    // עיגול כחול
-                    Box(
-                        modifier = Modifier
-                            .size(50.dp)
-                            .background(Color.Blue, CircleShape)
-                            .offset { IntOffset(circleBluePosition.x.roundToInt(), circleBluePosition.y.roundToInt()) }
-                            .pointerInput(Unit) {
-                                detectDragGestures { _, dragAmount ->
-                                    circleBluePosition = Offset(
-                                        circleBluePosition.x + dragAmount.x,
-                                        circleBluePosition.y + dragAmount.y
-                                    )
-                                }
-                            }
-                    )
-
-                    // כפתור "המשך"
-                    Button(
-                        modifier = Modifier
-                            .width(200.dp)
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = 16.dp),
-                        onClick = { navigator?.push(WritingScreen())},
-                        colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
-                        shape = RoundedCornerShape(50)
-                    ) {
-                        Text(
-                            "המשך", color = Color.White, fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold
+                    // ציור עיגולים דינמי
+                    circlePositions.forEachIndexed { index, (x, y) ->
+                        drawCircle(
+                            color = circleColors.getOrElse(index) { Color.Gray },
+                            center = Offset(x * screenWidth, y * screenHeight),
+                            radius = 25.dp.toPx()
                         )
                     }
                 }
             })
-        }
+    }
 
+}
+
+fun Offset.distanceTo(other: Offset): Float {
+    return kotlin.math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y))
 }

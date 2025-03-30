@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import org.example.hit.heal.hitber.presentation.dragAndDrop.instructions
 import org.example.hit.heal.hitber.presentation.naming.components.imageCouples
 import org.example.hit.heal.hitber.presentation.naming.components.imageNames
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeList
@@ -276,5 +277,37 @@ class ActivityViewModel : ViewModel() {
     fun setNapkinPlacedCorrectly() {
         _isNapkinPlacedCorrectly.value = true
         updateScore()
+    }
+
+    //Drag and drop Question (6/10)
+    private val _circlePositions = MutableStateFlow(
+        listOf(
+            Pair(0.4f, 0.6f),
+            Pair(0.4f, 0.4f),
+            Pair(0.6f, 0.4f),
+            Pair(0.6f, 0.6f)
+        )
+    )
+    val circlePositions = _circlePositions.asStateFlow()
+
+    fun updateCirclePosition(index: Int, dragAmount: Offset) {
+        _circlePositions.update { currentList ->
+            currentList.mapIndexed { i, position ->
+                if (i == index) {
+                    Pair(position.first + dragAmount.x, position.second + dragAmount.y)
+                } else {
+                    position
+                }
+            }
+        }
+    }
+
+    private val _instructionsResourceId = MutableStateFlow<StringResource?>(null)
+    val instructionsResourceId: StateFlow<StringResource?> get() = _instructionsResourceId.asStateFlow()
+
+    fun setRandomInstructions(){
+        if (_instructionsResourceId.value == null) {
+            _instructionsResourceId.value = instructions.random()
+        }
     }
 }

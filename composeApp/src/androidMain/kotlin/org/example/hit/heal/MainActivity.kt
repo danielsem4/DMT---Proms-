@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import org.example.hit.heal.hitber.di.initKoin
-import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScreen
+import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,8 +51,8 @@ fun AppTabletPreview() {
     //ConcentrationScreen().Content()
     //NamingScreen().Content()
     //RepetitionScreen().Content()
-    UnderstandingScreen().Content()
-    //DragAndDropScreen().Content()
+    //UnderstandingScreen().Content()
+    DragAndDropScreen().Content()
     // WritingScreen().Content()
     // BuildShapeScreen().Content()
 
