@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.example.hit.heal.network.AuthApi
-import org.example.hit.heal.network.AuthApiImpl
-import org.example.hit.heal.network.SuccessfulLoginResponse
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel : ViewModel(), KoinComponent {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -21,7 +21,7 @@ class LoginViewModel : ViewModel() {
     private val _isLoggedIn = mutableStateOf(false)
     val isLoggedIn: State<Boolean> = _isLoggedIn
 
-    private val authApi: AuthApi = AuthApiImpl()
+    private val authApi: AuthApi by inject()
 
     fun login(email: String, password: String, onLoginSuccess: () -> Unit) {
         viewModelScope.launch {

@@ -27,7 +27,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import dmt_proms.composeapp.generated.resources.Res
 import org.example.hit.heal.bgGreen
 import org.example.hit.heal.lightWhite
 import org.jetbrains.compose.resources.DrawableResource

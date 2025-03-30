@@ -2,26 +2,13 @@ package org.example.hit.heal.network
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
 
-class AuthApiImpl : AuthApi {
-    private val client = HttpClient {
-        install(ContentNegotiation) {
-            json(Json {
-                prettyPrint = true
-                isLenient = true
-                ignoreUnknownKeys = true
-            })
-        }
-    }
-
+class AuthApiImpl(private val client: HttpClient) : AuthApi {
     private val baseUrl = "https://generic2.hitheal.org.il/api/v1"
 
     override suspend fun login(email: String, password: String): Result<SuccessfulLoginResponse> {

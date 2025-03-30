@@ -1,29 +1,16 @@
 package org.example.hit.heal
 
-import LoginScreen
-import androidx.compose.runtime.*
-import org.example.hit.heal.Home.HomeScreen
-
 import androidx.compose.runtime.Composable
-//import org.example.hit.heal.core.presentation.SampleScreen
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.example.hit.heal.di.networkModule
+import org.example.hit.heal.navigation.NavigationGraph
+import org.example.hit.heal.navigation.navigationModule
+import org.koin.compose.KoinApplication
 
 @Composable
-@Preview
 fun App() {
-    var isLoggedIn by remember { mutableStateOf(false) }
-
-    if (!isLoggedIn) {
-        LoginScreen(
-            onLoginSuccess = {
-                isLoggedIn = true
-            }
-        )
-    } else {
-        HomeScreen(
-            onLogout = {
-                isLoggedIn = false
-            }
-        )
+    KoinApplication(application = {
+        modules(navigationModule, networkModule)
+    }) {
+        NavigationGraph()
     }
 }

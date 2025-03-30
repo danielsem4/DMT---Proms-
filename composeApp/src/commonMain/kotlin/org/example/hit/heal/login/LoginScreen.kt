@@ -10,9 +10,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,7 +33,6 @@ import org.example.EmailTextField
 import org.example.PasswordTextField
 import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.login.LoginViewModel
-
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
