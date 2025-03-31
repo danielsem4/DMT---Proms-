@@ -19,6 +19,8 @@ import org.example.hit.heal.hitber.presentation.shapes.components.shapeSets
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.DropDownItem
 import org.example.hit.heal.hitber.presentation.understanding.components.audioList
 import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
+import org.example.hit.heal.hitber.presentation.writing.DraggableWordState
+import org.example.hit.heal.hitber.presentation.writing.draggableWordsList
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
@@ -280,7 +282,7 @@ class ActivityViewModel : ViewModel() {
         updateScore()
     }
 
-    //Drag and drop Question (6/10)
+    //Drag and drop Question (7/10)
     private val _circlePositions = MutableStateFlow(
         listOf(
             Pair(0.4f, 0.6f),
@@ -320,5 +322,38 @@ class ActivityViewModel : ViewModel() {
     fun setAnswerDragAndDrop() {
         println("setAnswerDragAndDrop called!")
         _answerDragAndDrop.value = true
+    }
+
+    //Writing Question (8/10)
+    private val _words = MutableStateFlow(draggableWordsList)
+    val words: StateFlow<List<DraggableWordState>> = _words
+
+    private val _copiedWords = MutableStateFlow(listOf<DraggableWordState>())
+    val copiedWords: StateFlow<List<DraggableWordState>> = _copiedWords
+
+    fun updateWordOffset(word: String, newOffset: Offset) {
+        val updatedWords = _words.value.map {
+            if (it.word == word) {
+                it.copy(offset = newOffset)
+            } else {
+                it
+            }
+        }
+        _words.value = updatedWords
+    }
+
+    // פונקציה להוספת מילה לגרירה
+    fun addCopiedWord(word: String) {
+        val wordState = _words.value.find { it.word == word }
+        wordState?.let {
+            _copiedWords.value += it
+        }
+    }
+
+    // פונקציה להוספת מילה חדשה לרשימה
+    fun updateWords(newWords: List<String>) {
+        viewModelScope.launch {
+            _copiedWords.value = newWords.map { word -> DraggableWordState(word) }
+        }
     }
 }

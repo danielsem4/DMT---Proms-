@@ -1,5 +1,6 @@
 package org.example.hit.heal.hitber.presentation.writing
 
+import TabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -13,11 +14,11 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,74 +31,85 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.hitber.ActivityViewModel
 
 class WritingScreen : Screen {
     @Composable
     override fun Content() {
 
         val navigator = LocalNavigator.current
+        val viewModel: ActivityViewModel = viewModel()
 
-        BaseScreen(title = "כתיבה", onPrevClick = null, onNextClick = null, content = {
-            Box(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+        val words by viewModel.words.collectAsState()
+        val copiedWords by viewModel.copiedWords.collectAsState()
+
+        TabletBaseScreen(
+            title = "כתיבה",
+            onNextClick = {},
+            buttonText = "המשך",
+            question = 8,
+            buttonColor = primaryColor,
+            content = {
+                Text(
+                    "בחלק זה עליך להרכיב משפט מהמילים המוצגות לפניך. לשיבוץ מילה במשפט יש לגרור אותה למשבצת שתבחר.",
+                    color = Color.Black,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                        .background(color = Color.White, shape = RoundedCornerShape(4))
                 ) {
-                    Text(
-                        "בחלק זה עליך להרכיב משפט מהמילים המוצגות לפניך. לשיבוץ מילה במשפט יש לגרור אותה למשבצת שתבחר.",
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                            .padding(bottom = 120.dp)
-                    )
 
-                    WordsLayout()
-
+                    WordsLayout(viewModel = viewModel, words = words, copiedWords = copiedWords) { word ->
+                        viewModel.addCopiedWord(word) // הוספת מילה לגרירה
+                    }
                 }
-
-                // כפתור המשך
-                Button(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .align(Alignment.BottomCenter)
-                        .padding(bottom = 16.dp),
-                    onClick = {  },
-                    colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
-                    shape = RoundedCornerShape(50)
-                ) {
-                    Text(
-                        "המשך", color = Color.White, fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
-        })
+            })
     }
-}
 
-@Composable
-fun WordsLayout() {
-    val words = listOf("סבתא", "ארוחת", "עם", "אתמול", "אכלתי", "ערב")
-    var copiedWords by remember { mutableStateOf(listOf<String>()) } // רשימה של מילים גרירות
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+    @Composable
+    fun WordsLayout(
+        viewModel: ActivityViewModel,
+        words: List<DraggableWordState>,
+        copiedWords: List<DraggableWordState>,
+        onWordDragged: (String) -> Unit
     ) {
-        // הצגת המילים הסטטיות (שלא נגררות)
-        StaticWords(words = words, onWordDragged = { word ->
-            // כאשר מתחילים לגרור את המילה, אנו יוצרים עותק שלה
-            copiedWords = copiedWords + word
-        })
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            StaticWords(words = words, viewModel = viewModel, onWordDragged = onWordDragged)
 
-        // הצגת המילים הגרירות (העותקים שנגררו)
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(16.dp),
+//                horizontalArrangement = Arrangement.spacedBy(16.dp),
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                copiedWords.forEach { word ->
+//                    DraggableWord(word = word, viewModel = viewModel)
+//                }
+//            }
+
+            WordSlots()
+        }
+    }
+
+    @Composable
+    fun StaticWords(
+        words: List<DraggableWordState>, // כאן אתה מקבל את הרשימה של DraggableWordState
+        onWordDragged: (String) -> Unit,
+        viewModel: ActivityViewModel // הוספתי את ה-ViewModel
+    ) {
+        val draggingWords = remember { mutableStateListOf<String>() }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -105,107 +117,104 @@ fun WordsLayout() {
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            copiedWords.forEach { word ->
-                DraggableWord(word = word) // אפשר לגרור את העותקים
+            words.forEach { word ->
+                StaticWord(
+                    word = word.word, // השתמש במילה מתוך ה-DraggableWordState
+                    viewModel = viewModel,
+                    onWordDragged = onWordDragged,
+                    onDragStart = { draggedWord ->
+                        if (draggedWord !in draggingWords) {
+                            draggingWords.add(draggedWord)
+                        }
+                    }
+                )
             }
         }
 
-        // הצגת אזורי השיבוץ (Slots)
-        WordSlots()
-    }
-}
-
-@Composable
-fun StaticWords(words: List<String>, onWordDragged: (String) -> Unit) {
-    // הצגת המילים ככפתורים קבועים, שלא ניתן לגרור אותם
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        words.forEach { word ->
-            WordButton(word = word, onWordDragged = onWordDragged)
+        // הצגת המילים שנגררות כרגע
+        draggingWords.forEach { draggedWord ->
+            DraggableWord(word = DraggableWordState(draggedWord), viewModel = viewModel)
         }
     }
-}
 
-@Composable
-fun WordButton(word: String, onWordDragged: (String) -> Unit) {
-    // כפתור המייצג מילה, לא ניתן לגרור אותו
-    Button(
-        onClick = { /* לא פעולה כרגע */ },
-        modifier = Modifier
-            .width(120.dp)
-            .height(60.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-        shape = RoundedCornerShape(50.dp)
+    @Composable
+    fun StaticWord(
+        word: String,
+        onWordDragged: (String) -> Unit,
+        onDragStart: (String) -> Unit,
+        viewModel: ActivityViewModel
     ) {
-        Text(
-            text = word,
-            color = Color.White,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-
-@Composable
-fun DraggableWord(word: String) {
-    var offset by remember { mutableStateOf(Offset(0f, 0f)) }
-    var isDragged by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .pointerInput(Unit) {
-                detectDragGestures { _, dragAmount ->
-                    offset = Offset(offset.x + dragAmount.x, offset.y + dragAmount.y)
-                    isDragged = true
-                }
-            }
-    ) {
-        // יצירת כפתור לגרירה
-        Button(
-            onClick = { /* פעולה אם נלחץ על המילה */ },
+        Box(
             modifier = Modifier
                 .width(120.dp)
                 .height(60.dp)
-                .offset { IntOffset(offset.x.toInt(), offset.y.toInt()) },
-            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-            shape = RoundedCornerShape(50.dp)
+                .background(primaryColor, shape = RoundedCornerShape(50.dp))
+                .pointerInput(Unit) {
+                    detectDragGestures { _, dragAmount ->
+                        onDragStart(word) // מתחילים לגרור את המילה
+                        onWordDragged(word) // מעדכנים את המילה שנגררה
+                    }
+                }
+                .padding(16.dp)
         ) {
             Text(
                 text = word,
                 color = Color.White,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.Center)
             )
         }
     }
-}
 
-@Composable
-fun WordSlots() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        repeat(6) { index ->
-            WordSlot() // הצגת אזורי השיבוץ
+    @Composable
+    fun DraggableWord(word: DraggableWordState, viewModel: ActivityViewModel) {
+        var offset by remember { mutableStateOf(Offset(0f, 0f)) }
+
+        Box(
+            modifier = Modifier
+                .offset { IntOffset(offset.x.toInt(), offset.y.toInt()) } // עדכון ה-offset של ה-Box
+                .pointerInput(Unit) {
+                    detectDragGestures { _, dragAmount ->
+                        // עדכון המיקום של ה-Box לפי תנועת הגרירה
+                        offset = Offset(offset.x + dragAmount.x, offset.y + dragAmount.y)
+                        viewModel.updateWordOffset(word.word, offset) // עדכון המיקום במודל
+                    }
+                }
+                .background(primaryColor, shape = RoundedCornerShape(50.dp))
+                .padding(16.dp)
+        ) {
+            Text(
+                text = word.word,
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.Center) // טקסט במרכז ה-Box
+            )
         }
     }
-}
 
-@Composable
-fun WordSlot() {
-    Box(
-        modifier = Modifier
-            .width(120.dp)
-            .height(100.dp)
-            .background(Color.Gray, shape = RoundedCornerShape(10.dp))
-    )
-}
+    @Composable
+    fun WordSlots() {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            repeat(6) { index ->
+                WordSlot()
+            }
+        }
+    }
+
+    @Composable
+    fun WordSlot() {
+        Box(
+            modifier = Modifier
+                .width(120.dp)
+                .height(100.dp)
+                .background(Color.Gray, shape = RoundedCornerShape(10.dp))
+        )
+    }}
