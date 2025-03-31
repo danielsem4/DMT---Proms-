@@ -19,6 +19,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -36,7 +37,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -58,6 +61,8 @@ import org.example.hit.heal.hitber.presentation.understanding.components.napkins
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 
 class UnderstandingScreen : Screen {
@@ -88,6 +93,13 @@ class UnderstandingScreen : Screen {
         val selectedNapkin = napkins.find { it.image == napkinResourceId }
         var napkinPosition by remember { mutableStateOf(Offset.Zero) }
         var itemPosition by remember { mutableStateOf(Offset.Zero) }
+        val itemWidthPx = fridgeSize.first * 0.2f
+        val itemHeightPx = fridgeSize.second * 0.1f
+        val napkinWidthPx = tableSize.first * 0.2f
+        val napkinHeightPx = tableSize.second * 0.1f
+
+
+
 
         LaunchedEffect(isAudioClicked) {
             if (isAudioClicked) {
@@ -100,130 +112,179 @@ class UnderstandingScreen : Screen {
                 }
             }
         }
+        val isRtl = false // שים כאן את המצב שלך
+        CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
+            TabletBaseScreen(
+                title = "הבנת הוראות",
+                onNextClick = {
 
-        TabletBaseScreen(
-            title = "הבנת הוראות",
-            onNextClick = {
-
-                if (selectedNapkin != null) {
-                    if (isNapkinNearPosition(napkinPosition, itemLastPositions)) {
-                        viewModel.setNapkinPlacedCorrectly()
+                    if (selectedNapkin != null) {
+                        if (isNapkinNearPosition(napkinPosition, itemLastPositions, napkinWidthPx, napkinHeightPx, itemWidthPx, itemHeightPx)) {
+                            viewModel.setNapkinPlacedCorrectly()
+                        }
                     }
-                }
-                navigator?.push(DragAndDropScreen())
-            },
-            question = 6,
-            buttonText = "המשך",
-            buttonColor = primaryColor,
-            content = {
-                Text(
-                    "בחלק זה תתבקש לבצע מטלה. לשמיעת המטלה לחץ על הקשב. בסיום לחץ על המשך.",
-                    color = Color.Black,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                        .padding(bottom = 30.dp)
-                )
+                    navigator?.push(DragAndDropScreen())
+                },
+                question = 6,
+                buttonText = "המשך",
+                buttonColor = primaryColor,
+                content = {
+                    Text(
+                        "בחלק זה תתבקש לבצע מטלה. לשמיעת המטלה לחץ על הקשב. בסיום לחץ על המשך.",
+                        color = Color.Black,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                            .padding(bottom = 30.dp)
+                    )
 
-                Button(
-                    onClick = {
-                        viewModel.setRandomAudio()
-                        isAudioClicked = true
+                    Button(
+                        onClick = {
+                            viewModel.setRandomAudio()
+                            isAudioClicked = true
 
-                    },
-                    colors = ButtonDefaults.buttonColors(primaryColor),
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    shape = RoundedCornerShape(30)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        },
+                        colors = ButtonDefaults.buttonColors(primaryColor),
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        shape = RoundedCornerShape(30)
                     ) {
-                        Image(
-                            painter = painterResource(Res.drawable.speaker),
-                            contentDescription = "Volume Icon",
-                            modifier = Modifier.padding(end = 8.dp)
-                                .size(30.dp).background(color = Color.Transparent)
-                        )
-                        Text(
-                            "הקשב",
-                            color = Color.White,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Image(
+                                painter = painterResource(Res.drawable.speaker),
+                                contentDescription = "Volume Icon",
+                                modifier = Modifier.padding(end = 8.dp)
+                                    .size(30.dp).background(color = Color.Transparent)
+                            )
+                            Text(
+                                "הקשב",
+                                color = Color.White,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
-                }
 
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                        .background(color = Color.White, shape = RoundedCornerShape(4))
-                ) {
                     Box(
-                        modifier = Modifier.wrapContentWidth()
-                            .fillMaxHeight().align(Alignment.CenterStart)
-                            .clickable {
-                                isFridgeOpen = !isFridgeOpen
-                                if (!fridgeOpen) {
-                                    viewModel.setFridgeOpened()
+                        modifier = Modifier.fillMaxSize()
+                            .background(color = Color.White, shape = RoundedCornerShape(4))
+                    ) {
+                        Box(
+                            modifier = Modifier.wrapContentWidth()
+                                .fillMaxHeight().align(Alignment.CenterStart)
+                                .clickable {
+                                    isFridgeOpen = !isFridgeOpen
+                                    if (!fridgeOpen) {
+                                        viewModel.setFridgeOpened()
+                                    }
+                                }
+                        ) {
+                            Image(
+                                painter = if (isFridgeOpen) painterResource(Res.drawable.open_fridge)
+                                else painterResource(Res.drawable.close_fridge),
+                                contentDescription = if (isFridgeOpen) "open fridge" else "close fridge",
+                                modifier = Modifier.fillMaxHeight()
+                                    .wrapContentWidth().onSizeChanged { size ->
+                                        fridgeSize = size.width.toFloat() to size.height.toFloat()
+                                    },
+                                contentScale = ContentScale.FillHeight
+                            )
+
+                            if (isFridgeOpen) {
+                                fridgeItems.forEachIndexed { index, item ->
+                                    val xPx = fridgeSize.first * item.xRatio
+                                    val yPx = fridgeSize.second * item.yRatio
+
+                                    val itemWidthDp = with(density) { itemWidthPx.toDp() }
+                                    val itemHeightDp = with(density) { itemHeightPx.toDp() }
+                                    val xDp = with(density) { xPx.toDp() }
+                                    val yDp = with(density) { yPx.toDp() }
+
+                                    val currentPosition = itemPositions[index]
+
+                                    Box(
+                                        modifier = Modifier
+                                            .offset(
+                                                x = (currentPosition.first.dp + xDp),
+                                                y = (currentPosition.second.dp + yDp)
+                                            )
+                                            .size(itemWidthDp, itemHeightDp)
+                                            .pointerInput(Unit) {
+                                                detectDragGestures { change, dragAmount ->
+                                                    val dragAmountXInDp =
+                                                        with(density) { dragAmount.x.toDp() }
+                                                    val dragAmountYInDp =
+                                                        with(density) { dragAmount.y.toDp() }
+                                                    viewModel.updateItemPosition(
+                                                        index,
+                                                        Pair(
+                                                            dragAmountXInDp.value,
+                                                            dragAmountYInDp.value
+                                                        )
+                                                    )
+
+                                                    if (change.positionChanged()) {
+                                                        if (item.image == itemResourceId && !correctItem) {
+                                                            viewModel.setItemMovedCorrectly()
+                                                        }
+                                                    }
+                                                }
+                                            }.onGloballyPositioned { coordinates ->
+                                                itemPosition = coordinates.positionInRoot()
+                                                viewModel.updateItemLastPosition(
+                                                    index,
+                                                    itemPosition
+                                                )
+                                            }
+                                            .zIndex(1f)
+                                    ) {
+                                        Image(
+                                            painter = painterResource(item.image),
+                                            contentDescription = null,
+                                            modifier = Modifier.fillMaxSize()
+                                        )
+                                    }
                                 }
                             }
-                    ) {
-                        Image(
-                            painter = if (isFridgeOpen) painterResource(Res.drawable.open_fridge)
-                            else painterResource(Res.drawable.close_fridge),
-                            contentDescription = if (isFridgeOpen) "open fridge" else "close fridge",
-                            modifier = Modifier.fillMaxHeight()
-                                .wrapContentWidth().onSizeChanged { size ->
-                                    fridgeSize = size.width.toFloat() to size.height.toFloat()
-                                },
-                            contentScale = ContentScale.FillHeight
-                        )
+                        }
 
-                        if (isFridgeOpen) {
-                            fridgeItems.forEachIndexed { index, item ->
-                                val itemWidthPx = fridgeSize.first * 0.2f
-                                val itemHeightPx = fridgeSize.second * 0.1f
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd).fillMaxHeight(0.6f).fillMaxWidth(0.4f)
 
-                                val xPx = fridgeSize.first * item.xRatio
-                                val yPx = fridgeSize.second * item.yRatio
+                                .zIndex(-1f).onSizeChanged { size ->
+                                    tableSize = size.width.toFloat() to size.height.toFloat()
+                                }
+                        ) {
+                            Image(
+                                painter = painterResource(Res.drawable.table),
+                                contentDescription = "table",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.FillBounds
 
-                                val itemWidthDp = with(density) { itemWidthPx.toDp() }
-                                val itemHeightDp = with(density) { itemHeightPx.toDp() }
+                            )
+
+                            napkins.forEachIndexed { _, item ->
+                                val xPx = tableSize.first * item.xRatio
+                                val yPx = tableSize.second * item.yRatio
+
+                                val napkinWidthDp = with(density) { napkinWidthPx.toDp() }
+                                val napkinHeightDp = with(density) { napkinHeightPx.toDp() }
                                 val xDp = with(density) { xPx.toDp() }
                                 val yDp = with(density) { yPx.toDp() }
-
-                                val currentPosition = itemPositions[index]
 
                                 Box(
                                     modifier = Modifier
                                         .offset(
-                                            x = (currentPosition.first.dp + xDp),
-                                            y = (currentPosition.second.dp + yDp)
-                                        )
-                                        .size(itemWidthDp, itemHeightDp)
-                                        .pointerInput(Unit) {
-                                            detectDragGestures { change, dragAmount ->
-                                                val dragAmountXInDp =
-                                                    with(density) { dragAmount.x.toDp() }
-                                                val dragAmountYInDp =
-                                                    with(density) { dragAmount.y.toDp() }
-                                                viewModel.updateItemPosition(
-                                                    index,
-                                                    Pair(
-                                                        dragAmountXInDp.value,
-                                                        dragAmountYInDp.value
-                                                    )
-                                                )
-
-                                                if (change.positionChanged()) {
-                                                    if (item.image == itemResourceId && !correctItem) {
-                                                        viewModel.setItemMovedCorrectly()
-                                                    }
-                                                }
+                                            x = xDp,
+                                            y = yDp
+                                        ).onGloballyPositioned { coordinates ->
+                                            if (selectedNapkin?.image == item.image) {
+                                                napkinPosition = coordinates.positionInRoot()
                                             }
-                                        }.onGloballyPositioned { coordinates ->
-                                            itemPosition = coordinates.positionInRoot()
-                                            viewModel.updateItemLastPosition(index, itemPosition)
                                         }
+                                        .size(napkinWidthDp, napkinHeightDp)
                                         .zIndex(1f)
                                 ) {
                                     Image(
@@ -235,79 +296,36 @@ class UnderstandingScreen : Screen {
                             }
                         }
                     }
-
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd).fillMaxHeight(0.6f).fillMaxWidth(0.4f)
-
-                            .zIndex(-1f).onSizeChanged { size ->
-                                tableSize = size.width.toFloat() to size.height.toFloat()
-                            }
-                    ) {
-                        Image(
-                            painter = painterResource(Res.drawable.table),
-                            contentDescription = "table",
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.FillBounds
-
-                        )
-
-                        napkins.forEachIndexed { _, item ->
-                            val napkinWidthPx = tableSize.first * 0.2f
-                            val napkinHeightPx = tableSize.second * 0.1f
-
-                            val xPx = tableSize.first * item.xRatio
-                            val yPx = tableSize.second * item.yRatio
-
-                            val napkinWidthDp = with(density) { napkinWidthPx.toDp() }
-                            val napkinHeightDp = with(density) { napkinHeightPx.toDp() }
-                            val xDp = with(density) { xPx.toDp() }
-                            val yDp = with(density) { yPx.toDp() }
-
-                            Box(
-                                modifier = Modifier
-                                    .offset(
-                                        x = xDp,
-                                        y = yDp
-                                    ).onGloballyPositioned { coordinates ->
-                                        if (selectedNapkin?.image == item.image) {
-                                            napkinPosition = coordinates.positionInRoot()
-                                        }
-                                    }
-                                    .size(napkinWidthDp, napkinHeightDp)
-                                    .zIndex(1f)
-                            ) {
-                                Image(
-                                    painter = painterResource(item.image),
-                                    contentDescription = null,
-                                    modifier = Modifier.fillMaxSize()
-                                )
-                            }
-                        }
-                    }
                 }
-            }
-        )
+            )
 
-        if (isDialogVisible) {
-            AudioPlayingDialog()
+            if (isDialogVisible) {
+                AudioPlayingDialog()
+            }
         }
     }
 
+
     private fun isNapkinNearPosition(
         napkinPosition: Offset,
-        itemPositions: Map<Int, Offset>
+        itemPositions: Map<Int, Offset>,
+        napkinWidth: Float,
+        napkinHeight: Float,
+        itemWidth: Float,
+        itemHeight: Float
     ): Boolean {
         return itemPositions.values.any { position ->
-            val dx = abs(napkinPosition.x - position.x)
-            val dy = abs(napkinPosition.y - position.y)
+            val napkinCenter = Offset(napkinPosition.x + napkinWidth / 2, napkinPosition.y + napkinHeight / 2)
+            val itemCenter = Offset(position.x + itemWidth / 2, position.y + itemHeight / 2)
 
-            val isXOverlapping = dx <= 35f
-            val isYOverlapping = dy <= 35f
+            val dx = abs(napkinCenter.x - itemCenter.x)
+            val dy = abs(napkinCenter.y - itemCenter.y)
+            val distance = sqrt(dx.pow(2) + dy.pow(2))
 
-            println("isXOverlapping: $isXOverlapping, isYOverlapping: $isYOverlapping")
+            println("Napkin Position: $napkinPosition, Item Position: $position, Distance: $distance")
 
-            isXOverlapping && isYOverlapping
+            val threshold = 25f
+            distance <= threshold
         }
     }
 }

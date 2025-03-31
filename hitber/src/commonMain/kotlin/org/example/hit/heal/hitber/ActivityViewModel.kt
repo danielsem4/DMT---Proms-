@@ -1,6 +1,7 @@
 package org.example.hit.heal.hitber
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -235,7 +236,7 @@ class ActivityViewModel : ViewModel() {
         _itemPositions.update { currentList ->
             currentList.mapIndexed { i, position ->
                 if (i == index) {
-                    val newX = position.first - dragAmount.first
+                    val newX = position.first + dragAmount.first
                     val newY = position.second + dragAmount.second
                     Pair(newX, newY)
                 } else {
@@ -305,9 +306,19 @@ class ActivityViewModel : ViewModel() {
     private val _instructionsResourceId = MutableStateFlow<StringResource?>(null)
     val instructionsResourceId: StateFlow<StringResource?> get() = _instructionsResourceId.asStateFlow()
 
-    fun setRandomInstructions(){
-        if (_instructionsResourceId.value == null) {
-            _instructionsResourceId.value = instructions.random()
-        }
+    private val _targetCircleColor = MutableStateFlow<Color?>(null)
+    val targetCircleColor: StateFlow<Color?> get() = _targetCircleColor
+
+    private val _answerDragAndDrop = MutableStateFlow<Boolean>(false)
+
+    fun setRandomInstructions() {
+        val (randomInstruction, color) = instructions.random()
+        _instructionsResourceId.value = randomInstruction
+        _targetCircleColor.value = color
+    }
+
+    fun setAnswerDragAndDrop() {
+        println("setAnswerDragAndDrop called!")
+        _answerDragAndDrop.value = true
     }
 }

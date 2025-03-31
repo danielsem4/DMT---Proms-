@@ -22,7 +22,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,19 +39,24 @@ class DragAndDropScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
+        val density = LocalDensity.current
         val viewModel: ActivityViewModel = viewModel()
         var screenSize by remember { mutableStateOf(0f to 0f) }
         val circlePositions by viewModel.circlePositions.collectAsState()
         val circleColors = listOf(Color.Black, Color.Green, Color.Blue, Color.Yellow)
         val instructionsResourceId by viewModel.instructionsResourceId.collectAsState()
         val instructions = instructionsResourceId?.let { stringResource(it) }
+        val targetColor by viewModel.targetCircleColor.collectAsState()
+        var targetBoxXRange by remember { mutableStateOf(0f..0f) }
+        var targetBoxYRange by remember { mutableStateOf(0f..0f) }
 
         LaunchedEffect(Unit) {
             viewModel.setRandomInstructions()
         }
         TabletBaseScreen(
             title = "גרור ושחרר",
-            onNextClick = { navigator?.push(WritingScreen()) },
+            onNextClick = { checkIfCorrectCircleInBox(viewModel, screenSize, density)
+                navigator?.push(WritingScreen()) },
             buttonText = "המשך",
             buttonColor = primaryColor,
             question = 7,
@@ -65,28 +72,34 @@ class DragAndDropScreen : Screen {
                     )
                 }
                 Canvas(
+
                     modifier = Modifier.fillMaxSize()
                         .background(color = Color.White, shape = RoundedCornerShape(4))
                         .onSizeChanged { size ->
                             screenSize = size.width.toFloat() to size.height.toFloat()
-                        }
+
+                            with(density) {
+                                val targetBoxSize = 150.dp.toPx()
+                                val targetBoxXStart = (screenSize.first - targetBoxSize) / 2
+                                val targetBoxYStart = (screenSize.second - targetBoxSize) / 2
+                                targetBoxXRange = targetBoxXStart..(targetBoxXStart + targetBoxSize)
+                                targetBoxYRange = targetBoxYStart..(targetBoxYStart + targetBoxSize)
+                            }}
                         .pointerInput(Unit) {
                             detectDragGestures { change, dragAmount ->
                                 change.consume()
 
                                 val draggedIndex = circlePositions.indexOfFirst { (x, y) ->
                                     val center = Offset(x * screenSize.first, y * screenSize.second)
-                                    center.distanceTo(change.position) < 50f  // משתמשים בפונקציה המתוקנת
+                                    center.distanceTo(change.position) < 50f
                                 }
 
                                 if (draggedIndex != -1) {
-                                    viewModel.updateCirclePosition(
-                                        draggedIndex,
-                                        Offset(
-                                            dragAmount.x / screenSize.first,
-                                            dragAmount.y / screenSize.second
-                                        )
+                                    val newPosition = Offset(
+                                        dragAmount.x / screenSize.first,
+                                        dragAmount.y / screenSize.second
                                     )
+                                    viewModel.updateCirclePosition(draggedIndex, newPosition)
                                 }
                             }
                         }
@@ -95,19 +108,16 @@ class DragAndDropScreen : Screen {
                 ) {
                     val (screenWidth, screenHeight) = screenSize
 
-                    // ריבוע יעד אדום
                     drawRect(
                         color = Color.Red,
                         topLeft = Offset(
-                            (screenWidth - 150.dp.toPx()) / 2,  // הזזה שמאלה ב- 75.dp
-                            (screenHeight - 150.dp.toPx()) / 2  // הזזה למעלה ב- 75.dp
+                            (screenWidth - 150.dp.toPx()) / 2,
+                            (screenHeight - 150.dp.toPx()) / 2
                         ),
                         size = androidx.compose.ui.geometry.Size(150.dp.toPx(), 150.dp.toPx()),
-                        style = Stroke(width = 10.dp.toPx()) // עובי המסגרת
+                        style = Stroke(width = 10.dp.toPx())
                     )
 
-
-                    // ציור עיגולים דינמי
                     circlePositions.forEachIndexed { index, (x, y) ->
                         drawCircle(
                             color = circleColors.getOrElse(index) { Color.Gray },
@@ -118,9 +128,35 @@ class DragAndDropScreen : Screen {
                 }
             })
     }
-
 }
 
 fun Offset.distanceTo(other: Offset): Float {
     return kotlin.math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y))
 }
+
+fun checkIfCorrectCircleInBox(viewModel: ActivityViewModel, screenSize: Pair<Float, Float>?, density: Density){
+    if (screenSize == null) return
+
+    val (screenWidth, screenHeight) = screenSize
+    val circlePositions = viewModel.circlePositions.value
+    val targetColor = viewModel.targetCircleColor.value
+    val circleColors = listOf(Color.Black, Color.Green, Color.Blue, Color.Yellow)
+
+    density.run {
+        val targetBoxSize = 150.dp.toPx()
+        val targetBoxXStart = (screenWidth - targetBoxSize) / 2
+        val targetBoxYStart = (screenHeight - targetBoxSize) / 2
+        val targetBoxXRange = targetBoxXStart..(targetBoxXStart + targetBoxSize)
+        val targetBoxYRange = targetBoxYStart..(targetBoxYStart + targetBoxSize)
+
+        val correctCircleIndex = circleColors.indexOf(targetColor)
+        val correctCirclePosition = circlePositions.getOrNull(correctCircleIndex) ?: return
+
+        val circleCenterX = correctCirclePosition.first * screenWidth
+        val circleCenterY = correctCirclePosition.second * screenHeight
+
+        if (circleCenterX in targetBoxXRange && circleCenterY in targetBoxYRange) {
+            viewModel.setAnswerDragAndDrop()
+        }
+    }}
+
