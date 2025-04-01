@@ -1,5 +1,6 @@
 package org.example.hit.heal.hitber
 
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
@@ -20,7 +21,9 @@ import org.example.hit.heal.hitber.presentation.timeAndPlace.components.DropDown
 import org.example.hit.heal.hitber.presentation.understanding.components.audioList
 import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
 import org.example.hit.heal.hitber.presentation.writing.DraggableWordState
+import org.example.hit.heal.hitber.presentation.writing.WordSlotState
 import org.example.hit.heal.hitber.presentation.writing.draggableWordsList
+import org.example.hit.heal.hitber.presentation.writing.slotsList
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
@@ -325,35 +328,27 @@ class ActivityViewModel : ViewModel() {
     }
 
     //Writing Question (8/10)
-    private val _words = MutableStateFlow(draggableWordsList)
+
+    private val _words = MutableStateFlow(draggableWordsList) // הרשימה המקורית של המילים
     val words: StateFlow<List<DraggableWordState>> = _words
 
-    private val _copiedWords = MutableStateFlow(listOf<DraggableWordState>())
+    private val _copiedWords = MutableStateFlow(draggableWordsList) // רשימה ריקה לגרירה
     val copiedWords: StateFlow<List<DraggableWordState>> = _copiedWords
 
-    fun updateWordOffset(word: String, newOffset: Offset) {
-        val updatedWords = _words.value.map {
-            if (it.word == word) {
-                it.copy(offset = newOffset)
+    private val _slotsWords = MutableStateFlow(slotsList)
+    val slotsWords : StateFlow<List<WordSlotState>> = _slotsWords
+
+
+
+    // עדכון ה-slot עם המילה
+    fun updateSlot(slotIndex: Int, word: String?) {
+        _slotsWords.value = _slotsWords.value.mapIndexed { index, slot ->
+            if (index == slotIndex) {
+                slot.copy(word = word, isOccupied = word != null)
             } else {
-                it
+                slot
             }
-        }
-        _words.value = updatedWords
+        } as SnapshotStateList<WordSlotState>
     }
 
-    // פונקציה להוספת מילה לגרירה
-    fun addCopiedWord(word: String) {
-        val wordState = _words.value.find { it.word == word }
-        wordState?.let {
-            _copiedWords.value += it
-        }
-    }
-
-    // פונקציה להוספת מילה חדשה לרשימה
-    fun updateWords(newWords: List<String>) {
-        viewModelScope.launch {
-            _copiedWords.value = newWords.map { word -> DraggableWordState(word) }
-        }
-    }
 }
