@@ -16,10 +16,10 @@ data class DraggableWordState(
 
 // כאן המילים יכילו את המיקום ההתחלתי כ-Offset
 val draggableWordsList = listOf(
-    DraggableWordState("סבתא", initialOffset = Offset(0.2f, 0.6f)),
-    DraggableWordState("ארוחת", initialOffset = Offset(0.3f, 0.6f)),
-    DraggableWordState("עם", initialOffset = Offset(0.4f, 0.6f)),
-    DraggableWordState("אתמול", initialOffset = Offset(0.5f, 0.6f)),
-    DraggableWordState("אכלתי", initialOffset = Offset(0.6f, 0.6f)),
-    DraggableWordState("ערב", initialOffset = Offset(0.7f, 0.6f))
+    DraggableWordState("סבתא", initialOffset = Offset(0.2f, 0.2f)),
+    DraggableWordState("ארוחת", initialOffset = Offset(0.3f, 0.2f)),
+    DraggableWordState("עם", initialOffset = Offset(0.4f, 0.2f)),
+    DraggableWordState("אתמול", initialOffset = Offset(0.5f, 0.2f)),
+    DraggableWordState("אכלתי", initialOffset = Offset(0.6f, 0.2f)),
+    DraggableWordState("ערב", initialOffset = Offset(0.7f, 0.2f))
 )

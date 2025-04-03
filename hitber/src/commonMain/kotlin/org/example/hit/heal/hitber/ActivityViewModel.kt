@@ -1,8 +1,10 @@
 package org.example.hit.heal.hitber
 
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -12,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import org.example.hit.heal.core.presentation.Colors.backgroundColor
 import org.example.hit.heal.hitber.presentation.dragAndDrop.instructions
 import org.example.hit.heal.hitber.presentation.naming.components.imageCouples
 import org.example.hit.heal.hitber.presentation.naming.components.imageNames
@@ -329,26 +332,99 @@ class ActivityViewModel : ViewModel() {
 
     //Writing Question (8/10)
 
-    private val _words = MutableStateFlow(draggableWordsList) // הרשימה המקורית של המילים
+    private val _words = MutableStateFlow(draggableWordsList)
     val words: StateFlow<List<DraggableWordState>> = _words
 
-    private val _copiedWords = MutableStateFlow(draggableWordsList) // רשימה ריקה לגרירה
+    private val _copiedWords = MutableStateFlow(draggableWordsList)
     val copiedWords: StateFlow<List<DraggableWordState>> = _copiedWords
 
     private val _slotsWords = MutableStateFlow(slotsList)
     val slotsWords : StateFlow<List<WordSlotState>> = _slotsWords
 
+    private val _activeSlotIndex = MutableStateFlow<Int?>(null)
+    val activeSlotIndex: StateFlow<Int?> = _activeSlotIndex
+
+    private val _sentence = MutableStateFlow<List<String>>(emptyList())
+
+    private val _allFinished= MutableStateFlow<Boolean>(false)
+     val allFinished: StateFlow<Boolean> = _allFinished
 
 
-    // עדכון ה-slot עם המילה
-    fun updateSlot(slotIndex: Int, word: String?) {
+
+    fun isWordOnSlot(wordState: Offset, containerSize: IntSize, density: Density, isRTL: Boolean): Int? {
+        val foundIndex = _slotsWords.value.indexOfFirst { slot ->
+            val slotWidthPx = with(density) { 150.dp.toPx() }
+            val slotHeightPx = with(density) { 100.dp.toPx() }
+
+            val adjustedX = if (isRTL) {
+                containerSize.width - (slot.initialOffset.x * containerSize.width)
+            } else {
+                slot.initialOffset.x * containerSize.width
+            }
+
+            val slotLeft = adjustedX - slotWidthPx / 2
+            val slotRight = adjustedX + slotWidthPx / 2
+            val slotTop = slot.initialOffset.y * containerSize.height - slotHeightPx / 2
+            val slotBottom = slot.initialOffset.y * containerSize.height + slotHeightPx / 2
+
+            wordState.x * containerSize.width in slotLeft..slotRight &&
+                    wordState.y * containerSize.height in slotTop..slotBottom
+        }.takeIf { it >= 0 }
+
+        _activeSlotIndex.value = if (isRTL && foundIndex != null) {
+            _slotsWords.value.size - 1 - foundIndex
+        } else {
+            foundIndex
+        }
+
+        return _activeSlotIndex.value
+    }
+
+    fun updateWordInSlot(word: String, slotId: Int) {
         _slotsWords.value = _slotsWords.value.mapIndexed { index, slot ->
-            if (index == slotIndex) {
-                slot.copy(word = word, isOccupied = word != null)
+
+            if (index == slotId && slot.word == null) {
+                slot.copy(word = word, color = backgroundColor)
             } else {
                 slot
             }
-        } as SnapshotStateList<WordSlotState>
+        }
+        updateSentence()
+        _allFinished.value = areAllSlotsFilled()
+
+    }
+
+    fun resetSlot(slotIndex: Int) {
+        _slotsWords.value = _slotsWords.value.mapIndexed { index, slot ->
+            if (index == slotIndex) {
+                slot.copy(word = null, color = Color.Gray)
+            } else {
+                slot
+            }
+        }
+        updateSentence()
+    }
+    fun updateSlotColor(slotId: Int) {
+        _slotsWords.value = _slotsWords.value.map { slot ->
+            if (slot.id == slotId && slot.word == null) {
+                slot.copy(color = backgroundColor)
+            } else if (slot.word == null) {
+                slot.copy(color = Color.Gray)
+            } else {
+                slot
+            }
+        }
+    }
+
+
+    private fun updateSentence() {
+        _sentence.value = _slotsWords.value
+            .sortedBy { it.id }
+            .mapNotNull { it.word }
+    }
+
+    fun areAllSlotsFilled(): Boolean {
+        return _slotsWords.value.all { it.word != null }
     }
 
 }
