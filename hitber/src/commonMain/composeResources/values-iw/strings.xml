@@ -4,20 +4,19 @@
     <string name="seventh_question_grapes_to_blue_napkin_hitbear"><![CDATA[https://firebasestorage.googleapis.com/v0/b/minimental-hit.appspot.com/o/Three%20Phase%20Instruction%20Versions%2FMyRec_0526_1328%D7%92%D7%A8%D7%A1%D7%94%20%D7%A9%D7%A0%D7%99%D7%94%20%D7%94%D7%95%D7%A8%D7%90%D7%94%20%D7%AA%D7%9C%D7%AA%20%D7%A9%D7%9C%D7%91%D7%99%D7%AA.mp3?alt=media&token=24ba10bd-e6e6-415b-9397-0317c4c0cc3e]]></string>
     <string name="seventh_question_chicken_to_green_napkin_hitbear"><![CDATA[https://firebasestorage.googleapis.com/v0/b/minimental-hit.appspot.com/o/Three%20Phase%20Instruction%20Versions%2FMyRec_0526_1330%D7%92%D7%A8%D7%A1%D7%94%20%D7%A9%D7%9C%D7%99%D7%A9%D7%99%D7%AA%20%D7%94%D7%95%D7%A8%D7%90%D7%AA%20%D7%AA%D7%9C%D7%AA%20%D7%A9%D7%9C%D7%91%D7%99%D7%AA.mp3?alt=media&token=d5204567-d417-41b1-80f5-8739ef2e0cf8]]></string>
     <string name="seventh_question_can_to_yellow_napkin_hitbear"><![CDATA[https://firebasestorage.googleapis.com/v0/b/minimental-hit.appspot.com/o/Three%20Phase%20Instruction%20Versions%2FMyRec_0526_1331%D7%92%D7%A8%D7%A1%D7%94%20%D7%A8%D7%91%D7%99%D7%A2%D7%99%D7%AA%20%D7%94%D7%95%D7%A8%D7%90%D7%94%20%D7%AA%D7%9C%D7%AA%20%D7%A9%D7%9C%D7%91%D7%99%D7%AA.mp3?alt=media&token=e706eeb4-647c-4910-8a24-6b1dc3eba139]]></string>
-    <string name="seventh_question_green_circle">Drag the green circle into the square, then press Continue.</string>
-    <string name="seventh_question_yellow_circle">Drag the yellow circle into the square, then press Continue.</string>
-    <string name="seventh_question_black_circle">Drag the black circle into the square, then press Continue.</string>
-    <string name="seventh_question_blue_circle">Drag the blue circle into the square, then press Continue.</string>
-    <string name="nine_question_word_hitbear_yesterday">yesterday</string>
-    <string name="nine_question_word_hitbear_I">I</string>
-    <string name="nine_question_word_hitbear_had">had</string>
-    <string name="nine_question_word_hitbear_dinner">dinner</string>
-    <string name="nine_question_word_hitbear_with">with</string>
-    <string name="nine_question_word_hitbear_grandma">grandma</string>
-
-    <string name="nine_question_answer_hitbear_version_1">Yesterday I had dinner with grandma</string>
-    <string name="nine_question_answer_hitbear_version_2">Yesterday I had dinner with grandma</string>
-    <string name="nine_question_answer_hitbear_version_3">I had dinner with grandma yesterday</string>
-    <string name="nine_question_answer_hitbear_version_4">I had dinner with grandma yesterday</string>
+    <string name="seventh_question_green_circle">גרור את העיגול הירוק לתוך הריבוע, בסיום לחץ על המשך.</string>
+    <string name="seventh_question_yellow_circle">גרור את העיגול הצהוב לתוך הריבוע, בסיום לחץ על המשך.</string>
+    <string name="seventh_question_black_circle">גרור את העיגול השחור לתוך הריבוע, בסיום לחץ על המשך.</string>
+    <string name="seventh_question_blue_circle">גרור את העיגול הכחול לתוך הריבוע, בסיום לחץ על המשך.</string>
+    <string name="nine_question_word_hitbear_yesterday">אתמול</string>
+    <string name="nine_question_word_hitbear_I">אכלתי</string>
+    <string name="nine_question_word_hitbear_had">ארוחת</string>
+    <string name="nine_question_word_hitbear_dinner">ערב</string>
+    <string name="nine_question_word_hitbear_with">עם</string>
+    <string name="nine_question_word_hitbear_grandma">סבתא</string>
+    <string name="nine_question_answer_hitbear_version_1">אתמול אכלתי ארוחת ערב עם סבתא</string>
+    <string name="nine_question_answer_hitbear_version_2">אתמול אכלתי עם סבתא ארוחת ערב</string>
+    <string name="nine_question_answer_hitbear_version_3">אכלתי עם סבתא ארוחת ערב אתמול</string>
+    <string name="nine_question_answer_hitbear_version_4">אכלתי ארוחת ערב עם סבתא אתמול</string>
 
 </resources>

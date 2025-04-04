@@ -51,7 +51,10 @@ import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ActionShapesScreen
+import org.example.hit.heal.hitber.presentation.writing.components.DraggableWordState
+import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 class WritingScreen : Screen {
     @Composable
@@ -65,18 +68,23 @@ class WritingScreen : Screen {
         val copiedWords by viewModel.copiedWords.collectAsState()
         val slots by viewModel.slotsWords.collectAsState()
         val allFinished by viewModel.allFinished.collectAsState()
+        val sentencesResourceId by viewModel.answerSentences.collectAsState()
+        val sentences = sentencesResourceId.map { stringResource(it) }
+
 
         TabletBaseScreen(
             title = "כתיבה",
             onNextClick = {
-                if (allFinished) navigator?.push(ActionShapesScreen())
+                if (allFinished) {navigator?.push(ActionShapesScreen(9))
+                    val isCorrect = viewModel.checkSentence(sentences)
+                    println("התוצאה: $isCorrect")}
             },
             buttonText = "המשך",
             question = 8,
             buttonColor = if (!allFinished) Color.Gray else primaryColor,
             content = {
                 Text(
-                    "בחלק זה עליך להרכיב משפט מהמילים המוצגות לפניך. לשיבוץ מילה במשפט יש לגרור אותה למשבצת שתבחר.",
+                    "בחלק זה עליך להרכיב משפט מהמילים המוצגות לפניך. לשיבוץ מילה במשפט יש לגרור אותה למשבצת שתבחר. אם תרצה לשנות את המיקום של מילה שכבר שובצה, צריך שוב לגרור אותה ממחסן המילים ולשבץ אותה מחדשץ בסיום לחץ על המשך.",
                     color = Color.Black,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
@@ -86,7 +94,7 @@ class WritingScreen : Screen {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     StaticWords(words, copiedWords, viewModel, density, isRTL)
-                    WordSlots(slots, viewModel)
+                    WordSlots(slots, viewModel, density)
                 }
             })
     }
@@ -106,13 +114,15 @@ class WritingScreen : Screen {
                 .fillMaxSize().onSizeChanged { newSize -> containerSize = newSize }) {
             DraggableWords(copiedWords, containerSize, viewModel, density, isRTL)
             words.forEach { wordState ->
-                StaticWord(wordState = wordState, containerSize = containerSize)
+                StaticWord(wordState = wordState, containerSize = containerSize, density)
             }
         }
     }
 
     @Composable
-    fun StaticWord(wordState: DraggableWordState, containerSize: IntSize) {
+    fun StaticWord(wordState: DraggableWordState, containerSize: IntSize, density: Density) {
+        val widthPx = (containerSize.width * 0.1f)
+        val heightPx = (containerSize.height * 0.15f)
         Box(
             modifier = Modifier.offset {
                 IntOffset(
@@ -120,13 +130,13 @@ class WritingScreen : Screen {
                     (wordState.initialOffset.y * containerSize.height).toInt()
                 )
             }
-                .width(70.dp)
-                .height(40.dp)
+                .width(with(density) { widthPx.toDp() })
+                .height(with(density) { heightPx.toDp() })
                 .background(primaryColor, shape = RoundedCornerShape(50.dp))) {
             Text(
-                text = wordState.word,
+                text = stringResource(wordState.word),
                 color = Color.White,
-                fontSize = 10.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.Center)
             )
@@ -161,6 +171,9 @@ class WritingScreen : Screen {
         val coroutineScope = rememberCoroutineScope()
         var wordColor by remember { mutableStateOf(primaryColor) }
         var isOnSlot by remember { mutableStateOf<Int?>(null) }
+        val word = stringResource(wordState.word)
+        val widthPx = (containerSize.width * 0.1f)
+        val heightPx = (containerSize.height * 0.15f)
 
         LaunchedEffect(wordState.offset) {
             wordOffset.snapTo(wordState.offset)
@@ -206,21 +219,21 @@ class WritingScreen : Screen {
                                 coroutineScope.launch {
                                     wordOffset.snapTo(wordState.initialOffset)
                                 }
-                                viewModel.updateWordInSlot(wordState.word, isOnSlot!!)
+                                viewModel.updateWordInSlot(word, isOnSlot!!)
                             }
                         }
 
                     )
                 }
-                .width(70.dp)
-                .height(40.dp)
+                .width(with(density) { widthPx.toDp() })
+                .height(with(density) { heightPx.toDp() })
                 .background(wordColor, shape = RoundedCornerShape(50.dp))
                 .zIndex(1f)
         ) {
             Text(
-                text = wordState.word,
+                text = stringResource(wordState.word),
                 color = Color.White,
-                fontSize = 10.sp,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.Center)
             )
@@ -230,7 +243,8 @@ class WritingScreen : Screen {
     @Composable
     fun WordSlots(
         slots: List<WordSlotState>,
-        viewModel: ActivityViewModel
+        viewModel: ActivityViewModel,
+        density: Density
     ) {
         var containerSize by remember { mutableStateOf(IntSize.Zero) }
 
@@ -240,7 +254,7 @@ class WritingScreen : Screen {
                 .onSizeChanged { newSize -> containerSize = newSize }.zIndex(-1f)
         ) {
             slots.forEachIndexed { index, slot ->
-                WordSlot(slot, index, containerSize = containerSize, viewModel = viewModel)
+                WordSlot(slot, index, containerSize = containerSize, viewModel = viewModel, density = density)
             }
         }
     }
@@ -251,9 +265,11 @@ class WritingScreen : Screen {
         slotIndex: Int,
         containerSize: IntSize,
         viewModel: ActivityViewModel
+        ,density: Density
     ) {
         val activeSlotIndex by viewModel.activeSlotIndex.collectAsState()
-
+        val widthPx = (containerSize.width * 0.1f)
+        val heightPx = (containerSize.width * 0.1f)
         LaunchedEffect(activeSlotIndex) {
             viewModel.updateSlotColor(activeSlotIndex ?: -1)
         }
@@ -265,8 +281,8 @@ class WritingScreen : Screen {
                     (slot.initialOffset.y * containerSize.height).toInt()
                 )
             }
-                .width(150.dp)
-                .height(100.dp)
+                .width(with(density) { widthPx.toDp() })
+                .height(with(density) { heightPx.toDp() })
                 .background(slot.color, shape = RoundedCornerShape(10.dp))
                 .border(color = Color.White, width = 5.dp)
                 .zIndex(-1f)

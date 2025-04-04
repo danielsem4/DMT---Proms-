@@ -43,7 +43,7 @@ class ShapeScreen : Screen {
 
         TabletBaseScreen(
             title = "צורות",
-            onNextClick = { navigator?.push(ActionShapesScreen()) },
+            onNextClick = { navigator?.push(ActionShapesScreen(2)) },
             question = 2,
             buttonText = "המשך", buttonColor = primaryColor,
             content = {

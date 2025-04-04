@@ -32,12 +32,13 @@ import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.error_icon
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 
 
-class ActionShapesScreen : Screen {
+class ActionShapesScreen(private val question: Int) : Screen {
     @Composable
     override fun Content() {
 
@@ -58,10 +59,13 @@ class ActionShapesScreen : Screen {
             if (attempt < 3) {
                 showDialog = true
             } else {
+                if(question == 2)
                 navigator?.push(ConcentrationScreen())
+
+                else navigator?.push(BuildShapeScreen())
             }
 
-        }, question = 2, buttonText = "המשך", buttonColor = primaryColor, content = {
+        }, question = question, buttonText = "המשך", buttonColor = primaryColor, content = {
             Text(
                 "לפניך מספר צורות, עליך לבחור את 5 הצורות שראית לפני מספר דקות באמצעות לחיצה עליהן, אם אינך זוכר אפשר לנחש. בסיום לחץ על המשך.",
                 color = Color.Black,

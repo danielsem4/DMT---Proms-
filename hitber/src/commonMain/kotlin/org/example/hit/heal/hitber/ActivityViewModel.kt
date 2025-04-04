@@ -23,10 +23,11 @@ import org.example.hit.heal.hitber.presentation.shapes.components.shapeSets
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.DropDownItem
 import org.example.hit.heal.hitber.presentation.understanding.components.audioList
 import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
-import org.example.hit.heal.hitber.presentation.writing.DraggableWordState
-import org.example.hit.heal.hitber.presentation.writing.WordSlotState
-import org.example.hit.heal.hitber.presentation.writing.draggableWordsList
-import org.example.hit.heal.hitber.presentation.writing.slotsList
+import org.example.hit.heal.hitber.presentation.writing.components.DraggableWordState
+import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
+import org.example.hit.heal.hitber.presentation.writing.components.draggableWordsList
+import org.example.hit.heal.hitber.presentation.writing.components.sentencesResourceId
+import org.example.hit.heal.hitber.presentation.writing.components.slotsList
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
@@ -346,10 +347,20 @@ class ActivityViewModel : ViewModel() {
 
     private val _sentence = MutableStateFlow<List<String>>(emptyList())
 
-    private val _allFinished= MutableStateFlow<Boolean>(false)
+
+    private val _allFinished= MutableStateFlow(false)
      val allFinished: StateFlow<Boolean> = _allFinished
 
+    private val _answerSentences = MutableStateFlow<List<StringResource>>(sentencesResourceId)
+    val answerSentences: StateFlow<List<StringResource>> = _answerSentences
 
+    private val _answerWriting = MutableStateFlow(false)
+
+    fun checkSentence(sentences: List<String>): Boolean {
+        val userSentence = _sentence.value.joinToString(" ")
+        _answerWriting.value = userSentence in sentences
+        return _answerWriting.value
+    }
 
     fun isWordOnSlot(wordState: Offset, containerSize: IntSize, density: Density, isRTL: Boolean): Int? {
         val foundIndex = _slotsWords.value.indexOfFirst { slot ->
@@ -423,7 +434,7 @@ class ActivityViewModel : ViewModel() {
             .mapNotNull { it.word }
     }
 
-    fun areAllSlotsFilled(): Boolean {
+    private fun areAllSlotsFilled(): Boolean {
         return _slotsWords.value.all { it.word != null }
     }
 
