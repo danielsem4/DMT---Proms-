@@ -5,13 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
+import androidx.lifecycle.ViewModel
 import com.clock.test.presentation.components.ClockTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.datetime.Clock
 
-class TestViewModel {
+class TestViewModel: ViewModel() {
     // Clock test data
     private val firstClockTime = MutableStateFlow(ClockTime(12, 0))
     private val secondClockTime = MutableStateFlow(ClockTime(12, 0))

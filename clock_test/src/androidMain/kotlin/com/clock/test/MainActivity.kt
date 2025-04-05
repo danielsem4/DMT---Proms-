@@ -1,4 +1,4 @@
-package org.example.hit.heal
+package com.clock.test
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
