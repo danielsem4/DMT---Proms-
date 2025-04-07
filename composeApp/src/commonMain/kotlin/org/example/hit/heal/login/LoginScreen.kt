@@ -34,7 +34,7 @@ import org.example.PasswordTextField
 import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.login.LoginViewModel
 import org.jetbrains.compose.resources.painterResource
-
+import org.example.hit.heal.core.Network.AuthApi
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,

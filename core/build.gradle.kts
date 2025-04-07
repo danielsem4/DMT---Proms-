@@ -1,38 +1,35 @@
-
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
-plugins {
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+plugins{
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
 }
-
 kotlin {
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "core"
             isStatic = true
         }
     }
-    
+
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -44,7 +41,6 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(projects.ui.core)
-            implementation(projects.core)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -62,32 +58,26 @@ kotlin {
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.lifecycle.viewmodel)
-            implementation(libs.navigation.compose)
-
-
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
         desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
             implementation(compose.desktop.common)
+            implementation(compose.desktop.currentOs)
             implementation(libs.ktor.client.okhttp)
         }
     }
-}
 
+}
 android {
-    namespace = "org.example.hit.heal"
+    namespace = "org.example.hit.heal.core"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.example.hit.heal"
+
         minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+
     }
     packaging {
         resources {
@@ -105,19 +95,3 @@ android {
     }
 }
 
-dependencies {
-    implementation(libs.androidx.runtime.livedata)
-    debugImplementation(compose.uiTooling)
-}
-
-compose.desktop {
-    application {
-        mainClass = "org.example.hit.heal.MainKt"
-
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.hit.heal"
-            packageVersion = "1.0.0"
-        }
-    }
-}

@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.example.hit.heal.network.AuthApi
+
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+
+import org.example.hit.heal.core.Network.AuthApi
 
 class LoginViewModel : ViewModel(), KoinComponent {
     private val _isLoading = MutableStateFlow(false)
