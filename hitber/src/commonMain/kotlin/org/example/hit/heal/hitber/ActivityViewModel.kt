@@ -17,7 +17,6 @@ import kotlinx.datetime.Clock
 import org.example.hit.heal.core.presentation.Colors.backgroundColor
 import org.example.hit.heal.hitber.presentation.dragAndDrop.instructions
 import org.example.hit.heal.hitber.presentation.naming.components.imageCouples
-import org.example.hit.heal.hitber.presentation.naming.components.imageNames
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeList
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeSets
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.DropDownItem
@@ -196,12 +195,7 @@ class ActivityViewModel : ViewModel() {
     private val _answersNaming =
         MutableStateFlow<Pair<Pair<String, String>, Pair<String, String>>?>(null)
 
-    fun setAnswersNaming(answer1: String, answer2: String) {
-        val currentCouple = _selectedCouple.value ?: return
-        val (image1, image2) = currentCouple
-
-        val correct1 = imageNames[image1] ?: "?"
-        val correct2 = imageNames[image2] ?: "?"
+    fun setAnswersNaming(answer1: String, answer2: String, correct1: String, correct2: String) {
         _answersNaming.value = Pair(Pair(answer1, correct1), Pair(answer2, correct2))
     }
 

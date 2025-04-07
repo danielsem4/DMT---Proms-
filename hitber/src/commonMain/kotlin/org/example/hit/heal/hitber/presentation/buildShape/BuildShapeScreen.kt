@@ -16,25 +16,33 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.hitbear_continue
+import dmt_proms.hitber.generated.resources.ninth_question_hitbear_instructions
+import dmt_proms.hitber.generated.resources.ninth_question_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.hitber.ActivityViewModel
+import org.jetbrains.compose.resources.stringResource
 
 class BuildShapeScreen : Screen {
     @Composable
     override fun Content() {
 
         val navigator = LocalNavigator.current
+        val viewModel: ActivityViewModel = viewModel()
 
         TabletBaseScreen(
-            title = "בנה צורה",
+            title = stringResource(Res.string.ninth_question_hitbear_title),
             onNextClick = {},
-            buttonText = "המשך",
+            buttonText = stringResource(Res.string.hitbear_continue),
             question = 10,
             buttonColor = primaryColor,
             content = {
                 Text(
-                    "עליך להעתיק את התמונה שמוצגת בצד שמאל, למרכז המסך. את התמונה יש להעתיק באמצעות הצורות המופיעות בצד ימין. את הצורות צריך לגרור ולסדר במרכז המסך.",
+                    stringResource(Res.string.ninth_question_hitbear_instructions),
                     color = Color.Black,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,

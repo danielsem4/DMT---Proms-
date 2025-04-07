@@ -24,14 +24,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.hitbear_continue
+import dmt_proms.hitber.generated.resources.hitbear_start
+import dmt_proms.hitber.generated.resources.third_question_hitbear_finish_task
+import dmt_proms.hitber.generated.resources.third_question_hitbear_instructions
+import dmt_proms.hitber.generated.resources.third_question_hitbear_title
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
-import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
 
 
 class ConcentrationScreen : Screen {
@@ -39,21 +46,22 @@ class ConcentrationScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        val viewModel: ActivityViewModel = koinViewModel()
+        //val viewModel: ActivityViewModel = koinViewModel()
+        val viewModel: ActivityViewModel = viewModel()
         val buttonVisible by viewModel.startButtonIsVisible.collectAsState()
         val number by viewModel.number.collectAsState()
         val isFinished by viewModel.isFinished.collectAsState()
         val isNumberClickable by viewModel.isNumberClickable.collectAsState()
 
         TabletBaseScreen(
-            title = "ריכוז",
+            title = stringResource(Res.string.third_question_hitbear_title),
             onNextClick = { if (isFinished) navigator?.push(NamingScreen()) },
             question = 3,
-            buttonText = "המשך",
+            buttonText = stringResource(Res.string.hitbear_continue),
             buttonColor = if (isFinished) primaryColor else Color.Gray,
             content = {
                 Text(
-                    "בדקה הקרובה יופיעו במרכז המסך מספרים, בכל פעם שתראה את הספרה 7 עליך ללחוץ על המסך. להתחלת המטלה יש ללחוץ על התחל. בסיום המטלה תופיע ההודעה תודה. לחץ על המשך",
+                    stringResource(Res.string.third_question_hitbear_instructions),
                     color = Color.Black,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
@@ -72,7 +80,7 @@ class ConcentrationScreen : Screen {
                         shape = RoundedCornerShape(30)
                     ) {
                         Text(
-                            "התחל", color = Color.White, fontSize = 25.sp,
+                            stringResource(Res.string.hitbear_start), color = Color.White, fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
 
@@ -90,7 +98,7 @@ class ConcentrationScreen : Screen {
                                 .background(color = Color.White)
                         ) {
                             Text(
-                                "תודה, אנא עבור לשאלה הבאה", color = primaryColor, fontSize = 30.sp,
+                                stringResource(Res.string.third_question_hitbear_finish_task), color = primaryColor, fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.align(Alignment.Center)
                             )

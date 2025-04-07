@@ -14,8 +14,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.entry_hitbear_good_luck
+import dmt_proms.hitber.generated.resources.entry_hitbear_instructions1
+import dmt_proms.hitber.generated.resources.entry_hitbear_instructions2
+import dmt_proms.hitber.generated.resources.entry_hitbear_instructions3
+import dmt_proms.hitber.generated.resources.entry_hitbear_instructions4
+import dmt_proms.hitber.generated.resources.entry_hitbear_instructions5
+import dmt_proms.hitber.generated.resources.entry_hitbear_instructions6
+import dmt_proms.hitber.generated.resources.entry_hitbear_instructions7
+import dmt_proms.hitber.generated.resources.entry_hitbear_note
+import dmt_proms.hitber.generated.resources.entry_hitbear_title
+import dmt_proms.hitber.generated.resources.hitbear_start
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
+import org.jetbrains.compose.resources.stringResource
 
 class EntryScreen : Screen {
     @Composable
@@ -23,10 +36,10 @@ class EntryScreen : Screen {
         val navigator = LocalNavigator.current
 
         TabletBaseScreen(
-            title = "HITBER",
+            title = stringResource(Res.string.entry_hitbear_title),
             onNextClick = { navigator?.push(TimeAndPlace()) },
             question = 0,
-            buttonText = "התחל",
+            buttonText = stringResource(Res.string.hitbear_start),
             buttonColor = primaryColor,
             content = {
 
@@ -34,23 +47,23 @@ class EntryScreen : Screen {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("הערה", color = Color.Red, fontSize = 40.sp)
+                    Text(stringResource(Res.string.entry_hitbear_note), color = Color.Red, fontSize = 40.sp)
 
                     Column(
                         modifier = Modifier.fillMaxWidth().padding(30.dp),
                         verticalArrangement = Arrangement.spacedBy(30.dp),
-                        horizontalAlignment = Alignment.End,
+                        horizontalAlignment = Alignment.Start,
                     ) {
-                        Text("המשימה אורכת כ-20 דקות •", fontSize = 30.sp)
-                        Text("יש להשלים את המשימה ברצף, ללא הפסקות•", fontSize = 30.sp)
-                        Text("יש לקרוא את ההנחיות עד הסוף •", fontSize = 30.sp)
-                        Text("יש להשלים את כל המטלות •", fontSize = 30.sp)
-                        Text("לשמיעת ההוראות ניתן ללחוץ על הקשב •", fontSize = 30.sp)
-                        Text("מומלץ לבצע את המשימות בחדר שקט. •", fontSize = 30.sp)
+                        Text(stringResource(Res.string.entry_hitbear_instructions1), fontSize = 30.sp)
+                        Text(stringResource(Res.string.entry_hitbear_instructions2), fontSize = 30.sp)
+                        Text(stringResource(Res.string.entry_hitbear_instructions3), fontSize = 30.sp)
+                        Text(stringResource(Res.string.entry_hitbear_instructions4), fontSize = 30.sp)
+                        Text(stringResource(Res.string.entry_hitbear_instructions5), fontSize = 30.sp)
+                        Text(stringResource(Res.string.entry_hitbear_instructions6), fontSize = 30.sp)
                     }
 
-                    Text("ההוראות מנוסחות בלשון זכר אך מתייחסות לכל המינים •", fontSize = 25.sp)
-                    Text("בהצלחה!", fontSize = 25.sp)
+                    Text(stringResource(Res.string.entry_hitbear_instructions7), fontSize = 25.sp)
+                    Text(stringResource(Res.string.entry_hitbear_good_luck), fontSize = 25.sp)
                 }
             })
     }

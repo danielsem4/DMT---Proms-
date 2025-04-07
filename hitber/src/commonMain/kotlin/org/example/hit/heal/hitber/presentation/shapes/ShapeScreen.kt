@@ -18,22 +18,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.second_question_hitbear_dialog_instructions
+import dmt_proms.hitber.generated.resources.second_question_hitbear_task
+import dmt_proms.hitber.generated.resources.second_question_hitbear_title
+import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.profile
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
 
 class ShapeScreen : Screen {
     @Composable
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        val viewModel: ActivityViewModel = koinViewModel()
+       // val viewModel: ActivityViewModel = koinViewModel()
+        val viewModel: ActivityViewModel = viewModel()
+
         var showDialog by remember { mutableStateOf(true) }
         val shapeSet by viewModel.selectedSet.collectAsState()
 
@@ -42,10 +49,10 @@ class ShapeScreen : Screen {
         }
 
         TabletBaseScreen(
-            title = "צורות",
+            title = stringResource(Res.string.second_question_hitbear_title),
             onNextClick = { navigator?.push(ActionShapesScreen(2)) },
             question = 2,
-            buttonText = "המשך", buttonColor = primaryColor,
+            buttonText = stringResource(Res.string.hitbear_continue), buttonColor = primaryColor,
             content = {
 
                 Row(
@@ -58,7 +65,7 @@ class ShapeScreen : Screen {
                     shapeSet.forEach { shapeRes ->
                         Image(
                             painter = painterResource(shapeRes),
-                            contentDescription = "Shape",
+                            contentDescription = stringResource(Res.string.second_question_hitbear_title),
                             modifier = Modifier.size(150.dp)
                         )
                     }
@@ -68,8 +75,8 @@ class ShapeScreen : Screen {
         if (showDialog) {
             DialogTask(
                 icon = Res.drawable.profile,
-                title = "משימה",
-                text = "בפניך 5 צורות, יש לזכור אותן להמשך המשימה בסיום לחץ על המשך",
+                title = stringResource(Res.string.second_question_hitbear_task),
+                text = stringResource(Res.string.second_question_hitbear_dialog_instructions),
                 onDismiss = { showDialog = false })
         }
     }

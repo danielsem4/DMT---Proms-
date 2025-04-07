@@ -30,6 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.hitbear_continue
+import dmt_proms.hitber.generated.resources.seventh_question_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.writing.WritingScreen
@@ -46,7 +49,6 @@ class DragAndDropScreen : Screen {
         val circleColors = listOf(Color.Black, Color.Green, Color.Blue, Color.Yellow)
         val instructionsResourceId by viewModel.instructionsResourceId.collectAsState()
         val instructions = instructionsResourceId?.let { stringResource(it) }
-        val targetColor by viewModel.targetCircleColor.collectAsState()
         var targetBoxXRange by remember { mutableStateOf(0f..0f) }
         var targetBoxYRange by remember { mutableStateOf(0f..0f) }
 
@@ -54,10 +56,10 @@ class DragAndDropScreen : Screen {
             viewModel.setRandomInstructions()
         }
         TabletBaseScreen(
-            title = "גרור ושחרר",
+            title = stringResource(Res.string.seventh_question_hitbear_title),
             onNextClick = { checkIfCorrectCircleInBox(viewModel, screenSize, density)
                 navigator?.push(WritingScreen()) },
-            buttonText = "המשך",
+            buttonText = stringResource(Res.string.hitbear_continue),
             buttonColor = primaryColor,
             question = 7,
             content = {

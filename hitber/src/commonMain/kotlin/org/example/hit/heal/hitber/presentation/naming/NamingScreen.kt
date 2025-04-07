@@ -25,39 +25,52 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.fourth_question_hitbear_instructions
+import dmt_proms.hitber.generated.resources.fourth_question_hitbear_pic1
+import dmt_proms.hitber.generated.resources.fourth_question_hitbear_pic2
+import dmt_proms.hitber.generated.resources.fourth_question_hitbear_title
+import dmt_proms.hitber.generated.resources.fourth_question_hitbear_what_in_the_pic
+import dmt_proms.hitber.generated.resources.hitbear_continue
+import getImageName
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.repetition.RepetitionScreen
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
+import org.jetbrains.compose.resources.stringResource
 
 class NamingScreen : Screen {
     @Composable
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        val viewModel: ActivityViewModel = koinViewModel()
+       // val viewModel: ActivityViewModel = koinViewModel()
+        val viewModel: ActivityViewModel = viewModel()
         var answer1 by remember { mutableStateOf("") }
         var answer2 by remember { mutableStateOf("") }
         val selectedCouple by viewModel.selectedCouple.collectAsState()
+
+        val firstImageName = selectedCouple?.let { getImageName(it.first) } ?: ""
+        val secondImageName = selectedCouple?.let { getImageName(it.second) } ?: ""
 
         LaunchedEffect(Unit) {
             viewModel.setRandomCouple()
         }
 
-        TabletBaseScreen(title = "שיום",
+        TabletBaseScreen(title = stringResource(Res.string.fourth_question_hitbear_title),
             onNextClick = {
-                viewModel.setAnswersNaming(answer1, answer2)
+                viewModel.setAnswersNaming(answer1, answer2, firstImageName, secondImageName)
                 navigator?.push(RepetitionScreen())
             },
             question = 4,
-            buttonText = "המשך",
+            buttonText = stringResource(Res.string.hitbear_continue),
             buttonColor = primaryColor,
             content = {
                 Text(
-                    "כתוב מה מוצג בתמונה. לכתיבת התשובה יש ללחוץ על השאלה. בסיום לחץ על המשך",
+                    stringResource(Res.string.fourth_question_hitbear_instructions),
                     color = Color.Black,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
@@ -73,7 +86,7 @@ class NamingScreen : Screen {
                     TextField(
                         value = answer1,
                         onValueChange = { answer1 = it },
-                        label = { Text("מה מופיע בתמונה?", color = Color.Black) },
+                        label = { Text(stringResource(Res.string.fourth_question_hitbear_what_in_the_pic), color = Color.Black) },
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = primaryColor,
                             unfocusedBorderColor = primaryColor
@@ -84,7 +97,7 @@ class NamingScreen : Screen {
                     TextField(
                         value = answer2,
                         onValueChange = { answer2 = it },
-                        label = { Text("מה מופיע בתמונה?", color = Color.Black) },
+                        label = { Text(stringResource(Res.string.fourth_question_hitbear_what_in_the_pic), color = Color.Black) },
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = primaryColor,
                             unfocusedBorderColor = primaryColor
@@ -101,13 +114,13 @@ class NamingScreen : Screen {
                     selectedCouple?.let { (firstImage, secondImage) ->
                         Image(
                             painter = painterResource(firstImage),
-                            contentDescription = "First Image",
+                            contentDescription = stringResource(Res.string.fourth_question_hitbear_pic1),
                             modifier = Modifier.weight(1f).fillMaxHeight().padding(20.dp)
                                 .background(color = Color.White)
                         )
                         Image(
                             painter = painterResource(secondImage),
-                            contentDescription = "Second Image",
+                            contentDescription = stringResource(Res.string.fourth_question_hitbear_pic2),
                             modifier = Modifier.weight(1f).fillMaxHeight().padding(20.dp)
                                 .background(color = Color.White)
                         )

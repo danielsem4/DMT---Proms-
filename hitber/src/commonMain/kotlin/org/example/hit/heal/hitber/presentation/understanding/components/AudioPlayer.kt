@@ -1,8 +1,7 @@
 package org.example.hit.heal.hitber.presentation.understanding.components
 
 expect class AudioPlayer() {
-    fun play(url: String, onCompletion: () -> Unit)  // נוסיף את ה-callback
-    fun stop()
+    fun play(url: String, onCompletion: () -> Unit)
 }
 
 

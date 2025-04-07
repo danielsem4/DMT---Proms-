@@ -47,6 +47,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.close_icon
+import dmt_proms.hitber.generated.resources.eighth_question_hitbear_close_icon
+import dmt_proms.hitber.generated.resources.eighth_question_hitbear_instructions
+import dmt_proms.hitber.generated.resources.eighth_question_hitbear_title
+import dmt_proms.hitber.generated.resources.hitbear_continue
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
@@ -73,18 +77,18 @@ class WritingScreen : Screen {
 
 
         TabletBaseScreen(
-            title = "כתיבה",
+            title = stringResource(Res.string.eighth_question_hitbear_title),
             onNextClick = {
                 if (allFinished) {navigator?.push(ActionShapesScreen(9))
                     val isCorrect = viewModel.checkSentence(sentences)
                     println("התוצאה: $isCorrect")}
             },
-            buttonText = "המשך",
+            buttonText = stringResource(Res.string.hitbear_continue),
             question = 8,
             buttonColor = if (!allFinished) Color.Gray else primaryColor,
             content = {
                 Text(
-                    "בחלק זה עליך להרכיב משפט מהמילים המוצגות לפניך. לשיבוץ מילה במשפט יש לגרור אותה למשבצת שתבחר. אם תרצה לשנות את המיקום של מילה שכבר שובצה, צריך שוב לגרור אותה ממחסן המילים ולשבץ אותה מחדשץ בסיום לחץ על המשך.",
+                    stringResource(Res.string.eighth_question_hitbear_instructions),
                     color = Color.Black,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
@@ -289,7 +293,7 @@ class WritingScreen : Screen {
         ) {
             slot.word?.let {
                 Image(painter = painterResource(Res.drawable.close_icon),
-                    contentDescription = "Close icon",
+                    contentDescription = stringResource(Res.string.eighth_question_hitbear_close_icon),
                     modifier = Modifier.size(20.dp).align(Alignment.TopStart).padding(5.dp)
                         .clickable {
                             viewModel.resetSlot(slot.id)

@@ -23,9 +23,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.second_question_hitbear_dialog_icon
+import dmt_proms.hitber.generated.resources.second_question_hitbear_dialog_understand
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DialogTask(icon: DrawableResource, title: String,text: String, onDismiss: () -> Unit) {
@@ -33,7 +37,7 @@ fun DialogTask(icon: DrawableResource, title: String,text: String, onDismiss: ()
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
                 painter = painterResource(icon),
-                contentDescription = "profile icon",
+                contentDescription = stringResource(Res.string.second_question_hitbear_dialog_icon),
                 modifier = Modifier
                     .size(50.dp)
                     .align(Alignment.TopCenter)
@@ -74,7 +78,7 @@ fun DialogTask(icon: DrawableResource, title: String,text: String, onDismiss: ()
                         colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
 
                         ) {
-                        Text("הבנתי", color = Color.White)
+                        Text(stringResource(Res.string.second_question_hitbear_dialog_understand), color = Color.White)
                     }
                 }
             }

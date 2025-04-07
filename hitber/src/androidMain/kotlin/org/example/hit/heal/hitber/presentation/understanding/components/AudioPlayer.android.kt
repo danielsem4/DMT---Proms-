@@ -5,21 +5,14 @@ import android.media.MediaPlayer
 actual class AudioPlayer {
     private var mediaPlayer: MediaPlayer? = null
 
-    // מטרה להחזיר callback על סיום השמיעה
     actual fun play(url: String, onCompletion: () -> Unit) {
         mediaPlayer = MediaPlayer().apply {
             setDataSource(url)
             prepareAsync()
             setOnPreparedListener { start() }
             setOnCompletionListener {
-                onCompletion()  // תקרא ל-callback כשהשמיעה מסתיימת
+                onCompletion()
             }
         }
-    }
-
-    actual fun stop() {
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
     }
 }

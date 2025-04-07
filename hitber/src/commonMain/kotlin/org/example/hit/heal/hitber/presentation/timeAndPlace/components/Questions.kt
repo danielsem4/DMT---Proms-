@@ -1,41 +1,168 @@
 package org.example.hit.heal.hitber.presentation.timeAndPlace.components
 
 import androidx.compose.runtime.Composable
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer1_1
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer1_2
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer1_3
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer1_4
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer1_5
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer1_6
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer1_7
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_1
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_10
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_11
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_12
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_2
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_3
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_4
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_5
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_6
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_7
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_8
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer2_9
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer3_1
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer3_2
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer3_3
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer3_4
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer3_5
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer3_6
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer3_7
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer3_8
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer4_1
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer4_10
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer4_2
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer4_3
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer4_4
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer4_5
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer4_6
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer4_7
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer4_8
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer4_9
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer5_1
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer5_2
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer5_3
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer5_4
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer5_5
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer5_6
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer5_7
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer5_8
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer6_1
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer6_2
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer6_3
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer6_4
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer6_5
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer6_6
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer7_1
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer7_2
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer7_3
+import dmt_proms.hitber.generated.resources.first_question_hitbear_answer7_4
+import dmt_proms.hitber.generated.resources.first_question_hitbear_question1
+import dmt_proms.hitber.generated.resources.first_question_hitbear_question2
+import dmt_proms.hitber.generated.resources.first_question_hitbear_question3
+import dmt_proms.hitber.generated.resources.first_question_hitbear_question4
+import dmt_proms.hitber.generated.resources.first_question_hitbear_question5
+import dmt_proms.hitber.generated.resources.first_question_hitbear_question6
+import dmt_proms.hitber.generated.resources.first_question_hitbear_question7
 import org.example.hit.heal.hitber.ActivityViewModel
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun Questions(viewModel: ActivityViewModel) {
 
     val questionsData = listOf(
         QuestionData(
-            question = "איזה יום היום?",
-            answers = listOf("ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת")
+            question = stringResource(Res.string.first_question_hitbear_question1),
+            answers = listOf(
+                stringResource(Res.string.first_question_hitbear_answer1_1),
+                stringResource(Res.string.first_question_hitbear_answer1_2),
+                stringResource(Res.string.first_question_hitbear_answer1_3),
+                stringResource(Res.string.first_question_hitbear_answer1_4),
+                stringResource(Res.string.first_question_hitbear_answer1_5),
+                stringResource(Res.string.first_question_hitbear_answer1_6),
+                stringResource(Res.string.first_question_hitbear_answer1_7)
+            )
         ),
         QuestionData(
-            question = "באיזה חודש אנחנו נמצאים?",
-            answers = listOf("ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר")
+            question = stringResource(Res.string.first_question_hitbear_question2),
+            answers = listOf(
+                stringResource(Res.string.first_question_hitbear_answer2_1),
+                stringResource(Res.string.first_question_hitbear_answer2_2),
+                stringResource(Res.string.first_question_hitbear_answer2_3),
+                stringResource(Res.string.first_question_hitbear_answer2_4),
+                stringResource(Res.string.first_question_hitbear_answer2_5),
+                stringResource(Res.string.first_question_hitbear_answer2_6),
+                stringResource(Res.string.first_question_hitbear_answer2_7),
+                stringResource(Res.string.first_question_hitbear_answer2_8),
+                stringResource(Res.string.first_question_hitbear_answer2_9),
+                stringResource(Res.string.first_question_hitbear_answer2_10),
+                stringResource(Res.string.first_question_hitbear_answer2_11),
+                stringResource(Res.string.first_question_hitbear_answer2_12)
+                )
         ),
         QuestionData(
-            question = "באיזו שנה אנחנו נמצאים?",
-            answers = listOf("1994", "2024", "1964", "2025", "2000", "2023", "1924", "1948")
+            question = stringResource(Res.string.first_question_hitbear_question3),
+            answers = listOf(
+                stringResource(Res.string.first_question_hitbear_answer3_1),
+                stringResource(Res.string.first_question_hitbear_answer3_2),
+                stringResource(Res.string.first_question_hitbear_answer3_3),
+                stringResource(Res.string.first_question_hitbear_answer3_4),
+                stringResource(Res.string.first_question_hitbear_answer3_5),
+                stringResource(Res.string.first_question_hitbear_answer3_6),
+                stringResource(Res.string.first_question_hitbear_answer3_7),
+                stringResource(Res.string.first_question_hitbear_answer3_8)
+                )
         ),
         QuestionData(
-            question = "באיזו עיר אתה נמצא כרגע?",
-            answers = listOf("גני תקווה", "חיפה", "תל אביב", "פתח תקווה", "ראשון לציון", "כפר סבא", "ראש העין", "בני ברק", "ירושלים", "באר שבע")
+            question = stringResource(Res.string.first_question_hitbear_question4),
+            answers = listOf(
+                stringResource(Res.string.first_question_hitbear_answer4_1),
+                stringResource(Res.string.first_question_hitbear_answer4_2),
+                stringResource(Res.string.first_question_hitbear_answer4_3),
+                stringResource(Res.string.first_question_hitbear_answer4_4),
+                stringResource(Res.string.first_question_hitbear_answer4_5),
+                stringResource(Res.string.first_question_hitbear_answer4_6),
+                stringResource(Res.string.first_question_hitbear_answer4_7),
+                stringResource(Res.string.first_question_hitbear_answer4_8),
+                stringResource(Res.string.first_question_hitbear_answer4_9),
+                stringResource(Res.string.first_question_hitbear_answer4_10)
+                )
         ),
         QuestionData(
-            question = "באיזו מדינה אתה גר?",
-            answers = listOf("מרוקו", "ארצות הברית", "עיראק", "לבנון", "ישראל", "תימן", "רוסיה", "אתיופיה")
+            question = stringResource(Res.string.first_question_hitbear_question5),
+            answers = listOf(
+                stringResource(Res.string.first_question_hitbear_answer5_1),
+                stringResource(Res.string.first_question_hitbear_answer5_2),
+                stringResource(Res.string.first_question_hitbear_answer5_3),
+                stringResource(Res.string.first_question_hitbear_answer5_4),
+                stringResource(Res.string.first_question_hitbear_answer5_5),
+                stringResource(Res.string.first_question_hitbear_answer5_6),
+                stringResource(Res.string.first_question_hitbear_answer5_7),
+                stringResource(Res.string.first_question_hitbear_answer5_8)
+            )
         ),
         QuestionData(
-            question = "באיזה איזור בישראל אתה נמצא?",
-            answers = listOf("מרכז", "צפון", "דרום", "הגליל המערבי", "צפון השרון", "מישור החוף")
+            question = stringResource(Res.string.first_question_hitbear_question6),
+            answers = listOf(
+                stringResource(Res.string.first_question_hitbear_answer6_1),
+                stringResource(Res.string.first_question_hitbear_answer6_2),
+                stringResource(Res.string.first_question_hitbear_answer6_3),
+                stringResource(Res.string.first_question_hitbear_answer6_4),
+                stringResource(Res.string.first_question_hitbear_answer6_5),
+                stringResource(Res.string.first_question_hitbear_answer6_6)
+            )
         ),
         QuestionData(
-            question = "למה אתה עונה לשאלון הזה?",
-            answers = listOf("אני לא יודע", "כי אני בודק את תפקודיהחשיבה שלי", "אמרו לי להגיע", "זו פעילות שגרתית עבורי")
+            question = stringResource(Res.string.first_question_hitbear_question7),
+            answers = listOf(
+                stringResource(Res.string.first_question_hitbear_answer7_1),
+                stringResource(Res.string.first_question_hitbear_answer7_2),
+                stringResource(Res.string.first_question_hitbear_answer7_3),
+                stringResource(Res.string.first_question_hitbear_answer7_4)
+            )
         )
     )
+
 
     questionsData.forEach { questionData ->
         TimeAndPlaceQuestion(

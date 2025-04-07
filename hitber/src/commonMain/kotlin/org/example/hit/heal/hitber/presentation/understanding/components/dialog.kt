@@ -28,8 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.dialog_speaker
+import dmt_proms.hitber.generated.resources.sixth_question_hitbear_Speaker
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
@@ -78,7 +80,7 @@ fun AudioPlayingDialog() {
         ) {
             Image(
                 painter = painterResource(Res.drawable.dialog_speaker),
-                contentDescription = "Speaker",
+                contentDescription = stringResource(Res.string.sixth_question_hitbear_Speaker),
                 modifier = Modifier.size(70.dp).offset(y = offsetY.dp)
             )
 

@@ -48,7 +48,17 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.close_fridge
+import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.open_fridge
+import dmt_proms.hitber.generated.resources.sixth_question_hitbear_close_fridge
+import dmt_proms.hitber.generated.resources.sixth_question_hitbear_instructions
+import dmt_proms.hitber.generated.resources.sixth_question_hitbear_item
+import dmt_proms.hitber.generated.resources.sixth_question_hitbear_listen
+import dmt_proms.hitber.generated.resources.sixth_question_hitbear_napkin
+import dmt_proms.hitber.generated.resources.sixth_question_hitbear_open_fridge
+import dmt_proms.hitber.generated.resources.sixth_question_hitbear_table
+import dmt_proms.hitber.generated.resources.sixth_question_hitbear_title
+import dmt_proms.hitber.generated.resources.sixth_question_hitbear_volume_icon
 import dmt_proms.hitber.generated.resources.speaker
 import dmt_proms.hitber.generated.resources.table
 import org.example.hit.heal.core.presentation.Colors.primaryColor
@@ -112,10 +122,10 @@ class UnderstandingScreen : Screen {
                 }
             }
         }
-        val isRtl = false // שים כאן את המצב שלך
+        val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
             TabletBaseScreen(
-                title = "הבנת הוראות",
+                title = stringResource(Res.string.sixth_question_hitbear_title),
                 onNextClick = {
 
                     if (selectedNapkin != null) {
@@ -126,11 +136,11 @@ class UnderstandingScreen : Screen {
                     navigator?.push(DragAndDropScreen())
                 },
                 question = 6,
-                buttonText = "המשך",
+                buttonText = stringResource(Res.string.hitbear_continue),
                 buttonColor = primaryColor,
                 content = {
                     Text(
-                        "בחלק זה תתבקש לבצע מטלה. לשמיעת המטלה לחץ על הקשב. בסיום לחץ על המשך.",
+                        stringResource(Res.string.sixth_question_hitbear_instructions),
                         color = Color.Black,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -153,12 +163,12 @@ class UnderstandingScreen : Screen {
                         ) {
                             Image(
                                 painter = painterResource(Res.drawable.speaker),
-                                contentDescription = "Volume Icon",
+                                contentDescription = stringResource(Res.string.sixth_question_hitbear_volume_icon),
                                 modifier = Modifier.padding(end = 8.dp)
                                     .size(30.dp).background(color = Color.Transparent)
                             )
                             Text(
-                                "הקשב",
+                                stringResource(Res.string.sixth_question_hitbear_listen),
                                 color = Color.White,
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold
@@ -183,7 +193,7 @@ class UnderstandingScreen : Screen {
                             Image(
                                 painter = if (isFridgeOpen) painterResource(Res.drawable.open_fridge)
                                 else painterResource(Res.drawable.close_fridge),
-                                contentDescription = if (isFridgeOpen) "open fridge" else "close fridge",
+                                contentDescription = if (isFridgeOpen) stringResource(Res.string.sixth_question_hitbear_open_fridge) else stringResource(Res.string.sixth_question_hitbear_close_fridge),
                                 modifier = Modifier.fillMaxHeight()
                                     .wrapContentWidth().onSizeChanged { size ->
                                         fridgeSize = size.width.toFloat() to size.height.toFloat()
@@ -241,7 +251,7 @@ class UnderstandingScreen : Screen {
                                     ) {
                                         Image(
                                             painter = painterResource(item.image),
-                                            contentDescription = null,
+                                            contentDescription = stringResource(Res.string.sixth_question_hitbear_item),
                                             modifier = Modifier.fillMaxSize()
                                         )
                                     }
@@ -259,7 +269,7 @@ class UnderstandingScreen : Screen {
                         ) {
                             Image(
                                 painter = painterResource(Res.drawable.table),
-                                contentDescription = "table",
+                                contentDescription = stringResource(Res.string.sixth_question_hitbear_table),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.FillBounds
 
@@ -289,7 +299,7 @@ class UnderstandingScreen : Screen {
                                 ) {
                                     Image(
                                         painter = painterResource(item.image),
-                                        contentDescription = null,
+                                        contentDescription = stringResource(Res.string.sixth_question_hitbear_napkin),
                                         modifier = Modifier.fillMaxSize()
                                     )
                                 }

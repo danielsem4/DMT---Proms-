@@ -30,12 +30,18 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.error_icon
+import dmt_proms.hitber.generated.resources.hitbear_continue
+import dmt_proms.hitber.generated.resources.second_question_hitbear_dialog_title
+import dmt_proms.hitber.generated.resources.second_question_hitbear_task_instructions
+import dmt_proms.hitber.generated.resources.second_question_hitbear_task_retry_instructions
+import dmt_proms.hitber.generated.resources.second_question_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 
 class ActionShapesScreen(private val question: Int) : Screen {
@@ -51,7 +57,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
         var showDialog by remember { mutableStateOf(false) }
         val listShapes by viewModel.listShapes.collectAsState()
 
-        TabletBaseScreen(title = "צורות", onNextClick = {
+        TabletBaseScreen(title = stringResource(Res.string.second_question_hitbear_title), onNextClick = {
             viewModel.calculateCorrectShapesCount()
             viewModel.updateTask()
             viewModel.setAnswersShapes()
@@ -65,9 +71,9 @@ class ActionShapesScreen(private val question: Int) : Screen {
                 else navigator?.push(BuildShapeScreen())
             }
 
-        }, question = question, buttonText = "המשך", buttonColor = primaryColor, content = {
+        }, question = question, buttonText = stringResource(Res.string.hitbear_continue), buttonColor = primaryColor, content = {
             Text(
-                "לפניך מספר צורות, עליך לבחור את 5 הצורות שראית לפני מספר דקות באמצעות לחיצה עליהן, אם אינך זוכר אפשר לנחש. בסיום לחץ על המשך.",
+                stringResource(Res.string.second_question_hitbear_task_instructions),
                 color = Color.Black,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
@@ -97,7 +103,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
 
                                 Image(
                                     painter = painterResource(shapeRes),
-                                    contentDescription = "Shape",
+                                    contentDescription = stringResource(Res.string.second_question_hitbear_title),
                                     modifier = Modifier
                                         .background(shapeColor).weight(1f)
                                         .clickable { viewModel.setSelectedShapes(shapeRes) }
@@ -112,8 +118,8 @@ class ActionShapesScreen(private val question: Int) : Screen {
         if (showDialog) {
             DialogTask(
                 icon = Res.drawable.error_icon,
-                title = "בחר 5 צורות",
-                text = "אנא בחר את 5 הצורות שראית לפני מספר שאלות",
+                title = stringResource(Res.string.second_question_hitbear_dialog_title),
+                text = stringResource(Res.string.second_question_hitbear_task_retry_instructions),
                 onDismiss = { showDialog = false })
         }
 
