@@ -1,6 +1,9 @@
 package org.example.hit.heal
 
 import androidx.compose.ui.window.ComposeUIViewController
+import com.clock.test.di.initKoin
 import com.clock.test.presentation.App
 
-fun MainViewController() = ComposeUIViewController { App() }
+fun MainViewController() = ComposeUIViewController(
+    configure = { initKoin() }
+) { App() }

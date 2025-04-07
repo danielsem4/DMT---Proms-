@@ -39,6 +39,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
         }
         commonMain.dependencies {
             implementation(projects.ui.core)
@@ -58,8 +60,11 @@ kotlin {
             implementation(libs.voyager.transitions)
 
             // Koin dependencies
-            implementation(libs.koin.core)
+            api(libs.koin.core)
             implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.navigation.compose)
 
             // DateTime
             implementation(libs.kotlinx.datetime)
