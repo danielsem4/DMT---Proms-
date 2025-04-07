@@ -152,6 +152,8 @@
 
     <string name="ninth_question_hitbear_title">בנה צורה</string>
     <string name="ninth_question_hitbear_instructions">עליך להעתיק את התמונה שמוצגת בצד שמאל, למרכז המסך. את התמונה יש להעתיק באמצעות הצורות המופיעות בצד ימין. את הצורות צריך לגרור ולסדר במרכז המסך. בסיום לחץ על המשך</string>
+    <string name="ninth_question_hitbear_shape_model">דגם הצורה שיש לבנות</string>
+    <string name="ninth_question_hitbear_shapes">הצורות שלרשותך</string>
 
 
     <string name="hitbear_continue">המשך</string>

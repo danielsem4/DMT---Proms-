@@ -151,6 +151,9 @@
 
     <string name="ninth_question_hitbear_title">Build Shape</string>
     <string name="ninth_question_hitbear_instructions">You need to replicate the image displayed on the left to the center of the screen. You should use the shapes shown on the right to recreate the image. Drag and arrange the shapes in the center of the screen. Once finished, click continue.</string>
+    <string name="ninth_question_hitbear_shape_model">The shape model to build</string>
+    <string name="ninth_question_hitbear_shapes">The shapes available to you</string>
+
 
     <string name="hitbear_continue">Continue</string>
     <string name="hitbear_start">Start</string>

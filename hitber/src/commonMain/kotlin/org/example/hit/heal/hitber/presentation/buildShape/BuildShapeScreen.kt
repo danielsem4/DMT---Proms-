@@ -2,7 +2,9 @@ package org.example.hit.heal.hitber.presentation.buildShape
 
 import TabletBaseScreen
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +24,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.ninth_question_hitbear_instructions
+import dmt_proms.hitber.generated.resources.ninth_question_hitbear_shape_model
+import dmt_proms.hitber.generated.resources.ninth_question_hitbear_shapes
 import dmt_proms.hitber.generated.resources.ninth_question_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
@@ -62,6 +66,23 @@ class BuildShapeScreen : Screen {
                             .fillMaxHeight()
                             .background(color = Color(0xFFB2FFFF), shape = RoundedCornerShape(4.dp))
                     )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(30.dp),
+                        horizontalArrangement =  Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            stringResource(Res.string.ninth_question_hitbear_shape_model), color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Text(
+                            stringResource(Res.string.ninth_question_hitbear_shapes), color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
 
                 }
             })
