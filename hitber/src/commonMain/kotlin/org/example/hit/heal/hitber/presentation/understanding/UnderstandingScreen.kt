@@ -68,11 +68,9 @@ import org.example.hit.heal.hitber.presentation.understanding.components.AudioPl
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayingDialog
 import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
 import org.example.hit.heal.hitber.presentation.understanding.components.napkins
+import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 
 class UnderstandingScreen : Screen {
@@ -103,13 +101,10 @@ class UnderstandingScreen : Screen {
         val selectedNapkin = napkins.find { it.image == napkinResourceId }
         var napkinPosition by remember { mutableStateOf(Offset.Zero) }
         var itemPosition by remember { mutableStateOf(Offset.Zero) }
-        val itemWidthPx = fridgeSize.first * 0.2f
+        val itemWidthPx =  fridgeSize.second * 0.1f
         val itemHeightPx = fridgeSize.second * 0.1f
-        val napkinWidthPx = tableSize.first * 0.2f
+        val napkinWidthPx = tableSize.second * 0.1f
         val napkinHeightPx = tableSize.second * 0.1f
-
-
-
 
         LaunchedEffect(isAudioClicked) {
             if (isAudioClicked) {
@@ -129,7 +124,19 @@ class UnderstandingScreen : Screen {
                 onNextClick = {
 
                     if (selectedNapkin != null) {
-                        if (isNapkinNearPosition(napkinPosition, itemLastPositions, napkinWidthPx, napkinHeightPx, itemWidthPx, itemHeightPx)) {
+                        val isItemInNapkin = itemLastPositions.values.any { itemPosition ->
+                            isObjectInsideTargetArea(
+                                targetPosition = napkinPosition,
+                                draggablePosition = itemPosition,
+                                targetSize = napkinWidthPx to napkinHeightPx,
+                                draggableSize = itemWidthPx to itemHeightPx,
+                                threshold = 40f,
+                                isCircle = false
+
+                            )
+                        }
+
+                        if (isItemInNapkin) {
                             viewModel.setNapkinPlacedCorrectly()
                         }
                     }
@@ -252,7 +259,8 @@ class UnderstandingScreen : Screen {
                                         Image(
                                             painter = painterResource(item.image),
                                             contentDescription = stringResource(Res.string.sixth_question_hitbear_item),
-                                            modifier = Modifier.fillMaxSize()
+                                            modifier = Modifier.fillMaxSize(),
+                                            contentScale = ContentScale.FillBounds
                                         )
                                     }
                                 }
@@ -300,7 +308,8 @@ class UnderstandingScreen : Screen {
                                     Image(
                                         painter = painterResource(item.image),
                                         contentDescription = stringResource(Res.string.sixth_question_hitbear_napkin),
-                                        modifier = Modifier.fillMaxSize()
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentScale = ContentScale.FillBounds
                                     )
                                 }
                             }
@@ -312,30 +321,6 @@ class UnderstandingScreen : Screen {
             if (isDialogVisible) {
                 AudioPlayingDialog()
             }
-        }
-    }
-
-
-    private fun isNapkinNearPosition(
-        napkinPosition: Offset,
-        itemPositions: Map<Int, Offset>,
-        napkinWidth: Float,
-        napkinHeight: Float,
-        itemWidth: Float,
-        itemHeight: Float
-    ): Boolean {
-        return itemPositions.values.any { position ->
-            val napkinCenter = Offset(napkinPosition.x + napkinWidth / 2, napkinPosition.y + napkinHeight / 2)
-            val itemCenter = Offset(position.x + itemWidth / 2, position.y + itemHeight / 2)
-
-            val dx = abs(napkinCenter.x - itemCenter.x)
-            val dy = abs(napkinCenter.y - itemCenter.y)
-            val distance = sqrt(dx.pow(2) + dy.pow(2))
-
-            println("Napkin Position: $napkinPosition, Item Position: $position, Distance: $distance")
-
-            val threshold = 25f
-            distance <= threshold
         }
     }
 }

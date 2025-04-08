@@ -345,7 +345,7 @@ class ActivityViewModel : ViewModel() {
     private val _allFinished= MutableStateFlow(false)
      val allFinished: StateFlow<Boolean> = _allFinished
 
-    private val _answerSentences = MutableStateFlow<List<StringResource>>(sentencesResourceId)
+    private val _answerSentences = MutableStateFlow(sentencesResourceId)
     val answerSentences: StateFlow<List<StringResource>> = _answerSentences
 
     private val _answerWriting = MutableStateFlow(false)

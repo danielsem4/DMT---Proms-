@@ -24,7 +24,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -36,6 +35,7 @@ import dmt_proms.hitber.generated.resources.seventh_question_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.writing.WritingScreen
+import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.stringResource
 
 class DragAndDropScreen : Screen {
@@ -46,6 +46,7 @@ class DragAndDropScreen : Screen {
         val viewModel: ActivityViewModel = viewModel()
         var screenSize by remember { mutableStateOf(0f to 0f) }
         val circlePositions by viewModel.circlePositions.collectAsState()
+        val targetColor by viewModel.targetCircleColor.collectAsState()
         val circleColors = listOf(Color.Black, Color.Green, Color.Blue, Color.Yellow)
         val instructionsResourceId by viewModel.instructionsResourceId.collectAsState()
         val instructions = instructionsResourceId?.let { stringResource(it) }
@@ -57,8 +58,36 @@ class DragAndDropScreen : Screen {
         }
         TabletBaseScreen(
             title = stringResource(Res.string.seventh_question_hitbear_title),
-            onNextClick = { checkIfCorrectCircleInBox(viewModel, screenSize, density)
-                navigator?.push(WritingScreen()) },
+            onNextClick = {
+                val (screenWidth, screenHeight) = screenSize
+                with(density) {
+                    val radius = 25.dp.toPx()
+                    val diameter = 2 * radius
+
+                    val correctCircleIndex = circleColors.indexOf(targetColor)
+                    val correctCirclePosition = circlePositions.getOrNull(correctCircleIndex)
+
+                    val draggablePosition = Offset(
+                        x = correctCirclePosition?.first?.times(screenWidth) ?: 0f,
+                        y = correctCirclePosition?.second?.times(screenHeight) ?:0f
+                    )
+
+                    val isInside = isObjectInsideTargetArea(
+                        targetPosition = Offset(targetBoxXRange.start, targetBoxYRange.start),
+                        draggablePosition = draggablePosition,
+                        targetSize = (targetBoxXRange.endInclusive - targetBoxXRange.start) to (targetBoxYRange.endInclusive - targetBoxYRange.start),
+                        draggableSize = diameter to diameter,
+                        threshold = 50f,
+                        isCircle = true
+                    )
+
+
+                    if (isInside) {
+                        viewModel.setAnswerDragAndDrop()
+                    }
+                }
+
+                    navigator?.push(WritingScreen()) },
             buttonText = stringResource(Res.string.hitbear_continue),
             buttonColor = primaryColor,
             question = 7,
@@ -136,29 +165,4 @@ fun Offset.distanceTo(other: Offset): Float {
     return kotlin.math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y))
 }
 
-fun checkIfCorrectCircleInBox(viewModel: ActivityViewModel, screenSize: Pair<Float, Float>?, density: Density){
-    if (screenSize == null) return
-
-    val (screenWidth, screenHeight) = screenSize
-    val circlePositions = viewModel.circlePositions.value
-    val targetColor = viewModel.targetCircleColor.value
-    val circleColors = listOf(Color.Black, Color.Green, Color.Blue, Color.Yellow)
-
-    density.run {
-        val targetBoxSize = 150.dp.toPx()
-        val targetBoxXStart = (screenWidth - targetBoxSize) / 2
-        val targetBoxYStart = (screenHeight - targetBoxSize) / 2
-        val targetBoxXRange = targetBoxXStart..(targetBoxXStart + targetBoxSize)
-        val targetBoxYRange = targetBoxYStart..(targetBoxYStart + targetBoxSize)
-
-        val correctCircleIndex = circleColors.indexOf(targetColor)
-        val correctCirclePosition = circlePositions.getOrNull(correctCircleIndex) ?: return
-
-        val circleCenterX = correctCirclePosition.first * screenWidth
-        val circleCenterY = correctCirclePosition.second * screenHeight
-
-        if (circleCenterX in targetBoxXRange && circleCenterY in targetBoxYRange) {
-            viewModel.setAnswerDragAndDrop()
-        }
-    }}
 
