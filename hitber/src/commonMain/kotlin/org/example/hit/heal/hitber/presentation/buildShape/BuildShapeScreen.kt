@@ -1,6 +1,7 @@
 package org.example.hit.heal.hitber.presentation.buildShape
 
 import TabletBaseScreen
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,13 +9,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +39,7 @@ import dmt_proms.hitber.generated.resources.ninth_question_hitbear_shapes
 import dmt_proms.hitber.generated.resources.ninth_question_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 class BuildShapeScreen : Screen {
@@ -36,7 +47,10 @@ class BuildShapeScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
+        val density = LocalDensity.current
         val viewModel: ActivityViewModel = viewModel()
+        var screenSize by remember { mutableStateOf(0f to 0f) }
+
 
         TabletBaseScreen(
             title = stringResource(Res.string.ninth_question_hitbear_title),
@@ -57,8 +71,8 @@ class BuildShapeScreen : Screen {
 
                 Box(
                     modifier = Modifier.fillMaxSize()
-                        .background(color = Color.White, shape = RoundedCornerShape(4))
-                )
+                        .background(color = Color.White, shape = RoundedCornerShape(4)).onSizeChanged { size ->
+                            screenSize = size.width.toFloat() to size.height.toFloat()})
                 {
                     Box(
                         modifier = Modifier.align(Alignment.CenterEnd)
@@ -83,9 +97,67 @@ class BuildShapeScreen : Screen {
                         )
                     }
 
+                    shapesItem.forEachIndexed { index, shape ->
+                        val itemWidthPx =  screenSize.second * 0.3f
+                        val itemHeightPx = screenSize.second * 0.3f
+                        val xPx = screenSize.first * shape.xRatio
+                        val yPx = screenSize.second * shape.yRatio
 
+                        val itemWidthDp = with(density) { itemWidthPx.toDp() }
+                        val itemHeightDp = with(density) { itemHeightPx.toDp() }
+                        val xDp = with(density) { xPx.toDp() }
+                        val yDp = with(density) { yPx.toDp() }
+
+                        Box(
+                            modifier = Modifier
+                                .offset(
+                                    x = xDp,
+                                    y = yDp
+                                )
+                                .size(itemWidthDp, itemHeightDp))
+
+                                {
+                            Image(
+                                painter = painterResource(shape.image),
+                                contentDescription = "Shape Image",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.FillBounds
+                            )
+                        }
+                    }
+
+                    val rightSideShapes = shapesItem.mapIndexed { index, shape ->
+                        shape.copy(
+                            xRatio = 0.75f + 0.1f * index, // מיקום דינמי בצד ימין, תוספת אקראית
+                            yRatio = 0.2f + (0.2f * index) // ריווח בין התמונות
+                        )
+                    }
+                    rightSideShapes.forEachIndexed { index, shape ->
+                        val itemWidthPx = screenSize.second * 0.3f
+                        val itemHeightPx = screenSize.second * 0.3f
+                        val xPx = screenSize.first * shape.xRatio
+                        val yPx = screenSize.second * shape.yRatio
+
+                        val itemWidthDp = with(density) { itemWidthPx.toDp() }
+                        val itemHeightDp = with(density) { itemHeightPx.toDp() }
+                        val xDp = with(density) { xPx.toDp() }
+                        val yDp = with(density) { yPx.toDp() }
+
+                        Box(
+                            modifier = Modifier
+                                .offset(x = xDp, y = yDp)
+                                .size(itemWidthDp, itemHeightDp)
+                        ) {
+                            Image(
+                                painter = painterResource(shape.image),
+                                contentDescription = "Shape Image",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.FillBounds
+                            )
+                        }
                 }
-            })
-    }
-}
+
+            }
+    })
+}}
 
