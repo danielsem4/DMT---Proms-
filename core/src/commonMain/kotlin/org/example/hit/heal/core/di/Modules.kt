@@ -7,13 +7,14 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 import org.example.hit.heal.core.Network.HttpClientFactory
+import org.example.hit.heal.core.Network.createPlatformHttpClient
 
 expect val platformModule: Module
 
 val sharedModule = module{
-   single {HttpClientFactory.createHttpClient(get())}
+    single { HttpClientFactory.createHttpClient(get()) }
     single<AuthApi> { AuthApiImpl(get()) }
-    }
+}
 
 
 
