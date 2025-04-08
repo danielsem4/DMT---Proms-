@@ -1,4 +1,4 @@
-package org.example.hit.heal.hitber.presentation.dragAndDrop
+package org.example.hit.heal.hitber.presentation.dragAndDrop.components
 
 import androidx.compose.ui.graphics.Color
 import dmt_proms.hitber.generated.resources.Res

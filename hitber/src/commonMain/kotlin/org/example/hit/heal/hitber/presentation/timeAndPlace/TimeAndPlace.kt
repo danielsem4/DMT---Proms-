@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
@@ -25,14 +24,15 @@ import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.Questions
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 
 class TimeAndPlace : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-       // val viewModel: ActivityViewModel = koinViewModel()
-        val viewModel: ActivityViewModel = viewModel()
+       val viewModel: ActivityViewModel = koinViewModel()
+           //val viewModel: ActivityViewModel = viewModel()
 
         TabletBaseScreen(
             title = stringResource(Res.string.first_question_hitbear_title),
@@ -55,6 +55,7 @@ class TimeAndPlace : Screen {
                     Questions(viewModel)
                 }
             })
+
     }
 }
 

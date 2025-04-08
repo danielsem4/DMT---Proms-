@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.example.hit.heal.core.presentation.Colors.backgroundColor
-import org.example.hit.heal.hitber.presentation.dragAndDrop.instructions
+import org.example.hit.heal.hitber.presentation.dragAndDrop.components.instructions
 import org.example.hit.heal.hitber.presentation.naming.components.imageCouples
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeList
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeSets

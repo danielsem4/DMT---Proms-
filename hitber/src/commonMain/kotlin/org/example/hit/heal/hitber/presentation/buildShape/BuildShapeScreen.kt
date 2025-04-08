@@ -33,12 +33,14 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.hitbear_continue
-import dmt_proms.hitber.generated.resources.ninth_question_hitbear_instructions
-import dmt_proms.hitber.generated.resources.ninth_question_hitbear_shape_model
-import dmt_proms.hitber.generated.resources.ninth_question_hitbear_shapes
-import dmt_proms.hitber.generated.resources.ninth_question_hitbear_title
+import dmt_proms.hitber.generated.resources.tenth_question_hitbear_instructions
+import dmt_proms.hitber.generated.resources.tenth_question_hitbear_shape_image
+import dmt_proms.hitber.generated.resources.tenth_question_hitbear_shape_model
+import dmt_proms.hitber.generated.resources.tenth_question_hitbear_shapes
+import dmt_proms.hitber.generated.resources.tenth_question_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -53,14 +55,14 @@ class BuildShapeScreen : Screen {
 
 
         TabletBaseScreen(
-            title = stringResource(Res.string.ninth_question_hitbear_title),
-            onNextClick = {},
+            title = stringResource(Res.string.tenth_question_hitbear_title),
+            onNextClick = { navigator?.push(SummaryScreen())},
             buttonText = stringResource(Res.string.hitbear_continue),
             question = 10,
             buttonColor = primaryColor,
             content = {
                 Text(
-                    stringResource(Res.string.ninth_question_hitbear_instructions),
+                    stringResource(Res.string.tenth_question_hitbear_instructions),
                     color = Color.Black,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
@@ -86,12 +88,12 @@ class BuildShapeScreen : Screen {
                         horizontalArrangement =  Arrangement.SpaceBetween
                     ) {
                         Text(
-                            stringResource(Res.string.ninth_question_hitbear_shape_model), color = Color.Black,
+                            stringResource(Res.string.tenth_question_hitbear_shape_model), color = Color.Black,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            stringResource(Res.string.ninth_question_hitbear_shapes), color = Color.Black,
+                            stringResource(Res.string.tenth_question_hitbear_shapes), color = Color.Black,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -119,7 +121,7 @@ class BuildShapeScreen : Screen {
                                 {
                             Image(
                                 painter = painterResource(shape.image),
-                                contentDescription = "Shape Image",
+                                contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.FillBounds
                             )
@@ -128,8 +130,8 @@ class BuildShapeScreen : Screen {
 
                     val rightSideShapes = shapesItem.mapIndexed { index, shape ->
                         shape.copy(
-                            xRatio = 0.75f + 0.1f * index, // מיקום דינמי בצד ימין, תוספת אקראית
-                            yRatio = 0.2f + (0.2f * index) // ריווח בין התמונות
+                            xRatio = 0.75f + 0.1f * index,
+                            yRatio = 0.2f + (0.2f * index)
                         )
                     }
                     rightSideShapes.forEachIndexed { index, shape ->
@@ -150,7 +152,7 @@ class BuildShapeScreen : Screen {
                         ) {
                             Image(
                                 painter = painterResource(shape.image),
-                                contentDescription = "Shape Image",
+                                contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.FillBounds
                             )

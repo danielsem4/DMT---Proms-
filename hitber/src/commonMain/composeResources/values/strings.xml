@@ -149,10 +149,17 @@
     <string name="eighth_question_answer_hitbear_version_3">I had dinner with grandma yesterday</string>
     <string name="eighth_question_answer_hitbear_version_4">I had dinner with grandma yesterday</string>
 
-    <string name="ninth_question_hitbear_title">Build Shape</string>
-    <string name="ninth_question_hitbear_instructions">You need to replicate the image displayed on the left to the center of the screen. You should use the shapes shown on the right to recreate the image. Drag and arrange the shapes in the center of the screen. Once finished, click continue.</string>
-    <string name="ninth_question_hitbear_shape_model">The shape model to build</string>
-    <string name="ninth_question_hitbear_shapes">The shapes available to you</string>
+    <string name="tenth_question_hitbear_title">Build Shape</string>
+    <string name="tenth_question_hitbear_instructions">You need to replicate the image displayed on the left to the center of the screen. You should use the shapes shown on the right to recreate the image. Drag and arrange the shapes in the center of the screen. Once finished, click continue.</string>
+    <string name="tenth_question_hitbear_shape_model">The shape model to build</string>
+    <string name="tenth_question_hitbear_shapes">The shapes available to you</string>
+    <string name="tenth_question_hitbear_shape_image">Shape Image</string>
+
+
+    <string name="summary_hitbear_title">Summary</string>
+    <string name="summary_hitbear_instructions1">You have completed the test.</string>
+    <string name="summary_hitbear_instructions2">Please contact your therapist for further details.</string>
+    <string name="summary_hitbear_exit">Exit</string>
 
 
     <string name="hitbear_continue">Continue</string>
