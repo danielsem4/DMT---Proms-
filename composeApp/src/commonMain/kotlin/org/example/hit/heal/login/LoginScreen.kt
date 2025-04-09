@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import org.example.EmailTextField
@@ -34,12 +33,16 @@ import org.example.PasswordTextField
 import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.login.LoginViewModel
 import org.jetbrains.compose.resources.painterResource
-import org.example.hit.heal.core.Network.AuthApi
+import org.koin.compose.viewmodel.koinViewModel
+
+
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
-    loginViewModel: LoginViewModel = viewModel()
 ) {
+
+    val loginViewModel: LoginViewModel = koinViewModel()
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }

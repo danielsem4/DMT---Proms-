@@ -1,11 +1,11 @@
-package org.example.hit.heal.core.di
+package org.example.hit.heal.di
 
 import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.engine.darwin.Darwin
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
 actual val platformModule: Module
     get() = module {
-        single<HttpClientEngine> { OkHttp.create() }
+        single<HttpClientEngine> { Darwin.create() }
     }

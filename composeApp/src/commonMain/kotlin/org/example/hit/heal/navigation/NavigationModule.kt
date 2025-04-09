@@ -10,10 +10,6 @@ import org.koin.compose.koinInject
 import org.koin.dsl.module
 
 
-val navigationModule = module {
-    single { NavigationViewModel() }
-}
-
 sealed class Screen(val route: String) {
     object Login : Screen("login")
     object Home : Screen("home")

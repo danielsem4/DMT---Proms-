@@ -14,6 +14,7 @@ import org.koin.core.component.inject
 import org.example.hit.heal.core.Network.AuthApi
 
 class LoginViewModel : ViewModel(), KoinComponent {
+    
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 

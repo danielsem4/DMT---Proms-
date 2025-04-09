@@ -54,10 +54,9 @@ kotlin {
             implementation(libs.font.awesome)
 
             implementation(libs.bundles.ktor)
-
-            api(libs.koin.core)
             implementation(libs.koin.compose)
-            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.koin.compose.viewmodel)
+            api(libs.koin.core)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
