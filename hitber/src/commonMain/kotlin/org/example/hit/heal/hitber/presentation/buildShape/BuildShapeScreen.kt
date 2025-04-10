@@ -40,6 +40,7 @@ import dmt_proms.hitber.generated.resources.tenth_question_hitbear_shapes
 import dmt_proms.hitber.generated.resources.tenth_question_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.buildShape.components.shapesItem
 import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -100,8 +101,8 @@ class BuildShapeScreen : Screen {
                     }
 
                     shapesItem.forEachIndexed { index, shape ->
-                        val itemWidthPx =  screenSize.second * 0.3f
-                        val itemHeightPx = screenSize.second * 0.3f
+                        val itemWidthPx =  screenSize.second * shape.width
+                        val itemHeightPx = screenSize.second * shape.height
                         val xPx = screenSize.first * shape.xRatio
                         val yPx = screenSize.second * shape.yRatio
 
@@ -135,8 +136,8 @@ class BuildShapeScreen : Screen {
                         )
                     }
                     rightSideShapes.forEachIndexed { index, shape ->
-                        val itemWidthPx = screenSize.second * 0.3f
-                        val itemHeightPx = screenSize.second * 0.3f
+                        val itemWidthPx =  screenSize.second * shape.width
+                        val itemHeightPx = screenSize.second * shape.height
                         val xPx = screenSize.first * shape.xRatio
                         val yPx = screenSize.second * shape.yRatio
 
