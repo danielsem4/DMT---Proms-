@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
 @Preview(
     name = "Tablet Preview",
     showBackground = true,
-    widthDp = 2000,
+    widthDp =2000,
     heightDp = 1200
 )
 @Composable

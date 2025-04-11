@@ -18,13 +18,22 @@ data class BuildShapes(
     val height: Float
 )
 
-val shapesItem = listOf(
-    BuildShapes(Res.drawable.triangle, 0.05f, 0.4f, 0.4f, 0.4f),
-    BuildShapes(Res.drawable.rotate_star, 0.15f, 0.28f, 0.25f, 0.25f),
-    BuildShapes(Res.drawable.arrow_key, 0.15f, 0.54f, 0.4f, 0.25f),
-    BuildShapes(Res.drawable.circle, 0.08f, 0.64f, 0.1f, 0.1f),
-    BuildShapes(Res.drawable.black_circle, 0.17f, 0.64f, 0.1f, 0.1f),
-    BuildShapes(Res.drawable.vertical_line, 0.09f, 0.47f, 0.25f, 0.3f),
-    BuildShapes(Res.drawable.horizontal_line, 0.086f, 0.44f, 0.25f, 0.33f)
+val staticShapesItem = listOf(
+   BuildShapes(Res.drawable.triangle, 0.05f, 0.4f, 0.4f, 0.4f),
+    BuildShapes(Res.drawable.rotate_star, 0.5f, -0.25f, 0.5f, 0.5f),
+    BuildShapes(Res.drawable.arrow_key, 0.5f, 0.45f, 0.8f, 0.5f),
+    BuildShapes(Res.drawable.circle, 0.15f, 0.65f, 0.2f, 0.2f),
+    BuildShapes(Res.drawable.black_circle, 0.6f, 0.65f, 0.2f, 0.2f),
+    BuildShapes(Res.drawable.vertical_line, 0.22f, 0.3f, 0.45f, 0.5f),
+    BuildShapes(Res.drawable.horizontal_line, 0.2f, 0.1f, 0.5f, 0.8f)
+)
 
+val draggableShapesItem = listOf(
+    BuildShapes(Res.drawable.triangle, 0.8f, 0.05f, 0.8f, 1f),
+    BuildShapes(Res.drawable.rotate_star, 0.87f, 0.7f, 0.5f, 0.5f),
+    BuildShapes(Res.drawable.arrow_key, 0.7f, 0.1f, 0.8f, 0.5f),
+    BuildShapes(Res.drawable.circle, 0.95f, 0.55f, 0.2f, 0.2f),
+    BuildShapes(Res.drawable.black_circle, 0.88f, 0.55f, 0.2f, 0.2f),
+    BuildShapes(Res.drawable.vertical_line, 0.75f, 0.7f, 0.45f, 0.5f),
+    BuildShapes(Res.drawable.horizontal_line, 0.65f, 0.4f, 0.5f, 0.8f)
 )
