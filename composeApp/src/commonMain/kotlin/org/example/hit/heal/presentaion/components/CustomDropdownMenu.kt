@@ -56,6 +56,7 @@ import org.example.hit.heal.presentaion.primaryColor
                 focusedBorderColor = primaryColor,
                 unfocusedBorderColor = Color.Black,
                 cursorColor = Color.Black,
+                backgroundColor = Color.White,
                 textColor = Color.Black
             )
         )

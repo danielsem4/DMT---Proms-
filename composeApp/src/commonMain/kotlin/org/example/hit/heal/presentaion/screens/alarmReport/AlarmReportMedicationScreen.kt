@@ -1,6 +1,7 @@
-package org.example.hit.heal.presentaion.screens
+package org.example.hit.heal.presentaion.screens.alarmReport
 
 import MedicationScreen
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -20,18 +22,18 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import org.example.hit.heal.presentaion.components.RoundedButton
-import org.example.hit.heal.presentaion.primaryColor
+import dmt_proms.composeapp.generated.resources.Res
+import dmt_proms.composeapp.generated.resources.medication_alarm
+import dmt_proms.composeapp.generated.resources.pills
+import org.example.hit.heal.presentaion.screens.BaseScreen
+import org.jetbrains.compose.resources.painterResource
 
 
 class AlarmReportMedicationScreen : Screen {
@@ -60,7 +62,14 @@ class AlarmReportMedicationScreen : Screen {
 
 
                 ){
-                    Icon(Icons.Default.Star, contentDescription = "Add")
+                    Image(
+                        painter = painterResource(Res.drawable.pills),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(70.dp)
+                            .padding(bottom = 3.dp,top=3.dp),
+                        contentScale = ContentScale.Fit
+                    )
                     Text(text = "Report medication ", fontSize = 18.sp,  modifier = Modifier.padding(horizontal = 8.dp))
 
                 }
@@ -78,7 +87,14 @@ class AlarmReportMedicationScreen : Screen {
 
 
                     ){
-                    Icon(Icons.Default.Star, contentDescription = "Add")
+                    Image(
+                        painter = painterResource(Res.drawable.medication_alarm),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(70.dp)
+                            .padding(bottom = 3.dp,top=3.dp),
+                        contentScale = ContentScale.Fit
+                    )
                     Text(text = "Set medication alarm", fontSize = 18.sp,  modifier = Modifier.padding(horizontal = 8.dp))
 
                 }
@@ -86,5 +102,9 @@ class AlarmReportMedicationScreen : Screen {
 
             }
         }
+
+
     }
+
 }
+

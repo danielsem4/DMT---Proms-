@@ -1,138 +1,137 @@
 package org.example.hit.heal.presentaion.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.LocalTextStyle
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
+import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
+import network.chaintech.kmp_date_time_picker.utils.MAX
+import network.chaintech.kmp_date_time_picker.utils.MIN
+import network.chaintech.kmp_date_time_picker.utils.SelectorProperties
+import network.chaintech.kmp_date_time_picker.utils.WheelPickerDefaults
+import network.chaintech.kmp_date_time_picker.utils.now
 import org.example.hit.heal.presentaion.primaryColor
+import network.chaintech.kmp_date_time_picker.ui.datepicker.WheelDatePickerView as WheelDatePickerView
 
 @Composable
-fun CustomOutlinedTextDataField(
+fun CustomDatePickerBox(
     value: String,
     onValueChange: (String) -> Unit,
     label: String = "",
-    readOnly: Boolean = false,
-    modifier: Modifier = Modifier,
-    trailingIcon: @Composable (() -> Unit)? = null
+    modifier: Modifier = Modifier
 ) {
-    var textFieldValue by remember { mutableStateOf(TextFieldValue(value, TextRange(value.length))) }
+    var showDatePicker by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
 
-
-    fun formatDateInput(input: String): TextFieldValue {
-        val digits = input.filter { it.isDigit() }
-        val formatted = StringBuilder()
-
-        for (i in digits.indices) {
-            formatted.append(digits[i])
-            if ((i == 1 || i == 3) && i < digits.length - 1) {
-                formatted.append("/")
-            }
-        }
-
-        val newText = formatted.toString()
-        val newCursorPosition = newText.length
-
-        return TextFieldValue(newText, TextRange(newCursorPosition))
-    }
-
-    fun validateDate(date: String){
-        val today: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())
-        try {
-            val parts = date.split("/")
-            if (parts.size == 3) {
-                val day = parts[0].toInt()
-                val month = parts[1].toInt()
-                val year = parts[2].toInt()
-
-                val parsedDate = LocalDate(year, month, day)
-
-                if (parsedDate < today) {
+    WheelDatePickerView(
+        showDatePicker = showDatePicker,
+        height = 200.dp,
+        dateTimePickerView = DateTimePickerView.BOTTOM_SHEET_VIEW,
+        rowCount = 3,
+        titleStyle = TextStyle(
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = primaryColor
+        ),
+        doneLabelStyle = TextStyle(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = primaryColor
+        ),
+        yearsRange = LocalDate.now().year..LocalDate.now().year + 100,
+        onDoneClick = { selectedDate ->
+            try {
+                val parsedDate = LocalDate.parse(selectedDate.toString())
+                if (parsedDate < LocalDate.now()) {
                     isError = true
-                    errorMessage = "The date cannot be in the past"
-
-
+                    errorMessage = "Date cannot be in the past"
                 } else {
                     isError = false
-                    errorMessage = ""
+                    errorMessage = null
+                    onValueChange(selectedDate.toString())
                 }
-            } else {
-                throw IllegalArgumentException()
+            } catch (e: Exception) {
+                isError = true
+                errorMessage = "Incorrect date"
             }
-        } catch (e: Exception) {
-            isError = true
-            errorMessage = "Invalid date format"
-        }
-        return
-    }
-
-
-    OutlinedTextField(
-        value = textFieldValue,
-        onValueChange = { newValue ->
-            val formattedValue = formatDateInput(newValue.text)
-            if (formattedValue.text.length <= 10) {
-                textFieldValue = formattedValue
-                onValueChange(formattedValue.text)
-            }
-            if (formattedValue.text.length == 10) {
-                validateDate(formattedValue.text)
-            } else {
-                isError = false
-                errorMessage = ""
-            }
+            showDatePicker = false
         },
-        readOnly = readOnly,
-        label = { Text(label) },
-        trailingIcon = trailingIcon,
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(10.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = if (isError) Color.Red else primaryColor,
-            unfocusedBorderColor = if (isError) Color.Red else Color.Black,
-            disabledTextColor = Color.Black,
-            disabledLabelColor = Color.Black,
-            disabledPlaceholderColor = Color.Black,
-            disabledBorderColor = Color.Black,
-            cursorColor = Color.Black,
-            leadingIconColor = Color.Black,
-            trailingIconColor = Color.Black,
-            focusedLabelColor = primaryColor,
-            unfocusedLabelColor = Color.Black,
-            textColor = Color.Black,
-            backgroundColor = Color.White,
-
-            errorCursorColor =  Color.Red,
-            errorLabelColor = Color.Red,
-            errorLeadingIconColor = Color.Red,
-            errorTrailingIconColor = Color.Red,
-
-            placeholderColor = Color.Black
-
-        ),
-        isError = isError,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-
-
-
+        onDismiss = { showDatePicker = false }
     )
+
+    Column(modifier = modifier) {
+        Text(text = label, fontWeight = FontWeight.Bold, color = Color.Black)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .background(Color.White, RoundedCornerShape(10.dp))
+                .border(1.dp, if (isError) Color.Red else Color.Black, RoundedCornerShape(10.dp))
+                .clickable { showDatePicker = true }
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Text(
+                text = value.ifEmpty { "Select a date" },
+                color = if (isError) Color.Red else Color.Black,
+                fontSize = 16.sp
+            )
+        }
+        if (isError) {
+            Text(
+                text = errorMessage ?: "",
+                color = Color.Red,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+    }
 }
+
+
+
+
+
+

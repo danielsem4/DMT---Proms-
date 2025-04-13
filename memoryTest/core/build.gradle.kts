@@ -4,10 +4,11 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     kotlin("plugin.serialization") version "2.1.10"
+
 
 }
 
@@ -18,23 +19,21 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "memoryTest"
             isStatic = true
         }
     }
-    
     jvm("desktop")
-    
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -64,18 +63,14 @@ kotlin {
             implementation("network.chaintech:kmp-date-time-picker:1.0.7")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
 
-
             implementation(libs.navigation.compose)
             implementation(libs.viewmodel.compose)
-
-            implementation(projects.memoryTest.core)
 
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
-
-
+            implementation(libs.compose.dnd)  //drag and drop dependencies
 
 
 
@@ -83,20 +78,22 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.compose.dnd)
         }
     }
+
 }
 
 android {
-    namespace = "org.example.hit.heal"
+    namespace = "org.example.hit.heal.memoryTest"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.example.hit.heal"
+
         minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+
+
+
     }
     packaging {
         resources {
@@ -113,19 +110,17 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-
 dependencies {
-    implementation(libs.androidx.material3.android)
-    debugImplementation(compose.uiTooling)
+    implementation(libs.compose.dnd)
 }
 
 compose.desktop {
     application {
-        mainClass = "org.example.hit.heal.MainKt"
+        mainClass = "org.example.hit.heal.memoryTest"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.hit.heal"
+            packageName = "org.example.hit.heal.memoryTest"
             packageVersion = "1.0.0"
         }
     }

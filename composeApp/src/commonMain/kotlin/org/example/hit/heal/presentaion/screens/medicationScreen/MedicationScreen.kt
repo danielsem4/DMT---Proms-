@@ -17,13 +17,21 @@ import org.example.hit.heal.presentaion.components.ReportMedicationDialog
 import org.example.hit.heal.presentaion.screens.BaseScreen
 import org.example.hit.heal.presentaion.components.SearchBar
 
+import org.example.hit.heal.presentaion.screens.medicationReport.MedicationAlarmDetailsScreenContent
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.annotation.KoinExperimentalAPI
+
 
 class Medication(val name: String)
 
 class MedicationScreen (private val isReport: Boolean) : Screen {
+    @OptIn(KoinExperimentalAPI::class)
     @Composable
     override fun Content() {
+
         val navigator = LocalNavigator.currentOrThrow
+        val viewModel = koinViewModel<MedicationAlarmViewModel>()
+
 
         val sampleMedications = listOf(
             Medication("Edvil"),
@@ -77,7 +85,8 @@ class MedicationScreen (private val isReport: Boolean) : Screen {
                                      selectedMedication = medication
                                      showDialog = true
                                  } else {
-                                     navigator.push(MedicationReportDetailsScreen(medication.name))
+                                     viewModel.setMedicationName(medication.name)
+                                     navigator.push(MedicationAlarmDetailsScreenContent(medication.name))
                                  }
                             }
                                 .clip(RoundedCornerShape(10.dp)),
