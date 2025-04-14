@@ -13,8 +13,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +34,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.hi.heal.memoryTest.core.presentation.data.backgroundColor
+
 import com.example.hi.heal.memoryTest.core.presentation.data.presentation.components.CircleWithPipeImage
+import com.example.hi.heal.memoryTest.core.presentation.data.presentation.components.CustomDialog
 import com.example.hi.heal.memoryTest.core.presentation.data.presentation.components.effects.RipplePulseEffect
 import com.example.hi.heal.memoryTest.core.presentation.data.primaryColor
 import dmt_proms.memorytest.core.generated.resources.Res
@@ -41,6 +51,7 @@ class CallScreen( val txtMemoryPage: Int = 1)  : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.currentOrThrow
+        var showAcceptDialog by remember { mutableStateOf(false) }
 
         BaseTabletScreen(title = "שיחה נכנסת", page = txtMemoryPage, totalPages = 6) {
 
@@ -106,7 +117,8 @@ class CallScreen( val txtMemoryPage: Int = 1)  : Screen {
 
                         CircleWithPipeImage(
                             imagePainter = painterResource(Res.drawable.call_accept),
-                            color = primaryColor
+                            color = primaryColor,
+                            onClick = { showAcceptDialog = true }
                         )
                     }
                     Spacer(modifier = Modifier.width(200.dp))
@@ -130,6 +142,18 @@ class CallScreen( val txtMemoryPage: Int = 1)  : Screen {
                 }
 
             }
+        var showDialog by rememberSaveable { mutableStateOf(true) }
+        if (showAcceptDialog) {
+            CustomDialog(
+                onDismiss = { showDialog = false },
+                icon = {
+                    Icon(Icons.Default.ThumbUp, contentDescription = null, tint = Color.White, modifier = Modifier.size(40.dp))
+                },
+                title = "תודה",
+                description = "המשימה הסתיימה, תודה רבה על שיתוף הפעולה",
+                buttons = listOf("הבא" to { navigator.push(RoomsScreens(txtMemoryPage = 2)) })
+            )
+        }
         }
 
     }

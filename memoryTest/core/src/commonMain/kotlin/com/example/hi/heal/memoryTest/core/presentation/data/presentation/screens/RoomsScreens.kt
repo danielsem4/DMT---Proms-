@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -58,14 +59,19 @@ import com.mohamedrejeb.compose.dnd.DragAndDropContainer
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
 
 import dmt_proms.memorytest.core.generated.resources.Res
+import dmt_proms.memorytest.core.generated.resources.app
+import dmt_proms.memorytest.core.generated.resources.backpack
 import dmt_proms.memorytest.core.generated.resources.bedroom_block
 import dmt_proms.memorytest.core.generated.resources.book
+import dmt_proms.memorytest.core.generated.resources.bottle
+import dmt_proms.memorytest.core.generated.resources.coffee
 import dmt_proms.memorytest.core.generated.resources.dress
 import dmt_proms.memorytest.core.generated.resources.glasses
 import dmt_proms.memorytest.core.generated.resources.keys
 import dmt_proms.memorytest.core.generated.resources.kitchen_block
 import dmt_proms.memorytest.core.generated.resources.phone
 import dmt_proms.memorytest.core.generated.resources.salon_block
+import dmt_proms.memorytest.core.generated.resources.shoes
 import dmt_proms.memorytest.core.generated.resources.wallet
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.DrawableResource
@@ -90,17 +96,29 @@ class RoomsScreens( val txtMemoryPage: Int = 1): Screen {
         var draggedOffset by remember { mutableStateOf(Offset.Zero) }
         var isDragging by remember { mutableStateOf(false) }
 
-        var timer by remember { mutableStateOf(0) }
+
 
         val dragAndDropState = rememberDragAndDropState<Item>()
         var droppedItems by remember { mutableStateOf(mutableListOf<Item>()) }
 
         var selectedRoom by remember { mutableStateOf("חדר שינה") }
         val roomButtons = listOf("חדר שינה", "סלון", "מטבח")
-        val items = listOf(
+
+        val itemsFirst = listOf(
             Res.drawable.glasses, Res.drawable.book, Res.drawable.dress,
             Res.drawable.phone, Res.drawable.keys, Res.drawable.wallet
         )
+
+        val itemsImagesRest = listOf(
+            Res.drawable.glasses, Res.drawable.book, Res.drawable.dress,
+            Res.drawable.phone, Res.drawable.keys, Res.drawable.wallet,
+            Res.drawable.backpack, Res.drawable.shoes, Res.drawable.bottle,
+            Res.drawable.coffee,Res.drawable.app
+        )
+
+        val currentItems = if (txtMemoryPage!= 1)  itemsImagesRest else itemsFirst
+
+
         var timeLeft by remember { mutableStateOf(4 * 60) }
 
         LaunchedEffect(Unit) {
@@ -141,6 +159,7 @@ class RoomsScreens( val txtMemoryPage: Int = 1): Screen {
                 Column(
                     modifier = Modifier
                         .weight(0.6f)
+                        .zIndex(0f)
                         .background(color = backgroundColor)
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -180,88 +199,102 @@ class RoomsScreens( val txtMemoryPage: Int = 1): Screen {
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
-                     DragAndDropContainer(state = dragAndDropState){
 
 
-                     }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        // Left: items list
-                        Box(
+                        Row(
                             modifier = Modifier
-                                .weight(0.5f)
-                                .padding(8.dp)
-                                .border(1.dp, Color.Black, shape = RoundedCornerShape(8.dp))
-                                .background(Color.White)
+                                .fillMaxSize()
+                                .weight(1f),
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            LazyVerticalGrid(
-                                columns = GridCells.Fixed(3),
-                                modifier = Modifier.padding(12.dp),
-                                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            // Left: items list
+                            DragAndDropContainer(state = dragAndDropState) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(0.5f)
+                                    .padding(8.dp)
+                                    .zIndex(1f)
+                                    .border(1.dp, Color.Black)
+                                    .background(Color.White)
                             ) {
-                                items(items.size) { index ->
-                                    DraggableItem(
-                                        imageRes = items[index],
-                                        onDrop = { offset ->
-                                            droppedItems.add(
-                                                Item(id = index, resId = items[index], isPlaced = true, position = offset)
-                                            )
-                                        }
-                                    )
+                                LazyVerticalGrid(
+                                    columns = GridCells.Fixed(3),
+                                    modifier = Modifier.padding(12.dp)
+                                        .zIndex(1f),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                                ) {
+                                    items(currentItems.size) { index ->
+                                        DraggableItem(
+
+                                            imageRes = currentItems[index],
+                                            onDrop = { offset ->
+                                                droppedItems.add(
+                                                    Item(
+                                                        id = index,
+                                                        resId = currentItems[index],
+                                                        isPlaced = true,
+                                                        position = offset
+                                                    )
+                                                )
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         }
-                    }
-                    Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
 
-                    // Bottom: time and continue
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = formatTime(timeLeft),
-                            fontSize = 20.sp,
-                            color = primaryColor,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Button(
-                            onClick = {
-                                navigator.push(CallScreen(txtMemoryPage = 3))
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                            shape = RoundedCornerShape(50),
-                            modifier = Modifier
-                                .defaultMinSize(minWidth = 100.dp)
-                                .height(50.dp)
+                        // Bottom: time and continue
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = "המשך",
-                                fontSize = 32.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White
+                                text = formatTime(timeLeft),
+                                fontSize = 20.sp,
+                                color = primaryColor,
+                                fontWeight = FontWeight.Bold
                             )
+                            Button(
+                                onClick = {
+                                    if (txtMemoryPage == 1) {
+                                        navigator.push(CallScreen(txtMemoryPage = 2))
+                                    } else {
+                                        navigator.push(AgendaScreen(txtMemoryPage = 4))
+                                    }
+
+                                },
+                                colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
+                                shape = RoundedCornerShape(50),
+                                modifier = Modifier
+                                    .defaultMinSize(minWidth = 100.dp)
+                                    .height(50.dp)
+                            ) {
+                                Text(
+                                    text = "המשך",
+                                    fontSize = 32.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White
+                                )
+                            }
                         }
                     }
-                }
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp)
-                ) {
-                    Image(
+                    Box(
+                        modifier = Modifier
+                            .weight(1f)
+                            .zIndex(0f)
+                            .padding(8.dp)
+                    ) {
+                        Image(
 
-                        painter = painterResource(getRoomImageRes(selectedRoom)),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
+                            painter = painterResource(getRoomImageRes(selectedRoom)),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                 }
             }
 
@@ -292,6 +325,7 @@ fun DraggableItem(
             .graphicsLayer {
                 translationX = offset.x
                 translationY = offset.y
+
             }
             .pointerInput(Unit) {
                 detectDragGestures(
