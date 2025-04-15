@@ -11,7 +11,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.example.hit.heal.core.presentation.Colors.backgroundColor
@@ -21,10 +20,7 @@ import org.example.hit.heal.hitber.presentation.shapes.components.shapeList
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeSets
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.DropDownItem
 import org.example.hit.heal.hitber.presentation.understanding.components.audioList
-import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
-import org.example.hit.heal.hitber.presentation.writing.components.DraggableWordState
 import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
-import org.example.hit.heal.hitber.presentation.writing.components.draggableWordsList
 import org.example.hit.heal.hitber.presentation.writing.components.sentencesResourceId
 import org.example.hit.heal.hitber.presentation.writing.components.slotsList
 import org.jetbrains.compose.resources.DrawableResource
@@ -210,9 +206,8 @@ class ActivityViewModel : ViewModel() {
     private val _selectedItem = MutableStateFlow<DrawableResource?>(null)
     val selectedItem: StateFlow<DrawableResource?> get() = _selectedItem.asStateFlow()
 
-    private val _selectedNapkin = MutableStateFlow<DrawableResource?>(null) // שמירה על צבע המפית
+    private val _selectedNapkin = MutableStateFlow<DrawableResource?>(null)
     val selectedNapkin: StateFlow<DrawableResource?> get() = _selectedNapkin.asStateFlow()
-
 
     fun setRandomAudio() {
         if (_audioResourceId.value == null) {
@@ -229,23 +224,6 @@ class ActivityViewModel : ViewModel() {
     fun updateItemLastPosition(index: Int, position: Offset) {
         _itemLastPositions.value = _itemLastPositions.value.toMutableMap().apply {
             this[index] = position
-        }
-    }
-
-    private val _itemPositions = MutableStateFlow(List(fridgeItems.size) { Pair(0f, 0f) })
-    val itemPositions = _itemPositions.asStateFlow()
-
-    fun updateItemPosition(index: Int, dragAmount: Pair<Float, Float>) {
-        _itemPositions.update { currentList ->
-            currentList.mapIndexed { i, position ->
-                if (i == index) {
-                    val newX = position.first + dragAmount.first
-                    val newY = position.second + dragAmount.second
-                    Pair(newX, newY)
-                } else {
-                    position
-                }
-            }
         }
     }
 
@@ -284,27 +262,6 @@ class ActivityViewModel : ViewModel() {
     }
 
     //Drag and drop Question (7/10)
-    private val _circlePositions = MutableStateFlow(
-        listOf(
-            Pair(0.4f, 0.6f),
-            Pair(0.4f, 0.4f),
-            Pair(0.6f, 0.4f),
-            Pair(0.6f, 0.6f)
-        )
-    )
-    val circlePositions = _circlePositions.asStateFlow()
-
-    fun updateCirclePosition(index: Int, dragAmount: Offset) {
-        _circlePositions.update { currentList ->
-            currentList.mapIndexed { i, position ->
-                if (i == index) {
-                    Pair(position.first + dragAmount.x, position.second + dragAmount.y)
-                } else {
-                    position
-                }
-            }
-        }
-    }
 
     private val _instructionsResourceId = MutableStateFlow<StringResource?>(null)
     val instructionsResourceId: StateFlow<StringResource?> get() = _instructionsResourceId.asStateFlow()
@@ -326,24 +283,16 @@ class ActivityViewModel : ViewModel() {
     }
 
     //Writing Question (8/10)
-
-    private val _words = MutableStateFlow(draggableWordsList)
-    val words: StateFlow<List<DraggableWordState>> = _words
-
-    private val _copiedWords = MutableStateFlow(draggableWordsList)
-    val copiedWords: StateFlow<List<DraggableWordState>> = _copiedWords
-
     private val _slotsWords = MutableStateFlow(slotsList)
-    val slotsWords : StateFlow<List<WordSlotState>> = _slotsWords
+    val slotsWords: StateFlow<List<WordSlotState>> = _slotsWords
 
     private val _activeSlotIndex = MutableStateFlow<Int?>(null)
     val activeSlotIndex: StateFlow<Int?> = _activeSlotIndex
 
     private val _sentence = MutableStateFlow<List<String>>(emptyList())
 
-
-    private val _allFinished= MutableStateFlow(false)
-     val allFinished: StateFlow<Boolean> = _allFinished
+    private val _allFinished = MutableStateFlow(false)
+    val allFinished: StateFlow<Boolean> = _allFinished
 
     private val _answerSentences = MutableStateFlow(sentencesResourceId)
     val answerSentences: StateFlow<List<StringResource>> = _answerSentences
@@ -356,33 +305,27 @@ class ActivityViewModel : ViewModel() {
         return _answerWriting.value
     }
 
-    fun isWordOnSlot(wordState: Offset, containerSize: IntSize, density: Density, isRTL: Boolean): Int? {
+    fun isWordOnSlot(
+        wordState: Offset,
+        screenSize: IntSize,
+        density: Density,
+    ): Int? {
         val foundIndex = _slotsWords.value.indexOfFirst { slot ->
             val slotWidthPx = with(density) { 150.dp.toPx() }
             val slotHeightPx = with(density) { 100.dp.toPx() }
 
-            val adjustedX = if (isRTL) {
-                containerSize.width - (slot.initialOffset.x * containerSize.width)
-            } else {
-                slot.initialOffset.x * containerSize.width
-            }
+            val slotLeft =   slot.initialOffset.x * screenSize.width - slotWidthPx / 2
+            val slotRight =   slot.initialOffset.x * screenSize.width + slotWidthPx / 2
+            val slotTop = slot.initialOffset.y * screenSize.height - slotHeightPx / 2
+            val slotBottom = slot.initialOffset.y * screenSize.height + slotHeightPx / 2
 
-            val slotLeft = adjustedX - slotWidthPx / 2
-            val slotRight = adjustedX + slotWidthPx / 2
-            val slotTop = slot.initialOffset.y * containerSize.height - slotHeightPx / 2
-            val slotBottom = slot.initialOffset.y * containerSize.height + slotHeightPx / 2
-
-            wordState.x * containerSize.width in slotLeft..slotRight &&
-                    wordState.y * containerSize.height in slotTop..slotBottom
+            wordState.x * screenSize.width in slotLeft..slotRight &&
+                    wordState.y * screenSize.height in slotTop..slotBottom
         }.takeIf { it >= 0 }
 
-        _activeSlotIndex.value = if (isRTL && foundIndex != null) {
-            _slotsWords.value.size - 1 - foundIndex
-        } else {
-            foundIndex
-        }
+        _activeSlotIndex.value = foundIndex
+        return foundIndex
 
-        return _activeSlotIndex.value
     }
 
     fun updateWordInSlot(word: String, slotId: Int) {
@@ -409,6 +352,7 @@ class ActivityViewModel : ViewModel() {
         }
         updateSentence()
     }
+
     fun updateSlotColor(slotId: Int) {
         _slotsWords.value = _slotsWords.value.map { slot ->
             if (slot.id == slotId && slot.word == null) {
@@ -432,4 +376,10 @@ class ActivityViewModel : ViewModel() {
         return _slotsWords.value.all { it.word != null }
     }
 
-}
+    //BuildShape Question (10/10)
+
+    }
+
+
+
+

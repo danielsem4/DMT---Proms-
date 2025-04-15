@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -57,6 +58,7 @@ import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ActionShapesScreen
 import org.example.hit.heal.hitber.presentation.writing.components.DraggableWordState
 import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
+import org.example.hit.heal.hitber.presentation.writing.components.draggableWordsList
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -67,15 +69,13 @@ class WritingScreen : Screen {
         val navigator = LocalNavigator.current
         val viewModel: ActivityViewModel = viewModel()
         val density = LocalDensity.current
-        val isRTL = LocalLayoutDirection.current == LayoutDirection.Rtl
-        val words by viewModel.words.collectAsState()
-        val copiedWords by viewModel.copiedWords.collectAsState()
         val slots by viewModel.slotsWords.collectAsState()
         val allFinished by viewModel.allFinished.collectAsState()
         val sentencesResourceId by viewModel.answerSentences.collectAsState()
         val sentences = sentencesResourceId.map { stringResource(it) }
 
-
+        val isRtl = false
+        CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
         TabletBaseScreen(
             title = stringResource(Res.string.eighth_question_hitbear_title),
             onNextClick = {
@@ -97,41 +97,38 @@ class WritingScreen : Screen {
                 Box(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    StaticWords(words, copiedWords, viewModel, density, isRTL)
+                    StaticWords(draggableWordsList, viewModel, density)
                     WordSlots(slots, viewModel, density)
                 }
             })
-    }
+    }}
 
     @Composable
     fun StaticWords(
         words: List<DraggableWordState>,
-        copiedWords: List<DraggableWordState>,
         viewModel: ActivityViewModel,
-        density: Density,
-        isRTL: Boolean
-    ) {
-        var containerSize by remember { mutableStateOf(IntSize.Zero) }
+        density: Density) {
+        var screenSize by remember { mutableStateOf(IntSize.Zero) }
 
         Box(
             modifier = Modifier
-                .fillMaxSize().onSizeChanged { newSize -> containerSize = newSize }) {
-            DraggableWords(copiedWords, containerSize, viewModel, density, isRTL)
+                .fillMaxSize().onSizeChanged { newSize -> screenSize = newSize }) {
+            DraggableWords(words, screenSize, viewModel, density)
             words.forEach { wordState ->
-                StaticWord(wordState = wordState, containerSize = containerSize, density)
+                StaticWord(wordState = wordState, screenSize = screenSize, density)
             }
         }
     }
 
     @Composable
-    fun StaticWord(wordState: DraggableWordState, containerSize: IntSize, density: Density) {
-        val widthPx = (containerSize.width * 0.1f)
-        val heightPx = (containerSize.height * 0.15f)
+    fun StaticWord(wordState: DraggableWordState, screenSize: IntSize, density: Density) {
+        val widthPx = (screenSize.width * 0.1f)
+        val heightPx = (screenSize.height * 0.15f)
         Box(
             modifier = Modifier.offset {
                 IntOffset(
-                    (wordState.initialOffset.x * containerSize.width).toInt(),
-                    (wordState.initialOffset.y * containerSize.height).toInt()
+                    (wordState.initialOffset.x * screenSize.width).toInt(),
+                    (wordState.initialOffset.y * screenSize.height).toInt()
                 )
             }
                 .width(with(density) { widthPx.toDp() })
@@ -150,14 +147,13 @@ class WritingScreen : Screen {
     @Composable
     fun DraggableWords(
         copiedWords: List<DraggableWordState>,
-        containerSize: IntSize,
+        screenSize: IntSize,
         viewModel: ActivityViewModel,
-        density: Density,
-        isRTL: Boolean
+        density: Density
     ) {
         Box(modifier = Modifier.fillMaxSize().zIndex(1f)) {
             copiedWords.forEach { wordState ->
-                DraggableWord(wordState, containerSize, viewModel, density, isRTL)
+                DraggableWord(wordState, screenSize, viewModel, density)
             }
         }
     }
@@ -166,18 +162,16 @@ class WritingScreen : Screen {
     @Composable
     fun DraggableWord(
         wordState: DraggableWordState,
-        containerSize: IntSize,
+        screenSize: IntSize,
         viewModel: ActivityViewModel,
-        density: Density,
-        isRTL: Boolean
-    ) {
+        density: Density) {
         val wordOffset = remember { Animatable(wordState.offset, Offset.VectorConverter) }
         val coroutineScope = rememberCoroutineScope()
         var wordColor by remember { mutableStateOf(primaryColor) }
         var isOnSlot by remember { mutableStateOf<Int?>(null) }
         val word = stringResource(wordState.word)
-        val widthPx = (containerSize.width * 0.1f)
-        val heightPx = (containerSize.height * 0.15f)
+        val widthPx = (screenSize.width * 0.1f)
+        val heightPx = (screenSize.height * 0.15f)
 
         LaunchedEffect(wordState.offset) {
             wordOffset.snapTo(wordState.offset)
@@ -187,16 +181,16 @@ class WritingScreen : Screen {
             modifier = Modifier
                 .offset {
                     IntOffset(
-                        (wordOffset.value.x * containerSize.width).toInt(),
-                        (wordOffset.value.y * containerSize.height).toInt()
+                        (wordOffset.value.x * screenSize.width).toInt(),
+                        (wordOffset.value.y * screenSize.height).toInt()
                     )
                 }
                 .pointerInput(Unit) {
                     detectDragGestures(
                         onDragStart = { },
                         onDrag = { _, dragAmount ->
-                            val newX = wordOffset.value.x - dragAmount.x / (containerSize.width)
-                            val newY = wordOffset.value.y + dragAmount.y / (containerSize.height)
+                            val newX = wordOffset.value.x + dragAmount.x / (screenSize.width)
+                            val newY = wordOffset.value.y + dragAmount.y / (screenSize.height)
 
                             coroutineScope.launch {
                                 wordOffset.snapTo(Offset(newX, newY))
@@ -204,10 +198,8 @@ class WritingScreen : Screen {
 
                             isOnSlot = viewModel.isWordOnSlot(
                                 wordOffset.value,
-                                containerSize,
-                                density,
-                                isRTL
-                            )
+                                screenSize,
+                                density)
                             wordColor =
                                 if (isOnSlot != null) primaryColor.copy(alpha = 0.5f) else primaryColor
 
@@ -242,7 +234,7 @@ class WritingScreen : Screen {
                 modifier = Modifier.align(Alignment.Center)
             )
         }
-    }
+    }}
 
     @Composable
     fun WordSlots(
@@ -250,15 +242,15 @@ class WritingScreen : Screen {
         viewModel: ActivityViewModel,
         density: Density
     ) {
-        var containerSize by remember { mutableStateOf(IntSize.Zero) }
+        var screenSize by remember { mutableStateOf(IntSize.Zero) }
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .onSizeChanged { newSize -> containerSize = newSize }.zIndex(-1f)
+                .onSizeChanged { newSize -> screenSize = newSize }.zIndex(-1f)
         ) {
-            slots.forEachIndexed { index, slot ->
-                WordSlot(slot, index, containerSize = containerSize, viewModel = viewModel, density = density)
+            slots.forEachIndexed { _, slot ->
+                WordSlot(slot, screenSize = screenSize, viewModel = viewModel, density = density)
             }
         }
     }
@@ -266,14 +258,13 @@ class WritingScreen : Screen {
     @Composable
     fun WordSlot(
         slot: WordSlotState,
-        slotIndex: Int,
-        containerSize: IntSize,
+        screenSize: IntSize,
         viewModel: ActivityViewModel
-        ,density: Density
+        , density: Density
     ) {
         val activeSlotIndex by viewModel.activeSlotIndex.collectAsState()
-        val widthPx = (containerSize.width * 0.1f)
-        val heightPx = (containerSize.width * 0.1f)
+        val widthPx = (screenSize.width * 0.1f)
+        val heightPx = (screenSize.width * 0.1f)
         LaunchedEffect(activeSlotIndex) {
             viewModel.updateSlotColor(activeSlotIndex ?: -1)
         }
@@ -281,8 +272,8 @@ class WritingScreen : Screen {
         Box(
             modifier = Modifier.offset {
                 IntOffset(
-                    (slot.initialOffset.x * containerSize.width).toInt(),
-                    (slot.initialOffset.y * containerSize.height).toInt()
+                    (slot.initialOffset.x * screenSize.width).toInt(),
+                    (slot.initialOffset.y * screenSize.height).toInt()
                 )
             }
                 .width(with(density) { widthPx.toDp() })
@@ -310,4 +301,4 @@ class WritingScreen : Screen {
     }
 
 
-}
+

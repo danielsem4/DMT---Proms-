@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,6 +35,7 @@ import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.seventh_question_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.dragAndDrop.components.circlePositions
 import org.example.hit.heal.hitber.presentation.writing.WritingScreen
 import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.stringResource
@@ -45,13 +47,22 @@ class DragAndDropScreen : Screen {
         val density = LocalDensity.current
         val viewModel: ActivityViewModel = viewModel()
         var screenSize by remember { mutableStateOf(0f to 0f) }
-        val circlePositions by viewModel.circlePositions.collectAsState()
         val targetColor by viewModel.targetCircleColor.collectAsState()
         val circleColors = listOf(Color.Black, Color.Green, Color.Blue, Color.Yellow)
         val instructionsResourceId by viewModel.instructionsResourceId.collectAsState()
         val instructions = instructionsResourceId?.let { stringResource(it) }
         var targetBoxXRange by remember { mutableStateOf(0f..0f) }
         var targetBoxYRange by remember { mutableStateOf(0f..0f) }
+
+        val circlePositions = remember(screenSize) {
+            mutableStateListOf<Offset>().apply {
+                circlePositions.forEach { circle ->
+                    val initialX = circle.first
+                    val initialY = circle.second
+                    add(Offset(initialX, initialY))
+                }
+            }
+        }
 
         LaunchedEffect(Unit) {
             viewModel.setRandomInstructions()
@@ -68,8 +79,8 @@ class DragAndDropScreen : Screen {
                     val correctCirclePosition = circlePositions.getOrNull(correctCircleIndex)
 
                     val draggablePosition = Offset(
-                        x = correctCirclePosition?.first?.times(screenWidth) ?: 0f,
-                        y = correctCirclePosition?.second?.times(screenHeight) ?:0f
+                        x = correctCirclePosition?.x?.times(screenWidth) ?: 0f,
+                        y = correctCirclePosition?.y?.times(screenHeight) ?:0f
                     )
 
                     val isInside = isObjectInsideTargetArea(
@@ -126,12 +137,14 @@ class DragAndDropScreen : Screen {
                                 }
 
                                 if (draggedIndex != -1) {
-                                    val newPosition = Offset(
-                                        dragAmount.x / screenSize.first,
-                                        dragAmount.y / screenSize.second
+                                    val currentOffset = circlePositions[draggedIndex]
+                                    val newOffset = Offset(
+                                        x = (currentOffset.x * screenSize.first + dragAmount.x) / screenSize.first,
+                                        y = (currentOffset.y * screenSize.second + dragAmount.y) / screenSize.second
                                     )
-                                    viewModel.updateCirclePosition(draggedIndex, newPosition)
+                                    circlePositions[draggedIndex] = newOffset
                                 }
+
                             }
                         }
 

@@ -3,6 +3,7 @@ package org.example.hit.heal.hitber.presentation.buildShape
 import TabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -17,17 +18,23 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,11 +50,13 @@ import dmt_proms.hitber.generated.resources.tenth_question_hitbear_title
 import dmt_proms.hitber.generated.resources.triangle
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.buildShape.components.BuildShapes
 import org.example.hit.heal.hitber.presentation.buildShape.components.draggableShapesItem
 import org.example.hit.heal.hitber.presentation.buildShape.components.staticShapesItem
 import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import kotlin.math.absoluteValue
 
 class BuildShapeScreen : Screen {
     @Composable
@@ -57,11 +66,41 @@ class BuildShapeScreen : Screen {
         val density = LocalDensity.current
         val viewModel: ActivityViewModel = viewModel()
         var screenSize by remember { mutableStateOf(0f to 0f) }
+        val triangleWidth = 0.4f * screenSize.second
+        val triangleHeight = 0.5f * screenSize.second
+        val itemPositions = remember(screenSize) {
+            mutableStateListOf<Offset>().apply {
+                draggableShapesItem.forEach { shape ->
+                    val initialX = screenSize.first * shape.xRatio
+                    val initialY = screenSize.second * shape.yRatio
+                    add(Offset(initialX, initialY))
+                }
+            }
+        }
 
+
+        val isRtl = false
+        CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
         TabletBaseScreen(
             title = stringResource(Res.string.tenth_question_hitbear_title),
-            onNextClick = { navigator?.push(SummaryScreen())},
-            buttonText = stringResource(Res.string.hitbear_continue),
+            onNextClick = {
+                val correctShapes = getCorrectlyPlacedShapes(
+                    itemPositions = itemPositions,
+                    draggableShapes = draggableShapesItem,
+                    staticShapes = staticShapesItem,
+                    containerWidth = triangleWidth,
+                    containerHeight = triangleHeight
+                )
+
+                if (correctShapes.size == draggableShapesItem.size - 1) {
+                    navigator?.push(SummaryScreen())
+                } else {
+                    println("Only these shapes are correctly placed: ${correctShapes.map { it.id }}")
+                    // אפשר להראות הודעה, או להדגיש רק את מי שנכון
+                }
+            },
+
+                    buttonText = stringResource(Res.string.hitbear_continue),
             question = 10,
             buttonColor = primaryColor,
             content = {
@@ -102,8 +141,7 @@ class BuildShapeScreen : Screen {
                             fontWeight = FontWeight.Bold
                         )
                     }
-                    val triangleWidth = 0.4f * screenSize.second
-                    val triangleHeight = 0.5f * screenSize.second
+
                     Box(
                         modifier = Modifier.width( with(density) {triangleWidth.toDp()}).height(with(density) {triangleHeight.toDp()})
                             .offset(
@@ -120,7 +158,7 @@ class BuildShapeScreen : Screen {
 
                         )
 
-                        staticShapesItem.drop(1).forEachIndexed { index, shape ->
+                        staticShapesItem.drop(1).forEachIndexed { _, shape ->
                         val itemWidthPx =  triangleHeight * shape.width
                         val itemHeightPx = triangleHeight * shape.height
                         val xPx = triangleWidth * shape.xRatio
@@ -130,6 +168,7 @@ class BuildShapeScreen : Screen {
                         val itemHeightDp = with(density) { itemHeightPx.toDp() }
                         val xDp = with(density) { xPx.toDp() }
                         val yDp = with(density) { yPx.toDp() }
+
 
                         Box(
                             modifier = Modifier
@@ -152,19 +191,30 @@ class BuildShapeScreen : Screen {
                     draggableShapesItem.forEachIndexed { index, shape ->
                         val itemWidthPx =  triangleHeight * shape.width
                         val itemHeightPx = triangleHeight * shape.height
-                        val xPx = screenSize.first * shape.xRatio
-                        val yPx = screenSize.second * shape.yRatio
-
                         val itemWidthDp = with(density) { itemWidthPx.toDp() }
                         val itemHeightDp = with(density) { itemHeightPx.toDp() }
-                        val xDp = with(density) { xPx.toDp() }
-                        val yDp = with(density) { yPx.toDp() }
+
+                        val currentPosition = itemPositions[index]
+
 
                         Box(
                             modifier = Modifier
-                                .offset(x = xDp, y = yDp)
+                                .offset(
+                                    x = with(density) { currentPosition.x.toDp() },
+                                    y = with(density) { currentPosition.y.toDp() }
+                                )
+
                                 .size(itemWidthDp, itemHeightDp)
-                        ) {
+                                .pointerInput(Unit) {
+                                    detectDragGestures { change, dragAmount ->
+                                        change.consume()
+                                        itemPositions[index] = itemPositions[index] + dragAmount
+                                    }
+                                }
+
+                        )
+
+                        {
                             Image(
                                 painter = painterResource(shape.image),
                                 contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
@@ -177,4 +227,55 @@ class BuildShapeScreen : Screen {
             }
     })
 }}
+    }
 
+fun getCorrectlyPlacedShapes(
+    itemPositions: List<Offset>,
+    draggableShapes: List<BuildShapes>,
+    staticShapes: List<BuildShapes>,
+    containerWidth: Float,
+    containerHeight: Float,
+): List<BuildShapes> {
+
+    val correctlyPlaced = mutableListOf<BuildShapes>()
+
+    if (itemPositions.isEmpty() || draggableShapes.isEmpty()) return correctlyPlaced
+
+    val basePosition = itemPositions[0]
+    val baseShape = draggableShapes[0]
+    val baseStatic = staticShapes.find { it.id == baseShape.id } ?: return correctlyPlaced
+
+    val baseX = baseStatic.xRatio
+    val baseY = baseStatic.yRatio
+
+    println("Base shape: ${baseShape.id}, Position: $basePosition, Expected position (baseX, baseY): ($baseX, $baseY)")
+
+    itemPositions.drop(1).withIndex().forEach { (index, position) ->
+        val draggable = draggableShapes[index + 1]
+        val static = staticShapes.find { it.id == draggable.id } ?: return@forEach
+
+        val expectedOffsetX = static.xRatio  * containerWidth
+        val expectedOffsetY = static.yRatio  * containerHeight
+
+        val expectedX = basePosition.x + expectedOffsetX
+        val expectedY = basePosition.y + expectedOffsetY
+
+        println("Draggable shape: ${draggable.id}, Position: $position")
+        println("Expected position (expectedX, expectedY): ($expectedX, $expectedY)")
+
+        val dx = (position.x - expectedX).absoluteValue
+        val dy = (position.y - expectedY).absoluteValue
+
+        println("Distance (dx, dy): ($dx, $dy)")
+
+        if (dx <= static.toleranceX && dy <= static.toleranceY) {
+            println("Shape ${draggable.id} is correctly placed!")
+            correctlyPlaced.add(draggable)
+        } else {
+            println("Shape ${draggable.id} is NOT correctly placed.")
+        }
+    }
+
+    println("Correctly placed shapes: ${correctlyPlaced.map { it.id }}")
+    return correctlyPlaced
+}

@@ -23,6 +23,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -95,8 +96,17 @@ class UnderstandingScreen : Screen {
         val correctItem by viewModel.isItemMovedCorrectly.collectAsState()
 
         var isDialogVisible by remember { mutableStateOf(false) }
-        val itemPositions by viewModel.itemPositions.collectAsState()
         val itemLastPositions by viewModel.itemLastPositions.collectAsState()
+
+        val itemPositions = remember(fridgeSize) {
+            mutableStateListOf<Offset>().apply {
+                fridgeItems.forEach { item ->
+                    val initialX = fridgeSize.first * item.xRatio
+                    val initialY = fridgeSize.second * item.yRatio
+                    add(Offset(initialX, initialY))
+                }
+            }
+        }
 
         val selectedNapkin = napkins.find { it.image == napkinResourceId }
         var napkinPosition by remember { mutableStateOf(Offset.Zero) }
@@ -210,36 +220,22 @@ class UnderstandingScreen : Screen {
 
                             if (isFridgeOpen) {
                                 fridgeItems.forEachIndexed { index, item ->
-                                    val xPx = fridgeSize.first * item.xRatio
-                                    val yPx = fridgeSize.second * item.yRatio
-
                                     val itemWidthDp = with(density) { itemWidthPx.toDp() }
                                     val itemHeightDp = with(density) { itemHeightPx.toDp() }
-                                    val xDp = with(density) { xPx.toDp() }
-                                    val yDp = with(density) { yPx.toDp() }
 
                                     val currentPosition = itemPositions[index]
 
                                     Box(
                                         modifier = Modifier
                                             .offset(
-                                                x = (currentPosition.first.dp + xDp),
-                                                y = (currentPosition.second.dp + yDp)
+                                                x = with(density) { currentPosition.x.toDp() },
+                                                y = with(density) { currentPosition.y.toDp() }
                                             )
                                             .size(itemWidthDp, itemHeightDp)
                                             .pointerInput(Unit) {
                                                 detectDragGestures { change, dragAmount ->
-                                                    val dragAmountXInDp =
-                                                        with(density) { dragAmount.x.toDp() }
-                                                    val dragAmountYInDp =
-                                                        with(density) { dragAmount.y.toDp() }
-                                                    viewModel.updateItemPosition(
-                                                        index,
-                                                        Pair(
-                                                            dragAmountXInDp.value,
-                                                            dragAmountYInDp.value
-                                                        )
-                                                    )
+                                                    change.consume()
+                                                    itemPositions[index] = itemPositions[index] + dragAmount
 
                                                     if (change.positionChanged()) {
                                                         if (item.image == itemResourceId && !correctItem) {
