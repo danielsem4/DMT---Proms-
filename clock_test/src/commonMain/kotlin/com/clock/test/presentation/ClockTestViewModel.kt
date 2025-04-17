@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.datetime.Clock
 
-class TestViewModel: ViewModel() {
+class ClockTestViewModel: ViewModel() {
     // Clock test data
     private val firstClockTime = MutableStateFlow(ClockTime(12, 0))
     private val secondClockTime = MutableStateFlow(ClockTime(12, 0))

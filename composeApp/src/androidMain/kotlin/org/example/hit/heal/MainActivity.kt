@@ -1,5 +1,6 @@
 package org.example.hit.heal
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
@@ -9,6 +10,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import org.koin.dsl.module
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +29,9 @@ class MainActivity : ComponentActivity() {
                 navigationBarStyle = if (!inDarkTheme) SystemBarStyle.dark(darkColor.hashCode())
                 else SystemBarStyle.light(lightColor.hashCode(), lightColor.hashCode())
             )
-            App()
+            App(platformModule = module {
+                single<Context> { applicationContext}
+            })
         }
     }
 }

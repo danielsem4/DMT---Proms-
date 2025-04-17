@@ -68,7 +68,7 @@ class DrawClockScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinInject<TestViewModel>()
+        val viewModel = koinInject<ClockTestViewModel>()
 
         viewModel.startDrawingTimer()
         viewModel.updateFirstTime(ClockTime(12, 0))

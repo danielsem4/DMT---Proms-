@@ -32,7 +32,7 @@ class CompletionScreen : Screen {
     override fun Content() {
         var isFirstMessage by remember { mutableStateOf(true) }
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinInject<TestViewModel>()
+        val viewModel = koinInject<ClockTestViewModel>()
 
         // Reset the state of the clock step before use
         viewModel.setSecondStep(false)

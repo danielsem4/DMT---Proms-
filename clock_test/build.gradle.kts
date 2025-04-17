@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -60,11 +61,11 @@ kotlin {
             implementation(libs.voyager.transitions)
 
             // Koin dependencies
-            api(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.bundles.koin.compose)
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
+            implementation(libs.koin.core)
+            implementation(libs.kotlinx.serialization) // for data serialization
 
             // DateTime
             implementation(libs.kotlinx.datetime)

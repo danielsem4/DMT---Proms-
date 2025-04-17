@@ -34,7 +34,7 @@ class SetTimeClockScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinInject<TestViewModel>()
+        val viewModel = koinInject<ClockTestViewModel>()
 
         // Start timing for setting the first clock when the screen loads
         viewModel.startSettingFirstClockTimer()
