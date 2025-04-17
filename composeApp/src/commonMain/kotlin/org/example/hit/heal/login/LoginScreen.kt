@@ -64,7 +64,7 @@ fun LoginScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             // Login Image
             Image(
@@ -99,7 +99,7 @@ fun LoginScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(68.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
             // Login Button
             Button(

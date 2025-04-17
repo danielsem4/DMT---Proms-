@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.hit.heal.core.presentation.BaseScreen
-
 @Composable
 fun HomeScreen(
     onLogout: () -> Unit
@@ -42,45 +41,45 @@ fun HomeScreen(
             }
         }
     ) {
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            // Messages Section
+            // Using the updated MessagesSection with a distinct header style
             MessagesSection {
-                Text("Messages", fontSize = 18.sp, color = Color.Black)
+                // Content below the header inside the MessagesSection
                 Spacer(modifier = Modifier.height(8.dp))
-                Text("• Don't forget to take your test.", fontSize = 14.sp)
-                Text("• Take 2 pills at 12:00", fontSize = 14.sp)
+                Text("• Don't forget to take your test.", fontSize = 14.sp, color = Color.Black)
+                Text("• Take 2 pills at 12:00", fontSize = 14.sp, color = Color.Black)
             }
 
+            // Push the feature buttons to the bottom of the screen
             Spacer(modifier = Modifier.weight(1f))
-            // Feature Buttons
+
+            // First row: three feature buttons evenly spaced
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-
                 FeatureButton(icon = Icons.Outlined.Medication, label = "Medications", onClick = {})
                 FeatureButton(icon = Icons.Outlined.AutoGraph, label = "Graphs", onClick = {})
-                FeatureButton(
-                    icon = Icons.Outlined.Snowshoeing,
-                    label = "Activities",
-                    onClick = {})
-
-
+                FeatureButton(icon = Icons.Outlined.Snowshoeing, label = "Activities", onClick = {})
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                FeatureButton(Icons.Outlined.MonitorHeart, label = "Measurements", onClick = {})
+            // Second row: a single feature button aligned to the start
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                FeatureButton(icon = Icons.Outlined.MonitorHeart, label = "Measurements", onClick = {})
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
-
 }
-
-
