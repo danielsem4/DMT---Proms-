@@ -11,23 +11,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.core.presentation.Colors
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 
 @Composable
-fun OnOffToggle() {
-    var isOn by remember { mutableStateOf(false) }
-
+fun OnOffToggle(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit
+) {
     Row(
         modifier = Modifier
             .background(Color.White, shape = RoundedCornerShape(16.dp))
@@ -38,11 +34,11 @@ fun OnOffToggle() {
             modifier = Modifier
                 .weight(1f)
                 .background(
-                    if (isOn) Colors.primaryColor else Color.White,
+                    if (checked) primaryColor else Color.White,
                     shape = RoundedCornerShape(16.dp)
                 )
                 .border(2.dp, Color.Black, shape = RoundedCornerShape(16.dp))
-                .clickable { isOn = true }
+                .clickable { onCheckedChange(true) }
                 .padding(vertical = 8.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -50,7 +46,7 @@ fun OnOffToggle() {
                 text = "On",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (isOn) Color.White else primaryColor
+                color = if (checked) Color.White else primaryColor
             )
         }
 
@@ -60,11 +56,11 @@ fun OnOffToggle() {
             modifier = Modifier
                 .weight(1f)
                 .background(
-                    if (isOn) Color.White else primaryColor,
+                    if (!checked) primaryColor else Color.White,
                     shape = RoundedCornerShape(16.dp)
                 )
                 .border(2.dp, Color.Black, shape = RoundedCornerShape(16.dp))
-                .clickable { isOn = false }
+                .clickable { onCheckedChange(false) }
                 .padding(vertical = 8.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -72,7 +68,7 @@ fun OnOffToggle() {
                 text = "Off",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (isOn) primaryColor else Color.White
+                color = if (!checked) Color.White else primaryColor
             )
         }
     }

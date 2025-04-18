@@ -17,11 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.example.hit.heal.evaluations.domain.Evaluation
+import org.example.hit.heal.evaluations.domain.EvaluationViewModel
 import org.example.hit.heal.evaluations.presentaion.EvaluationObjectItem
 
 @Composable
 fun EvaluationItem(
     evaluation: Evaluation,
+    viewModel: EvaluationViewModel,
     onItemClick: (Evaluation) -> Unit
 ) {
     Card(
@@ -54,7 +56,7 @@ fun EvaluationItem(
                     .verticalScroll(rememberScrollState())
             ) {
                 evaluation.evaluationObjects.forEach { obj ->
-                    EvaluationObjectItem(obj)
+                    EvaluationObjectItem(obj, viewModel)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }

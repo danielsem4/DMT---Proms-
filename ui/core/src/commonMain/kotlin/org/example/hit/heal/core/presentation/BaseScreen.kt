@@ -23,8 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dmt_proms.ui.core.generated.resources.Res
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
-import dmt_proms.ui.core.generated.resources.next
-import dmt_proms.ui.core.generated.resources.previous
 import org.example.hit.heal.core.presentation.Colors.backgroundColor
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.components.RoundedButton
@@ -37,6 +35,8 @@ fun BaseScreen(
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
     onDoneClick: (() -> Unit)? = null,
+    isNextEnabled: Boolean = true,
+    isDoneEnabled: Boolean = true,
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
     MaterialTheme {
@@ -83,17 +83,27 @@ fun BaseScreen(
                     .padding(horizontal = 12.dp, vertical = 4.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                if (onDoneClick != null) {
-                    Spacer(modifier = Modifier.weight(1f))
-                    RoundedButton("Done", Modifier, onDoneClick)
-                    Spacer(modifier = Modifier.weight(1f))
-                } else {
-                    onPrevClick?.let {
-                        RoundedButton(Res.string.previous, Modifier, it)
+                onPrevClick?.let {
+                    RoundedButton(text = "Previous", onClick = it)
+                }
+
+                Spacer(Modifier.weight(1f))
+
+                when {
+                    onDoneClick != null -> {
+                        RoundedButton(
+                            text = "Done",
+                            enabled = isDoneEnabled,
+                            onClick = onDoneClick
+                        )
                     }
-                    Spacer(modifier = Modifier.weight(1f))
-                    onNextClick?.let {
-                        RoundedButton(Res.string.next, Modifier, it)
+
+                    onNextClick != null -> {
+                        RoundedButton(
+                            text = "Next",
+                            enabled = isNextEnabled,
+                            onClick = onNextClick
+                        )
                     }
                 }
             }

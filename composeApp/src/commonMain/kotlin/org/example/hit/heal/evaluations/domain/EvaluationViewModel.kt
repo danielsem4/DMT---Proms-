@@ -439,4 +439,16 @@ class EvaluationViewModel : ViewModel() {
     )
 
     val evaluations: StateFlow<List<Evaluation>> = _evaluations
+
+    fun saveAnswer(objectId: Int, answer: String) {
+        val updated = _evaluations.value.map { eval ->
+            eval.copy(
+                evaluationObjects = eval.evaluationObjects.map { obj ->
+                    if (obj.id == objectId) obj.copy(answer = answer) else obj
+                }
+            )
+        }
+        _evaluations.value = updated
+    }
+
 }

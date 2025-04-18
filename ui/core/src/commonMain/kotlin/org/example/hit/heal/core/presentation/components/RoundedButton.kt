@@ -15,17 +15,41 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun RoundedButton(text: String, modifier: Modifier, onclick: () -> Unit) {
+fun RoundedButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
     Button(
-        onClick = onclick, colors = ButtonDefaults.buttonColors(Colors.primaryColor),
+        onClick = { if (enabled) onClick() },
+        enabled = enabled,
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = if (enabled) Colors.primaryColor else Color.LightGray,
+            contentColor = if (enabled) Color.White else Color.DarkGray
+        ),
         shape = RoundedCornerShape(50),
         modifier = modifier,
     ) {
-        Text(text, color = Color.White, fontSize = 32.sp, modifier = Modifier.padding(horizontal = 8.dp))
+        Text(
+            text,
+            fontSize = 32.sp,
+            modifier = Modifier.padding(horizontal = 8.dp)
+        )
     }
 }
 
 @Composable
-fun RoundedButton(stringResource: StringResource, modifier: Modifier, onclick: () -> Unit) {
-    RoundedButton(stringResource(stringResource), modifier, onclick)
+fun RoundedButton(
+    stringResource: StringResource,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    onClick: () -> Unit
+) {
+    RoundedButton(
+        text = stringResource(stringResource),
+        modifier = modifier,
+        enabled = enabled,
+        onClick = onClick
+    )
 }
