@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun RoundedFilledSlider(start: Float, end: Float, onValueChange: ((Float) -> Unit)? = null) {
+fun RoundedFilledSlider(start: Float, end: Float, onValueChanged: ((Float) -> Unit)? = null) {
     var sliderValue by remember { mutableStateOf(start) }
     val range = end - start
     val fillFraction = (sliderValue - start) / range
@@ -57,7 +57,7 @@ fun RoundedFilledSlider(start: Float, end: Float, onValueChange: ((Float) -> Uni
                     value = sliderValue,
                     onValueChange = { newValue ->
                         sliderValue = newValue
-                        onValueChange?.invoke(newValue)
+                        onValueChanged?.invoke(newValue)
                     },
                     valueRange = start..end,
                     colors = SliderDefaults.colors(

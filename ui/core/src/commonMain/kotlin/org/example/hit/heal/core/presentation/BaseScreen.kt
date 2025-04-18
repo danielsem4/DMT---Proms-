@@ -36,6 +36,7 @@ fun BaseScreen(
     title: String,
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
+    onDoneClick: (() -> Unit)? = null,
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
     MaterialTheme {
@@ -64,23 +65,29 @@ fun BaseScreen(
                 )
             }
 
-            // Dynamic Content
+            // Content
             Column(
-                modifier = Modifier.padding(8.dp).weight(1f),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 content()
             }
 
-            // Bottom Navigation Bar
-            if (onPrevClick != null || onNextClick != null) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
+            // Bottom Navigation
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 4.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                if (onDoneClick != null) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    RoundedButton("Done", Modifier, onDoneClick)
+                    Spacer(modifier = Modifier.weight(1f))
+                } else {
                     onPrevClick?.let {
                         RoundedButton(Res.string.previous, Modifier, it)
                     }
