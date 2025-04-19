@@ -13,31 +13,34 @@ import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.Colors
+import org.example.hit.heal.core.utils.formatLabel
 
 @Composable
-fun RoundedFilledSlider(start: Float, end: Float, onValueChanged: ((Float) -> Unit)? = null) {
-    var sliderValue by remember { mutableStateOf(start) }
+fun RoundedFilledSlider(
+    start: Float,
+    end: Float,
+    value: Float,
+    onValueChanged: ((Float) -> Unit)? = null
+) {
     val range = end - start
-    val fillFraction = (sliderValue - start) / range
+    val fillFraction = ((value - start) / range).coerceIn(0f, 1f)
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = start.toInt().toString(),
+                text = start.formatLabel(),
                 fontSize = 20.sp,
                 modifier = Modifier.padding(end = 8.dp)
             )
@@ -51,12 +54,11 @@ fun RoundedFilledSlider(start: Float, end: Float, onValueChanged: ((Float) -> Un
                     modifier = Modifier
                         .fillMaxWidth(fillFraction)
                         .fillMaxHeight()
-                        .background(Color(0xFF6FCF97), RoundedCornerShape(12.dp))
+                        .background(Colors.primaryColor, RoundedCornerShape(12.dp))
                 )
                 Slider(
-                    value = sliderValue,
+                    value = value,
                     onValueChange = { newValue ->
-                        sliderValue = newValue
                         onValueChanged?.invoke(newValue)
                     },
                     valueRange = start..end,
@@ -69,11 +71,10 @@ fun RoundedFilledSlider(start: Float, end: Float, onValueChanged: ((Float) -> Un
                 )
             }
             Text(
-                text = end.toInt().toString(),
+                text = end.formatLabel(),
                 fontSize = 20.sp,
                 modifier = Modifier.padding(start = 8.dp)
             )
         }
     }
 }
-

@@ -30,7 +30,10 @@ fun EvaluationNavigator(
     }
 
     val currentEval = evaluations.find { it.evaluationObjects.contains(currentObject) }
-    val title = currentEval?.evaluationName ?: "Evaluation"
+    var title = "Evaluation"
+    currentEval?.evaluationName.let {
+        title+= " - $it"
+    }
 
     BaseScreen(
         title = title,

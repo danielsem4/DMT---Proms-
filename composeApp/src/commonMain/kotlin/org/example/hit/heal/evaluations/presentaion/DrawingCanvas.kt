@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -84,14 +83,10 @@ fun DrawingCanvas(
         }
     }
 
-    val cornerRadius = 32.dp
-    val padding = 16.dp
-
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(padding)
-            .clip(RoundedCornerShape(cornerRadius))
+            .clip(RoundedCornerShape(32.dp))
             .background(Color.White)
             .onSizeChanged {
                 canvasSize = Size(it.width.toFloat(), it.height.toFloat())

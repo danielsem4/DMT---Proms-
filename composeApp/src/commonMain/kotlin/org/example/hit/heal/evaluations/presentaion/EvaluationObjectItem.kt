@@ -1,12 +1,15 @@
 package org.example.hit.heal.evaluations.presentaion
 
 import HumanBodyModelSelector
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,23 +17,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.Colors
 import org.example.hit.heal.core.presentation.components.CustomMultilineTextField
 import org.example.hit.heal.core.presentation.components.OnOffToggle
 import org.example.hit.heal.core.presentation.components.RoundedFilledSlider
 import org.example.hit.heal.core.presentation.components.SimpleRadioButtonGroup
+import org.example.hit.heal.core.utils.formatLabel
 import org.example.hit.heal.evaluations.DrawingCanvasController
 import org.example.hit.heal.evaluations.domain.EvaluationObject
 import org.example.hit.heal.evaluations.domain.EvaluationViewModel
 import org.example.hit.heal.evaluations.domain.api.ApiService
 import org.example.hit.heal.evaluations.domain.data.EvaluationAnswer
 import org.example.hit.heal.utils.imageBitmapToPngByteArray
-import kotlin.math.round
 
 @Composable
 fun EvaluationObjectItem(obj: EvaluationObject, viewModel: EvaluationViewModel) {
@@ -41,8 +48,10 @@ fun EvaluationObjectItem(obj: EvaluationObject, viewModel: EvaluationViewModel) 
         if (obj.evaluationQuestion.isNotBlank()) {
             Text(
                 text = obj.evaluationQuestion,
-                style = androidx.compose.material.MaterialTheme.typography.subtitle1,
-                modifier = Modifier.padding(bottom = 4.dp)
+                style = MaterialTheme.typography.h5,
+                fontWeight = FontWeight.Bold,
+                color = Colors.primaryColor,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
             )
         }
 
@@ -50,18 +59,39 @@ fun EvaluationObjectItem(obj: EvaluationObject, viewModel: EvaluationViewModel) 
             // 1 = Open text field (uses CustomMultilineTextField)
             1 -> {
                 var text by remember(obj.id) { mutableStateOf(obj.answer) }
-                CustomMultilineTextField(
-                    value = text,
-                    onValueChange = {
-                        text = it
-                        viewModel.saveAnswer(obj.id, EvaluationAnswer.Text(it))
-                    },
+
+                Card(
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = 4.dp,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(4.dp),
-                    hintText = "Type your answer...",
-                    maxLines = 5
-                )
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        if (obj.evaluationQuestion.isNotBlank()) {
+                            Text(
+                                text = obj.evaluationQuestion,
+                                style = MaterialTheme.typography.subtitle1,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            )
+                        }
+
+                        CustomMultilineTextField(
+                            value = text,
+                            onValueChange = {
+                                text = it
+                                viewModel.saveAnswer(obj.id, EvaluationAnswer.Text(it))
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 120.dp), // gives a clean consistent height
+                            hintText = "Type your answer...",
+                            textStyle = TextStyle(fontSize = 18.sp),
+                            maxLines = 8
+                        )
+                    }
+                }
             }
 
             // 2 = Single choice (radio)
@@ -126,7 +156,6 @@ fun EvaluationObjectItem(obj: EvaluationObject, viewModel: EvaluationViewModel) 
             21 -> {
                 val controller = remember { mutableStateOf<DrawingCanvasController?>(null) }
                 val hasDrawn = remember { mutableStateOf(false) }
-                val coroutineScope = rememberCoroutineScope()
 
                 LaunchedEffect(hasDrawn.value) {
                     if (hasDrawn.value) {
@@ -139,37 +168,63 @@ fun EvaluationObjectItem(obj: EvaluationObject, viewModel: EvaluationViewModel) 
                     }
                 }
 
-                // 🟢 Ensure full height canvas using Column + weight(1f)
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Spacer(modifier = Modifier.height(16.dp))
-
+                Box(
+                    modifier = Modifier
+                        .padding(24.dp)
+                        .fillMaxSize()
+                ) {
                     controller.value = DrawingCanvas(
                         onDrawChanged = { hasDrawn.value = it },
                         modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .weight(1f) // <- fills remaining vertical space
+                            .fillMaxSize()
                     )
-
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
+
             }
 
             // 34 = Scale (slider)
             34 -> {
-                var sliderValue by remember { mutableStateOf(5f) }
-                RoundedFilledSlider(
-                    start = 0f,
-                    end = 10f,
-                    onValueChanged = {
-                        sliderValue = it
-                        viewModel.saveAnswer(obj.id, EvaluationAnswer.Number(round(it)))
-                    }
-                )
-                Text("Value: ${sliderValue.toInt()}")
+                val values = obj.availableValues?.mapNotNull {
+                    it.value.toFloatOrNull()
+                } ?: emptyList()
+                val sliderStart = values.minOrNull() ?: 0f
+                val sliderEnd = values.maxOrNull() ?: 10f
+
+                var sliderValue by remember(obj.id) {
+                    mutableStateOf(obj.answer.toFloatOrNull() ?: sliderStart)
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                ) {
+                    RoundedFilledSlider(
+                        start = sliderStart,
+                        end = sliderEnd,
+                        value = sliderValue,
+                        onValueChanged = {
+                            sliderValue = it
+                            viewModel.saveAnswer(obj.id, EvaluationAnswer.Number(it))
+                        }
+                    )
+
+                    Text(
+                        text = "Value: ${sliderValue.formatLabel()}",
+                        style = MaterialTheme.typography.h6,
+                        fontWeight = FontWeight.Bold,
+                        color = Colors.primaryColor,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(top = 4.dp).fillMaxWidth()
+                    )
+                }
             }
 
             else -> {
-                Text("Unsupported question type: ${obj.objectType}")
+                Text(
+                    "Unsupported question type: ${obj.objectType}",
+                    style = MaterialTheme.typography.body1
+                )
             }
         }
     }
