@@ -1,8 +1,12 @@
+package org.example.hit.heal.evaluations.presentaion
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -10,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
@@ -28,6 +33,7 @@ import org.example.hit.heal.evaluations.DrawingCanvasController
 
 @Composable
 fun DrawingCanvas(
+    modifier: Modifier = Modifier,
     onDrawChanged: (Boolean) -> Unit = {}
 ): DrawingCanvasController {
     val density = LocalDensity.current
@@ -37,7 +43,6 @@ fun DrawingCanvas(
     val currentStroke = remember { mutableStateListOf<Offset>() }
     var hasDrawn by remember { mutableStateOf(false) }
 
-    // Tell parent when drawing begins
     fun notifyDrawn() {
         if (!hasDrawn) {
             hasDrawn = true
@@ -48,7 +53,10 @@ fun DrawingCanvas(
     val controller = remember {
         object : DrawingCanvasController {
             override fun drawPathsToBitmap(): ImageBitmap {
-                val bitmap = ImageBitmap(canvasSize.width.toInt(), canvasSize.height.toInt())
+                val bitmap = ImageBitmap(
+                    canvasSize.width.toInt().coerceAtLeast(1),
+                    canvasSize.height.toInt().coerceAtLeast(1)
+                )
                 val canvas = Canvas(bitmap)
                 val drawScope = CanvasDrawScope()
 
@@ -76,9 +84,14 @@ fun DrawingCanvas(
         }
     }
 
-    Canvas(
+    val cornerRadius = 32.dp
+    val padding = 16.dp
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
+            .padding(padding)
+            .clip(RoundedCornerShape(cornerRadius))
             .background(Color.White)
             .onSizeChanged {
                 canvasSize = Size(it.width.toFloat(), it.height.toFloat())
@@ -104,16 +117,18 @@ fun DrawingCanvas(
                 )
             }
     ) {
-        paths.forEach {
-            drawPath(it, Colors.primaryColor, style = Stroke(width = 4f))
-        }
-
-        if (currentStroke.size > 1) {
-            val path = Path().apply {
-                moveTo(currentStroke[0].x, currentStroke[0].y)
-                currentStroke.drop(1).forEach { lineTo(it.x, it.y) }
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            paths.forEach {
+                drawPath(it, Colors.primaryColor, style = Stroke(width = 4f))
             }
-            drawPath(path, Colors.primaryColor, style = Stroke(width = 4f))
+
+            if (currentStroke.size > 1) {
+                val path = Path().apply {
+                    moveTo(currentStroke[0].x, currentStroke[0].y)
+                    currentStroke.drop(1).forEach { lineTo(it.x, it.y) }
+                }
+                drawPath(path, Colors.primaryColor, style = Stroke(width = 4f))
+            }
         }
     }
 

@@ -118,7 +118,7 @@ fun HumanBodyModelSelector(
 
         IconButton(onClick = { isFrontView = !isFrontView }) {
             Row {
-                Icon(Icons.Outlined.Refresh, contentDescription = "Flip", tint = Color(0xFF6FCF97))
+                Icon(Icons.Outlined.Refresh, contentDescription = "Flip", tint = Colors.primaryColor)
                 Spacer(Modifier.width(8.dp))
                 Text("Flip")
             }

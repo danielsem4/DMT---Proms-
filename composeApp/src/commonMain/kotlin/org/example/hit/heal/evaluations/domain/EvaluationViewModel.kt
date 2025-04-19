@@ -1,8 +1,10 @@
 package org.example.hit.heal.evaluations.domain
 
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.example.hit.heal.evaluations.domain.data.EvaluationAnswer
 
 // ViewModel to Manage Evaluations
 class EvaluationViewModel : ViewModel() {
@@ -440,14 +442,35 @@ class EvaluationViewModel : ViewModel() {
 
     val evaluations: StateFlow<List<Evaluation>> = _evaluations
 
-    fun saveAnswer(objectId: Int, answer: String) {
-        val updated = _evaluations.value.map { eval ->
-            eval.copy(
-                evaluationObjects = eval.evaluationObjects.map { obj ->
-                    if (obj.id == objectId) obj.copy(answer = answer) else obj
-                }
-            )
+
+    private val _answers = mutableStateMapOf<Int, EvaluationAnswer>() // obj.id to typed answer
+    val answers: Map<Int, EvaluationAnswer> = _answers
+
+
+    fun saveAnswer(objectId: Int, answer: EvaluationAnswer) {
+        _answers[objectId] = answer
+        updateEvaluationsWithAnswer(objectId, answer)
+    }
+
+    private fun EvaluationAnswer.toRawString(): String = when (this) {
+        is EvaluationAnswer.Text -> value
+        is EvaluationAnswer.Number -> value.toString()
+        is EvaluationAnswer.MultiChoice -> values.joinToString(",")
+        is EvaluationAnswer.Image -> url
+        is EvaluationAnswer.Toggle -> value.toString()
+        EvaluationAnswer.Unanswered -> ""
+    }
+
+    private fun updateEvaluationsWithAnswer(objectId: Int, answer: EvaluationAnswer) {
+        val updated = _evaluations.value.map { evaluation ->
+            val updatedObjects = evaluation.evaluationObjects.map { obj ->
+                if (obj.id == objectId) {
+                    obj.copy(answer = answer.toRawString())
+                } else obj
+            }
+            evaluation.copy(evaluationObjects = updatedObjects)
         }
+
         _evaluations.value = updated
     }
 

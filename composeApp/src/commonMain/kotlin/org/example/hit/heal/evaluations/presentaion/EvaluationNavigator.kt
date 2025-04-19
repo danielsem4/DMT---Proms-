@@ -29,8 +29,11 @@ fun EvaluationNavigator(
         currentObject.answer
     }
 
+    val currentEval = evaluations.find { it.evaluationObjects.contains(currentObject) }
+    val title = currentEval?.evaluationName ?: "Evaluation"
+
     BaseScreen(
-        title = "Evaluation",
+        title = title,
         onPrevClick = if (!isFirst) ({ currentIndex-- }) else null,
         onNextClick = { if (!isLast && answer.isNotBlank()) currentIndex++ },
         onDoneClick = if (isLast) ({ if (answer.isNotBlank()) onComplete() }) else null,
