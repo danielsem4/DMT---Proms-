@@ -107,7 +107,7 @@ class ConcentrationScreen : Screen {
                         RandomNumberScreen(
                             number = number,
                             isClickable = isNumberClickable,
-                            onNumberClicked = { viewModel.setAnswersConcentration(it) })
+                            onNumberClicked = { viewModel.thirdQuestionAnswer(it) })
                 }
             })
     }

@@ -94,6 +94,21 @@
     <string name="second_question_hitbear_task_retry_instructions">אנא בחר את 5 הצורות שראית לפני מספר שאלות.</string>
     <string name="second_question_hitbear_dialog_icon">profile icon</string>
     <string name="second_question_hitbear_dialog_understand">הבנתי</string>
+    <string name="second_question_hitbear_ellipse">אליפסה</string>
+    <string name="second_question_hitbear_rectangle">מלבן</string>
+    <string name="second_question_hitbear_pentagon">מחומש</string>
+    <string name="second_question_hitbear_star">כוכב</string>
+    <string name="second_question_hitbear_hash_tag">סולמית</string>
+    <string name="second_question_hitbear_rhomb">מעוין</string>
+    <string name="second_question_hitbear_cone">חרוט</string>
+    <string name="second_question_hitbear_plus">פלוס</string>
+    <string name="second_question_hitbear_hexagon">משושה</string>
+    <string name="second_question_hitbear_right_triangle">משולש ישר</string>
+    <string name="second_question_hitbear_asterisk">כוכבית</string>
+    <string name="second_question_hitbear_check">וי</string>
+    <string name="second_question_hitbear_trapezoid">טרפז</string>
+    <string name="second_question_hitbear_triangle">משולש</string>
+    <string name="second_question_hitbear_close">איקס</string>
 
 
     <string name="third_question_hitbear_title">ריכוז</string>

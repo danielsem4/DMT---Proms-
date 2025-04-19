@@ -81,7 +81,7 @@ class UnderstandingScreen : Screen {
         val density = LocalDensity.current
         val viewModel: ActivityViewModel = viewModel()
 
-        var isFridgeOpen by remember { mutableStateOf(true) }
+        var isFridgeOpen by remember { mutableStateOf(false) }
         var isAudioClicked by remember { mutableStateOf(false) }
         var fridgeSize by remember { mutableStateOf(0f to 0f) }
         var tableSize by remember { mutableStateOf(0f to 0f) }
@@ -150,6 +150,7 @@ class UnderstandingScreen : Screen {
                             viewModel.setNapkinPlacedCorrectly()
                         }
                     }
+                    viewModel.sixthQuestionAnswer()
                     navigator?.push(DragAndDropScreen())
                 },
                 question = 6,

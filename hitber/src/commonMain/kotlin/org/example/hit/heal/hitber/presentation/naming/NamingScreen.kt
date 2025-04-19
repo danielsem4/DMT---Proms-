@@ -62,7 +62,7 @@ class NamingScreen : Screen {
 
         TabletBaseScreen(title = stringResource(Res.string.fourth_question_hitbear_title),
             onNextClick = {
-                viewModel.setAnswersNaming(answer1, answer2, firstImageName, secondImageName)
+                viewModel.fourthQuestionAnswer(answer1, answer2)
                 navigator?.push(RepetitionScreen())
             },
             question = 4,

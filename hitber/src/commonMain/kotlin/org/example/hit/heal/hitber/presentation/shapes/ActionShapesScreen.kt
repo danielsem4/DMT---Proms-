@@ -42,14 +42,15 @@ import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScree
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 
 class ActionShapesScreen(private val question: Int) : Screen {
     @Composable
     override fun Content() {
 
-       // val viewModel: ActivityViewModel = koinViewModel()
-        val viewModel: ActivityViewModel = viewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
+        //val viewModel: ActivityViewModel = viewModel()
 
         val navigator = LocalNavigator.current
         val selectedShapes by viewModel.selectedShapes.collectAsState()
@@ -60,7 +61,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
         TabletBaseScreen(title = stringResource(Res.string.second_question_hitbear_title), onNextClick = {
             viewModel.calculateCorrectShapesCount()
             viewModel.updateTask()
-            viewModel.setAnswersShapes()
+            viewModel.secondQuestionAnswer()
 
             if (attempt < 3) {
                 showDialog = true
@@ -102,7 +103,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                                 val shapeColor = if (isSelected) primaryColor else Color.Transparent
 
                                 Image(
-                                    painter = painterResource(shapeRes),
+                                    painter = painterResource(shapeRes.drawable),
                                     contentDescription = stringResource(Res.string.second_question_hitbear_title),
                                     modifier = Modifier
                                         .background(shapeColor).weight(1f)

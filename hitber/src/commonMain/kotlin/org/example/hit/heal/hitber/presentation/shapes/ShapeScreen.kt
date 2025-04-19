@@ -32,14 +32,15 @@ import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class ShapeScreen : Screen {
     @Composable
     override fun Content() {
 
         val navigator = LocalNavigator.current
-       // val viewModel: ActivityViewModel = koinViewModel()
-        val viewModel: ActivityViewModel = viewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
+       // val viewModel: ActivityViewModel = viewModel()
 
         var showDialog by remember { mutableStateOf(true) }
         val shapeSet by viewModel.selectedSet.collectAsState()
@@ -64,7 +65,7 @@ class ShapeScreen : Screen {
                 {
                     shapeSet.forEach { shapeRes ->
                         Image(
-                            painter = painterResource(shapeRes),
+                            painter = painterResource(shapeRes.drawable),
                             contentDescription = stringResource(Res.string.second_question_hitbear_title),
                             modifier = Modifier.size(150.dp)
                         )

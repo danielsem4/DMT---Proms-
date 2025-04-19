@@ -94,6 +94,21 @@
     <string name="second_question_hitbear_task_retry_instructions">Please select the 5 shapes you saw a few questions ago.</string>
     <string name="second_question_hitbear_dialog_icon">profile icon</string>
     <string name="second_question_hitbear_dialog_understand">I understand</string>
+    <string name="second_question_hitbear_ellipse">Ellipse</string>
+    <string name="second_question_hitbear_rectangle">Rectangle</string>
+    <string name="second_question_hitbear_pentagon">Pentagon</string>
+    <string name="second_question_hitbear_star">Star</string>
+    <string name="second_question_hitbear_hash_tag">Hashtag</string>
+    <string name="second_question_hitbear_rhomb">Rhombus</string>
+    <string name="second_question_hitbear_cone">Cone</string>
+    <string name="second_question_hitbear_plus">Plus</string>
+    <string name="second_question_hitbear_hexagon">Hexagon</string>
+    <string name="second_question_hitbear_right_triangle">Right Triangle</string>
+    <string name="second_question_hitbear_asterisk">Asterisk</string>
+    <string name="second_question_hitbear_check">Check</string>
+    <string name="second_question_hitbear_trapezoid">Trapezoid</string>
+    <string name="second_question_hitbear_triangle">Triangle</string>
+    <string name="second_question_hitbear_close">Close</string>
 
 
     <string name="third_question_hitbear_title">Concentration</string>

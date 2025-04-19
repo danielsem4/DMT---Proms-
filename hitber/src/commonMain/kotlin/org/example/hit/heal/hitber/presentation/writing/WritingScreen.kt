@@ -53,6 +53,7 @@ import dmt_proms.hitber.generated.resources.eighth_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.eighth_question_hitbear_title
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.JsonNull.content
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ActionShapesScreen
@@ -80,9 +81,8 @@ class WritingScreen : Screen {
             title = stringResource(Res.string.eighth_question_hitbear_title),
             onNextClick = {
                 if (allFinished) {navigator?.push(ActionShapesScreen(9))
-                    val isCorrect = viewModel.checkSentence(sentences)
-                    println("התוצאה: $isCorrect")}
-            },
+                    viewModel.checkSentence(sentences)
+            }},
             buttonText = stringResource(Res.string.hitbear_continue),
             question = 8,
             buttonColor = if (!allFinished) Color.Gray else primaryColor,

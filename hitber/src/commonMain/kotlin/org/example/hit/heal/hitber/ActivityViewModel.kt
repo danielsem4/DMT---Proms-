@@ -14,8 +14,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.example.hit.heal.core.presentation.Colors.backgroundColor
+import org.example.hit.heal.hitber.model.FirstQuestion
+import org.example.hit.heal.hitber.model.MeasureObjectBoolean
+import org.example.hit.heal.hitber.model.MeasureObjectInt
+import org.example.hit.heal.hitber.model.MeasureObjectString
+import org.example.hit.heal.hitber.model.SecondQuestionItem
+import org.example.hit.heal.hitber.model.SelectedShapesStringList
+import org.example.hit.heal.hitber.model.SixthQuestionType
+import org.example.hit.heal.hitber.model.ThirdQuestionItem
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.instructions
 import org.example.hit.heal.hitber.presentation.naming.components.imageCouples
+import org.example.hit.heal.hitber.presentation.shapes.components.Shape
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeList
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeSets
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.DropDownItem
@@ -23,47 +32,58 @@ import org.example.hit.heal.hitber.presentation.understanding.components.audioLi
 import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
 import org.example.hit.heal.hitber.presentation.writing.components.sentencesResourceId
 import org.example.hit.heal.hitber.presentation.writing.components.slotsList
+import org.example.hit.heal.hitber.utils.getNow
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
 class ActivityViewModel : ViewModel() {
 
     //Time and Place Question (1/10)
-    private val _answersTimeAndPlace = MutableStateFlow<Map<String, DropDownItem>>(emptyMap())
-    val answersTimeAndPlace: StateFlow<Map<String, DropDownItem>> =
-        _answersTimeAndPlace.asStateFlow()
+    private val _firstQuestion = MutableStateFlow(FirstQuestion())
+    val firstQuestion: StateFlow<FirstQuestion> = _firstQuestion.asStateFlow()
 
-    fun setAnswersTimeAndPlace(question: String, answer: DropDownItem) {
-        _answersTimeAndPlace.value = _answersTimeAndPlace.value.toMutableMap().apply {
-            this[question] = answer
+    fun firstQuestionAnswer(field: String, answer: DropDownItem) {
+        val updated = when (field) {
+            "day" -> _firstQuestion.value.copy(day = MeasureObjectString(101, answer.text, getNow()))
+            "month" -> _firstQuestion.value.copy(month = MeasureObjectString(102, answer.text, getNow()))
+            "year" -> _firstQuestion.value.copy(year = MeasureObjectString(109, answer.text, getNow()))
+            "country" -> _firstQuestion.value.copy(country = MeasureObjectString(104, answer.text, getNow()))
+            "city" -> _firstQuestion.value.copy(city = MeasureObjectString(105, answer.text, getNow()))
+            "place" -> _firstQuestion.value.copy(place = MeasureObjectString(106, answer.text, getNow()))
+            "survey" -> _firstQuestion.value.copy(survey = MeasureObjectString(108, answer.text, getNow()))
+            else -> _firstQuestion.value
         }
+
+        _firstQuestion.value = updated
+
+        println("Updated Question: Day: ${updated.day}, Month: ${updated.month}, Year: ${updated.year}")
+
     }
 
     //Shape Question (2/10)
     private val _listShapes = MutableStateFlow(shapeList)
-    val listShapes: StateFlow<List<DrawableResource>> = _listShapes.asStateFlow()
+    val listShapes: StateFlow<List<Shape>> = _listShapes.asStateFlow()
 
-    private val _selectedSet = MutableStateFlow<List<DrawableResource>>(emptyList())
-    val selectedSet: StateFlow<List<DrawableResource>> = _selectedSet.asStateFlow()
+    private val _selectedSet = MutableStateFlow<List<Shape>>(emptyList())
+    val selectedSet: StateFlow<List<Shape>> = _selectedSet.asStateFlow()
 
-    private val _selectedShapes = MutableStateFlow<List<DrawableResource>>(emptyList())
-    val selectedShapes: StateFlow<List<DrawableResource>> = _selectedShapes.asStateFlow()
+    private val _selectedShapes = MutableStateFlow<List<Shape>>(emptyList())
+    val selectedShapes: StateFlow<List<Shape>> = _selectedShapes.asStateFlow()
 
     private val _attempt = MutableStateFlow(1)
     val attempt: StateFlow<Int> = _attempt.asStateFlow()
 
-    private val _answersShapes =
-        MutableStateFlow<List<Triple<Int, List<DrawableResource>, Int>>>(emptyList())
-
     private var correctShapesCount = 0
     private var distractorToRemove = 0
 
+    private val _secondQuestion = MutableStateFlow<List<SecondQuestionItem>>(emptyList())
 
     fun setRandomShapeSet() {
-        _selectedSet.value = shapeSets.random()
+        val selectedTypes = shapeSets.random()
+        _selectedSet.value = shapeList.filter { it.type in selectedTypes }
     }
 
-    fun setSelectedShapes(shape: DrawableResource) {
+    fun setSelectedShapes(shape: Shape) {
         if (_selectedShapes.value.size >= 5) {
             if (_selectedShapes.value.contains(shape)) {
                 _selectedShapes.value = _selectedShapes.value.filterNot { it == shape }
@@ -119,18 +139,34 @@ class ActivityViewModel : ViewModel() {
     }
 
     private fun removeDistractors(count: Int) {
-        val distractors = _listShapes.value.filter { it !in selectedSet.value }
+        val distractors = _listShapes.value.filter { shape ->
+            selectedSet.value.none { it.drawable == shape.drawable }
+        }
         val distractorsToRemove = distractors.take(count)
         val updatedList = _listShapes.value - distractorsToRemove.toSet()
         _listShapes.value = updatedList
     }
 
-    fun setAnswersShapes() {
-        _answersShapes.value += Triple(_attempt.value - 1, selectedShapes.value, correctShapesCount)
-        resetSelectedShapes()
-        println("תשובות שנשמרו: ${_answersShapes.value}")
+    fun secondQuestionAnswer() {
+        val selectedShapeNames = selectedShapes.value.map { it.type.name }
+        val selected = SelectedShapesStringList(
+            measureObject = _attempt.value - 1,
+            value = selectedShapeNames,
+            dateTime = getNow()
+        )
 
+        val newAnswer = SecondQuestionItem(
+            selectedShapes = selected,
+            wrongShapes = MeasureObjectInt(value = 5 - correctShapesCount)
+        )
+
+        _secondQuestion.value += newAnswer
+
+        resetSelectedShapes()
+
+        println("תשובות שנשמרו: ${_secondQuestion.value}")
     }
+
 
     private fun resetSelectedShapes() {
         _selectedShapes.value = emptyList()
@@ -142,7 +178,7 @@ class ActivityViewModel : ViewModel() {
     val startButtonIsVisible: StateFlow<Boolean> =
         _startButtonIsVisible.asStateFlow()
 
-    private val _answersConcentration = MutableStateFlow<List<Pair<Double, Int>>>(emptyList())
+    private val _thirdQuestion = MutableStateFlow<List<ThirdQuestionItem>>(emptyList())
 
     private var numberAppearedAt: Long = 0L
     private var elapsedTime = 0.0
@@ -161,14 +197,24 @@ class ActivityViewModel : ViewModel() {
         _startButtonIsVisible.value = visible
     }
 
-    fun setAnswersConcentration(answer: Int) {
+    fun thirdQuestionAnswer(answer: Int) {
         if (_isNumberClickable.value) {
-            val reactionTime =
-                (Clock.System.now().toEpochMilliseconds() - numberAppearedAt) / 1000.0
-            _answersConcentration.value += Pair(reactionTime, answer)
+            val reactionTime = (Clock.System.now().toEpochMilliseconds() - numberAppearedAt) / 1000.0
+
+            val answerItem = ThirdQuestionItem(
+                number = MeasureObjectInt(value = answer),
+                time = MeasureObjectInt(value = reactionTime.toInt()),
+                isPressed = MeasureObjectBoolean(value = true)
+            )
+
+            _thirdQuestion.value += answerItem
             _isNumberClickable.value = false
+            println("🧠 New answer saved: $answerItem")
+
         }
+
     }
+
 
     fun startRandomNumberGeneration() {
         viewModelScope.launch {
@@ -188,12 +234,22 @@ class ActivityViewModel : ViewModel() {
     val selectedCouple: StateFlow<Pair<DrawableResource, DrawableResource>?> =
         _selectedCouple.asStateFlow()
 
-    private val _answersNaming =
-        MutableStateFlow<Pair<Pair<String, String>, Pair<String, String>>?>(null)
+    private val _fourthQuestion = MutableStateFlow<List<MeasureObjectString>>(emptyList())
 
-    fun setAnswersNaming(answer1: String, answer2: String, correct1: String, correct2: String) {
-        _answersNaming.value = Pair(Pair(answer1, correct1), Pair(answer2, correct2))
+    fun fourthQuestionAnswer(answer1: String, answer2: String) {
+        val currentTime = getNow()
+
+        val newFourthQuestionList = listOf(
+            MeasureObjectString(value = answer1, dateTime = currentTime),
+            MeasureObjectString(value = answer2, dateTime = currentTime)
+        )
+
+        _fourthQuestion.value = newFourthQuestionList
+
+        println("New Fourth Question List: $newFourthQuestionList")
+
     }
+
 
     fun setRandomCouple() {
         _selectedCouple.value = imageCouples.random()
@@ -227,7 +283,8 @@ class ActivityViewModel : ViewModel() {
         }
     }
 
-    private val _score = MutableStateFlow(0)
+    private val _sixthQuestion = MutableStateFlow<SixthQuestionType>(SixthQuestionType.SixthQuestionItem())
+
 
     private val _isFridgeOpened = MutableStateFlow(false)
     val isFridgeOpened: StateFlow<Boolean> get() = _isFridgeOpened.asStateFlow()
@@ -237,28 +294,38 @@ class ActivityViewModel : ViewModel() {
 
     private val _isNapkinPlacedCorrectly = MutableStateFlow(false)
 
-    private fun updateScore() {
-        _score.value = listOf(
-            _isFridgeOpened.value,
-            _isItemMovedCorrectly.value,
-            _isNapkinPlacedCorrectly.value
-        ).count { it }
-        println("Current score: ${_score.value}")
-    }
+
 
     fun setFridgeOpened() {
         _isFridgeOpened.value = true
-        updateScore()
     }
 
     fun setItemMovedCorrectly() {
         _isItemMovedCorrectly.value = true
-        updateScore()
     }
 
     fun setNapkinPlacedCorrectly() {
         _isNapkinPlacedCorrectly.value = true
-        updateScore()
+    }
+
+    fun sixthQuestionAnswer() {
+        val updatedQuestion = SixthQuestionType.SixthQuestionItem(
+            fridgeOpened = MeasureObjectBoolean(value = _isFridgeOpened.value),
+            correctProductDragged = MeasureObjectBoolean(value = _isItemMovedCorrectly.value),
+            placedOnCorrectNap = MeasureObjectBoolean(value = _isNapkinPlacedCorrectly.value)
+        )
+
+        println("Updated sixthQuestion: $updatedQuestion")
+        _sixthQuestion.value = updatedQuestion
+
+
+
+    }
+
+    fun setSixthQuestionImage(imageUrl: String) {
+        _sixthQuestion.value = SixthQuestionType.SixthQuestionImage(
+            imageUrl = MeasureObjectString(value = imageUrl)
+        )
     }
 
     //Drag and drop Question (7/10)
@@ -297,14 +364,17 @@ class ActivityViewModel : ViewModel() {
     private val _answerSentences = MutableStateFlow(sentencesResourceId)
     val answerSentences: StateFlow<List<StringResource>> = _answerSentences
 
-    private val _answerWriting = MutableStateFlow(false)
+    private val _answerWriting = MutableStateFlow(MeasureObjectBoolean())
 
-    fun checkSentence(sentences: List<String>): Boolean {
+    fun checkSentence(sentences: List<String>){
         val userSentence = _sentence.value.joinToString(" ")
-        _answerWriting.value = userSentence in sentences
-        return _answerWriting.value
-    }
+        println("User sentence: '$userSentence'")
 
+        val isCorrect = sentences.any { it.trim().equals(userSentence.trim(), ignoreCase = true) }
+        _answerWriting.value = MeasureObjectBoolean(value = isCorrect)
+
+        println("Written sentence MeasureObjectBoolean: ${_answerWriting.value}")
+    }
     fun isWordOnSlot(
         wordState: Offset,
         screenSize: IntSize,
@@ -365,11 +435,11 @@ class ActivityViewModel : ViewModel() {
         }
     }
 
-
     private fun updateSentence() {
         _sentence.value = _slotsWords.value
             .sortedBy { it.id }
             .mapNotNull { it.word }
+            .reversed()
     }
 
     private fun areAllSlotsFilled(): Boolean {

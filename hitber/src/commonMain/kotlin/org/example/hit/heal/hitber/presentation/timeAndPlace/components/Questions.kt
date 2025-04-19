@@ -73,6 +73,7 @@ fun Questions(viewModel: ActivityViewModel) {
     val questionsData = listOf(
         QuestionData(
             question = stringResource(Res.string.first_question_hitbear_question1),
+            questionKey = "day",
             answers = listOf(
                 stringResource(Res.string.first_question_hitbear_answer1_1),
                 stringResource(Res.string.first_question_hitbear_answer1_2),
@@ -85,6 +86,7 @@ fun Questions(viewModel: ActivityViewModel) {
         ),
         QuestionData(
             question = stringResource(Res.string.first_question_hitbear_question2),
+            questionKey = "month",
             answers = listOf(
                 stringResource(Res.string.first_question_hitbear_answer2_1),
                 stringResource(Res.string.first_question_hitbear_answer2_2),
@@ -102,6 +104,7 @@ fun Questions(viewModel: ActivityViewModel) {
         ),
         QuestionData(
             question = stringResource(Res.string.first_question_hitbear_question3),
+            questionKey = "year",
             answers = listOf(
                 stringResource(Res.string.first_question_hitbear_answer3_1),
                 stringResource(Res.string.first_question_hitbear_answer3_2),
@@ -115,6 +118,7 @@ fun Questions(viewModel: ActivityViewModel) {
         ),
         QuestionData(
             question = stringResource(Res.string.first_question_hitbear_question4),
+            questionKey = "country",
             answers = listOf(
                 stringResource(Res.string.first_question_hitbear_answer4_1),
                 stringResource(Res.string.first_question_hitbear_answer4_2),
@@ -130,6 +134,7 @@ fun Questions(viewModel: ActivityViewModel) {
         ),
         QuestionData(
             question = stringResource(Res.string.first_question_hitbear_question5),
+            questionKey = "city",
             answers = listOf(
                 stringResource(Res.string.first_question_hitbear_answer5_1),
                 stringResource(Res.string.first_question_hitbear_answer5_2),
@@ -143,6 +148,7 @@ fun Questions(viewModel: ActivityViewModel) {
         ),
         QuestionData(
             question = stringResource(Res.string.first_question_hitbear_question6),
+            questionKey = "place",
             answers = listOf(
                 stringResource(Res.string.first_question_hitbear_answer6_1),
                 stringResource(Res.string.first_question_hitbear_answer6_2),
@@ -154,6 +160,7 @@ fun Questions(viewModel: ActivityViewModel) {
         ),
         QuestionData(
             question = stringResource(Res.string.first_question_hitbear_question7),
+            questionKey = "survey",
             answers = listOf(
                 stringResource(Res.string.first_question_hitbear_answer7_1),
                 stringResource(Res.string.first_question_hitbear_answer7_2),
@@ -167,13 +174,14 @@ fun Questions(viewModel: ActivityViewModel) {
     questionsData.forEach { questionData ->
         TimeAndPlaceQuestion(
             question = questionData.question,
+            questionKey = questionData.questionKey,
             dropDownItems = questionData.answers.map { DropDownItem(it) },
             viewModel = viewModel,
             onItemClick = { selectedAnswer ->
-                viewModel.setAnswersTimeAndPlace(questionData.question, selectedAnswer)
+                viewModel.firstQuestionAnswer(questionData.questionKey, selectedAnswer)
             }
         )
     }
 }
 
-data class QuestionData(val question: String, val answers: List<String>)
+data class QuestionData(val question: String, val questionKey: String, val answers: List<String>)
