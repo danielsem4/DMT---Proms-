@@ -20,6 +20,7 @@ import org.example.hit.heal.hitber.model.MeasureObjectInt
 import org.example.hit.heal.hitber.model.MeasureObjectString
 import org.example.hit.heal.hitber.model.SecondQuestionItem
 import org.example.hit.heal.hitber.model.SelectedShapesStringList
+import org.example.hit.heal.hitber.model.SeventhQuestionType
 import org.example.hit.heal.hitber.model.SixthQuestionType
 import org.example.hit.heal.hitber.model.ThirdQuestionItem
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.instructions
@@ -336,7 +337,7 @@ class ActivityViewModel : ViewModel() {
     private val _targetCircleColor = MutableStateFlow<Color?>(null)
     val targetCircleColor: StateFlow<Color?> get() = _targetCircleColor
 
-    private val _answerDragAndDrop = MutableStateFlow<Boolean>(false)
+    private val _seventhQuestion = MutableStateFlow<SeventhQuestionType>(SeventhQuestionType.SeventhQuestionItem())
 
     fun setRandomInstructions() {
         val (randomInstruction, color) = instructions.random()
@@ -344,9 +345,18 @@ class ActivityViewModel : ViewModel() {
         _targetCircleColor.value = color
     }
 
-    fun setAnswerDragAndDrop() {
-        println("setAnswerDragAndDrop called!")
-        _answerDragAndDrop.value = true
+    fun seventhQuestionAnswer(isCorrect: Boolean) {
+        _seventhQuestion.value = SeventhQuestionType.SeventhQuestionItem(
+            isCorrect = MeasureObjectBoolean(value = isCorrect)
+        )
+        println("SeventhQuestionItem saved: ${_seventhQuestion.value}")
+    }
+
+    fun setSeventhQuestionImage(imageUrl: String) {
+        _seventhQuestion.value = SeventhQuestionType.SeventhQuestionImage(
+            imageUrl = MeasureObjectString(value = imageUrl)
+        )
+        println("SeventhQuestionImage saved: ${_seventhQuestion.value}")
     }
 
     //Writing Question (8/10)

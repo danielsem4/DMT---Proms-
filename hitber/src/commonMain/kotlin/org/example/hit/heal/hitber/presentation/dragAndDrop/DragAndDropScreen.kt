@@ -94,7 +94,11 @@ class DragAndDropScreen : Screen {
 
 
                     if (isInside) {
-                        viewModel.setAnswerDragAndDrop()
+                        viewModel.seventhQuestionAnswer(true)
+                    }
+
+                    else{
+                        viewModel.seventhQuestionAnswer(false)
                     }
                 }
 
