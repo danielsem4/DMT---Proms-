@@ -33,21 +33,17 @@ import org.example.hit.heal.evaluations.DrawingCanvasController
 @Composable
 fun DrawingCanvas(
     modifier: Modifier = Modifier,
-    onDrawChanged: (Boolean) -> Unit = {}
+    initialPaths: List<List<Offset>> = emptyList(),
+    onStrokeCommitted: () -> Unit,
 ): DrawingCanvasController {
     val density = LocalDensity.current
     var canvasSize by remember { mutableStateOf(Size(1f, 1f)) }
 
-    val paths = remember { mutableStateListOf<Path>() }
-    val currentStroke = remember { mutableStateListOf<Offset>() }
-    var hasDrawn by remember { mutableStateOf(false) }
-
-    fun notifyDrawn() {
-        if (!hasDrawn) {
-            hasDrawn = true
-            onDrawChanged(true)
-        }
+    val paths = remember {
+        mutableStateListOf<List<Offset>>().apply { addAll(initialPaths) }
     }
+
+    val currentStroke = remember { mutableStateListOf<Offset>() }
 
     val controller = remember {
         object : DrawingCanvasController {
@@ -67,18 +63,26 @@ fun DrawingCanvas(
                 ) {
                     drawRect(Color.White, size = size)
                     paths.forEach {
-                        drawPath(it, Colors.primaryColor, style = Stroke(width = 4.dp.toPx()))
-                    }
-                    if (currentStroke.size > 1) {
                         val path = Path().apply {
-                            moveTo(currentStroke[0].x, currentStroke[0].y)
-                            currentStroke.drop(1).forEach { lineTo(it.x, it.y) }
+                            moveTo(it[0].x, it[0].y)
+                            it.drop(1).forEach { offset -> lineTo(offset.x, offset.y) }
                         }
                         drawPath(path, Colors.primaryColor, style = Stroke(width = 4.dp.toPx()))
                     }
                 }
 
                 return bitmap
+            }
+
+            override fun getPaths() = paths.toList()
+
+            override fun undoLastStroke() {
+                if (paths.isNotEmpty()) paths.removeLast()
+            }
+
+            override fun clearCanvas() {
+                paths.clear()
+                currentStroke.clear()
             }
         }
     }
@@ -96,26 +100,28 @@ fun DrawingCanvas(
                     onDragStart = { offset ->
                         currentStroke.clear()
                         currentStroke.add(offset)
-                        notifyDrawn()
                     },
                     onDrag = { change, _ ->
                         currentStroke.add(change.position)
                     },
                     onDragEnd = {
-                        val path = Path().apply {
-                            moveTo(currentStroke[0].x, currentStroke[0].y)
-                            currentStroke.drop(1).forEach { lineTo(it.x, it.y) }
-                        }
+                        val path = currentStroke.toList()
                         paths.add(path)
                         currentStroke.clear()
+                        onStrokeCommitted()
                     }
                 )
             }
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
-            paths.forEach {
-                drawPath(it, Colors.primaryColor, style = Stroke(width = 4f))
+            paths.forEach { stroke ->
+                val path = Path().apply {
+                    moveTo(stroke[0].x, stroke[0].y)
+                    stroke.drop(1).forEach { lineTo(it.x, it.y) }
+                }
+                drawPath(path, Colors.primaryColor, style = Stroke(width = 4f))
             }
+
 
             if (currentStroke.size > 1) {
                 val path = Path().apply {

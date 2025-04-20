@@ -1,127 +1,128 @@
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Canvas
+package org.example.hit.heal.evaluations.presentaion
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import dmt_proms.composeapp.generated.resources.Res
-import dmt_proms.composeapp.generated.resources.body_back_removed
-import dmt_proms.composeapp.generated.resources.body_front_removed
+import dmt_proms.composeapp.generated.resources.body_back
+import dmt_proms.composeapp.generated.resources.body_front
+import dmt_proms.composeapp.generated.resources.flip_button_label
 import org.example.hit.heal.core.presentation.Colors
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HumanBodyModelSelector(
-    selectedPoints: Set<Offset>,
-    onSelectionChanged: (Set<Offset>) -> Unit
+    frontPoints: Set<Offset>,
+    backPoints: Set<Offset>,
+    isFrontView: Boolean,
+    onSelectionChanged: (front: Set<Offset>, back: Set<Offset>) -> Unit,
+    onToggleView: () -> Unit
 ) {
-    var isFrontView by rememberSaveable() { mutableStateOf(true) }
-    var selectedFrontPoints by rememberSaveable { mutableStateOf(setOf<Offset>()) }
-    var selectedBackPoints by rememberSaveable { mutableStateOf(setOf<Offset>()) }
-
-    val currentPoints = if (isFrontView) selectedFrontPoints else selectedBackPoints
-    val rotationAngle by animateFloatAsState(targetValue = if (isFrontView) 0f else 180f)
-    var parentSize by remember { mutableStateOf(IntSize.Zero) }
-
-    val bodyImage: Painter = painterResource(
-        if (isFrontView) Res.drawable.body_front_removed else Res.drawable.body_back_removed
+    val points = listOf(
+        Offset(0.45f, 0.08f),  // Head
+        Offset(0.45f, 0.26f),  // Chest
+        Offset(0.45f, 0.4f),  // Belly
+        Offset(0.24f, 0.45f),  // Left Palm
+        Offset(0.7f, 0.45f),  // Right Palm
+        Offset(0.38f, 0.68f),  // Left Knee
+        Offset(0.5f, 0.68f)   // Right Knee
     )
+    val selectedPoints = if (isFrontView) frontPoints else backPoints
+    val imagePainter =
+        painterResource(if (isFrontView) Res.drawable.body_front else Res.drawable.body_back)
 
-    val painPoints = listOf(
-        Offset(0.5f, 0.05f), Offset(0.5f, 0.27f), Offset(0.5f, 0.4f),
-        Offset(0.3f, 0.55f), Offset(0.7f, 0.55f),
-        Offset(0.45f, 0.72f), Offset(0.55f, 0.72f)
-    )
-
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Keep image's original aspect ratio (based on actual image)
+        BoxWithConstraints(
             modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .aspectRatio(0.6f)
-                .background(Color.White, shape = RoundedCornerShape(16.dp))
-                .onGloballyPositioned { parentSize = it.size }
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(32.dp))
+                .background(Color.White)
+                .weight(.9f)
         ) {
+            val imageWidth = constraints.maxWidth.toFloat()
+            val imageHeight = constraints.maxHeight.toFloat()
+
             Image(
-                painter = bodyImage,
-                contentDescription = "Human Body",
+                painter = imagePainter,
+                contentDescription = "Human",
                 contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer { rotationY = rotationAngle }
+                modifier = Modifier.fillMaxSize()
             )
 
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                val width = size.width
-                val height = size.height
+            points.forEach { offset ->
+                val x = offset.x * imageWidth
+                val y = offset.y * imageHeight
 
-                painPoints.forEach { point ->
-                    val x = point.x * width
-                    val y = point.y * height
-                    val isSelected = currentPoints.contains(point)
-                    drawCircle(
-                        color = if (isSelected) Colors.primaryColor else Color.Gray,
-                        radius = 30f,
-                        center = Offset(x, y)
-                    )
-                }
-            }
-
-            painPoints.forEach { point ->
-                val x = point.x * parentSize.width
-                val y = point.y * parentSize.height
                 Box(
                     modifier = Modifier
-                        .offset { IntOffset(x.toInt() - 20, y.toInt() - 20) }
-                        .size(40.dp)
+                        .offset { IntOffset(x.toInt(), y.toInt()) }
+                        .size(28.dp)
+                        .background(
+                            color = if (selectedPoints.contains(offset)) Colors.primaryColor else Color.LightGray,
+                            shape = CircleShape
+                        )
                         .clickable {
-                            val updated = currentPoints.toMutableSet().apply {
-                                if (contains(point)) remove(point) else add(point)
+                            if (isFrontView) {
+                                val updated = frontPoints.toMutableSet().apply {
+                                    if (contains(offset)) remove(offset) else add(offset)
+                                }
+                                onSelectionChanged(updated, backPoints)
+                            } else {
+                                val updated = backPoints.toMutableSet().apply {
+                                    if (contains(offset)) remove(offset) else add(offset)
+                                }
+                                onSelectionChanged(frontPoints, updated)
                             }
-                            if (isFrontView) selectedFrontPoints = updated else selectedBackPoints = updated
-                            onSelectionChanged((selectedFrontPoints + selectedBackPoints).toSet())
                         }
                 )
             }
-        }
 
-        IconButton(onClick = { isFrontView = !isFrontView }) {
-            Row {
-                Icon(Icons.Outlined.Refresh, contentDescription = "Flip", tint = Colors.primaryColor)
-                Spacer(Modifier.width(8.dp))
-                Text("Flip")
+            val flipIcon = Icons.Default.Refresh
+            IconButton(
+                onClick = onToggleView,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(24.dp)
+                    .size(flipIcon.defaultWidth)
+                    .background(Colors.primaryColor, shape = CircleShape)
+            ) {
+                Icon(
+                    imageVector = flipIcon,
+                    contentDescription = stringResource(Res.string.flip_button_label),
+                    tint = Color.White
+                )
             }
+
         }
     }
 }

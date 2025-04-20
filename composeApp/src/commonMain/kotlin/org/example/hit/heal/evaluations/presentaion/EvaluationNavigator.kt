@@ -6,8 +6,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import dmt_proms.composeapp.generated.resources.Res
+import dmt_proms.composeapp.generated.resources.evaluation_title
 import org.example.hit.heal.core.presentation.BaseScreen
-import org.example.hit.heal.evaluations.domain.EvaluationViewModel
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun EvaluationNavigator(
@@ -30,9 +32,9 @@ fun EvaluationNavigator(
     }
 
     val currentEval = evaluations.find { it.evaluationObjects.contains(currentObject) }
-    var title = "Evaluation"
+    var title = stringResource(Res.string.evaluation_title)
     currentEval?.evaluationName.let {
-        title+= " - $it"
+        title += " - $it"
     }
 
     BaseScreen(

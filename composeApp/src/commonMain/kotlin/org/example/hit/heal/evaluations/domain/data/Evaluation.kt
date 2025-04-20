@@ -1,4 +1,4 @@
-package org.example.hit.heal.evaluations.domain
+package org.example.hit.heal.evaluations.domain.data
 
 data class Evaluation(
     val id: Int,

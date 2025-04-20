@@ -54,14 +54,11 @@ fun MultiSelectCheckboxGroup(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
-                    checked = isSelected,
-                    onCheckedChange = {
-                        if (isSelected) {
-                            selectedValues.remove(option)
-                        } else {
-                            selectedValues.add(option)
-                        }
-                        onSelectionChanged(selectedValues)
+                    checked = selectedValues.contains(option),
+                    onCheckedChange = { isChecked ->
+                        val updated = selectedValues.toMutableList()
+                        if (isChecked) updated.add(option) else updated.remove(option)
+                        onSelectionChanged(updated)
                     }
                 )
                 Spacer(modifier = Modifier.width(8.dp))

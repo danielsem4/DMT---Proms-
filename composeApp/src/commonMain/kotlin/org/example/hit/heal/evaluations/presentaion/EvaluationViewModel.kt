@@ -1,13 +1,20 @@
-package org.example.hit.heal.evaluations.domain
+package org.example.hit.heal.evaluations.presentaion
 
 import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.example.hit.heal.evaluations.domain.data.Evaluation
 import org.example.hit.heal.evaluations.domain.data.EvaluationAnswer
+import org.example.hit.heal.evaluations.domain.data.EvaluationObject
+import org.example.hit.heal.evaluations.domain.data.EvaluationValue
 
 // ViewModel to Manage Evaluations
 class EvaluationViewModel : ViewModel() {
+
+    private val _drawingPaths = mutableMapOf<Int, List<List<Offset>>>()
+    val drawingPaths = _drawingPaths
 
     private val _evaluations = MutableStateFlow(
         listOf(
@@ -18,6 +25,25 @@ class EvaluationViewModel : ViewModel() {
                 isMultilingual = true,
                 evaluationType = 0, // measurement
                 evaluationObjects = listOf(
+                    EvaluationObject(
+                        id = 359,
+                        evaluationQuestion = "Dynamic",
+                        evaluationScreen = 4,
+                        evaluationOrder = 1,
+                        returnValue = true,
+                        numberOfValues = 1,
+                        predefinedValues = false,
+                        randomSelection = false,
+                        orderImportant = false,
+                        showIcon = false,
+                        answer = "",
+                        style = "none",
+                        isGrade = false,
+                        evaluationId = 27,
+                        objectType = 11,
+                        language = 1,
+                        availableValues = null
+                    ),//added for testing
                     EvaluationObject(
                         id = 344,
                         evaluationQuestion = "Choose one option:",
@@ -439,13 +465,10 @@ class EvaluationViewModel : ViewModel() {
             )
         )
     )
-
     val evaluations: StateFlow<List<Evaluation>> = _evaluations
-
 
     private val _answers = mutableStateMapOf<Int, EvaluationAnswer>() // obj.id to typed answer
     val answers: Map<Int, EvaluationAnswer> = _answers
-
 
     fun saveAnswer(objectId: Int, answer: EvaluationAnswer) {
         _answers[objectId] = answer
@@ -458,6 +481,8 @@ class EvaluationViewModel : ViewModel() {
         is EvaluationAnswer.MultiChoice -> values.joinToString(",")
         is EvaluationAnswer.Image -> url
         is EvaluationAnswer.Toggle -> value.toString()
+        is EvaluationAnswer.HumanModelPoints ->
+            "front=${front.joinToString(";") { "${it.x},${it.y}" }}|back=${back.joinToString(";") { "${it.x},${it.y}" }}"
         EvaluationAnswer.Unanswered -> ""
     }
 
@@ -472,6 +497,18 @@ class EvaluationViewModel : ViewModel() {
         }
 
         _evaluations.value = updated
+    }
+
+    fun getDrawingPaths(objectId: Int): List<List<Offset>> {
+        return _drawingPaths[objectId] ?: emptyList()
+    }
+
+    fun saveDrawingPaths(objectId: Int, paths: List<List<Offset>>) {
+        _drawingPaths[objectId] = paths
+    }
+
+    fun getAnswer(objectId: Int): EvaluationAnswer? {
+        return answers[objectId]
     }
 
 }

@@ -9,13 +9,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import dmt_proms.ui.core.generated.resources.Res
+import dmt_proms.ui.core.generated.resources.hint_open_question
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CustomMultilineTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    hintText: String = "",
+    hintText: String = stringResource(Res.string.hint_open_question),
     textStyle: TextStyle = MaterialTheme.typography.body1,
     maxLines: Int = 4
 ) {
