@@ -1,6 +1,7 @@
 package org.example.hit.heal.presentation.evaluation
 
 import ContentWithMessageBar
+import MessageBarPosition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,13 +15,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import core.data.model.evaluation.Evaluation
 import org.example.hit.heal.core.presentation.Resources.String.evaluationText
-import org.example.hit.heal.core.presentation.Resources.String.login
-import org.example.hit.heal.core.presentation.Resources.String.serverError
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.presentation.components.evaluation.EvaluationItemCard
@@ -33,14 +32,14 @@ import rememberMessageBarState
  *
  */
 
-class AllEvaluationsScreen: Screen {
+class AllEvaluationsScreen : Screen {
 
     @Composable
     override fun Content() {
 
         val navigator = LocalNavigator.currentOrThrow
         val vm: EvaluationsViewModel = koinViewModel()
-        val items by vm.items.collectAsState()
+        val evaluations by vm.evalItems.collectAsState()
         val isLoading by vm.isLoading.collectAsState()
         val error by vm.errorMessage.collectAsState()
         val messageBarState = rememberMessageBarState()
@@ -58,33 +57,38 @@ class AllEvaluationsScreen: Screen {
                     if (isLoading) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                     }
-                    error?.let { msg ->
-                        LaunchedEffect(msg) {
-                            messageBarState.addError(msg)
+
+                    if (error != null && !error.isNullOrEmpty()) {
+                        LaunchedEffect(error) {
+                            messageBarState.addError(error!!)
                         }
                     }
-                    if (!isLoading && items.isNotEmpty()) {
+
+                    if (!isLoading && evaluations.isEmpty()) {
+                        Text(
+                            text = error ?: "No evaluations found",
+                            fontSize = 32.sp,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+
+                    if (!isLoading && evaluations.isNotEmpty()) {
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(spacingMd)
                         ) {
-                            items(items, key = { it.id }) { item ->
+                            items(evaluations, key = { it.id }) { evaluation ->
                                 EvaluationItemCard(
-                                    item = item,
+                                    item = evaluation,
                                     onClick = {
-                                        navigator.push(EvaluationScreen())
+                                        navigator.push(EvaluationScreen(evaluation))
                                     }
                                 )
                             }
                         }
                     }
-                    if (!isLoading && items.isEmpty() && error == null) {
-                        Text(
-                            text = stringResource(serverError),
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
+
                 }
             }
         }

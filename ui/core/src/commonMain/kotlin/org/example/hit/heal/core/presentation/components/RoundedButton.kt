@@ -16,10 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
 import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
 import org.example.hit.heal.core.presentation.Sizes.paddingNone
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.spacingSm
-import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
@@ -30,13 +30,13 @@ import org.jetbrains.compose.resources.stringResource
 fun RoundedButton(
     text: Any,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
     fontSize: TextUnit = LARGE,
     icon: DrawableResource? = null,
     enabled: Boolean = true,
     buttonColor: Color = primaryColor,
     contentColor: Color = Color.White,
-    iconColor: Color = Color.White
+    iconColor: Color = Color.White,
+    onClick: () -> Unit
 ) {
     val buttonText = when (text) {
         is StringResource -> stringResource(text)

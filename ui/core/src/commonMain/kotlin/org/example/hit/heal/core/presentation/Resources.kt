@@ -1,11 +1,5 @@
 package org.example.hit.heal.core.presentation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
 import dmt_proms.ui.core.generated.resources.Res
 import dmt_proms.ui.core.generated.resources.activities
 import dmt_proms.ui.core.generated.resources.app_name
@@ -20,6 +14,7 @@ import dmt_proms.ui.core.generated.resources.clock
 import dmt_proms.ui.core.generated.resources.clock_test
 import dmt_proms.ui.core.generated.resources.disk_full
 import dmt_proms.ui.core.generated.resources.document_share
+import dmt_proms.ui.core.generated.resources.done
 import dmt_proms.ui.core.generated.resources.dont_forget
 import dmt_proms.ui.core.generated.resources.elipsa_outlined
 import dmt_proms.ui.core.generated.resources.email
@@ -178,6 +173,7 @@ object Resources {
         val appName = rs.app_name
         val howDoYouFeel = rs.how_do_you_feel
         val evaluationText = rs.evaluation
+        val done = rs.done
 
         // Error messages
         val noInternet = rs.no_internet

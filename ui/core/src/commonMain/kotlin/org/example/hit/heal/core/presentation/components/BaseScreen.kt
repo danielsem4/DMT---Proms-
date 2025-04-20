@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dmt_proms.ui.core.generated.resources.Res
+import dmt_proms.ui.core.generated.resources.done
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
 import dmt_proms.ui.core.generated.resources.next
 import dmt_proms.ui.core.generated.resources.previous
@@ -45,12 +47,17 @@ fun BaseScreen(
     config: ScreenConfig = ScreenConfig.PhoneConfig, // Use ScreenConfig to define layout
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
+    onDoneClick: (() -> Unit)? = null,
+    isNextEnabled: Boolean = true,
+    isDoneEnabled: Boolean = true,
     navigationIcon: @Composable (() -> Unit)? = null,
     topRightText: String? = null, // For tablet
     snackbarHost: @Composable (() -> Unit)? = null, // For tablet
     buttons: Array<TabletButton> = emptyArray(), // For tablet
+    modifier: Modifier = Modifier,
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
+    val scrollState = rememberScrollState()
     MaterialTheme {
         val statusBarValues = WindowInsets.safeDrawing.asPaddingValues()
 
@@ -99,7 +106,7 @@ fun BaseScreen(
 
             // Dynamic Content
             Column(
-                modifier = Modifier.padding(config.contentPadding.dp).weight(1f),
+                modifier = modifier.padding(config.contentPadding.dp).weight(1f),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -107,18 +114,31 @@ fun BaseScreen(
             }
 
             // Bottom Navigation Bar
-            if (config.showNavigationButtons && (onPrevClick != null || onNextClick != null)) {
+            if (config.showNavigationButtons &&
+                (onPrevClick != null || onNextClick != null || onDoneClick != null)
+            ) {
                 Row(
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = paddingSm, vertical = paddingXs),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     onPrevClick?.let {
-                        RoundedButton(stringResource(Res.string.previous), Modifier, it)
+                        RoundedButton(stringResource(Res.string.previous), onClick = it)
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     onNextClick?.let {
-                        RoundedButton(stringResource(Res.string.next), Modifier, it)
+                        RoundedButton(
+                            text = stringResource(Res.string.next),
+                            enabled = isNextEnabled,
+                            onClick = it
+                        )
+                    }
+                    onDoneClick?.let {
+                        RoundedButton(
+                            text = stringResource(Res.string.done),
+                            enabled = isDoneEnabled,
+                            onClick = it
+                        )
                     }
                 }
             } else if (!config.showNavigationButtons && buttons.isNotEmpty()) {
@@ -129,7 +149,7 @@ fun BaseScreen(
                     ), horizontalArrangement = config.buttonArrangement
                 ) {
                     buttons.forEachIndexed { index, btn ->
-                        RoundedButton(btn.text, Modifier, btn.onClick)
+                        RoundedButton(btn.text, Modifier, onClick = btn.onClick)
                         if (index < buttons.size - 1) {
                             Spacer(modifier = Modifier.width(config.buttonSpacing.dp))
                         }
