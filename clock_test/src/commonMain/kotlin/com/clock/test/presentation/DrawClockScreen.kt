@@ -263,7 +263,7 @@ class DrawClockScreen : Screen {
                             onClick = {
                                 viewModel.saveBitmap(drawPathsToBitmap())
                                 viewModel.stopDrawingTimer()
-                                navigator.replace(CompletionScreen())
+                                navigator.replace(InfoScreen())
                             }
                         )
                     }

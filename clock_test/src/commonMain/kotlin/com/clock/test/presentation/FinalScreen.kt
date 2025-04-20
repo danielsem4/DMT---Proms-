@@ -20,12 +20,15 @@ import dmt_proms.clock_test.generated.resources.final_screen_message
 import dmt_proms.clock_test.generated.resources.final_screen_title
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.koinInject
 
 class FinalScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        
+        val viewModel = koinInject<ClockTestViewModel>()
+
+
         TabletBaseScreen(
             title = stringResource(Res.string.final_screen_title),
             content = {
@@ -36,14 +39,14 @@ class FinalScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
-                    
+
                     InstructionBox(
                         textResource = Res.string.final_screen_message,
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
-                    
+
                     Spacer(modifier = Modifier.weight(1f))
-                    
+
                     RoundedButton(
                         text = stringResource(Res.string.exit_button_text),
                         modifier = Modifier
@@ -51,9 +54,18 @@ class FinalScreen : Screen {
                             .height(60.dp),
                         onClick = {
                             navigator.pop()
+                            val results = viewModel.getResults().value
+                            println("CDT-Results:")
+                            println("ImageUrl: " + results.imageUrl)
+                            println("timeChange1: " + results.timeChange1)
+                            println("hourChange1: " + results.hourChange1)
+                            println("minuteChange1: " + results.minuteChange1)
+                            println("timeChange2: " + results.timeChange2)
+                            println("hourChange2: " + results.hourChange2)
+                            println("minuteChangeUrl2: " + results.minuteChangeUrl2)
                         }
                     )
-                    
+
                     Spacer(modifier = Modifier.height(32.dp))
                 }
             }

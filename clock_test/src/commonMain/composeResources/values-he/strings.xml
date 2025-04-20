@@ -23,7 +23,7 @@
     <string name="clock_instruction">כעת, לפניך שעון שמראה את השעה 12:00, עליך לכוון את השעון באמצעות הזזת המחוגים 40 דקות קדימה, לאחר מכן יש ללחוץ על כפתור ההמשך</string>
     <string name="clock_instruction_twelve">כעת, כוון את השעון שעה ו25 דקות קדימה, לאחר מכן יש ללחוץ על כפתור ההמשך</string>
 
-    <string name="final_screen_title">משימה ראשונה</string>
+    <string name="final_screen_title">סיום המשימות</string>
     <string name="final_screen_message">המשימה הגיעה לסיומה, תודה רבה על שיתוף הפעולה</string>
     <string name="exit_button_text">יציאה</string>
 

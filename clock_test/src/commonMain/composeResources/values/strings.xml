@@ -23,7 +23,7 @@
     <string name="clock_instruction">Now, you see a clock showing 12:00, you need to move the hands forward by 40 minutes, then press the continue button</string>
     <string name="clock_instruction_twelve">Now, move the clock hands forward by 1 hour and 25 minutes, then press the continue button</string>
 
-    <string name="final_screen_title">First Task</string>
+    <string name="final_screen_title">Tasks completed</string>
     <string name="final_screen_message">The task has been completed, thank you for your cooperation</string>
     <string name="exit_button_text">Exit</string>
 

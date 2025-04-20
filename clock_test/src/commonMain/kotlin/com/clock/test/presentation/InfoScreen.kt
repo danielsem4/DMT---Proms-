@@ -27,7 +27,7 @@ import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 
-class CompletionScreen : Screen {
+class InfoScreen : Screen {
     @Composable
     override fun Content() {
         var isFirstMessage by remember { mutableStateOf(true) }

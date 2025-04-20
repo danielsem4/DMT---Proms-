@@ -34,7 +34,7 @@ fun InstructionBox(
     ) {
         Text(
             text = text,
-            fontSize = 30.sp,
+            fontSize = 40.sp,
             fontWeight = FontWeight.SemiBold,
             color = Colors.primaryColor,
             textAlign = TextAlign.Center,
