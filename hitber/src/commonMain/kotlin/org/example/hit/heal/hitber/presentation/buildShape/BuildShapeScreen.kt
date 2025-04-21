@@ -240,22 +240,16 @@ fun getCorrectlyPlacedShapes(
     containerHeight: Float,
 ): List<Pair<BuildShapes, Int>> {
 
-    val results = mutableListOf<Pair<BuildShapes, Int>>()
-
-    if (itemPositions.isEmpty() || draggableShapes.isEmpty()) {
-        return results
-    }
-
+    val result = mutableListOf<Pair<BuildShapes, Int>>()
+    if (itemPositions.isEmpty() || draggableShapes.isEmpty()) return result
     val basePosition = itemPositions[0]
-    val baseShape = draggableShapes[0]
-    val baseStatic = staticShapes.find { it.id == baseShape.id } ?: return results
 
     itemPositions.drop(1).withIndex().forEach { (index, position) ->
-        val draggable = draggableShapes.getOrNull(index + 1) ?: return@forEach
+        val draggable = draggableShapes[index + 1]
         val static = staticShapes.find { it.id == draggable.id } ?: return@forEach
 
-        val expectedOffsetX = static.xRatio * containerWidth
-        val expectedOffsetY = static.yRatio * containerHeight
+        val expectedOffsetX = static.xRatio  * containerWidth
+        val expectedOffsetY = static.yRatio  * containerHeight
 
         val expectedX = basePosition.x + expectedOffsetX
         val expectedY = basePosition.y + expectedOffsetY
@@ -263,10 +257,10 @@ fun getCorrectlyPlacedShapes(
         val dx = (position.x - expectedX).absoluteValue
         val dy = (position.y - expectedY).absoluteValue
 
-        val isCorrect = if (dx <= static.toleranceX && dy <= static.toleranceY) 1 else 0
-        results.add(draggable to isCorrect)
+        val isCorrect = dx <= static.toleranceX && dy <= static.toleranceY
+        val resultValue = if (isCorrect) 1 else 0
+
+        result.add(Pair(draggable, resultValue))
     }
-
-    return results
+    return result
 }
-

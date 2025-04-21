@@ -77,49 +77,49 @@ class SummaryScreen : Screen {
                 }
 
 
-                LaunchedEffect(Unit) {
-                    cogData.firstQuestion?.let {
-                        println("First Question: $it")
-                    }
 
-                    cogData.secondQuestion.forEachIndexed { i, item ->
-                        println("Second Question #$i: $item")
-                    }
+//                    cogData.firstQuestion?.let {
+//                        println("First Question: $it")
+//                    }
+//
+//                    cogData.secondQuestion.forEachIndexed { i, item ->
+//                        println("Second Question #$i: $item")
+//                    }
+//
+//                    cogData.thirdQuestion.forEachIndexed { i, item ->
+//                        println("Third Question #$i: $item")
+//                    }
+//
+//                    cogData.fourthQuestion.forEachIndexed { i, item ->
+//                        println("Fourth Question #$i: $item")
+//                    }
+//
+//                    cogData.fifthQuestion.forEachIndexed { i, item ->
+//                        println("Fifth Question #$i: $item")
+//                    }
+//
+//                    cogData.sixthQuestion.forEachIndexed { i, item ->
+//                        println("Sixth Question #$i: $item")
+//                    }
 
-                    cogData.thirdQuestion.forEachIndexed { i, item ->
-                        println("Third Question #$i: $item")
-                    }
-
-                    cogData.fourthQuestion.forEachIndexed { i, item ->
-                        println("Fourth Question #$i: $item")
-                    }
-
-                    cogData.fifthQuestion.forEachIndexed { i, item ->
-                        println("Fifth Question #$i: $item")
-                    }
-
-                    cogData.sixthQuestion.forEachIndexed { i, item ->
-                        println("Sixth Question #$i: $item")
-                    }
-
-                    cogData.seventhQuestion.forEachIndexed { i, item ->
-                        println("Seventh Question #$i: $item")
-                    }
-
-                    cogData.eighthQuestion.forEachIndexed { i, item ->
-                        println("Eighth Question #$i: $item")
-                    }
-
-                    cogData.ninthQuestion.forEachIndexed { i, item ->
-                        println("Ninth Question #$i: $item")
-                    }
+//                    cogData.seventhQuestion.forEachIndexed { i, item ->
+//                        println("Seventh Question #$i: $item")
+//                    }
+//
+//                    cogData.eighthQuestion.forEachIndexed { i, item ->
+//                        println("Eighth Question #$i: $item")
+//                    }
+//
+//                    cogData.ninthQuestion.forEachIndexed { i, item ->
+//                        println("Ninth Question #$i: $item")
+//                    }
 
                     cogData.tenthQuestion.forEachIndexed { i, item ->
                         println("Tenth Question #$i: $item")
                     }
 
                     println("Completed printing all cogData.")
-                }
+
 
 
 
@@ -161,7 +161,6 @@ fun SuccessAnimation(modifier: Modifier = Modifier) {
             val center = this.center
             val baseRadius = size.minDimension / 2 * circleScale.value
 
-            // Draw white background circle
             drawCircle(
                 color = Color.White,
                 radius = baseRadius,
@@ -180,7 +179,7 @@ fun SuccessAnimation(modifier: Modifier = Modifier) {
                 val positionProgress = morphProgress.value
                 val currentRadius = lerp(innerRadius, outerRadius, positionProgress)
 
-                val progressSin = sin(PI * positionProgress).toFloat() // 0 ➝ 1 ➝ 0
+                val progressSin = sin(PI * positionProgress).toFloat()
                 val lineLength = progressSin * baseRadius * 0.5f
 
                 val start = center + direction * (currentRadius - lineLength / 2)
@@ -208,20 +207,19 @@ fun SuccessAnimation(modifier: Modifier = Modifier) {
             }
         }
 
-        // Checkmark icon
         if (tickAlpha.value > 0f) {
             Image(
                 painter = painterResource(Res.drawable.check),
                 contentDescription = "Success",
                 modifier = Modifier
-                    .size(50.dp) // Size of the checkmark
+                    .size(50.dp)
                     .graphicsLayer {
                         alpha = tickAlpha.value
                         scaleX = tickAlpha.value
                         scaleY = tickAlpha.value
                     }
                     .clipToBounds()
-                    .width(50.dp * tickAlpha.value) // Width starts from 0 and increases to full width
+                    .width(50.dp * tickAlpha.value)
             )
         }
 
