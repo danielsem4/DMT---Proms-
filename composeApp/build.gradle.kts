@@ -107,6 +107,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.play.services.cast.framework)
     debugImplementation(compose.uiTooling)
 }
 

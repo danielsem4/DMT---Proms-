@@ -8,21 +8,38 @@ data class LoginRequest(
     val email: String,
     val password: String
 )
-
+//
+//@Serializable
+//data class SuccessfulLoginResponse(
+//    val refresh: String? = null,
+//    val access: String? = null,
+//    @SerialName("userId") val userId: String? = null,
+//    val email: String? = null,
+//    val image: String? = null,
+//    @SerialName("research_patient") val researchPatient: Boolean? = null,
+//    @SerialName("first_name") val firstName: String? = null,
+//    @SerialName("full_name") val fullName: String? = null,
+//    val clinicId: Int? = null,
+//    val clinicName: String? = null,
+//    val token: String? = null,
+//    val modules: List<String> = emptyList(),
+//    val status: String,
+//    @SerialName("server_url") val serverUrl: String? = null
+//)
 @Serializable
 data class SuccessfulLoginResponse(
-    val refresh: String? = null,
-    val access: String? = null,
-    @SerialName("userId") val userId: String? = null,
-    val email: String? = null,
-    val image: String? = null,
-    @SerialName("research_patient") val researchPatient: Boolean? = null,
-    @SerialName("first_name") val firstName: String? = null,
-    @SerialName("full_name") val fullName: String? = null,
-    val clinicId: Int? = null,
-    val clinicName: String? = null,
-    val token: String? = null,
-    val modules: List<String> = emptyList(),
-    val status: String? = null,
-    @SerialName("server_url") val serverUrl: String? = null
+    val refresh: String,
+    val access: String,
+    @SerialName("userId") val userId: String,
+    val email: String,
+    val image: String,
+    @SerialName("research_patient") val researchPatient: Boolean,
+    @SerialName("first_name") val firstName: String,
+    @SerialName("full_name") val fullName: String,
+    val clinicId: Int,
+    val clinicName: String,
+    val token: String,
+    val modules: List<String>,
+    val status: String,
+    @SerialName("server_url") val serverUrl: String
 )

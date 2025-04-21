@@ -12,6 +12,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 import org.example.hit.heal.core.Network.AuthApi
+import org.example.hit.heal.core.Network.session.SessionManager
 
 class LoginViewModel : ViewModel(), KoinComponent {
     
@@ -25,7 +26,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
     val isLoggedIn: State<Boolean> = _isLoggedIn
 
     private val authApi: AuthApi by inject()
-
+    private val sessionManager: SessionManager by inject()
     fun login(email: String, password: String, onLoginSuccess: () -> Unit) {
         viewModelScope.launch {
             try {
@@ -36,6 +37,12 @@ class LoginViewModel : ViewModel(), KoinComponent {
                 result.fold(
                     onSuccess = { response ->
                         if (response.status == "Success") {
+
+                            sessionManager.saveUserSession(response)
+                            println("Session saved successfully")
+                            println("User ${response.fullName} logged in")
+                            println("Available modules: ${response.modules}")
+
                             _isLoggedIn.value = true
                             _message.value = "Login successful"
                             onLoginSuccess()
