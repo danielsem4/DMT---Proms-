@@ -174,9 +174,7 @@ fun Questions(viewModel: ActivityViewModel) {
     questionsData.forEach { questionData ->
         TimeAndPlaceQuestion(
             question = questionData.question,
-            questionKey = questionData.questionKey,
             dropDownItems = questionData.answers.map { DropDownItem(it) },
-            viewModel = viewModel,
             onItemClick = { selectedAnswer ->
                 viewModel.firstQuestionAnswer(questionData.questionKey, selectedAnswer)
             }

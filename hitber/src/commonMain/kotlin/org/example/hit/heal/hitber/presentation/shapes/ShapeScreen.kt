@@ -40,8 +40,6 @@ class ShapeScreen : Screen {
 
         val navigator = LocalNavigator.current
         val viewModel: ActivityViewModel = koinViewModel()
-       // val viewModel: ActivityViewModel = viewModel()
-
         var showDialog by remember { mutableStateOf(true) }
         val shapeSet by viewModel.selectedSet.collectAsState()
 

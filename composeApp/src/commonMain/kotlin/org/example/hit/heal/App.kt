@@ -15,7 +15,7 @@ import org.koin.compose.KoinContext
 fun App() {
 
     MaterialTheme {
-        KoinContext { Navigator (screen = NamingScreen()) }
+        KoinContext { Navigator (screen = EntryScreen()) }
     }
 
 

@@ -41,14 +41,14 @@ import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.repetition.RepetitionScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class NamingScreen : Screen {
     @Composable
     override fun Content() {
 
         val navigator = LocalNavigator.current
-       // val viewModel: ActivityViewModel = koinViewModel()
-        val viewModel: ActivityViewModel = viewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
         var answer1 by remember { mutableStateOf("") }
         var answer2 by remember { mutableStateOf("") }
         val selectedCouple by viewModel.selectedCouple.collectAsState()
@@ -62,7 +62,7 @@ class NamingScreen : Screen {
 
         TabletBaseScreen(title = stringResource(Res.string.fourth_question_hitbear_title),
             onNextClick = {
-                viewModel.fourthQuestionAnswer(answer1, answer2)
+                viewModel.fourthQuestionAnswer(answer1, answer2, firstImageName, secondImageName)
                 navigator?.push(RepetitionScreen())
             },
             question = 4,

@@ -39,6 +39,7 @@ import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 
 class ConcentrationScreen : Screen {
@@ -46,8 +47,7 @@ class ConcentrationScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        //val viewModel: ActivityViewModel = koinViewModel()
-        val viewModel: ActivityViewModel = viewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
         val buttonVisible by viewModel.startButtonIsVisible.collectAsState()
         val number by viewModel.number.collectAsState()
         val isFinished by viewModel.isFinished.collectAsState()

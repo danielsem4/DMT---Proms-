@@ -56,6 +56,7 @@ import org.example.hit.heal.hitber.presentation.buildShape.components.staticShap
 import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.absoluteValue
 
 class BuildShapeScreen : Screen {
@@ -64,7 +65,7 @@ class BuildShapeScreen : Screen {
 
         val navigator = LocalNavigator.current
         val density = LocalDensity.current
-        val viewModel: ActivityViewModel = viewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
         var screenSize by remember { mutableStateOf(0f to 0f) }
         val triangleWidth = 0.4f * screenSize.second
         val triangleHeight = 0.5f * screenSize.second
@@ -84,7 +85,7 @@ class BuildShapeScreen : Screen {
         TabletBaseScreen(
             title = stringResource(Res.string.tenth_question_hitbear_title),
             onNextClick = {
-                val correctShapes = getCorrectlyPlacedShapes(
+                val results  = getCorrectlyPlacedShapes(
                     itemPositions = itemPositions,
                     draggableShapes = draggableShapesItem,
                     staticShapes = staticShapesItem,
@@ -92,12 +93,14 @@ class BuildShapeScreen : Screen {
                     containerHeight = triangleHeight
                 )
 
-                if (correctShapes.size == draggableShapesItem.size - 1) {
-                    navigator?.push(SummaryScreen())
-                } else {
-                    println("Only these shapes are correctly placed: ${correctShapes.map { it.id }}")
-                    // אפשר להראות הודעה, או להדגיש רק את מי שנכון
+                results.forEach { (shape, resultFlag) ->
+                    viewModel.tenthQuestionAnswer(
+                        shape = shape.id,
+                        grade = resultFlag.toDouble()
+                    )
                 }
+                    navigator?.push(SummaryScreen())
+
             },
 
                     buttonText = stringResource(Res.string.hitbear_continue),
@@ -235,47 +238,35 @@ fun getCorrectlyPlacedShapes(
     staticShapes: List<BuildShapes>,
     containerWidth: Float,
     containerHeight: Float,
-): List<BuildShapes> {
+): List<Pair<BuildShapes, Int>> {
 
-    val correctlyPlaced = mutableListOf<BuildShapes>()
+    val results = mutableListOf<Pair<BuildShapes, Int>>()
 
-    if (itemPositions.isEmpty() || draggableShapes.isEmpty()) return correctlyPlaced
+    if (itemPositions.isEmpty() || draggableShapes.isEmpty()) {
+        return results
+    }
 
     val basePosition = itemPositions[0]
     val baseShape = draggableShapes[0]
-    val baseStatic = staticShapes.find { it.id == baseShape.id } ?: return correctlyPlaced
-
-    val baseX = baseStatic.xRatio
-    val baseY = baseStatic.yRatio
-
-    println("Base shape: ${baseShape.id}, Position: $basePosition, Expected position (baseX, baseY): ($baseX, $baseY)")
+    val baseStatic = staticShapes.find { it.id == baseShape.id } ?: return results
 
     itemPositions.drop(1).withIndex().forEach { (index, position) ->
-        val draggable = draggableShapes[index + 1]
+        val draggable = draggableShapes.getOrNull(index + 1) ?: return@forEach
         val static = staticShapes.find { it.id == draggable.id } ?: return@forEach
 
-        val expectedOffsetX = static.xRatio  * containerWidth
-        val expectedOffsetY = static.yRatio  * containerHeight
+        val expectedOffsetX = static.xRatio * containerWidth
+        val expectedOffsetY = static.yRatio * containerHeight
 
         val expectedX = basePosition.x + expectedOffsetX
         val expectedY = basePosition.y + expectedOffsetY
 
-        println("Draggable shape: ${draggable.id}, Position: $position")
-        println("Expected position (expectedX, expectedY): ($expectedX, $expectedY)")
-
         val dx = (position.x - expectedX).absoluteValue
         val dy = (position.y - expectedY).absoluteValue
 
-        println("Distance (dx, dy): ($dx, $dy)")
-
-        if (dx <= static.toleranceX && dy <= static.toleranceY) {
-            println("Shape ${draggable.id} is correctly placed!")
-            correctlyPlaced.add(draggable)
-        } else {
-            println("Shape ${draggable.id} is NOT correctly placed.")
-        }
+        val isCorrect = if (dx <= static.toleranceX && dy <= static.toleranceY) 1 else 0
+        results.add(draggable to isCorrect)
     }
 
-    println("Correctly placed shapes: ${correctlyPlaced.map { it.id }}")
-    return correctlyPlaced
+    return results
 }
+

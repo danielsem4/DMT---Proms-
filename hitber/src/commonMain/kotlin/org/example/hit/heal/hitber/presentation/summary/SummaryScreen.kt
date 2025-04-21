@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +30,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
@@ -37,9 +40,11 @@ import dmt_proms.hitber.generated.resources.summary_hitbear_instructions1
 import dmt_proms.hitber.generated.resources.summary_hitbear_instructions2
 import dmt_proms.hitber.generated.resources.summary_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -49,6 +54,8 @@ class SummaryScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
+        val viewModel: ActivityViewModel = koinViewModel()
+        val cogData by viewModel.cogData.collectAsState()
 
         TabletBaseScreen(
             title = stringResource(Res.string.summary_hitbear_title),
@@ -68,6 +75,52 @@ class SummaryScreen : Screen {
                     SuccessAnimation(modifier = Modifier.size(100.dp))
 
                 }
+
+
+                LaunchedEffect(Unit) {
+                    cogData.firstQuestion?.let {
+                        println("First Question: $it")
+                    }
+
+                    cogData.secondQuestion.forEachIndexed { i, item ->
+                        println("Second Question #$i: $item")
+                    }
+
+                    cogData.thirdQuestion.forEachIndexed { i, item ->
+                        println("Third Question #$i: $item")
+                    }
+
+                    cogData.fourthQuestion.forEachIndexed { i, item ->
+                        println("Fourth Question #$i: $item")
+                    }
+
+                    cogData.fifthQuestion.forEachIndexed { i, item ->
+                        println("Fifth Question #$i: $item")
+                    }
+
+                    cogData.sixthQuestion.forEachIndexed { i, item ->
+                        println("Sixth Question #$i: $item")
+                    }
+
+                    cogData.seventhQuestion.forEachIndexed { i, item ->
+                        println("Seventh Question #$i: $item")
+                    }
+
+                    cogData.eighthQuestion.forEachIndexed { i, item ->
+                        println("Eighth Question #$i: $item")
+                    }
+
+                    cogData.ninthQuestion.forEachIndexed { i, item ->
+                        println("Ninth Question #$i: $item")
+                    }
+
+                    cogData.tenthQuestion.forEachIndexed { i, item ->
+                        println("Tenth Question #$i: $item")
+                    }
+
+                    println("Completed printing all cogData.")
+                }
+
 
 
             })

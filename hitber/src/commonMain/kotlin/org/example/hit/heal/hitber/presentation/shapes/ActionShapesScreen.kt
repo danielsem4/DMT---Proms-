@@ -40,6 +40,7 @@ import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
+import org.example.hit.heal.hitber.presentation.shapes.components.getShapeName
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -50,22 +51,22 @@ class ActionShapesScreen(private val question: Int) : Screen {
     override fun Content() {
 
         val viewModel: ActivityViewModel = koinViewModel()
-        //val viewModel: ActivityViewModel = viewModel()
-
         val navigator = LocalNavigator.current
         val selectedShapes by viewModel.selectedShapes.collectAsState()
         val attempt by viewModel.attempt.collectAsState()
         var showDialog by remember { mutableStateOf(false) }
         val listShapes by viewModel.listShapes.collectAsState()
+        val shapeNames = selectedShapes.map { getShapeName(it.type) }
 
         TabletBaseScreen(title = stringResource(Res.string.second_question_hitbear_title), onNextClick = {
             viewModel.calculateCorrectShapesCount()
             viewModel.updateTask()
-            viewModel.secondQuestionAnswer()
+            viewModel.secondQuestionAnswer(question, shapeNames)
 
             if (attempt < 3) {
                 showDialog = true
             } else {
+                viewModel.resetSelectedShapes()
                 if(question == 2)
                 navigator?.push(ConcentrationScreen())
 

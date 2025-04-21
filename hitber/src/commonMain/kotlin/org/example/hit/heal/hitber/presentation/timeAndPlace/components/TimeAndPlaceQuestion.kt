@@ -37,14 +37,12 @@ data class DropDownItem(val text: String)
 @Composable
 fun TimeAndPlaceQuestion(
     question: String,
-    questionKey: String,
     dropDownItems: List<DropDownItem>,
-    viewModel: ActivityViewModel,
     modifier: Modifier = Modifier,
     onItemClick: (DropDownItem) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val selectedItem = viewModel.firstQuestion.value
+    var selectedText by remember { mutableStateOf("") }
 
     Box(  modifier = Modifier
                 .fillMaxWidth()
@@ -59,18 +57,7 @@ fun TimeAndPlaceQuestion(
         OutlinedTextField(
             colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = primaryColor,focusedLabelColor = primaryColor),
-            value = selectedItem.let {
-                when (questionKey) {
-                    "day" -> it.day.value
-                    "month" -> it.month.value
-                    "year" -> it.year.value
-                    "country" -> it.country.value
-                    "city" -> it.city.value
-                    "place" -> it.place.value
-                    "survey" -> it.survey.value
-                    else -> ""
-                }
-            },
+            value = selectedText,
             onValueChange = {},
             readOnly = true,
             label = { Text(question) },
@@ -96,6 +83,7 @@ fun TimeAndPlaceQuestion(
             dropDownItems.forEach { item ->
                 DropdownMenuItem(
                     onClick = {
+                        selectedText = item.text
                         onItemClick(item)
                         expanded = false
                     }

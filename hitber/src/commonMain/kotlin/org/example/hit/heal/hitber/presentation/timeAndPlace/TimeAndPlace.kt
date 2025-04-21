@@ -31,14 +31,13 @@ class TimeAndPlace : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-       val viewModel: ActivityViewModel = koinViewModel()
-           //val viewModel: ActivityViewModel = viewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
 
         TabletBaseScreen(
             title = stringResource(Res.string.first_question_hitbear_title),
             onNextClick = { navigator?.push(ShapeScreen()) },
             question = 1,
-            buttonText =  stringResource(Res.string.hitbear_continue),buttonColor = primaryColor,
+            buttonText = stringResource(Res.string.hitbear_continue), buttonColor = primaryColor,
             content = {
                 Text(
                     stringResource(Res.string.first_question_hitbear_instructions),

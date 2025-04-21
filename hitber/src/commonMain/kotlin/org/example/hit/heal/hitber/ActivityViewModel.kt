@@ -14,14 +14,18 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.example.hit.heal.core.presentation.Colors.backgroundColor
+import org.example.hit.heal.hitber.model.CogData
+import org.example.hit.heal.hitber.model.EighthQuestionItem
 import org.example.hit.heal.hitber.model.FirstQuestion
 import org.example.hit.heal.hitber.model.MeasureObjectBoolean
+import org.example.hit.heal.hitber.model.MeasureObjectDouble
 import org.example.hit.heal.hitber.model.MeasureObjectInt
 import org.example.hit.heal.hitber.model.MeasureObjectString
 import org.example.hit.heal.hitber.model.SecondQuestionItem
 import org.example.hit.heal.hitber.model.SelectedShapesStringList
 import org.example.hit.heal.hitber.model.SeventhQuestionType
 import org.example.hit.heal.hitber.model.SixthQuestionType
+import org.example.hit.heal.hitber.model.TenthQuestionType
 import org.example.hit.heal.hitber.model.ThirdQuestionItem
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.instructions
 import org.example.hit.heal.hitber.presentation.naming.components.imageCouples
@@ -39,27 +43,29 @@ import org.jetbrains.compose.resources.StringResource
 
 class ActivityViewModel : ViewModel() {
 
-    //Time and Place Question (1/10)
-    private val _firstQuestion = MutableStateFlow(FirstQuestion())
-    val firstQuestion: StateFlow<FirstQuestion> = _firstQuestion.asStateFlow()
+    private val _cogData = MutableStateFlow(CogData())
+    val cogData: StateFlow<CogData> get() = _cogData
 
+    //Time and Place Question (1/10)
     fun firstQuestionAnswer(field: String, answer: DropDownItem) {
+        val currentFirstQuestion = _cogData.value.firstQuestion
+
         val updated = when (field) {
-            "day" -> _firstQuestion.value.copy(day = MeasureObjectString(101, answer.text, getNow()))
-            "month" -> _firstQuestion.value.copy(month = MeasureObjectString(102, answer.text, getNow()))
-            "year" -> _firstQuestion.value.copy(year = MeasureObjectString(109, answer.text, getNow()))
-            "country" -> _firstQuestion.value.copy(country = MeasureObjectString(104, answer.text, getNow()))
-            "city" -> _firstQuestion.value.copy(city = MeasureObjectString(105, answer.text, getNow()))
-            "place" -> _firstQuestion.value.copy(place = MeasureObjectString(106, answer.text, getNow()))
-            "survey" -> _firstQuestion.value.copy(survey = MeasureObjectString(108, answer.text, getNow()))
-            else -> _firstQuestion.value
+            "day" -> currentFirstQuestion.copy(day = MeasureObjectString(101, answer.text, getNow()))
+            "month" -> currentFirstQuestion.copy(month = MeasureObjectString(102, answer.text, getNow()))
+            "year" -> currentFirstQuestion.copy(year = MeasureObjectString(109, answer.text, getNow()))
+            "country" -> currentFirstQuestion.copy(country = MeasureObjectString(104, answer.text, getNow()))
+            "city" -> currentFirstQuestion.copy(city = MeasureObjectString(105, answer.text, getNow()))
+            "place" -> currentFirstQuestion.copy(place = MeasureObjectString(106, answer.text, getNow()))
+            "survey" -> currentFirstQuestion.copy(survey = MeasureObjectString(108, answer.text, getNow()))
+            else -> currentFirstQuestion
         }
 
-        _firstQuestion.value = updated
+        _cogData.value = _cogData.value.copy(firstQuestion = updated)
 
         println("Updated Question: Day: ${updated.day}, Month: ${updated.month}, Year: ${updated.year}")
-
     }
+
 
     //Shape Question (2/10)
     private val _listShapes = MutableStateFlow(shapeList)
@@ -77,7 +83,6 @@ class ActivityViewModel : ViewModel() {
     private var correctShapesCount = 0
     private var distractorToRemove = 0
 
-    private val _secondQuestion = MutableStateFlow<List<SecondQuestionItem>>(emptyList())
 
     fun setRandomShapeSet() {
         val selectedTypes = shapeSets.random()
@@ -148,30 +153,49 @@ class ActivityViewModel : ViewModel() {
         _listShapes.value = updatedList
     }
 
-    fun secondQuestionAnswer() {
-        val selectedShapeNames = selectedShapes.value.map { it.type.name }
+    fun secondQuestionAnswer(
+        questionNumber: Int,
+        shapeNames: List<String>
+    ) {
         val selected = SelectedShapesStringList(
-            measureObject = _attempt.value - 1,
-            value = selectedShapeNames,
+            value = shapeNames,
             dateTime = getNow()
         )
 
         val newAnswer = SecondQuestionItem(
             selectedShapes = selected,
-            wrongShapes = MeasureObjectInt(value = 5 - correctShapesCount)
+            wrongShapes = MeasureObjectInt(value = 5 - correctShapesCount, dateTime = getNow())
         )
 
-        _secondQuestion.value += newAnswer
+        when (questionNumber) {
+            2 -> {
+                val updatedList = _cogData.value.secondQuestion + newAnswer
+                _cogData.value = _cogData.value.copy(secondQuestion = ArrayList(updatedList))
+            }
 
-        resetSelectedShapes()
+            9 -> {
+                val updatedList = _cogData.value.ninthQuestion + newAnswer
+                _cogData.value = _cogData.value.copy(ninthQuestion = ArrayList(updatedList))
+            }
 
-        println("תשובות שנשמרו: ${_secondQuestion.value}")
-    }
+            else -> {
+                println("שאלה לא מוכרת: $questionNumber")
+            }
+        }
 
-
-    private fun resetSelectedShapes() {
         _selectedShapes.value = emptyList()
+        correctShapesCount = 0
     }
+
+
+    fun resetSelectedShapes() {
+        _selectedShapes.value = emptyList()
+        correctShapesCount = 0
+        distractorToRemove = 0
+        _attempt.value = 1
+        _listShapes.value = shapeList
+    }
+
 
 
     //concentration Question (3/10)
@@ -179,7 +203,6 @@ class ActivityViewModel : ViewModel() {
     val startButtonIsVisible: StateFlow<Boolean> =
         _startButtonIsVisible.asStateFlow()
 
-    private val _thirdQuestion = MutableStateFlow<List<ThirdQuestionItem>>(emptyList())
 
     private var numberAppearedAt: Long = 0L
     private var elapsedTime = 0.0
@@ -203,19 +226,23 @@ class ActivityViewModel : ViewModel() {
             val reactionTime = (Clock.System.now().toEpochMilliseconds() - numberAppearedAt) / 1000.0
 
             val answerItem = ThirdQuestionItem(
-                number = MeasureObjectInt(value = answer),
-                time = MeasureObjectInt(value = reactionTime.toInt()),
-                isPressed = MeasureObjectBoolean(value = true)
+                number = MeasureObjectInt(value = answer, dateTime = getNow()),
+                time = MeasureObjectInt(value = reactionTime.toInt(), dateTime = getNow()),
+                isPressed = MeasureObjectBoolean(value = true, dateTime = getNow())
             )
 
-            _thirdQuestion.value += answerItem
+            val updatedList = ArrayList(_cogData.value.thirdQuestion).apply {
+                add(answerItem)
+            }
+
+            _cogData.value = _cogData.value.copy(thirdQuestion = updatedList)
+
             _isNumberClickable.value = false
+
             println("🧠 New answer saved: $answerItem")
-
+            println("✨ All answers: ${_cogData.value.thirdQuestion}")
         }
-
     }
-
 
     fun startRandomNumberGeneration() {
         viewModelScope.launch {
@@ -235,22 +262,19 @@ class ActivityViewModel : ViewModel() {
     val selectedCouple: StateFlow<Pair<DrawableResource, DrawableResource>?> =
         _selectedCouple.asStateFlow()
 
-    private val _fourthQuestion = MutableStateFlow<List<MeasureObjectString>>(emptyList())
 
-    fun fourthQuestionAnswer(answer1: String, answer2: String) {
-        val currentTime = getNow()
-
-        val newFourthQuestionList = listOf(
-            MeasureObjectString(value = answer1, dateTime = currentTime),
-            MeasureObjectString(value = answer2, dateTime = currentTime)
+    fun fourthQuestionAnswer(answer1: String, answer2: String, correct1: String, correct2: String) {
+        val newFourthQuestionList = arrayListOf(
+            MeasureObjectString(value = correct1, dateTime = getNow()),
+            MeasureObjectString(value = answer1, dateTime = getNow()),
+            MeasureObjectString(value = correct2, dateTime = getNow()),
+            MeasureObjectString(value = answer2, dateTime = getNow())
         )
 
-        _fourthQuestion.value = newFourthQuestionList
+        _cogData.value = _cogData.value.copy(fourthQuestion = newFourthQuestionList)
 
         println("New Fourth Question List: $newFourthQuestionList")
-
     }
-
 
     fun setRandomCouple() {
         _selectedCouple.value = imageCouples.random()
@@ -284,9 +308,6 @@ class ActivityViewModel : ViewModel() {
         }
     }
 
-    private val _sixthQuestion = MutableStateFlow<SixthQuestionType>(SixthQuestionType.SixthQuestionItem())
-
-
     private val _isFridgeOpened = MutableStateFlow(false)
     val isFridgeOpened: StateFlow<Boolean> get() = _isFridgeOpened.asStateFlow()
 
@@ -294,8 +315,6 @@ class ActivityViewModel : ViewModel() {
     val isItemMovedCorrectly: StateFlow<Boolean> get() = _isItemMovedCorrectly.asStateFlow()
 
     private val _isNapkinPlacedCorrectly = MutableStateFlow(false)
-
-
 
     fun setFridgeOpened() {
         _isFridgeOpened.value = true
@@ -310,24 +329,21 @@ class ActivityViewModel : ViewModel() {
     }
 
     fun sixthQuestionAnswer() {
+        val time = getNow()
         val updatedQuestion = SixthQuestionType.SixthQuestionItem(
-            fridgeOpened = MeasureObjectBoolean(value = _isFridgeOpened.value),
-            correctProductDragged = MeasureObjectBoolean(value = _isItemMovedCorrectly.value),
-            placedOnCorrectNap = MeasureObjectBoolean(value = _isNapkinPlacedCorrectly.value)
+            fridgeOpened = MeasureObjectBoolean(value = _isFridgeOpened.value, dateTime = time),
+            correctProductDragged = MeasureObjectBoolean(value = _isItemMovedCorrectly.value, dateTime = time),
+            placedOnCorrectNap = MeasureObjectBoolean(value = _isNapkinPlacedCorrectly.value, dateTime = time)
         )
 
-        println("Updated sixthQuestion: $updatedQuestion")
-        _sixthQuestion.value = updatedQuestion
+        val currentList = _cogData.value.sixthQuestion.toCollection(ArrayList())
+        currentList.add(updatedQuestion)
 
+        _cogData.value = _cogData.value.copy(sixthQuestion = currentList)
 
-
+        println("✅ Updated cogData.sixthQuestion: $currentList")
     }
 
-    fun setSixthQuestionImage(imageUrl: String) {
-        _sixthQuestion.value = SixthQuestionType.SixthQuestionImage(
-            imageUrl = MeasureObjectString(value = imageUrl)
-        )
-    }
 
     //Drag and drop Question (7/10)
 
@@ -346,18 +362,17 @@ class ActivityViewModel : ViewModel() {
     }
 
     fun seventhQuestionAnswer(isCorrect: Boolean) {
-        _seventhQuestion.value = SeventhQuestionType.SeventhQuestionItem(
-            isCorrect = MeasureObjectBoolean(value = isCorrect)
+        val updatedItem = SeventhQuestionType.SeventhQuestionItem(
+            isCorrect = MeasureObjectBoolean(value = isCorrect, dateTime = getNow())
         )
-        println("SeventhQuestionItem saved: ${_seventhQuestion.value}")
+
+        val currentList = ArrayList(_cogData.value.seventhQuestion) // 👈 המרה מפורשת ל־ArrayList
+        currentList.add(updatedItem)
+
+        _cogData.value = _cogData.value.copy(seventhQuestion = currentList)
+        println("SeventhQuestionItem saved: ${_cogData.value.seventhQuestion}")
     }
 
-    fun setSeventhQuestionImage(imageUrl: String) {
-        _seventhQuestion.value = SeventhQuestionType.SeventhQuestionImage(
-            imageUrl = MeasureObjectString(value = imageUrl)
-        )
-        println("SeventhQuestionImage saved: ${_seventhQuestion.value}")
-    }
 
     //Writing Question (8/10)
     private val _slotsWords = MutableStateFlow(slotsList)
@@ -374,17 +389,23 @@ class ActivityViewModel : ViewModel() {
     private val _answerSentences = MutableStateFlow(sentencesResourceId)
     val answerSentences: StateFlow<List<StringResource>> = _answerSentences
 
-    private val _answerWriting = MutableStateFlow(MeasureObjectBoolean())
-
-    fun checkSentence(sentences: List<String>){
+    fun eighthQuestionAnswer(sentences: List<String>) {
         val userSentence = _sentence.value.joinToString(" ")
         println("User sentence: '$userSentence'")
 
         val isCorrect = sentences.any { it.trim().equals(userSentence.trim(), ignoreCase = true) }
-        _answerWriting.value = MeasureObjectBoolean(value = isCorrect)
 
-        println("Written sentence MeasureObjectBoolean: ${_answerWriting.value}")
+        val answer = MeasureObjectBoolean(value = isCorrect, dateTime = getNow())
+
+        val item = EighthQuestionItem(writtenSentence = answer)
+
+        _cogData.value = _cogData.value.copy(
+            eighthQuestion = ArrayList(_cogData.value.eighthQuestion).apply { add(item) }
+        )
+
+        println("✍️ EighthQuestionItem saved: $item")
     }
+
     fun isWordOnSlot(
         wordState: Offset,
         screenSize: IntSize,
@@ -457,8 +478,15 @@ class ActivityViewModel : ViewModel() {
     }
 
     //BuildShape Question (10/10)
+    fun tenthQuestionAnswer(shape: String, grade: Double) {
+        val answer = TenthQuestionType.TenthQuestionItem(
+            shape = MeasureObjectString(value = shape, dateTime = getNow()),
+            grade = MeasureObjectDouble(value = grade, dateTime = getNow())
+        )
+        val updatedList = _cogData.value.tenthQuestion + answer
+        _cogData.value = _cogData.value.copy(tenthQuestion = ArrayList(updatedList))    }
 
-    }
+}
 
 
 

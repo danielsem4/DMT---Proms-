@@ -72,6 +72,7 @@ import org.example.hit.heal.hitber.presentation.understanding.components.napkins
 import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 
 class UnderstandingScreen : Screen {
@@ -79,7 +80,7 @@ class UnderstandingScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.current
         val density = LocalDensity.current
-        val viewModel: ActivityViewModel = viewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
 
         var isFridgeOpen by remember { mutableStateOf(false) }
         var isAudioClicked by remember { mutableStateOf(false) }
@@ -238,10 +239,10 @@ class UnderstandingScreen : Screen {
                                                     change.consume()
                                                     itemPositions[index] = itemPositions[index] + dragAmount
 
-                                                    if (change.positionChanged()) {
+                                                    println("Item Image: ${item.image}, Item Resource ID: $itemResourceId")
+
                                                         if (item.image == itemResourceId && !correctItem) {
                                                             viewModel.setItemMovedCorrectly()
-                                                        }
                                                     }
                                                 }
                                             }.onGloballyPositioned { coordinates ->

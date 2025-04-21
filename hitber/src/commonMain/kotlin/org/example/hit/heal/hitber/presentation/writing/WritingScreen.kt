@@ -53,7 +53,6 @@ import dmt_proms.hitber.generated.resources.eighth_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.eighth_question_hitbear_title
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.JsonNull.content
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ActionShapesScreen
@@ -62,13 +61,14 @@ import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
 import org.example.hit.heal.hitber.presentation.writing.components.draggableWordsList
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class WritingScreen : Screen {
     @Composable
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        val viewModel: ActivityViewModel = viewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
         val density = LocalDensity.current
         val slots by viewModel.slotsWords.collectAsState()
         val allFinished by viewModel.allFinished.collectAsState()
@@ -81,7 +81,7 @@ class WritingScreen : Screen {
             title = stringResource(Res.string.eighth_question_hitbear_title),
             onNextClick = {
                 if (allFinished) {navigator?.push(ActionShapesScreen(9))
-                    viewModel.checkSentence(sentences)
+                    viewModel.eighthQuestionAnswer(sentences)
             }},
             buttonText = stringResource(Res.string.hitbear_continue),
             question = 8,

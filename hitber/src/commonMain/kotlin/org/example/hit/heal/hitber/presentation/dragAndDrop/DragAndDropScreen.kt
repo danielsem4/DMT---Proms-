@@ -39,13 +39,14 @@ import org.example.hit.heal.hitber.presentation.dragAndDrop.components.circlePos
 import org.example.hit.heal.hitber.presentation.writing.WritingScreen
 import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class DragAndDropScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
         val density = LocalDensity.current
-        val viewModel: ActivityViewModel = viewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
         var screenSize by remember { mutableStateOf(0f to 0f) }
         val targetColor by viewModel.targetCircleColor.collectAsState()
         val circleColors = listOf(Color.Black, Color.Green, Color.Blue, Color.Yellow)
