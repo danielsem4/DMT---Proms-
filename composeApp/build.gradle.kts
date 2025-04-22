@@ -64,6 +64,7 @@ kotlin {
 
             implementation(libs.navigation.compose)
 
+            implementation(libs.coil.compose)
 
         }
         nativeMain.dependencies {

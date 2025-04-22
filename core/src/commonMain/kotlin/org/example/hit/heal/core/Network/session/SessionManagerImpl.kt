@@ -1,11 +1,13 @@
 package org.example.hit.heal.core.Network.session
 
+import dmt_proms.core.generated.resources.Res
 import org.example.hit.heal.core.Network.SuccessfulLoginResponse
 interface SessionManager {
     suspend fun saveUserSession(loginResponse: SuccessfulLoginResponse)
     suspend fun getUserSession(): SuccessfulLoginResponse?
     suspend fun clearUserSession()
     fun isLoggedIn(): Boolean
+
 }
 class SessionManagerImpl : SessionManager {
     private var userSession: SuccessfulLoginResponse? = null
@@ -42,4 +44,6 @@ class SessionManagerImpl : SessionManager {
     fun getClinicName(): String? = userSession?.clinicName
     fun getModules(): List<String> = userSession?.modules ?: emptyList()
     fun getServerUrl(): String? = userSession?.serverUrl
+    fun getImage(): String? = userSession?.image
+
 }

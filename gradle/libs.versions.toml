@@ -25,7 +25,7 @@ navigationCompose = "2.7.0-alpha03"
 kotlin-date-time = "0.6.2"
 ktor = "2.3.12"
 playServicesCastFramework = "22.0.0"
-
+coil = "2.4.0"
 [libraries]
 font-awesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "fontAwesome" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }

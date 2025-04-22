@@ -6,11 +6,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.example.hit.heal.Home.HomeScreen
+import org.example.hit.heal.splash.SplashScreen
 import org.koin.compose.koinInject
 import org.koin.dsl.module
 
 
 sealed class Screen(val route: String) {
+    object Splash : Screen("splash")
     object Login : Screen("login")
     object Home : Screen("home")
 }
@@ -22,8 +24,22 @@ fun NavigationGraph() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route
+        startDestination = Screen.Splash.route
     ) {
+        composable(Screen.Splash.route) {
+            SplashScreen(
+                onNavigateToHome = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                },
+                onNavigateToLogin = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                }
+            )
+        }
         composable(Screen.Login.route) {
             LoginScreen(
                 onLoginSuccess = {
