@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 else SystemBarStyle.light(lightColor.hashCode(), lightColor.hashCode())
             )
             App(platformModule = module {
-                single<Context> { applicationContext}
+                single<Context> { applicationContext }
             })
         }
     }

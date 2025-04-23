@@ -13,7 +13,7 @@ fun App(
 ) {
     KoinApplication(application = {
         modules(appModule, platformModule)
-    }){
-        com.clock.test.presentation.App()
+    }) {
+        org.example.hit.heal.cdt.presentation.App()
     }
 }

@@ -34,7 +34,7 @@ fun RoundedButton(
         is String -> text
         else -> error("Text must be either String or StringResource")
     }
-    
+
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(Colors.primaryColor),

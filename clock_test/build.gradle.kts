@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
@@ -42,6 +42,9 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+
+            // Ktor dependencies
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(projects.ui.core)
@@ -61,14 +64,17 @@ kotlin {
             implementation(libs.voyager.transitions)
 
             // Koin dependencies
+            api(libs.koin.core)
             implementation(libs.bundles.koin.compose)
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
-            implementation(libs.koin.core)
             implementation(libs.kotlinx.serialization) // for data serialization
 
             // DateTime
             implementation(libs.kotlinx.datetime)
+
+            //Ktor
+            implementation(libs.bundles.ktor)
         }
 
         iosMain.dependencies {
@@ -80,6 +86,21 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
+            //For Compose Multiplatform, especially on Desktop, Dispatchers.Main might not be available by default.
+            implementation(libs.kotlinx.coroutines.swing)
+
+            //Ktor
+            implementation(libs.ktor.client.darwin)
+        }
+
+        nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+
+        desktopMain.dependencies {
+            implementation(libs.ktor.client.cio)
+            implementation(libs.ktor.client.okhttp)
         }
     }
 }
@@ -88,13 +109,6 @@ android {
     namespace = "com.clock.test"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    defaultConfig {
-        applicationId = "com.clock.test"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
