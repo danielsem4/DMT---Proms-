@@ -160,10 +160,11 @@
     <string name="eighth_question_word_hitbear_dinner">ערב</string>
     <string name="eighth_question_word_hitbear_with">עם</string>
     <string name="eighth_question_word_hitbear_grandma">סבתא</string>
-    <string name="eighth_question_answer_hitbear_version_1">אתמול אכלתי ארוחת ערב עם סבתא</string>
-    <string name="eighth_question_answer_hitbear_version_2">אתמול אכלתי עם סבתא ארוחת ערב</string>
-    <string name="eighth_question_answer_hitbear_version_3">אכלתי עם סבתא ארוחת ערב אתמול</string>
-    <string name="eighth_question_answer_hitbear_version_4">אכלתי ארוחת ערב עם סבתא אתמול</string>
+    <string name="eighth_question_answer_hitbear_version_1">סבתא עם ערב ארוחת אכלתי אתמול</string>
+    <string name="eighth_question_answer_hitbear_version_2">ערב  ארוחת סבתא עם אכלתי אתמול</string>
+    <string name="eighth_question_answer_hitbear_version_3">אתמול ערב ארוחת סבתא עם אכלתי</string>
+    <string name="eighth_question_answer_hitbear_version_4">אתמול סבתא עם ערב ארוחת אכלתי</string>
+
 
     <string name="tenth_question_hitbear_title">בנה צורה</string>
     <string name="tenth_question_hitbear_instructions">עליך להעתיק את התמונה שמוצגת בצד שמאל, למרכז המסך. את התמונה יש להעתיק באמצעות הצורות המופיעות בצד ימין. את הצורות צריך לגרור ולסדר במרכז המסך. בסיום לחץ על המשך</string>

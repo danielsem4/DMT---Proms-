@@ -8,8 +8,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,6 +22,7 @@ import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.first_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.first_question_hitbear_title
 import dmt_proms.hitber.generated.resources.hitbear_continue
+import kotlinx.serialization.json.JsonNull.content
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
@@ -32,12 +36,20 @@ class TimeAndPlace : Screen {
     override fun Content() {
         val navigator = LocalNavigator.current
         val viewModel: ActivityViewModel = koinViewModel()
+        val allAnswersFinished by viewModel.allAnswersFinished.collectAsState()
 
         TabletBaseScreen(
             title = stringResource(Res.string.first_question_hitbear_title),
-            onNextClick = { navigator?.push(ShapeScreen()) },
+            onNextClick = {
+                if (allAnswersFinished) {
+                    navigator?.push(ShapeScreen())
+                }
+            },
             question = 1,
-            buttonText = stringResource(Res.string.hitbear_continue), buttonColor = primaryColor,
+            buttonText = stringResource(Res.string.hitbear_continue),
+            buttonColor = if (allAnswersFinished) {
+                primaryColor
+            } else Color.Gray,
             content = {
                 Text(
                     stringResource(Res.string.first_question_hitbear_instructions),

@@ -47,6 +47,17 @@ class ActivityViewModel : ViewModel() {
     val cogData: StateFlow<CogData> get() = _cogData
 
     //Time and Place Question (1/10)
+
+    private val _allAnswersFinished = MutableStateFlow(false)
+    val allAnswersFinished : StateFlow<Boolean> get() = _allAnswersFinished
+
+    private fun updateAllAnswersFinished() {
+        val q = _cogData.value.firstQuestion
+        _allAnswersFinished.value = listOf(
+            q.day, q.month, q.year, q.country, q.city, q.place, q.survey
+        ).all { it.value.isNotBlank() }
+    }
+
     fun firstQuestionAnswer(field: String, answer: DropDownItem) {
         val currentFirstQuestion = _cogData.value.firstQuestion
 
@@ -62,10 +73,9 @@ class ActivityViewModel : ViewModel() {
         }
 
         _cogData.value = _cogData.value.copy(firstQuestion = updated)
-
+        updateAllAnswersFinished()
         println("Updated Question: Day: ${updated.day}, Month: ${updated.month}, Year: ${updated.year}")
     }
-
 
     //Shape Question (2/10)
     private val _listShapes = MutableStateFlow(shapeList)
@@ -82,7 +92,6 @@ class ActivityViewModel : ViewModel() {
 
     private var correctShapesCount = 0
     private var distractorToRemove = 0
-
 
     fun setRandomShapeSet() {
         val selectedTypes = shapeSets.random()
@@ -196,15 +205,12 @@ class ActivityViewModel : ViewModel() {
         _listShapes.value = shapeList
     }
 
-
-
     //concentration Question (3/10)
     private val _startButtonIsVisible = MutableStateFlow(true)
     val startButtonIsVisible: StateFlow<Boolean> =
         _startButtonIsVisible.asStateFlow()
 
-
-    private var numberAppearedAt: Long = 0L
+    private var numberAppearedAt: Int = 0
     private var elapsedTime = 0.0
 
     private val _number = MutableStateFlow((0..9).random())
@@ -212,7 +218,6 @@ class ActivityViewModel : ViewModel() {
 
     private val _isNumberClickable = MutableStateFlow(true)
     val isNumberClickable: StateFlow<Boolean> = _isNumberClickable.asStateFlow()
-
 
     private val _isFinished = MutableStateFlow(false)
     val isFinished: StateFlow<Boolean> = _isFinished.asStateFlow()
@@ -236,7 +241,6 @@ class ActivityViewModel : ViewModel() {
             }
 
             _cogData.value = _cogData.value.copy(thirdQuestion = updatedList)
-
             _isNumberClickable.value = false
 
             println("🧠 New answer saved: $answerItem")
@@ -248,7 +252,7 @@ class ActivityViewModel : ViewModel() {
         viewModelScope.launch {
             while (elapsedTime < 60) {
                 delay(2500)
-                numberAppearedAt = Clock.System.now().toEpochMilliseconds()
+                numberAppearedAt = Clock.System.now().toEpochMilliseconds().toInt()
                 _number.value = (0..9).random()
                 _isNumberClickable.value = true
                 elapsedTime += 2.5
@@ -262,13 +266,13 @@ class ActivityViewModel : ViewModel() {
     val selectedCouple: StateFlow<Pair<DrawableResource, DrawableResource>?> =
         _selectedCouple.asStateFlow()
 
-
     fun fourthQuestionAnswer(answer1: String, answer2: String, correct1: String, correct2: String) {
+        val now = getNow()
         val newFourthQuestionList = arrayListOf(
-            MeasureObjectString(value = correct1, dateTime = getNow()),
-            MeasureObjectString(value = answer1, dateTime = getNow()),
-            MeasureObjectString(value = correct2, dateTime = getNow()),
-            MeasureObjectString(value = answer2, dateTime = getNow())
+            MeasureObjectString(value = correct1, dateTime = now),
+            MeasureObjectString(value = answer1, dateTime = now),
+            MeasureObjectString(value = correct2, dateTime = now),
+            MeasureObjectString(value = answer2, dateTime = now)
         )
 
         _cogData.value = _cogData.value.copy(fourthQuestion = newFourthQuestionList)
@@ -353,8 +357,6 @@ class ActivityViewModel : ViewModel() {
     private val _targetCircleColor = MutableStateFlow<Color?>(null)
     val targetCircleColor: StateFlow<Color?> get() = _targetCircleColor
 
-    private val _seventhQuestion = MutableStateFlow<SeventhQuestionType>(SeventhQuestionType.SeventhQuestionItem())
-
     fun setRandomInstructions() {
         val (randomInstruction, color) = instructions.random()
         _instructionsResourceId.value = randomInstruction
@@ -366,7 +368,7 @@ class ActivityViewModel : ViewModel() {
             isCorrect = MeasureObjectBoolean(value = isCorrect, dateTime = getNow())
         )
 
-        val currentList = ArrayList(_cogData.value.seventhQuestion) // 👈 המרה מפורשת ל־ArrayList
+        val currentList = ArrayList(_cogData.value.seventhQuestion)
         currentList.add(updatedItem)
 
         _cogData.value = _cogData.value.copy(seventhQuestion = currentList)
@@ -394,9 +396,7 @@ class ActivityViewModel : ViewModel() {
         println("User sentence: '$userSentence'")
 
         val isCorrect = sentences.any { it.trim().equals(userSentence.trim(), ignoreCase = true) }
-
         val answer = MeasureObjectBoolean(value = isCorrect, dateTime = getNow())
-
         val item = EighthQuestionItem(writtenSentence = answer)
 
         _cogData.value = _cogData.value.copy(
@@ -470,7 +470,6 @@ class ActivityViewModel : ViewModel() {
         _sentence.value = _slotsWords.value
             .sortedBy { it.id }
             .mapNotNull { it.word }
-            .reversed()
     }
 
     private fun areAllSlotsFilled(): Boolean {

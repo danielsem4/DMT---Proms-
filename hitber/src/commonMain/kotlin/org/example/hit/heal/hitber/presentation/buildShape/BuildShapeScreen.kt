@@ -79,7 +79,6 @@ class BuildShapeScreen : Screen {
             }
         }
 
-
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
         TabletBaseScreen(

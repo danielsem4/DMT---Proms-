@@ -8,6 +8,7 @@ import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScree
 import org.example.hit.heal.hitber.presentation.entry.EntryScreen
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
 import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
+import org.example.hit.heal.hitber.utils.BottomToTopTransition
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 
@@ -16,8 +17,8 @@ import org.koin.compose.KoinContext
 fun App() {
 
     MaterialTheme {
-        KoinContext { Navigator (screen = BuildShapeScreen()) }
+        KoinContext { Navigator(EntryScreen()) { navigator ->
+            BottomToTopTransition(navigator = navigator)
+        } }
     }
-
-
 }

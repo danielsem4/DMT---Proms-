@@ -2,30 +2,38 @@ package org.example.hit.heal.hitber.utils
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.with
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.ScreenTransition
+import cafe.adriel.voyager.transitions.ScreenTransitionContent
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AnimatedNavigator(content: @Composable () -> Unit) {
-    val navigator = LocalNavigator.current
-    val currentScreen = navigator?.lastItem
-
-    if (navigator == null) return
-
-    AnimatedContent(
-        targetState = currentScreen,
-        transitionSpec = {
-            slideInVertically(initialOffsetY = { it }) + fadeIn() with
-                    slideOutVertically(targetOffsetY = { -it }) + fadeOut()
+fun BottomToTopTransition(
+    navigator: Navigator,
+    modifier: Modifier = Modifier,
+    content: ScreenTransitionContent = { it.Content() }
+) {
+    ScreenTransition(
+        navigator = navigator,
+        modifier = modifier,
+        transition = {
+            slideInVertically(
+                initialOffsetY = { fullHeight -> fullHeight },
+                animationSpec = tween(durationMillis = 300)
+            ) with slideOutVertically(
+                targetOffsetY = { fullHeight -> -fullHeight },
+                animationSpec = tween(durationMillis = 300)
+            )
         },
-        contentKey = { it?.key }
-    ) {
-        content()
-    }
+        content = content
+    )
 }

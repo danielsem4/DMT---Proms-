@@ -113,14 +113,14 @@ class SummaryScreen : Screen {
 //                    cogData.ninthQuestion.forEachIndexed { i, item ->
 //                        println("Ninth Question #$i: $item")
 //                    }
-
-                    cogData.tenthQuestion.forEachIndexed { i, item ->
-                        println("Tenth Question #$i: $item")
-                    }
-
-                    println("Completed printing all cogData.")
-
-
+//
+//                    cogData.tenthQuestion.forEachIndexed { i, item ->
+//                        println("Tenth Question #$i: $item")
+//                    }
+//
+//                    println("Completed printing all cogData.")
+//
+//
 
 
             })
