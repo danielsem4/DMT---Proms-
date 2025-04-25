@@ -16,9 +16,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
@@ -48,12 +52,17 @@ import dmt_proms.hitber.generated.resources.tenth_question_hitbear_shape_model
 import dmt_proms.hitber.generated.resources.tenth_question_hitbear_shapes
 import dmt_proms.hitber.generated.resources.tenth_question_hitbear_title
 import dmt_proms.hitber.generated.resources.triangle
+import io.github.suwasto.capturablecompose.Capturable
+import io.github.suwasto.capturablecompose.CompressionFormat
+import io.github.suwasto.capturablecompose.rememberCaptureController
+import io.github.suwasto.capturablecompose.toByteArray
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.components.BuildShapes
 import org.example.hit.heal.hitber.presentation.buildShape.components.draggableShapesItem
 import org.example.hit.heal.hitber.presentation.buildShape.components.staticShapesItem
 import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
+import org.example.hit.heal.hitber.utils.toBase64
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -66,6 +75,7 @@ class BuildShapeScreen : Screen {
         val navigator = LocalNavigator.current
         val density = LocalDensity.current
         val viewModel: ActivityViewModel = koinViewModel()
+        val captureController = rememberCaptureController()
         var screenSize by remember { mutableStateOf(0f to 0f) }
         val triangleWidth = 0.4f * screenSize.second
         val triangleHeight = 0.5f * screenSize.second
@@ -79,157 +89,187 @@ class BuildShapeScreen : Screen {
             }
         }
 
+        var imageBitmapState by remember { mutableStateOf<ImageBitmap?>(null) }
+
+        LaunchedEffect(imageBitmapState) {
+            val base64 = imageBitmapState?.let {
+                val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
+                byteArray.toBase64()
+            }
+            base64?.let { viewModel.addTenthQuestionImage(it) }
+        }
+
+
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
-        TabletBaseScreen(
-            title = stringResource(Res.string.tenth_question_hitbear_title),
-            onNextClick = {
-                val results  = getCorrectlyPlacedShapes(
-                    itemPositions = itemPositions,
-                    draggableShapes = draggableShapesItem,
-                    staticShapes = staticShapesItem,
-                    containerWidth = triangleWidth,
-                    containerHeight = triangleHeight
-                )
+            TabletBaseScreen(
+                title = stringResource(Res.string.tenth_question_hitbear_title),
+                onNextClick = {
+                    captureController.capture()
 
-                results.forEach { (shape, resultFlag) ->
-                    viewModel.tenthQuestionAnswer(
-                        shape = shape.id,
-                        grade = resultFlag.toDouble()
-                    )
-                }
-                    navigator?.push(SummaryScreen())
-
-            },
-
-                    buttonText = stringResource(Res.string.hitbear_continue),
-            question = 10,
-            buttonColor = primaryColor,
-            content = {
-                Text(
-                    stringResource(Res.string.tenth_question_hitbear_instructions),
-                    color = Color.Black,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                        .padding(bottom = 30.dp)
-                )
-
-
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                        .background(color = Color.White, shape = RoundedCornerShape(4)).onSizeChanged { size ->
-                            screenSize = size.width.toFloat() to size.height.toFloat()})
-                {
-                    Box(
-                        modifier = Modifier.align(Alignment.CenterEnd)
-                            .fillMaxWidth(0.7f)
-                            .fillMaxHeight()
-                            .background(color = Color(0xFFB2FFFF), shape = RoundedCornerShape(4.dp))
+                    val results = getCorrectlyPlacedShapes(
+                        itemPositions = itemPositions,
+                        draggableShapes = draggableShapesItem,
+                        staticShapes = staticShapesItem,
+                        containerWidth = triangleWidth,
+                        containerHeight = triangleHeight
                     )
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(30.dp),
-                        horizontalArrangement =  Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            stringResource(Res.string.tenth_question_hitbear_shape_model), color = Color.Black,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                        )
-                        Text(
-                            stringResource(Res.string.tenth_question_hitbear_shapes), color = Color.Black,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold
+                    results.forEach { (shape, resultFlag) ->
+                        viewModel.tenthQuestionAnswer(
+                            shape = shape.id,
+                            grade = resultFlag.toDouble(),
                         )
                     }
+                    navigator?.push(SummaryScreen())
+                },
 
-                    Box(
-                        modifier = Modifier.width( with(density) {triangleWidth.toDp()}).height(with(density) {triangleHeight.toDp()})
-                            .offset(
-                                x = with(density) {(screenSize.first * staticShapesItem[0].xRatio).toDp()},
-                                y = with(density) {(screenSize.second * staticShapesItem[0].yRatio).toDp()}
-                            )
+                buttonText = stringResource(Res.string.hitbear_continue),
+                question = 10,
+                buttonColor = primaryColor,
+                content = {
+                    Text(
+                        stringResource(Res.string.tenth_question_hitbear_instructions),
+                        color = Color.Black,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                            .padding(bottom = 30.dp)
+                    )
 
-                    ) {
-                        Image(
-                            painter = painterResource(Res.drawable.triangle),
-                            contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.FillBounds
-
-                        )
-
-                        staticShapesItem.drop(1).forEachIndexed { _, shape ->
-                        val itemWidthPx =  triangleHeight * shape.width
-                        val itemHeightPx = triangleHeight * shape.height
-                        val xPx = triangleWidth * shape.xRatio
-                        val yPx = triangleHeight* shape.yRatio
-
-                        val itemWidthDp = with(density) { itemWidthPx.toDp() }
-                        val itemHeightDp = with(density) { itemHeightPx.toDp() }
-                        val xDp = with(density) { xPx.toDp() }
-                        val yDp = with(density) { yPx.toDp() }
-
-
-                        Box(
-                            modifier = Modifier
-                                .offset(
-                                    x = xDp,
-                                    y = yDp
-                                )
-                                .size(itemWidthDp, itemHeightDp))
-
-                                {
-                            Image(
-                                painter = painterResource(shape.image),
-                                contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.FillBounds
-                            )
+                    Capturable(
+                        captureController = captureController,
+                        onCaptured = { imageBitmap ->
+                            imageBitmapState = imageBitmap
                         }
-                    }}
-
-                    draggableShapesItem.forEachIndexed { index, shape ->
-                        val itemWidthPx =  triangleHeight * shape.width
-                        val itemHeightPx = triangleHeight * shape.height
-                        val itemWidthDp = with(density) { itemWidthPx.toDp() }
-                        val itemHeightDp = with(density) { itemHeightPx.toDp() }
-
-                        val currentPosition = itemPositions[index]
-
-
+                    ) {
                         Box(
-                            modifier = Modifier
-                                .offset(
-                                    x = with(density) { currentPosition.x.toDp() },
-                                    y = with(density) { currentPosition.y.toDp() }
+                            modifier = Modifier.fillMaxSize()
+                                .background(color = Color.White, shape = RoundedCornerShape(4))
+                                .onSizeChanged { size ->
+                                    screenSize = size.width.toFloat() to size.height.toFloat()
+                                })
+                        {
+                            Box(
+                                modifier = Modifier.align(Alignment.CenterEnd)
+                                    .fillMaxWidth(0.7f)
+                                    .fillMaxHeight()
+                                    .background(
+                                        color = Color(0xFFB2FFFF),
+                                        shape = RoundedCornerShape(4.dp)
+                                    )
+                            )
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth().padding(30.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    stringResource(Res.string.tenth_question_hitbear_shape_model),
+                                    color = Color.Black,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                )
+                                Text(
+                                    stringResource(Res.string.tenth_question_hitbear_shapes),
+                                    color = Color.Black,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+
+                            Box(
+                                modifier = Modifier.width(with(density) { triangleWidth.toDp() })
+                                    .height(with(density) { triangleHeight.toDp() })
+                                    .offset(
+                                        x = with(density) { (screenSize.first * staticShapesItem[0].xRatio).toDp() },
+                                        y = with(density) { (screenSize.second * staticShapesItem[0].yRatio).toDp() }
+                                    )
+
+                            ) {
+                                Image(
+                                    painter = painterResource(Res.drawable.triangle),
+                                    contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.FillBounds
+
                                 )
 
-                                .size(itemWidthDp, itemHeightDp)
-                                .pointerInput(Unit) {
-                                    detectDragGestures { change, dragAmount ->
-                                        change.consume()
-                                        itemPositions[index] = itemPositions[index] + dragAmount
+                                staticShapesItem.drop(1).forEachIndexed { _, shape ->
+                                    val itemWidthPx = triangleHeight * shape.width
+                                    val itemHeightPx = triangleHeight * shape.height
+                                    val xPx = triangleWidth * shape.xRatio
+                                    val yPx = triangleHeight * shape.yRatio
+
+                                    val itemWidthDp = with(density) { itemWidthPx.toDp() }
+                                    val itemHeightDp = with(density) { itemHeightPx.toDp() }
+                                    val xDp = with(density) { xPx.toDp() }
+                                    val yDp = with(density) { yPx.toDp() }
+
+
+                                    Box(
+                                        modifier = Modifier
+                                            .offset(
+                                                x = xDp,
+                                                y = yDp
+                                            )
+                                            .size(itemWidthDp, itemHeightDp)
+                                    )
+
+                                    {
+                                        Image(
+                                            painter = painterResource(shape.image),
+                                            contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
+                                            modifier = Modifier.fillMaxSize(),
+                                            contentScale = ContentScale.FillBounds
+                                        )
                                     }
                                 }
+                            }
 
-                        )
+                            draggableShapesItem.forEachIndexed { index, shape ->
+                                val itemWidthPx = triangleHeight * shape.width
+                                val itemHeightPx = triangleHeight * shape.height
+                                val itemWidthDp = with(density) { itemWidthPx.toDp() }
+                                val itemHeightDp = with(density) { itemHeightPx.toDp() }
 
-                        {
-                            Image(
-                                painter = painterResource(shape.image),
-                                contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.FillBounds
-                            )
+                                val currentPosition = itemPositions[index]
+
+
+                                Box(
+                                    modifier = Modifier
+                                        .offset(
+                                            x = with(density) { currentPosition.x.toDp() },
+                                            y = with(density) { currentPosition.y.toDp() }
+                                        )
+
+                                        .size(itemWidthDp, itemHeightDp)
+                                        .pointerInput(Unit) {
+                                            detectDragGestures { change, dragAmount ->
+                                                change.consume()
+                                                itemPositions[index] =
+                                                    itemPositions[index] + dragAmount
+                                            }
+                                        }
+
+                                )
+
+                                {
+                                    Image(
+                                        painter = painterResource(shape.image),
+                                        contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentScale = ContentScale.FillBounds
+                                    )
+                                }
+                            }
+
                         }
-                }
-
-            }
-    })
-}}
+                    }
+                })
+        }
     }
+}
 
 fun getCorrectlyPlacedShapes(
     itemPositions: List<Offset>,
@@ -247,8 +287,8 @@ fun getCorrectlyPlacedShapes(
         val draggable = draggableShapes[index + 1]
         val static = staticShapes.find { it.id == draggable.id } ?: return@forEach
 
-        val expectedOffsetX = static.xRatio  * containerWidth
-        val expectedOffsetY = static.yRatio  * containerHeight
+        val expectedOffsetX = static.xRatio * containerWidth
+        val expectedOffsetY = static.yRatio * containerHeight
 
         val expectedX = basePosition.x + expectedOffsetX
         val expectedY = basePosition.y + expectedOffsetY

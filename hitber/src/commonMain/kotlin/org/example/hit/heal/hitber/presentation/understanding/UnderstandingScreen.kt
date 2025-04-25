@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -31,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
@@ -62,14 +65,21 @@ import dmt_proms.hitber.generated.resources.sixth_question_hitbear_title
 import dmt_proms.hitber.generated.resources.sixth_question_hitbear_volume_icon
 import dmt_proms.hitber.generated.resources.speaker
 import dmt_proms.hitber.generated.resources.table
+import io.github.suwasto.capturablecompose.Capturable
+import io.github.suwasto.capturablecompose.CompressionFormat
+import io.github.suwasto.capturablecompose.rememberCaptureController
+import io.github.suwasto.capturablecompose.toByteArray
+import kotlinx.serialization.json.JsonNull.content
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
+
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayingDialog
 import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
 import org.example.hit.heal.hitber.presentation.understanding.components.napkins
 import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
+import org.example.hit.heal.hitber.utils.toBase64
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -81,6 +91,7 @@ class UnderstandingScreen : Screen {
         val navigator = LocalNavigator.current
         val density = LocalDensity.current
         val viewModel: ActivityViewModel = koinViewModel()
+        val captureController = rememberCaptureController()
 
         var isFridgeOpen by remember { mutableStateOf(false) }
         var isAudioClicked by remember { mutableStateOf(false) }
@@ -112,10 +123,25 @@ class UnderstandingScreen : Screen {
         val selectedNapkin = napkins.find { it.image == napkinResourceId }
         var napkinPosition by remember { mutableStateOf(Offset.Zero) }
         var itemPosition by remember { mutableStateOf(Offset.Zero) }
-        val itemWidthPx =  fridgeSize.second * 0.1f
+        val itemWidthPx = fridgeSize.second * 0.1f
         val itemHeightPx = fridgeSize.second * 0.1f
         val napkinWidthPx = tableSize.second * 0.1f
         val napkinHeightPx = tableSize.second * 0.1f
+
+
+        var imageBitmapState by remember { mutableStateOf<ImageBitmap?>(null) }
+        // var showDialog by remember { mutableStateOf(false) }
+
+        LaunchedEffect(imageBitmapState) {
+            val base64 = imageBitmapState?.let {
+                val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
+                byteArray.toBase64()
+            }
+            base64?.let {
+                viewModel.addSixthQuestionImage(it)
+            }
+        }
+
 
         LaunchedEffect(isAudioClicked) {
             if (isAudioClicked) {
@@ -133,6 +159,7 @@ class UnderstandingScreen : Screen {
             TabletBaseScreen(
                 title = stringResource(Res.string.sixth_question_hitbear_title),
                 onNextClick = {
+                    captureController.capture()
 
                     if (selectedNapkin != null) {
                         val isItemInNapkin = itemLastPositions.values.any { itemPosition ->
@@ -151,174 +178,226 @@ class UnderstandingScreen : Screen {
                             viewModel.setNapkinPlacedCorrectly()
                         }
                     }
+
                     viewModel.sixthQuestionAnswer()
-                    navigator?.push(DragAndDropScreen())
-                },
-                question = 6,
-                buttonText = stringResource(Res.string.hitbear_continue),
-                buttonColor = primaryColor,
-                content = {
-                    Text(
-                        stringResource(Res.string.sixth_question_hitbear_instructions),
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                            .padding(bottom = 30.dp)
-                    )
+                    //showDialog = true
+                    navigator?.push(DragAndDropScreen())},
+                    question = 6,
+                    buttonText = stringResource(Res.string.hitbear_continue),
+                    buttonColor = primaryColor,
+                    content = {
 
-                    Button(
-                        onClick = {
-                            viewModel.setRandomAudio()
-                            isAudioClicked = true
+                        Text(
+                            stringResource(Res.string.sixth_question_hitbear_instructions),
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                                .padding(bottom = 30.dp)
+                        )
 
-                        },
-                        colors = ButtonDefaults.buttonColors(primaryColor),
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        shape = RoundedCornerShape(30)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
+                        Button(
+                            onClick = {
+                                viewModel.setRandomAudio()
+                                isAudioClicked = true
+
+                            },
+                            colors = ButtonDefaults.buttonColors(primaryColor),
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            shape = RoundedCornerShape(30)
                         ) {
-                            Image(
-                                painter = painterResource(Res.drawable.speaker),
-                                contentDescription = stringResource(Res.string.sixth_question_hitbear_volume_icon),
-                                modifier = Modifier.padding(end = 8.dp)
-                                    .size(30.dp).background(color = Color.Transparent)
-                            )
-                            Text(
-                                stringResource(Res.string.sixth_question_hitbear_listen),
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
-
-                    Box(
-                        modifier = Modifier.fillMaxSize()
-                            .background(color = Color.White, shape = RoundedCornerShape(4))
-                    ) {
-                        Box(
-                            modifier = Modifier.wrapContentWidth()
-                                .fillMaxHeight().align(Alignment.CenterStart)
-                                .clickable {
-                                    isFridgeOpen = !isFridgeOpen
-                                    if (!fridgeOpen) {
-                                        viewModel.setFridgeOpened()
-                                    }
-                                }
-                        ) {
-                            Image(
-                                painter = if (isFridgeOpen) painterResource(Res.drawable.open_fridge)
-                                else painterResource(Res.drawable.close_fridge),
-                                contentDescription = if (isFridgeOpen) stringResource(Res.string.sixth_question_hitbear_open_fridge) else stringResource(Res.string.sixth_question_hitbear_close_fridge),
-                                modifier = Modifier.fillMaxHeight()
-                                    .wrapContentWidth().onSizeChanged { size ->
-                                        fridgeSize = size.width.toFloat() to size.height.toFloat()
-                                    },
-                                contentScale = ContentScale.FillHeight
-                            )
-
-                            if (isFridgeOpen) {
-                                fridgeItems.forEachIndexed { index, item ->
-                                    val itemWidthDp = with(density) { itemWidthPx.toDp() }
-                                    val itemHeightDp = with(density) { itemHeightPx.toDp() }
-
-                                    val currentPosition = itemPositions[index]
-
-                                    Box(
-                                        modifier = Modifier
-                                            .offset(
-                                                x = with(density) { currentPosition.x.toDp() },
-                                                y = with(density) { currentPosition.y.toDp() }
-                                            )
-                                            .size(itemWidthDp, itemHeightDp)
-                                            .pointerInput(Unit) {
-                                                detectDragGestures { change, dragAmount ->
-                                                    change.consume()
-                                                    itemPositions[index] = itemPositions[index] + dragAmount
-
-                                                    println("Item Image: ${item.image}, Item Resource ID: $itemResourceId")
-
-                                                        if (item.image == itemResourceId && !correctItem) {
-                                                            viewModel.setItemMovedCorrectly()
-                                                    }
-                                                }
-                                            }.onGloballyPositioned { coordinates ->
-                                                itemPosition = coordinates.positionInRoot()
-                                                viewModel.updateItemLastPosition(
-                                                    index,
-                                                    itemPosition
-                                                )
-                                            }
-                                            .zIndex(1f)
-                                    ) {
-                                        Image(
-                                            painter = painterResource(item.image),
-                                            contentDescription = stringResource(Res.string.sixth_question_hitbear_item),
-                                            modifier = Modifier.fillMaxSize(),
-                                            contentScale = ContentScale.FillBounds
-                                        )
-                                    }
-                                }
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Image(
+                                    painter = painterResource(Res.drawable.speaker),
+                                    contentDescription = stringResource(Res.string.sixth_question_hitbear_volume_icon),
+                                    modifier = Modifier.padding(end = 8.dp)
+                                        .size(30.dp).background(color = Color.Transparent)
+                                )
+                                Text(
+                                    stringResource(Res.string.sixth_question_hitbear_listen),
+                                    color = Color.White,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
                         }
-
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd).fillMaxHeight(0.6f).fillMaxWidth(0.4f)
-
-                                .zIndex(-1f).onSizeChanged { size ->
-                                    tableSize = size.width.toFloat() to size.height.toFloat()
-                                }
+                        Capturable(
+                            captureController = captureController,
+                            onCaptured = { imageBitmap ->
+                                imageBitmapState = imageBitmap
+                            }
                         ) {
-                            Image(
-                                painter = painterResource(Res.drawable.table),
-                                contentDescription = stringResource(Res.string.sixth_question_hitbear_table),
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.FillBounds
+                            Box(
+                                modifier = Modifier.fillMaxSize()
+                                    .background(color = Color.White, shape = RoundedCornerShape(4))
+                            ) {
+                                Box(
+                                    modifier = Modifier.wrapContentWidth()
+                                        .fillMaxHeight().align(Alignment.CenterStart)
+                                        .clickable {
+                                            isFridgeOpen = !isFridgeOpen
+                                            if (!fridgeOpen) {
+                                                viewModel.setFridgeOpened()
+                                            }
+                                        }
+                                ) {
+                                    Image(
+                                        painter = if (isFridgeOpen) painterResource(Res.drawable.open_fridge)
+                                        else painterResource(Res.drawable.close_fridge),
+                                        contentDescription = if (isFridgeOpen) stringResource(Res.string.sixth_question_hitbear_open_fridge) else stringResource(
+                                            Res.string.sixth_question_hitbear_close_fridge
+                                        ),
+                                        modifier = Modifier.fillMaxHeight()
+                                            .wrapContentWidth().onSizeChanged { size ->
+                                                fridgeSize =
+                                                    size.width.toFloat() to size.height.toFloat()
+                                            },
+                                        contentScale = ContentScale.FillHeight
+                                    )
 
-                            )
+                                    if (isFridgeOpen) {
+                                        fridgeItems.forEachIndexed { index, item ->
+                                            val itemWidthDp = with(density) { itemWidthPx.toDp() }
+                                            val itemHeightDp = with(density) { itemHeightPx.toDp() }
 
-                            napkins.forEachIndexed { _, item ->
-                                val xPx = tableSize.first * item.xRatio
-                                val yPx = tableSize.second * item.yRatio
+                                            val currentPosition = itemPositions[index]
 
-                                val napkinWidthDp = with(density) { napkinWidthPx.toDp() }
-                                val napkinHeightDp = with(density) { napkinHeightPx.toDp() }
-                                val xDp = with(density) { xPx.toDp() }
-                                val yDp = with(density) { yPx.toDp() }
+                                            Box(
+                                                modifier = Modifier
+                                                    .offset(
+                                                        x = with(density) { currentPosition.x.toDp() },
+                                                        y = with(density) { currentPosition.y.toDp() }
+                                                    )
+                                                    .size(itemWidthDp, itemHeightDp)
+                                                    .pointerInput(Unit) {
+                                                        detectDragGestures { change, dragAmount ->
+                                                            change.consume()
+                                                            itemPositions[index] =
+                                                                itemPositions[index] + dragAmount
+
+                                                            println("Item Image: ${item.image}, Item Resource ID: $itemResourceId")
+
+                                                            if (item.image == itemResourceId && !correctItem) {
+                                                                viewModel.setItemMovedCorrectly()
+                                                            }
+                                                        }
+                                                    }.onGloballyPositioned { coordinates ->
+                                                        itemPosition = coordinates.positionInRoot()
+                                                        viewModel.updateItemLastPosition(
+                                                            index,
+                                                            itemPosition
+                                                        )
+                                                    }
+                                                    .zIndex(1f)
+                                            ) {
+                                                Image(
+                                                    painter = painterResource(item.image),
+                                                    contentDescription = stringResource(Res.string.sixth_question_hitbear_item),
+                                                    modifier = Modifier.fillMaxSize(),
+                                                    contentScale = ContentScale.FillBounds
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
 
                                 Box(
                                     modifier = Modifier
-                                        .offset(
-                                            x = xDp,
-                                            y = yDp
-                                        ).onGloballyPositioned { coordinates ->
-                                            if (selectedNapkin?.image == item.image) {
-                                                napkinPosition = coordinates.positionInRoot()
-                                            }
+                                        .align(Alignment.BottomEnd).fillMaxHeight(0.6f)
+                                        .fillMaxWidth(0.4f)
+
+                                        .zIndex(-1f).onSizeChanged { size ->
+                                            tableSize =
+                                                size.width.toFloat() to size.height.toFloat()
                                         }
-                                        .size(napkinWidthDp, napkinHeightDp)
-                                        .zIndex(1f)
                                 ) {
                                     Image(
-                                        painter = painterResource(item.image),
-                                        contentDescription = stringResource(Res.string.sixth_question_hitbear_napkin),
+                                        painter = painterResource(Res.drawable.table),
+                                        contentDescription = stringResource(Res.string.sixth_question_hitbear_table),
                                         modifier = Modifier.fillMaxSize(),
                                         contentScale = ContentScale.FillBounds
+
                                     )
+
+                                    napkins.forEachIndexed { _, item ->
+                                        val xPx = tableSize.first * item.xRatio
+                                        val yPx = tableSize.second * item.yRatio
+
+                                        val napkinWidthDp = with(density) { napkinWidthPx.toDp() }
+                                        val napkinHeightDp = with(density) { napkinHeightPx.toDp() }
+                                        val xDp = with(density) { xPx.toDp() }
+                                        val yDp = with(density) { yPx.toDp() }
+
+                                        Box(
+                                            modifier = Modifier
+                                                .offset(
+                                                    x = xDp,
+                                                    y = yDp
+                                                ).onGloballyPositioned { coordinates ->
+                                                    if (selectedNapkin?.image == item.image) {
+                                                        napkinPosition =
+                                                            coordinates.positionInRoot()
+                                                    }
+                                                }
+                                                .size(napkinWidthDp, napkinHeightDp)
+                                                .zIndex(1f)
+                                        ) {
+                                            Image(
+                                                painter = painterResource(item.image),
+                                                contentDescription = stringResource(Res.string.sixth_question_hitbear_napkin),
+                                                modifier = Modifier.fillMaxSize(),
+                                                contentScale = ContentScale.FillBounds
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            )
+                    )
 
-            if (isDialogVisible) {
-                AudioPlayingDialog()
-            }
+                    if (isDialogVisible) {
+                        AudioPlayingDialog()
+                    }
+//                    if (showDialog && imageBitmapState != null) {
+//                        ScreenshotDialog(
+//                            imageBitmap = imageBitmapState,
+//                            onDismiss = { showDialog = false }
+//                        )
+//                    }
+
+                }
         }
     }
-}
+
+
+    @Composable
+    fun ScreenshotDialog(
+        imageBitmap: ImageBitmap?,
+        onDismiss: () -> Unit
+    ) {
+        if (imageBitmap == null) return
+
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = {
+                Text("תצוגת צילום מסך")
+            },
+            text = {
+                Image(
+                    bitmap = imageBitmap,
+                    contentDescription = "Screenshot",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                )
+            },
+            confirmButton = {
+                Button(onClick = onDismiss) {
+                    Text("סגור")
+                }
+            }
+        )
+    }

@@ -334,20 +334,30 @@ class ActivityViewModel : ViewModel() {
 
     fun sixthQuestionAnswer() {
         val time = getNow()
-        val updatedQuestion = SixthQuestionType.SixthQuestionItem(
+
+        val answerItem = SixthQuestionType.SixthQuestionItem(
             fridgeOpened = MeasureObjectBoolean(value = _isFridgeOpened.value, dateTime = time),
             correctProductDragged = MeasureObjectBoolean(value = _isItemMovedCorrectly.value, dateTime = time),
             placedOnCorrectNap = MeasureObjectBoolean(value = _isNapkinPlacedCorrectly.value, dateTime = time)
         )
 
         val currentList = _cogData.value.sixthQuestion.toCollection(ArrayList())
-        currentList.add(updatedQuestion)
+        currentList.add(answerItem)
 
         _cogData.value = _cogData.value.copy(sixthQuestion = currentList)
-
-        println("✅ Updated cogData.sixthQuestion: $currentList")
     }
 
+    fun addSixthQuestionImage(base64: String) {
+        val imageItem = SixthQuestionType.SixthQuestionImage(
+            imageUrl = MeasureObjectString(value = base64, dateTime = getNow())
+        )
+
+        val currentList = _cogData.value.sixthQuestion.toCollection(ArrayList())
+        currentList.add(imageItem)
+        println("📦 Full sixthQuestion list: $currentList")
+
+        _cogData.value = _cogData.value.copy(sixthQuestion = currentList)
+    }
 
     //Drag and drop Question (7/10)
 
@@ -364,17 +374,27 @@ class ActivityViewModel : ViewModel() {
     }
 
     fun seventhQuestionAnswer(isCorrect: Boolean) {
-        val updatedItem = SeventhQuestionType.SeventhQuestionItem(
+        val answerItem = SeventhQuestionType.SeventhQuestionItem(
             isCorrect = MeasureObjectBoolean(value = isCorrect, dateTime = getNow())
         )
 
-        val currentList = ArrayList(_cogData.value.seventhQuestion)
-        currentList.add(updatedItem)
+        val currentList = _cogData.value.seventhQuestion.toCollection(ArrayList())
+        currentList.add(answerItem)
 
         _cogData.value = _cogData.value.copy(seventhQuestion = currentList)
-        println("SeventhQuestionItem saved: ${_cogData.value.seventhQuestion}")
     }
 
+    fun addSeventhQuestionImage(base64: String) {
+        val imageItem = SeventhQuestionType.SeventhQuestionImage(
+            imageUrl = MeasureObjectString(value = base64, dateTime = getNow())
+        )
+
+        val currentList = _cogData.value.seventhQuestion.toCollection(ArrayList())
+        currentList.add(imageItem)
+        println("📦 Full seventhQuestion list: $currentList")
+
+        _cogData.value = _cogData.value.copy(seventhQuestion = currentList)
+    }
 
     //Writing Question (8/10)
     private val _slotsWords = MutableStateFlow(slotsList)
@@ -478,15 +498,25 @@ class ActivityViewModel : ViewModel() {
 
     //BuildShape Question (10/10)
     fun tenthQuestionAnswer(shape: String, grade: Double) {
+        val time = getNow()
         val answer = TenthQuestionType.TenthQuestionItem(
-            shape = MeasureObjectString(value = shape, dateTime = getNow()),
-            grade = MeasureObjectDouble(value = grade, dateTime = getNow())
+            shape = MeasureObjectString(value = shape, dateTime = time),
+            grade = MeasureObjectDouble(value = grade, dateTime = time)
         )
         val updatedList = _cogData.value.tenthQuestion + answer
         _cogData.value = _cogData.value.copy(tenthQuestion = ArrayList(updatedList))    }
 
+
+    fun addTenthQuestionImage(base64: String) {
+        val imageItem = TenthQuestionType.TenthQuestionImage(
+            imageUrl = MeasureObjectString(value = base64, dateTime = getNow())
+        )
+
+        val currentList = _cogData.value.tenthQuestion.toCollection(ArrayList())
+        currentList.add(imageItem)
+        println("📦 Full tenthQuestion list: $currentList")
+
+        _cogData.value = _cogData.value.copy(tenthQuestion = currentList)
+    }
+
 }
-
-
-
-

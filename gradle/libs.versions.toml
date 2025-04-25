@@ -15,6 +15,7 @@ compose-multiplatform = "1.7.0"
 coreVersion = "1.0.0-beta7"
 gson = "2.10.1"
 junit = "4.13.2"
+kmpCapturableCompose = "0.1.0"
 koinAndroid = "3.2.0"
 kotlin = "2.1.0"
 kotlinx-coroutines = "1.10.1"
@@ -38,6 +39,7 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+kmp-capturable-compose = { module = "io.github.suwasto:kmp-capturable-compose", version.ref = "kmpCapturableCompose" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
