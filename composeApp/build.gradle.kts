@@ -37,6 +37,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.compose)
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(libs.kmp.capturable.compose)
@@ -48,6 +50,8 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose)
+            implementation(libs.bundles.ktor)
+            implementation(libs.bundles.coil)
             implementation (libs.navigator)
             implementation (libs.navigator.tabs)
             implementation (libs.navigator.transitions)
@@ -60,6 +64,11 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
         }
+
+        nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
