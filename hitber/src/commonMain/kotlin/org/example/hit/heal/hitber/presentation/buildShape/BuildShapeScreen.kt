@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -41,7 +39,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
@@ -56,8 +53,13 @@ import io.github.suwasto.capturablecompose.Capturable
 import io.github.suwasto.capturablecompose.CompressionFormat
 import io.github.suwasto.capturablecompose.rememberCaptureController
 import io.github.suwasto.capturablecompose.toByteArray
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ImageUploadViewModel
+import org.example.hit.heal.hitber.presentation.QuestionType
 import org.example.hit.heal.hitber.presentation.buildShape.components.BuildShapes
 import org.example.hit.heal.hitber.presentation.buildShape.components.draggableShapesItem
 import org.example.hit.heal.hitber.presentation.buildShape.components.staticShapesItem
@@ -75,6 +77,8 @@ class BuildShapeScreen : Screen {
         val navigator = LocalNavigator.current
         val density = LocalDensity.current
         val viewModel: ActivityViewModel = koinViewModel()
+        val imageUploadViewModel: ImageUploadViewModel = koinViewModel()
+
         val captureController = rememberCaptureController()
         var screenSize by remember { mutableStateOf(0f to 0f) }
         val triangleWidth = 0.4f * screenSize.second
@@ -92,13 +96,15 @@ class BuildShapeScreen : Screen {
         var imageBitmapState by remember { mutableStateOf<ImageBitmap?>(null) }
 
         LaunchedEffect(imageBitmapState) {
-            val base64 = imageBitmapState?.let {
-                val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
-                byteArray.toBase64()
-            }
-            base64?.let { viewModel.addTenthQuestionImage(it) }
-        }
+            imageBitmapState?.let {
+                withContext(Dispatchers.IO) {
+                    val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
+                    val base64 = byteArray.toBase64()
 
+                    imageUploadViewModel.uploadImage(base64, QuestionType.TenthQuestion)
+                }
+            }
+        }
 
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {

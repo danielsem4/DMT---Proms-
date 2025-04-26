@@ -31,6 +31,12 @@ kotlin {
     jvm("desktop")
 
     sourceSets {
+        androidMain.dependencies {
+            implementation(compose.preview)
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.compose)
+            implementation(libs.ktor.client.okhttp)
+        }
         commonMain.dependencies {
             implementation(libs.kmp.capturable.compose)
             implementation(libs.kotlinx.serialization.json)
@@ -52,6 +58,9 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+        }
+        nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
     }
 }

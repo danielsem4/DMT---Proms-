@@ -22,9 +22,8 @@ import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.first_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.first_question_hitbear_title
 import dmt_proms.hitber.generated.resources.hitbear_continue
-import kotlinx.serialization.json.JsonNull.content
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.Questions
 import org.jetbrains.compose.resources.stringResource

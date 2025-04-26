@@ -38,10 +38,15 @@ import io.github.suwasto.capturablecompose.Capturable
 import io.github.suwasto.capturablecompose.CompressionFormat
 import io.github.suwasto.capturablecompose.rememberCaptureController
 import io.github.suwasto.capturablecompose.toByteArray
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ImageUploadViewModel
+import org.example.hit.heal.hitber.presentation.QuestionType
+import org.example.hit.heal.hitber.presentation.dragAndDrop.components.circleColors
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.circlePositions
-import org.example.hit.heal.hitber.presentation.understanding.ScreenshotDialog
 import org.example.hit.heal.hitber.presentation.writing.WritingScreen
 import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
 import org.example.hit.heal.hitber.utils.toBase64
@@ -54,12 +59,14 @@ class DragAndDropScreen : Screen {
         val navigator = LocalNavigator.current
         val density = LocalDensity.current
         val viewModel: ActivityViewModel = koinViewModel()
+        val imageUploadViewModel: ImageUploadViewModel = koinViewModel()
+
+        val state by viewModel.seventhQuestionState.collectAsState()
+
         val captureController = rememberCaptureController()
         var screenSize by remember { mutableStateOf(0f to 0f) }
-        val targetColor by viewModel.targetCircleColor.collectAsState()
-        val circleColors = listOf(Color.Black, Color.Green, Color.Blue, Color.Yellow)
-        val instructionsResourceId by viewModel.instructionsResourceId.collectAsState()
-        val instructions = instructionsResourceId?.let { stringResource(it) }
+
+        val instructions = state.instruction?.let { stringResource(it) }
         var targetBoxXRange by remember { mutableStateOf(0f..0f) }
         var targetBoxYRange by remember { mutableStateOf(0f..0f) }
 
@@ -77,11 +84,14 @@ class DragAndDropScreen : Screen {
         var imageBitmapState by remember { mutableStateOf<ImageBitmap?>(null) }
 
         LaunchedEffect(imageBitmapState) {
-            val base64 = imageBitmapState?.let {
-                val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
-                byteArray.toBase64()
+            imageBitmapState?.let {
+                withContext(Dispatchers.IO) {
+                    val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
+                    val base64 = byteArray.toBase64()
+
+                    imageUploadViewModel.uploadImage(base64, QuestionType.SeventhQuestion)
+                }
             }
-            base64?.let { viewModel.addSeventhQuestionImage(it) }
         }
 
         LaunchedEffect(Unit) {
@@ -93,7 +103,7 @@ class DragAndDropScreen : Screen {
             title = stringResource(Res.string.seventh_question_hitbear_title),
             onNextClick = {
                 captureController.capture()
-                targetColor?.let {
+                state.targetColor?.let {
                     nextQuestion(
                         screenSize = screenSize,
                         circleColors = circleColors,

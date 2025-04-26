@@ -8,7 +8,10 @@ import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScree
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
 import org.example.hit.heal.hitber.presentation.entry.EntryScreen
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
+import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
 import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
+import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
+import org.example.hit.heal.hitber.presentation.timeAndPlace.components.TimeAndPlaceQuestion
 import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScreen
 import org.example.hit.heal.hitber.utils.BottomToTopTransition
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -19,7 +22,7 @@ import org.koin.compose.KoinContext
 fun App() {
 
     MaterialTheme {
-        KoinContext { Navigator(UnderstandingScreen()) { navigator ->
+        KoinContext { Navigator(EntryScreen()) { navigator ->
             BottomToTopTransition(navigator = navigator)
         } }
     }

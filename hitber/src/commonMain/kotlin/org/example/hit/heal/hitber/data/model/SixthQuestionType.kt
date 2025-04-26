@@ -1,4 +1,4 @@
-package org.example.hit.heal.hitber.model
+package org.example.hit.heal.hitber.data.model
 
 
 sealed class SixthQuestionType {

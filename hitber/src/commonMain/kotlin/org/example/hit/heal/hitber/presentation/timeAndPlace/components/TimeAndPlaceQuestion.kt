@@ -27,7 +27,6 @@ import dmt_proms.hitber.generated.resources.drop_down
 import dmt_proms.hitber.generated.resources.drop_up
 import dmt_proms.hitber.generated.resources.first_question_hitbear_Drop_down_drop_up_Icon
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.ActivityViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

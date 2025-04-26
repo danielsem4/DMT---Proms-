@@ -13,3 +13,5 @@ val instructions = listOf(
     Res.string.seventh_question_blue_circle to Color.Blue,
     Res.string.seventh_question_yellow_circle to Color.Yellow
 )
+
+val circleColors = listOf(Color.Black, Color.Green, Color.Blue, Color.Yellow)

@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +36,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
@@ -69,9 +68,14 @@ import io.github.suwasto.capturablecompose.Capturable
 import io.github.suwasto.capturablecompose.CompressionFormat
 import io.github.suwasto.capturablecompose.rememberCaptureController
 import io.github.suwasto.capturablecompose.toByteArray
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonNull.content
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ImageUploadViewModel
+import org.example.hit.heal.hitber.presentation.QuestionType
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
 
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
@@ -91,24 +95,18 @@ class UnderstandingScreen : Screen {
         val navigator = LocalNavigator.current
         val density = LocalDensity.current
         val viewModel: ActivityViewModel = koinViewModel()
+        val imageUploadViewModel: ImageUploadViewModel = koinViewModel()
+        val state by viewModel.sixthQuestionState.collectAsState()
         val captureController = rememberCaptureController()
 
         var isFridgeOpen by remember { mutableStateOf(false) }
         var isAudioClicked by remember { mutableStateOf(false) }
         var fridgeSize by remember { mutableStateOf(0f to 0f) }
         var tableSize by remember { mutableStateOf(0f to 0f) }
-        val audioResourceId by viewModel.audioResourceId.collectAsState()
-        val itemResourceId by viewModel.selectedItem.collectAsState()
-        val napkinResourceId by viewModel.selectedNapkin.collectAsState()
 
         val audioPlayer = remember { AudioPlayer() }
-        val audioUrl = audioResourceId?.let { stringResource(it) }
-
-        val fridgeOpen by viewModel.isFridgeOpened.collectAsState()
-        val correctItem by viewModel.isItemMovedCorrectly.collectAsState()
-
+        val audioUrl = state.audioResourceId?.let { stringResource(it) }
         var isDialogVisible by remember { mutableStateOf(false) }
-        val itemLastPositions by viewModel.itemLastPositions.collectAsState()
 
         val itemPositions = remember(fridgeSize) {
             mutableStateListOf<Offset>().apply {
@@ -120,7 +118,7 @@ class UnderstandingScreen : Screen {
             }
         }
 
-        val selectedNapkin = napkins.find { it.image == napkinResourceId }
+        val selectedNapkin = napkins.find { it.image == state.selectedNapkin }
         var napkinPosition by remember { mutableStateOf(Offset.Zero) }
         var itemPosition by remember { mutableStateOf(Offset.Zero) }
         val itemWidthPx = fridgeSize.second * 0.1f
@@ -130,17 +128,19 @@ class UnderstandingScreen : Screen {
 
 
         var imageBitmapState by remember { mutableStateOf<ImageBitmap?>(null) }
-        // var showDialog by remember { mutableStateOf(false) }
+        var showDialog by remember { mutableStateOf(false) }
 
         LaunchedEffect(imageBitmapState) {
-            val base64 = imageBitmapState?.let {
-                val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
-                byteArray.toBase64()
-            }
-            base64?.let {
-                viewModel.addSixthQuestionImage(it)
+            imageBitmapState?.let {
+                withContext(Dispatchers.IO) {
+                    val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
+                    val base64 = byteArray.toBase64()
+
+                    imageUploadViewModel.uploadImage(base64, QuestionType.SixthQuestion)
+                }
             }
         }
+
 
 
         LaunchedEffect(isAudioClicked) {
@@ -162,7 +162,7 @@ class UnderstandingScreen : Screen {
                     captureController.capture()
 
                     if (selectedNapkin != null) {
-                        val isItemInNapkin = itemLastPositions.values.any { itemPosition ->
+                        val isItemInNapkin = state.itemLastPositions.values.any { itemPosition ->
                             isObjectInsideTargetArea(
                                 targetPosition = napkinPosition,
                                 draggablePosition = itemPosition,
@@ -180,8 +180,9 @@ class UnderstandingScreen : Screen {
                     }
 
                     viewModel.sixthQuestionAnswer()
-                    //showDialog = true
-                    navigator?.push(DragAndDropScreen())},
+                   // showDialog = true
+                    navigator?.push(DragAndDropScreen())
+                    },
                     question = 6,
                     buttonText = stringResource(Res.string.hitbear_continue),
                     buttonColor = primaryColor,
@@ -238,7 +239,7 @@ class UnderstandingScreen : Screen {
                                         .fillMaxHeight().align(Alignment.CenterStart)
                                         .clickable {
                                             isFridgeOpen = !isFridgeOpen
-                                            if (!fridgeOpen) {
+                                            if (!state.isFridgeOpened) {
                                                 viewModel.setFridgeOpened()
                                             }
                                         }
@@ -277,9 +278,7 @@ class UnderstandingScreen : Screen {
                                                             itemPositions[index] =
                                                                 itemPositions[index] + dragAmount
 
-                                                            println("Item Image: ${item.image}, Item Resource ID: $itemResourceId")
-
-                                                            if (item.image == itemResourceId && !correctItem) {
+                                                            if (item.image == state.selectedItem && !state.isItemMovedCorrectly) {
                                                                 viewModel.setItemMovedCorrectly()
                                                             }
                                                         }
@@ -361,12 +360,12 @@ class UnderstandingScreen : Screen {
                     if (isDialogVisible) {
                         AudioPlayingDialog()
                     }
-//                    if (showDialog && imageBitmapState != null) {
-//                        ScreenshotDialog(
-//                            imageBitmap = imageBitmapState,
-//                            onDismiss = { showDialog = false }
-//                        )
-//                    }
+                    if (showDialog && imageBitmapState != null) {
+                        ScreenshotDialog(
+                            imageBitmap = imageBitmapState,
+                            onDismiss = { showDialog = false }
+                        )
+                    }
 
                 }
         }
