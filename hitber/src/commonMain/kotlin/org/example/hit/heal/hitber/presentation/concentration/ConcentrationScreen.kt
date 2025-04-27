@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
@@ -35,7 +36,7 @@ import dmt_proms.hitber.generated.resources.third_question_hitbear_title
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.presentation.ActivityViewModel
+import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -47,14 +48,17 @@ class ConcentrationScreen : Screen {
 
         val navigator = LocalNavigator.current
         val viewModel: ActivityViewModel = koinViewModel()
-        val state by viewModel.thirdQuestionState.collectAsState()
+        val buttonVisible by viewModel.startButtonIsVisible.collectAsState()
+        val number by viewModel.number.collectAsState()
+        val isFinished by viewModel.isFinished.collectAsState()
+        val isNumberClickable by viewModel.isNumberClickable.collectAsState()
 
         TabletBaseScreen(
             title = stringResource(Res.string.third_question_hitbear_title),
-            onNextClick = { if (state.isFinished) navigator?.push(NamingScreen()) },
+            onNextClick = { if (isFinished) navigator?.push(NamingScreen()) },
             question = 3,
             buttonText = stringResource(Res.string.hitbear_continue),
-            buttonColor = if (state.isFinished) primaryColor else Color.Gray,
+            buttonColor = if (isFinished) primaryColor else Color.Gray,
             content = {
                 Text(
                     stringResource(Res.string.third_question_hitbear_instructions),
@@ -64,13 +68,13 @@ class ConcentrationScreen : Screen {
                     modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 20.dp)
                 )
 
-                if (state.startButtonIsVisible) {
+                if (buttonVisible) {
                     Button(
                         modifier = Modifier.width(300.dp).padding(bottom = 20.dp)
                             .align(Alignment.CenterHorizontally),
                         onClick = {
-                            viewModel.setThirdQuestionStartButtonVisible(false)
-                            viewModel.startThirdQuestion()
+                            viewModel.startButtonSetVisible(false)
+                            viewModel.startRandomNumberGeneration()
                         },
                         colors = ButtonDefaults.buttonColors(primaryColor),
                         shape = RoundedCornerShape(30)
@@ -87,7 +91,7 @@ class ConcentrationScreen : Screen {
                             .background(color = Color.White)
                     )
                 } else {
-                    if (state.isFinished) {
+                    if (isFinished) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -100,12 +104,10 @@ class ConcentrationScreen : Screen {
                             )
                         }
                     } else
-                        state.number?.let {
-                            RandomNumberScreen(
-                                number = it,
-                                isClickable = state.isNumberClickable,
-                                onNumberClicked = { viewModel.onThirdQuestionAnswer(it) })
-                        }
+                        RandomNumberScreen(
+                            number = number,
+                            isClickable = isNumberClickable,
+                            onNumberClicked = { viewModel.thirdQuestionAnswer(it) })
                 }
             })
     }

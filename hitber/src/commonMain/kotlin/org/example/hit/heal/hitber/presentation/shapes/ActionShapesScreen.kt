@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
@@ -35,7 +36,7 @@ import dmt_proms.hitber.generated.resources.second_question_hitbear_task_instruc
 import dmt_proms.hitber.generated.resources.second_question_hitbear_task_retry_instructions
 import dmt_proms.hitber.generated.resources.second_question_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.presentation.ActivityViewModel
+import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
@@ -51,23 +52,27 @@ class ActionShapesScreen(private val question: Int) : Screen {
 
         val viewModel: ActivityViewModel = koinViewModel()
         val navigator = LocalNavigator.current
+        val selectedShapes by viewModel.selectedShapes.collectAsState()
+        val attempt by viewModel.attempt.collectAsState()
         var showDialog by remember { mutableStateOf(false) }
-        val state by viewModel.secondQuestionState.collectAsState()
-        val shapeNames = state.selectedShapes.map { getShapeName(it.type) }
+        val listShapes by viewModel.listShapes.collectAsState()
+        val shapeNames = selectedShapes.map { getShapeName(it.type) }
 
         TabletBaseScreen(title = stringResource(Res.string.second_question_hitbear_title), onNextClick = {
-            viewModel.onNextClicked(
-                question = question,
-                shapeNames = shapeNames,
-                onShowDialog = { showDialog = true },
-                onNavigateNext = { isConcentrationScreen ->
-                    if (isConcentrationScreen) {
-                        navigator?.push(ConcentrationScreen())
-                    } else {
-                        navigator?.push(BuildShapeScreen())
-                    }
-                }
-            )
+            viewModel.calculateCorrectShapesCount()
+            viewModel.updateTask()
+            viewModel.secondQuestionAnswer(question, shapeNames)
+
+            if (attempt < 3) {
+                showDialog = true
+            } else {
+                viewModel.resetSelectedShapes()
+                if(question == 2)
+                    navigator?.push(ConcentrationScreen())
+
+                else navigator?.push(BuildShapeScreen())
+            }
+
         }, question = question, buttonText = stringResource(Res.string.hitbear_continue), buttonColor = primaryColor, content = {
             Text(
                 stringResource(Res.string.second_question_hitbear_task_instructions),
@@ -87,7 +92,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(40.dp)
                 ) {
-                    val chunkedShapes = state.shapeList.chunked(5)
+                    val chunkedShapes = listShapes.chunked(5)
 
                     chunkedShapes.forEach { rowShapes ->
                         Row(
@@ -95,7 +100,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                             horizontalArrangement = Arrangement.spacedBy(40.dp)
                         ) {
                             rowShapes.forEach { shapeRes ->
-                                val isSelected = state.selectedShapes.contains(shapeRes)
+                                val isSelected = selectedShapes.contains(shapeRes)
                                 val shapeColor = if (isSelected) primaryColor else Color.Transparent
 
                                 Image(
@@ -110,6 +115,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                     }
                 }
             }
+
         })
         if (showDialog) {
             DialogTask(
@@ -118,6 +124,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                 text = stringResource(Res.string.second_question_hitbear_task_retry_instructions),
                 onDismiss = { showDialog = false })
         }
+
     }
 }
 

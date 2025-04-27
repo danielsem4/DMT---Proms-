@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
@@ -27,7 +28,7 @@ import dmt_proms.hitber.generated.resources.second_question_hitbear_title
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.profile
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.presentation.ActivityViewModel
+import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -40,7 +41,7 @@ class ShapeScreen : Screen {
         val navigator = LocalNavigator.current
         val viewModel: ActivityViewModel = koinViewModel()
         var showDialog by remember { mutableStateOf(true) }
-        val state by viewModel.secondQuestionState.collectAsState()
+        val shapeSet by viewModel.selectedSet.collectAsState()
 
         LaunchedEffect(Unit) {
             viewModel.setRandomShapeSet()
@@ -60,7 +61,7 @@ class ShapeScreen : Screen {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 )
                 {
-                    state.selectedSet.forEach { shapeRes ->
+                    shapeSet.forEach { shapeRes ->
                         Image(
                             painter = painterResource(shapeRes.drawable),
                             contentDescription = stringResource(Res.string.second_question_hitbear_title),

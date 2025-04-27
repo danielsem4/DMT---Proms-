@@ -42,7 +42,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.presentation.ActivityViewModel
+import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.ImageUploadViewModel
 import org.example.hit.heal.hitber.presentation.QuestionType
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.circleColors
@@ -61,12 +61,12 @@ class DragAndDropScreen : Screen {
         val viewModel: ActivityViewModel = koinViewModel()
         val imageUploadViewModel: ImageUploadViewModel = koinViewModel()
 
-        val state by viewModel.seventhQuestionState.collectAsState()
 
         val captureController = rememberCaptureController()
         var screenSize by remember { mutableStateOf(0f to 0f) }
-
-        val instructions = state.instruction?.let { stringResource(it) }
+        val targetColor by viewModel.targetCircleColor.collectAsState()
+        val instructionsResourceId by viewModel.instructionsResourceId.collectAsState()
+        val instructions = instructionsResourceId?.let { stringResource(it) }
         var targetBoxXRange by remember { mutableStateOf(0f..0f) }
         var targetBoxYRange by remember { mutableStateOf(0f..0f) }
 
@@ -103,7 +103,7 @@ class DragAndDropScreen : Screen {
             title = stringResource(Res.string.seventh_question_hitbear_title),
             onNextClick = {
                 captureController.capture()
-                state.targetColor?.let {
+                targetColor?.let {
                     nextQuestion(
                         screenSize = screenSize,
                         circleColors = circleColors,

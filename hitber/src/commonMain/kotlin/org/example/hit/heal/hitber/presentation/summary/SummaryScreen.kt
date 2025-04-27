@@ -39,11 +39,9 @@ import dmt_proms.hitber.generated.resources.summary_hitbear_instructions1
 import dmt_proms.hitber.generated.resources.summary_hitbear_instructions2
 import dmt_proms.hitber.generated.resources.summary_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -53,8 +51,6 @@ class SummaryScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-        val viewModel: ActivityViewModel = koinViewModel()
-        val cogData by viewModel.cogData.collectAsState()
 
         TabletBaseScreen(
             title = stringResource(Res.string.summary_hitbear_title),
@@ -74,53 +70,6 @@ class SummaryScreen : Screen {
                     SuccessAnimation(modifier = Modifier.size(100.dp))
 
                 }
-
-
-
-//                    cogData.firstQuestion?.let {
-//                        println("First Question: $it")
-//                    }
-//
-//                    cogData.secondQuestion.forEachIndexed { i, item ->
-//                        println("Second Question #$i: $item")
-//                    }
-//
-//                    cogData.thirdQuestion.forEachIndexed { i, item ->
-//                        println("Third Question #$i: $item")
-//                    }
-//
-//                    cogData.fourthQuestion.forEachIndexed { i, item ->
-//                        println("Fourth Question #$i: $item")
-//                    }
-//
-//                    cogData.fifthQuestion.forEachIndexed { i, item ->
-//                        println("Fifth Question #$i: $item")
-//                    }
-//
-//                    cogData.sixthQuestion.forEachIndexed { i, item ->
-//                        println("Sixth Question #$i: $item")
-//                    }
-
-//                    cogData.seventhQuestion.forEachIndexed { i, item ->
-//                        println("Seventh Question #$i: $item")
-//                    }
-//
-//                    cogData.eighthQuestion.forEachIndexed { i, item ->
-//                        println("Eighth Question #$i: $item")
-//                    }
-//
-//                    cogData.ninthQuestion.forEachIndexed { i, item ->
-//                        println("Ninth Question #$i: $item")
-//                    }
-//
-//                    cogData.tenthQuestion.forEachIndexed { i, item ->
-//                        println("Tenth Question #$i: $item")
-//                    }
-//
-//                    println("Completed printing all cogData.")
-//
-//
-
 
             })
     }

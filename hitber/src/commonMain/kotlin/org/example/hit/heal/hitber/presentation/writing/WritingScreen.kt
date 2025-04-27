@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
@@ -53,7 +54,7 @@ import dmt_proms.hitber.generated.resources.eighth_question_hitbear_title
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.presentation.ActivityViewModel
+import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ActionShapesScreen
 import org.example.hit.heal.hitber.presentation.writing.components.DraggableWordState
 import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
@@ -69,37 +70,38 @@ class WritingScreen : Screen {
         val navigator = LocalNavigator.current
         val viewModel: ActivityViewModel = koinViewModel()
         val density = LocalDensity.current
-        val state by viewModel.eighthQuestionState.collectAsState()
-
-        val sentences = state.answerSentences.map { stringResource(it) }
+        val slots by viewModel.slotsWords.collectAsState()
+        val allFinished by viewModel.allFinished.collectAsState()
+        val sentencesResourceId by viewModel.answerSentences.collectAsState()
+        val sentences = sentencesResourceId.map { stringResource(it) }
 
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
-        TabletBaseScreen(
-            title = stringResource(Res.string.eighth_question_hitbear_title),
-            onNextClick = {
-                if (state.allFinished) {navigator?.push(ActionShapesScreen(9))
-                    viewModel.eighthQuestionAnswer(sentences)
-            }},
-            buttonText = stringResource(Res.string.hitbear_continue),
-            question = 8,
-            buttonColor = if (!state.allFinished) Color.Gray else primaryColor,
-            content = {
-                Text(
-                    stringResource(Res.string.eighth_question_hitbear_instructions),
-                    color = Color.Black,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-                Box(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    StaticWords(draggableWordsList, viewModel, density)
-                    WordSlots(state.slots, viewModel, density)
-                }
-            })
-    }}
+            TabletBaseScreen(
+                title = stringResource(Res.string.eighth_question_hitbear_title),
+                onNextClick = {
+                    if (allFinished) {navigator?.push(ActionShapesScreen(9))
+                        viewModel.eighthQuestionAnswer(sentences)
+                    }},
+                buttonText = stringResource(Res.string.hitbear_continue),
+                question = 8,
+                buttonColor = if (!allFinished) Color.Gray else primaryColor,
+                content = {
+                    Text(
+                        stringResource(Res.string.eighth_question_hitbear_instructions),
+                        color = Color.Black,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                    Box(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        StaticWords(draggableWordsList, viewModel, density)
+                        WordSlots(slots, viewModel, density)
+                    }
+                })
+        }}
 
     @Composable
     fun StaticWords(
@@ -234,69 +236,69 @@ class WritingScreen : Screen {
         }
     }}
 
-    @Composable
-    fun WordSlots(
-        slots: List<WordSlotState>,
-        viewModel: ActivityViewModel,
-        density: Density
-    ) {
-        var screenSize by remember { mutableStateOf(IntSize.Zero) }
+@Composable
+fun WordSlots(
+    slots: List<WordSlotState>,
+    viewModel: ActivityViewModel,
+    density: Density
+) {
+    var screenSize by remember { mutableStateOf(IntSize.Zero) }
 
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .onSizeChanged { newSize -> screenSize = newSize }.zIndex(-1f)
-        ) {
-            slots.forEachIndexed { _, slot ->
-                WordSlot(slot, screenSize = screenSize, viewModel = viewModel, density = density)
-            }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .onSizeChanged { newSize -> screenSize = newSize }.zIndex(-1f)
+    ) {
+        slots.forEachIndexed { _, slot ->
+            WordSlot(slot, screenSize = screenSize, viewModel = viewModel, density = density)
         }
     }
+}
 
-    @Composable
-    fun WordSlot(
-        slot: WordSlotState,
-        screenSize: IntSize,
-        viewModel: ActivityViewModel
-        , density: Density
-    ) {
-        val activeSlotIndex by viewModel.eighthQuestionState.collectAsState()
-        val widthPx = (screenSize.width * 0.1f)
-        val heightPx = (screenSize.width * 0.1f)
-        LaunchedEffect(activeSlotIndex.activeSlotIndex) {
-            viewModel.updateSlotColor(activeSlotIndex.activeSlotIndex ?: -1)
+@Composable
+fun WordSlot(
+    slot: WordSlotState,
+    screenSize: IntSize,
+    viewModel: ActivityViewModel
+    , density: Density
+) {
+    val activeSlotIndex by viewModel.activeSlotIndex.collectAsState()
+    val widthPx = (screenSize.width * 0.1f)
+    val heightPx = (screenSize.width * 0.1f)
+    LaunchedEffect(activeSlotIndex) {
+        viewModel.updateSlotColor(activeSlotIndex ?: -1)
+    }
+
+    Box(
+        modifier = Modifier.offset {
+            IntOffset(
+                (slot.initialOffset.x * screenSize.width).toInt(),
+                (slot.initialOffset.y * screenSize.height).toInt()
+            )
         }
-
-        Box(
-            modifier = Modifier.offset {
-                IntOffset(
-                    (slot.initialOffset.x * screenSize.width).toInt(),
-                    (slot.initialOffset.y * screenSize.height).toInt()
-                )
-            }
-                .width(with(density) { widthPx.toDp() })
-                .height(with(density) { heightPx.toDp() })
-                .background(slot.color, shape = RoundedCornerShape(10.dp))
-                .border(color = Color.White, width = 5.dp)
-                .zIndex(-1f)
-        ) {
-            slot.word?.let {
-                Image(painter = painterResource(Res.drawable.close_icon),
-                    contentDescription = stringResource(Res.string.eighth_question_hitbear_close_icon),
-                    modifier = Modifier.size(20.dp).align(Alignment.TopStart).padding(5.dp)
-                        .clickable {
-                            viewModel.resetSlot(slot.id)
-                        })
-                Text(
-                    text = it,
-                    color = Color.Black,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
+            .width(with(density) { widthPx.toDp() })
+            .height(with(density) { heightPx.toDp() })
+            .background(slot.color, shape = RoundedCornerShape(10.dp))
+            .border(color = Color.White, width = 5.dp)
+            .zIndex(-1f)
+    ) {
+        slot.word?.let {
+            Image(painter = painterResource(Res.drawable.close_icon),
+                contentDescription = stringResource(Res.string.eighth_question_hitbear_close_icon),
+                modifier = Modifier.size(20.dp).align(Alignment.TopStart).padding(5.dp)
+                    .clickable {
+                        viewModel.resetSlot(slot.id)
+                    })
+            Text(
+                text = it,
+                color = Color.Black,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
     }
+}
 
 
 

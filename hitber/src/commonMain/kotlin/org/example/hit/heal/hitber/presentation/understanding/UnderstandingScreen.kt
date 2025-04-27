@@ -73,7 +73,7 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.JsonNull.content
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.presentation.ActivityViewModel
+import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.ImageUploadViewModel
 import org.example.hit.heal.hitber.presentation.QuestionType
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
@@ -96,7 +96,12 @@ class UnderstandingScreen : Screen {
         val density = LocalDensity.current
         val viewModel: ActivityViewModel = koinViewModel()
         val imageUploadViewModel: ImageUploadViewModel = koinViewModel()
-        val state by viewModel.sixthQuestionState.collectAsState()
+        val audioResourceId by viewModel.audioResourceId.collectAsState()
+        val itemResourceId by viewModel.selectedItem.collectAsState()
+        val napkinResourceId by viewModel.selectedNapkin.collectAsState()
+        val fridgeOpen by viewModel.isFridgeOpened.collectAsState()
+        val correctItem by viewModel.isItemMovedCorrectly.collectAsState()
+        val itemLastPositions by viewModel.itemLastPositions.collectAsState()
         val captureController = rememberCaptureController()
 
         var isFridgeOpen by remember { mutableStateOf(false) }
@@ -105,7 +110,7 @@ class UnderstandingScreen : Screen {
         var tableSize by remember { mutableStateOf(0f to 0f) }
 
         val audioPlayer = remember { AudioPlayer() }
-        val audioUrl = state.audioResourceId?.let { stringResource(it) }
+        val audioUrl = audioResourceId?.let { stringResource(it) }
         var isDialogVisible by remember { mutableStateOf(false) }
 
         val itemPositions = remember(fridgeSize) {
@@ -118,7 +123,7 @@ class UnderstandingScreen : Screen {
             }
         }
 
-        val selectedNapkin = napkins.find { it.image == state.selectedNapkin }
+        val selectedNapkin = napkins.find { it.image == napkinResourceId }
         var napkinPosition by remember { mutableStateOf(Offset.Zero) }
         var itemPosition by remember { mutableStateOf(Offset.Zero) }
         val itemWidthPx = fridgeSize.second * 0.1f
@@ -162,7 +167,7 @@ class UnderstandingScreen : Screen {
                     captureController.capture()
 
                     if (selectedNapkin != null) {
-                        val isItemInNapkin = state.itemLastPositions.values.any { itemPosition ->
+                        val isItemInNapkin = itemLastPositions.values.any { itemPosition ->
                             isObjectInsideTargetArea(
                                 targetPosition = napkinPosition,
                                 draggablePosition = itemPosition,
@@ -239,7 +244,7 @@ class UnderstandingScreen : Screen {
                                         .fillMaxHeight().align(Alignment.CenterStart)
                                         .clickable {
                                             isFridgeOpen = !isFridgeOpen
-                                            if (!state.isFridgeOpened) {
+                                            if (!!fridgeOpen) {
                                                 viewModel.setFridgeOpened()
                                             }
                                         }
@@ -278,7 +283,7 @@ class UnderstandingScreen : Screen {
                                                             itemPositions[index] =
                                                                 itemPositions[index] + dragAmount
 
-                                                            if (item.image == state.selectedItem && !state.isItemMovedCorrectly) {
+                                                            if (item.image == itemResourceId && !correctItem)  {
                                                                 viewModel.setItemMovedCorrectly()
                                                             }
                                                         }
