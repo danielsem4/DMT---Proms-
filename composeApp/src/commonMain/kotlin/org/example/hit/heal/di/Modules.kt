@@ -1,9 +1,6 @@
 package org.example.hit.heal.di
 
-import org.example.hit.heal.core.Network.AuthApi
-import org.example.hit.heal.core.Network.AuthApiImpl
-import org.example.hit.heal.core.Network.HttpClientFactory
-import org.example.hit.heal.core.di.clientRequestsModule
+import core.di.clientRequestsModule
 import org.example.hit.heal.login.LoginViewModel
 import org.example.hit.heal.navigation.NavigationViewModel
 import org.koin.core.context.startKoin
@@ -28,7 +25,6 @@ expect val platformModule: Module
 
 val sharedAppModules = module{
     includes(clientRequestsModule)
-
 }
 
 val sharedModules = module {

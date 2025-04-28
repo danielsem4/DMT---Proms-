@@ -21,7 +21,6 @@ import coil3.compose.AsyncImage
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import kotlinx.coroutines.delay
-import org.example.hit.heal.core.Network.session.SessionManager
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -31,10 +30,9 @@ fun SplashScreen(
     onNavigateToHome: () -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
-    val sessionManager: SessionManager = koinInject()
 
     // Use safe non-suspend methods only
-    val isLoggedIn = remember { sessionManager.isLoggedIn() }
+    val isLoggedIn = remember { false }
 
     // Use a safe approach to image loading
     val defaultImage = painterResource(Res.drawable.med_presc)
