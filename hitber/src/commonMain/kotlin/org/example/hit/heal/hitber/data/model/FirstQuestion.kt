@@ -1,6 +1,8 @@
 package org.example.hit.heal.hitber.data.model
 
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class FirstQuestion(
     var day: MeasureObjectString = MeasureObjectString(101),
     var month: MeasureObjectString = MeasureObjectString(102),

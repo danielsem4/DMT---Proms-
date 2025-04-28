@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
@@ -41,6 +40,7 @@ import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.example.hit.heal.hitber.presentation.shapes.components.getShapeName
+import org.example.hit.heal.hitber.utils.getNow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -50,27 +50,32 @@ class ActionShapesScreen(private val question: Int) : Screen {
     @Composable
     override fun Content() {
 
-        val viewModel: ActivityViewModel = koinViewModel()
+        val secondQuestionViewModel: SecondQuestionViewModel = koinViewModel()
+        val viewModel : ActivityViewModel = koinViewModel()
         val navigator = LocalNavigator.current
-        val selectedShapes by viewModel.selectedShapes.collectAsState()
-        val attempt by viewModel.attempt.collectAsState()
+        val selectedShapes by secondQuestionViewModel.selectedShapes.collectAsState()
+        val attempt by secondQuestionViewModel.attempt.collectAsState()
         var showDialog by remember { mutableStateOf(false) }
-        val listShapes by viewModel.listShapes.collectAsState()
+        val listShapes by secondQuestionViewModel.listShapes.collectAsState()
         val shapeNames = selectedShapes.map { getShapeName(it.type) }
 
         TabletBaseScreen(title = stringResource(Res.string.second_question_hitbear_title), onNextClick = {
-            viewModel.calculateCorrectShapesCount()
-            viewModel.updateTask()
-            viewModel.secondQuestionAnswer(question, shapeNames)
+            secondQuestionViewModel.calculateCorrectShapesCount()
+            secondQuestionViewModel.updateTask()
+            secondQuestionViewModel.secondQuestionAnswer(question, shapeNames)
 
             if (attempt < 3) {
                 showDialog = true
             } else {
-                viewModel.resetSelectedShapes()
-                if(question == 2)
+                secondQuestionViewModel.resetSelectedShapes()
+                if(question == 2) {
+                    viewModel.setSecondQuestion(secondQuestionViewModel.secondQuestionAnswersMap, getNow())
                     navigator?.push(ConcentrationScreen())
+                }
 
-                else navigator?.push(BuildShapeScreen())
+                else {viewModel.setNinthQuestion(secondQuestionViewModel.secondQuestionAnswersMap, getNow())
+                    navigator?.push(BuildShapeScreen())
+                }
             }
 
         }, question = question, buttonText = stringResource(Res.string.hitbear_continue), buttonColor = primaryColor, content = {
@@ -108,7 +113,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                                     contentDescription = stringResource(Res.string.second_question_hitbear_title),
                                     modifier = Modifier
                                         .background(shapeColor).weight(1f)
-                                        .clickable { viewModel.setSelectedShapes(shapeRes) }
+                                        .clickable { secondQuestionViewModel.setSelectedShapes(shapeRes) }
                                 )
                             }
                         }

@@ -39,6 +39,7 @@ import getImageName
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.repetition.RepetitionScreen
+import org.example.hit.heal.hitber.utils.getNow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -48,21 +49,23 @@ class NamingScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
+        val fourthQuestionViewModel : FourthQuestionViewModel = koinViewModel()
         val viewModel: ActivityViewModel = koinViewModel()
         var answer1 by remember { mutableStateOf("") }
         var answer2 by remember { mutableStateOf("") }
-        val selectedCouple by viewModel.selectedCouple.collectAsState()
+        val selectedCouple by fourthQuestionViewModel.selectedCouple.collectAsState()
 
         val firstImageName = selectedCouple?.let { getImageName(it.first) } ?: ""
         val secondImageName = selectedCouple?.let { getImageName(it.second) } ?: ""
 
         LaunchedEffect(Unit) {
-            viewModel.setRandomCouple()
+            fourthQuestionViewModel.setRandomCouple()
         }
 
         TabletBaseScreen(title = stringResource(Res.string.fourth_question_hitbear_title),
             onNextClick = {
-                viewModel.fourthQuestionAnswer(answer1, answer2, firstImageName, secondImageName)
+                fourthQuestionViewModel.fourthQuestionAnswer(answer1, answer2, firstImageName, secondImageName)
+                viewModel.setFourthQuestion(fourthQuestionViewModel.fourthQuestionAnswers, getNow())
                 navigator?.push(RepetitionScreen())
             },
             question = 4,

@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
@@ -28,7 +27,6 @@ import dmt_proms.hitber.generated.resources.second_question_hitbear_title
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.profile
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -39,12 +37,12 @@ class ShapeScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        val viewModel: ActivityViewModel = koinViewModel()
+        val secondQuestionViewModel: SecondQuestionViewModel = koinViewModel()
         var showDialog by remember { mutableStateOf(true) }
-        val shapeSet by viewModel.selectedSet.collectAsState()
+        val shapeSet by secondQuestionViewModel.selectedSet.collectAsState()
 
         LaunchedEffect(Unit) {
-            viewModel.setRandomShapeSet()
+            secondQuestionViewModel.setRandomShapeSet()
         }
 
         TabletBaseScreen(

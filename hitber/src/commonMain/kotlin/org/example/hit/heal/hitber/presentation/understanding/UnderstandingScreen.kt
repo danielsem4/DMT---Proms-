@@ -28,7 +28,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +46,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
@@ -71,17 +71,15 @@ import io.github.suwasto.capturablecompose.toByteArray
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.JsonNull.content
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
-import org.example.hit.heal.hitber.presentation.ImageUploadViewModel
-import org.example.hit.heal.hitber.presentation.QuestionType
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
 
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayingDialog
 import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
 import org.example.hit.heal.hitber.presentation.understanding.components.napkins
+import org.example.hit.heal.hitber.utils.getNow
 import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
 import org.example.hit.heal.hitber.utils.toBase64
 import org.jetbrains.compose.resources.painterResource
@@ -95,13 +93,11 @@ class UnderstandingScreen : Screen {
         val navigator = LocalNavigator.current
         val density = LocalDensity.current
         val viewModel: ActivityViewModel = koinViewModel()
-        val imageUploadViewModel: ImageUploadViewModel = koinViewModel()
-        val audioResourceId by viewModel.audioResourceId.collectAsState()
-        val itemResourceId by viewModel.selectedItem.collectAsState()
-        val napkinResourceId by viewModel.selectedNapkin.collectAsState()
-        val fridgeOpen by viewModel.isFridgeOpened.collectAsState()
-        val correctItem by viewModel.isItemMovedCorrectly.collectAsState()
-        val itemLastPositions by viewModel.itemLastPositions.collectAsState()
+        val sixthQuestionViewModel: SixthQuestionViewModel = koinViewModel()
+        val audioResourceId by sixthQuestionViewModel.audioResourceId.collectAsState()
+        val itemResourceId by sixthQuestionViewModel.selectedItem.collectAsState()
+        val napkinResourceId by sixthQuestionViewModel.selectedNapkin.collectAsState()
+        val itemLastPositions by sixthQuestionViewModel.itemLastPositions.collectAsState()
         val captureController = rememberCaptureController()
 
         var isFridgeOpen by remember { mutableStateOf(false) }
@@ -141,8 +137,8 @@ class UnderstandingScreen : Screen {
                     val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
                     val base64 = byteArray.toBase64()
 
-                    imageUploadViewModel.uploadImage(base64, QuestionType.SixthQuestion)
-                }
+                   // sixthQuestionViewModel.addImageToQuestion(base64, QuestionType.SeventhQuestion)
+                 }
             }
         }
 
@@ -180,11 +176,16 @@ class UnderstandingScreen : Screen {
                         }
 
                         if (isItemInNapkin) {
-                            viewModel.setNapkinPlacedCorrectly()
+                            sixthQuestionViewModel.setNapkinPlacedCorrectly()
                         }
                     }
 
-                    viewModel.sixthQuestionAnswer()
+                    viewModel.setSixthQuestion(
+                        sixthQuestionViewModel.isFridgeOpened,
+                        sixthQuestionViewModel.isItemMovedCorrectly,
+                        sixthQuestionViewModel.isNapkinPlacedCorrectly,
+                        getNow()
+                    )
                    // showDialog = true
                     navigator?.push(DragAndDropScreen())
                     },
@@ -204,7 +205,7 @@ class UnderstandingScreen : Screen {
 
                         Button(
                             onClick = {
-                                viewModel.setRandomAudio()
+                                sixthQuestionViewModel.setRandomAudio()
                                 isAudioClicked = true
 
                             },
@@ -244,8 +245,8 @@ class UnderstandingScreen : Screen {
                                         .fillMaxHeight().align(Alignment.CenterStart)
                                         .clickable {
                                             isFridgeOpen = !isFridgeOpen
-                                            if (!!fridgeOpen) {
-                                                viewModel.setFridgeOpened()
+                                            if (!sixthQuestionViewModel.isFridgeOpened) {
+                                                sixthQuestionViewModel.setFridgeOpened()
                                             }
                                         }
                                 ) {
@@ -283,13 +284,13 @@ class UnderstandingScreen : Screen {
                                                             itemPositions[index] =
                                                                 itemPositions[index] + dragAmount
 
-                                                            if (item.image == itemResourceId && !correctItem)  {
-                                                                viewModel.setItemMovedCorrectly()
+                                                            if (item.image == itemResourceId && !sixthQuestionViewModel.isItemMovedCorrectly)  {
+                                                                sixthQuestionViewModel.setItemMovedCorrectly()
                                                             }
                                                         }
                                                     }.onGloballyPositioned { coordinates ->
                                                         itemPosition = coordinates.positionInRoot()
-                                                        viewModel.updateItemLastPosition(
+                                                        sixthQuestionViewModel.updateItemLastPosition(
                                                             index,
                                                             itemPosition
                                                         )

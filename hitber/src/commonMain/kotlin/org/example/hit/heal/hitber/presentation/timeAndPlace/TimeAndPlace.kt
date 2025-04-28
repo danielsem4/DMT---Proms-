@@ -34,13 +34,15 @@ class TimeAndPlace : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-        val viewModel: ActivityViewModel = koinViewModel()
-        val allAnswersFinished by viewModel.allAnswersFinished.collectAsState()
+        val firstQuestionViewModel: FirstQuestionViewModel = koinViewModel()
+        val viewModel : ActivityViewModel = koinViewModel()
+        val allAnswersFinished by firstQuestionViewModel.allAnswersFinished.collectAsState()
 
         TabletBaseScreen(
             title = stringResource(Res.string.first_question_hitbear_title),
             onNextClick = {
                 if (allAnswersFinished) {
+                    viewModel.setFirstQuestion(firstQuestionViewModel.firstQuestion.value)
                     navigator?.push(ShapeScreen())
                 }
             },
@@ -62,7 +64,7 @@ class TimeAndPlace : Screen {
                     verticalArrangement = Arrangement.spacedBy(25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Questions(viewModel)
+                    Questions(firstQuestionViewModel)
                 }
             })
 

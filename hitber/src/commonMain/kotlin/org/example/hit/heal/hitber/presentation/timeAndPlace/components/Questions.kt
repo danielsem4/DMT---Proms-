@@ -64,11 +64,11 @@ import dmt_proms.hitber.generated.resources.first_question_hitbear_question4
 import dmt_proms.hitber.generated.resources.first_question_hitbear_question5
 import dmt_proms.hitber.generated.resources.first_question_hitbear_question6
 import dmt_proms.hitber.generated.resources.first_question_hitbear_question7
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.timeAndPlace.FirstQuestionViewModel
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun Questions(viewModel: ActivityViewModel) {
+fun Questions(viewModel: FirstQuestionViewModel) {
 
     val questionsData = listOf(
         QuestionData(

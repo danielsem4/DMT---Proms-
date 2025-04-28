@@ -1,6 +1,8 @@
 package org.example.hit.heal.hitber.data.model
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CogData(
     @SerialName("measurement") var measurement: Int = 20,
     @SerialName("patient_id") var patientId: Int = 1,

@@ -59,6 +59,7 @@ import org.example.hit.heal.hitber.presentation.shapes.ActionShapesScreen
 import org.example.hit.heal.hitber.presentation.writing.components.DraggableWordState
 import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
 import org.example.hit.heal.hitber.presentation.writing.components.draggableWordsList
+import org.example.hit.heal.hitber.utils.getNow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -68,20 +69,22 @@ class WritingScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        val viewModel: ActivityViewModel = koinViewModel()
+        val eightQuestionViewModel: EightQuestionViewModel = koinViewModel()
+        val viewModel : ActivityViewModel = koinViewModel()
         val density = LocalDensity.current
-        val slots by viewModel.slotsWords.collectAsState()
-        val allFinished by viewModel.allFinished.collectAsState()
-        val sentencesResourceId by viewModel.answerSentences.collectAsState()
-        val sentences = sentencesResourceId.map { stringResource(it) }
+        val slots by eightQuestionViewModel.slotsWords.collectAsState()
+        val allFinished by eightQuestionViewModel.allFinished.collectAsState()
+        val sentences = eightQuestionViewModel.answerSentences.map { stringResource(it) }
 
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
             TabletBaseScreen(
                 title = stringResource(Res.string.eighth_question_hitbear_title),
                 onNextClick = {
-                    if (allFinished) {navigator?.push(ActionShapesScreen(9))
-                        viewModel.eighthQuestionAnswer(sentences)
+                    if (allFinished) {eightQuestionViewModel.eighthQuestionAnswer(sentences)
+                        viewModel.setEighthQuestion(eightQuestionViewModel.answer, getNow())
+                        navigator?.push(ActionShapesScreen(9))
+
                     }},
                 buttonText = stringResource(Res.string.hitbear_continue),
                 question = 8,
@@ -97,8 +100,8 @@ class WritingScreen : Screen {
                     Box(
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        StaticWords(draggableWordsList, viewModel, density)
-                        WordSlots(slots, viewModel, density)
+                        StaticWords(draggableWordsList, eightQuestionViewModel, density)
+                        WordSlots(slots, eightQuestionViewModel, density)
                     }
                 })
         }}
@@ -106,14 +109,14 @@ class WritingScreen : Screen {
     @Composable
     fun StaticWords(
         words: List<DraggableWordState>,
-        viewModel: ActivityViewModel,
+        eightQuestionViewModel: EightQuestionViewModel,
         density: Density) {
         var screenSize by remember { mutableStateOf(IntSize.Zero) }
 
         Box(
             modifier = Modifier
                 .fillMaxSize().onSizeChanged { newSize -> screenSize = newSize }) {
-            DraggableWords(words, screenSize, viewModel, density)
+            DraggableWords(words, screenSize, eightQuestionViewModel, density)
             words.forEach { wordState ->
                 StaticWord(wordState = wordState, screenSize = screenSize, density)
             }
@@ -148,12 +151,12 @@ class WritingScreen : Screen {
     fun DraggableWords(
         copiedWords: List<DraggableWordState>,
         screenSize: IntSize,
-        viewModel: ActivityViewModel,
+        eightQuestionViewModel: EightQuestionViewModel,
         density: Density
     ) {
         Box(modifier = Modifier.fillMaxSize().zIndex(1f)) {
             copiedWords.forEach { wordState ->
-                DraggableWord(wordState, screenSize, viewModel, density)
+                DraggableWord(wordState, screenSize, eightQuestionViewModel, density)
             }
         }
     }
@@ -163,7 +166,7 @@ class WritingScreen : Screen {
     fun DraggableWord(
         wordState: DraggableWordState,
         screenSize: IntSize,
-        viewModel: ActivityViewModel,
+        eightQuestionViewModel: EightQuestionViewModel,
         density: Density) {
         val wordOffset = remember { Animatable(wordState.offset, Offset.VectorConverter) }
         val coroutineScope = rememberCoroutineScope()
@@ -196,7 +199,7 @@ class WritingScreen : Screen {
                                 wordOffset.snapTo(Offset(newX, newY))
                             }
 
-                            isOnSlot = viewModel.isWordOnSlot(
+                            isOnSlot = eightQuestionViewModel.isWordOnSlot(
                                 wordOffset.value,
                                 screenSize,
                                 density)
@@ -215,7 +218,7 @@ class WritingScreen : Screen {
                                 coroutineScope.launch {
                                     wordOffset.snapTo(wordState.initialOffset)
                                 }
-                                viewModel.updateWordInSlot(word, isOnSlot!!)
+                                eightQuestionViewModel.updateWordInSlot(word, isOnSlot!!)
                             }
                         }
 
@@ -239,7 +242,7 @@ class WritingScreen : Screen {
 @Composable
 fun WordSlots(
     slots: List<WordSlotState>,
-    viewModel: ActivityViewModel,
+    eightQuestionViewModel: EightQuestionViewModel,
     density: Density
 ) {
     var screenSize by remember { mutableStateOf(IntSize.Zero) }
@@ -250,7 +253,7 @@ fun WordSlots(
             .onSizeChanged { newSize -> screenSize = newSize }.zIndex(-1f)
     ) {
         slots.forEachIndexed { _, slot ->
-            WordSlot(slot, screenSize = screenSize, viewModel = viewModel, density = density)
+            WordSlot(slot, screenSize = screenSize, eightQuestionViewModel = eightQuestionViewModel, density = density)
         }
     }
 }
@@ -259,14 +262,14 @@ fun WordSlots(
 fun WordSlot(
     slot: WordSlotState,
     screenSize: IntSize,
-    viewModel: ActivityViewModel
+    eightQuestionViewModel: EightQuestionViewModel
     , density: Density
 ) {
-    val activeSlotIndex by viewModel.activeSlotIndex.collectAsState()
+    val activeSlotIndex by eightQuestionViewModel.activeSlotIndex.collectAsState()
     val widthPx = (screenSize.width * 0.1f)
     val heightPx = (screenSize.width * 0.1f)
     LaunchedEffect(activeSlotIndex) {
-        viewModel.updateSlotColor(activeSlotIndex ?: -1)
+        eightQuestionViewModel.updateSlotColor(activeSlotIndex ?: -1)
     }
 
     Box(
@@ -287,7 +290,7 @@ fun WordSlot(
                 contentDescription = stringResource(Res.string.eighth_question_hitbear_close_icon),
                 modifier = Modifier.size(20.dp).align(Alignment.TopStart).padding(5.dp)
                     .clickable {
-                        viewModel.resetSlot(slot.id)
+                        eightQuestionViewModel.resetSlot(slot.id)
                     })
             Text(
                 text = it,

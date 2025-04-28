@@ -1,0 +1,60 @@
+package org.example.hit.heal.hitber.presentation.understanding
+
+import androidx.compose.ui.geometry.Offset
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import org.example.hit.heal.hitber.data.model.MeasureObjectBoolean
+import org.example.hit.heal.hitber.data.model.SixthQuestionType
+import org.example.hit.heal.hitber.presentation.understanding.components.audioList
+import org.example.hit.heal.hitber.utils.getNow
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
+
+class SixthQuestionViewModel: ViewModel() {
+
+    private val _audioResourceId = MutableStateFlow<StringResource?>(null)
+    val audioResourceId: StateFlow<StringResource?> get() = _audioResourceId.asStateFlow()
+
+    private val _selectedItem = MutableStateFlow<DrawableResource?>(null)
+    val selectedItem: StateFlow<DrawableResource?> get() = _selectedItem.asStateFlow()
+
+    private val _selectedNapkin = MutableStateFlow<DrawableResource?>(null)
+    val selectedNapkin: StateFlow<DrawableResource?> get() = _selectedNapkin.asStateFlow()
+
+    fun setRandomAudio() {
+        if (_audioResourceId.value == null) {
+            val randomAudio = audioList.random()
+            _audioResourceId.value = randomAudio.audioResId
+            _selectedItem.value = randomAudio.itemResId
+            _selectedNapkin.value = randomAudio.napkinColorResId
+        }
+    }
+
+    private val _itemLastPositions = MutableStateFlow<Map<Int, Offset>>(emptyMap())
+    val itemLastPositions: StateFlow<Map<Int, Offset>> = _itemLastPositions.asStateFlow()
+
+    fun updateItemLastPosition(index: Int, position: Offset) {
+        _itemLastPositions.value = _itemLastPositions.value.toMutableMap().apply {
+            this[index] = position
+        }
+    }
+
+    var isFridgeOpened: Boolean = false
+    var isItemMovedCorrectly: Boolean = false
+    var isNapkinPlacedCorrectly: Boolean = false
+
+    fun setFridgeOpened() {
+        isFridgeOpened = true
+    }
+
+    fun setItemMovedCorrectly() {
+        isItemMovedCorrectly = true
+    }
+
+    fun setNapkinPlacedCorrectly() {
+        isNapkinPlacedCorrectly = true
+    }
+
+}

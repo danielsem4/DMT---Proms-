@@ -43,11 +43,10 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
-import org.example.hit.heal.hitber.presentation.ImageUploadViewModel
-import org.example.hit.heal.hitber.presentation.QuestionType
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.circleColors
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.circlePositions
 import org.example.hit.heal.hitber.presentation.writing.WritingScreen
+import org.example.hit.heal.hitber.utils.getNow
 import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
 import org.example.hit.heal.hitber.utils.toBase64
 import org.jetbrains.compose.resources.stringResource
@@ -58,14 +57,12 @@ class DragAndDropScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.current
         val density = LocalDensity.current
+        val seventhQuestionViewModel: SeventhQuestionViewModel = koinViewModel()
         val viewModel: ActivityViewModel = koinViewModel()
-        val imageUploadViewModel: ImageUploadViewModel = koinViewModel()
-
-
         val captureController = rememberCaptureController()
         var screenSize by remember { mutableStateOf(0f to 0f) }
-        val targetColor by viewModel.targetCircleColor.collectAsState()
-        val instructionsResourceId by viewModel.instructionsResourceId.collectAsState()
+        val targetColor by seventhQuestionViewModel.targetCircleColor.collectAsState()
+        val instructionsResourceId by seventhQuestionViewModel.instructionsResourceId.collectAsState()
         val instructions = instructionsResourceId?.let { stringResource(it) }
         var targetBoxXRange by remember { mutableStateOf(0f..0f) }
         var targetBoxYRange by remember { mutableStateOf(0f..0f) }
@@ -89,13 +86,13 @@ class DragAndDropScreen : Screen {
                     val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
                     val base64 = byteArray.toBase64()
 
-                    imageUploadViewModel.uploadImage(base64, QuestionType.SeventhQuestion)
+                    //viewModel.addImageToQuestion(base64, QuestionType.SeventhQuestion)
                 }
             }
         }
 
         LaunchedEffect(Unit) {
-            viewModel.setRandomInstructions()
+            seventhQuestionViewModel.setRandomInstructions()
         }
 
 
@@ -112,8 +109,10 @@ class DragAndDropScreen : Screen {
                         targetBoxXRange = targetBoxXRange,
                         targetBoxYRange = targetBoxYRange,
                         density = density,
-                        viewModel = viewModel
+                        seventhQuestionViewModel = seventhQuestionViewModel
                     )
+                    viewModel.setSeventhQuestion(seventhQuestionViewModel.answer, getNow())
+
                 }
                 navigator?.push(WritingScreen())
             },
@@ -215,7 +214,7 @@ fun nextQuestion(
     targetBoxXRange: ClosedFloatingPointRange<Float>,
     targetBoxYRange: ClosedFloatingPointRange<Float>,
     density: Density,
-    viewModel: ActivityViewModel
+    seventhQuestionViewModel: SeventhQuestionViewModel
 ) {
     val (screenWidth, screenHeight) = screenSize
 
@@ -239,7 +238,7 @@ fun nextQuestion(
             threshold = 50f,
             isCircle = true
         )
-        viewModel.seventhQuestionAnswer(isInside)
+        seventhQuestionViewModel.seventhQuestionAnswer(isInside)
     }
 }
 

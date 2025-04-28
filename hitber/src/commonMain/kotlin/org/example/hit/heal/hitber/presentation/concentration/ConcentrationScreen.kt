@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
+import org.example.hit.heal.hitber.utils.getNow
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -47,15 +48,18 @@ class ConcentrationScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
+        val thirdQuestionViewModel : ThirdQuestionViewModel = koinViewModel()
         val viewModel: ActivityViewModel = koinViewModel()
-        val buttonVisible by viewModel.startButtonIsVisible.collectAsState()
-        val number by viewModel.number.collectAsState()
-        val isFinished by viewModel.isFinished.collectAsState()
-        val isNumberClickable by viewModel.isNumberClickable.collectAsState()
+        val buttonVisible by thirdQuestionViewModel.startButtonIsVisible.collectAsState()
+        val number by thirdQuestionViewModel.number.collectAsState()
+        val isFinished by thirdQuestionViewModel.isFinished.collectAsState()
+        val isNumberClickable by thirdQuestionViewModel.isNumberClickable.collectAsState()
 
         TabletBaseScreen(
             title = stringResource(Res.string.third_question_hitbear_title),
-            onNextClick = { if (isFinished) navigator?.push(NamingScreen()) },
+            onNextClick = { if (isFinished){ viewModel.setThirdQuestion(thirdQuestionViewModel.thirdQuestionAnswers, getNow())
+                navigator?.push(NamingScreen())
+            } },
             question = 3,
             buttonText = stringResource(Res.string.hitbear_continue),
             buttonColor = if (isFinished) primaryColor else Color.Gray,
@@ -73,8 +77,8 @@ class ConcentrationScreen : Screen {
                         modifier = Modifier.width(300.dp).padding(bottom = 20.dp)
                             .align(Alignment.CenterHorizontally),
                         onClick = {
-                            viewModel.startButtonSetVisible(false)
-                            viewModel.startRandomNumberGeneration()
+                            thirdQuestionViewModel.startButtonSetVisible(false)
+                            thirdQuestionViewModel.startRandomNumberGeneration()
                         },
                         colors = ButtonDefaults.buttonColors(primaryColor),
                         shape = RoundedCornerShape(30)
@@ -107,7 +111,7 @@ class ConcentrationScreen : Screen {
                         RandomNumberScreen(
                             number = number,
                             isClickable = isNumberClickable,
-                            onNumberClicked = { viewModel.thirdQuestionAnswer(it) })
+                            onNumberClicked = { thirdQuestionViewModel.thirdQuestionAnswer(it) })
                 }
             })
     }

@@ -58,12 +58,11 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
-import org.example.hit.heal.hitber.presentation.ImageUploadViewModel
-import org.example.hit.heal.hitber.presentation.QuestionType
 import org.example.hit.heal.hitber.presentation.buildShape.components.BuildShapes
 import org.example.hit.heal.hitber.presentation.buildShape.components.draggableShapesItem
 import org.example.hit.heal.hitber.presentation.buildShape.components.staticShapesItem
 import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
+import org.example.hit.heal.hitber.utils.getNow
 import org.example.hit.heal.hitber.utils.toBase64
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -76,8 +75,8 @@ class BuildShapeScreen : Screen {
 
         val navigator = LocalNavigator.current
         val density = LocalDensity.current
+        val tenthQuestionViewModel: TenthQuestionViewModel = koinViewModel()
         val viewModel: ActivityViewModel = koinViewModel()
-        val imageUploadViewModel: ImageUploadViewModel = koinViewModel()
 
         val captureController = rememberCaptureController()
         var screenSize by remember { mutableStateOf(0f to 0f) }
@@ -101,7 +100,7 @@ class BuildShapeScreen : Screen {
                     val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
                     val base64 = byteArray.toBase64()
 
-                    imageUploadViewModel.uploadImage(base64, QuestionType.TenthQuestion)
+                    //viewModel.addImageToQuestion(base64, QuestionType.SeventhQuestion)
                 }
             }
         }
@@ -122,12 +121,14 @@ class BuildShapeScreen : Screen {
                     )
 
                     results.forEach { (shape, resultFlag) ->
-                        viewModel.tenthQuestionAnswer(
+                        tenthQuestionViewModel.tenthQuestionAnswer(
                             shape = shape.id,
                             grade = resultFlag.toDouble(),
                         )
                     }
+                    viewModel.setTenthQuestion(tenthQuestionViewModel.answer, getNow())
                     navigator?.push(SummaryScreen())
+                   // viewModel.uploadHitberResult()
                 },
 
                 buttonText = stringResource(Res.string.hitbear_continue),

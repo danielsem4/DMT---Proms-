@@ -1,6 +1,8 @@
 package org.example.hit.heal.hitber.data.model
 
+import kotlinx.serialization.Serializable
 
+@Serializable
 sealed class TenthQuestionType {
     data class TenthQuestionItem(
         val shape: MeasureObjectString = MeasureObjectString(),
