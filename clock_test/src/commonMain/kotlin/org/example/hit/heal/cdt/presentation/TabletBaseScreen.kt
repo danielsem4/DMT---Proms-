@@ -30,6 +30,7 @@ fun TabletBaseScreen(
     title: String,
     topRightText: String? = null,
     content: @Composable ColumnScope.() -> Unit,
+    snackbarHost: @Composable (() -> Unit)? = null,
     vararg buttons: TabletButton
 ) {
     MaterialTheme {
@@ -92,6 +93,8 @@ fun TabletBaseScreen(
                     }
                 }
             }
+
+            snackbarHost?.invoke()
         }
     }
 }

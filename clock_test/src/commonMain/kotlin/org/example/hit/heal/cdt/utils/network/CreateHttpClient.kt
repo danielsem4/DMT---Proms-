@@ -13,12 +13,14 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.example.hit.heal.cdt.domain.TokenProvider
 
 fun createHttpClient(engine: HttpClientEngine): HttpClient {
     return HttpClient(engine) {
         install(ContentNegotiation) {
             json(
                 json = Json {
+                    encodeDefaults = true
                     ignoreUnknownKeys = true
                     prettyPrint = true
                     isLenient = true
@@ -41,6 +43,7 @@ fun createHttpClient(engine: HttpClientEngine): HttpClient {
         defaultRequest {
             contentType(ContentType.Application.Json)
             header("Accept", "application/json")
+            header("Authorization", "Token ${TokenProvider.getCurrentToken()}")
         }
     }
 }

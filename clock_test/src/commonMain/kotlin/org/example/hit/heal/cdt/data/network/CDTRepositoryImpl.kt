@@ -15,14 +15,12 @@ import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
 import org.example.hit.heal.cdt.domain.CDTRepository
 import org.example.hit.heal.cdt.domain.TokenProvider
+import org.example.hit.heal.cdt.presentation.components.ClockTime
 import org.example.hit.heal.cdt.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.cdt.utils.network.CDTError
-import org.example.hit.heal.cdt.utils.network.EmptyResult
 import org.example.hit.heal.cdt.utils.network.Error
 import org.example.hit.heal.cdt.utils.network.NetworkError
 import org.example.hit.heal.cdt.utils.network.Result
-import org.example.hit.heal.cdt.utils.network.onError
-import org.example.hit.heal.cdt.utils.network.onSuccess
 import org.example.hit.heal.cdt.utils.toByteArray
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -33,13 +31,13 @@ class CDTRepositoryImpl(
 
     private val BASE_URL = "https://rivka.hitheal.org.il/api/v1"
 
-    private var cdtResults: CDTResults = CDTResults()
+    private var cdtResults = CDTResults()
     private var clockDrawing: ImageBitmap? = null
     private var timeSpentDrawing: Long = 0
     private var timeSpentSettingFirstClock: Long = 0
     private var timeSpentSettingSecondClock: Long = 0
 
-    override suspend fun sendCDTRequest(): Result<String, Error> {
+    override suspend fun sendCDTRequest(): TransactionResult<String, Error> {
         val measurement = 21
         val patientId = 168
         val clinicId = 6
@@ -49,21 +47,19 @@ class CDTRepositoryImpl(
 
         val imagePath = "clinics/$clinicId/patients/$patientId/measurements/$measurement/$date/$version/$imgName"
 
-        // Step 1: Upload the clock image
         val uploadResult = uploadFileCog(imagePath)
 
-        return uploadResult
-            .onSuccess { uploadedImageUrl ->
+        return when (uploadResult) {
+            is Result.Success -> {
+                val uploadedImageUrl = uploadResult.data
                 println("Image uploaded successfully: $uploadedImageUrl")
 
-                // Step 2: Update CDT results with the uploaded image URL
                 cdtResults.imageUrl = MeasureObjectString(
                     measureObject = 186,
                     value = uploadedImageUrl,
                     dateTime = getCurrentFormattedDateTime()
                 )
 
-                // Step 3: Build the full CDTRequestBody
                 val body = CDTRequestBody(
                     measurement = measurement,
                     patientId = patientId,
@@ -72,10 +68,9 @@ class CDTRepositoryImpl(
                     test = cdtResults
                 )
 
-                println("Sending CDT request with body: $body")
-
+                val url = "$BASE_URL/patientMeasureResponse/"
                 try {
-                    val response = httpClient.post("$BASE_URL/patientMeasureResponse") {
+                    val response = httpClient.post(url) {
                         setBody(body)
                     }
 
@@ -83,32 +78,30 @@ class CDTRepositoryImpl(
                         in 200..299 -> {
                             val responseBody = response.bodyAsText()
                             println("CDT request success: ${response.status.value} - $responseBody")
-                            Result.Success(responseBody)
+                            TransactionResult.Success(responseBody)
                         }
-                        401 -> Result.Error(NetworkError.UNAUTHORIZED)
-                        403 -> Result.Error(NetworkError.UNAUTHORIZED)
-                        404 -> Result.Error(NetworkError.NOT_FOUND)
-                        409 -> Result.Error(NetworkError.CONFLICT)
-                        408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
-                        413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
-                        in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
-                        else -> Result.Error(NetworkError.UNKNOWN)
+                        401 -> TransactionResult.SendFailure(NetworkError.UNAUTHORIZED)
+                        403 -> TransactionResult.SendFailure(NetworkError.UNAUTHORIZED)
+                        404 -> TransactionResult.SendFailure(NetworkError.NOT_FOUND)
+                        409 -> TransactionResult.SendFailure(NetworkError.CONFLICT)
+                        408 -> TransactionResult.SendFailure(NetworkError.REQUEST_TIMEOUT)
+                        413 -> TransactionResult.SendFailure(NetworkError.PAYLOAD_TOO_LARGE)
+                        in 500..599 -> TransactionResult.SendFailure(NetworkError.SERVER_ERROR)
+                        else -> TransactionResult.SendFailure(NetworkError.UNKNOWN)
                     }
                 } catch (e: UnresolvedAddressException) {
-                    println("Failed to send CDT: no internet")
-                    Result.Error(NetworkError.NO_INTERNET)
+                    TransactionResult.SendFailure(NetworkError.NO_INTERNET)
                 } catch (e: SerializationException) {
-                    println("Failed to send CDT: serialization error")
-                    Result.Error(NetworkError.SERIALIZATION)
+                    TransactionResult.SendFailure(NetworkError.SERIALIZATION)
                 } catch (e: Exception) {
-                    println("Failed to send CDT: unknown error ${e.message}")
-                    Result.Error(NetworkError.UNKNOWN)
+                    TransactionResult.SendFailure(NetworkError.UNKNOWN)
                 }
             }
-            .onError { error ->
-                println("Image upload failed, not sending CDT: $error")
-                Result.Error(error) // Immediately stop if upload failed
+            is Result.Error -> {
+                println("Image upload failed: ${uploadResult.error}")
+                TransactionResult.UploadFailure(uploadResult.error)
             }
+        }
     }
 
 
@@ -176,32 +169,6 @@ class CDTRepositoryImpl(
         }
     }
 
-
-    override suspend fun uploadMeasureResponse(results: CDTRequestBody): EmptyResult<NetworkError> {
-        val response = try {
-            httpClient.post(urlString = "$BASE_URL/patientMeasureResponse/") {
-                setBody(results)
-            }
-        } catch (e: UnresolvedAddressException) {
-            return Result.Error(NetworkError.NO_INTERNET)
-        } catch (e: SerializationException) {
-            return Result.Error(NetworkError.SERIALIZATION)
-        }
-
-        return when (response.status.value) {
-            in 200..299 -> {
-                Result.Success(Unit)
-            }
-
-            401 -> Result.Error(NetworkError.UNAUTHORIZED)
-            409 -> Result.Error(NetworkError.CONFLICT)
-            408 -> Result.Error(NetworkError.REQUEST_TIMEOUT)
-            413 -> Result.Error(NetworkError.PAYLOAD_TOO_LARGE)
-            in 500..599 -> Result.Error(NetworkError.SERVER_ERROR)
-            else -> Result.Error(NetworkError.UNKNOWN)
-        }
-    }
-
     override fun getCDTResults(): CDTResults = cdtResults
 
     override fun updateCDTResults(results: CDTResults) {
@@ -234,5 +201,33 @@ class CDTRepositoryImpl(
 
     override fun setCDTResults(newRes: CDTResults) {
         this.cdtResults = newRes
+    }
+
+    override fun updateFirstClockTime(newTime: ClockTime) {
+        val formattedDateTime = getCurrentFormattedDateTime()
+        with(cdtResults){
+            timeChange1.value = newTime.toString()
+            timeChange1.dateTime = formattedDateTime
+
+            hourChange1.value = newTime.hours
+            hourChange1.dateTime = formattedDateTime
+
+            minuteChange1.value = newTime.minutes
+            minuteChange1.dateTime = formattedDateTime
+        }
+    }
+
+    override fun updateSecondClockTime(newTime: ClockTime) {
+        val formattedDateTime = getCurrentFormattedDateTime()
+        with(cdtResults){
+            timeChange2.value = newTime.toString()
+            timeChange2.dateTime = formattedDateTime
+
+            hourChange2.value = newTime.hours
+            hourChange2.dateTime = formattedDateTime
+
+           minuteChangeUrl2.value = newTime.minutes
+            minuteChangeUrl2.dateTime = formattedDateTime
+        }
     }
 }
