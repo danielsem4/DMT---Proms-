@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FileUploadReqBody(
+    @Serializable(with = Base64ByteArraySerializer::class)
     @SerialName("file") val file: ByteArray,
     @SerialName("file_name") val fileName: String,
     @SerialName("clinic_id") val clinicId: Int,

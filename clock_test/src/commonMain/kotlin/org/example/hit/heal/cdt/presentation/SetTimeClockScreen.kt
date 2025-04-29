@@ -40,12 +40,12 @@ class SetTimeClockScreen : Screen {
         viewModel.startSettingFirstClockTimer()
 
         // Reset the time to 12:0 if this is the first step
-        val isSecondStep by viewModel.isSecondStep.collectAsState()
+        val isSecondStep by viewModel.getSecondStep().collectAsState()
         if (!isSecondStep) {
             viewModel.updateFirstTime(ClockTime(12, 0))
         }
 
-        val currentTime by viewModel.drawTime.collectAsState()
+        val currentTime by viewModel.getCurrentClockSetTime().collectAsState()
 
         TabletBaseScreen(
             title = stringResource(Res.string.clock_screen_title),

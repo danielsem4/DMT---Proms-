@@ -43,6 +43,8 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
 
+            implementation (libs.kotlinx.coroutines.android)
+
             // Ktor dependencies
             implementation(libs.ktor.client.okhttp)
         }
@@ -86,9 +88,6 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-
-            //For Compose Multiplatform, especially on Desktop, Dispatchers.Main might not be available by default.
-            implementation(libs.kotlinx.coroutines.swing)
 
             //Ktor
             implementation(libs.ktor.client.darwin)

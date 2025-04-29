@@ -21,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -73,7 +72,7 @@ class DrawClockScreen : Screen {
         viewModel.startDrawingTimer()
         viewModel.updateFirstTime(ClockTime(12, 0))
 
-        val currentTime by viewModel.drawTime.collectAsState()
+        val currentTime = viewModel.getCurrentClockSetTime().value
         val formattedTitle = stringResource(Res.string.draw_screen_title, currentTime.toString())
         val instructions = stringResource(Res.string.draw_instruction, currentTime.toString())
 
@@ -271,7 +270,8 @@ class DrawClockScreen : Screen {
                             onClick = {
                                 if (!isButtonEnabled) return@RoundedButton
                                 isButtonEnabled = false
-                                viewModel.saveBitmap(drawPathsToBitmap())
+                                val image = drawPathsToBitmap()
+                                viewModel.saveBitmap(image)
                                 viewModel.stopDrawingTimer()
                                 navigator.replace(InfoScreen())
                             }

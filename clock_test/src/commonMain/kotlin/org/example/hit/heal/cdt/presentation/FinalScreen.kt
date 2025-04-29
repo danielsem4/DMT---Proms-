@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -28,7 +31,7 @@ class FinalScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinViewModel<ClockTestViewModel>()
-
+        val uploadState by viewModel.uploadState.collectAsState()
 
         TabletBaseScreen(
             title = stringResource(Res.string.final_screen_title),
@@ -40,14 +43,11 @@ class FinalScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
-
                     InstructionBox(
                         textResource = Res.string.final_screen_message,
                         modifier = Modifier.fillMaxWidth(0.8f)
                     )
-
                     Spacer(modifier = Modifier.weight(1f))
-
                     Row {
                         RoundedButton(
                             text = stringResource(Res.string.exit_button_text),
@@ -59,21 +59,36 @@ class FinalScreen : Screen {
                             }
                         )
                         Spacer(modifier = Modifier.weight(1f))
-
                         RoundedButton(
                             text = "Send",
                             modifier = Modifier
                                 .fillMaxWidth(0.3f)
                                 .height(60.dp),
                             onClick = {
-                                viewModel.sendToServer()
+                                val results = viewModel.getResults().value
+                                if (results.imageUrl.value == "initialUrl.png" && !viewModel.hasClockDrawing()) {
+                                    println("Warning: No clock drawing provided")
+                                    // Optionally show a dialog
+                                } else {
+                                    viewModel.sendToServer()
+                                }
                             }
                         )
                     }
-
                     Spacer(modifier = Modifier.height(32.dp))
                 }
             }
         )
+
+        // Handle upload state changes
+        LaunchedEffect(uploadState) {
+            when (uploadState) {
+                "Success" -> navigator.pop()
+                else -> if (uploadState?.startsWith("Failed") == true) {
+                    println("Upload failed: $uploadState")
+                    // Optionally show error to user
+                }
+            }
+        }
     }
-} 
+}
