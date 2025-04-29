@@ -12,15 +12,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.example.hit.heal.cdt.data.network.CDTResults
-import org.example.hit.heal.cdt.data.network.SendCDTUseCase
 import org.example.hit.heal.cdt.data.network.TransactionResult
-import org.example.hit.heal.cdt.domain.CDTRepository
+import org.example.hit.heal.cdt.domain.ClockRepository
+import org.example.hit.heal.cdt.domain.UploadCDTResultsUseCase
 import org.example.hit.heal.cdt.presentation.components.ClockTime
 import org.koin.core.component.KoinComponent
 
 class ClockTestViewModel(
-    private val repo: CDTRepository,
-    private val sendCDTUseCase: SendCDTUseCase
+    private val repo: ClockRepository,
+    private val uploadCDTResultsUseCase: UploadCDTResultsUseCase,
 ) : ViewModel(), KoinComponent {
 
     private val _currentClockSetTime= MutableStateFlow(ClockTime(12,0))
@@ -42,6 +42,32 @@ class ClockTestViewModel(
     private var timeSpentSettingSecondClock
         get() = repo.getTimeSpentSettingSecondClock()
         set(value) = repo.setTimeSpentSettingSecondClock(value)
+
+    /** Sends the clock drawing and results to the server */
+    fun sendToServer() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                when (val result = uploadCDTResultsUseCase.execute()) {
+                    is TransactionResult.Success -> {
+                        val msg = "Successfully uploaded CDT data: ${result.data}"
+                        _uploadState.value = msg
+                        println(msg)
+                    }
+                    is TransactionResult.UploadFailure -> {
+                        _uploadState.value = "Upload failed: ${result.error}"
+                        println("Upload failed before sending CDT: ${result.error}")
+                    }
+                    is TransactionResult.SendFailure -> {
+                        _uploadState.value = "Sending CDT failed: ${result.error}"
+                        println("Failed while sending CDT to server: ${result.error}")
+                    }
+                }
+            } catch (e: Exception) {
+                _uploadState.value = "Failed with exception: ${e.message}"
+                println("Unexpected exception: ${e.message}")
+            }
+        }
+    }
 
     /** Returns the current test results as a StateFlow */
     fun getResults(): StateFlow<CDTResults> = MutableStateFlow(repo.getCDTResults())
@@ -107,32 +133,5 @@ class ClockTestViewModel(
 
     fun getCurrentClockSetTime() = _currentClockSetTime
 
-    /** Sends the clock drawing and results to the server */
-    fun sendToServer() {
-        println("CDT Results: ${getResults().value}")
-
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                when (val result = sendCDTUseCase()) { // Use UseCase, not repo directly
-                    is TransactionResult.Success -> {
-                        val msg = "Successfully uploaded CDT data: ${result.data}"
-                        _uploadState.value = msg
-                        println(msg)
-                    }
-                    is TransactionResult.UploadFailure -> {
-                        _uploadState.value = "Upload failed: ${result.error}"
-                        println("Upload failed before sending CDT: ${result.error}")
-                    }
-                    is TransactionResult.SendFailure -> {
-                        _uploadState.value = "Sending CDT failed: ${result.error}"
-                        println("Failed while sending CDT to server: ${result.error}")
-                    }
-                }
-            } catch (e: Exception) {
-                _uploadState.value = "Failed with exception: ${e.message}"
-                println("Unexpected exception: ${e.message}")
-            }
-        }
-    }
 
 }

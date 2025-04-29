@@ -13,7 +13,7 @@ import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
-import org.example.hit.heal.cdt.domain.CDTRepository
+import org.example.hit.heal.cdt.domain.ClockRepository
 import org.example.hit.heal.cdt.domain.TokenProvider
 import org.example.hit.heal.cdt.presentation.components.ClockTime
 import org.example.hit.heal.cdt.utils.getCurrentFormattedDateTime
@@ -25,9 +25,9 @@ import org.example.hit.heal.cdt.utils.toByteArray
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-class CDTRepositoryImpl(
+class ClockRepositoryImpl(
     private val httpClient: HttpClient
-) : CDTRepository {
+) : ClockRepository {
 
     private val BASE_URL = "https://rivka.hitheal.org.il/api/v1"
 

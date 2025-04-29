@@ -7,7 +7,7 @@ import org.example.hit.heal.cdt.presentation.components.ClockTime
 import org.example.hit.heal.cdt.utils.network.Error
 import org.example.hit.heal.cdt.utils.network.Result
 
-interface CDTRepository {
+interface ClockRepository {
     suspend fun sendCDTRequest(): TransactionResult<String, Error>
     suspend fun uploadFileCog(imagePath: String):Result<String, Error>
 
