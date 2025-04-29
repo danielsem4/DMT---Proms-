@@ -40,8 +40,6 @@ import dmt_proms.hitber.generated.resources.summary_hitbear_instructions2
 import dmt_proms.hitber.generated.resources.summary_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
-import org.example.hit.heal.hitber.presentation.CogDataViewModel
-import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -55,12 +53,10 @@ class SummaryScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.current
         val viewModel : ActivityViewModel = koinViewModel()
-        val viewModelCogData : CogDataViewModel = koinViewModel()
-      //  val result = viewModel.cogData.collectAsState()
 
         TabletBaseScreen(
             title = stringResource(Res.string.summary_hitbear_title),
-            onNextClick = { },
+            onNextClick = { viewModel.uploadEvaluationResults()},
             question = 10,
             buttonText = stringResource(Res.string.summary_hitbear_exit),
             buttonColor = primaryColor,

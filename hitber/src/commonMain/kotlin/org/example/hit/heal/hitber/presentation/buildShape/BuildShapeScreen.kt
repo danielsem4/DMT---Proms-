@@ -92,16 +92,12 @@ class BuildShapeScreen : Screen {
             }
         }
 
-        var imageBitmapState by remember { mutableStateOf<ImageBitmap?>(null) }
+        var imageBitmapScreenShot by remember { mutableStateOf<ImageBitmap?>(null) }
+        LaunchedEffect(imageBitmapScreenShot) {
+            imageBitmapScreenShot?.let {
+                viewModel.uploadImage(it, getNow(), 10)
+                println("image: $imageBitmapScreenShot")
 
-        LaunchedEffect(imageBitmapState) {
-            imageBitmapState?.let {
-                withContext(Dispatchers.IO) {
-                    val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
-                    val base64 = byteArray.toBase64()
-
-                    //viewModel.addImageToQuestion(base64, QuestionType.SeventhQuestion)
-                }
             }
         }
 
@@ -128,7 +124,6 @@ class BuildShapeScreen : Screen {
                     }
                     viewModel.setTenthQuestion(tenthQuestionViewModel.answer, getNow())
                     navigator?.push(SummaryScreen())
-                   // viewModel.uploadHitberResult()
                 },
 
                 buttonText = stringResource(Res.string.hitbear_continue),
@@ -147,7 +142,7 @@ class BuildShapeScreen : Screen {
                     Capturable(
                         captureController = captureController,
                         onCaptured = { imageBitmap ->
-                            imageBitmapState = imageBitmap
+                            imageBitmapScreenShot = imageBitmap
                         }
                     ) {
                         Box(

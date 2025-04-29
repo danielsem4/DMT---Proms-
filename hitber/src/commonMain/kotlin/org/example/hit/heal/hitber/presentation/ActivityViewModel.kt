@@ -1,8 +1,18 @@
 package org.example.hit.heal.hitber
 
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.example.hit.heal.hitber.core.domain.Result
+import org.example.hit.heal.hitber.core.domain.onError
+import org.example.hit.heal.hitber.core.domain.onSuccess
+import org.example.hit.heal.hitber.core.utils.BitmapToUploadUseCase
+import org.example.hit.heal.hitber.core.utils.UploadEvaluationUseCase
+import org.example.hit.heal.hitber.core.utils.UploadImageUseCase
 import org.example.hit.heal.hitber.data.model.CogData
 import org.example.hit.heal.hitber.data.model.EighthQuestionItem
 import org.example.hit.heal.hitber.data.model.FirstQuestion
@@ -17,14 +27,16 @@ import org.example.hit.heal.hitber.data.model.SixthQuestionType
 import org.example.hit.heal.hitber.data.model.TenthQuestionType
 import org.example.hit.heal.hitber.data.model.ThirdQuestionItem
 
-class ActivityViewModel : ViewModel() {
+class ActivityViewModel(
+    private val uploadImageUseCase: UploadImageUseCase,
+    private val uploadEvaluationUseCase: UploadEvaluationUseCase
+) : ViewModel() {
 
-    private val _result = MutableStateFlow(CogData())
-    val result : StateFlow<CogData> get() = _result
+    var result: CogData = CogData()
 
     fun setFirstQuestion(firstQuestion: FirstQuestion) {
-        _result.value = _result.value.copy(firstQuestion = firstQuestion)
-        println("FirstQuestion answer: (${_result.value.firstQuestion})")
+        result.firstQuestion = firstQuestion
+        println("FirstQuestion answer: (${result.firstQuestion})")
     }
 
     fun setSecondQuestion(
@@ -45,10 +57,8 @@ class ActivityViewModel : ViewModel() {
             )
         }
 
-        _result.value = _result.value.copy(
-            secondQuestion = ArrayList(secondQuestionList)
-        )
-        println("FirstQuestion answer: (${_result.value.secondQuestion})")
+        result.secondQuestion = ArrayList(secondQuestionList)
+        println("FirstQuestion answer: (${result.secondQuestion})")
     }
 
     fun setThirdQuestion(thirdQuestionAnswers: MutableList<Pair<Int, Int>>, date: String) {
@@ -69,10 +79,9 @@ class ActivityViewModel : ViewModel() {
             )
         }
 
-        _result.value = _result.value.copy(
-            thirdQuestion = ArrayList(thirdQuestionList)
-        )
-        println("FirstQuestion answer: (${_result.value.thirdQuestion})")}
+        result.thirdQuestion = ArrayList(thirdQuestionList)
+        println("FirstQuestion answer: (${result.thirdQuestion})")
+    }
 
     fun setFourthQuestion(answers: List<String>, date: String) {
         val measureObjects = answers.map { answer ->
@@ -81,10 +90,8 @@ class ActivityViewModel : ViewModel() {
                 dateTime = date
             )
         }
-        _result.value = _result.value.copy(
-            fourthQuestion = ArrayList(measureObjects)
-        )
-        println("FirstQuestion answer: (${_result.value.fourthQuestion})")
+        result.fourthQuestion = ArrayList(measureObjects)
+        println("FirstQuestion answer: (${result.fourthQuestion})")
     }
 
 
@@ -92,16 +99,22 @@ class ActivityViewModel : ViewModel() {
         fridgeOpened: Boolean,
         itemMovedCorrectly: Boolean,
         napkinPlacedCorrectly: Boolean,
-        date : String
+        date: String
     ) {
         val sixthQuestionItem = SixthQuestionType.SixthQuestionItem(
             fridgeOpened = MeasureObjectBoolean(value = fridgeOpened, dateTime = date),
-            correctProductDragged = MeasureObjectBoolean(value = itemMovedCorrectly, dateTime = date),
-            placedOnCorrectNap = MeasureObjectBoolean(value = napkinPlacedCorrectly, dateTime = date)
+            correctProductDragged = MeasureObjectBoolean(
+                value = itemMovedCorrectly,
+                dateTime = date
+            ),
+            placedOnCorrectNap = MeasureObjectBoolean(
+                value = napkinPlacedCorrectly,
+                dateTime = date
+            )
         )
 
-        _result.value = _result.value.copy(sixthQuestion = arrayListOf(sixthQuestionItem))
-        println("FirstQuestion answer: (${_result.value.sixthQuestion})")
+        result.sixthQuestion = arrayListOf(sixthQuestionItem)
+        println("FirstQuestion answer: (${result.sixthQuestion})")
     }
 
     fun setSeventhQuestion(answer: Boolean, date: String) {
@@ -109,10 +122,8 @@ class ActivityViewModel : ViewModel() {
             isCorrect = MeasureObjectBoolean(value = answer, dateTime = date)
         )
 
-        _result.value = _result.value.copy(
-            seventhQuestion = arrayListOf(seventhQuestionItem)
-        )
-        println("FirstQuestion answer: (${_result.value.seventhQuestion})")
+        result.seventhQuestion = arrayListOf(seventhQuestionItem)
+        println("FirstQuestion answer: (${result.seventhQuestion})")
     }
 
     fun setEighthQuestion(
@@ -126,10 +137,8 @@ class ActivityViewModel : ViewModel() {
             )
         )
 
-        _result.value = _result.value.copy(
-            eighthQuestion = arrayListOf(eighthQuestionItem)
-        )
-        println("FirstQuestion answer: (${_result.value.eighthQuestion})")
+        result.eighthQuestion = arrayListOf(eighthQuestionItem)
+        println("FirstQuestion answer: (${result.eighthQuestion})")
     }
 
     fun setNinthQuestion(
@@ -150,10 +159,8 @@ class ActivityViewModel : ViewModel() {
             )
         }
 
-        _result.value = _result.value.copy(
-            ninthQuestion = ArrayList(ninthQuestionList)
-        )
-        println("FirstQuestion answer: (${_result.value.ninthQuestion})")
+        result.ninthQuestion = ArrayList(ninthQuestionList)
+        println("FirstQuestion answer: (${result.ninthQuestion})")
     }
 
 
@@ -175,42 +182,80 @@ class ActivityViewModel : ViewModel() {
             )
         }
 
-        _result.value = _result.value.copy(
-            tenthQuestion = ArrayList(tenthQuestionList)
-        )
-        println("FirstQuestion answer: (${_result.value.tenthQuestion})")
+        result.tenthQuestion = ArrayList(tenthQuestionList)
+        println("FirstQuestion answer: (${result.tenthQuestion})")
     }
 
 
-//    fun addImageToQuestion(image: String, questionType: QuestionType) {
-//        val imageObject = MeasureObjectString(value = image, dateTime = getNow())
-//
-//        when (questionType) {
-//            is QuestionType.SixthQuestion -> {
-//                val currentList = ArrayList(_result.value.sixthQuestion)
-//                val imageItem = SixthQuestionType.SixthQuestionImage(imageUrl = imageObject)
-//                currentList.add(imageItem)
-//                _result.value = _result.value.copy(sixthQuestion = currentList)
-//            }
-//            is QuestionType.SeventhQuestion -> {
-//                val currentList = ArrayList(_result.value.seventhQuestion)
-//                val imageItem = SeventhQuestionType.SeventhQuestionImage(imageUrl = imageObject)
-//                currentList.add(imageItem)
-//                _result.value = _result.value.copy(seventhQuestion = currentList)
-//            }
-//            is QuestionType.TenthQuestion -> {
-//                val currentList = ArrayList(_result.value.tenthQuestion)
-//                val imageItem = TenthQuestionType.TenthQuestionImage(imageUrl = imageObject)
-//                currentList.add(imageItem)
-//                _result.value = _result.value.copy(tenthQuestion = currentList)
-//            }
-//        }
-//    }
-//
-//    fun uploadHitberResult(){
-//
-//    }
+    private var uploadedImageUrl: String = ""
 
+    fun uploadImage(bitmap: ImageBitmap, date: String, currentQuestion: Int) {
+
+        val bitmapToUploadImageUseCase = BitmapToUploadUseCase()
+        println("העלאת תמונה התחילה")
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            uploadedImageUrl = bitmapToUploadImageUseCase.buildPath(
+                clinicId = result.clinicId.toString(),
+                patientId = result.patientId.toString(),
+                measurementId = result.measurement.toString(),
+                pathDate = date
+            )
+
+            when (val result = uploadImageUseCase.execute(
+                bitmap = bitmap,
+                clinicId = result.clinicId,
+                userId = result.patientId,
+                path = uploadedImageUrl
+            )) {
+                is Result.Success -> {
+                    withContext(Dispatchers.Main) {
+                        saveUpLoadedImageUrl(currentQuestion, date)
+                        println("העלאת תמונה הצליחה")
+                    }
+                }
+
+                is Result.Error -> {
+                    println("Error: ${result.error}")
+                }
+            }
+        }
+    }
+
+
+    private fun saveUpLoadedImageUrl(currentQuestion: Int?, date: String) {
+        val image = MeasureObjectString(
+            value = uploadedImageUrl,
+            dateTime = date
+        )
+
+        when (currentQuestion) {
+            6 -> result.sixthQuestion.add(
+                SixthQuestionType.SixthQuestionImage(image)
+            )
+
+            7 -> result.seventhQuestion.add(
+                SeventhQuestionType.SeventhQuestionImage(image)
+            )
+
+            10 -> result.tenthQuestion.add(
+                TenthQuestionType.TenthQuestionImage(image)
+            )
+        }
+    }
+
+    fun uploadEvaluationResults() {
+        viewModelScope.launch {
+            val testResult = uploadEvaluationUseCase.execute(result, CogData.serializer())
+
+            testResult.onSuccess {
+                println("העלאה הצליחה")
+            }.onError {
+                println("שגיאה בהעלאה: ${it.name}")
+            }
+        }
+    }
 }
 
 

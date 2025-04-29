@@ -128,21 +128,17 @@ class UnderstandingScreen : Screen {
         val napkinHeightPx = tableSize.second * 0.1f
 
 
-        var imageBitmapState by remember { mutableStateOf<ImageBitmap?>(null) }
+        var imageBitmapScreenShot by remember { mutableStateOf<ImageBitmap?>(null) }
         var showDialog by remember { mutableStateOf(false) }
 
-        LaunchedEffect(imageBitmapState) {
-            imageBitmapState?.let {
-                withContext(Dispatchers.IO) {
-                    val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
-                    val base64 = byteArray.toBase64()
 
-                   // sixthQuestionViewModel.addImageToQuestion(base64, QuestionType.SeventhQuestion)
-                 }
+        LaunchedEffect(imageBitmapScreenShot) {
+            imageBitmapScreenShot?.let {
+                    viewModel.uploadImage(it, getNow(), 6)
+                println("image: $imageBitmapScreenShot")
+
             }
         }
-
-
 
         LaunchedEffect(isAudioClicked) {
             if (isAudioClicked) {
@@ -186,7 +182,8 @@ class UnderstandingScreen : Screen {
                         sixthQuestionViewModel.isNapkinPlacedCorrectly,
                         getNow()
                     )
-                   // showDialog = true
+
+                    // showDialog = true
                     navigator?.push(DragAndDropScreen())
                     },
                     question = 6,
@@ -233,7 +230,7 @@ class UnderstandingScreen : Screen {
                         Capturable(
                             captureController = captureController,
                             onCaptured = { imageBitmap ->
-                                imageBitmapState = imageBitmap
+                                imageBitmapScreenShot = imageBitmap
                             }
                         ) {
                             Box(
@@ -366,9 +363,9 @@ class UnderstandingScreen : Screen {
                     if (isDialogVisible) {
                         AudioPlayingDialog()
                     }
-                    if (showDialog && imageBitmapState != null) {
+                    if (showDialog && imageBitmapScreenShot != null) {
                         ScreenshotDialog(
-                            imageBitmap = imageBitmapState,
+                            imageBitmap = imageBitmapScreenShot,
                             onDismiss = { showDialog = false }
                         )
                     }

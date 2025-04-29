@@ -78,16 +78,13 @@ class DragAndDropScreen : Screen {
         }
 
 
-        var imageBitmapState by remember { mutableStateOf<ImageBitmap?>(null) }
+        var imageBitmapScreenShot by remember { mutableStateOf<ImageBitmap?>(null) }
 
-        LaunchedEffect(imageBitmapState) {
-            imageBitmapState?.let {
-                withContext(Dispatchers.IO) {
-                    val byteArray = it.toByteArray(CompressionFormat.PNG, 100)
-                    val base64 = byteArray.toBase64()
+        LaunchedEffect(imageBitmapScreenShot) {
+            imageBitmapScreenShot?.let {
+                viewModel.uploadImage(it, getNow(), 7)
+                println("image: $imageBitmapScreenShot")
 
-                    //viewModel.addImageToQuestion(base64, QuestionType.SeventhQuestion)
-                }
             }
         }
 
@@ -134,7 +131,7 @@ class DragAndDropScreen : Screen {
                 Capturable(
                     captureController = captureController,
                     onCaptured = { imageBitmap ->
-                        imageBitmapState = imageBitmap
+                        imageBitmapScreenShot = imageBitmap
                     }
                 ) {
                     Canvas(

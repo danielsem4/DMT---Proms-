@@ -3,9 +3,11 @@ package org.example.hit.heal.hitber.di
 
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.core.data.HttpClientFactory
-import org.example.hit.heal.hitber.data.CogDataRepository
-import org.example.hit.heal.hitber.data.ImageUploadRepository
-import org.example.hit.heal.hitber.presentation.CogDataViewModel
+import org.example.hit.heal.hitber.core.network.AppApi
+import org.example.hit.heal.hitber.core.network.KtorAppRemoteDataSource
+import org.example.hit.heal.hitber.core.utils.BitmapToUploadUseCase
+import org.example.hit.heal.hitber.core.utils.UploadEvaluationUseCase
+import org.example.hit.heal.hitber.core.utils.UploadImageUseCase
 import org.example.hit.heal.hitber.presentation.buildShape.TenthQuestionViewModel
 import org.example.hit.heal.hitber.presentation.concentration.ThirdQuestionViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.SeventhQuestionViewModel
@@ -23,11 +25,7 @@ expect val platformModule: Module
 val appModule: Module = module {
 
     single { HttpClientFactory.createHttpClient(get()) }
-    single { ImageUploadRepository(get()) }
-    //single { ImageUploadViewModel(get()) }
-    single { ActivityViewModel() }
-    single { CogDataRepository(get()) }
-    single { CogDataViewModel(get()) }
+    single { ActivityViewModel(get(), get()) }
     viewModel { FirstQuestionViewModel() }
     single { SecondQuestionViewModel() }
     viewModel { ThirdQuestionViewModel() }
@@ -36,4 +34,7 @@ val appModule: Module = module {
     viewModel { SeventhQuestionViewModel() }
     viewModel { EightQuestionViewModel() }
     viewModel { TenthQuestionViewModel() }
+    single<AppApi> { KtorAppRemoteDataSource(get()) }
+    single { UploadImageUseCase(get()) }
+    single { UploadEvaluationUseCase(get()) }
 }
