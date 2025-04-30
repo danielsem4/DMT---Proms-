@@ -2,6 +2,7 @@ package core.di
 
 import core.data.remote.impl.KtorAppRemoteDataSource
 import core.domain.api.AppApi
+import core.domain.session.SessionManager
 import core.domain.use_case.LoginUseCase
 import core.network.HttpClientFactory
 import org.koin.core.module.dsl.singleOf

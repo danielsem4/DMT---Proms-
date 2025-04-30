@@ -62,6 +62,8 @@ kotlin {
             implementation(libs.navigation.compose)
 
             implementation(libs.coil.compose)
+            implementation(libs.datastore.preferences)
+            implementation(libs.atomicfu)
 
         }
         nativeMain.dependencies {

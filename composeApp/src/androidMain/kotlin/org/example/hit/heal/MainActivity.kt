@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                 navigationBarStyle = if (!inDarkTheme) SystemBarStyle.dark(darkColor.hashCode())
                 else SystemBarStyle.light(lightColor.hashCode(), lightColor.hashCode())
             )
-            App()
+            App(context = this)
         }
     }
 }

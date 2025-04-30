@@ -6,5 +6,4 @@ interface SessionManager {
 
     fun saveUserSession(response: SuccessfulLoginResponse)
     fun clearSession()
-
 }

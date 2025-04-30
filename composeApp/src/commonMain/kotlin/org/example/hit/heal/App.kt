@@ -5,6 +5,6 @@ import org.example.hit.heal.navigation.NavigationGraph
 
 
 @Composable
-fun App() {
+fun App(context: Any? = null) {
     NavigationGraph()
 }
