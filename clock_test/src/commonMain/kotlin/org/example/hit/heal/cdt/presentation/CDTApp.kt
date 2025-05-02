@@ -6,7 +6,7 @@ import cafe.adriel.voyager.transitions.FadeTransition
 import org.koin.compose.KoinContext
 
 @Composable
-fun App() {
+fun CDTApp() {
     KoinContext {
         Navigator(screen = LandingScreen()) { navigator ->
             FadeTransition(navigator)

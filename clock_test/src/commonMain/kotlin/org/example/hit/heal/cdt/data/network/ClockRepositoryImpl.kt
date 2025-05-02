@@ -72,6 +72,7 @@ class ClockRepositoryImpl(
                 try {
                     val response = httpClient.post(url) {
                         setBody(body)
+                        header("Authorization", "Token ${TokenProvider.getCurrentToken()}")
                     }
 
                     when (response.status.value) {

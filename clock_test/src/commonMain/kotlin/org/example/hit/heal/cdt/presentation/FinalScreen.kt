@@ -29,6 +29,7 @@ import dmt_proms.clock_test.generated.resources.exit_button_text
 import dmt_proms.clock_test.generated.resources.final_screen_message
 import dmt_proms.clock_test.generated.resources.final_screen_title
 import kotlinx.coroutines.launch
+import org.example.hit.heal.cdt.data.UploadState
 import org.example.hit.heal.cdt.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
@@ -104,17 +105,12 @@ class FinalScreen : Screen {
 
         // Handle upload state changes
         LaunchedEffect(uploadState) {
-            uploadState?.let {
-                when {
-                    it.startsWith("Success")-> {
-                        coroutineScope.launch {
-                            snackbarHostState.showSnackbar(it)
-                            navigator.pop()
-                        }
-                    }
-                    it.startsWith("Failed") -> coroutineScope.launch {
-                        snackbarHostState.showSnackbar(it)
-                    }
+            uploadState?.let { state: UploadState ->
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(state.message)
+                }
+                if (state.isSuccessful) {
+                    navigator.pop()
                 }
             }
         }

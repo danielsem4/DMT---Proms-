@@ -4,13 +4,12 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import org.example.hit.heal.cdt.data.UploadState
 import org.example.hit.heal.cdt.data.network.CDTResults
 import org.example.hit.heal.cdt.data.network.TransactionResult
 import org.example.hit.heal.cdt.domain.ClockRepository
@@ -23,13 +22,13 @@ class ClockTestViewModel(
     private val uploadCDTResultsUseCase: UploadCDTResultsUseCase,
 ) : ViewModel(), KoinComponent {
 
-    private val _currentClockSetTime= MutableStateFlow(ClockTime(12,0))
+    private val _currentClockSetTime = MutableStateFlow(ClockTime(12, 0))
     private val _isSecondStep: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val _drawnPaths: MutableStateFlow<List<Path>> = MutableStateFlow(emptyList())
 
     // Upload state
-    private val _uploadState = MutableStateFlow<String?>(null)
-    var uploadState: StateFlow<String?> = _uploadState.asStateFlow()
+    private val _uploadState = MutableStateFlow<UploadState?>(null)
+    var uploadState: StateFlow<UploadState?> = _uploadState.asStateFlow()
 
     // Time tracking properties
     private var startTime: Long = 0
@@ -45,26 +44,32 @@ class ClockTestViewModel(
 
     /** Sends the clock drawing and results to the server */
     fun sendToServer() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
+            var msg = ""
+            var isSuccess = false
             try {
                 when (val result = uploadCDTResultsUseCase.execute()) {
                     is TransactionResult.Success -> {
-                        val msg = "Successfully uploaded CDT data: ${result.data}"
-                        _uploadState.value = msg
+                        msg = "Successfully uploaded CDT data: ${result.data}"
+                        isSuccess = true
                         println(msg)
                     }
+
                     is TransactionResult.UploadFailure -> {
-                        _uploadState.value = "Upload failed: ${result.error}"
+                        msg = "Upload failed: ${result.error}"
                         println("Upload failed before sending CDT: ${result.error}")
                     }
+
                     is TransactionResult.SendFailure -> {
-                        _uploadState.value = "Sending CDT failed: ${result.error}"
+                        msg = "Sending CDT failed: ${result.error}"
                         println("Failed while sending CDT to server: ${result.error}")
                     }
                 }
             } catch (e: Exception) {
-                _uploadState.value = "Failed with exception: ${e.message}"
+                msg = "Failed with exception: ${e.message}"
                 println("Unexpected exception: ${e.message}")
+            } finally {
+                _uploadState.value = UploadState(isSuccess, msg)
             }
         }
     }

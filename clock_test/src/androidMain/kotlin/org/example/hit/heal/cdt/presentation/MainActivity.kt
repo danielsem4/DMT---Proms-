@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                 navigationBarStyle = if (!inDarkTheme) SystemBarStyle.dark(darkColor.hashCode())
                 else SystemBarStyle.light(lightColor.hashCode(), lightColor.hashCode())
             )
-            App()
+            CDTApp()
         }
     }
 }
@@ -36,5 +36,5 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    App()
+    CDTApp()
 }
