@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -14,7 +15,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-
+    
     listOf(
         iosX64(),
         iosArm64(),
@@ -25,24 +26,26 @@ kotlin {
             isStatic = true
         }
     }
-
+    
     jvm("desktop")
-
+    
     sourceSets {
         val desktopMain by getting
-
+        
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
             // Koin dependencies
             implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
 
             // Ktor dependencies
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(projects.ui.core)
+            implementation(projects.core)
             implementation(projects.clockTest)
 
             implementation(compose.runtime)
@@ -58,6 +61,8 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.transitions)
+            // Basic Navigation
+            implementation(libs.navigation.compose)
 
             // Koin dependencies
             api(libs.koin.core)
@@ -65,10 +70,25 @@ kotlin {
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization) // for data serialization
+            implementation(compose.materialIconsExtended)
+            implementation(libs.font.awesome)
+
+            implementation(libs.bundles.ktor)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
+
+            implementation(libs.coil.compose)
+
+        }
+        nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(compose.desktop.common)
+            implementation(libs.ktor.client.okhttp)
         }
     }
 }
@@ -84,7 +104,6 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
-
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -102,6 +121,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.play.services.cast.framework)
     debugImplementation(compose.uiTooling)
 }
 

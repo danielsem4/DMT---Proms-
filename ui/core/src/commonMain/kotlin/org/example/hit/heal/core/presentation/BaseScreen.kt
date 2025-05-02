@@ -36,6 +36,7 @@ fun BaseScreen(
     title: String,
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
+    navigationIcon: @Composable (() -> Unit)? = null,
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
     MaterialTheme {
@@ -53,14 +54,25 @@ fun BaseScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(primaryColor)
-                    .padding(12.dp),
-                contentAlignment = Alignment.Center
+                    .padding(12.dp)
             ) {
+                navigationIcon?.let {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(top = statusBarValues.calculateTopPadding())
+                    ) {
+                        it()
+                    }
+                }
+                
                 Text(
                     text = title,
                     color = Color.White,
                     style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(top = statusBarValues.calculateTopPadding())
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(top = statusBarValues.calculateTopPadding())
                 )
             }
 

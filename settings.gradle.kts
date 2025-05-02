@@ -5,9 +5,9 @@ pluginManagement {
     repositories {
         google {
             mavenContent {
-                includeGroupByRegex("androidx.*")
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
             }
         }
         mavenCentral()
@@ -19,14 +19,16 @@ dependencyResolutionManagement {
     repositories {
         google {
             mavenContent {
-                includeGroupByRegex("androidx.*")
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
             }
         }
         mavenCentral()
     }
 }
+
 include(":composeApp")
 include(":ui:core")
+include(":core")
 include(":clock_test")
