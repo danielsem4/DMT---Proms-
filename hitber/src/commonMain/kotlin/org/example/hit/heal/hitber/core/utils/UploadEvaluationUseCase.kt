@@ -15,6 +15,6 @@ class UploadEvaluationUseCase(
         println("Uploading evaluation: $evaluationResults")
         val result = api.uploadEvaluationTest(evaluationResults, serializer)
         println("Uploading evaluation: $result")
-return  result
+        return  result
     }
 }

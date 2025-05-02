@@ -60,8 +60,8 @@ class KtorAppRemoteDataSource(
     ): Result<Unit, DataError.Remote> = safeCall<Unit> {
         println("🔄 Starting uploadEvaluationTest...")
 
-            val jsonString = AppJson.encodeToString(serializer, results)
-            println("📦 Encoded JSON string:\n${jsonString}")
+        val jsonString = AppJson.encodeToString(serializer, results)
+        println("📦 Encoded JSON string:\n${jsonString}")
 
         val response = httpClient.post("${BASE_URL}patientMeasureResponse/") {
             println("🌐 Sending POST request to: ${BASE_URL}patientMeasureResponse/")
