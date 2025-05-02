@@ -25,12 +25,11 @@ fun BaseTabletScreen(
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
     MaterialTheme {
-
         val statusBarValues = WindowInsets.safeDrawing.asPaddingValues()
 
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize() // מאפשר לתפוס את כל שטח המסך
                 .background(backgroundColor)
                 .padding(bottom = statusBarValues.calculateBottomPadding())
         ) {
@@ -41,7 +40,6 @@ fun BaseTabletScreen(
                     .background(primaryColor)
                     .padding(12.dp)
             ) {
-
                 Text(
                     text = title,
                     color = Color.White,
@@ -54,12 +52,14 @@ fun BaseTabletScreen(
 
             // Dynamic Content
             Column(
-                modifier = Modifier.padding(8.dp).weight(1f),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .fillMaxSize() // ממלא את כל המסך
+                    .padding(top = 20.dp), // ה-padding שלך
+                verticalArrangement = Arrangement.Center // ממקם את התוכן במרכז אנכית
             ) {
                 content()
             }
         }
     }
 }
+

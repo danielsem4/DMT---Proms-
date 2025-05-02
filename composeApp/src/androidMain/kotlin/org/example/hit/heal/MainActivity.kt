@@ -9,6 +9,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import entryScreen.EntryScreen
 import org.example.hit.heal.di.initKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -38,8 +39,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview
+@Preview(
+    name = "Tablet Portrait Preview",
+    showBackground = true,
+    device = "spec:width=800dp,height=1280dp,dpi=240"
+)
 @Composable
-fun AppAndroidPreview() {
-    App()
+fun TabletPortraitEntryScreenPreview() {
+    EntryScreen().Content()
 }
