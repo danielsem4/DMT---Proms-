@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
@@ -16,7 +16,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -27,12 +27,12 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -43,10 +43,6 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
-            implementation(projects.ui.core)
-            implementation(projects.core)
-            implementation(projects.pass)
-
             implementation (libs.navigator)
             implementation (libs.navigator.tabs)
             implementation (libs.navigator.transitions)
@@ -70,6 +66,8 @@ kotlin {
             implementation(libs.navigation.compose)
 
             implementation(libs.coil.compose)
+            implementation(libs.datastore.preferences)
+            implementation(libs.atomicfu)
 
         }
         nativeMain.dependencies {
@@ -85,16 +83,9 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.hit.heal"
+    namespace = "org.example.hit.heal.core"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    defaultConfig {
-        applicationId = "org.example.hit.heal"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
