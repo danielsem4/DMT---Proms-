@@ -1,11 +1,10 @@
 package org.example.hit.heal
 
 import androidx.compose.runtime.Composable
-import org.example.hit.heal.core.presentation.SampleScreen
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.example.hit.heal.navigation.NavigationGraph
+
 
 @Composable
-@Preview
-fun App() {
-    SampleScreen()
+fun App(context: Any? = null) {
+    NavigationGraph()
 }

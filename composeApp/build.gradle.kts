@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -35,9 +36,15 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(projects.ui.core)
+            implementation(projects.core)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -47,10 +54,27 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(compose.materialIconsExtended)
+            implementation(libs.font.awesome)
+
+            implementation(libs.bundles.ktor)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            api(libs.koin.core)
+
+            implementation(libs.navigation.compose)
+
+            implementation(libs.coil.compose)
+
+        }
+        nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(compose.desktop.common)
+            implementation(libs.ktor.client.okhttp)
         }
     }
 }
@@ -83,6 +107,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.play.services.cast.framework)
     debugImplementation(compose.uiTooling)
 }
 
