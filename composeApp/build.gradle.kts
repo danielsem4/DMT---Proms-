@@ -47,6 +47,7 @@ kotlin {
             implementation(projects.core)
             implementation(projects.pass)
 
+            implementation(libs.kotlinx.coroutines.core)
             implementation (libs.navigator)
             implementation (libs.navigator.tabs)
             implementation (libs.navigator.transitions)

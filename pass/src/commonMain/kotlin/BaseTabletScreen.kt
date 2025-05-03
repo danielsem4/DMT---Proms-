@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.material.DrawerDefaults.backgroundColor
+import org.example.hit.heal.core.presentation.Colors.backgroundColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -55,7 +55,8 @@ fun BaseTabletScreen(
                 modifier = Modifier
                     .fillMaxSize() // ממלא את כל המסך
                     .padding(top = 20.dp), // ה-padding שלך
-                verticalArrangement = Arrangement.Center // ממקם את התוכן במרכז אנכית
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally// ממקם את התוכן במרכז אנכית
             ) {
                 content()
             }

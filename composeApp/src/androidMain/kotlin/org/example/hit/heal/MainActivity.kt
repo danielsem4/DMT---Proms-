@@ -9,10 +9,12 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import entryScreen.EntryScreen
+import presentation.entryScreen.EntryScreen
 import org.example.hit.heal.di.initKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import presentation.appsDeviceScreen.AppDeviceScreen
+import presentation.contatcts.ContactsScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,5 +48,7 @@ class MainActivity : ComponentActivity() {
 )
 @Composable
 fun TabletPortraitEntryScreenPreview() {
-    EntryScreen().Content()
+  //  EntryScreen().Content()
+   // AppDeviceScreen().Content()
+    ContactsScreen().Content()
 }

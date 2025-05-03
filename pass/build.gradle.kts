@@ -43,6 +43,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
+            implementation(libs.kotlinx.coroutines.core)
             implementation (libs.navigator)
             implementation (libs.navigator.tabs)
             implementation (libs.navigator.transitions)
