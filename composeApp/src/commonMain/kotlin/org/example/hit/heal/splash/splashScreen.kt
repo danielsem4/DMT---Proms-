@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
 import coil3.compose.AsyncImage
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
@@ -24,7 +25,15 @@ import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-
+class SplashScreen(): Screen {
+    @Composable
+    override fun Content() {
+        SplashScreen(
+            onNavigateToHome = { /* TODO: Implement navigation to Home */ },
+            onNavigateToLogin = { /* TODO: Implement navigation to Login */ }
+        )
+    }
+}
 @Composable
 fun SplashScreen(
     onNavigateToHome: () -> Unit,

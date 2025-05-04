@@ -26,21 +26,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import org.example.EmailTextField
 import org.example.PasswordTextField
+import org.example.hit.heal.Home.HomeScreen
 import org.example.hit.heal.core.presentation.BaseScreen
 import org.example.hit.heal.login.LoginViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
-
+class LoginScreen(): Screen {
 @Composable
-fun LoginScreen(
-    onLoginSuccess: () -> Unit,
-) {
-
+override fun Content() {
+    val navigator = LocalNavigator.currentOrThrow
     val loginViewModel: LoginViewModel = koinViewModel()
 
     var email by remember { mutableStateOf("") }
@@ -105,7 +107,9 @@ fun LoginScreen(
             Button(
                 onClick = {
                     if (email.isNotEmpty() && password.isNotEmpty()) {
-                        loginViewModel.login(email, password, onLoginSuccess)
+                        loginViewModel.login(email, password) {
+                            navigator.replace(HomeScreen())
+                        }
                     } else {
                         loginViewModel.setMessage("Please fill in all fields")
                     }
@@ -130,4 +134,5 @@ fun LoginScreen(
             SnackbarHost(hostState = snackbarHostState)
         }
     }
+}
 }

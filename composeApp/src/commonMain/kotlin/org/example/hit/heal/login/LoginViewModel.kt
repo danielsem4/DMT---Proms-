@@ -1,9 +1,12 @@
 package org.example.hit.heal.login
 
+import LoginScreen
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.navigator.defaultNavigatorSaver
 import core.domain.onError
 import core.domain.onSuccess
 import core.domain.use_case.LoginUseCase
@@ -11,7 +14,11 @@ import core.network.responseToResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.example.hit.heal.Home.HomeScreen
 import org.koin.core.component.KoinComponent
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+
 
 
 class LoginViewModel(
@@ -49,6 +56,7 @@ class LoginViewModel(
                             _isLoggedIn.value = true
                             _message.value = "Login successful"
                             onLoginSuccess()
+
                         } else {
                             _isLoggedIn.value = false
                             _message.value = response.status ?: "Unknown error"

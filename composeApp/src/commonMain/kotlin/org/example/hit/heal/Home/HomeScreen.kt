@@ -24,22 +24,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
 import org.example.hit.heal.core.presentation.BaseScreen
+
+import cafe.adriel.voyager.core.screen.Screen
+class HomeScreen(): Screen {
 @Composable
-fun HomeScreen(
-    onLogout: () -> Unit
-) {
+    override  fun Content()
+    {
     BaseScreen(
         title = "Home",
-        navigationIcon = {
-            IconButton(onClick = onLogout) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Logout,
-                    contentDescription = "Logout",
-                    tint = Color.White
-                )
-            }
-        }
+//        navigationIcon = {
+//            IconButton(onClick = Null) {
+//                Icon(
+//                    imageVector = Icons.AutoMirrored.Filled.Logout,
+//                    contentDescription = "Logout",
+//                    tint = Color.White
+//                )
+//            }
+//        }
     ) {
 
         Column(
@@ -82,4 +85,5 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
+}
 }

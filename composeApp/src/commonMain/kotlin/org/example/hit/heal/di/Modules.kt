@@ -2,7 +2,7 @@ package org.example.hit.heal.di
 
 import core.di.clientRequestsModule
 import org.example.hit.heal.login.LoginViewModel
-import org.example.hit.heal.navigation.NavigationViewModel
+
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -29,6 +29,5 @@ val sharedAppModules = module{
 
 val sharedModules = module {
     viewModelOf(::LoginViewModel)
-    single { NavigationViewModel() }
-
+    // NavigationViewModel is no longer needed with Voyager
 }
