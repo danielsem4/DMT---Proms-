@@ -246,6 +246,8 @@ class ActivityViewModel(
     }
 
     fun uploadEvaluationResults() {
+        println("results object: $result")
+
         viewModelScope.launch {
             val testResult = uploadEvaluationUseCase.execute(result, CogData.serializer())
 
