@@ -31,3 +31,4 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":hitber")
 include(":ui:core")
+include(":core")

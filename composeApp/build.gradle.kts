@@ -39,14 +39,22 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.compose)
             implementation(libs.ktor.client.okhttp)
+
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
+            implementation(projects.hitber)
+            implementation(projects.ui.core)
+            implementation(projects.core)
+
             implementation(libs.kmp.capturable.compose)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation(compose.material3)
-            implementation(projects.hitber)
-            implementation(projects.ui.core)
+
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose)
@@ -63,16 +71,32 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(compose.materialIconsExtended)
+            implementation(libs.font.awesome)
+
+            implementation(libs.bundles.ktor)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            api(libs.koin.core)
+
+            implementation(libs.navigation.compose)
+
+            implementation(libs.coil.compose)
+
+        }
+        nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
 
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
-            implementation(libs.ktor.ios)
         }
 
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(compose.desktop.common)
+            implementation(libs.ktor.client.okhttp)
         }
     }
 }
@@ -105,6 +129,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.play.services.cast.framework)
     debugImplementation(compose.uiTooling)
 }
 
