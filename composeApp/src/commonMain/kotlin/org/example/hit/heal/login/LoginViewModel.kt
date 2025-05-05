@@ -18,13 +18,14 @@ import org.example.hit.heal.Home.HomeScreen
 import org.koin.core.component.KoinComponent
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-
+import core.data.local.DataStoreRepository
 
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
+//    private val dataStoreRepository: DataStoreRepository
 ) : ViewModel(), KoinComponent {
-    
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -52,9 +53,10 @@ class LoginViewModel(
                     .onSuccess { response ->
                         if (response.status == "Success") {
 
-
+//                            dataStoreRepository.saveLoginResponse(response)
                             _isLoggedIn.value = true
                             _message.value = "Login successful"
+
                             onLoginSuccess()
 
                         } else {

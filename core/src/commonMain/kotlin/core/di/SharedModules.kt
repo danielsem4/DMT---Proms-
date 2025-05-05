@@ -1,5 +1,6 @@
 package core.di
 
+import core.data.local.DataStoreRepository
 import core.data.remote.impl.KtorAppRemoteDataSource
 import core.domain.api.AppApi
 import core.domain.session.SessionManager
@@ -19,5 +20,6 @@ val clientRequestsModule = module{
     single { HttpClientFactory.create(get()) }
     singleOf(::KtorAppRemoteDataSource).bind<AppApi>()
     singleOf(::LoginUseCase)
+
 
 }

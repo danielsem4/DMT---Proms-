@@ -1,5 +1,6 @@
 package org.example.hit.heal.splash
 
+import LoginScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,46 +19,40 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import coil3.compose.AsyncImage
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import kotlinx.coroutines.delay
+import org.example.hit.heal.Home.HomeScreen
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 class SplashScreen(): Screen {
     @Composable
     override fun Content() {
-        SplashScreen(
-            onNavigateToHome = { /* TODO: Implement navigation to Home */ },
-            onNavigateToLogin = { /* TODO: Implement navigation to Login */ }
-        )
-    }
-}
-@Composable
-fun SplashScreen(
-    onNavigateToHome: () -> Unit,
-    onNavigateToLogin: () -> Unit
-) {
-
+        val navigator = LocalNavigator.currentOrThrow
+        val splashViewModel = koinViewModel<SplashViewModel>()
+        val isLoggedIn by splashViewModel.isLoggedIn.collectAsState()
     // Use safe non-suspend methods only
-    val isLoggedIn = remember { false }
+
 
     // Use a safe approach to image loading
     val defaultImage = painterResource(Res.drawable.med_presc)
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(isLoggedIn) {
         try {
             delay(2000)
             if (isLoggedIn) {
-                onNavigateToHome()
+                navigator.replace(HomeScreen())
             } else {
-                onNavigateToLogin()
+                navigator.replace(LoginScreen())
             }
         } catch (e: Exception) {
             println("Navigation error: ${e.message}")
             // Fallback navigation
-            onNavigateToLogin()
+            navigator.replace(LoginScreen())
         }
     }
     Box(
@@ -85,4 +80,5 @@ fun SplashScreen(
             )
         }
     }
+}
 }
