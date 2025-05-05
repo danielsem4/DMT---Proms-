@@ -50,5 +50,5 @@ class MainActivity : ComponentActivity() {
 fun TabletPortraitEntryScreenPreview() {
   //  EntryScreen().Content()
    // AppDeviceScreen().Content()
-    ContactsScreen().Content()
+   // ContactsScreen().Content()
 }

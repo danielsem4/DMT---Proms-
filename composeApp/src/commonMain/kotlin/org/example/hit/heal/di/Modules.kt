@@ -10,6 +10,7 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import presentation.appsDeviceScreen.AppDeviceViewModel
 
 fun initKoin(config: KoinAppDeclaration? = null) =
     startKoin {
@@ -30,5 +31,6 @@ val sharedAppModules = module{
 val sharedModules = module {
     viewModelOf(::LoginViewModel)
     single { NavigationViewModel() }
+    single { AppDeviceViewModel() }
 
 }

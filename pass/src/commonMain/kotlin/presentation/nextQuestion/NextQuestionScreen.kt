@@ -33,7 +33,7 @@ class NextQuestionScreen : Screen {
 
         LaunchedEffect(navigateToDialScreen) {
             if (navigateToDialScreen) {
-                navigator?.push(DialScreen())
+                navigator?.push(DialScreen(null))
             }
         }
 

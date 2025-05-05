@@ -4,6 +4,7 @@ import BaseTabletScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -14,11 +15,13 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,10 +35,11 @@ import org.jetbrains.compose.resources.painterResource
 import presentation.detailedContact.DetailedContactScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.pass.generated.resources.search
+import presentation.appsDeviceScreen.components.reminderDialog
 import presentation.components.ContactData
 
 
-class ContactsScreen : Screen {
+class ContactsScreen(private val correctContact: ContactData) : Screen {
 
     @Composable
     override fun Content() {
@@ -43,6 +47,25 @@ class ContactsScreen : Screen {
         val viewModel: ContactsViewModel = viewModel()
         val contacts by viewModel.contacts.collectAsState()
         val searchQuery by viewModel.searchQuery
+        val showReminderDialog by viewModel.showReminderDialog.collectAsState()
+        val dialogText by viewModel.dialogText.collectAsState()
+        val shouldNavigate by viewModel.shouldNavigateAfterDialog.collectAsState()
+
+        if (showReminderDialog) {
+            reminderDialog(
+                text = dialogText,
+                onClick = {
+                    viewModel.hideReminderDialog()
+                    if (shouldNavigate) {
+                        navigator?.push(DetailedContactScreen(correctContact))
+                    }
+                }
+            )
+        }
+
+        LaunchedEffect(Unit) {
+            viewModel.startReminderCountdownForDidNothing(correctContact)
+        }
 
         BaseTabletScreen(
             title = "אנשי קשר",
@@ -68,12 +91,17 @@ class ContactsScreen : Screen {
                     ) {
                         LazyColumn(
                             modifier = Modifier
-                                .fillMaxSize(),
+                                .fillMaxSize().pointerInput(Unit) {
+                                    detectDragGestures { _, _ ->
+                                        viewModel.startRepeatCountdown(correctContact)
+                                    }
+                                },
                             verticalArrangement = Arrangement.spacedBy(25.dp)
                         ) {
                             items(contacts) { contact ->
-                                ContactItem(contact)
+                                ContactItem(contact = contact, correctContact = correctContact, viewModel = viewModel)
                             }
+
                         }
 
                         Box(
@@ -82,7 +110,7 @@ class ContactsScreen : Screen {
                                 .padding(16.dp)
                                 .size(50.dp)
                                 .background(primaryColor, shape = RoundedCornerShape(10.dp))
-                                .clickable { /* פעולה */ },
+                                .clickable { },
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
@@ -97,14 +125,21 @@ class ContactsScreen : Screen {
     }
 
     @Composable
-    fun ContactItem(contact: ContactData) {
+    fun ContactItem(contact: ContactData, correctContact: ContactData, viewModel: ContactsViewModel) {
         val navigator = LocalNavigator.current
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth().height(120.dp)
                 .background(color = Color.White, shape = RoundedCornerShape(10.dp)).clickable {
-                    navigator?.push(DetailedContactScreen(contact))
+                    if(contact == correctContact){
+                        navigator?.push(DetailedContactScreen(contact))
+
+                    }
+                    else{
+                        viewModel.startReminderCountdownForWrongContact(correctContact)
+                        viewModel.startReminderCountdownForDidNothing(correctContact)
+                    }
                 }
         ) {
             Box(

@@ -19,21 +19,16 @@ fun getContactChatData(): List<AppData> {
             imageRes = Res.drawable.white_phone,
             circleColor = primaryColor,
             label = "טלפון",
-            onClick = {
-                navigator?.push(NextQuestionScreen())
-            }
         ),
         AppData(
             imageRes = Res.drawable.black_messages,
             circleColor = primaryColor,
             label = "הודעות",
-            onClick = { /* פעולה */ }
         ),
         AppData(
             imageRes = Res.drawable.white_video,
             circleColor = primaryColor,
             label = "וידאו",
-            onClick = { /* פעולה */ }
         )
     )
 }

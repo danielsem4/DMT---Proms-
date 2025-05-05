@@ -4,6 +4,7 @@ import BaseTabletScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,12 +20,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.pass.generated.resources.Res
@@ -34,9 +39,11 @@ import dmt_proms.pass.generated.resources.black_video
 import dmt_proms.pass.generated.resources.whatsapp
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
+import presentation.appsDeviceScreen.components.reminderDialog
 import presentation.components.ContactData
 import presentation.components.circleWithPicture
 import presentation.detailedContact.components.getContactChatData
+import presentation.dialScreen.DialScreen
 
 class DetailedContactScreen(private val contact: ContactData) : Screen {
 
@@ -44,6 +51,31 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.current
         val contactChatData = getContactChatData()
+        val viewModel: DetailedContactViewModel = viewModel()
+
+        val showDialog by viewModel.showReminderDialog.collectAsState()
+        val dialogText by viewModel.dialogText.collectAsState()
+
+        LaunchedEffect(Unit) {
+            viewModel.startInactivityReminder()
+        }
+        val didNothingCount by viewModel.didNothing.collectAsState()
+        val wrongContactCount by viewModel.wrongClick.collectAsState()
+
+        LaunchedEffect(didNothingCount, wrongContactCount) {
+            if (didNothingCount > 1 || wrongContactCount > 2) {
+                navigator?.push(DialScreen("סיימת את המשימה ראשונה, לפניך משימה נוספת. מוצג לפניך רשימת טלפונים אנא חייג למרפאת השיניים"))
+            }
+        }
+
+        if (showDialog) {
+            reminderDialog(
+                text = dialogText,
+                onClick = {
+                    viewModel.hideReminderDialog()
+                }
+            )
+        }
 
         BaseTabletScreen(
             title = "איש קשר",
@@ -83,20 +115,23 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         contactChatData.forEach { item ->
-                            circleWithPicture(item)
+                           circleWithPicture(item, {  viewModel.onWrongButtonClicked()
+                               viewModel.startInactivityReminder()})
                         }
                     }
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    ContactDetailsSection(contact)
+                    ContactDetailsSection(contact, viewModel)
                 }
             }
         )
     }
 
    @Composable
-    fun ContactDetailsSection(contact: ContactData) {
-        Box(
+    fun ContactDetailsSection(contact: ContactData, viewModel: DetailedContactViewModel) {
+       val navigator = LocalNavigator.current
+
+       Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White, shape = RoundedCornerShape(10.dp))
@@ -118,25 +153,28 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(Res.drawable.black_phone),
-                            modifier = Modifier.size(35.dp),
+                            modifier = Modifier.size(35.dp).clickable { navigator?.push(DialScreen(null)) },
                             contentDescription = "טלפון"
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = contact.phoneNumber,
                             fontSize = 16.sp,
+                            modifier = Modifier.clickable { navigator?.push(DialScreen(null)) }
                         )
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(Res.drawable.black_messages),
-                            modifier = Modifier.size(35.dp),
+                            modifier = Modifier.size(35.dp).clickable {  viewModel.onWrongButtonClicked()
+                                viewModel.startInactivityReminder()},
                             contentDescription = "הודעות"
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Image(
                             painter = painterResource(Res.drawable.black_video),
-                            modifier = Modifier.size(35.dp),
+                            modifier = Modifier.size(35.dp).clickable {  viewModel.onWrongButtonClicked()
+                                viewModel.startInactivityReminder()},
                             contentDescription = "וידאו"
                         )
                     }
@@ -164,7 +202,8 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(Res.drawable.whatsapp),
-                            modifier = Modifier.size(40.dp),
+                            modifier = Modifier.size(40.dp).clickable {  viewModel.onWrongButtonClicked()
+                                viewModel.startInactivityReminder()},
                             contentDescription = "WhatsApp"
                         )
                     }

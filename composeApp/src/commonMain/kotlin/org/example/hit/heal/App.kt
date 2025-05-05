@@ -10,5 +10,5 @@ import presentation.entryScreen.EntryScreen
 
 @Composable
 fun App(context: Any? = null) {
-    Navigator(EndScreen())
+    Navigator(EntryScreen())
 }

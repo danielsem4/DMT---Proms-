@@ -23,28 +23,18 @@ import presentation.contatcts.ContactsScreen
 @Composable
 fun getGridItems(): List<AppData> {
     val navigator = LocalNavigator.current
-    return  listOf(
-    AppData(imageRes = Res.drawable.calculator, circleColor = Color.Green, label = "מחשבון", onClick = { /* פעולה */ }),
-    AppData(imageRes = Res.drawable.settings, circleColor = Color.Black, label = "הגדרות", onClick = { /* פעולה */ }),
-    AppData(imageRes = Res.drawable.camera, circleColor = Color.Gray, label = "מצלמה", onClick = { /* פעולה */ }),
-    AppData(imageRes = Res.drawable.email, circleColor = Color(0xFFFFA500), label = "אימייל", onClick = { /* פעולה */ }),
-    AppData(imageRes = Res.drawable.store, circleColor = Color.Red, label = "חנות", onClick = { /* פעולה */ }),
-    AppData(imageRes = Res.drawable.clock, circleColor = Color(0xFF00008B), label = "שעון", onClick = { /* פעולה */ }),
-    AppData(imageRes = Res.drawable.contacts, circleColor = Color.Black, label = "אנשי קשר", onClick = {navigator?.push(ContactsScreen())}),
-    AppData(
-        imageRes = Res.drawable.white_messages,
-        circleColor = Color.Blue,
-        label = "הודעות", onClick = { /* פעולה */ }
-    ),
-    AppData(imageRes = Res.drawable.purse, circleColor = Color(0xFF800080), label = "ארנק", onClick = { /* פעולה */ }),
-    AppData(imageRes = Res.drawable.weather, circleColor = Color.Yellow, label = "מזג אוויר", onClick = { /* פעולה */ }),
-    AppData(
-        imageRes = Res.drawable.documents,
-        circleColor = Color.Yellow,
-        label = "הקבצים שלי", onClick = { /* פעולה */ }
-    ),
-    AppData(imageRes = Res.drawable.white_phone, circleColor = primaryColor, label = "טלפון",  onClick = { /* פעולה */ } ),
-
-
-    )}
+    return listOf(
+        AppData(imageRes = Res.drawable.calculator, circleColor = Color.Green, label = "מחשבון"),
+        AppData(imageRes = Res.drawable.settings, circleColor = Color.Black, label = "הגדרות"),
+        AppData(imageRes = Res.drawable.camera, circleColor = Color.Gray, label = "מצלמה"),
+        AppData(imageRes = Res.drawable.email, circleColor = Color(0xFFFFA500), label = "אימייל"),
+        AppData(imageRes = Res.drawable.store, circleColor = Color.Red, label = "חנות"),
+        AppData(imageRes = Res.drawable.clock, circleColor = Color(0xFF00008B), label = "שעון"),
+        AppData(imageRes = Res.drawable.contacts, circleColor = Color.Black, label = "אנשי קשר"),
+        AppData(imageRes = Res.drawable.white_messages, circleColor = Color.Blue, label = "הודעות"),
+        AppData(imageRes = Res.drawable.purse, circleColor = Color(0xFF800080), label = "ארנק"),
+        AppData(imageRes = Res.drawable.weather, circleColor = Color.Yellow, label = "מזג אוויר"),
+        AppData(imageRes = Res.drawable.documents, circleColor = Color.Yellow, label = "הקבצים שלי"),
+        AppData(imageRes = Res.drawable.white_phone, circleColor = primaryColor, label = "טלפון"))
+}
 
