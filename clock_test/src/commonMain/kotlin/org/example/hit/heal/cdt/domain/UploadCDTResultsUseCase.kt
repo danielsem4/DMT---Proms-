@@ -1,12 +1,11 @@
 package org.example.hit.heal.cdt.domain
 
-import org.example.hit.heal.cdt.data.network.TransactionResult
-import org.example.hit.heal.cdt.utils.network.Error
+import core.domain.DataError
+import core.domain.Result
+import org.example.hit.heal.cdt.data.network.CDTResults
 
 class UploadCDTResultsUseCase(
-    private val repository: ClockRepository
+    private val api: ClockRepository
 ) {
-    suspend fun execute(): TransactionResult<String, Error> {
-        return repository.sendCDTRequest()
-    }
+    suspend fun execute(results: CDTResults): Result<String, DataError> = api.sendCDTRequest(results)
 }

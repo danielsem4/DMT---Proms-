@@ -1,8 +1,4 @@
-package core.util
-
-import core.domain.DataError
-import dmt_proms.core.generated.resources.Res
-import org.jetbrains.compose.resources.StringResource
+package core.utils
 
 //fun DataError.toUiText(): StringResource {
 //    val stringRes = when (this) {

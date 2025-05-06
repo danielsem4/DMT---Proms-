@@ -65,9 +65,12 @@ kotlin {
             implementation(libs.datastore.preferences)
             implementation(libs.atomicfu)
 
+            // DateTime
+            implementation(libs.kotlinx.datetime)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.compose.ui.graphics)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

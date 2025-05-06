@@ -1,4 +1,4 @@
-package org.example.hit.heal.cdt.utils
+package core.utils
 
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.ImageBitmap

@@ -1,4 +1,4 @@
-package org.example.hit.heal.cdt.utils
+package core.utils
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone

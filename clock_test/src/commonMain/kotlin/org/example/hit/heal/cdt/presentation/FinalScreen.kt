@@ -12,15 +12,13 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -28,8 +26,9 @@ import dmt_proms.clock_test.generated.resources.Res
 import dmt_proms.clock_test.generated.resources.exit_button_text
 import dmt_proms.clock_test.generated.resources.final_screen_message
 import dmt_proms.clock_test.generated.resources.final_screen_title
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.example.hit.heal.cdt.data.UploadState
 import org.example.hit.heal.cdt.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
@@ -39,8 +38,8 @@ class FinalScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+
         val viewModel = koinViewModel<ClockTestViewModel>()
-        val uploadState by viewModel.uploadState.collectAsState()
 
         val snackbarHostState = remember { SnackbarHostState() }
         val coroutineScope = rememberCoroutineScope()
@@ -77,12 +76,12 @@ class FinalScreen : Screen {
                                 .fillMaxWidth(0.3f)
                                 .height(60.dp),
                             onClick = {
-                                val results = viewModel.getResults().value
-                                if (results.imageUrl.value == "initialUrl.png" && !viewModel.hasClockDrawing()) {
-                                    println("Warning: No clock drawing provided")
-                                } else {
-                                    viewModel.sendToServer()
-                                }
+                                val composeJob = coroutineScope.coroutineContext[Job]
+                                println("▶️ Called from Compose scope: $composeJob, active=${composeJob?.isActive}")
+                                // ② ViewModel’s scope:
+                                val vmJob = viewModel.viewModelScope.coroutineContext[Job]
+                                println("▶️ ViewModel scope: $vmJob, active=${vmJob?.isActive}")
+                                send(viewModel, snackbarHostState, coroutineScope)
                             }
                         )
                     }
@@ -102,16 +101,27 @@ class FinalScreen : Screen {
                 }
             }
         )
+    }
 
-        // Handle upload state changes
-        LaunchedEffect(uploadState) {
-            uploadState?.let { state: UploadState ->
+    private fun send(
+        viewModel: ClockTestViewModel,
+        snackbarHostState: SnackbarHostState,
+        coroutineScope: CoroutineScope
+    ) {
+        try {
+            viewModel.sendToServer(onSuccess = {
                 coroutineScope.launch {
-                    snackbarHostState.showSnackbar(state.message)
+                    snackbarHostState.showSnackbar("Sent successfully")
                 }
-                if (state.isSuccessful) {
-                    navigator.pop()
+            }, onFailure = { error ->
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(error.toString())
                 }
+            })
+        } catch (error: Exception) {
+            println(error.message)
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(error.toString())
             }
         }
     }

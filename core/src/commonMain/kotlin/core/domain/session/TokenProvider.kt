@@ -1,4 +1,4 @@
-package org.example.hit.heal.cdt.domain
+package core.domain.session
 
 object TokenProvider {
     fun getCurrentToken(): String {

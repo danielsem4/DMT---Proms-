@@ -1,4 +1,4 @@
-package org.example.hit.heal.cdt.data.network
+package org.example.hit.heal.cdt.utils
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind

@@ -1,6 +1,4 @@
-package core.util
-
-import dmt_proms.core.generated.resources.Res
+package core.utils
 
 object Resources {
 
