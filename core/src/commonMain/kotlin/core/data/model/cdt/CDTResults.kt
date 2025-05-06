@@ -1,5 +1,7 @@
-package org.example.hit.heal.cdt.data.network
+package core.data.model.cdt
 
+import core.data.model.MeasureObjectInt
+import core.data.model.MeasureObjectString
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

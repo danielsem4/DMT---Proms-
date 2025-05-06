@@ -24,18 +24,12 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.hit.heal.cdt.data.ClockTime
 import org.example.hit.heal.core.presentation.Colors
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
-
-// Data class representing clock time
-data class ClockTime(val hours: Int, val minutes: Int) {
-    override fun toString(): String {
-        return "$hours:${minutes.toString().padStart(2, '0')}"
-    }
-}
 
 @Composable
 fun ClockComponent(

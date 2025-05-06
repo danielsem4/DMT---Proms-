@@ -1,13 +1,13 @@
 package core.network
 
 import core.domain.DataError
+import core.domain.Result
+import io.ktor.client.call.body
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.ensureActive
 import kotlin.coroutines.coroutineContext
-import core.domain.Result
-import io.ktor.client.call.body
 
 /**
  *

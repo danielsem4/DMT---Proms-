@@ -1,9 +1,9 @@
-package org.example.hit.heal.cdt.data.network
+package core.data.model
 
+import core.utils.getCurrentFormattedDateTime
 import kotlinx.serialization.Required
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import core.utils.getCurrentFormattedDateTime
 
 @Serializable
 data class MeasureObjectString(

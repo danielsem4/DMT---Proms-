@@ -4,10 +4,15 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import core.data.model.MeasureObjectString
+import core.data.model.cdt.CDTRequestBody
+import core.data.model.cdt.CDTResults
 import core.domain.DataError
 import core.domain.Error
 import core.domain.onError
 import core.domain.onSuccess
+import core.domain.use_case.cdt.UploadCDTResultsUseCase
+import core.domain.use_case.cdt.UploadImageUseCase
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
@@ -20,11 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
-import org.example.hit.heal.cdt.data.network.CDTResults
-import org.example.hit.heal.cdt.data.network.MeasureObjectString
-import org.example.hit.heal.cdt.domain.UploadCDTResultsUseCase
-import org.example.hit.heal.cdt.domain.UploadImageUseCase
-import org.example.hit.heal.cdt.presentation.components.ClockTime
+import org.example.hit.heal.cdt.data.ClockTime
 
 
 class ClockTestViewModel(
@@ -76,14 +77,23 @@ class ClockTestViewModel(
             // this will run even if viewModelScope is gone
             try {
                 uploadImageUseCase.execute(imagePath, imageByteArray)
-                    .onSuccess { uploadedImageUrl ->
-                        println("Successfully uploaded Image: $uploadedImageUrl")
+                    .onSuccess {
+                        println("Successfully uploaded Image")
                         cdtResults.imageUrl = MeasureObjectString(
                             measureObject = 186,
-                            value = uploadedImageUrl,
+                            value = imagePath,
                             dateTime = getCurrentFormattedDateTime()
                         )
-                        uploadCDTResultsUseCase.execute(cdtResults)
+
+                        val body = CDTRequestBody(
+                            measurement = measurement,
+                            patientId = patientId,
+                            date = date,
+                            clinicId = clinicId,
+                            test = cdtResults
+                        )
+
+                        uploadCDTResultsUseCase.execute(body)
                             .onSuccess {
                                 withContext(Dispatchers.Main){
                                     onSuccess?.invoke()

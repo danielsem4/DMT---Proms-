@@ -1,4 +1,4 @@
-package org.example.hit.heal.cdt.data.network
+package core.data.model.cdt
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

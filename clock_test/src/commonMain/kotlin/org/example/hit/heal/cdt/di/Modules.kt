@@ -1,10 +1,9 @@
 package org.example.hit.heal.cdt.di
 
-import androidx.lifecycle.SavedStateHandle
-import org.example.hit.heal.cdt.data.network.ClockRepositoryImpl
-import org.example.hit.heal.cdt.domain.ClockRepository
-import org.example.hit.heal.cdt.domain.UploadCDTResultsUseCase
-import org.example.hit.heal.cdt.domain.UploadImageUseCase
+import core.data.remote.impl.KtorAppRemoteDataSource
+import core.domain.api.AppApi
+import core.domain.use_case.cdt.UploadCDTResultsUseCase
+import core.domain.use_case.cdt.UploadImageUseCase
 import org.example.hit.heal.cdt.presentation.ClockTestViewModel
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -14,6 +13,5 @@ val CDT_module = module {
     singleOf(::UploadImageUseCase)
     singleOf(::UploadCDTResultsUseCase)
     singleOf(::ClockTestViewModel)
-    factory { SavedStateHandle() }
-    singleOf(::ClockRepositoryImpl).bind<ClockRepository>()
+    singleOf(::KtorAppRemoteDataSource).bind<AppApi>()
 }

@@ -21,8 +21,8 @@ import dmt_proms.clock_test.generated.resources.completion_screen_message
 import dmt_proms.clock_test.generated.resources.completion_screen_message_next
 import dmt_proms.clock_test.generated.resources.completion_screen_title
 import dmt_proms.clock_test.generated.resources.next_button_text
-import org.example.hit.heal.cdt.presentation.components.ClockTime
-import org.example.hit.heal.cdt.presentation.components.InstructionBox
+import org.example.hit.heal.cdt.data.ClockTime
+import org.example.hit.heal.core.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel

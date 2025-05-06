@@ -57,7 +57,7 @@ import dmt_proms.clock_test.generated.resources.draw_screen_title
 import dmt_proms.clock_test.generated.resources.drawing_instruction
 import dmt_proms.clock_test.generated.resources.erase_mode
 import dmt_proms.clock_test.generated.resources.finish_button_text
-import org.example.hit.heal.cdt.presentation.components.ClockTime
+import org.example.hit.heal.cdt.data.ClockTime
 import org.example.hit.heal.core.presentation.Colors
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource

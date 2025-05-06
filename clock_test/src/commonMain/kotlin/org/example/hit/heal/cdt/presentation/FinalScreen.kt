@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -27,9 +26,8 @@ import dmt_proms.clock_test.generated.resources.exit_button_text
 import dmt_proms.clock_test.generated.resources.final_screen_message
 import dmt_proms.clock_test.generated.resources.final_screen_title
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.example.hit.heal.cdt.presentation.components.InstructionBox
+import org.example.hit.heal.core.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -75,14 +73,7 @@ class FinalScreen : Screen {
                             modifier = Modifier
                                 .fillMaxWidth(0.3f)
                                 .height(60.dp),
-                            onClick = {
-                                val composeJob = coroutineScope.coroutineContext[Job]
-                                println("▶️ Called from Compose scope: $composeJob, active=${composeJob?.isActive}")
-                                // ② ViewModel’s scope:
-                                val vmJob = viewModel.viewModelScope.coroutineContext[Job]
-                                println("▶️ ViewModel scope: $vmJob, active=${vmJob?.isActive}")
-                                send(viewModel, snackbarHostState, coroutineScope)
-                            }
+                            onClick = { send(viewModel, snackbarHostState, coroutineScope) }
                         )
                     }
                     Spacer(modifier = Modifier.height(32.dp))
