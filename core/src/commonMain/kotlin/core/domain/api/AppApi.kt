@@ -20,6 +20,8 @@ interface AppApi {
 
     suspend fun uploadFileCog(
         imagePath: String,
-        imageBytes: ByteArray
+        imageBytes: ByteArray,
+        clinicId: Int,
+        userId: Int
     ): EmptyResult<DataError.Remote>
 }

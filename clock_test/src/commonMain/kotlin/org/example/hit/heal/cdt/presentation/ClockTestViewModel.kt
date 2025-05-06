@@ -3,7 +3,6 @@ package org.example.hit.heal.cdt.presentation
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import core.data.model.MeasureObjectString
 import core.data.model.cdt.CDTRequestBody
 import core.data.model.cdt.CDTResults
@@ -18,7 +17,6 @@ import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -56,10 +54,6 @@ class ClockTestViewModel(
             return
         }
         val imageByteArray = clockDrawing.toByteArray()
-        println("image: $clockDrawing")
-
-        val job = viewModelScope.coroutineContext[Job]
-        println("🕵 scope job: $job, active=${job?.isActive}")
 
         val measurement = 21
         val patientId = 168
@@ -70,13 +64,11 @@ class ClockTestViewModel(
         val imagePath = "clinics/$clinicId/patients/$patientId/measurements/$measurement/" +
                 "$date/$version/$imgName"
 
-        println("✅ viewModelScope: $viewModelScope")
-
         uploadScope.launch  {
             println("Entering viewmodel scope - to upload results")
             // this will run even if viewModelScope is gone
             try {
-                uploadImageUseCase.execute(imagePath, imageByteArray)
+                uploadImageUseCase.execute(imagePath, imageByteArray,clinicId,patientId)
                     .onSuccess {
                         println("Successfully uploaded Image")
                         cdtResults.imageUrl = MeasureObjectString(

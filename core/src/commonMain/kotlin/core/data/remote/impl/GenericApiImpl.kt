@@ -30,7 +30,7 @@ class GenericApiImpl() {
 }
 
 class KtorAppRemoteDataSource(
-    val httpClient: HttpClient
+    private val httpClient: HttpClient
 ) : AppApi {
 
     override suspend fun login(email: String, password: String):
@@ -57,7 +57,9 @@ class KtorAppRemoteDataSource(
     @OptIn(ExperimentalEncodingApi::class)
     override suspend fun uploadFileCog(
         imagePath: String,
-        imageBytes: ByteArray
+        imageBytes: ByteArray,
+        clinicId: Int,
+        userId: Int
     ): EmptyResult<DataError.Remote> {
         val token = TokenProvider.getCurrentToken()
         println("Uploading file with token: $token")
@@ -77,8 +79,8 @@ class KtorAppRemoteDataSource(
                                 append(HttpHeaders.ContentType, "text/plain")
                             })
                             append("file_name", imagePath)
-                            append("clinic_id", "6") // fixed
-                            append("user_id", "168") // fixed
+                            append("clinic_id", clinicId)
+                            append("user_id", userId)
                             append("path", imagePath)
                         }
                     )
