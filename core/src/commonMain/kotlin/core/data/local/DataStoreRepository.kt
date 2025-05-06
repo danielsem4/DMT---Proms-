@@ -39,18 +39,18 @@ class DataStoreRepository(
     suspend fun saveLoginResponse(response: SuccessfulLoginResponse): Boolean =
         try {
             dataStore.edit { preferences ->
-                preferences[TOKEN_KEY] = response.token
+//                preferences[TOKEN_KEY] = response.token
                 preferences[USER_ID_KEY] = response.userId
-                preferences[EMAIL_KEY] = response.email
+//                preferences[EMAIL_KEY] = response.email
                 preferences[IMAGE] = response.image
-                preferences[RESERCH_PATIENT] = response.researchPatient
-                preferences[FIRST_NAME] = response.firstName
-                preferences[FULL_NAME] = response.fullName
+//                preferences[RESERCH_PATIENT] = response.researchPatient
+//                preferences[FIRST_NAME] = response.firstName
+//                preferences[FULL_NAME] = response.fullName
                 preferences[CLINIC_ID] = response.clinicId
-                preferences[CLINIC_NAME] = response.clinicName
+//                preferences[CLINIC_NAME] = response.clinicName
                 preferences[TOKEN] = response.token
-                preferences[MODULES] = response.modules.toString()
-                preferences[STATUS] = response.status
+//                preferences[MODULES] = response.modules.toString()
+//                preferences[STATUS] = response.status
                 preferences[SERVER_URL] = response.serverUrl
             }
             true
