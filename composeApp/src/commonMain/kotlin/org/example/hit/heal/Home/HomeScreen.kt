@@ -1,5 +1,6 @@
 package org.example.hit.heal.Home
 
+import LoginScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,21 +29,27 @@ import androidx.compose.ui.unit.sp
 import org.example.hit.heal.core.presentation.BaseScreen
 
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
+import org.example.hit.heal.login.LoginViewModel
+import org.koin.compose.viewmodel.koinViewModel
+
 class HomeScreen(): Screen {
 @Composable
     override  fun Content()
     {
+    val navigator = LocalNavigator.currentOrThrow
     BaseScreen(
         title = "Home",
-//        navigationIcon = {
-//            IconButton(onClick = Null) {
-//                Icon(
-//                    imageVector = Icons.AutoMirrored.Filled.Logout,
-//                    contentDescription = "Logout",
-//                    tint = Color.White
-//                )
-//            }
-//        }
+        navigationIcon = {
+            IconButton(onClick = (navigator::pop)) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Logout,
+                    contentDescription = "Logout",
+                    tint = Color.White
+                )
+            }
+        }
     ) {
 
         Column(

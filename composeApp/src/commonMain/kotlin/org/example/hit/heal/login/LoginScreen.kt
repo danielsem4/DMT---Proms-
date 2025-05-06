@@ -108,7 +108,7 @@ override fun Content() {
                 onClick = {
                     if (email.isNotEmpty() && password.isNotEmpty()) {
                         loginViewModel.login(email, password) {
-                            navigator.replace(HomeScreen())
+                            navigator.push(HomeScreen())
                         }
                     } else {
                         loginViewModel.setMessage("Please fill in all fields")
