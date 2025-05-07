@@ -81,7 +81,9 @@ kotlin {
 android {
     namespace = "org.example.hit.heal.core"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
-
+    defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
+    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
