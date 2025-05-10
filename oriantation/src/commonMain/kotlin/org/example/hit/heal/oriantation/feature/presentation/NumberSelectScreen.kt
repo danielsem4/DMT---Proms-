@@ -37,7 +37,7 @@ class NumberSelectScreen : Screen {
         TabletBaseScreen(
             title = "תפריט נפתח", // Replace with stringResource if you have it
             question = 2, // For "2/8"
-            onNextClick = { /* TODO: Navigate to next screen */ },
+            onNextClick = { navigator?.push(SeasonsSelectScreen()) },
             content = {
                 Spacer(modifier = Modifier.height(32.dp))
 
