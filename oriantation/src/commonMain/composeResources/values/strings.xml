@@ -3,6 +3,6 @@
     <string name="entry_Oriantation_title">אורינטציה</string>
     <string name="entry_Oriantation_welcome_note">ברוך הבא</string>
     <string name="entry_Oriantation_instructions">לפניך התנסות קצרה בשימוש בטאבלט. נסה לעקוב אחר ההנחיות ולבצע</string>
-    <string name="button_text">הבא</string>
+    <string name="entry_Oriantation_button_text">הבא</string>
 
 </resources>

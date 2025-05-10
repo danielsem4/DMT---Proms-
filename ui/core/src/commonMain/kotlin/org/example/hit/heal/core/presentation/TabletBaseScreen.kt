@@ -32,7 +32,7 @@ import org.example.hit.heal.core.presentation.Colors.primaryColor
 fun TabletBaseScreen(
     title: String,
     onNextClick: (() -> Unit)? = null,
-    buttonText: String,
+    buttonText: String?=null,
     question: Int,
     navigationIcon: @Composable (() -> Unit)? = null,
     content: @Composable() (ColumnScope.() -> Unit)
