@@ -1,4 +1,11 @@
 package org.example.hit.heal.oriantation.feature.presentation
 
-class NumberSelectScreen {
+import androidx.compose.runtime.Composable
+import cafe.adriel.voyager.core.screen.Screen
+
+class NumberSelectScreen : Screen {
+    @Composable
+    override fun Content() {
+        TODO("Not yet implemented")
+    }
 }

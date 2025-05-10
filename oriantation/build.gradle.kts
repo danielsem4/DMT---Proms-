@@ -30,6 +30,9 @@ kotlin {
     sourceSets {
         val desktopMain by getting
         commonMain.dependencies {
+            implementation(projects.ui.core)
+            implementation(projects.core)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -47,6 +50,10 @@ kotlin {
             api(libs.koin.core)
 
             implementation(libs.navigation.compose)
+
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.tabNavigator)
+            implementation(libs.voyager.transitions)
         }
         androidMain.dependencies {
             implementation(compose.preview)
@@ -84,4 +91,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+}
+dependencies {
+    implementation(libs.ui.graphics.android)
 }
