@@ -34,7 +34,10 @@ import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import presentation.detailedContact.DetailedContactScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.pass.generated.resources.phone_number
 import dmt_proms.pass.generated.resources.search
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import presentation.appsDeviceScreen.components.reminderDialog
 import presentation.components.ContactData
 
@@ -44,12 +47,20 @@ class ContactsScreen(private val correctContact: ContactData) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-        val viewModel: ContactsViewModel = viewModel()
-        val contacts by viewModel.contacts.collectAsState()
-        val searchQuery by viewModel.searchQuery
+        val viewModel: ContactsViewModel = koinViewModel()
+        val searchQuery by viewModel.searchQuery.collectAsState()
         val showReminderDialog by viewModel.showReminderDialog.collectAsState()
         val dialogText by viewModel.dialogText.collectAsState()
         val shouldNavigate by viewModel.shouldNavigateAfterDialog.collectAsState()
+        val contactsList = viewModel.contactsList.collectAsState().value
+
+        val phoneNumber = stringResource(Res.string.phone_number)
+
+        LaunchedEffect(Unit) {
+            viewModel.loadContacts(phoneNumber)
+            viewModel.startReminderCountdown(correctContact, false)
+        }
+
 
         if (showReminderDialog) {
             reminderDialog(
@@ -61,10 +72,6 @@ class ContactsScreen(private val correctContact: ContactData) : Screen {
                     }
                 }
             )
-        }
-
-        LaunchedEffect(Unit) {
-            viewModel.startReminderCountdownForDidNothing(correctContact)
         }
 
         BaseTabletScreen(
@@ -93,12 +100,12 @@ class ContactsScreen(private val correctContact: ContactData) : Screen {
                             modifier = Modifier
                                 .fillMaxSize().pointerInput(Unit) {
                                     detectDragGestures { _, _ ->
-                                        viewModel.startRepeatCountdown(correctContact)
+                                        viewModel.startScrollCountdown(correctContact)
                                     }
                                 },
                             verticalArrangement = Arrangement.spacedBy(25.dp)
                         ) {
-                            items(contacts) { contact ->
+                            items(contactsList) { contact ->
                                 ContactItem(contact = contact, correctContact = correctContact, viewModel = viewModel)
                             }
 
@@ -137,8 +144,7 @@ class ContactsScreen(private val correctContact: ContactData) : Screen {
 
                     }
                     else{
-                        viewModel.startReminderCountdownForWrongContact(correctContact)
-                        viewModel.startReminderCountdownForDidNothing(correctContact)
+                        viewModel.startReminderCountdown(correctContact, true)
                     }
                 }
         ) {

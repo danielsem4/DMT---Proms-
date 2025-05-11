@@ -17,10 +17,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.pass.generated.resources.Res
+import dmt_proms.pass.generated.resources.hana_cohen
+import dmt_proms.pass.generated.resources.phone_number
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.appsDeviceScreen.components.CheckUnderstandingDialog
 import presentation.appsDeviceScreen.components.InstructionsDialog
@@ -47,7 +54,13 @@ class AppDeviceScreen : Screen {
         val didNothingMain by viewModel.didNothingMain.collectAsState()
         val didNothingApp by viewModel.didNothingApp.collectAsState()
 
+        val contactName = stringResource(Res.string.hana_cohen)
+        val contactPhone = stringResource(Res.string.phone_number)
+
+        println("contactName = $contactName")
+
         LaunchedEffect(Unit) {
+            viewModel.setContact(contactName, contactPhone)
             viewModel.triggerDialogSequenceIfNeeded()
 
             viewModel.navigationEvent.collect { event ->

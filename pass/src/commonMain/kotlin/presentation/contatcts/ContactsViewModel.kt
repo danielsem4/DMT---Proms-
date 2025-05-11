@@ -3,22 +3,21 @@ package presentation.contatcts
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dmt_proms.pass.generated.resources.Res
+import dmt_proms.pass.generated.resources.person_names
+import dmt_proms.pass.generated.resources.phone_number
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.delay
-import presentation.contatcts.components.allContacts
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.updateAndGet
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import presentation.appsDeviceScreen.AppDeviceViewModel.NavigationEvent
-import presentation.appsDeviceScreen.ScreenState
+import org.jetbrains.compose.resources.getStringArray
 import presentation.components.ContactData
 
-class ContactsViewModel : ViewModel()  {
+class ContactsViewModel : ViewModel() {
 
-
-    private val _contacts = MutableStateFlow(allContacts)
-    val contacts: StateFlow<List<ContactData>> = _contacts
 
     private val _showReminderDialog = MutableStateFlow(false)
     val showReminderDialog: StateFlow<Boolean> = _showReminderDialog
@@ -34,15 +33,31 @@ class ContactsViewModel : ViewModel()  {
     private val _shouldNavigateAfterDialog = MutableStateFlow(false)
     val shouldNavigateAfterDialog: StateFlow<Boolean> = _shouldNavigateAfterDialog
 
-
+    private var scrollJob: Job? = null
     private var reminderJob: Job? = null
 
-    var searchQuery = mutableStateOf("")
-        private set
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String> = _searchQuery
+
+
+    private var allContacts: List<ContactData> = emptyList()
+
+    private val _contactsList = MutableStateFlow<List<ContactData>>(emptyList())
+    val contactsList: StateFlow<List<ContactData>> = _contactsList
+
+    suspend fun loadContacts(phoneNumber: String) {
+        val names = getStringArray(Res.array.person_names).toList()
+        allContacts = names
+            .map { name -> ContactData(name, phoneNumber) }
+            .sortedBy { it.name }
+        _contactsList.value = allContacts
+    }
+
 
     fun onSearchQueryChanged(query: String) {
-        searchQuery.value = query
-        _contacts.value = if (query.isBlank()) {
+        _searchQuery.value = query
+
+        _contactsList.value = if (query.isBlank()) {
             allContacts
         } else {
             allContacts.filter {
@@ -51,31 +66,46 @@ class ContactsViewModel : ViewModel()  {
         }
     }
 
-    fun startReminderCountdownForDidNothing(contactData: ContactData) {
-        _userDidSomething.value = false
+
+
+    fun startReminderCountdown(contactData: ContactData, wrongContact: Boolean) {
+        if (wrongContact) {
+            _userDidSomething.value = true
+        }
+
+        if (scrollJob?.isActive == true) return
+
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
-            while (_didNothing.value < 3) {
-                delay(15_000)
-                if (!_userDidSomething.value) {
-                    _dialogText.value = getDidNothingReminderText(contactData)
+            var elapsedTime = 0
+            while (isActive && _didNothing.value + _wrongContact.value < 3) {
+
+                if (_userDidSomething.value) {
+                    _wrongContact.value++
+                    _dialogText.value = getReminderText(contactData)
                     _showReminderDialog.value = true
+                    elapsedTime = 0
+                    _userDidSomething.value = false
+                    continue
                 }
+
+                if (elapsedTime >= 15) {
+                    _didNothing.value++
+                    _dialogText.value = getReminderText(contactData)
+                    _showReminderDialog.value = true
+                    elapsedTime = 0
+                }
+
+                delay(1_000)
+                elapsedTime++
             }
         }
     }
 
-    fun startReminderCountdownForWrongContact(contactData: ContactData) {
-            if (_wrongContact.value < 3) {
-                    _dialogText.value = getWrongContactReminderText(contactData)
-                    _showReminderDialog.value = true
-            }
-        }
 
-
-    private fun getDidNothingReminderText(contactData: ContactData): String {
-        val count = _didNothing.updateAndGet { it + 1 }
+    private fun getReminderText(contactData: ContactData): String {
+        val count = _didNothing.value + _wrongContact.value
         return when (count) {
             1 -> "תחפש את ${contactData.name} באנשי קשר"
             2 -> "תחפש באות ${contactData.name.first()}"
@@ -83,43 +113,44 @@ class ContactsViewModel : ViewModel()  {
                 _shouldNavigateAfterDialog.value = true
                 "${contactData.name} תחפש את"
             }
+
             else -> ""
         }
     }
 
-    private fun getWrongContactReminderText(contactData: ContactData): String {
+    fun startScrollCountdown(contactData: ContactData) {
         _userDidSomething.value = true
-        val count = _wrongContact.updateAndGet { it + 1 }
-        return when (count) {
-            1 -> "תחפש את ${contactData.name} באנשי קשר"
-            2 -> "תחפש באות ${contactData.name.first()}"
-            3 -> {
-                _shouldNavigateAfterDialog.value = true
-                "${contactData.name} תחפש את"
-            }
-            else -> ""
-        }
-    }
 
-
-    fun startRepeatCountdown(contactData: ContactData) {
         reminderJob?.cancel()
-        _userDidSomething.value = false
+        scrollJob?.cancel()
 
-        reminderJob = viewModelScope.launch {
-            while (_didNothing.value < 3) {
-                delay(25_000)
+        scrollJob = viewModelScope.launch {
+            var elapsedTime = 0
+            var dialogShown = false
 
-                if (!_userDidSomething.value) {
-                    _dialogText.value = getDidNothingReminderText(contactData)
-                    _showReminderDialog.value = true
-                    _didNothing.value += 1
-                } else {
+            while (isActive && _didNothing.value + _wrongContact.value < 3) {
+                delay(1_000)
+                elapsedTime++
+
+                if (_userDidSomething.value) {
+                    if (!dialogShown) {
+                        _dialogText.value = getReminderText(contactData)
+                        _showReminderDialog.value = true
+                        dialogShown = true
+                    }
                     _userDidSomething.value = false
                 }
+
+                if (elapsedTime >= 25 && !dialogShown) {
+                    _dialogText.value = getReminderText(contactData)
+                    _showReminderDialog.value = true
+                    _didNothing.value++
+                    dialogShown = true
+                }
             }
         }
     }
+
     fun hideReminderDialog() {
         _showReminderDialog.value = false
     }

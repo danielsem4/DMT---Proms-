@@ -12,7 +12,6 @@ import presentation.nextQuestion.NextQuestionScreen
 
 @Composable
 fun getContactChatData(): List<AppData> {
-    val navigator = LocalNavigator.current
 
     return listOf(
         AppData(

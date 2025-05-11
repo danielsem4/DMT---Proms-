@@ -1,12 +1,16 @@
 package presentation.appsDeviceScreen
 
+import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dmt_proms.pass.generated.resources.Res
+import dmt_proms.pass.generated.resources.person_names
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.getStringArray
 import presentation.components.ContactData
 import presentation.components.AppData
-import presentation.contatcts.components.allContacts
 
 class AppDeviceViewModel : ViewModel() {
 
@@ -68,14 +72,13 @@ class AppDeviceViewModel : ViewModel() {
     fun triggerDialogSequenceIfNeeded() {
         if (!hasStartedDialogSequence) {
             hasStartedDialogSequence = true
-            setContactByName("חנה כהן")
             startDialogSequence()
         }
     }
-
-    fun setContactByName(name: String) {
-        _contact.value = allContacts.firstOrNull { it.name == name }
+    fun setContact(name: String, phoneNumber: String) {
+        _contact.value = ContactData(name, phoneNumber)
     }
+
 
     fun onAppClicked(app: AppData) {
         if (_wrongApp.value == 3 || app.label == "אנשי קשר") {

@@ -18,10 +18,7 @@ class DetailedContactViewModel(): ViewModel() {
     private val _userDidSomething = MutableStateFlow(false)
 
     private val _didNothing = MutableStateFlow(0)
-    val didNothing: StateFlow<Int> = _didNothing
-
     private val _wrongClick = MutableStateFlow(0)
-    val wrongClick: StateFlow<Int> = _wrongClick
 
     private val _shouldNavigateAfterDialog = MutableStateFlow(false)
     val shouldNavigateAfterDialog: StateFlow<Boolean> = _shouldNavigateAfterDialog
@@ -29,49 +26,53 @@ class DetailedContactViewModel(): ViewModel() {
 
     private var reminderJob: Job? = null
 
-    fun startInactivityReminder() {
-        _userDidSomething.value = false
+    fun startReminderCountdown(wrongClick: Boolean) {
+        if (wrongClick) {
+            _userDidSomething.value = true
+        }
+
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
-            while (_didNothing.value < 2) {
-                delay(15_000)
-                if (!_userDidSomething.value) {
-                    _dialogText.value = getInactivityText()
+            var elapsedTime = 0
+            while (isActive && _didNothing.value + _wrongClick.value < 3) {
+
+                if (_userDidSomething.value) {
+                    _wrongClick.value++
+                    _dialogText.value = getReminderText()
                     _showReminderDialog.value = true
+                    elapsedTime = 0
+                    _userDidSomething.value = false
+                    continue
                 }
+
+                if (elapsedTime >= 15) {
+                    _didNothing.value++
+                    _dialogText.value = getReminderText()
+                    _showReminderDialog.value = true
+                    elapsedTime = 0
+                }
+
+                delay(1_000)
+                elapsedTime++
             }
         }
     }
 
-    private fun getInactivityText(): String {
-        return when (_didNothing.updateAndGet { it + 1 }) {
+    private fun getReminderText(): String {
+        val count = _didNothing.value + _wrongClick.value
+        return when (count) {
             1 -> "מה יש לעשות?"
             2 -> "לחץ על מספר הפלאפון או על כפתור החיוג עם השפורפרת"
+            3 -> {
+                _shouldNavigateAfterDialog.value = true
+                ""
+            }
             else -> ""
         }
     }
 
-    fun onWrongButtonClicked() {
-        _userDidSomething.value = true
-        if (_wrongClick.value < 2) {
-            _dialogText.value = getWrongClickText()
-            _showReminderDialog.value = true
-        }
-    }
 
-    private fun getWrongClickText(): String {
-        return when (_wrongClick.updateAndGet { it + 1 }) {
-            1 -> "מה יש לעשות?"
-            2 -> "לחץ על מספר הפלאפון או על כפתור החיוג עם השפורפרת"
-            else -> ""
-        }
-    }
-
-    fun onCorrectAction() {
-        _userDidSomething.value = true
-        reminderJob?.cancel()
-    }
 
     fun hideReminderDialog() {
         _showReminderDialog.value = false

@@ -53,28 +53,27 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
         val contactChatData = getContactChatData()
         val viewModel: DetailedContactViewModel = viewModel()
 
-        val showDialog by viewModel.showReminderDialog.collectAsState()
+        val shouldNavigate by viewModel.shouldNavigateAfterDialog.collectAsState()
+        val showReminderDialog by viewModel.showReminderDialog.collectAsState()
         val dialogText by viewModel.dialogText.collectAsState()
 
         LaunchedEffect(Unit) {
-            viewModel.startInactivityReminder()
+            viewModel.startReminderCountdown(false)
         }
-        val didNothingCount by viewModel.didNothing.collectAsState()
-        val wrongContactCount by viewModel.wrongClick.collectAsState()
 
-        LaunchedEffect(didNothingCount, wrongContactCount) {
-            if (didNothingCount > 1 || wrongContactCount > 2) {
+
+        if (showReminderDialog) {
+
+            if (shouldNavigate) {
                 navigator?.push(DialScreen("סיימת את המשימה ראשונה, לפניך משימה נוספת. מוצג לפניך רשימת טלפונים אנא חייג למרפאת השיניים"))
+            } else {
+                reminderDialog(
+                    text = dialogText,
+                    onClick = {
+                        viewModel.hideReminderDialog()
+                    }
+                )
             }
-        }
-
-        if (showDialog) {
-            reminderDialog(
-                text = dialogText,
-                onClick = {
-                    viewModel.hideReminderDialog()
-                }
-            )
         }
 
         BaseTabletScreen(
@@ -115,8 +114,9 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         contactChatData.forEach { item ->
-                           circleWithPicture(item, {  viewModel.onWrongButtonClicked()
-                               viewModel.startInactivityReminder()})
+                            circleWithPicture(item, { if(item.label == "טלפון")
+                                navigator?.push(DialScreen(null))
+                                else viewModel.startReminderCountdown(true) })
                         }
                     }
                     Spacer(modifier = Modifier.height(12.dp))
@@ -127,11 +127,11 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
         )
     }
 
-   @Composable
+    @Composable
     fun ContactDetailsSection(contact: ContactData, viewModel: DetailedContactViewModel) {
-       val navigator = LocalNavigator.current
+        val navigator = LocalNavigator.current
 
-       Box(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White, shape = RoundedCornerShape(10.dp))
@@ -153,7 +153,8 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(Res.drawable.black_phone),
-                            modifier = Modifier.size(35.dp).clickable { navigator?.push(DialScreen(null)) },
+                            modifier = Modifier.size(35.dp)
+                                .clickable { navigator?.push(DialScreen(null)) },
                             contentDescription = "טלפון"
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -166,15 +167,16 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(Res.drawable.black_messages),
-                            modifier = Modifier.size(35.dp).clickable {  viewModel.onWrongButtonClicked()
-                                viewModel.startInactivityReminder()},
+                            modifier = Modifier.size(35.dp).clickable {
+                                viewModel.startReminderCountdown(true)
+                            },
                             contentDescription = "הודעות"
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Image(
                             painter = painterResource(Res.drawable.black_video),
-                            modifier = Modifier.size(35.dp).clickable {  viewModel.onWrongButtonClicked()
-                                viewModel.startInactivityReminder()},
+                            modifier = Modifier.size(35.dp)
+                                .clickable { viewModel.startReminderCountdown(true) },
                             contentDescription = "וידאו"
                         )
                     }
@@ -202,12 +204,13 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(Res.drawable.whatsapp),
-                            modifier = Modifier.size(40.dp).clickable {  viewModel.onWrongButtonClicked()
-                                viewModel.startInactivityReminder()},
+                            modifier = Modifier.size(40.dp)
+                                .clickable { viewModel.startReminderCountdown(true) },
                             contentDescription = "WhatsApp"
                         )
                     }
                 }
             }
         }
-    }}
+    }
+}
