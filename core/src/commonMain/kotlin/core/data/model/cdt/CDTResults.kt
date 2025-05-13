@@ -14,7 +14,7 @@ data class CDTResults(
     @SerialName("timeChange2") var timeChange2: MeasureObjectString = MeasureObjectString(191),
     @SerialName("hourChange2") var hourChange2: MeasureObjectInt = MeasureObjectInt(192),
     @SerialName("minuteChangeUrl2") var minuteChangeUrl2: MeasureObjectInt = MeasureObjectInt(194)
-){
+) {
     override fun toString(): String {
         return "CDTResults(" +
                 "imageUrl=$imageUrl\n" +

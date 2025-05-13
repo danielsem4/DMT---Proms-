@@ -23,7 +23,7 @@ fun initKoin(config: KoinAppDeclaration? = null) =
 
 expect val platformModule: Module
 
-val sharedAppModules = module{
+val sharedAppModules = module {
     includes(clientRequestsModule)
 }
 

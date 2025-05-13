@@ -13,7 +13,7 @@ interface AppApi {
         password: String
     ): Result<SuccessfulLoginResponse, DataError.Remote>
 
-    suspend fun <T : Any> sendResults(
+    suspend fun <T> sendResults(
         results: T,
         serializer: KSerializer<T>
     ): Result<String, DataError.Remote>

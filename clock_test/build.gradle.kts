@@ -43,7 +43,7 @@ kotlin {
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
 
-            implementation (libs.kotlinx.coroutines.android)
+            implementation(libs.kotlinx.coroutines.android)
 
             // Ktor dependencies
             implementation(libs.ktor.client.okhttp)

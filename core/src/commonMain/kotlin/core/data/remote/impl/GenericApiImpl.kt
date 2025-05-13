@@ -41,7 +41,10 @@ class KtorAppRemoteDataSource(
         }
     }
 
-    override suspend fun <T : Any> sendResults(results: T, serializer: KSerializer<T>): Result<String, DataError.Remote> {
+    override suspend fun <T> sendResults(
+        results: T,
+        serializer: KSerializer<T>
+    ): Result<String, DataError.Remote> {
         val url = "$UPLOADS_BASE_URL/patientMeasureResponse/"
 
         val body = Json.encodeToString(serializer, results)

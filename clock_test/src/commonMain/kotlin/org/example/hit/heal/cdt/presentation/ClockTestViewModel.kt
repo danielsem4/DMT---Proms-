@@ -10,8 +10,8 @@ import core.domain.DataError
 import core.domain.Error
 import core.domain.onError
 import core.domain.onSuccess
-import core.domain.use_case.cdt.UploadCDTResultsUseCase
-import core.domain.use_case.cdt.UploadImageUseCase
+import core.domain.use_case.cdt.UploadFileUseCase
+import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
@@ -27,8 +27,8 @@ import org.example.hit.heal.cdt.data.ClockTime
 
 
 class ClockTestViewModel(
-    private val uploadImageUseCase: UploadImageUseCase,
-    private val uploadCDTResultsUseCase: UploadCDTResultsUseCase,
+    private val uploadImageUseCase: UploadFileUseCase,
+    private val uploadCDTResultsUseCase: UploadTestResultsUseCase,
 ) : ViewModel() {
 
     private val _currentClockSetTime = MutableStateFlow(ClockTime(12, 0))
@@ -36,7 +36,7 @@ class ClockTestViewModel(
     private val _drawnPaths: MutableStateFlow<List<Path>> = MutableStateFlow(emptyList())
 
     private var cdtResults = CDTResults()
-    private var clockDrawing: ImageBitmap = ImageBitmap(1,1)
+    private var clockDrawing: ImageBitmap = ImageBitmap(1, 1)
     private var timeSpentDrawing: Long = 0
     private var timeSpentSettingFirstClock: Long = 0
     private var timeSpentSettingSecondClock: Long = 0
@@ -47,7 +47,7 @@ class ClockTestViewModel(
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     /** Sends the clock drawing and results to the server */
-    fun sendToServer(onSuccess: (() -> Unit)?, onFailure: ((message:Error) -> Unit)?) {
+    fun sendToServer(onSuccess: (() -> Unit)?, onFailure: ((message: Error) -> Unit)?) {
         if (clockDrawing.width == 1 && clockDrawing.height == 1) {
             println("❌ Failed to convert image: clockDrawing is not set.")
             onFailure?.invoke(DataError.Local.EMPTY_FILE)
@@ -56,19 +56,19 @@ class ClockTestViewModel(
         val imageByteArray = clockDrawing.toByteArray()
 
         val measurement = 21
-        val patientId = 168
+        val userId = 168
         val clinicId = 6
         val date = getCurrentFormattedDateTime()
         val version = 1
         val imgName = "clock_image.png"
-        val imagePath = "clinics/$clinicId/patients/$patientId/measurements/$measurement/" +
+        val imagePath = "clinics/$clinicId/patients/$userId/measurements/$measurement/" +
                 "$date/$version/$imgName"
 
-        uploadScope.launch  {
+        uploadScope.launch {
             println("Entering viewmodel scope - to upload results")
             // this will run even if viewModelScope is gone
             try {
-                uploadImageUseCase.execute(imagePath, imageByteArray,clinicId,patientId)
+                uploadImageUseCase.execute(imagePath, imageByteArray, clinicId, userId)
                     .onSuccess {
                         println("Successfully uploaded Image")
                         cdtResults.imageUrl = MeasureObjectString(
@@ -79,20 +79,20 @@ class ClockTestViewModel(
 
                         val body = CDTRequestBody(
                             measurement = measurement,
-                            patientId = patientId,
+                            patientId = userId,
                             date = date,
                             clinicId = clinicId,
                             test = cdtResults
                         )
 
-                        uploadCDTResultsUseCase.execute(body)
+                        uploadCDTResultsUseCase.execute(body, CDTRequestBody.serializer())
                             .onSuccess {
-                                withContext(Dispatchers.Main){
+                                withContext(Dispatchers.Main) {
                                     onSuccess?.invoke()
                                 }
                             }
                             .onError { error ->
-                                withContext(Dispatchers.Main){
+                                withContext(Dispatchers.Main) {
                                     onFailure?.invoke(error)
                                 }
                             }
@@ -108,7 +108,7 @@ class ClockTestViewModel(
     }
 
     /** Saves the drawn clock as an ImageBitmap */
-    fun saveBitmap(image: ImageBitmap){
+    fun saveBitmap(image: ImageBitmap) {
         this.clockDrawing = image
     }
 

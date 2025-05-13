@@ -2,8 +2,8 @@ package core.domain.use_case
 
 import core.data.model.SuccessfulLoginResponse
 import core.domain.DataError
-import core.domain.api.AppApi
 import core.domain.Result
+import core.domain.api.AppApi
 
 
 class LoginUseCase(
