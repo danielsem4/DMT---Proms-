@@ -30,6 +30,7 @@ kotlinStdlib = "2.1.0"
 runner = "1.6.2"
 core = "1.6.1"
 datastore = "1.1.1"
+
 atomicfu = "0.23.2"
 voyager = "1.1.0-beta02"
 [libraries]
@@ -47,8 +48,8 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
-
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+
 atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
 # Koin libraries
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }

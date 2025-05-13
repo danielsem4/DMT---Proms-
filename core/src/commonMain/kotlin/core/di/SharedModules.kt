@@ -6,6 +6,7 @@ import core.domain.api.AppApi
 import core.domain.session.SessionManager
 import core.domain.use_case.LoginUseCase
 import core.network.HttpClientFactory
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -21,5 +22,6 @@ val clientRequestsModule = module{
     singleOf(::KtorAppRemoteDataSource).bind<AppApi>()
     singleOf(::LoginUseCase)
 
-
 }
+
+internal expect val platformModuleCore: Module

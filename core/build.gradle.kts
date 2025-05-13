@@ -53,6 +53,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
+            implementation(libs.datastore.preferences)
 
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)

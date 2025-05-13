@@ -56,6 +56,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
+            implementation(libs.datastore.preferences)
 
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.tabNavigator)
