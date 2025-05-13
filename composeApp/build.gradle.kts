@@ -1,4 +1,3 @@
-
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -16,7 +15,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -27,24 +26,27 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
+            // Koin dependencies
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
 
+            // Ktor dependencies
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(projects.ui.core)
             implementation(projects.core)
+            implementation(projects.clockTest)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -54,15 +56,27 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
+            // Voyager Navigator
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.screenModel)
+            implementation(libs.voyager.transitions)
+            // Basic Navigation
+            implementation(libs.navigation.compose)
+
+            // Koin dependencies
+            api(libs.koin.core)
+            implementation(libs.bundles.koin.compose)
+            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.navigation.compose)
+            implementation(libs.kotlinx.serialization) // for data serialization
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
 
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-            api(libs.koin.core)
 
-            implementation(libs.navigation.compose)
 
             implementation(libs.coil.compose)
 

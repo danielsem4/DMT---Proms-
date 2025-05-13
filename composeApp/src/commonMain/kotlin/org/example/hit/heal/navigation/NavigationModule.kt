@@ -7,8 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.example.hit.heal.Home.HomeScreen
 import org.example.hit.heal.splash.SplashScreen
-import org.koin.compose.koinInject
-import org.koin.dsl.module
+import org.koin.compose.viewmodel.koinViewModel
 
 
 sealed class Screen(val route: String) {
@@ -20,7 +19,7 @@ sealed class Screen(val route: String) {
 @Composable
 fun NavigationGraph() {
     val navController = rememberNavController()
-    val navigationViewModel: NavigationViewModel = koinInject()
+    val navigationViewModel: NavigationViewModel = koinViewModel()
 
     NavHost(
         navController = navController,

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <resources>
-<!--    <string name=""></string>-->
+    <!--    <string name=""></string>-->
     <string name="previous">Previous</string>
     <string name="next">Next</string>
     <string name="how_do_you_feel">How do you feel?</string>

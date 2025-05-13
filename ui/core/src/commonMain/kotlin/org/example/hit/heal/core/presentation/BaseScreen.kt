@@ -65,7 +65,7 @@ fun BaseScreen(
                         it()
                     }
                 }
-                
+
                 Text(
                     text = title,
                     color = Color.White,
