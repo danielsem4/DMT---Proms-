@@ -1,195 +1,175 @@
 package presentation.appsDeviceScreen
 
-import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.person_names
+import dmt_proms.pass.generated.resources.apps_page_second_assist
+import dmt_proms.pass.generated.resources.here_persons_number
+import dmt_proms.pass.generated.resources.now_the_contacts_list_will_be_opened_pass
+import dmt_proms.pass.generated.resources.search_contacts_list_in_the_phone_pass
+import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
+import dmt_proms.pass.generated.resources.what_you_need_to_do
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.getStringArray
-import presentation.components.ContactData
 import presentation.components.AppData
+import presentation.components.AudioPlayer
 
 class AppDeviceViewModel : ViewModel() {
 
     // --- Dialog State ---
+    private val _isPlaying = MutableStateFlow(false)
+    val isPlaying: StateFlow<Boolean> = _isPlaying
+
     private val _showDialog = MutableStateFlow(false)
     val showDialog: StateFlow<Boolean> = _showDialog
 
-    private val _showSecondDialog = MutableStateFlow(false)
-    val showSecondDialog: StateFlow<Boolean> = _showSecondDialog
+    private val _showUnderstandingDialog = MutableStateFlow(false)
+    val showUnderstandingDialog: StateFlow<Boolean> = _showUnderstandingDialog
 
     private val _showReminderDialog = MutableStateFlow(false)
     val showReminderDialog: StateFlow<Boolean> = _showReminderDialog
 
-    private val _dialogText = MutableStateFlow("")
-    val dialogText: StateFlow<String> = _dialogText
+    private val _dialogAudioText = MutableStateFlow<Pair<StringResource, StringResource>?>(null)
+    val dialogAudioText: StateFlow<Pair<StringResource, StringResource>?> = _dialogAudioText
+
+    private val _isSecondInstructions = MutableStateFlow(false)
+    val isSecondInstructions: StateFlow<Boolean> = _isSecondInstructions
 
     // --- Countdown ---
-    private val _countdown = MutableStateFlow(10)
+    private val _countdown = MutableStateFlow(0)
     val countdown: StateFlow<Int> = _countdown
 
-    // --- Contact & App State ---
-    private val _contact = MutableStateFlow<ContactData?>(null)
-    val contact: StateFlow<ContactData?> = _contact
+    private val _isFinished = MutableStateFlow(false)
+    val isFinished: StateFlow<Boolean> = _isFinished
 
-    private val _currentScreen = MutableStateFlow(ScreenState.MainScreen)
-    val currentScreen: StateFlow<ScreenState> = _currentScreen
-
-    // --- User Interaction State ---
-    private val _userDidSomething = MutableStateFlow(false)
-
-    private val _didNothingApp = MutableStateFlow(0)
-    val didNothingApp: StateFlow<Int> = _didNothingApp
-
-    private val _didNothingMain = MutableStateFlow(0)
-    val didNothingMain: StateFlow<Int> = _didNothingMain
-
-    private val _wrongApp = MutableStateFlow(0)
-    val wrongApp: StateFlow<Int> = _wrongApp
-
-    // --- Navigation Events ---
-    sealed class NavigationEvent {
-        data object ToContactsScreen : NavigationEvent()
-        data object BackToAppsScreen : NavigationEvent() // ← חדש
-        data class ToWrongAppScreen(val app: AppData) : NavigationEvent()
-    }
+    private var didNothing = 0
+    private var wrongApp = 0
+    private var isCorrectApp = false
 
 
-    private val _navigationEvent = MutableSharedFlow<NavigationEvent>()
-    val navigationEvent: SharedFlow<NavigationEvent> = _navigationEvent
 
     // --- Internal ---
+
     private var dialogJob: Job? = null
     private var reminderJob: Job? = null
-    private var isSecondDialogShown = false
-    private var hasStartedDialogSequence = false
 
     // --- Public API ---
 
-    fun triggerDialogSequenceIfNeeded() {
-        if (!hasStartedDialogSequence) {
-            hasStartedDialogSequence = true
-            startDialogSequence()
+    private val audioPlayer = AudioPlayer()
+
+    init {
+        startDialogInstructions()
+        startCheckingIfUserDidSomething()
+    }
+
+
+    private fun startDialogInstructions() {
+        dialogJob?.cancel()
+        _showDialog.value = true
+
+        dialogJob = viewModelScope.launch {
+            var remainingTime = 10
+
+            while (remainingTime > 0) {
+                if (remainingTime <= 3) {
+                    _countdown.value = remainingTime - 1
+                }
+                delay(1000)
+                remainingTime--
+            }
+
+            _showDialog.value = false
+
+            if (!_isSecondInstructions.value) {
+                _showUnderstandingDialog.value = true
+            }
         }
     }
-    fun setContact(name: String, phoneNumber: String) {
-        _contact.value = ContactData(name, phoneNumber)
-    }
 
+    private fun startCheckingIfUserDidSomething() {
+        reminderJob?.cancel()
 
-    fun onAppClicked(app: AppData) {
-        if (_wrongApp.value == 3 || app.label == "אנשי קשר") {
-            viewModelScope.launch {
-                _navigationEvent.emit(NavigationEvent.ToContactsScreen)
-            }
-        } else {
-            _wrongApp.update { it + 1 }
-            _currentScreen.value = ScreenState.WrongAppScreen
-            viewModelScope.launch {
-                _navigationEvent.emit(NavigationEvent.ToWrongAppScreen(app))
+        reminderJob = viewModelScope.launch {
+            var elapsedTime = 0
+            while (isActive && didNothing < 3) {
+
+                if (elapsedTime >= 15) {
+                    getReminderDidNotingText()
+                    _showReminderDialog.value = true
+                    elapsedTime = 0
+
+                }
+
+                delay(1_000)
+                elapsedTime++
             }
         }
     }
 
-    fun onUserDidSomething() {
-        _userDidSomething.value = true
-        _showReminderDialog.value = false
-        startReminderCountdown()
+
+    fun playAudio(audioText: String) {
+        _isPlaying.value = true
+
+        audioPlayer.play(audioText) {
+            _isPlaying.value = false
+        }
     }
 
     fun onUnderstandingConfirmed() {
-        _showSecondDialog.value = false
-        startReminderCountdown()
+        _showUnderstandingDialog.value = false
+        _showDialog.value = false
     }
 
     fun onUnderstandingDenied() {
-        _showSecondDialog.value = false
+        _showUnderstandingDialog.value = false
         _showDialog.value = true
-        isSecondDialogShown = true
-        startCountdownThenShowSecondDialog()
+        _isSecondInstructions.value = true
+        startDialogInstructions()
     }
 
     fun hideReminderDialog() {
         _showReminderDialog.value = false
     }
 
-    // --- Private Logic ---
-
-    private fun startDialogSequence() {
-        dialogJob?.cancel()
-        _showDialog.value = true
-        startCountdownThenShowSecondDialog()
-    }
-
-    private fun startCountdownThenShowSecondDialog() {
-        dialogJob = viewModelScope.launch {
-            for (i in 10 downTo 1) {
-                _countdown.value = i
-                delay(1000)
+    fun onAppClicked(app: AppData) {
+        userDidSomething()
+        if (app.label == "אנשי קשר") {
+            isCorrectApp = true
+            reminderJob?.cancel()
+        } else {
+            wrongApp++
+            if (wrongApp == 3) {
+                reminderJob?.cancel()
+                _isFinished.value = true
             }
-            _showDialog.value = false
-            if (!isSecondDialogShown) {
-                _showSecondDialog.value = true
-                isSecondDialogShown = true
-            }
-            startReminderCountdown()
         }
     }
 
-    fun startReminderCountdown() {
-        _userDidSomething.value = false
-        reminderJob?.cancel()
-
-        reminderJob = viewModelScope.launch {
-            while (_didNothingMain.value < 3 && _didNothingApp.value < 2) {
-                delay(15_000)
-
-                if (!_userDidSomething.value) {
-                    _dialogText.value = getReminderText()
-                    _showReminderDialog.value = true
-                }
+    private fun getReminderDidNotingText() {
+        when (didNothing++) {
+            1 -> {
+                _dialogAudioText.value =
+                    Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
             }
 
-
-            if (_didNothingApp.value == 2 && _currentScreen.value == ScreenState.WrongAppScreen) {
-                _dialogText.value = "הנה המספר של ${_contact.value?.name ?: ""}, תחייג אליה"
-                _showReminderDialog.value = true
-                _navigationEvent.emit(NavigationEvent.BackToAppsScreen)
+            2 -> {
+                _dialogAudioText.value =
+                    Res.string.apps_page_second_assist to Res.string.search_contacts_list_in_the_phone_pass
             }
 
+            3 -> {
+                _dialogAudioText.value =
+                    Res.string.here_persons_number to Res.string.now_the_contacts_list_will_be_opened_pass
+                _isFinished.value = true
+            }
         }
     }
 
-    private fun getReminderText(): String {
-        return when (_currentScreen.value) {
-            ScreenState.MainScreen -> {
-                when (_didNothingMain.updateAndGet { it + 1 }) {
-                    1 -> "מה יש לעשות?"
-                    2 -> "תחפש את רשימת אנשי הקשר בטלפון"
-                    3 -> "הנה המספר של ${_contact.value?.name ?: ""}, תחייג אליה"
-                    else -> ""
-                }
-            }
-
-            ScreenState.WrongAppScreen -> {
-                when (_didNothingApp.updateAndGet { it + 1 }) {
-                    1 -> "מה יש לעשות?"
-                    2 -> "כפתור החזרה נמצא בחלק העליון של המסך בצד שמאל"
-                    else -> ""
-                }
-            }
-        }
-
-    }
-    fun backToAppsScreen() {
-        viewModelScope.launch {
-            _currentScreen.value = ScreenState.MainScreen
-            _showReminderDialog.value = false
-            _navigationEvent.emit(NavigationEvent.BackToAppsScreen)
-        }
+    fun userDidSomething(){
+        _showDialog.value = false
+        _showUnderstandingDialog.value = false
+        _showReminderDialog.value = false
     }
 
 }

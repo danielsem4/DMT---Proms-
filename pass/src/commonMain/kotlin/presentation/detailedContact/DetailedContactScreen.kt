@@ -39,7 +39,6 @@ import dmt_proms.pass.generated.resources.black_video
 import dmt_proms.pass.generated.resources.whatsapp
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
-import presentation.appsDeviceScreen.components.reminderDialog
 import presentation.components.ContactData
 import presentation.components.circleWithPicture
 import presentation.detailedContact.components.getContactChatData
@@ -66,14 +65,14 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
 
             if (shouldNavigate) {
                 navigator?.push(DialScreen("סיימת את המשימה ראשונה, לפניך משימה נוספת. מוצג לפניך רשימת טלפונים אנא חייג למרפאת השיניים"))
-            } else {
-                reminderDialog(
-                    text = dialogText,
-                    onClick = {
-                        viewModel.hideReminderDialog()
-                    }
-                )
-            }
+//            } else {
+//                reminderDialog(
+//                    text = dialogText,
+//                    onClick = {
+//                        viewModel.hideReminderDialog()
+//                    }
+//                )
+//            }
         }
 
         BaseTabletScreen(
@@ -121,7 +120,7 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
                     }
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    ContactDetailsSection(contact, viewModel)
+                   // ContactDetailsSection(contact, viewModel)
                 }
             }
         )
@@ -213,4 +212,4 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
             }
         }
     }
-}
+}}

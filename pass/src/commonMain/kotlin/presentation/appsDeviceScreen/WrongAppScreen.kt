@@ -13,48 +13,59 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key.Companion.L
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.exit
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.appsDeviceScreen.components.reminderDialog
+import presentation.appsDeviceScreen.components.InstructionsDialog
 import presentation.components.AppData
+import presentation.contatcts.ContactsScreen
 
 class WrongAppScreen(private val app: AppData) : Screen {
 
     @Composable
     override fun Content() {
-        val viewModel: AppDeviceViewModel = koinViewModel()
-        val showReminderDialog by viewModel.showReminderDialog.collectAsState()
-        val dialogText by viewModel.dialogText.collectAsState()
+        val viewModel: WrongAppViewModel = koinViewModel()
+        val showDialog by viewModel.showDialog.collectAsState()
+        val dialogAudioText by viewModel.dialogAudioText.collectAsState()
+        val isPlaying by viewModel.isPlaying.collectAsState()
+        val didNothing by viewModel.didNothing.collectAsState()
+        val countdown by viewModel.countdown.collectAsState()
+        val backToApps by viewModel.backToApps.collectAsState()
+
 
         val navigator = LocalNavigator.current
 
-        LaunchedEffect(Unit) {
-            viewModel.navigationEvent.collect { event ->
-                when (event) {
-                    is AppDeviceViewModel.NavigationEvent.ToContactsScreen -> {
-                        navigator?.popUntilRoot()
-                        // אפשרי: ואז push למסך אנשי קשר אם צריך
-                    }
 
-                    is AppDeviceViewModel.NavigationEvent.BackToAppsScreen -> {
-                        navigator?.pop() // ← מחזיר אחורה למסך הקודם (האפליקציות)
-                    }
-
-                    is AppDeviceViewModel.NavigationEvent.ToWrongAppScreen -> {
-                        // לא עושים כלום כאן כרגע
-                    }
-                }
-            }
+       if(backToApps){
+            viewModel.setBackToApps()
+            navigator?.push(AppDeviceScreen())
         }
 
-        if (showReminderDialog) {
-            reminderDialog(onClick = { viewModel.hideReminderDialog() }, text = dialogText)
+        if (showDialog) {
+            dialogAudioText?.let { (text, audio) ->
+                val dialogText = stringResource(text)
+                val dialogAudio = stringResource(audio)
+                val shouldNavigateToContacts = didNothing == 3
+                InstructionsDialog(
+                    text = dialogText,
+                    secondsLeft = countdown,
+                    isPlaying = isPlaying,
+                    shouldShowCloseIcon = true,
+                    onPlayAudio = { viewModel.playAudio(dialogAudio) },
+                    onDismiss = {
+                        viewModel.hideReminderDialog()
+                        if (shouldNavigateToContacts) {
+                            navigator?.push(ContactsScreen())
+
+                        }
+                    }
+                )}
         }
 
         BaseTabletScreen(
@@ -66,8 +77,9 @@ class WrongAppScreen(private val app: AppData) : Screen {
                         contentDescription = "Icon",
                         modifier = Modifier
                             .size(48.dp)
-                            .align(Alignment.TopStart).clickable { viewModel.backToAppsScreen()
-                                viewModel.startReminderCountdown()
+                            .align(Alignment.TopStart).clickable {
+                                viewModel.setSecondTimeWrongApp()
+                                navigator?.push(AppDeviceScreen())
                             }
                     )
                     Text(

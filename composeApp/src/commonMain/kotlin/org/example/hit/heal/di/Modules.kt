@@ -11,6 +11,7 @@ import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import presentation.appsDeviceScreen.AppDeviceViewModel
+import presentation.appsDeviceScreen.WrongAppViewModel
 import presentation.contatcts.ContactsViewModel
 
 fun initKoin(config: KoinAppDeclaration? = null) =
@@ -34,6 +35,7 @@ val sharedModules = module {
 
     single { NavigationViewModel() }
     single { AppDeviceViewModel() }
+    single { WrongAppViewModel() }
     single { ContactsViewModel() }
 
 }

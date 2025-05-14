@@ -33,7 +33,6 @@ import dmt_proms.pass.generated.resources.dial_keys
 import dmt_proms.pass.generated.resources.white_phone
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
-import presentation.appsDeviceScreen.components.reminderDialog
 
 class DialScreen(private val dialogText: String?) : Screen {
 
@@ -47,12 +46,12 @@ class DialScreen(private val dialogText: String?) : Screen {
 
 
             if (dialogText != null) {
-                reminderDialog(
-                    text = dialogText,
-                    onClick = {
-                        //viewModel.hideReminderDialog()
-                    }
-                )
+//                reminderDialog(
+//                    text = dialogText,
+//                    onClick = {
+//                        //viewModel.hideReminderDialog()
+//                    }
+//                )
         }
         BaseTabletScreen(
             title = "חייגן",

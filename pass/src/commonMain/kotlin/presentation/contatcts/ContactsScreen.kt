@@ -38,11 +38,10 @@ import dmt_proms.pass.generated.resources.phone_number
 import dmt_proms.pass.generated.resources.search
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.appsDeviceScreen.components.reminderDialog
 import presentation.components.ContactData
 
 
-class ContactsScreen(private val correctContact: ContactData) : Screen {
+class ContactsScreen() : Screen {
 
     @Composable
     override fun Content() {
@@ -58,21 +57,21 @@ class ContactsScreen(private val correctContact: ContactData) : Screen {
 
         LaunchedEffect(Unit) {
             viewModel.loadContacts(phoneNumber)
-            viewModel.startReminderCountdown(correctContact, false)
+          //  viewModel.startReminderCountdown(correctContact, false)
         }
 
 
-        if (showReminderDialog) {
-            reminderDialog(
-                text = dialogText,
-                onClick = {
-                    viewModel.hideReminderDialog()
-                    if (shouldNavigate) {
-                        navigator?.push(DetailedContactScreen(correctContact))
-                    }
-                }
-            )
-        }
+//        if (showReminderDialog) {
+//            reminderDialog(
+//                text = dialogText,
+//                onClick = {
+//                    viewModel.hideReminderDialog()
+//                    if (shouldNavigate) {
+//                        navigator?.push(DetailedContactScreen(correctContact))
+//                    }
+//                }
+//            )
+//        }
 
         BaseTabletScreen(
             title = "אנשי קשר",
@@ -100,13 +99,13 @@ class ContactsScreen(private val correctContact: ContactData) : Screen {
                             modifier = Modifier
                                 .fillMaxSize().pointerInput(Unit) {
                                     detectDragGestures { _, _ ->
-                                        viewModel.startScrollCountdown(correctContact)
+                                       // viewModel.startScrollCountdown(correctContact)
                                     }
                                 },
                             verticalArrangement = Arrangement.spacedBy(25.dp)
                         ) {
                             items(contactsList) { contact ->
-                                ContactItem(contact = contact, correctContact = correctContact, viewModel = viewModel)
+                             //   ContactItem(contact = contact, correctContact = correctContact, viewModel = viewModel)
                             }
 
                         }

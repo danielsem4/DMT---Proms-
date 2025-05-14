@@ -4,6 +4,8 @@ import BaseTabletScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,14 +27,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.pass.generated.resources.Res
+import dmt_proms.pass.generated.resources.first_instructions_pass
+import dmt_proms.pass.generated.resources.first_mission_pass
+import dmt_proms.pass.generated.resources.fmpt
+import dmt_proms.pass.generated.resources.fmpt_meaning
 import dmt_proms.pass.generated.resources.speaker
+import dmt_proms.pass.generated.resources.test_record_pass
+import dmt_proms.pass.generated.resources.the_pass_test
+import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import presentation.appsDeviceScreen.AppDeviceScreen
+import presentation.components.AudioPlayer
+import presentation.components.AudioPlayingAnimation
 
 class EntryScreen : Screen {
 
@@ -40,53 +52,19 @@ class EntryScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        var isDialogVisible by remember { mutableStateOf(false) }
-        var isAudioClicked by remember { mutableStateOf(false) }
-      //  val audioPlayer = remember { AudioPlayer() }
-       // val audioUrl = audioResourceId?.let { stringResource(it) }
+        val viewModel: EntryViewModel = viewModel()
+        val isOverlayVisible by viewModel.isOverlayVisible.collectAsState()
+        val audioString = stringResource(Res.string.first_instructions_pass)
+        val isPlaying by viewModel.isPlaying.collectAsState()
 
-//        LaunchedEffect(isAudioClicked) {
-//            if (isAudioClicked) {
-//                audioUrl?.let {
-//                    isDialogVisible = true
-//                    audioPlayer.play(it) {
-//                        isDialogVisible = false
-//                    }
-//                    isAudioClicked = false
-//                }
-//            }
-//        }
+        LaunchedEffect(Unit) {
+            viewModel.playAudio(audioString)
+        }
 
         BaseTabletScreen(
             title = "ברוך הבא!",
             content = {
-                Button(
-                    onClick = {
-                      //  sixthQuestionViewModel.setRandomAudio()
-                        isAudioClicked = true
-                    },
-                    colors = ButtonDefaults.buttonColors(primaryColor),
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    shape = RoundedCornerShape(30)
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = "הקשב/י",
-                            color = Color.White,
-                            fontSize = 20.sp,
-                            fontWeight = Bold
-                        )
-                        Spacer(modifier = Modifier.width(20.dp))
-                        Image(
-                            painter = painterResource(Res.drawable.speaker),
-                            contentDescription = "Audio",
-                            modifier = Modifier
-                                .padding(end = 8.dp)
-                                .size(30.dp)
-                                .background(Color.Transparent)
-                        )
-                    }
-                }
+                AudioPlayingAnimation(isPlaying = isPlaying,)
 
                 Column(
                     modifier = Modifier
@@ -94,21 +72,36 @@ class EntryScreen : Screen {
                         .align(Alignment.CenterHorizontally),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("FMPT", color = primaryColor, fontSize = 30.sp, fontWeight = Bold)
+                    Text(
+                        stringResource(Res.string.fmpt),
+                        color = primaryColor,
+                        fontSize = 40.sp,
+                        fontWeight = Bold
+                    )
                     Spacer(modifier = Modifier.padding(10.dp))
-                    Text("Functional Mobile Phone Test", color = primaryColor, fontSize = 20.sp, fontWeight = Bold)
+                    Text(
+                        stringResource(Res.string.fmpt_meaning),
+                        color = primaryColor,
+                        fontSize = 20.sp,
+                        fontWeight = Bold
+                    )
+                    Spacer(modifier = Modifier.padding(50.dp))
 
                     Box(
-                        modifier = Modifier.align(Alignment.CenterHorizontally).border(width = 2.dp, color = Color.LightGray, shape = RoundedCornerShape(10.dp))
+                        modifier = Modifier.align(Alignment.CenterHorizontally).border(
+                            width = 2.dp,
+                            color = Color.LightGray,
+                            shape = RoundedCornerShape(10.dp)
+                        )
                             .background(Color.White, shape = RoundedCornerShape(10.dp))
-                            .padding(16.dp)
+                            .padding(20.dp)
                     ) {
                         Text(
-                            text = "שלום, המרפאה בעיסוק רוצה לבדוק את היכולת התפקודית בפלאפון. בדקות הקרובות יופיע בטאבלט, שמשתמש כמכשיר הפלאפון, שתי משימות הקשורות לשימוש בפלאפון. פעלו לפי ההוראות. מתחילים.",
+                            text = stringResource(Res.string.first_mission_pass),
                             color = primaryColor,
-                            fontSize = 30.sp,
+                            fontSize = 35.sp,
                             fontWeight = Bold,
-                            lineHeight = 40.sp
+                            lineHeight = 60.sp
                         )
                     }
 
@@ -116,30 +109,45 @@ class EntryScreen : Screen {
                         modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp)
                     ) {
                         Text(
-                            "מבוסס על מבחן ה-PASS.",
+                            stringResource(Res.string.the_pass_test),
                             fontSize = 15.sp,
                             fontWeight = Bold,
                         )
                     }
-                    Box(modifier = Modifier.fillMaxSize().padding(10.dp)){
-                    Button(
-                        onClick = {navigator?.push(AppDeviceScreen())},
-                        modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                        shape = RoundedCornerShape(12.dp),
-                    ) {
-                        Text(
-                            text = "הבא",
-                            color = Color.White,
-                            fontSize = 20.sp,
-                            fontWeight = Bold
-                        )
-                    }}
-
-
-
+                    Box(modifier = Modifier.fillMaxSize().padding(10.dp)) {
+                        Button(
+                            onClick = { navigator?.push(AppDeviceScreen()) },
+                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
+                            shape = RoundedCornerShape(12.dp),
+                        ) {
+                            Text(
+                                text = "הבא",
+                                color = Color.White,
+                                fontSize = 20.sp,
+                                fontWeight = Bold
+                            )
+                        }
+                    }
                 }
+
+
             }
         )
+        if (isOverlayVisible) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.6f))
+                    .clickable(
+                        enabled = true,
+                        onClick = { },
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    )
+            )
+        }
     }
+
 }
+
