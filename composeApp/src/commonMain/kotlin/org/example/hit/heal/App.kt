@@ -1,20 +1,16 @@
 package org.example.hit.heal
 
-import LoginScreen
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
-import org.example.hit.heal.oriantation.feature.presentation.SeasonsSelectScreen
-import org.example.hit.heal.oriantation.feature.presentation.ShapesDragScreen
-
-import org.example.hit.heal.oriantation.feature.presentation.WelcomeScreen
+import org.example.hit.heal.oriantation.feature.presentation.components.ShapesDragScreen
 
 
 @Composable
 fun App(context: Any? = null) {
 //    NavigationGraph()
     MaterialTheme {
-       Navigator(SeasonsSelectScreen())
+       Navigator(ShapesDragScreen())
 
 
     }

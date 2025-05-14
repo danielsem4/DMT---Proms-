@@ -23,24 +23,14 @@ import org.example.hit.heal.core.presentation.TabletBaseScreen
 import androidx.compose.foundation.Image
 import org.jetbrains.compose.resources.painterResource
 import dmt_proms.oriantation.generated.resources.Res
+import dmt_proms.oriantation.generated.resources.bleach
 import dmt_proms.oriantation.generated.resources.check
 import dmt_proms.oriantation.generated.resources.close
 import dmt_proms.oriantation.generated.resources.hash_tag
 import dmt_proms.oriantation.generated.resources.rhomb_outline
 import dmt_proms.oriantation.generated.resources.star
 
-@Composable
-private fun TriangleShape(modifier: Modifier = Modifier, color: Color = Color.Black) {
-    Canvas(modifier = modifier) {
-        val path = Path().apply {
-            moveTo(size.width / 2f, 0f)
-            lineTo(size.width, size.height)
-            lineTo(0f, size.height)
-            close()
-        }
-        drawPath(path, color)
-    }
-}
+
 
 class ShapesDragScreen : Screen {
     @Composable
@@ -53,13 +43,13 @@ class ShapesDragScreen : Screen {
         val redSquareSize = 300.dp
         val redSquarePx = with(LocalDensity.current) { redSquareSize.toPx() }
 
-        // List of other shapes (star, check, close, hash-tag, rhomb-outline)
+        // List of other shapes (diamond, star, hash, X, check)
         val shapeImages = listOf(
+            Res.drawable.rhomb_outline,
             Res.drawable.star,
-            Res.drawable.check,
-            Res.drawable.close,
             Res.drawable.hash_tag,
-            Res.drawable.rhomb_outline
+            Res.drawable.close,
+            Res.drawable.check
         )
 
         TabletBaseScreen(
@@ -88,35 +78,36 @@ class ShapesDragScreen : Screen {
                     ) {
                         // If triangle is dropped, show it inside
                         if (isTriangleDropped) {
-                            TriangleShape(
-                                modifier = Modifier.size(80.dp),
-                                color = Color(0xFF4EC3AF)
+                            Image(
+                                painter = painterResource(Res.drawable.bleach),
+                                contentDescription = null,
+                                modifier = Modifier.size(80.dp)
                             )
                         }
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     // Draggable triangle (if not dropped)
                     if (!isTriangleDropped) {
-                        Box(
-                            modifier = Modifier
-                                .offset { triangleOffset.toIntOffset() }
-                                .pointerInput(Unit) {
-                                    detectDragGestures { change, dragAmount ->
-                                        change.consume()
-                                        triangleOffset += Offset(dragAmount.x, dragAmount.y)
-                                    }
+                        DraggableTriangleIcon(
+                            onDrop = { offset ->
+                                // Check if dropped inside the red square
+                                val dropX = offset.x
+                                val dropY = offset.y
+                                if (dropX in 0f..redSquarePx && dropY in 0f..redSquarePx) {
+                                    isTriangleDropped = true
+                                } else {
+                                    triangleOffset = Offset.Zero
                                 }
-                        ) {
-                            TriangleShape(
-                                modifier = Modifier.size(80.dp),
-                                color = Color.Black
-                            )
-                        }
+                            },
+                            offset = triangleOffset,
+                            onOffsetChange = { triangleOffset = it }
+                        )
                     }
-                    // Other shapes (not draggable for now, just displayed)
+                    // Other shapes (not draggable, just displayed)
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        verticalArrangement = Arrangement.spacedBy(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.padding(end = 32.dp)
                     ) {
                         shapeImages.forEach { res ->
                             Image(
@@ -125,9 +116,52 @@ class ShapesDragScreen : Screen {
                                 modifier = Modifier.size(60.dp)
                             )
                         }
+                        // Add the triangle at the bottom (draggable)
+                        if (isTriangleDropped) {
+                            // Show a faded triangle to indicate it's been placed
+                            Image(
+                                painter = painterResource(Res.drawable.bleach),
+                                contentDescription = null,
+                                modifier = Modifier.size(60.dp),
+                                alpha = 0.3f
+                            )
+                        } else {
+                            Image(
+                                painter = painterResource(Res.drawable.bleach),
+                                contentDescription = null,
+                                modifier = Modifier.size(60.dp)
+                            )
+                        }
                     }
                 }
             }
+        )
+    }
+}
+
+// Draggable triangle using the drawable icon
+@Composable
+fun DraggableTriangleIcon(
+    onDrop: (Offset) -> Unit,
+    offset: Offset,
+    onOffsetChange: (Offset) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .offset { offset.toIntOffset() }
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDragEnd = { onDrop(offset) }
+                ) { change, dragAmount ->
+                    change.consume()
+                    onOffsetChange(offset + Offset(dragAmount.x, dragAmount.y))
+                }
+            }
+    ) {
+        Image(
+            painter = painterResource(Res.drawable.bleach),
+            contentDescription = null,
+            modifier = Modifier.size(80.dp)
         )
     }
 }

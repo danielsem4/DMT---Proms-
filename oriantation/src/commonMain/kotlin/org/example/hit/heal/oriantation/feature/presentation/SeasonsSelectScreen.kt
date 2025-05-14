@@ -36,6 +36,7 @@ import dmt_proms.oriantation.generated.resources.spring
 import dmt_proms.oriantation.generated.resources.summer
 import dmt_proms.oriantation.generated.resources.winter
 import org.example.hit.heal.core.presentation.TabletBaseScreen
+import org.example.hit.heal.oriantation.feature.presentation.components.ShapesDragScreen
 import org.jetbrains.compose.resources.painterResource
 
 
