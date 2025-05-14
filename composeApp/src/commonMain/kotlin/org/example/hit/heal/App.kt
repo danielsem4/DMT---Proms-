@@ -4,6 +4,8 @@ import LoginScreen
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
+import org.example.hit.heal.oriantation.feature.presentation.SeasonsSelectScreen
+import org.example.hit.heal.oriantation.feature.presentation.ShapesDragScreen
 
 import org.example.hit.heal.oriantation.feature.presentation.WelcomeScreen
 
@@ -12,7 +14,7 @@ import org.example.hit.heal.oriantation.feature.presentation.WelcomeScreen
 fun App(context: Any? = null) {
 //    NavigationGraph()
     MaterialTheme {
-       Navigator(WelcomeScreen())
+       Navigator(SeasonsSelectScreen())
 
 
     }
