@@ -14,11 +14,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key.Companion.L
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.exit
+import kotlinx.atomicfu.TraceBase.None.append
+import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -34,38 +40,14 @@ class WrongAppScreen(private val app: AppData) : Screen {
         val showDialog by viewModel.showDialog.collectAsState()
         val dialogAudioText by viewModel.dialogAudioText.collectAsState()
         val isPlaying by viewModel.isPlaying.collectAsState()
-        val didNothing by viewModel.didNothing.collectAsState()
         val countdown by viewModel.countdown.collectAsState()
         val backToApps by viewModel.backToApps.collectAsState()
-
+        val isCountdownActive by viewModel.isCountdownActive.collectAsState()
 
         val navigator = LocalNavigator.current
 
-
-       if(backToApps){
-            viewModel.setBackToApps()
-            navigator?.push(AppDeviceScreen())
-        }
-
-        if (showDialog) {
-            dialogAudioText?.let { (text, audio) ->
-                val dialogText = stringResource(text)
-                val dialogAudio = stringResource(audio)
-                val shouldNavigateToContacts = didNothing == 3
-                InstructionsDialog(
-                    text = dialogText,
-                    secondsLeft = countdown,
-                    isPlaying = isPlaying,
-                    shouldShowCloseIcon = true,
-                    onPlayAudio = { viewModel.playAudio(dialogAudio) },
-                    onDismiss = {
-                        viewModel.hideReminderDialog()
-                        if (shouldNavigateToContacts) {
-                            navigator?.push(ContactsScreen())
-
-                        }
-                    }
-                )}
+        LaunchedEffect(Unit){
+            viewModel.startCheckingIfUserDidSomething()
         }
 
         BaseTabletScreen(
@@ -77,18 +59,47 @@ class WrongAppScreen(private val app: AppData) : Screen {
                         contentDescription = "Icon",
                         modifier = Modifier
                             .size(48.dp)
-                            .align(Alignment.TopStart).clickable {
+                            .align(Alignment.TopEnd)
+                            .clickable {
                                 viewModel.setSecondTimeWrongApp()
                                 navigator?.push(AppDeviceScreen())
                             }
                     )
+
                     Text(
-                        text = "האפליקציה שנכנסת אליה היא: ${app.label}",
-                        modifier = Modifier.align(Alignment.Center)
+                        text = buildAnnotatedString {
+                            append("האפליקציה שנכנסת אליה היא: ")
+                            withStyle(style = SpanStyle(color = primaryColor)) {
+                                append(app.label)
+                            }
+                        },
+                        modifier = Modifier.align(Alignment.Center), fontSize = 30.sp
                     )
                 }
             }
         )
+
+        if (showDialog) {
+            dialogAudioText?.let { (text, audio) ->
+                val dialogText = stringResource(text)
+                val dialogAudio = stringResource(audio)
+                InstructionsDialog(
+                    text = dialogText,
+                    secondsLeft = countdown,
+                    isPlaying = isPlaying,
+                    shouldShowCloseIcon = true,
+                    isCountdownActive = isCountdownActive,
+                    onPlayAudio = { viewModel.playAudio(dialogAudio) },
+                    onDismiss = {
+                        viewModel.hideReminderDialog()
+                        if (backToApps) {
+                            viewModel.setBackToApps()
+                            navigator?.push(AppDeviceScreen())
+                        }
+                    }
+                )
+            }
+        }
     }
 }
 

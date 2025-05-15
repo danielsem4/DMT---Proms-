@@ -7,11 +7,14 @@ import dmt_proms.pass.generated.resources.apps_page_second_assist
 import dmt_proms.pass.generated.resources.going_back_to_apss_screen_pass
 import dmt_proms.pass.generated.resources.here_persons_number
 import dmt_proms.pass.generated.resources.now_the_contacts_list_will_be_opened_pass
+import dmt_proms.pass.generated.resources.return_button_on_top_left_pass
 import dmt_proms.pass.generated.resources.search_contacts_list_in_the_phone_pass
 import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
 import dmt_proms.pass.generated.resources.what_you_need_to_do
 import dmt_proms.pass.generated.resources.wrong_app_second_assist
+import dmt_proms.pass.generated.resources.wrong_app_thired_assist
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,39 +35,76 @@ class WrongAppViewModel : ViewModel() {
     private val _showDialog = MutableStateFlow(false)
     val showDialog: StateFlow<Boolean> = _showDialog
 
-    private val _didNothing = MutableStateFlow(0)
-    val didNothing: StateFlow<Int> = _didNothing
-
-    private val _didNothingSecondTime = MutableStateFlow(0)
-    val didNothingSecondTime: StateFlow<Int> = _didNothingSecondTime
-
-    private var isSecondTimeWrongApp = false
-
     private val _countdown = MutableStateFlow(0)
     val countdown: StateFlow<Int> = _countdown
+
+    private val _isCountdownActive = MutableStateFlow(false)
+    val isCountdownActive: StateFlow<Boolean> = _isCountdownActive
 
     private val _backToApps = MutableStateFlow(false)
     val backToApps: StateFlow<Boolean> = _backToApps
 
+    private var didNothing = 0
+    private var didNothingSecondTime = 0
+    private var isSecondTimeWrongApp = false
+    private var isDialogActive = false
 
     private var reminderJob: Job? = null
+    private var dialogJob: Job? = null
 
     private val audioPlayer = AudioPlayer()
 
-    init {
-        startCheckingIfUserDidSomething()
+    private fun countDownDialog(onCountdownFinished: () -> Unit) {
+        isDialogActive = true
+        _isCountdownActive.value = false
+
+        dialogJob?.cancel()
+
+        dialogJob = viewModelScope.launch {
+            val audioDuration = 10 - _countdown.value - 1
+
+            delay(audioDuration * 1000L)
+
+            _isCountdownActive.value = true
+
+            var remainingTime = _countdown.value
+
+            while (remainingTime >= 0) {
+                _countdown.value = remainingTime
+                delay(1000L)
+                remainingTime--
+            }
+
+            _isCountdownActive.value = false
+            isDialogActive = false
+            onCountdownFinished()
+        }
     }
 
-    private fun startCheckingIfUserDidSomething() {
+
+
+    fun startCheckingIfUserDidSomething() {
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
             var elapsedTime = 0
-            while (isActive && _didNothing.value < 3 && _didNothingSecondTime.value < 3) {
+            while (isActive && didNothing < 3 && didNothingSecondTime < 3) {
 
+                if (isDialogActive) {
+                    delay(1_000)
+                    continue
+                }
                 if (elapsedTime >= 15) {
+
                     getReminderDidNotingText()
                     _showDialog.value = true
+
+                    countDownDialog {
+                        _showDialog.value = false
+                        if (didNothing >= 4 || didNothingSecondTime >= 4) {
+                            cancel()
+                        }
+                    }
                     elapsedTime = 0
                 }
 
@@ -95,25 +135,30 @@ class WrongAppViewModel : ViewModel() {
     private fun getReminderDidNotingText() {
         var didNothingCount = 0
         if (isSecondTimeWrongApp) {
-            _didNothing.value++
-            didNothingCount = _didNothing.value
+            didNothing++
+            didNothingCount = didNothing
         } else {
-            _didNothingSecondTime.value++
-            didNothingCount = _didNothingSecondTime.value
+            didNothingSecondTime++
+            didNothingCount = didNothingSecondTime
         }
 
         when (didNothingCount) {
             1 -> {
                 _dialogAudioText.value =
                     Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
+                _countdown.value = 5
             }
 
             2 -> {
                 _dialogAudioText.value =
-                    Res.string.wrong_app_second_assist to Res.string.going_back_to_apss_screen_pass
+                    Res.string.wrong_app_second_assist to Res.string.return_button_on_top_left_pass
+                _countdown.value = 1
             }
 
             3 -> {
+                _dialogAudioText.value =
+                    Res.string.wrong_app_thired_assist to Res.string.going_back_to_apss_screen_pass
+                _countdown.value = 5
                 _backToApps.value = true
                 reminderJob?.cancel()
             }

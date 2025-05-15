@@ -34,6 +34,7 @@ import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.close
 import dmt_proms.pass.generated.resources.exclamation_mark
 import dmt_proms.pass.generated.resources.like
+import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import presentation.components.AudioPlayingAnimation
@@ -43,15 +44,29 @@ fun InstructionsDialog(
     text: String,
     secondsLeft: Int,
     isPlaying: Boolean,
+    isCountdownActive: Boolean,
     shouldShowCloseIcon: Boolean,
     onPlayAudio: () -> Unit,
     onDismiss: () -> Unit
 ) {
+
+    val canDismiss = isCountdownActive && secondsLeft == 0
+
+    LaunchedEffect(isCountdownActive, secondsLeft) {
+        if (isCountdownActive && secondsLeft == 0) {
+            onDismiss()
+        }
+    }
+
     LaunchedEffect(Unit) {
         onPlayAudio()
     }
 
-    Dialog(onDismissRequest = { onDismiss() }) {
+    Dialog(onDismissRequest = {
+        if (canDismiss) {
+            onDismiss()
+        }
+    }) {
         Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
 
             Image(
@@ -82,7 +97,7 @@ fun InstructionsDialog(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        if (shouldShowCloseIcon) {
+                        if (isCountdownActive && shouldShowCloseIcon) {
                             Image(
                                 painter = painterResource(Res.drawable.close),
                                 contentDescription = "Close",
@@ -93,12 +108,14 @@ fun InstructionsDialog(
                                     }
                             )
                         }
-                        Text(
-                            text = "$secondsLeft",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = primaryColor
-                        )
+                        if (isCountdownActive) {
+                            Text(
+                                text = "$secondsLeft",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = primaryColor
+                            )
+                        }
 
                         AudioPlayingAnimation(
                             isPlaying = isPlaying,
@@ -129,8 +146,14 @@ fun InstructionsDialog(
 @Composable
 fun CheckUnderstandingDialog(
     onYesClick: () -> Unit,
-    onNoClick: () -> Unit
+    onNoClick: () -> Unit,
+    timeoutMillis: Long = 15_000L
 ) {
+    LaunchedEffect(Unit) {
+        delay(timeoutMillis)
+        onYesClick()
+    }
+
     Dialog(onDismissRequest = { onYesClick() }) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
@@ -200,23 +223,4 @@ fun CheckUnderstandingDialog(
 }
 
 
-
-//@Composable
-//fun reminderDialog(onClick: () -> Unit, text: String) {
-//    AlertDialog(
-//        onDismissRequest = {},
-//        confirmButton = {},
-//        dismissButton = {
-//            Button(onClick = onClick) {
-//                Text("המשך")
-//            }
-//        },
-//        title = {
-//            Text(text)
-//        },
-//    )
-//}
-//
-//
-//
 

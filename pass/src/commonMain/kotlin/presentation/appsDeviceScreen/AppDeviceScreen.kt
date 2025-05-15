@@ -37,55 +37,16 @@ class AppDeviceScreen : Screen {
         val viewModel: AppDeviceViewModel = koinViewModel()
 
         val isPlaying by viewModel.isPlaying.collectAsState()
-        val showDialog by viewModel.showDialog.collectAsState()
-        val isSecondInstructions by viewModel.isSecondInstructions.collectAsState()
+        val isCloseIconDialog by viewModel.isCloseIconDialog.collectAsState()
         val showUnderstandingDialog by viewModel.showUnderstandingDialog.collectAsState()
         val countdown by viewModel.countdown.collectAsState()
-        val showReminderDialog by viewModel.showReminderDialog.collectAsState()
+        val showDialog by viewModel.showDialog.collectAsState()
         val dialogAudioText by viewModel.dialogAudioText.collectAsState()
         val isFinished by viewModel.isFinished.collectAsState()
+        val isCountdownActive by viewModel.isCountdownActive.collectAsState()
 
-
-        if (showDialog) {
-            val audio = stringResource(Res.string.call_hana_cohen_pass)
-            InstructionsDialog(
-                text = stringResource(Res.string.call_to_hana_cohen_instruction_pass),
-                secondsLeft = countdown,
-                isPlaying = isPlaying,
-                shouldShowCloseIcon = isSecondInstructions,
-                onPlayAudio = { viewModel.playAudio(audio) },
-                onDismiss = { }
-            )
-        }
-
-
-        if (showUnderstandingDialog) {
-            CheckUnderstandingDialog(
-                onYesClick = { viewModel.onUnderstandingConfirmed() },
-                onNoClick = { viewModel.onUnderstandingDenied() }
-            )
-        }
-
-        if (showReminderDialog) {
-            dialogAudioText?.let { (text, audio) ->
-                val dialogText = stringResource(text)
-                val dialogAudio = stringResource(audio)
-
-                InstructionsDialog(
-                    text = dialogText,
-                    secondsLeft = countdown,
-                    isPlaying = isPlaying,
-                    shouldShowCloseIcon = true,
-                    onPlayAudio = { viewModel.playAudio(dialogAudio) },
-                    onDismiss = {
-                        viewModel.hideReminderDialog()
-                        if (isFinished) {
-                            navigator?.push(ContactsScreen())
-
-                        }
-                    }
-                )
-            }
+        LaunchedEffect(Unit){
+            viewModel.startCheckingIfUserDidSomething()
         }
 
         BaseTabletScreen(
@@ -105,11 +66,10 @@ class AppDeviceScreen : Screen {
                     ) {
                         itemsIndexed(items) { _, item ->
                             circleWithPicture(item = item) {
-                               viewModel.onAppClicked(item)
+                                viewModel.onAppClicked(item)
                                 if (isFinished) {
                                     navigator?.push(ContactsScreen())
-                                }
-                                else{
+                                } else {
                                     navigator?.push(WrongAppScreen(item))
                                 }
                             }
@@ -118,6 +78,36 @@ class AppDeviceScreen : Screen {
                 }
             }
         )
+
+
+        if (showUnderstandingDialog) {
+            CheckUnderstandingDialog(
+                onYesClick = { viewModel.onUnderstandingConfirmed() },
+                onNoClick = { viewModel.onUnderstandingDenied() }
+            )
+        }
+
+        if (showDialog) {
+            dialogAudioText?.let { (text, audio) ->
+                val dialogText = stringResource(text)
+                val dialogAudio = stringResource(audio)
+
+                InstructionsDialog(
+                    text = dialogText,
+                    secondsLeft = countdown,
+                    isPlaying = isPlaying,
+                    shouldShowCloseIcon = isCloseIconDialog,
+                    isCountdownActive = isCountdownActive,
+                    onPlayAudio = { viewModel.playAudio(dialogAudio) },
+                    onDismiss = {
+                        viewModel.hideReminderDialog()
+                        if (isFinished) {
+                            navigator?.push(ContactsScreen())
+                        }
+                    }
+                )
+            }
+        }
     }
 }
 
