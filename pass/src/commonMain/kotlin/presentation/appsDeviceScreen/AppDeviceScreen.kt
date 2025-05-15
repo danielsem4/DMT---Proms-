@@ -1,52 +1,48 @@
 package presentation.appsDeviceScreen
 
 import BaseTabletScreen
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.call_hana_cohen_pass
-import dmt_proms.pass.generated.resources.call_to_hana_cohen_instruction_pass
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.appsDeviceScreen.components.CheckUnderstandingDialog
 import presentation.appsDeviceScreen.components.InstructionsDialog
 import presentation.appsDeviceScreen.components.getGridItems
 import presentation.components.circleWithPicture
-import presentation.contatcts.ContactsScreen
-
 
 class AppDeviceScreen : Screen {
+
     @Composable
     override fun Content() {
-        val items = getGridItems()
-        val navigator = LocalNavigator.current
         val viewModel: AppDeviceViewModel = koinViewModel()
+        val navigator = LocalNavigator.current
 
+        val items = getGridItems()
         val isPlaying by viewModel.isPlaying.collectAsState()
         val isCloseIconDialog by viewModel.isCloseIconDialog.collectAsState()
         val showUnderstandingDialog by viewModel.showUnderstandingDialog.collectAsState()
         val countdown by viewModel.countdown.collectAsState()
         val showDialog by viewModel.showDialog.collectAsState()
         val dialogAudioText by viewModel.dialogAudioText.collectAsState()
-        val isFinished by viewModel.isFinished.collectAsState()
         val isCountdownActive by viewModel.isCountdownActive.collectAsState()
+        val nextScreen by viewModel.nextScreen.collectAsState()
 
-        LaunchedEffect(Unit){
+        LaunchedEffect(Unit) {
             viewModel.startCheckingIfUserDidSomething()
+        }
+
+        LaunchedEffect(nextScreen) {
+            nextScreen?.let { screen ->
+                navigator?.push(screen)
+                viewModel.clearNextScreen()
+            }
         }
 
         BaseTabletScreen(
@@ -67,18 +63,12 @@ class AppDeviceScreen : Screen {
                         itemsIndexed(items) { _, item ->
                             circleWithPicture(item = item) {
                                 viewModel.onAppClicked(item)
-                                if (isFinished) {
-                                    navigator?.push(ContactsScreen())
-                                } else {
-                                    navigator?.push(WrongAppScreen(item))
-                                }
                             }
                         }
                     }
                 }
             }
         )
-
 
         if (showUnderstandingDialog) {
             CheckUnderstandingDialog(
@@ -89,20 +79,20 @@ class AppDeviceScreen : Screen {
 
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->
-                val dialogText = stringResource(text)
-                val dialogAudio = stringResource(audio)
-
+                val audioString = stringResource(audio)
                 InstructionsDialog(
-                    text = dialogText,
+                    text = stringResource(text),
                     secondsLeft = countdown,
                     isPlaying = isPlaying,
                     shouldShowCloseIcon = isCloseIconDialog,
                     isCountdownActive = isCountdownActive,
-                    onPlayAudio = { viewModel.playAudio(dialogAudio) },
+                    onPlayAudio = { viewModel.playAudio(audioString) },
                     onDismiss = {
                         viewModel.hideReminderDialog()
-                        if (isFinished) {
-                            navigator?.push(ContactsScreen())
+
+                        nextScreen?.let { screen ->
+                            navigator?.push(screen)
+                            viewModel.clearNextScreen()
                         }
                     }
                 )
@@ -110,5 +100,3 @@ class AppDeviceScreen : Screen {
         }
     }
 }
-
-
