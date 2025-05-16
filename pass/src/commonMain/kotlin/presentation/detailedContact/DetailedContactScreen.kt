@@ -41,7 +41,6 @@ import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import presentation.components.ContactData
 import presentation.components.circleWithPicture
-import presentation.detailedContact.components.getContactChatData
 import presentation.dialScreen.DialScreen
 
 class DetailedContactScreen(private val contact: ContactData) : Screen {
@@ -49,7 +48,7 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-        val contactChatData = getContactChatData()
+      //  val contactChatData = getContactChatData()
         val viewModel: DetailedContactViewModel = viewModel()
 
         val shouldNavigate by viewModel.shouldNavigateAfterDialog.collectAsState()
@@ -112,11 +111,11 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        contactChatData.forEach { item ->
-                            circleWithPicture(item, { if(item.label == "טלפון")
-                                navigator?.push(DialScreen(null))
-                                else viewModel.startReminderCountdown(true) })
-                        }
+//                        contactChatData.forEach { item ->
+//                            circleWithPicture(item, { if(item.label == "טלפון")
+//                                navigator?.push(DialScreen(null))
+//                                else viewModel.startReminderCountdown(true) })
+//                        }
                     }
                     Spacer(modifier = Modifier.height(12.dp))
 

@@ -21,12 +21,14 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.pass.generated.resources.Res
+import dmt_proms.pass.generated.resources.device_app_title
 import dmt_proms.pass.generated.resources.exit
+import dmt_proms.pass.generated.resources.wrong_app_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.appsDeviceScreen.components.InstructionsDialog
+import presentation.components.InstructionsDialog
 import presentation.components.AppData
 
 class WrongAppScreen(private val app: AppData) : Screen {
@@ -48,12 +50,12 @@ class WrongAppScreen(private val app: AppData) : Screen {
         }
 
         BaseTabletScreen(
-            title = "אפליקציה",
+            title = stringResource(Res.string.device_app_title),
             content = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Image(
                         painter = painterResource(Res.drawable.exit),
-                        contentDescription = "Icon",
+                        contentDescription = stringResource(Res.string.exit),
                         modifier = Modifier
                             .size(48.dp)
                             .align(Alignment.TopEnd)
@@ -65,9 +67,9 @@ class WrongAppScreen(private val app: AppData) : Screen {
 
                     Text(
                         text = buildAnnotatedString {
-                            append("האפליקציה שנכנסת אליה היא: ")
+                            append(stringResource(Res.string.wrong_app_title))
                             withStyle(style = SpanStyle(color = primaryColor)) {
-                                append(app.label)
+                                append(stringResource(app.label))
                             }
                         },
                         modifier = Modifier.align(Alignment.Center), fontSize = 30.sp

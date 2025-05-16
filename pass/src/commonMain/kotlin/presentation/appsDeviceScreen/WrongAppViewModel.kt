@@ -1,6 +1,6 @@
 package presentation.appsDeviceScreen
 
-import CountdownTimerUseCase
+import presentation.components.CountdownTimerUseCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dmt_proms.pass.generated.resources.Res
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import presentation.appsDeviceScreen.components.CountdownDialogHandler
+import presentation.components.CountdownDialogHandler
 import presentation.components.AudioPlayer
 
 class WrongAppViewModel : ViewModel() {
@@ -50,20 +50,21 @@ class WrongAppViewModel : ViewModel() {
 
         reminderJob = viewModelScope.launch {
             var elapsedTime = 0
+
             while (isActive && didNothing < 3 && didNothingSecondTime < 3) {
 
+                delay(1_000)
+
                 if (showDialog.value) {
-                    delay(1_000)
                     continue
                 }
+
+                elapsedTime++
 
                 if (elapsedTime >= 15) {
                     getReminderDidNothingText()
                     elapsedTime = 0
                 }
-
-                delay(1_000)
-                elapsedTime++
             }
         }
     }

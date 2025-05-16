@@ -14,15 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.V
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 data class AppData(
     val imageRes: DrawableResource,
     val circleColor: Color,
-    val label: String,
+    val label: StringResource,
 )
 
 
@@ -31,7 +33,7 @@ fun circleWithPicture(item: AppData, onClick: () -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             modifier = Modifier
-                .size(60.dp)
+                .size(70.dp)
                 .background(color = item.circleColor, shape = CircleShape)
                 .clickable { onClick() },
             contentAlignment = Alignment.Center
@@ -40,12 +42,12 @@ fun circleWithPicture(item: AppData, onClick: () -> Unit) {
                 painter = painterResource(item.imageRes),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(40.dp)
             )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(text = item.label)
+        Text(text = stringResource(item.label) , fontSize = 25.sp)
     }
 }

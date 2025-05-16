@@ -1,7 +1,5 @@
-package presentation.appsDeviceScreen.components
+package presentation.components
 
-import CountdownTimerUseCase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.StringResource

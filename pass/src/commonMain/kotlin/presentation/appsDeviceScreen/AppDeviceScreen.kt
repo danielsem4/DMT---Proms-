@@ -10,11 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.pass.generated.resources.Res
+import dmt_proms.pass.generated.resources.contacts
+import dmt_proms.pass.generated.resources.device_apps_title
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.appsDeviceScreen.components.CheckUnderstandingDialog
-import presentation.appsDeviceScreen.components.InstructionsDialog
-import presentation.appsDeviceScreen.components.getGridItems
+import presentation.components.CheckUnderstandingDialog
+import presentation.components.InstructionsDialog
+import presentation.components.AppData
 import presentation.components.circleWithPicture
 
 class AppDeviceScreen : Screen {
@@ -24,8 +27,15 @@ class AppDeviceScreen : Screen {
         val viewModel: AppDeviceViewModel = koinViewModel()
         val navigator = LocalNavigator.current
 
-        val items = getGridItems()
+        val items: List<AppData> = viewModel.items.map { item ->
+            AppData(
+                imageRes = item.imageRes,
+                circleColor = item.circleColor,
+                label = item.label
+            )
+        }
         val isPlaying by viewModel.isPlaying.collectAsState()
+        val isNextScreen by viewModel.isNextScreen.collectAsState()
         val isCloseIconDialog by viewModel.isCloseIconDialog.collectAsState()
         val showUnderstandingDialog by viewModel.showUnderstandingDialog.collectAsState()
         val countdown by viewModel.countdown.collectAsState()
@@ -34,19 +44,23 @@ class AppDeviceScreen : Screen {
         val isCountdownActive by viewModel.isCountdownActive.collectAsState()
         val nextScreen by viewModel.nextScreen.collectAsState()
 
+        val correctApp = stringResource(Res.string.contacts)
+
         LaunchedEffect(Unit) {
             viewModel.startCheckingIfUserDidSomething()
         }
 
         LaunchedEffect(nextScreen) {
-            nextScreen?.let { screen ->
-                navigator?.push(screen)
-                viewModel.clearNextScreen()
+            if (isNextScreen) {
+                nextScreen?.let { screen ->
+                    navigator?.push(screen)
+                    viewModel.clearNextScreen()
+                }
             }
         }
 
         BaseTabletScreen(
-            title = "אפליקציות המכשיר",
+            title = stringResource(Res.string.device_apps_title),
             content = {
                 Column(
                     modifier = Modifier

@@ -1,7 +1,6 @@
-package presentation.appsDeviceScreen.components
+package presentation.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,8 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
@@ -31,13 +30,19 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import dmt_proms.pass.generated.resources.Res
+import dmt_proms.pass.generated.resources.Understanding_dialog_text
 import dmt_proms.pass.generated.resources.close
+import dmt_proms.pass.generated.resources.dialog_close
+import dmt_proms.pass.generated.resources.dialog_exclamation_mark
+import dmt_proms.pass.generated.resources.dialog_like
 import dmt_proms.pass.generated.resources.exclamation_mark
 import dmt_proms.pass.generated.resources.like
+import dmt_proms.pass.generated.resources.no
+import dmt_proms.pass.generated.resources.yes
 import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
-import presentation.components.AudioPlayingAnimation
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun InstructionsDialog(
@@ -71,7 +76,7 @@ fun InstructionsDialog(
 
             Image(
                 painter = painterResource(Res.drawable.exclamation_mark),
-                contentDescription = "profile icon",
+                contentDescription = stringResource(Res.string.dialog_exclamation_mark),
                 modifier = Modifier
                     .size(50.dp)
                     .align(Alignment.TopCenter)
@@ -90,41 +95,57 @@ fun InstructionsDialog(
                         .fillMaxSize()
                         .padding(horizontal = 16.dp, vertical = 16.dp)
                 ) {
-
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth().height(40.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
+                            .fillMaxWidth()
+                            .height(40.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        if (isCountdownActive && shouldShowCloseIcon) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Start,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            if (isCountdownActive && shouldShowCloseIcon) {
                             Image(
                                 painter = painterResource(Res.drawable.close),
-                                contentDescription = "Close",
+                                contentDescription = stringResource(Res.string.dialog_close),
                                 modifier = Modifier
                                     .size(24.dp)
-                                    .clickable {
-                                        onDismiss()
-                                    }
-                            )
-                        }
-                        if (isCountdownActive) {
-                            Text(
-                                text = "$secondsLeft",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = primaryColor
+                                    .clickable { onDismiss() }
                             )
                         }
 
-                        AudioPlayingAnimation(
-                            isPlaying = isPlaying,
-                            size1 = 20f,
-                            size2 = 40f,
-                            size3 = 60f,
-                            imageSize = 30.dp,
-                            strokeWidth = 2f
-                        )
+                            Spacer(modifier = Modifier.width(8.dp))
+
+                            if (isCountdownActive) {
+                                Text(
+                                    text = "$secondsLeft",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = primaryColor
+                                )
+                            }
+
+                        }
+
+                        Row(
+                            modifier = Modifier.weight(1f),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            if (isPlaying) {
+                                AudioPlayingAnimation(
+                                    isPlaying = isPlaying,
+                                    size1 = 20f,
+                                    size2 = 40f,
+                                    size3 = 60f,
+                                    imageSize = 30.dp,
+                                    strokeWidth = 2f
+                                )
+                            }
+                        }
+
                     }
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -158,7 +179,7 @@ fun CheckUnderstandingDialog(
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
                 painter = painterResource(Res.drawable.like),
-                contentDescription = "like",
+                contentDescription = stringResource(Res.string.dialog_like),
                 modifier = Modifier
                     .size(50.dp)
                     .align(Alignment.TopCenter)
@@ -179,7 +200,7 @@ fun CheckUnderstandingDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "האם ההוראה הייתה מובנת?",
+                        text = stringResource(Res.string.Understanding_dialog_text),
                         textAlign = TextAlign.Center,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -197,7 +218,7 @@ fun CheckUnderstandingDialog(
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
                         ) {
                             Text(
-                                "כן",
+                                stringResource(Res.string.yes),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = primaryColor
@@ -209,7 +230,7 @@ fun CheckUnderstandingDialog(
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
                         ) {
                             Text(
-                                "לא",
+                                stringResource(Res.string.no),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = primaryColor
