@@ -19,7 +19,16 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.pass.generated.resources.Res
+import dmt_proms.pass.generated.resources.contact
+import dmt_proms.pass.generated.resources.finish_first_mission_pass
+import dmt_proms.pass.generated.resources.first_instructions_pass
+import dmt_proms.pass.generated.resources.first_mission_done_vocal_pass
+import dmt_proms.pass.generated.resources.search
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import presentation.components.AudioPlayingAnimation
 import presentation.dialScreen.DialScreen
 
 class NextQuestionScreen : Screen {
@@ -27,19 +36,26 @@ class NextQuestionScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-        val viewModel: NextQuestionViewModel = viewModel()
+        val viewModel: NextQuestionViewModel = koinViewModel()
         val time by viewModel.time.collectAsState()
         val navigateToDialScreen by viewModel.navigateToDialScreen.collectAsState()
+        val audioString = stringResource(Res.string.first_mission_done_vocal_pass)
+        val isPlaying by viewModel.isPlaying.collectAsState()
+
+        LaunchedEffect(Unit) {
+            viewModel.playAudio(audioString)
+        }
 
         LaunchedEffect(navigateToDialScreen) {
             if (navigateToDialScreen) {
-                navigator?.push(DialScreen(null))
+                navigator?.push(DialScreen())
             }
         }
 
         BaseTabletScreen(
-            title = "איש קשר",
+            title = stringResource(Res.string.contact),
             content = {
+                AudioPlayingAnimation(isPlaying = isPlaying,)
                 Box(
                     modifier = Modifier
                         .fillMaxSize(),
@@ -59,7 +75,7 @@ class NextQuestionScreen : Screen {
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = "המשימה הראשונה הושלמה, מייד נעבור למשימה השנייה",
+                        text = stringResource(Res.string.finish_first_mission_pass),
                         color = primaryColor,
                         fontSize = 30.sp,
                         fontWeight = Bold,

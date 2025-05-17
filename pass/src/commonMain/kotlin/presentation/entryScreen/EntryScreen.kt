@@ -42,6 +42,7 @@ import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 import presentation.appsDeviceScreen.AppDeviceScreen
 import presentation.components.AudioPlayer
 import presentation.components.AudioPlayingAnimation
@@ -52,7 +53,7 @@ class EntryScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        val viewModel: EntryViewModel = viewModel()
+        val viewModel: EntryViewModel = koinViewModel()
         val isOverlayVisible by viewModel.isOverlayVisible.collectAsState()
         val audioString = stringResource(Res.string.first_instructions_pass)
         val isPlaying by viewModel.isPlaying.collectAsState()

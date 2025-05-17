@@ -110,6 +110,7 @@
     <string name="contacts_page_thired_assist">Search under the letter H</string>
 
     <string name="contact_page_first_assist">Press on the number itself or the dial button.</string>
+    <string name="finish_first_mission_pass">The first mission is complete, we will move to the next mission shortly</string>
 
     <string name="dialer_page_second_assist">Look for the dental clinics phone number</string>
     <string name="diale_to_dentist">Dial the dental clinics number</string>
@@ -148,15 +149,25 @@
     <string name="weather">Weather</string>
     <string name="my_files">My Files</string>
     <string name="phone">Phone</string>
+    <string name="video">video</string>
+    <string name="Whatsapp">Whatsapp</string>
 
-    <string name="dialog_speaker">dialog speaker</string>
-    <string name="dialog_exclamation_mark">dialog exclamation mark</string>
-    <string name="dialog_close">dialog close</string>
-    <string name="dialog_like">dialog like</string>
+    <string name="contact">Contact</string>
+    <string name="contact_details">Contact details</string>
+    <string name="dial_keys">Dial keys</string>
+
+    <string name="dialer">Dialer</string>
+
+    <string name="dialog_speaker">Dialog speaker</string>
+    <string name="dialog_exclamation_mark">Dialog exclamation mark</string>
+    <string name="dialog_close">Dialog close</string>
+    <string name="dialog_like">Dialog like</string>
     <string name="Understanding_dialog_text">Was the instruction clear?</string>
-    <string name="yes">yes</string>
-    <string name="no">no</string>
-    <string name="exit">exit</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="exit">Exit</string>
+    <string name="plus">Plus</string>
+    <string name="search">Search</string>
 
 
 </resources>

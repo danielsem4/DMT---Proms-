@@ -11,5 +11,5 @@ import presentation.entryScreen.EntryScreen
 
 @Composable
 fun App(context: Any? = null) {
-    Navigator(AppDeviceScreen())
+    Navigator(DialScreen())
 }

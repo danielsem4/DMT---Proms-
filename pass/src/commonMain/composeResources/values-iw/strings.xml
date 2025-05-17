@@ -109,6 +109,7 @@
     <string name="contacts_page_thired_assist">יש לחפש באות ח</string>
 
     <string name="contact_page_first_assist">יש ללחוץ על המספר עצמו ו/או על כפתור החיוג.</string>
+    <string name="finish_first_mission_pass">המשימה הראשונה הושלמה, מייד נעבור למשימה השנייה</string>
 
     <string name="dialer_page_second_assist">יש לחפש את המספר של מרפאת השיניים</string>
     <string name="diale_to_dentist">יש לחייג את המספר של מרפאת השיניים</string>
@@ -147,6 +148,13 @@
     <string name="weather">מזג אוויר</string>
     <string name="my_files">הקבצים שלי</string>
     <string name="phone">טלפון</string>
+    <string name="video">וידיאו</string>
+
+    <string name="contact">איש קשר</string>
+    <string name="contact_details">פרטים ליצירת קשר</string>
+
+    <string name="dialer">חייגן</string>
+    <string name="dial_keys">כפתורים</string>
 
     <string name="dialog_speaker">רמקול דיאלוג</string>
     <string name="dialog_exclamation_mark">סימן קריאה דיאלוג</string>
@@ -156,7 +164,8 @@
     <string name="yes">כן</string>
     <string name="no">לא</string>
     <string name="exit">יציאה</string>
-
+    <string name="plus">פלוס</string>
+    <string name="search">חיפוש</string>
 
 
     <!-- recordings -->

@@ -7,6 +7,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import presentation.components.AudioPlayer
 
 class NextQuestionViewModel: ViewModel() {
 
@@ -15,6 +16,20 @@ class NextQuestionViewModel: ViewModel() {
 
     private val _navigateToDialScreen = MutableStateFlow(false)
     val navigateToDialScreen: StateFlow<Boolean> = _navigateToDialScreen
+
+    private val _isPlaying = MutableStateFlow(false)
+    val isPlaying: StateFlow<Boolean> = _isPlaying
+
+
+    private val audioPlayer = AudioPlayer()
+
+    fun playAudio(audioText: String) {
+        _isPlaying.value = true
+
+        audioPlayer.play(audioText) {
+            _isPlaying.value = false
+        }
+    }
 
     init {
         viewModelScope.launch {

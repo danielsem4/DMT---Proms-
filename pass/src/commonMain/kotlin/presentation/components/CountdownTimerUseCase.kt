@@ -17,7 +17,7 @@ class CountdownTimerUseCase(private val scope: CoroutineScope) {
         dialogJob?.cancel()
 
         dialogJob = scope.launch {
-            val audioDuration = 10 - countdownStart - 1
+            val audioDuration = 10 - countdownStart
             delay(audioDuration * 1000L)
 
             var remainingTime = countdownStart

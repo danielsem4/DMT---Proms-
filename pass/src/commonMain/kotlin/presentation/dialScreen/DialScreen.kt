@@ -6,122 +6,168 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.material.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import presentation.dialScreen.components.contactsDial
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.delete_number
+import dmt_proms.pass.generated.resources.dentist_pass
 import dmt_proms.pass.generated.resources.dial_keys
+import dmt_proms.pass.generated.resources.dialer
 import dmt_proms.pass.generated.resources.white_phone
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import presentation.components.AppData
+import presentation.components.CheckUnderstandingDialog
+import presentation.components.InstructionsDialog
 
-class DialScreen(private val dialogText: String?) : Screen {
+class DialScreen : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-        val dialViewModel: DialScreenViewModel = viewModel()
 
-        val enteredNumber = dialViewModel.enteredNumber.collectAsState().value
-        val isDialogVisible = dialViewModel.isDialogVisible.collectAsState().value
+        val viewModel: DialScreenViewModel = koinViewModel()
+val correct = stringResource(Res.string.dentist_pass)
+        val isDialogVisible by viewModel.isDialogVisible.collectAsState()
+        val enteredNumber by viewModel.enteredNumber.collectAsState()
+        val isPlaying by viewModel.isPlaying.collectAsState()
+        val isNextScreen by viewModel.isNextScreen.collectAsState()
+        val isCloseIconDialog by viewModel.isCloseIconDialog.collectAsState()
+        val showUnderstandingDialog by viewModel.showUnderstandingDialog.collectAsState()
+        val countdown by viewModel.countdown.collectAsState()
+        val showDialog by viewModel.showDialog.collectAsState()
+        val dialogAudioText by viewModel.dialogAudioText.collectAsState()
+        val isCountdownActive by viewModel.isCountdownActive.collectAsState()
+        val nextScreen by viewModel.nextScreen.collectAsState()
+        val firstMissionPass by viewModel.firstMissionPass.collectAsState()
+        val lastChanceMissionPass by viewModel.lastChanceMissionPass.collectAsState()
 
 
-            if (dialogText != null) {
-//                reminderDialog(
-//                    text = dialogText,
-//                    onClick = {
-//                        //viewModel.hideReminderDialog()
-//                    }
-//                )
-        }
         BaseTabletScreen(
-            title = "חייגן",
+            title = stringResource(Res.string.dialer),
             content = {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    contactsDial.forEach { contact ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = contact.name + ":",
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black
-                            )
-                            Text(
-                                text = contact.phoneNumber,
-                                fontSize = 20.sp,
-                                color = Color.DarkGray
-                            )
-                        }
-                    }
-
-                    Box(
+                Box(modifier = Modifier.fillMaxSize()) {
+                    LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(20.dp)
+                            .padding(24.dp)
                     ) {
-                        Button(
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .size(60.dp)
-                                .background(primaryColor, shape = RoundedCornerShape(10.dp)),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                            onClick = { dialViewModel.toggleDialog() }
-                        ) {
-
-                            Image(
-                                painter = painterResource(Res.drawable.dial_keys),
-                                contentDescription = "dial keys",
-                                modifier = Modifier.size(30.dp)
+                        if(lastChanceMissionPass){
+                            item {
+                                Text(
+                                    text = correct,
+                                    fontSize = 24.sp,
+                                    color = Color.Black,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            }
+                        }
+                        else{
+                        items(viewModel.contacts) { contactResId ->
+                            Text(
+                                text = stringResource(contactResId),
+                                fontSize = 24.sp,
+                                color = Color.Black,
+                                modifier = Modifier.padding(8.dp)
                             )
                         }
+                    }}
 
+                    Button(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(60.dp)
+                            .background(primaryColor, shape = RoundedCornerShape(10.dp)),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
+                        onClick = { viewModel.onUserClicked() }
+                    ) {
+
+                        Image(
+                            painter = painterResource(Res.drawable.dial_keys),
+                            contentDescription = stringResource(Res.string.dial_keys),
+                            modifier = Modifier.size(30.dp)
+                        )
                     }
                 }
-
             }
-
-
         )
 
 
         if (isDialogVisible) {
             DialDialog(
                 enteredNumber = enteredNumber,
-                onNumberClicked = { dialViewModel.onNumberClicked(it) },
-                onDial = { dialViewModel.dial() },
-                onDeleteClicked = { dialViewModel.deleteLastDigit() }
+                onNumberClicked = { viewModel.onNumberClicked(it) },
+                onDial = { viewModel.checkNumber() },
+                onDeleteClicked = { viewModel.deleteLastDigit() }
             )
         }
+
+        LaunchedEffect(Unit) {
+            viewModel.startFirstCheck()
+        }
+
+        LaunchedEffect(nextScreen) {
+            if (isNextScreen) {
+                nextScreen?.let { screen ->
+                    navigator?.push(screen)
+                    viewModel.clearNextScreen()
+                }
+            }
+        }
+
+        LaunchedEffect(firstMissionPass) {
+            if (firstMissionPass) {
+                viewModel.toggleDialog()
+            }
+        }
+
+        if (showUnderstandingDialog) {
+            CheckUnderstandingDialog(
+                onYesClick = { viewModel.onUnderstandingConfirmed() },
+                onNoClick = { viewModel.onUnderstandingDenied() }
+            )
+        }
+
+        if (showDialog) {
+            dialogAudioText?.let { (text, audio) ->
+                val audioString = stringResource(audio)
+                InstructionsDialog(
+                    text = stringResource(text),
+                    secondsLeft = countdown,
+                    isPlaying = isPlaying,
+                    shouldShowCloseIcon = isCloseIconDialog,
+                    isCountdownActive = isCountdownActive,
+                    onPlayAudio = { viewModel.onPlayAudioRequested(audioString) },
+                    onDismiss = {
+                        viewModel.hideReminderDialog()
+
+                        nextScreen?.let { screen ->
+                            navigator?.push(screen)
+                            viewModel.clearNextScreen()
+                        }
+                    }
+                )
+            }
+        }
+
     }
 
     @Composable

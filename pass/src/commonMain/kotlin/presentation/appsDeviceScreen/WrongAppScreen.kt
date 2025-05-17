@@ -45,10 +45,6 @@ class WrongAppScreen(private val app: AppData) : Screen {
 
         val navigator = LocalNavigator.current
 
-        LaunchedEffect(Unit){
-            viewModel.startCheckingIfUserDidSomething()
-        }
-
         BaseTabletScreen(
             title = stringResource(Res.string.device_app_title),
             content = {
@@ -78,6 +74,11 @@ class WrongAppScreen(private val app: AppData) : Screen {
             }
         )
 
+        LaunchedEffect(Unit) {
+            viewModel.startCheckingIfUserDidSomething()
+        }
+
+
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->
                 val dialogText = stringResource(text)
@@ -88,7 +89,7 @@ class WrongAppScreen(private val app: AppData) : Screen {
                     isPlaying = isPlaying,
                     shouldShowCloseIcon = true,
                     isCountdownActive = isCountdownActive,
-                    onPlayAudio = { viewModel.playAudio(dialogAudio) },
+                    onPlayAudio = { viewModel.onPlayAudioRequested(dialogAudio) },
                     onDismiss = {
                         viewModel.hideReminderDialog()
                         if (backToApps) {

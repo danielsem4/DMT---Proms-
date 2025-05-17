@@ -34,38 +34,84 @@ import org.example.hit.heal.core.presentation.Colors
 import presentation.components.CountdownDialogHandler
 import presentation.components.AppData
 import presentation.components.AudioPlayer
+import presentation.components.ContactData
+import presentation.components.PlayAudioUseCase
 import presentation.contatcts.ContactsScreen
+import presentation.detailedContact.DetailedContactScreen
+import presentation.nextQuestion.NextQuestionScreen
 
-class AppDeviceViewModel : ViewModel() {
+class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHandler,
+                          private val playAudioUseCase: PlayAudioUseCase
+) : ViewModel() {
 
     val items = listOf(
-        AppData(imageRes = Res.drawable.calculator, circleColor = Colors.calculatorColor, label = Res.string.calculator),
-        AppData(imageRes = Res.drawable.settings, circleColor = Colors.settingsColor, label = Res.string.settings),
-        AppData(imageRes = Res.drawable.camera, circleColor = Colors.cameraColor, label = Res.string.camera),
-        AppData(imageRes = Res.drawable.email, circleColor = Colors.emailColor, label = Res.string.email),
-        AppData(imageRes = Res.drawable.store, circleColor = Colors.storeColor, label = Res.string.store),
-        AppData(imageRes = Res.drawable.clock, circleColor = Colors.clockColor, label = Res.string.clock),
-        AppData(imageRes = Res.drawable.contacts, circleColor = Colors.contactsColor, label = Res.string.contacts),
-        AppData(imageRes = Res.drawable.white_messages, circleColor = Colors.messagesColor, label = Res.string.messages),
-        AppData(imageRes = Res.drawable.purse, circleColor = Colors.purseColor, label = Res.string.purse),
-        AppData(imageRes = Res.drawable.weather, circleColor = Colors.weatherColor, label = Res.string.weather),
-        AppData(imageRes = Res.drawable.documents, circleColor = Colors.documentsColor, label = Res.string.my_files),
-        AppData(imageRes = Res.drawable.white_phone, circleColor = Colors.phoneColor, label = Res.string.phone)
+        AppData(
+            imageRes = Res.drawable.calculator,
+            circleColor = Colors.calculatorColor,
+            label = Res.string.calculator
+        ),
+        AppData(
+            imageRes = Res.drawable.settings,
+            circleColor = Colors.settingsColor,
+            label = Res.string.settings
+        ),
+        AppData(
+            imageRes = Res.drawable.camera,
+            circleColor = Colors.cameraColor,
+            label = Res.string.camera
+        ),
+        AppData(
+            imageRes = Res.drawable.email,
+            circleColor = Colors.emailColor,
+            label = Res.string.email
+        ),
+        AppData(
+            imageRes = Res.drawable.store,
+            circleColor = Colors.storeColor,
+            label = Res.string.store
+        ),
+        AppData(
+            imageRes = Res.drawable.clock,
+            circleColor = Colors.clockColor,
+            label = Res.string.clock
+        ),
+        AppData(
+            imageRes = Res.drawable.contacts,
+            circleColor = Colors.contactsColor,
+            label = Res.string.contacts
+        ),
+        AppData(
+            imageRes = Res.drawable.white_messages,
+            circleColor = Colors.messagesColor,
+            label = Res.string.messages
+        ),
+        AppData(
+            imageRes = Res.drawable.purse,
+            circleColor = Colors.purseColor,
+            label = Res.string.purse
+        ),
+        AppData(
+            imageRes = Res.drawable.weather,
+            circleColor = Colors.weatherColor,
+            label = Res.string.weather
+        ),
+        AppData(
+            imageRes = Res.drawable.documents,
+            circleColor = Colors.documentsColor,
+            label = Res.string.my_files
+        ),
+        AppData(
+            imageRes = Res.drawable.white_phone,
+            circleColor = Colors.phoneColor,
+            label = Res.string.phone
+        )
     )
 
-
-    private val countdownTimerUseCase = CountdownTimerUseCase(viewModelScope)
-
-    private val countdownDialogHandler =
-        CountdownDialogHandler(countdownTimerUseCase = countdownTimerUseCase)
 
     val dialogAudioText = countdownDialogHandler.dialogAudioText
     val showDialog = countdownDialogHandler.showDialog
     val countdown = countdownDialogHandler.countdown
     val isCountdownActive = countdownDialogHandler.isCountdownActive
-
-    private val _isPlaying = MutableStateFlow(false)
-    val isPlaying: StateFlow<Boolean> = _isPlaying
 
     private val _showUnderstandingDialog = MutableStateFlow(false)
     val showUnderstandingDialog: StateFlow<Boolean> = _showUnderstandingDialog
@@ -85,7 +131,8 @@ class AppDeviceViewModel : ViewModel() {
 
     private var reminderJob: Job? = null
 
-    private val audioPlayer = AudioPlayer()
+    val isPlaying = playAudioUseCase.isPlaying
+
 
 
     init {
@@ -129,12 +176,8 @@ class AppDeviceViewModel : ViewModel() {
         }
     }
 
-    fun playAudio(audioText: String) {
-        _isPlaying.value = true
-
-        audioPlayer.play(audioText) {
-            _isPlaying.value = false
-        }
+    fun onPlayAudioRequested(audioText: String) {
+        playAudioUseCase.playAudio(audioText)
     }
 
     fun onUnderstandingConfirmed() {
@@ -148,22 +191,22 @@ class AppDeviceViewModel : ViewModel() {
         startDialogInstructions()
     }
 
-    fun hideReminderDialog() {
-        countdownDialogHandler.hideDialog()
-    }
 
     fun onAppClicked(app: AppData) {
-        userDidSomething()
 
         if (app.label == Res.string.contacts) {
+            reminderJob?.cancel()
             _nextScreen.value = ContactsScreen()
+            return
+        }
+
+        startCheckingIfUserDidSomething()
+        wrongApp++
+
+        _nextScreen.value = if (wrongApp == 3) {
+            ContactsScreen()
         } else {
-            wrongApp++
-            if (wrongApp == 3) {
-                _nextScreen.value = ContactsScreen()
-            } else {
-                _nextScreen.value = WrongAppScreen(app)
-            }
+            WrongAppScreen(app)
         }
     }
 
@@ -174,6 +217,7 @@ class AppDeviceViewModel : ViewModel() {
                 duration = 2,
                 audioText = Res.string.call_to_hana_cohen_instruction_pass to Res.string.call_hana_cohen_pass
             )
+
             1 -> countdownDialogHandler.showCountdownDialog(
                 duration = 5,
                 audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
@@ -189,6 +233,7 @@ class AppDeviceViewModel : ViewModel() {
                     duration = 2,
                     audioText = Res.string.here_persons_number to Res.string.now_the_contacts_list_will_be_opened_pass
                 )
+                reminderJob?.cancel()
                 _isNextScreen.value = false
                 _nextScreen.value = ContactsScreen()
             }
@@ -200,9 +245,9 @@ class AppDeviceViewModel : ViewModel() {
         _nextScreen.value = null
     }
 
-    private fun userDidSomething() {
-        hideReminderDialog()
-        _showUnderstandingDialog.value = false
-        reminderJob?.cancel()
+    fun hideReminderDialog() {
+        countdownDialogHandler.hideDialog()
+        startCheckingIfUserDidSomething()
     }
+
 }

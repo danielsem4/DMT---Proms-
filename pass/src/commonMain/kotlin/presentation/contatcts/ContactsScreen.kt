@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
@@ -25,56 +24,43 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.pass.generated.resources.Res
+import dmt_proms.pass.generated.resources.contacts
 import dmt_proms.pass.generated.resources.plus
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
-import presentation.detailedContact.DetailedContactScreen
-import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.pass.generated.resources.hana_cohen
 import dmt_proms.pass.generated.resources.phone_number
 import dmt_proms.pass.generated.resources.search
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.components.ContactData
+import presentation.components.InstructionsDialog
 
 
-class ContactsScreen() : Screen {
+class ContactsScreen : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
         val viewModel: ContactsViewModel = koinViewModel()
         val searchQuery by viewModel.searchQuery.collectAsState()
-        val showReminderDialog by viewModel.showReminderDialog.collectAsState()
-        val dialogText by viewModel.dialogText.collectAsState()
-        val shouldNavigate by viewModel.shouldNavigateAfterDialog.collectAsState()
+        val countdown by viewModel.countdown.collectAsState()
+        val showDialog by viewModel.showDialog.collectAsState()
+        val dialogAudioText by viewModel.dialogAudioText.collectAsState()
         val contactsList = viewModel.contactsList.collectAsState().value
+        val isPlaying by viewModel.isPlaying.collectAsState()
+        val isCountdownActive by viewModel.isCountdownActive.collectAsState()
+        val nextScreen by viewModel.nextScreen.collectAsState()
+        val isNextScreen by viewModel.isNextScreen.collectAsState()
 
+        val correctContact = stringResource(Res.string.hana_cohen)
         val phoneNumber = stringResource(Res.string.phone_number)
 
-        LaunchedEffect(Unit) {
-            viewModel.loadContacts(phoneNumber)
-          //  viewModel.startReminderCountdown(correctContact, false)
-        }
-
-
-//        if (showReminderDialog) {
-//            reminderDialog(
-//                text = dialogText,
-//                onClick = {
-//                    viewModel.hideReminderDialog()
-//                    if (shouldNavigate) {
-//                        navigator?.push(DetailedContactScreen(correctContact))
-//                    }
-//                }
-//            )
-//        }
-
         BaseTabletScreen(
-            title = "אנשי קשר",
+            title = stringResource(Res.string.contacts),
             content = {
                 Column(
                     modifier = Modifier
@@ -99,13 +85,13 @@ class ContactsScreen() : Screen {
                             modifier = Modifier
                                 .fillMaxSize().pointerInput(Unit) {
                                     detectDragGestures { _, _ ->
-                                       // viewModel.startScrollCountdown(correctContact)
+                                        // viewModel.startScrollCountdown(correctContact)
                                     }
                                 },
                             verticalArrangement = Arrangement.spacedBy(25.dp)
                         ) {
                             items(contactsList) { contact ->
-                             //   ContactItem(contact = contact, correctContact = correctContact, viewModel = viewModel)
+                                ContactItem(contact = contact, viewModel = viewModel)
                             }
 
                         }
@@ -121,30 +107,54 @@ class ContactsScreen() : Screen {
                         ) {
                             Image(
                                 painter = painterResource(Res.drawable.plus),
-                                contentDescription = "plus",
+                                contentDescription = stringResource(Res.string.plus),
                                 modifier = Modifier.size(24.dp)
                             )
                         }
                     }
                 }
             })
+
+        LaunchedEffect(Unit) {
+            viewModel.loadContacts(phoneNumber)
+            viewModel.setCorrectContact(correctContact, phoneNumber)
+            viewModel.startCheckingIfUserDidSomething()
+        }
+
+        LaunchedEffect(nextScreen) {
+            if (isNextScreen) {
+                nextScreen?.let { screen ->
+                    navigator?.push(screen)
+                    viewModel.clearNextScreen()
+                }
+            }
+        }
+
+        if (showDialog) {
+            dialogAudioText?.let { (text, audio) ->
+                val audioString = stringResource(audio)
+                InstructionsDialog(
+                    text = stringResource(text),
+                    secondsLeft = countdown,
+                    isPlaying = isPlaying,
+                    shouldShowCloseIcon = true,
+                    isCountdownActive = isCountdownActive,
+                    onPlayAudio = { viewModel.onPlayAudioRequested(audioString) },
+                    onDismiss = {
+                        viewModel.hideReminderDialog()
+                    }
+                )
+            }
+        }
     }
 
     @Composable
-    fun ContactItem(contact: ContactData, correctContact: ContactData, viewModel: ContactsViewModel) {
-        val navigator = LocalNavigator.current
-
+    fun ContactItem(contact: ContactData, viewModel: ContactsViewModel) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth().height(120.dp)
                 .background(color = Color.White, shape = RoundedCornerShape(10.dp)).clickable {
-                    if(contact == correctContact){
-                        navigator?.push(DetailedContactScreen(contact))
-
-                    }
-                    else{
-                        viewModel.startReminderCountdown(correctContact, true)
-                    }
+                    viewModel.onContactClicked(contact)
                 }
         ) {
             Box(
@@ -189,11 +199,11 @@ fun SearchTextField(
             ) {
                 Image(
                     painter = painterResource(Res.drawable.search),
-                    contentDescription = "חיפוש",
+                    contentDescription = stringResource(Res.string.search),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text("חיפוש", color = Color.Gray)
+                Text(stringResource(Res.string.search), color = Color.Gray)
             }
         },
         modifier = modifier

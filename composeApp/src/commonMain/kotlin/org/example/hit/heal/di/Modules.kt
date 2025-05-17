@@ -1,6 +1,9 @@
 package org.example.hit.heal.di
 
 import core.di.clientRequestsModule
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import org.example.hit.heal.login.LoginViewModel
 import org.example.hit.heal.navigation.NavigationViewModel
 import org.koin.core.context.startKoin
@@ -12,7 +15,16 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import presentation.appsDeviceScreen.AppDeviceViewModel
 import presentation.appsDeviceScreen.WrongAppViewModel
+import presentation.components.AudioPlayer
+import presentation.components.CountdownDialogHandler
+import presentation.components.CountdownTimerUseCase
+import presentation.components.PlayAudioUseCase
 import presentation.contatcts.ContactsViewModel
+import presentation.detailedContact.DetailedContactScreen
+import presentation.detailedContact.DetailedContactViewModel
+import presentation.dialScreen.DialScreenViewModel
+import presentation.entryScreen.EntryViewModel
+import presentation.nextQuestion.NextQuestionViewModel
 
 fun initKoin(config: KoinAppDeclaration? = null) =
     startKoin {
@@ -31,11 +43,20 @@ val sharedAppModules = module{
 }
 
 val sharedModules = module {
+    single<CoroutineScope> { CoroutineScope(Dispatchers.Main + SupervisorJob()) }
     viewModelOf(::LoginViewModel)
 
     single { NavigationViewModel() }
-    single { AppDeviceViewModel() }
-    single { WrongAppViewModel() }
-    single { ContactsViewModel() }
 
+    single { CountdownTimerUseCase(get()) }
+    single { CountdownDialogHandler(get()) }
+    single { AudioPlayer() }
+    single { PlayAudioUseCase(get()) }
+    single { EntryViewModel() }
+    single { AppDeviceViewModel(get(), get()) }
+    single { WrongAppViewModel(get(), get()) }
+    single { ContactsViewModel(get(), get()) }
+    single { DetailedContactViewModel(get(), get()) }
+    single { NextQuestionViewModel() }
+    single { DialScreenViewModel(get(), get()) }
 }
