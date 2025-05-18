@@ -19,13 +19,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getStringArray
-import presentation.components.AudioPlayer
 import presentation.components.ContactData
 import presentation.components.CountdownDialogHandler
-import presentation.components.CountdownTimerUseCase
 import presentation.components.PlayAudioUseCase
 import presentation.detailedContact.DetailedContactScreen
-import presentation.nextQuestion.NextQuestionScreen
 
 class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandler,
                         private val playAudioUseCase: PlayAudioUseCase
@@ -36,16 +33,15 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     val countdown = countdownDialogHandler.countdown
     val isCountdownActive = countdownDialogHandler.isCountdownActive
 
-
     private var didNothing = 0
     private var wrongContact = 0
     private var correctContact = ContactData("", "")
 
-    private var scrollJob: Job? = null
     private var reminderJob: Job? = null
 
     val isPlaying = playAudioUseCase.isPlaying
 
+    private val _isScrolling = MutableStateFlow(false)
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
@@ -60,7 +56,6 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
 
     private val _isNextScreen = MutableStateFlow(false)
     val isNextScreen: StateFlow<Boolean> = _isNextScreen
-
 
     suspend fun loadContacts(phoneNumber: String) {
         val names = getStringArray(Res.array.person_names).toList()
@@ -84,8 +79,6 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
 
 
     fun startCheckingIfUserDidSomething() {
-        //if (scrollJob?.isActive == true) return
-
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
@@ -101,10 +94,11 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
 
                 elapsedTime++
 
-                if (elapsedTime >= 15) {
+                if (elapsedTime >= if (_isScrolling.value) 25 else 15) {
                     didNothing++
                     getReminderText()
                     elapsedTime = 0
+                    _isScrolling.value = false
                 }
 
             }
@@ -117,7 +111,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
             return
         }
 
-        startCheckingIfUserDidSomething()
+       // startCheckingIfUserDidSomething()
         wrongContact++
         getReminderText()
     }
@@ -162,7 +156,6 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         startCheckingIfUserDidSomething()
     }
 
-
     fun clearNextScreen() {
         _nextScreen.value = null
     }
@@ -171,37 +164,9 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         correctContact = ContactData(name = name, phoneNumber = phoneNumber)
     }
 
+    fun startScrolling(){
+        _isScrolling.value = true
+        startCheckingIfUserDidSomething()
+    }
+
 }
-//    fun startScrollCountdown(contactData: ContactData) {
-//        _userDidSomething.value = true
-//
-//        reminderJob?.cancel()
-//        scrollJob?.cancel()
-//
-//        scrollJob = viewModelScope.launch {
-//            var elapsedTime = 0
-//            var dialogShown = false
-//
-//            while (isActive && _didNothing.value + _wrongContact.value < 3) {
-//                delay(1_000)
-//                elapsedTime++
-//
-//                if (_userDidSomething.value) {
-//                    if (!dialogShown) {
-//                        _dialogText.value = getReminderText(contactData)
-//                        _showReminderDialog.value = true
-//                        dialogShown = true
-//                    }
-//                    _userDidSomething.value = false
-//                }
-//
-//                if (elapsedTime >= 25 && !dialogShown) {
-//                    _dialogText.value = getReminderText(contactData)
-//                    _showReminderDialog.value = true
-//                    _didNothing.value++
-//                    dialogShown = true
-//                }
-//            }
-//        }
-//    }
-//

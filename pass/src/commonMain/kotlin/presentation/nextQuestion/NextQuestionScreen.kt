@@ -43,7 +43,7 @@ class NextQuestionScreen : Screen {
         val isPlaying by viewModel.isPlaying.collectAsState()
 
         LaunchedEffect(Unit) {
-            viewModel.playAudio(audioString)
+            viewModel.onPlayAudioRequested(audioString)
         }
 
         LaunchedEffect(navigateToDialScreen) {

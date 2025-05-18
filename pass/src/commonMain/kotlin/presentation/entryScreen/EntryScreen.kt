@@ -35,9 +35,11 @@ import dmt_proms.pass.generated.resources.first_instructions_pass
 import dmt_proms.pass.generated.resources.first_mission_pass
 import dmt_proms.pass.generated.resources.fmpt
 import dmt_proms.pass.generated.resources.fmpt_meaning
+import dmt_proms.pass.generated.resources.next
 import dmt_proms.pass.generated.resources.speaker
 import dmt_proms.pass.generated.resources.test_record_pass
 import dmt_proms.pass.generated.resources.the_pass_test
+import dmt_proms.pass.generated.resources.welcome
 import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
@@ -59,11 +61,11 @@ class EntryScreen : Screen {
         val isPlaying by viewModel.isPlaying.collectAsState()
 
         LaunchedEffect(Unit) {
-            viewModel.playAudio(audioString)
+            viewModel.onPlayAudioRequested(audioString)
         }
 
         BaseTabletScreen(
-            title = "ברוך הבא!",
+            title = stringResource(Res.string.welcome),
             content = {
                 AudioPlayingAnimation(isPlaying = isPlaying,)
 
@@ -123,7 +125,7 @@ class EntryScreen : Screen {
                             shape = RoundedCornerShape(12.dp),
                         ) {
                             Text(
-                                text = "הבא",
+                                text = stringResource(Res.string.next),
                                 color = Color.White,
                                 fontSize = 20.sp,
                                 fontWeight = Bold

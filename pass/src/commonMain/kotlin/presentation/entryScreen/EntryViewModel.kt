@@ -1,27 +1,31 @@
 package presentation.entryScreen
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import presentation.components.AudioPlayer
+import presentation.components.PlayAudioUseCase
 
-class EntryViewModel: ViewModel() {
+class EntryViewModel(private val playAudioUseCase: PlayAudioUseCase) : ViewModel() {
 
-    private val _isPlaying = MutableStateFlow(false)
-    val isPlaying: StateFlow<Boolean> = _isPlaying
+    val isPlaying = playAudioUseCase.isPlaying
 
     private val _isOverlayVisible = MutableStateFlow(true)
     val isOverlayVisible: StateFlow<Boolean> = _isOverlayVisible
 
-    private val audioPlayer = AudioPlayer()
-
-    fun playAudio(audioText: String) {
-        _isPlaying.value = true
+    fun onPlayAudioRequested(audioText: String) {
         _isOverlayVisible.value = true
 
-            audioPlayer.play(audioText) {
-                _isPlaying.value = false
-                _isOverlayVisible.value = false
+        playAudioUseCase.playAudio(audioText)
+
+        viewModelScope.launch {
+            playAudioUseCase.isPlaying.collect { isPlaying ->
+                if (!isPlaying) {
+                    _isOverlayVisible.value = false
+                }
             }
+        }
     }
 }

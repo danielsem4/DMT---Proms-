@@ -85,7 +85,7 @@ class ContactsScreen : Screen {
                             modifier = Modifier
                                 .fillMaxSize().pointerInput(Unit) {
                                     detectDragGestures { _, _ ->
-                                        // viewModel.startScrollCountdown(correctContact)
+                                         viewModel.startScrolling()
                                     }
                                 },
                             verticalArrangement = Arrangement.spacedBy(25.dp)

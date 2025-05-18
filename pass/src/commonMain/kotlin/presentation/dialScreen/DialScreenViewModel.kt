@@ -72,11 +72,8 @@ class DialScreenViewModel(
     private val _nextScreen = MutableStateFlow<Screen?>(null)
     val nextScreen = _nextScreen.asStateFlow()
 
-    private val _firstMissionPass = MutableStateFlow(false)
-    val firstMissionPass: StateFlow<Boolean> = _firstMissionPass
-
-    private val _lastChanceMissionPass = MutableStateFlow(false)
-    val lastChanceMissionPass: StateFlow<Boolean> = _lastChanceMissionPass
+    private val _currentMissionPass = MutableStateFlow(1)
+    val currentMissionPass: StateFlow<Int> = _currentMissionPass
 
     // --- Reminder and instruction tracking ---
     private var didNothingFirstTime = 0
@@ -129,8 +126,10 @@ class DialScreenViewModel(
         startDialogInstructions()
     }
 
-    fun onUserClicked() {
-        _firstMissionPass.value = true
+    fun onUserClickedDialButton() {
+        _currentMissionPass.value = 2
+        _isCloseIconDialog.value = true
+
         stopChecks()
         countdownDialogHandler.showCountdownDialog(
             duration = 5,
@@ -138,26 +137,46 @@ class DialScreenViewModel(
         )
     }
 
-    fun checkNumber() {
-        println("Entered number: '${_enteredNumber.value}'")
-        if (_enteredNumber.value.trim() == "0522581194") {
-            _isNextScreen.value = true
-            _nextScreen.value = EndScreen()
-        } else {
-            when (++wrongNumberFirstTime) {
-                1 -> countdownDialogHandler.showCountdownDialog(
-                    duration = 1,
-                    audioText = Res.string.dialer_page_wrong_action_one to Res.string.wrong_number_dialed_please_try_again_pass
-                )
+    fun checkCorrectNumber(correctNumber: String) {
+        val enteredNumberTrimmed = _enteredNumber.value.trim()
 
-                2 -> {
-                    countdownDialogHandler.showCountdownDialog(
-                        duration = 3,
-                        audioText = Res.string.dialer_page_dentis_number_appeared to Res.string.dentist_number_showen_call_him_pass
-                    )
-                    _lastChanceMissionPass.value = true
-                }
+        if (enteredNumberTrimmed == correctNumber) {
+            navigateToEndScreen()
+            return
+        }
+
+        when (_currentMissionPass.value) {
+            2 -> handleFirstPass()
+            3 -> handleSecondPass()
+        }
+    }
+
+    private fun handleFirstPass() {
+        when (++wrongNumberFirstTime) {
+            1 -> countdownDialogHandler.showCountdownDialog(
+                duration = 1,
+                audioText = Res.string.dialer_page_wrong_action_one to Res.string.wrong_number_dialed_please_try_again_pass
+            )
+
+            2 -> {
+                countdownDialogHandler.showCountdownDialog(
+                    duration = 3,
+                    audioText = Res.string.dialer_page_dentis_number_appeared to Res.string.dentist_number_showen_call_him_pass
+                )
+                _currentMissionPass.value = 3
+                stopChecks()
             }
+        }
+    }
+
+    private fun handleSecondPass() {
+        when (++wrongNumberSecondTime) {
+            1 -> countdownDialogHandler.showCountdownDialog(
+                duration = 1,
+                audioText = Res.string.dialer_page_wrong_action_one to Res.string.wrong_number_dialed_please_try_again_pass
+            )
+
+            2 -> navigateToEndScreen()
         }
     }
 
@@ -168,13 +187,12 @@ class DialScreenViewModel(
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
 
-        when {
-            !_firstMissionPass.value -> startFirstCheck()
-            !_lastChanceMissionPass.value -> startSecondCheck()
-            else -> startThirdCheck()
+        when (_currentMissionPass.value) {
+            1 -> startFirstCheck()
+            2 -> startSecondCheck()
+            3 -> startThirdCheck()
         }
     }
-
 
     // --- Private helpers for reminders and instructions ---
 
@@ -235,6 +253,7 @@ class DialScreenViewModel(
     private fun stopChecks() {
         useCase.stop()
         useCaseSecond.stop()
+        useCaseThird.stop()
     }
 
     private fun getReminderDidNotingTextFirstTime() {
@@ -260,7 +279,7 @@ class DialScreenViewModel(
                     audioText = Res.string.dialer_opened to Res.string.dialer_opened_pass
                 )
                 stopChecks()
-                _firstMissionPass.value = true
+                _currentMissionPass.value = 2
             }
         }
     }
@@ -283,7 +302,7 @@ class DialScreenViewModel(
                     audioText = Res.string.dialer_page_dentis_number_appeared to Res.string.dentist_number_showen_call_him_pass
                 )
                 stopChecks()
-                _lastChanceMissionPass.value = true
+                _currentMissionPass.value = 3
             }
         }
     }
@@ -295,14 +314,20 @@ class DialScreenViewModel(
                 audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
             )
 
-            2 -> {countdownDialogHandler.showCountdownDialog(
+            2 -> countdownDialogHandler.showCountdownDialog(
                 duration = 3,
                 audioText = Res.string.diale_to_dentist to Res.string.call_to_detist_pass
             )
-                stopChecks()
-                _isNextScreen.value = true
-                _nextScreen.value = EndScreen()
+
+            3 -> {
+                navigateToEndScreen()
             }
         }
+    }
+
+    private fun navigateToEndScreen() {
+        stopChecks()
+        _isNextScreen.value = true
+        _nextScreen.value = EndScreen()
     }
 }

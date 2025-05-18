@@ -52,11 +52,11 @@ val sharedModules = module {
     single { CountdownDialogHandler(get()) }
     single { AudioPlayer() }
     single { PlayAudioUseCase(get()) }
-    single { EntryViewModel() }
+    single { EntryViewModel(get()) }
     single { AppDeviceViewModel(get(), get()) }
     single { WrongAppViewModel(get(), get()) }
     single { ContactsViewModel(get(), get()) }
     single { DetailedContactViewModel(get(), get()) }
-    single { NextQuestionViewModel() }
+    single { NextQuestionViewModel(get()) }
     single { DialScreenViewModel(get(), get()) }
 }

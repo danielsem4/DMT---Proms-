@@ -155,6 +155,13 @@
 
     <string name="dialer">חייגן</string>
     <string name="dial_keys">כפתורים</string>
+    <string name="delete_number">מחיקת מספר</string>
+    <string name="dial">חיוג</string>
+
+    <string name="welcome">ברוך הבא!</string>
+    <string name="next">הבא</string>
+
+    <string name="end">סיום</string>
 
     <string name="dialog_speaker">רמקול דיאלוג</string>
     <string name="dialog_exclamation_mark">סימן קריאה דיאלוג</string>

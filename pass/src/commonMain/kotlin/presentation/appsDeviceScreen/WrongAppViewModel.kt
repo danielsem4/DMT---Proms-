@@ -1,6 +1,5 @@
 package presentation.appsDeviceScreen
 
-import presentation.components.CountdownTimerUseCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dmt_proms.pass.generated.resources.Res
@@ -11,14 +10,12 @@ import dmt_proms.pass.generated.resources.what_you_need_to_do
 import dmt_proms.pass.generated.resources.wrong_app_second_assist
 import dmt_proms.pass.generated.resources.wrong_app_thired_assist
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import presentation.components.CountdownDialogHandler
-import presentation.components.AudioPlayer
 import presentation.components.PlayAudioUseCase
 
 class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandler,
@@ -40,7 +37,6 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
     private var reminderJob: Job? = null
 
     val isPlaying = playAudioUseCase.isPlaying
-
 
     fun startCheckingIfUserDidSomething() {
         reminderJob?.cancel()

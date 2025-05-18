@@ -30,12 +30,15 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
@@ -45,8 +48,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.util.lerp
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.check
+import dmt_proms.pass.generated.resources.end
+import dmt_proms.pass.generated.resources.exit
+import dmt_proms.pass.generated.resources.first_instructions_pass
+import dmt_proms.pass.generated.resources.thanks_coffe
+import dmt_proms.pass.generated.resources.thanks_vocal_pass
 
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
+import presentation.components.AudioPlayingAnimation
+import presentation.entryScreen.EntryViewModel
 import presentation.result.ResultScreen
 import kotlin.math.PI
 import kotlin.math.cos
@@ -58,9 +70,20 @@ class EndScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.current
 
+        val viewModel: EntryViewModel = koinViewModel()
+        val isOverlayVisible by viewModel.isOverlayVisible.collectAsState()
+        val audioString = stringResource(Res.string.thanks_vocal_pass)
+        val isPlaying by viewModel.isPlaying.collectAsState()
+
+        LaunchedEffect(Unit) {
+            viewModel.onPlayAudioRequested(audioString)
+        }
+
         BaseTabletScreen(
-            title = "סיום",
+            title = stringResource(Res.string.end),
             content = {
+                AudioPlayingAnimation(isPlaying = isPlaying)
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -68,7 +91,6 @@ class EndScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.SpaceBetween
                 ) {
-                    // טקסט עם רווח מלמעלה
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -81,9 +103,9 @@ class EndScreen : Screen {
                             .padding(top = 16.dp)
                     ) {
                         Text(
-                            text = "המשימה הסתיימה, תודה רבה על שיתוף הפעולה",
+                            text = stringResource(Res.string.thanks_coffe),
                             color = primaryColor,
-                            fontSize = 30.sp,
+                            fontSize = 35.sp,
                             fontWeight = Bold,
                             lineHeight = 40.sp,
                             textAlign = TextAlign.Center,
@@ -101,13 +123,13 @@ class EndScreen : Screen {
                             onClick = {},
                             modifier = Modifier.width(150.dp),
                             colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                                    shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text("סיום", fontSize = 20.sp, fontWeight = Bold, color = Color.White)
+                            Text(stringResource(Res.string.exit), fontSize = 20.sp, fontWeight = Bold, color = Color.White)
                         }
 
                         Button(
-                            onClick = {navigator?.push(ResultScreen())},
+                            onClick = { navigator?.push(ResultScreen()) },
                             modifier = Modifier.width(150.dp),
                             colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                             shape = RoundedCornerShape(12.dp)
@@ -118,10 +140,24 @@ class EndScreen : Screen {
                 }
             }
         )
-    }
-    }
 
-    @Composable
+        if (isOverlayVisible) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.6f))
+                    .clickable(
+                        enabled = true,
+                        onClick = { },
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    )
+            )
+        }
+    }
+}
+
+@Composable
 fun SuccessAnimation(modifier: Modifier = Modifier) {
     val circleScale = remember { Animatable(0f) }
     val morphProgress = remember { Animatable(0f) }

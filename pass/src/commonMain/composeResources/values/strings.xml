@@ -156,7 +156,15 @@
     <string name="contact_details">Contact details</string>
     <string name="dial_keys">Dial keys</string>
 
+    <string name="dentist_phone_number">0522581194</string>
     <string name="dialer">Dialer</string>
+    <string name="delete_number">Delete number</string>
+    <string name="dial">Dial</string>
+
+    <string name="welcome">Welcome!</string>
+    <string name="next">Next</string>
+
+    <string name="end">End</string>
 
     <string name="dialog_speaker">Dialog speaker</string>
     <string name="dialog_exclamation_mark">Dialog exclamation mark</string>

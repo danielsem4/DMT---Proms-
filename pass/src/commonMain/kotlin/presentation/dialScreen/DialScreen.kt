@@ -19,7 +19,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -27,14 +26,16 @@ import androidx.compose.ui.graphics.Color
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.delete_number
 import dmt_proms.pass.generated.resources.dentist_pass
+import dmt_proms.pass.generated.resources.dentist_phone_number
+import dmt_proms.pass.generated.resources.dial
 import dmt_proms.pass.generated.resources.dial_keys
 import dmt_proms.pass.generated.resources.dialer
+import dmt_proms.pass.generated.resources.phone
 import dmt_proms.pass.generated.resources.white_phone
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.components.AppData
 import presentation.components.CheckUnderstandingDialog
 import presentation.components.InstructionsDialog
 
@@ -45,7 +46,7 @@ class DialScreen : Screen {
         val navigator = LocalNavigator.current
 
         val viewModel: DialScreenViewModel = koinViewModel()
-val correct = stringResource(Res.string.dentist_pass)
+        val correct = stringResource(Res.string.dentist_pass)
         val isDialogVisible by viewModel.isDialogVisible.collectAsState()
         val enteredNumber by viewModel.enteredNumber.collectAsState()
         val isPlaying by viewModel.isPlaying.collectAsState()
@@ -57,9 +58,8 @@ val correct = stringResource(Res.string.dentist_pass)
         val dialogAudioText by viewModel.dialogAudioText.collectAsState()
         val isCountdownActive by viewModel.isCountdownActive.collectAsState()
         val nextScreen by viewModel.nextScreen.collectAsState()
-        val firstMissionPass by viewModel.firstMissionPass.collectAsState()
-        val lastChanceMissionPass by viewModel.lastChanceMissionPass.collectAsState()
-
+        val currentMissionPass by viewModel.currentMissionPass.collectAsState()
+        val correctNumber = stringResource(Res.string.dentist_phone_number)
 
         BaseTabletScreen(
             title = stringResource(Res.string.dialer),
@@ -70,42 +70,44 @@ val correct = stringResource(Res.string.dentist_pass)
                             .fillMaxSize()
                             .padding(24.dp)
                     ) {
-                        if(lastChanceMissionPass){
+                        if (currentMissionPass == 3) {
                             item {
                                 Text(
                                     text = correct,
-                                    fontSize = 24.sp,
+                                    fontSize = 35.sp,
+                                    color = Color.Black,
+                                    modifier = Modifier.padding(8.dp)
+                                )
+                            }
+                        } else {
+                            items(viewModel.contacts) { contactResId ->
+                                Text(
+                                    text = stringResource(contactResId),
+                                    fontSize = 35.sp,
                                     color = Color.Black,
                                     modifier = Modifier.padding(8.dp)
                                 )
                             }
                         }
-                        else{
-                        items(viewModel.contacts) { contactResId ->
-                            Text(
-                                text = stringResource(contactResId),
-                                fontSize = 24.sp,
-                                color = Color.Black,
-                                modifier = Modifier.padding(8.dp)
-                            )
-                        }
-                    }}
+                    }
+
 
                     Button(
                         modifier = Modifier
+                            .padding(16.dp)
                             .align(Alignment.BottomEnd)
-                            .size(60.dp)
+                            .size(80.dp)
                             .background(primaryColor, shape = RoundedCornerShape(10.dp)),
                         colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                        onClick = { viewModel.onUserClicked() }
+                        onClick = { viewModel.onUserClickedDialButton() }
                     ) {
-
                         Image(
                             painter = painterResource(Res.drawable.dial_keys),
                             contentDescription = stringResource(Res.string.dial_keys),
-                            modifier = Modifier.size(30.dp)
+                            modifier = Modifier.size(40.dp)
                         )
                     }
+
                 }
             }
         )
@@ -115,7 +117,7 @@ val correct = stringResource(Res.string.dentist_pass)
             DialDialog(
                 enteredNumber = enteredNumber,
                 onNumberClicked = { viewModel.onNumberClicked(it) },
-                onDial = { viewModel.checkNumber() },
+                onDial = { viewModel.checkCorrectNumber(correctNumber) },
                 onDeleteClicked = { viewModel.deleteLastDigit() }
             )
         }
@@ -133,8 +135,8 @@ val correct = stringResource(Res.string.dentist_pass)
             }
         }
 
-        LaunchedEffect(firstMissionPass) {
-            if (firstMissionPass) {
+        LaunchedEffect(currentMissionPass) {
+            if (currentMissionPass == 2) {
                 viewModel.toggleDialog()
             }
         }
@@ -190,7 +192,7 @@ val correct = stringResource(Res.string.dentist_pass)
             ) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth().height(60.dp)
                         .border(2.dp, Color.Black, RoundedCornerShape(10.dp))
                         .padding(8.dp)
                 ) {
@@ -201,14 +203,14 @@ val correct = stringResource(Res.string.dentist_pass)
                     ) {
                         Image(
                             painter = painterResource(Res.drawable.delete_number),
-                            contentDescription = "delete number",
+                            contentDescription = stringResource(Res.string.delete_number),
                             modifier = Modifier
-                                .size(20.dp)
+                                .size(40.dp)
                                 .clickable { onDeleteClicked() }
                         )
                         Text(
                             text = enteredNumber,
-                            fontSize = 18.sp,
+                            fontSize = 25.sp,
                             color = Color.Gray,
                         )
                     }
@@ -216,15 +218,15 @@ val correct = stringResource(Res.string.dentist_pass)
 
 
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(top = 20.dp),
+                    modifier = Modifier.fillMaxWidth().padding(top = 50.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     val numbers = listOf(
-                        listOf("1", "2", "3"),
-                        listOf("4", "5", "6"),
-                        listOf("7", "8", "9"),
-                        listOf("*", "0", "#")
+                        listOf("3", "2", "1"),
+                        listOf("6", "5", "4"),
+                        listOf("9", "8", "7"),
+                        listOf("#", "0", "*")
                     )
                     numbers.forEach { row ->
                         Row(
@@ -233,10 +235,10 @@ val correct = stringResource(Res.string.dentist_pass)
                             row.forEach { number ->
                                 Button(
                                     onClick = { onNumberClicked(number) },
-                                    modifier = Modifier.width(70.dp).height(40.dp),
+                                    modifier = Modifier.width(100.dp).height(70.dp),
                                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
                                 ) {
-                                    Text(text = number, fontSize = 20.sp, color = Color.Black)
+                                    Text(text = number, fontSize = 40.sp, color = Color.Black)
                                 }
                             }
                         }
@@ -247,8 +249,8 @@ val correct = stringResource(Res.string.dentist_pass)
                     Button(
                         onClick = onDial,
                         modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .width(150.dp)
+                            .align(Alignment.BottomCenter).height(100.dp)
+                            .width(160.dp)
                             .padding(20.dp),
                         colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor)
                     ) {
@@ -256,12 +258,16 @@ val correct = stringResource(Res.string.dentist_pass)
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(text = "חיוג", fontSize = 18.sp, color = Color.White)
+                            Text(
+                                text = stringResource(Res.string.dial),
+                                fontSize = 25.sp,
+                                color = Color.White
+                            )
                             Spacer(modifier = Modifier.width(8.dp))
                             Image(
                                 painter = painterResource(Res.drawable.white_phone),
-                                contentDescription = "phone",
-                                modifier = Modifier.size(20.dp)
+                                contentDescription = stringResource(Res.string.phone),
+                                modifier = Modifier.size(30.dp)
                             )
                         }
                     }

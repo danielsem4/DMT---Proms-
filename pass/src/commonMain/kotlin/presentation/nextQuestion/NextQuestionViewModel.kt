@@ -8,8 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import presentation.components.AudioPlayer
+import presentation.components.PlayAudioUseCase
 
-class NextQuestionViewModel: ViewModel() {
+class NextQuestionViewModel( private val playAudioUseCase: PlayAudioUseCase): ViewModel() {
 
     private val _time = MutableStateFlow(8)
     val time : StateFlow<Int> = _time
@@ -17,18 +18,10 @@ class NextQuestionViewModel: ViewModel() {
     private val _navigateToDialScreen = MutableStateFlow(false)
     val navigateToDialScreen: StateFlow<Boolean> = _navigateToDialScreen
 
-    private val _isPlaying = MutableStateFlow(false)
-    val isPlaying: StateFlow<Boolean> = _isPlaying
+    val isPlaying = playAudioUseCase.isPlaying
 
-
-    private val audioPlayer = AudioPlayer()
-
-    fun playAudio(audioText: String) {
-        _isPlaying.value = true
-
-        audioPlayer.play(audioText) {
-            _isPlaying.value = false
-        }
+    fun onPlayAudioRequested(audioText: String) {
+        playAudioUseCase.playAudio(audioText)
     }
 
     init {
