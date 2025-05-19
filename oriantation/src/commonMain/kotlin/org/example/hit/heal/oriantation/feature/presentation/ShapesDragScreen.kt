@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import androidx.compose.foundation.Image
+import androidx.compose.material.DrawerDefaults.shape
+import androidx.compose.ui.unit.IntOffset
 import org.jetbrains.compose.resources.painterResource
 import dmt_proms.oriantation.generated.resources.Res
 import dmt_proms.oriantation.generated.resources.bleach
@@ -29,28 +31,41 @@ import dmt_proms.oriantation.generated.resources.close
 import dmt_proms.oriantation.generated.resources.hash_tag
 import dmt_proms.oriantation.generated.resources.rhomb_outline
 import dmt_proms.oriantation.generated.resources.star
-
-
-
+import org.example.hit.heal.oriantation.feature.presentation.components.DraggableShape
+import org.example.hit.heal.oriantation.feature.presentation.components.DraggableShapeIcon
+import org.jetbrains.compose.resources.DrawableResource
 class ShapesDragScreen : Screen {
     @Composable
     override fun Content() {
-        // Drag state for triangle
-        var triangleOffset by remember { mutableStateOf(Offset.Zero) }
-        var isTriangleDropped by remember { mutableStateOf(false) }
+        // Initial positions for shapes in a column on the right
+        val initialOffsets = remember {
+            listOf(
+                Offset(800f, 100f),  // triangle
+                Offset(800f, 200f),  // diamond
+                Offset(800f, 300f),  // star
+                Offset(800f, 400f),  // hash
+                Offset(800f, 500f),  // X
+                Offset(800f, 600f)   // check
+            )
+        }
+
+        // Drag state for all shapes
+        var shapes by remember {
+            mutableStateOf(
+                listOf(
+                    DraggableShape(0, Res.drawable.bleach, initialOffsets[0]),         // triangle
+                    DraggableShape(1, Res.drawable.rhomb_outline, initialOffsets[1]),  // diamond
+                    DraggableShape(2, Res.drawable.star, initialOffsets[2]),           // star
+                    DraggableShape(3, Res.drawable.hash_tag, initialOffsets[3]),       // hash
+                    DraggableShape(4, Res.drawable.close, initialOffsets[4]),          // X
+                    DraggableShape(5, Res.drawable.check, initialOffsets[5])           // check
+                )
+            )
+        }
 
         // Red square position and size
         val redSquareSize = 300.dp
         val redSquarePx = with(LocalDensity.current) { redSquareSize.toPx() }
-
-        // List of other shapes (diamond, star, hash, X, check)
-        val shapeImages = listOf(
-            Res.drawable.rhomb_outline,
-            Res.drawable.star,
-            Res.drawable.hash_tag,
-            Res.drawable.close,
-            Res.drawable.check
-        )
 
         TabletBaseScreen(
             title = "גרירה",
@@ -64,72 +79,54 @@ class ShapesDragScreen : Screen {
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth().weight(1f),
-                    verticalAlignment = Alignment.CenterVertically
+                Box(
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     // Red square (drop target)
                     Box(
                         modifier = Modifier
                             .size(redSquareSize)
                             .border(3.dp, Color.Red)
-                            .background(Color(0xFFE0F7F1)),
+                            .background(Color(0xFFE0F7F1))
+                            .align(Alignment.CenterStart)
+                            .padding(start = 16.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        // If triangle is dropped, show it inside
-                        if (isTriangleDropped) {
+                        // Show shapes that were dropped in the red square
+                        shapes.filter { it.isDroppedInSquare }.forEach { shape ->
                             Image(
-                                painter = painterResource(Res.drawable.bleach),
+                                painter = painterResource(shape.drawableRes),
                                 contentDescription = null,
                                 modifier = Modifier.size(80.dp)
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.weight(1f))
-                    // Draggable triangle (if not dropped)
-                    if (!isTriangleDropped) {
-                        DraggableTriangleIcon(
-                            onDrop = { offset ->
-                                // Check if dropped inside the red square
-                                val dropX = offset.x
-                                val dropY = offset.y
-                                if (dropX in 0f..redSquarePx && dropY in 0f..redSquarePx) {
-                                    isTriangleDropped = true
-                                } else {
-                                    triangleOffset = Offset.Zero
+
+                    // Draggable shapes
+                    shapes.forEach { shape ->
+                        if (!shape.isDroppedInSquare) {
+                            DraggableShapeIcon(
+                                drawableRes = shape.drawableRes,
+                                offset = shape.offset,
+                                onOffsetChange = { newOffset ->
+                                    shapes = shapes.map {
+                                        if (it.id == shape.id) it.copy(offset = newOffset) else it
+                                    }
+                                },
+                                onDrop = { offset ->
+                                    val dropX = offset.x
+                                    val dropY = offset.y
+                                    // Check if dropped inside the red square
+                                    if (dropX in 0f..redSquarePx && dropY in 0f..redSquarePx) {
+                                        shapes = shapes.map {
+                                            if (it.id == shape.id) it.copy(isDroppedInSquare = true) else it
+                                        }
+                                    }
+                                    // Keep the shape at its dropped position
+                                    shapes = shapes.map {
+                                        if (it.id == shape.id) it.copy(offset = offset) else it
+                                    }
                                 }
-                            },
-                            offset = triangleOffset,
-                            onOffsetChange = { triangleOffset = it }
-                        )
-                    }
-                    // Other shapes (not draggable, just displayed)
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(24.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(end = 32.dp)
-                    ) {
-                        shapeImages.forEach { res ->
-                            Image(
-                                painter = painterResource(res),
-                                contentDescription = null,
-                                modifier = Modifier.size(60.dp)
-                            )
-                        }
-                        // Add the triangle at the bottom (draggable)
-                        if (isTriangleDropped) {
-                            // Show a faded triangle to indicate it's been placed
-                            Image(
-                                painter = painterResource(Res.drawable.bleach),
-                                contentDescription = null,
-                                modifier = Modifier.size(60.dp),
-                                alpha = 0.3f
-                            )
-                        } else {
-                            Image(
-                                painter = painterResource(Res.drawable.bleach),
-                                contentDescription = null,
-                                modifier = Modifier.size(60.dp)
                             )
                         }
                     }
@@ -138,32 +135,3 @@ class ShapesDragScreen : Screen {
         )
     }
 }
-
-// Draggable triangle using the drawable icon
-@Composable
-fun DraggableTriangleIcon(
-    onDrop: (Offset) -> Unit,
-    offset: Offset,
-    onOffsetChange: (Offset) -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .offset { offset.toIntOffset() }
-            .pointerInput(Unit) {
-                detectDragGestures(
-                    onDragEnd = { onDrop(offset) }
-                ) { change, dragAmount ->
-                    change.consume()
-                    onOffsetChange(offset + Offset(dragAmount.x, dragAmount.y))
-                }
-            }
-    ) {
-        Image(
-            painter = painterResource(Res.drawable.bleach),
-            contentDescription = null,
-            modifier = Modifier.size(80.dp)
-        )
-    }
-}
-
-private fun Offset.toIntOffset() = androidx.compose.ui.unit.IntOffset(x.toInt(), y.toInt())

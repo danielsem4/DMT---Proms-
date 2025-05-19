@@ -3,7 +3,7 @@ package org.example.hit.heal
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
-import org.example.hit.heal.oriantation.feature.presentation.components.ShapesDragScreen
+import org.example.hit.heal.oriantation.feature.presentation.ShapesDragScreen
 
 
 @Composable
