@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -78,7 +79,7 @@ fun TabletBaseScreen(
 
                 if (onNextClick != null) {
                     Button(
-                        onClick = onNextClick,
+                        onClick = onNextClick ,
                         colors = ButtonDefaults.buttonColors(primaryColor),
                         shape = RoundedCornerShape(30),
                         modifier = Modifier.width(300.dp).height(50.dp).align(Alignment.Center)
