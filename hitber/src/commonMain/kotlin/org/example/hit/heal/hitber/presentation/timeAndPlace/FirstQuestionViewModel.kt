@@ -1,12 +1,12 @@
 package org.example.hit.heal.hitber.presentation.timeAndPlace
 
 import androidx.lifecycle.ViewModel
+import core.data.model.MeasureObjectString
+import core.utils.getCurrentFormattedDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.example.hit.heal.hitber.data.model.FirstQuestion
-import org.example.hit.heal.hitber.data.model.MeasureObjectString
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.DropDownItem
-import org.example.hit.heal.hitber.utils.getNow
 
 class FirstQuestionViewModel : ViewModel() {
 
@@ -20,7 +20,7 @@ class FirstQuestionViewModel : ViewModel() {
 
     fun firstQuestionAnswer(field: String, answer: DropDownItem) {
         val currentFirstQuestion = _firstQuestion.value
-        val date = getNow()
+        val date = getCurrentFormattedDateTime()
 
         val updated = when (field) {
             "day" -> currentFirstQuestion.copy(day = MeasureObjectString(101, answer.text, date))

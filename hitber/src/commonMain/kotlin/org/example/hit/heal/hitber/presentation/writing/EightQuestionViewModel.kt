@@ -9,13 +9,9 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.example.hit.heal.core.presentation.Colors.backgroundColor
-import org.example.hit.heal.hitber.data.model.EighthQuestionItem
-import org.example.hit.heal.hitber.data.model.MeasureObjectBoolean
 import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
 import org.example.hit.heal.hitber.presentation.writing.components.sentencesResourceId
 import org.example.hit.heal.hitber.presentation.writing.components.slotsList
-import org.example.hit.heal.hitber.utils.getNow
-import org.jetbrains.compose.resources.StringResource
 
 class EightQuestionViewModel: ViewModel() {
     private val _slotsWords = MutableStateFlow(slotsList)

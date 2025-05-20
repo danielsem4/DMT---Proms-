@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.tenth_question_hitbear_instructions
@@ -50,20 +51,13 @@ import dmt_proms.hitber.generated.resources.tenth_question_hitbear_shapes
 import dmt_proms.hitber.generated.resources.tenth_question_hitbear_title
 import dmt_proms.hitber.generated.resources.triangle
 import io.github.suwasto.capturablecompose.Capturable
-import io.github.suwasto.capturablecompose.CompressionFormat
 import io.github.suwasto.capturablecompose.rememberCaptureController
-import io.github.suwasto.capturablecompose.toByteArray
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.withContext
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.components.BuildShapes
 import org.example.hit.heal.hitber.presentation.buildShape.components.draggableShapesItem
 import org.example.hit.heal.hitber.presentation.buildShape.components.staticShapesItem
 import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
-import org.example.hit.heal.hitber.utils.getNow
-import org.example.hit.heal.hitber.utils.toBase64
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -93,9 +87,18 @@ class BuildShapeScreen : Screen {
         }
 
         var imageBitmapScreenShot by remember { mutableStateOf<ImageBitmap?>(null) }
+
         LaunchedEffect(imageBitmapScreenShot) {
             imageBitmapScreenShot?.let {
-                viewModel.uploadImage(it, getNow(), 10)
+                viewModel.uploadImage(
+                    bitmap = imageBitmapScreenShot!!,
+                    date = getCurrentFormattedDateTime(),
+                    currentQuestion = 10,
+                    onSuccess = { /* עשי מה שצריך */ },
+                    onFailure = { error -> println("שגיאה: $error") }
+
+                )
+
                 println("image: $imageBitmapScreenShot")
 
             }
@@ -122,7 +125,7 @@ class BuildShapeScreen : Screen {
                             grade = resultFlag.toDouble(),
                         )
                     }
-                    viewModel.setTenthQuestion(tenthQuestionViewModel.answer, getNow())
+                    viewModel.setTenthQuestion(tenthQuestionViewModel.answer, getCurrentFormattedDateTime())
                     navigator?.push(SummaryScreen())
                 },
 

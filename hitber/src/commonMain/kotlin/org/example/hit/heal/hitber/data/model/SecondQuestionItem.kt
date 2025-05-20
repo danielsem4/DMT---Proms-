@@ -1,5 +1,6 @@
 package org.example.hit.heal.hitber.data.model
 
+import core.data.model.MeasureObjectInt
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

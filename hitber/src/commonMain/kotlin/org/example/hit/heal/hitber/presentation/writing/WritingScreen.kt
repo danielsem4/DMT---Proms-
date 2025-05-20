@@ -43,9 +43,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.close_icon
 import dmt_proms.hitber.generated.resources.eighth_question_hitbear_close_icon
@@ -59,7 +59,6 @@ import org.example.hit.heal.hitber.presentation.shapes.ActionShapesScreen
 import org.example.hit.heal.hitber.presentation.writing.components.DraggableWordState
 import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
 import org.example.hit.heal.hitber.presentation.writing.components.draggableWordsList
-import org.example.hit.heal.hitber.utils.getNow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -82,7 +81,7 @@ class WritingScreen : Screen {
                 title = stringResource(Res.string.eighth_question_hitbear_title),
                 onNextClick = {
                     if (allFinished) {eightQuestionViewModel.eighthQuestionAnswer(sentences)
-                        viewModel.setEighthQuestion(eightQuestionViewModel.answer, getNow())
+                        viewModel.setEighthQuestion(eightQuestionViewModel.answer, getCurrentFormattedDateTime())
                         navigator?.push(ActionShapesScreen(9))
 
                     }},

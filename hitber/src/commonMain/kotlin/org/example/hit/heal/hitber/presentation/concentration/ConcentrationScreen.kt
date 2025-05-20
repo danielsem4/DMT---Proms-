@@ -24,9 +24,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.hitbear_start
@@ -38,7 +38,6 @@ import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
-import org.example.hit.heal.hitber.utils.getNow
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -57,7 +56,7 @@ class ConcentrationScreen : Screen {
 
         TabletBaseScreen(
             title = stringResource(Res.string.third_question_hitbear_title),
-            onNextClick = { if (isFinished){ viewModel.setThirdQuestion(thirdQuestionViewModel.thirdQuestionAnswers, getNow())
+            onNextClick = { if (isFinished){ viewModel.setThirdQuestion(thirdQuestionViewModel.thirdQuestionAnswers, getCurrentFormattedDateTime())
                 navigator?.push(NamingScreen())
             } },
             question = 3,

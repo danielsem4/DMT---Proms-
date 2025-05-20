@@ -51,13 +51,15 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-            implementation(projects.ui.core)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+
+            implementation(projects.ui.core)
+            implementation(projects.core)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -67,7 +69,7 @@ kotlin {
 
 android {
     namespace = "org.example.hit.heal.hitber"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk = 35
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

@@ -46,9 +46,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.close_fridge
 import dmt_proms.hitber.generated.resources.hitbear_continue
@@ -65,23 +65,15 @@ import dmt_proms.hitber.generated.resources.sixth_question_hitbear_volume_icon
 import dmt_proms.hitber.generated.resources.speaker
 import dmt_proms.hitber.generated.resources.table
 import io.github.suwasto.capturablecompose.Capturable
-import io.github.suwasto.capturablecompose.CompressionFormat
 import io.github.suwasto.capturablecompose.rememberCaptureController
-import io.github.suwasto.capturablecompose.toByteArray
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.withContext
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
-
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayingDialog
 import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
 import org.example.hit.heal.hitber.presentation.understanding.components.napkins
-import org.example.hit.heal.hitber.utils.getNow
 import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
-import org.example.hit.heal.hitber.utils.toBase64
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -134,9 +126,18 @@ class UnderstandingScreen : Screen {
 
         LaunchedEffect(imageBitmapScreenShot) {
             imageBitmapScreenShot?.let {
-                    viewModel.uploadImage(it, getNow(), 6)
-                println("image: $imageBitmapScreenShot")
+                imageBitmapScreenShot?.let {
+                    viewModel.uploadImage(
+                        bitmap = imageBitmapScreenShot!!,
+                        date = getCurrentFormattedDateTime(),
+                        currentQuestion = 6,
+                        onSuccess = { /* עשי מה שצריך */ },
+                        onFailure = { error -> println("שגיאה: $error") }
 
+                    )
+                    println("image: $imageBitmapScreenShot")
+
+                }
             }
         }
 
@@ -180,7 +181,7 @@ class UnderstandingScreen : Screen {
                         sixthQuestionViewModel.isFridgeOpened,
                         sixthQuestionViewModel.isItemMovedCorrectly,
                         sixthQuestionViewModel.isNapkinPlacedCorrectly,
-                        getNow()
+                        getCurrentFormattedDateTime()
                     )
 
                     // showDialog = true

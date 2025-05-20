@@ -5,10 +5,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.example.hit.heal.hitber.data.model.MeasureObjectBoolean
-import org.example.hit.heal.hitber.data.model.SixthQuestionType
 import org.example.hit.heal.hitber.presentation.understanding.components.audioList
-import org.example.hit.heal.hitber.utils.getNow
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 

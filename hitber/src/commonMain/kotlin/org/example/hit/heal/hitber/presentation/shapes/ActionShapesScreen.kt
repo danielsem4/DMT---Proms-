@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.error_icon
 import dmt_proms.hitber.generated.resources.hitbear_continue
@@ -40,7 +41,6 @@ import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.example.hit.heal.hitber.presentation.shapes.components.getShapeName
-import org.example.hit.heal.hitber.utils.getNow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -69,11 +69,11 @@ class ActionShapesScreen(private val question: Int) : Screen {
             } else {
                 secondQuestionViewModel.resetSelectedShapes()
                 if(question == 2) {
-                    viewModel.setSecondQuestion(secondQuestionViewModel.secondQuestionAnswersMap, getNow())
+                    viewModel.setSecondQuestion(secondQuestionViewModel.secondQuestionAnswersMap, getCurrentFormattedDateTime())
                     navigator?.push(ConcentrationScreen())
                 }
 
-                else {viewModel.setNinthQuestion(secondQuestionViewModel.secondQuestionAnswersMap, getNow())
+                else {viewModel.setNinthQuestion(secondQuestionViewModel.secondQuestionAnswersMap, getCurrentFormattedDateTime())
                     navigator?.push(BuildShapeScreen())
                 }
             }

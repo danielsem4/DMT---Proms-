@@ -2,6 +2,7 @@ package core.di
 
 import core.data.remote.impl.KtorAppRemoteDataSource
 import core.domain.api.AppApi
+import core.domain.use_case.BitmapToUploadUseCase
 import core.domain.use_case.LoginUseCase
 import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
@@ -22,4 +23,5 @@ val clientRequestsModule = module {
     singleOf(::LoginUseCase)
     singleOf(::UploadFileUseCase)
     singleOf(::UploadTestResultsUseCase)
+    single { BitmapToUploadUseCase() }
 }

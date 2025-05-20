@@ -4,13 +4,9 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.example.hit.heal.hitber.data.model.MeasureObjectInt
-import org.example.hit.heal.hitber.data.model.SecondQuestionItem
-import org.example.hit.heal.hitber.data.model.SelectedShapesStringList
 import org.example.hit.heal.hitber.presentation.shapes.components.Shape
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeList
 import org.example.hit.heal.hitber.presentation.shapes.components.shapeSets
-import org.example.hit.heal.hitber.utils.getNow
 
 class SecondQuestionViewModel: ViewModel() {
     private val _listShapes = MutableStateFlow(shapeList)

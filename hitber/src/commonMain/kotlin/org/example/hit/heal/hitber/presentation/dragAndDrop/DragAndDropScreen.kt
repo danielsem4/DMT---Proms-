@@ -2,6 +2,7 @@ package org.example.hit.heal.hitber.presentation.dragAndDrop
 
 import TabletBaseScreen
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,24 +32,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.seventh_question_hitbear_title
 import io.github.suwasto.capturablecompose.Capturable
-import io.github.suwasto.capturablecompose.CompressionFormat
 import io.github.suwasto.capturablecompose.rememberCaptureController
-import io.github.suwasto.capturablecompose.toByteArray
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.withContext
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.circleColors
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.circlePositions
 import org.example.hit.heal.hitber.presentation.writing.WritingScreen
-import org.example.hit.heal.hitber.utils.getNow
 import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
-import org.example.hit.heal.hitber.utils.toBase64
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -63,6 +58,7 @@ class DragAndDropScreen : Screen {
         var screenSize by remember { mutableStateOf(0f to 0f) }
         val targetColor by seventhQuestionViewModel.targetCircleColor.collectAsState()
         val instructionsResourceId by seventhQuestionViewModel.instructionsResourceId.collectAsState()
+        val isUploadFinished by seventhQuestionViewModel.isUploadFinished.collectAsState()
         val instructions = instructionsResourceId?.let { stringResource(it) }
         var targetBoxXRange by remember { mutableStateOf(0f..0f) }
         var targetBoxYRange by remember { mutableStateOf(0f..0f) }
@@ -82,9 +78,34 @@ class DragAndDropScreen : Screen {
 
         LaunchedEffect(imageBitmapScreenShot) {
             imageBitmapScreenShot?.let {
-                viewModel.uploadImage(it, getNow(), 7)
-                println("image: $imageBitmapScreenShot")
+                viewModel.uploadImage(
+                    bitmap = imageBitmapScreenShot!!,
+                    date = getCurrentFormattedDateTime(),
+                    currentQuestion = 7,
+                    onSuccess = { seventhQuestionViewModel.setIsUploadFinished() },
+                    onFailure = { seventhQuestionViewModel.setIsUploadFinished() }
+                )
 
+                if (isUploadFinished) {
+                    targetColor?.let {
+                        proceedToNext(
+                            screenSize = screenSize,
+                            circleColors = circleColors,
+                            circlePositions = circlePositions,
+                            targetColor = it,
+                            targetBoxXRange = targetBoxXRange,
+                            targetBoxYRange = targetBoxYRange,
+                            density = density,
+                            seventhQuestionViewModel = seventhQuestionViewModel
+                        )
+                        viewModel.setSeventhQuestion(
+                            seventhQuestionViewModel.answer,
+                            getCurrentFormattedDateTime()
+                        )
+
+                    }
+                    navigator?.push(WritingScreen())
+                }
             }
         }
 
@@ -97,21 +118,6 @@ class DragAndDropScreen : Screen {
             title = stringResource(Res.string.seventh_question_hitbear_title),
             onNextClick = {
                 captureController.capture()
-                targetColor?.let {
-                    nextQuestion(
-                        screenSize = screenSize,
-                        circleColors = circleColors,
-                        circlePositions = circlePositions,
-                        targetColor = it,
-                        targetBoxXRange = targetBoxXRange,
-                        targetBoxYRange = targetBoxYRange,
-                        density = density,
-                        seventhQuestionViewModel = seventhQuestionViewModel
-                    )
-                    viewModel.setSeventhQuestion(seventhQuestionViewModel.answer, getNow())
-
-                }
-                navigator?.push(WritingScreen())
             },
             buttonText = stringResource(Res.string.hitbear_continue),
             buttonColor = primaryColor,
@@ -134,6 +140,7 @@ class DragAndDropScreen : Screen {
                         imageBitmapScreenShot = imageBitmap
                     }
                 ) {
+
                     Canvas(
                         modifier = Modifier.fillMaxSize()
                             .background(color = Color.White, shape = RoundedCornerShape(4))
@@ -203,7 +210,7 @@ fun Offset.distanceTo(other: Offset): Float {
     return kotlin.math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y))
 }
 
-fun nextQuestion(
+fun proceedToNext(
     screenSize: Pair<Float, Float>,
     circleColors: List<Color>,
     circlePositions: List<Offset>,

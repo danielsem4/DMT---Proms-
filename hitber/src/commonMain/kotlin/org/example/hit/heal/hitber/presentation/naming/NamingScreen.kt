@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.fourth_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.fourth_question_hitbear_pic1
@@ -39,7 +40,6 @@ import getImageName
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.repetition.RepetitionScreen
-import org.example.hit.heal.hitber.utils.getNow
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -49,10 +49,10 @@ class NamingScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        val fourthQuestionViewModel : FourthQuestionViewModel = koinViewModel()
+        val fourthQuestionViewModel: FourthQuestionViewModel = koinViewModel()
         val viewModel: ActivityViewModel = koinViewModel()
-        var answer1 by remember { mutableStateOf("") }
-        var answer2 by remember { mutableStateOf("") }
+        val answer1 by fourthQuestionViewModel.answer1.collectAsState()
+        val answer2 by fourthQuestionViewModel.answer2.collectAsState()
         val selectedCouple by fourthQuestionViewModel.selectedCouple.collectAsState()
 
         val firstImageName = selectedCouple?.let { getImageName(it.first) } ?: ""
@@ -64,8 +64,16 @@ class NamingScreen : Screen {
 
         TabletBaseScreen(title = stringResource(Res.string.fourth_question_hitbear_title),
             onNextClick = {
-                fourthQuestionViewModel.fourthQuestionAnswer(answer1, answer2, firstImageName, secondImageName)
-                viewModel.setFourthQuestion(fourthQuestionViewModel.fourthQuestionAnswers, getNow())
+                fourthQuestionViewModel.fourthQuestionAnswer(
+                    answer1,
+                    answer2,
+                    firstImageName,
+                    secondImageName
+                )
+                viewModel.setFourthQuestion(
+                    fourthQuestionViewModel.fourthQuestionAnswers,
+                    getCurrentFormattedDateTime()
+                )
                 navigator?.push(RepetitionScreen())
             },
             question = 4,
@@ -88,8 +96,13 @@ class NamingScreen : Screen {
                 ) {
                     TextField(
                         value = answer1,
-                        onValueChange = { answer1 = it },
-                        label = { Text(stringResource(Res.string.fourth_question_hitbear_what_in_the_pic), color = Color.Black) },
+                        onValueChange = { fourthQuestionViewModel.onAnswer1Changed(it)  },
+                        label = {
+                            Text(
+                                stringResource(Res.string.fourth_question_hitbear_what_in_the_pic),
+                                color = Color.Black
+                            )
+                        },
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = primaryColor,
                             unfocusedBorderColor = primaryColor
@@ -99,8 +112,13 @@ class NamingScreen : Screen {
 
                     TextField(
                         value = answer2,
-                        onValueChange = { answer2 = it },
-                        label = { Text(stringResource(Res.string.fourth_question_hitbear_what_in_the_pic), color = Color.Black) },
+                        onValueChange = { fourthQuestionViewModel.onAnswer2Changed(it) },
+                        label = {
+                            Text(
+                                stringResource(Res.string.fourth_question_hitbear_what_in_the_pic),
+                                color = Color.Black
+                            )
+                        },
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             focusedBorderColor = primaryColor,
                             unfocusedBorderColor = primaryColor

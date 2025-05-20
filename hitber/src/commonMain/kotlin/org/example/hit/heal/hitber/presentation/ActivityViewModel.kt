@@ -3,36 +3,42 @@ package org.example.hit.heal.hitber
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import core.data.model.MeasureObjectBoolean
+import core.data.model.MeasureObjectDouble
+import core.data.model.MeasureObjectInt
+import core.data.model.MeasureObjectString
+import core.domain.DataError
+import core.domain.Error
+import core.domain.onError
+import core.domain.onSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.example.hit.heal.hitber.core.domain.Result
-import org.example.hit.heal.hitber.core.domain.onError
-import org.example.hit.heal.hitber.core.domain.onSuccess
-import org.example.hit.heal.hitber.core.utils.BitmapToUploadUseCase
-import org.example.hit.heal.hitber.core.utils.UploadEvaluationUseCase
-import org.example.hit.heal.hitber.core.utils.UploadImageUseCase
+import core.domain.use_case.BitmapToUploadUseCase
 import org.example.hit.heal.hitber.data.model.CogData
 import org.example.hit.heal.hitber.data.model.EighthQuestionItem
 import org.example.hit.heal.hitber.data.model.FirstQuestion
-import org.example.hit.heal.hitber.data.model.MeasureObjectBoolean
-import org.example.hit.heal.hitber.data.model.MeasureObjectDouble
-import org.example.hit.heal.hitber.data.model.MeasureObjectInt
-import org.example.hit.heal.hitber.data.model.MeasureObjectString
 import org.example.hit.heal.hitber.data.model.SecondQuestionItem
 import org.example.hit.heal.hitber.data.model.SelectedShapesStringList
 import org.example.hit.heal.hitber.data.model.SeventhQuestionType
 import org.example.hit.heal.hitber.data.model.SixthQuestionType
 import org.example.hit.heal.hitber.data.model.TenthQuestionType
 import org.example.hit.heal.hitber.data.model.ThirdQuestionItem
+import core.domain.use_case.cdt.UploadFileUseCase
+import core.domain.use_case.cdt.UploadTestResultsUseCase
+import core.utils.getCurrentFormattedDateTime
+import core.utils.toByteArray
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.withContext
 
 class ActivityViewModel(
-    private val uploadImageUseCase: UploadImageUseCase,
-    private val uploadEvaluationUseCase: UploadEvaluationUseCase
+    private val uploadImageUseCase: UploadFileUseCase,
+    private val uploadTestResultsUseCase: UploadTestResultsUseCase,
+    private val bitmapToUploadUseCase: BitmapToUploadUseCase
 ) : ViewModel() {
 
-    var result: CogData = CogData()
+    private var result: CogData = CogData()
 
     fun setFirstQuestion(firstQuestion: FirstQuestion) {
         result.firstQuestion = firstQuestion
@@ -186,75 +192,102 @@ class ActivityViewModel(
         println("FirstQuestion answer: (${result.tenthQuestion})")
     }
 
+    private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    private var uploadedImageUrl: String = ""
+    fun uploadImage(
+        onSuccess: (() -> Unit)? = null,
+        onFailure: ((message: Error) -> Unit)? = null,
+        bitmap: ImageBitmap,
+        date: String,
+        currentQuestion: Int
+    ) {
+        if (bitmap.width <= 1 || bitmap.height <= 1) {
+            println("❌ תמונה לא תקינה")
+            onFailure?.invoke(DataError.Local.EMPTY_FILE)
+            return
+        }
 
-    fun uploadImage(bitmap: ImageBitmap, date: String, currentQuestion: Int) {
+        val imageByteArray = bitmap.toByteArray()
+        println("📤 התחלת העלאה, image size: ${imageByteArray.size}")
 
-        val bitmapToUploadImageUseCase = BitmapToUploadUseCase()
-        println("העלאת תמונה התחילה")
+        uploadScope.launch {
+            val clinicId = 8
+            val userId = 168
+            val measurement =21
 
-        viewModelScope.launch(Dispatchers.IO) {
-
-            uploadedImageUrl = bitmapToUploadImageUseCase.buildPath(
-                clinicId = result.clinicId.toString(),
-                patientId = result.patientId.toString(),
-                measurementId = result.measurement.toString(),
+            val imagePath = bitmapToUploadUseCase.buildPath(
+                clinicId = clinicId,
+                patientId = userId,
+                measurementId = measurement,
                 pathDate = date
             )
 
-            when (val result = uploadImageUseCase.execute(
-                bitmap = bitmap,
-                clinicId = result.clinicId,
-                userId = result.patientId,
-                path = uploadedImageUrl
-            )) {
-                is Result.Success -> {
+
+            println("📁 Path: $imagePath")
+
+            try {
+                uploadImageUseCase.execute(
+                    imagePath = imagePath,
+                    bytes = imageByteArray,
+                    clinicId = clinicId,
+                    userId = userId
+                ).onSuccess {
+                    saveUploadedImageUrl(currentQuestion, imagePath, date)
+                    println("✅ העלאה הצליחה")
                     withContext(Dispatchers.Main) {
-                        saveUpLoadedImageUrl(currentQuestion, date)
-                        println("העלאת תמונה הצליחה")
+                        onSuccess?.invoke()
+                    }
+                }.onError {
+                    println("❌ שגיאה בהעלאה: $it")
+                    withContext(Dispatchers.Main) {
+                        onFailure?.invoke(it)
                     }
                 }
-
-                is Result.Error -> {
-                    println("Error: ${result.error}")
+            } catch (e: Exception) {
+                println("🚨 שגיאה חריגה: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    onFailure?.invoke(DataError.Remote.UNKNOWN)
                 }
             }
         }
     }
 
 
-    private fun saveUpLoadedImageUrl(currentQuestion: Int?, date: String) {
+    private fun saveUploadedImageUrl(currentQuestion: Int?, uploadedUrl: String, date: String) {
         val image = MeasureObjectString(
-            value = uploadedImageUrl,
+            value = uploadedUrl,
             dateTime = date
         )
 
         when (currentQuestion) {
-            6 -> result.sixthQuestion.add(
-                SixthQuestionType.SixthQuestionImage(image)
-            )
-
-            7 -> result.seventhQuestion.add(
-                SeventhQuestionType.SeventhQuestionImage(image)
-            )
-
-            10 -> result.tenthQuestion.add(
-                TenthQuestionType.TenthQuestionImage(image)
-            )
+            6 -> result.sixthQuestion.add(SixthQuestionType.SixthQuestionImage(image))
+            7 -> result.seventhQuestion.add(SeventhQuestionType.SeventhQuestionImage(image))
+            10 -> result.tenthQuestion.add(TenthQuestionType.TenthQuestionImage(image))
         }
     }
 
-    fun uploadEvaluationResults() {
+
+    fun uploadEvaluationResults(
+        onSuccess: (() -> Unit)? = null,
+        onFailure: ((message: Error) -> Unit)? = null
+    ) {
         println("results object: $result")
 
         viewModelScope.launch {
-            val testResult = uploadEvaluationUseCase.execute(result, CogData.serializer())
+            try {
+                val uploadResult = uploadTestResultsUseCase.execute(result, CogData.serializer())
 
-            testResult.onSuccess {
-                println("העלאה הצליחה")
-            }.onError {
-                println("שגיאה בהעלאה: ${it.name}")
+                uploadResult.onSuccess {
+                    println("✅ העלאה הצליחה")
+                    onSuccess?.invoke()
+                }.onError { error ->
+                    println("❌ שגיאה בהעלאה: $error")
+                    onFailure?.invoke(error)
+                }
+
+            } catch (e: Exception) {
+                println("🚨 שגיאה לא צפויה: ${e.message}")
+                onFailure?.invoke(DataError.Remote.UNKNOWN)
             }
         }
     }

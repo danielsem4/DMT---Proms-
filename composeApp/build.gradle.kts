@@ -53,6 +53,7 @@ kotlin {
             implementation(projects.clockTest)
 
             implementation(libs.kmp.capturable.compose)
+
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation(compose.material3)
@@ -98,10 +99,6 @@ kotlin {
             implementation(libs.coil.compose)
 
         }
-        nativeMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-        }
-
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
