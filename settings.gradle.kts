@@ -33,3 +33,5 @@ include(":ui:core")
 include(":core")
 include(":pass")
 
+
+include(":clock_test")

@@ -18,4 +18,5 @@ object Colors {
     val weatherColor = Color(0xFFFFF176)
     val documentsColor = Color(0xFFFFF59D)
     val phoneColor = primaryColor
+    val lightGreen = Color(0xFFE8F5E9)  // Light green color with some transparency
 }

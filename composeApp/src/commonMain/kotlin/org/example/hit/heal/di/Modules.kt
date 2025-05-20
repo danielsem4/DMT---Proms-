@@ -4,6 +4,7 @@ import core.di.clientRequestsModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import org.example.hit.heal.cdt.di.CDT_module
 import org.example.hit.heal.login.LoginViewModel
 import org.example.hit.heal.navigation.NavigationViewModel
 import org.koin.core.context.startKoin
@@ -38,7 +39,7 @@ fun initKoin(config: KoinAppDeclaration? = null) =
 
 expect val platformModule: Module
 
-val sharedAppModules = module{
+val sharedAppModules = module {
     includes(clientRequestsModule)
 }
 
@@ -47,6 +48,8 @@ val sharedModules = module {
     viewModelOf(::LoginViewModel)
 
     single { NavigationViewModel() }
+//    viewModelOf(::NavigationViewModel) //should be like this instead of single
+    singleOf(::NavigationViewModel)
 
     single { CountdownTimerUseCase(get()) }
     single { CountdownDialogHandler(get()) }
@@ -59,4 +62,5 @@ val sharedModules = module {
     single { DetailedContactViewModel(get(), get()) }
     single { NextQuestionViewModel(get()) }
     single { DialScreenViewModel(get(), get()) }
+    includes(CDT_module)
 }
