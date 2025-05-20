@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.sp
 //}
 
 @Composable
-fun FeatureButton(icon: ImageVector, label: String,onClick: () -> Unit) {
+fun FeatureButton(icon: ImageVector, label: String, onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(16.dp),
         backgroundColor = Color.White,

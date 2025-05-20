@@ -94,7 +94,9 @@ fun LoginScreen(
             message?.let { msg ->
                 Text(
                     text = msg,
-                    color = if (loginViewModel.isLoggedIn.value) Color(0xFF4CAF50) else Color(0xFFE53935),
+                    color = if (loginViewModel.isLoggedIn.value) Color(0xFF4CAF50) else Color(
+                        0xFFE53935
+                    ),
                     modifier = Modifier.padding(8.dp)
                 )
             }

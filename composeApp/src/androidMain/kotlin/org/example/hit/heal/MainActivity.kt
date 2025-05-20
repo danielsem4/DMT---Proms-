@@ -10,53 +10,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import org.example.hit.heal.di.initKoin
-import org.example.hit.heal.hitber.di.initKoin
-import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        initKoin()
-
-
+//        initKoin {
+//            androidLogger() // provides logger to use in android module
+//            androidContext(this@MainActivity)
+//        }
         setContent {
 
-            val darkColor = Color.Transparent
-            val lightColor = Color.Transparent
+            val darkColor = Color.Transparent.hashCode()
+            val lightColor = Color.Transparent.hashCode()
 
             val inDarkTheme = isSystemInDarkTheme()
 
-            enableEdgeToEdge(
-                statusBarStyle = if (!inDarkTheme) SystemBarStyle.dark(darkColor.hashCode())
-                else SystemBarStyle.light(lightColor.hashCode(), lightColor.hashCode()),
-                navigationBarStyle = if (!inDarkTheme) SystemBarStyle.dark(darkColor.hashCode())
-                else SystemBarStyle.light(lightColor.hashCode(), lightColor.hashCode())
-            )
+            val barStyle = if (!inDarkTheme) SystemBarStyle.dark(darkColor)
+            else SystemBarStyle.light(lightColor, lightColor)
+
+            enableEdgeToEdge(statusBarStyle = barStyle, navigationBarStyle = barStyle)
             App()
         }
     }
 }
 
-@Preview(
-    name = "Tablet Preview",
-    showBackground = true,
-    widthDp =2000,
-    heightDp = 1200
-)
+@Preview
 @Composable
-fun AppTabletPreview() {
-    //EntryScreen().Content()
-    //TimeAndPlace().Content()
-    //ShapeScreen().Content()
-   //ActionShapesScreen(2).Content()
-    //ConcentrationScreen().Content()
-    //NamingScreen().Content()
-    //RepetitionScreen().Content()
-    //UnderstandingScreen().Content()
-    //DragAndDropScreen().Content()
-    //WritingScreen().Content()
-     BuildShapeScreen().Content()
-   // SummaryScreen().Content()
-
+fun AppAndroidPreview() {
+    App()
 }

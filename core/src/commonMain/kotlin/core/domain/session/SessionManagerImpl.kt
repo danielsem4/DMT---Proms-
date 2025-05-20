@@ -1,7 +1,5 @@
 package core.domain.session
 
-import core.data.model.SuccessfulLoginResponse
-
 //class SessionManagerImpl (
 //    private val prefs: SharedPreferences
 //) : SessionManager {
