@@ -18,13 +18,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -59,15 +59,18 @@ class DragAndDropScreen : Screen {
         var targetBoxXRange by remember { mutableStateOf(0f..0f) }
         var targetBoxYRange by remember { mutableStateOf(0f..0f) }
 
-        val circlePositions = remember(screenSize) {
+        val radiusPx = with(density) { 25.dp.toPx() }
+
+        val circleOffsets = remember(screenSize) {
             mutableStateListOf<Offset>().apply {
-                circlePositions.forEach { circle ->
-                    val initialX = circle.first
-                    val initialY = circle.second
-                    add(Offset(initialX, initialY))
+                circlePositions.forEach { (xRatio, yRatio) ->
+                    val x = screenSize.first * xRatio
+                    val y = screenSize.second * yRatio
+                    add(Offset(x, y))
                 }
             }
         }
+
         TabletBaseScreen(
             title = stringResource(Res.string.seventh_question_hitbear_title),
             onNextClick = {
@@ -100,13 +103,12 @@ class DragAndDropScreen : Screen {
                         )
                         targetColor?.let {
                             proceedToNext(
-                                screenSize = screenSize,
                                 circleColors = circleColors,
-                                circlePositions = circlePositions,
+                                circlePositions = circleOffsets,
                                 targetColor = it,
                                 targetBoxXRange = targetBoxXRange,
                                 targetBoxYRange = targetBoxYRange,
-                                density = density,
+                                radiusPx = radiusPx,
                                 seventhQuestionViewModel = seventhQuestionViewModel
                             )
                             viewModel.setSeventhQuestion(
@@ -118,93 +120,76 @@ class DragAndDropScreen : Screen {
                     }
                 ) {
                     Canvas(
-                        modifier = Modifier.fillMaxSize()
-                            .background(color = Color.White, shape = RoundedCornerShape(4))
-                            .onSizeChanged { size ->
+                        modifier = Modifier
+                            .fillMaxSize() .onSizeChanged { size ->
                                 screenSize = size.width.toFloat() to size.height.toFloat()
-
-                                with(density) {
-                                    val targetBoxSize = 150.dp.toPx()
-                                    val targetBoxXStart = (screenSize.first - targetBoxSize) / 2
-                                    val targetBoxYStart = (screenSize.second - targetBoxSize) / 2
-                                    targetBoxXRange =
-                                        targetBoxXStart..(targetBoxXStart + targetBoxSize)
-                                    targetBoxYRange =
-                                        targetBoxYStart..(targetBoxYStart + targetBoxSize)
-                                }
                             }
+                            .background(color = Color.White, shape = RoundedCornerShape(4))
                             .pointerInput(Unit) {
                                 detectDragGestures { change, dragAmount ->
                                     change.consume()
 
-                                    val draggedIndex = circlePositions.indexOfFirst { (x, y) ->
-                                        val center =
-                                            Offset(x * screenSize.first, y * screenSize.second)
-                                        center.distanceTo(change.position) < 50f
+                                    val draggedIndex = circleOffsets.indexOfFirst { offset ->
+                                        offset.distanceTo(change.position) < 50f
                                     }
 
                                     if (draggedIndex != -1) {
-                                        val currentOffset = circlePositions[draggedIndex]
-                                        val newOffset = Offset(
-                                            x = (currentOffset.x * screenSize.first + dragAmount.x) / screenSize.first,
-                                            y = (currentOffset.y * screenSize.second + dragAmount.y) / screenSize.second
-                                        )
-                                        circlePositions[draggedIndex] = newOffset
+                                        val currentOffset = circleOffsets[draggedIndex]
+                                        val newOffset = currentOffset + dragAmount
+                                        circleOffsets[draggedIndex] = newOffset
                                     }
                                 }
                             }
                     ) {
-                        val (screenWidth, screenHeight) = screenSize
+                        val rectSizePx = 150.dp.toPx()
+                        val left = (size.width - rectSizePx) / 2
+                        val top = (size.height - rectSizePx) / 2
+
+                        targetBoxXRange = left..(left + rectSizePx)
+                        targetBoxYRange = top..(top + rectSizePx)
 
                         drawRect(
                             color = Color.Red,
-                            topLeft = Offset(
-                                (screenWidth - 150.dp.toPx()) / 2,
-                                (screenHeight - 150.dp.toPx()) / 2
-                            ),
-                            size = androidx.compose.ui.geometry.Size(150.dp.toPx(), 150.dp.toPx()),
+                            topLeft = Offset(left, top),
+                            size = Size(rectSizePx, rectSizePx),
                             style = Stroke(width = 10.dp.toPx())
                         )
 
-                        circlePositions.forEachIndexed { index, (x, y) ->
+                        circleOffsets.forEachIndexed { index, offset ->
                             drawCircle(
                                 color = circleColors.getOrElse(index) { Color.Gray },
-                                center = Offset(x * screenWidth, y * screenHeight),
-                                radius = 25.dp.toPx()
+                                center = offset,
+                                radius = radiusPx
                             )
                         }
                     }
+
                 }
             })
     }
-}
 
-fun Offset.distanceTo(other: Offset): Float {
+private fun Offset.distanceTo(other: Offset): Float {
     return kotlin.math.sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y))
 }
 
-fun proceedToNext(
-    screenSize: Pair<Float, Float>,
+private fun proceedToNext(
     circleColors: List<Color>,
     circlePositions: List<Offset>,
     targetColor: Color,
     targetBoxXRange: ClosedFloatingPointRange<Float>,
     targetBoxYRange: ClosedFloatingPointRange<Float>,
-    density: Density,
+    radiusPx: Float,
     seventhQuestionViewModel: SeventhQuestionViewModel
 ) {
-    val (screenWidth, screenHeight) = screenSize
 
-    with(density) {
-        val radius = 25.dp.toPx()
-        val diameter = 2 * radius
+    val diameter = 2 * radiusPx
 
         val correctCircleIndex = circleColors.indexOf(targetColor)
         val correctCirclePosition = circlePositions.getOrNull(correctCircleIndex)
 
         val draggablePosition = Offset(
-            x = correctCirclePosition?.x?.times(screenWidth) ?: 0f,
-            y = correctCirclePosition?.y?.times(screenHeight) ?: 0f
+            x = correctCirclePosition?.x ?: 0f,
+            y = correctCirclePosition?.y ?: 0f
         )
 
         val isInside = isObjectInsideTargetArea(
@@ -216,8 +201,8 @@ fun proceedToNext(
             isCircle = true
         )
         seventhQuestionViewModel.seventhQuestionAnswer(isInside)
-    }
-}
+
+}}
 
 
 

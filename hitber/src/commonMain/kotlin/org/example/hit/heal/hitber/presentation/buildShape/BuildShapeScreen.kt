@@ -216,7 +216,6 @@ class BuildShapeScreen : Screen {
                                             )
                                             .size(itemWidthDp, itemHeightDp)
                                     )
-
                                     {
                                         Image(
                                             painter = painterResource(shape.image),
@@ -236,7 +235,6 @@ class BuildShapeScreen : Screen {
 
                                 val currentPosition = itemPositions[index]
 
-
                                 Box(
                                     modifier = Modifier
                                         .offset(
@@ -254,7 +252,6 @@ class BuildShapeScreen : Screen {
                                         }
 
                                 )
-
                                 {
                                     Image(
                                         painter = painterResource(shape.image),
@@ -264,7 +261,6 @@ class BuildShapeScreen : Screen {
                                     )
                                 }
                             }
-
                         }
                     }
                 })
