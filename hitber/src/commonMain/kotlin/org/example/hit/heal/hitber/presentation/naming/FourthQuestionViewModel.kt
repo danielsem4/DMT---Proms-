@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import org.example.hit.heal.hitber.presentation.naming.components.imageCouples
 import org.jetbrains.compose.resources.DrawableResource
 
-class FourthQuestionViewModel(): ViewModel() {
+class FourthQuestionViewModel() : ViewModel() {
 
     var fourthQuestionAnswers: List<String> = emptyList()
 
@@ -31,12 +31,16 @@ class FourthQuestionViewModel(): ViewModel() {
     }
 
 
-    fun fourthQuestionAnswer(answer1: String, answer2: String, correct1: String, correct2: String) {
-        fourthQuestionAnswers = listOf(correct1, answer1, correct2, answer2)
+    fun fourthQuestionAnswer(correct1: String, correct2: String) {
+        fourthQuestionAnswers = listOf(correct1, _answer1.value, correct2, _answer2.value)
     }
 
 
-    fun setRandomCouple() {
+    private fun setRandomCouple() {
         _selectedCouple.value = imageCouples.random()
+    }
+
+    init {
+        setRandomCouple()
     }
 }

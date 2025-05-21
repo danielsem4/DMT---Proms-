@@ -58,15 +58,9 @@ class NamingScreen : Screen {
         val firstImageName = selectedCouple?.let { getImageName(it.first) } ?: ""
         val secondImageName = selectedCouple?.let { getImageName(it.second) } ?: ""
 
-        LaunchedEffect(Unit) {
-            fourthQuestionViewModel.setRandomCouple()
-        }
-
         TabletBaseScreen(title = stringResource(Res.string.fourth_question_hitbear_title),
             onNextClick = {
                 fourthQuestionViewModel.fourthQuestionAnswer(
-                    answer1,
-                    answer2,
                     firstImageName,
                     secondImageName
                 )

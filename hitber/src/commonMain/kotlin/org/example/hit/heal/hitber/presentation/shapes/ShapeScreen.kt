@@ -41,10 +41,6 @@ class ShapeScreen : Screen {
         var showDialog by remember { mutableStateOf(true) }
         val shapeSet by secondQuestionViewModel.selectedSet.collectAsState()
 
-        LaunchedEffect(Unit) {
-            secondQuestionViewModel.setRandomShapeSet()
-        }
-
         TabletBaseScreen(
             title = stringResource(Res.string.second_question_hitbear_title),
             onNextClick = { navigator?.push(ActionShapesScreen(2)) },

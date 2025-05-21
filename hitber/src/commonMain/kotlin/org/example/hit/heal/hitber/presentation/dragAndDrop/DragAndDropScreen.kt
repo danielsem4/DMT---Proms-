@@ -2,7 +2,6 @@ package org.example.hit.heal.hitber.presentation.dragAndDrop
 
 import TabletBaseScreen
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -21,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
@@ -58,7 +55,6 @@ class DragAndDropScreen : Screen {
         var screenSize by remember { mutableStateOf(0f to 0f) }
         val targetColor by seventhQuestionViewModel.targetCircleColor.collectAsState()
         val instructionsResourceId by seventhQuestionViewModel.instructionsResourceId.collectAsState()
-        val isUploadFinished by seventhQuestionViewModel.isUploadFinished.collectAsState()
         val instructions = instructionsResourceId?.let { stringResource(it) }
         var targetBoxXRange by remember { mutableStateOf(0f..0f) }
         var targetBoxYRange by remember { mutableStateOf(0f..0f) }
@@ -72,48 +68,6 @@ class DragAndDropScreen : Screen {
                 }
             }
         }
-
-
-        var imageBitmapScreenShot by remember { mutableStateOf<ImageBitmap?>(null) }
-
-        LaunchedEffect(imageBitmapScreenShot) {
-            imageBitmapScreenShot?.let {
-                viewModel.uploadImage(
-                    bitmap = imageBitmapScreenShot!!,
-                    date = getCurrentFormattedDateTime(),
-                    currentQuestion = 7,
-                    onSuccess = { seventhQuestionViewModel.setIsUploadFinished() },
-                    onFailure = { seventhQuestionViewModel.setIsUploadFinished() }
-                )
-
-                if (isUploadFinished) {
-                    targetColor?.let {
-                        proceedToNext(
-                            screenSize = screenSize,
-                            circleColors = circleColors,
-                            circlePositions = circlePositions,
-                            targetColor = it,
-                            targetBoxXRange = targetBoxXRange,
-                            targetBoxYRange = targetBoxYRange,
-                            density = density,
-                            seventhQuestionViewModel = seventhQuestionViewModel
-                        )
-                        viewModel.setSeventhQuestion(
-                            seventhQuestionViewModel.answer,
-                            getCurrentFormattedDateTime()
-                        )
-
-                    }
-                    navigator?.push(WritingScreen())
-                }
-            }
-        }
-
-        LaunchedEffect(Unit) {
-            seventhQuestionViewModel.setRandomInstructions()
-        }
-
-
         TabletBaseScreen(
             title = stringResource(Res.string.seventh_question_hitbear_title),
             onNextClick = {
@@ -137,10 +91,32 @@ class DragAndDropScreen : Screen {
                 Capturable(
                     captureController = captureController,
                     onCaptured = { imageBitmap ->
-                        imageBitmapScreenShot = imageBitmap
+                        viewModel.uploadImage(
+                            bitmap = imageBitmap,
+                            date = getCurrentFormattedDateTime(),
+                            currentQuestion = 7,
+                            onSuccess = { },
+                            onFailure = { }
+                        )
+                        targetColor?.let {
+                            proceedToNext(
+                                screenSize = screenSize,
+                                circleColors = circleColors,
+                                circlePositions = circlePositions,
+                                targetColor = it,
+                                targetBoxXRange = targetBoxXRange,
+                                targetBoxYRange = targetBoxYRange,
+                                density = density,
+                                seventhQuestionViewModel = seventhQuestionViewModel
+                            )
+                            viewModel.setSeventhQuestion(
+                                seventhQuestionViewModel.answer,
+                                getCurrentFormattedDateTime()
+                            )
+                        }
+                        navigator?.push(WritingScreen())
                     }
                 ) {
-
                     Canvas(
                         modifier = Modifier.fillMaxSize()
                             .background(color = Color.White, shape = RoundedCornerShape(4))
@@ -175,11 +151,8 @@ class DragAndDropScreen : Screen {
                                         )
                                         circlePositions[draggedIndex] = newOffset
                                     }
-
                                 }
                             }
-
-
                     ) {
                         val (screenWidth, screenHeight) = screenSize
 

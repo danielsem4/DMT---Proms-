@@ -71,11 +71,10 @@ class BuildShapeScreen : Screen {
         val density = LocalDensity.current
         val tenthQuestionViewModel: TenthQuestionViewModel = koinViewModel()
         val viewModel: ActivityViewModel = koinViewModel()
-
         val captureController = rememberCaptureController()
+
         var screenSize by remember { mutableStateOf(0f to 0f) }
-        val triangleWidth = 0.4f * screenSize.second
-        val triangleHeight = 0.5f * screenSize.second
+
         val itemPositions = remember(screenSize) {
             mutableStateListOf<Offset>().apply {
                 draggableShapesItem.forEach { shape ->
@@ -86,23 +85,9 @@ class BuildShapeScreen : Screen {
             }
         }
 
-        var imageBitmapScreenShot by remember { mutableStateOf<ImageBitmap?>(null) }
+        val triangleWidth = 0.4f * screenSize.second
+        val triangleHeight = 0.5f * screenSize.second
 
-        LaunchedEffect(imageBitmapScreenShot) {
-            imageBitmapScreenShot?.let {
-                viewModel.uploadImage(
-                    bitmap = imageBitmapScreenShot!!,
-                    date = getCurrentFormattedDateTime(),
-                    currentQuestion = 10,
-                    onSuccess = { /* עשי מה שצריך */ },
-                    onFailure = { error -> println("שגיאה: $error") }
-
-                )
-
-                println("image: $imageBitmapScreenShot")
-
-            }
-        }
 
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
@@ -110,24 +95,7 @@ class BuildShapeScreen : Screen {
                 title = stringResource(Res.string.tenth_question_hitbear_title),
                 onNextClick = {
                     captureController.capture()
-
-                    val results = getCorrectlyPlacedShapes(
-                        itemPositions = itemPositions,
-                        draggableShapes = draggableShapesItem,
-                        staticShapes = staticShapesItem,
-                        containerWidth = triangleWidth,
-                        containerHeight = triangleHeight
-                    )
-
-                    results.forEach { (shape, resultFlag) ->
-                        tenthQuestionViewModel.tenthQuestionAnswer(
-                            shape = shape.id,
-                            grade = resultFlag.toDouble(),
-                        )
-                    }
-                    viewModel.setTenthQuestion(tenthQuestionViewModel.answer, getCurrentFormattedDateTime())
-                    navigator?.push(SummaryScreen())
-                },
+   },
 
                 buttonText = stringResource(Res.string.hitbear_continue),
                 question = 10,
@@ -145,7 +113,35 @@ class BuildShapeScreen : Screen {
                     Capturable(
                         captureController = captureController,
                         onCaptured = { imageBitmap ->
-                            imageBitmapScreenShot = imageBitmap
+                            viewModel.uploadImage(
+                                bitmap = imageBitmap,
+                                date = getCurrentFormattedDateTime(),
+                                currentQuestion = 10,
+                                onSuccess = { },
+                                onFailure = { }
+                            )
+
+
+                            val results = getCorrectlyPlacedShapes(
+                                itemPositions = itemPositions,
+                                draggableShapes = draggableShapesItem,
+                                staticShapes = staticShapesItem,
+                                containerWidth = triangleWidth,
+                                containerHeight = triangleHeight
+                            )
+
+                            results.forEach { (shape, resultFlag) ->
+                                tenthQuestionViewModel.tenthQuestionAnswer(
+                                    shape = shape.id,
+                                    grade = resultFlag.toDouble(),
+                                )
+                            }
+                            viewModel.setTenthQuestion(
+                                tenthQuestionViewModel.answer,
+                                getCurrentFormattedDateTime()
+                            )
+                            navigator?.push(SummaryScreen())
+
                         }
                     ) {
                         Box(

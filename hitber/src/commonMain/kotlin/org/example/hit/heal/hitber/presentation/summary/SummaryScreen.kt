@@ -70,9 +70,7 @@ class SummaryScreen : Screen {
                     Text(stringResource(Res.string.summary_hitbear_instructions1), fontSize = 25.sp)
                     Text(stringResource(Res.string.summary_hitbear_instructions2), fontSize = 25.sp)
                     SuccessAnimation(modifier = Modifier.size(100.dp))
-
                 }
-
             })
     }
 }

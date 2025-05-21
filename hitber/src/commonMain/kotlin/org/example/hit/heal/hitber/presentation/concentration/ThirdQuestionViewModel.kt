@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 
-
 class ThirdQuestionViewModel: ViewModel() {
 
     var thirdQuestionAnswers: MutableList<Pair<Int, Int>> = mutableListOf()
