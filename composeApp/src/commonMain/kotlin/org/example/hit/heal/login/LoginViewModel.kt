@@ -1,31 +1,32 @@
 package org.example.hit.heal.login
 
-import LoginScreen
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.navigator.defaultNavigatorSaver
+import core.data.model.SuccessfulLoginResponse
+import core.data.storage.Storage
 import core.domain.onError
 import core.domain.onSuccess
 import core.domain.use_case.LoginUseCase
 import core.network.responseToResult
+import core.util.PrefKeys
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.example.hit.heal.Home.HomeScreen
 import org.koin.core.component.KoinComponent
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
-import core.data.local.DataStoreRepository
 
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
-//    private val dataStoreRepository: DataStoreRepository
+    private val storage: Storage
 ) : ViewModel(), KoinComponent {
-
+    
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -52,13 +53,10 @@ class LoginViewModel(
                 loginUseCase.execute(email, password)
                     .onSuccess { response ->
                         if (response.status == "Success") {
-
-//                            dataStoreRepository.saveLoginResponse(response)
+                            saveLoginInfo(response)
                             _isLoggedIn.value = true
                             _message.value = "Login successful"
-
                             onLoginSuccess()
-
                         } else {
                             _isLoggedIn.value = false
                             _message.value = response.status ?: "Unknown error"
@@ -75,6 +73,14 @@ class LoginViewModel(
             } finally {
                 _isLoading.value = false
             }
+        }
+    }
+
+    private fun saveLoginInfo(response: SuccessfulLoginResponse) {
+        viewModelScope.launch {
+            storage.writeValue(PrefKeys.clinicId,  response.clinicId)
+            storage.writeValue(PrefKeys.serverUrl, response.serverUrl)
+            storage.writeValue(PrefKeys.token,     response.token)
         }
     }
 

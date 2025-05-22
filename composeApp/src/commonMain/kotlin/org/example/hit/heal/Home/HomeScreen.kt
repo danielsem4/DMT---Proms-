@@ -1,6 +1,5 @@
 package org.example.hit.heal.Home
 
-import LoginScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +13,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.outlined.AutoGraph
 import androidx.compose.material.icons.outlined.Medication
 import androidx.compose.material.icons.outlined.MonitorHeart
@@ -25,24 +23,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 import org.example.hit.heal.core.presentation.BaseScreen
-
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
-import org.example.hit.heal.login.LoginViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
-class HomeScreen(): Screen {
 @Composable
-    override  fun Content()
-    {
-    val navigator = LocalNavigator.currentOrThrow
+fun HomeScreen(
+    onLogout: () -> Unit
+) {
+    val homeViewModel: HomeViewModel = koinViewModel()
+
     BaseScreen(
         title = "Home",
         navigationIcon = {
-            IconButton(onClick = (navigator::pop)) {
+            IconButton(
+                onClick = {
+                    homeViewModel.logout()
+                    onLogout()
+                }) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Logout,
                     contentDescription = "Logout",
@@ -92,5 +89,4 @@ class HomeScreen(): Screen {
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
-}
 }

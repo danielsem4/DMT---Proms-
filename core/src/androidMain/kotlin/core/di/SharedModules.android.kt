@@ -3,12 +3,11 @@ package core.di
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import core.data.storage.createDataStore
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-internal actual val platformModuleCore= module {
-    single<DataStore<Preferences>> {
-        createDataStore(context = get())
-    }
+actual val platformModuleCore= module {
+    single<DataStore<Preferences>> { createDataStore(androidContext()) }
 
 }

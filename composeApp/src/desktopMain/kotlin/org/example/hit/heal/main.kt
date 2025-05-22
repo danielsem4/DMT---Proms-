@@ -2,10 +2,15 @@ package org.example.hit.heal
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import org.example.hit.heal.core.di.initKoin
+import core.data.storage.createDataStore
+import core.data.storage.dataStoreFileName
+import org.example.hit.heal.di.initKoin
 
 fun main() {
     initKoin()
+    val prefs = createDataStore {
+        dataStoreFileName
+    }
     application {
         Window(
             onCloseRequest = ::exitApplication,

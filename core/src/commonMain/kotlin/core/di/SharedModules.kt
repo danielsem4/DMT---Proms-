@@ -1,9 +1,9 @@
 package core.di
 
-import core.data.local.DataStoreRepository
 import core.data.remote.impl.KtorAppRemoteDataSource
+import core.data.storage.DataStoreStorage
+import core.data.storage.Storage
 import core.domain.api.AppApi
-import core.domain.session.SessionManager
 import core.domain.use_case.LoginUseCase
 import core.network.HttpClientFactory
 import org.koin.core.module.Module
@@ -21,6 +21,9 @@ val clientRequestsModule = module{
     single { HttpClientFactory.create(get()) }
     singleOf(::KtorAppRemoteDataSource).bind<AppApi>()
     singleOf(::LoginUseCase)
+
+    single<Storage> { DataStoreStorage(get()) }
+
 
 }
 

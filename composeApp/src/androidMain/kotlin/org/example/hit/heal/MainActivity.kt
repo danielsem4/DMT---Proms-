@@ -7,9 +7,12 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import core.data.storage.createDataStore
 import org.example.hit.heal.di.initKoin
+import org.example.hit.heal.di.platformModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 
@@ -19,6 +22,9 @@ class MainActivity : ComponentActivity() {
         initKoin {
             androidLogger() // provides logger to use in android module
             androidContext(this@MainActivity)
+            modules(
+                platformModule
+            )
         }
         setContent {
 
@@ -36,10 +42,4 @@ class MainActivity : ComponentActivity() {
             App(context = this)
         }
     }
-}
-
-@Preview
-@Composable
-fun AppAndroidPreview() {
-    App()
 }
