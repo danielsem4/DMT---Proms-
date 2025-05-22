@@ -28,6 +28,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.eighth_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.hitbear_start
 import dmt_proms.hitber.generated.resources.third_question_hitbear_finish_task
@@ -37,7 +38,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.concentration.components.RandomNumberScreen
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
+import org.example.hit.heal.hitber.utils.InstructionText
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -47,7 +50,7 @@ class ConcentrationScreen : Screen {
     override fun Content() {
 
         val navigator = LocalNavigator.current
-        val thirdQuestionViewModel : ThirdQuestionViewModel = koinViewModel()
+        val thirdQuestionViewModel: ThirdQuestionViewModel = koinViewModel()
         val viewModel: ActivityViewModel = koinViewModel()
         val buttonVisible by thirdQuestionViewModel.startButtonIsVisible.collectAsState()
         val number by thirdQuestionViewModel.number.collectAsState()
@@ -56,19 +59,22 @@ class ConcentrationScreen : Screen {
 
         TabletBaseScreen(
             title = stringResource(Res.string.third_question_hitbear_title),
-            onNextClick = { if (isFinished){ viewModel.setThirdQuestion(thirdQuestionViewModel.thirdQuestionAnswers, getCurrentFormattedDateTime())
-                navigator?.push(NamingScreen())
-            } },
+            onNextClick = {
+                if (isFinished) {
+                    viewModel.setThirdQuestion(
+                        thirdQuestionViewModel.thirdQuestionAnswers,
+                        getCurrentFormattedDateTime()
+                    )
+                    navigator?.push(NamingScreen())
+                }
+            },
             question = 3,
             buttonText = stringResource(Res.string.hitbear_continue),
             buttonColor = if (isFinished) primaryColor else Color.Gray,
             content = {
-                Text(
+
+                InstructionText(
                     stringResource(Res.string.third_question_hitbear_instructions),
-                    color = Color.Black,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 20.dp)
                 )
 
                 if (buttonVisible) {
@@ -83,7 +89,9 @@ class ConcentrationScreen : Screen {
                         shape = RoundedCornerShape(30)
                     ) {
                         Text(
-                            stringResource(Res.string.hitbear_start), color = Color.White, fontSize = 25.sp,
+                            stringResource(Res.string.hitbear_start),
+                            color = Color.White,
+                            fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
                         )
 
@@ -101,7 +109,9 @@ class ConcentrationScreen : Screen {
                                 .background(color = Color.White)
                         ) {
                             Text(
-                                stringResource(Res.string.third_question_hitbear_finish_task), color = primaryColor, fontSize = 30.sp,
+                                stringResource(Res.string.third_question_hitbear_finish_task),
+                                color = primaryColor,
+                                fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,
                                 modifier = Modifier.align(Alignment.Center)
                             )
@@ -116,31 +126,5 @@ class ConcentrationScreen : Screen {
     }
 }
 
-@Composable
-fun RandomNumberScreen(number: Int, isClickable: Boolean, onNumberClicked: (Int) -> Unit) {
-    var isClicked by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(if (isClicked) primaryColor else Color.White)
-            .clickable(enabled = isClickable) {
-                isClicked = true
-                onNumberClicked(number)
-                coroutineScope.launch {
-                    delay(100)
-                    isClicked = false
-                }
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = number.toString(),
-            fontSize = 50.sp,
-            fontWeight = FontWeight.Bold,
-            color = if (isClicked) Color.White else primaryColor
-        )
-    }
-}
 

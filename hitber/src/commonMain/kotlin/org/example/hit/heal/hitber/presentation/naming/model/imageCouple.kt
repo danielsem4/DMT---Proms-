@@ -1,4 +1,4 @@
-package org.example.hit.heal.hitber.presentation.naming.components
+package org.example.hit.heal.hitber.presentation.naming.model
 
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.ball

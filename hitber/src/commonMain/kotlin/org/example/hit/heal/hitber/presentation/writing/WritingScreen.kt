@@ -51,6 +51,7 @@ import dmt_proms.hitber.generated.resources.close_icon
 import dmt_proms.hitber.generated.resources.eighth_question_hitbear_close_icon
 import dmt_proms.hitber.generated.resources.eighth_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.eighth_question_hitbear_title
+import dmt_proms.hitber.generated.resources.first_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Colors.primaryColor
@@ -59,6 +60,7 @@ import org.example.hit.heal.hitber.presentation.shapes.ActionShapesScreen
 import org.example.hit.heal.hitber.presentation.writing.components.DraggableWordState
 import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
 import org.example.hit.heal.hitber.presentation.writing.components.draggableWordsList
+import org.example.hit.heal.hitber.utils.InstructionText
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -69,7 +71,7 @@ class WritingScreen : Screen {
 
         val navigator = LocalNavigator.current
         val eightQuestionViewModel: EightQuestionViewModel = koinViewModel()
-        val viewModel : ActivityViewModel = koinViewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
         val density = LocalDensity.current
         val slots by eightQuestionViewModel.slotsWords.collectAsState()
         val allFinished by eightQuestionViewModel.allFinished.collectAsState()
@@ -80,22 +82,21 @@ class WritingScreen : Screen {
             TabletBaseScreen(
                 title = stringResource(Res.string.eighth_question_hitbear_title),
                 onNextClick = {
-                    if (allFinished) {eightQuestionViewModel.eighthQuestionAnswer(sentences)
-                        viewModel.setEighthQuestion(eightQuestionViewModel.answer, getCurrentFormattedDateTime())
+                    if (allFinished) {
+                        eightQuestionViewModel.eighthQuestionAnswer(sentences)
+                        viewModel.setEighthQuestion(
+                            eightQuestionViewModel.answer,
+                            getCurrentFormattedDateTime()
+                        )
                         navigator?.push(ActionShapesScreen(9))
 
-                    }},
+                    }
+                },
                 buttonText = stringResource(Res.string.hitbear_continue),
                 question = 8,
                 buttonColor = if (!allFinished) Color.Gray else primaryColor,
                 content = {
-                    Text(
-                        stringResource(Res.string.eighth_question_hitbear_instructions),
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
+                    InstructionText(stringResource(Res.string.eighth_question_hitbear_instructions))
                     Box(
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -103,13 +104,15 @@ class WritingScreen : Screen {
                         WordSlots(slots, eightQuestionViewModel, density)
                     }
                 })
-        }}
+        }
+    }
 
     @Composable
     fun StaticWords(
         words: List<DraggableWordState>,
         eightQuestionViewModel: EightQuestionViewModel,
-        density: Density) {
+        density: Density
+    ) {
         var screenSize by remember { mutableStateOf(IntSize.Zero) }
 
         Box(
@@ -135,7 +138,8 @@ class WritingScreen : Screen {
             }
                 .width(with(density) { widthPx.toDp() })
                 .height(with(density) { heightPx.toDp() })
-                .background(primaryColor, shape = RoundedCornerShape(50.dp))) {
+                .background(primaryColor, shape = RoundedCornerShape(50.dp))
+        ) {
             Text(
                 text = stringResource(wordState.word),
                 color = Color.White,
@@ -166,7 +170,8 @@ class WritingScreen : Screen {
         wordState: DraggableWordState,
         screenSize: IntSize,
         eightQuestionViewModel: EightQuestionViewModel,
-        density: Density) {
+        density: Density
+    ) {
         val wordOffset = remember { Animatable(wordState.offset, Offset.VectorConverter) }
         val coroutineScope = rememberCoroutineScope()
         var wordColor by remember { mutableStateOf(primaryColor) }
@@ -201,7 +206,8 @@ class WritingScreen : Screen {
                             isOnSlot = eightQuestionViewModel.isWordOnSlot(
                                 wordOffset.value,
                                 screenSize,
-                                density)
+                                density
+                            )
                             wordColor =
                                 if (isOnSlot != null) primaryColor.copy(alpha = 0.5f) else primaryColor
 
@@ -236,7 +242,8 @@ class WritingScreen : Screen {
                 modifier = Modifier.align(Alignment.Center)
             )
         }
-    }}
+    }
+}
 
 @Composable
 fun WordSlots(
@@ -252,7 +259,12 @@ fun WordSlots(
             .onSizeChanged { newSize -> screenSize = newSize }.zIndex(-1f)
     ) {
         slots.forEachIndexed { _, slot ->
-            WordSlot(slot, screenSize = screenSize, eightQuestionViewModel = eightQuestionViewModel, density = density)
+            WordSlot(
+                slot,
+                screenSize = screenSize,
+                eightQuestionViewModel = eightQuestionViewModel,
+                density = density
+            )
         }
     }
 }
@@ -261,8 +273,7 @@ fun WordSlots(
 fun WordSlot(
     slot: WordSlotState,
     screenSize: IntSize,
-    eightQuestionViewModel: EightQuestionViewModel
-    , density: Density
+    eightQuestionViewModel: EightQuestionViewModel, density: Density
 ) {
     val activeSlotIndex by eightQuestionViewModel.activeSlotIndex.collectAsState()
     val widthPx = (screenSize.width * 0.1f)

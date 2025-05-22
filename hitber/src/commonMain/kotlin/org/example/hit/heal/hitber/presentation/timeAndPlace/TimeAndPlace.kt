@@ -26,6 +26,7 @@ import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.Questions
+import org.example.hit.heal.hitber.utils.InstructionText
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -35,7 +36,7 @@ class TimeAndPlace : Screen {
     override fun Content() {
         val navigator = LocalNavigator.current
         val firstQuestionViewModel: FirstQuestionViewModel = koinViewModel()
-        val viewModel : ActivityViewModel = koinViewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
         val allAnswersFinished by firstQuestionViewModel.allAnswersFinished.collectAsState()
 
         TabletBaseScreen(
@@ -52,14 +53,12 @@ class TimeAndPlace : Screen {
                 primaryColor
             } else Color.Gray,
             content = {
-                Text(
+                InstructionText(
                     stringResource(Res.string.first_question_hitbear_instructions),
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
+
                 Column(
-                    modifier = Modifier.padding(top = 30.dp)
+                    modifier = Modifier
                         .padding(horizontal = 16.dp).verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally

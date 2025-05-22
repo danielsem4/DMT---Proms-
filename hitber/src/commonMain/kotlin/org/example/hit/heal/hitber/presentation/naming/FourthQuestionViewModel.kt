@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.example.hit.heal.hitber.presentation.naming.components.imageCouples
+import org.example.hit.heal.hitber.presentation.naming.model.imageCouples
 import org.jetbrains.compose.resources.DrawableResource
 
 class FourthQuestionViewModel() : ViewModel() {

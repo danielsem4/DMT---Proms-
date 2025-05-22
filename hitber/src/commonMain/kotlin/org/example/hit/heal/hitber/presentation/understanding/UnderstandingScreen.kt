@@ -1,25 +1,10 @@
 package org.example.hit.heal.hitber.presentation.understanding
 
 import TabletBaseScreen
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -33,51 +18,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.close_fridge
 import dmt_proms.hitber.generated.resources.hitbear_continue
-import dmt_proms.hitber.generated.resources.open_fridge
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_close_fridge
 import dmt_proms.hitber.generated.resources.sixth_question_hitbear_instructions
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_item
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_listen
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_napkin
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_open_fridge
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_table
 import dmt_proms.hitber.generated.resources.sixth_question_hitbear_title
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_volume_icon
-import dmt_proms.hitber.generated.resources.speaker
-import dmt_proms.hitber.generated.resources.table
 import io.github.suwasto.capturablecompose.Capturable
 import io.github.suwasto.capturablecompose.rememberCaptureController
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
+import org.example.hit.heal.hitber.presentation.understanding.components.AudioButton
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayingDialog
-import org.example.hit.heal.hitber.presentation.understanding.components.fridgeItems
-import org.example.hit.heal.hitber.presentation.understanding.components.napkins
-import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
-import org.jetbrains.compose.resources.painterResource
+import org.example.hit.heal.hitber.presentation.understanding.components.TableWithNapkinsBox
+import org.example.hit.heal.hitber.presentation.understanding.components.FridgeWithItemsBox
+import org.example.hit.heal.hitber.presentation.understanding.model.fridgeItems
+import org.example.hit.heal.hitber.presentation.understanding.components.handleScreenshotCapture
+import org.example.hit.heal.hitber.utils.InstructionText
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-
 
 class UnderstandingScreen : Screen {
     @Composable
@@ -141,202 +105,60 @@ class UnderstandingScreen : Screen {
                 buttonColor = primaryColor,
                 content = {
 
-                    Text(
-                        stringResource(Res.string.sixth_question_hitbear_instructions),
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                            .padding(bottom = 30.dp)
-                    )
+                    InstructionText(stringResource(Res.string.sixth_question_hitbear_instructions))
 
-                    Button(
+                    AudioButton(
                         onClick = {
                             sixthQuestionViewModel.setRandomAudio()
                             isAudioClicked = true
-
                         },
-                        colors = ButtonDefaults.buttonColors(primaryColor),
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        shape = RoundedCornerShape(30)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Image(
-                                painter = painterResource(Res.drawable.speaker),
-                                contentDescription = stringResource(Res.string.sixth_question_hitbear_volume_icon),
-                                modifier = Modifier.padding(end = 8.dp)
-                                    .size(30.dp).background(color = Color.Transparent)
-                            )
-                            Text(
-                                stringResource(Res.string.sixth_question_hitbear_listen),
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+
                     Capturable(
                         captureController = captureController,
                         onCaptured = { imageBitmap ->
-                            viewModel.uploadImage(
-                                bitmap = imageBitmap,
-                                date = getCurrentFormattedDateTime(),
-                                currentQuestion = 6,
-                                onSuccess = { },
-                                onFailure = { }
-
+                            handleScreenshotCapture(
+                                imageBitmap = imageBitmap,
+                                viewModel = viewModel,
+                                sixthQuestionViewModel = sixthQuestionViewModel,
+                                napkinResourceId = napkinResourceId,
+                                napkinPosition = napkinPosition,
+                                napkinSize = napkinWidthPx to napkinHeightPx,
+                                itemSize = itemWidthPx to itemHeightPx,
+                                itemLastPositions = itemLastPositions,
+                                onNavigate = { navigator?.push(DragAndDropScreen()) }
                             )
-
-                            if (napkinResourceId != null) {
-                                val isItemInNapkin = itemLastPositions.values.any { itemPosition ->
-                                    isObjectInsideTargetArea(
-                                        targetPosition = napkinPosition,
-                                        draggablePosition = itemPosition,
-                                        targetSize = napkinWidthPx to napkinHeightPx,
-                                        draggableSize = itemWidthPx to itemHeightPx,
-                                        threshold = 40f,
-                                        isCircle = false
-
-                                    )
-                                }
-
-                                if (isItemInNapkin) {
-                                    sixthQuestionViewModel.setNapkinPlacedCorrectly()
-                                }
-                            }
-
-                            viewModel.setSixthQuestion(
-                                sixthQuestionViewModel.isFridgeOpened,
-                                sixthQuestionViewModel.isItemMovedCorrectly,
-                                sixthQuestionViewModel.isNapkinPlacedCorrectly,
-                                getCurrentFormattedDateTime()
-                            )
-
-                            navigator?.push(DragAndDropScreen())
                         }
-                    ) {
+                    )
+                    {
                         Box(
                             modifier = Modifier.fillMaxSize()
                                 .background(color = Color.White, shape = RoundedCornerShape(4))
                         ) {
-                            Box(
-                                modifier = Modifier.wrapContentWidth()
-                                    .fillMaxHeight().align(Alignment.CenterStart)
-                                    .clickable {
-                                        isFridgeOpen = !isFridgeOpen
-                                        if (!sixthQuestionViewModel.isFridgeOpened) {
-                                            sixthQuestionViewModel.setFridgeOpened()
-                                        }
-                                    }
-                            ) {
-                                Image(
-                                    painter = if (isFridgeOpen) painterResource(Res.drawable.open_fridge)
-                                    else painterResource(Res.drawable.close_fridge),
-                                    contentDescription = if (isFridgeOpen) stringResource(Res.string.sixth_question_hitbear_open_fridge) else stringResource(
-                                        Res.string.sixth_question_hitbear_close_fridge
-                                    ),
-                                    modifier = Modifier.fillMaxHeight()
-                                        .wrapContentWidth().onSizeChanged { size ->
-                                            fridgeSize =
-                                                size.width.toFloat() to size.height.toFloat()
-                                        },
-                                    contentScale = ContentScale.FillHeight
-                                )
+                            FridgeWithItemsBox(
+                                isFridgeOpen = isFridgeOpen,
+                                onFridgeToggle = { isFridgeOpen = !isFridgeOpen },
+                                onFridgeSizeChanged = { fridgeSize = it },
+                                itemPositions = itemPositions,
+                                itemWidthPx = itemWidthPx,
+                                itemHeightPx = itemHeightPx,
+                                itemResourceId = itemResourceId,
+                                density = density,
+                                viewModel = sixthQuestionViewModel,
+                                modifier = Modifier.align(Alignment.CenterStart)
+                            )
 
-                                if (isFridgeOpen) {
-                                    fridgeItems.forEachIndexed { index, item ->
-                                        val itemWidthDp = with(density) { itemWidthPx.toDp() }
-                                        val itemHeightDp = with(density) { itemHeightPx.toDp() }
-                                        val currentPosition = itemPositions[index]
-
-                                        Box(
-                                            modifier = Modifier
-                                                .offset(
-                                                    x = with(density) { currentPosition.x.toDp() },
-                                                    y = with(density) { currentPosition.y.toDp() }
-                                                )
-                                                .size(itemWidthDp, itemHeightDp)
-                                                .pointerInput(Unit) {
-                                                    detectDragGestures { change, dragAmount ->
-                                                        change.consume()
-                                                        itemPositions[index] =
-                                                            itemPositions[index] + dragAmount
-
-                                                        if (item.image == itemResourceId && !sixthQuestionViewModel.isItemMovedCorrectly) {
-                                                            sixthQuestionViewModel.setItemMovedCorrectly()
-                                                        }
-                                                    }
-                                                }.onGloballyPositioned { coordinates ->
-                                                    sixthQuestionViewModel.updateItemLastPosition(
-                                                        index,
-                                                        coordinates.positionInRoot()
-                                                    )
-                                                }
-                                                .zIndex(1f)
-                                        ) {
-                                            Image(
-                                                painter = painterResource(item.image),
-                                                contentDescription = stringResource(Res.string.sixth_question_hitbear_item),
-                                                modifier = Modifier.fillMaxSize(),
-                                                contentScale = ContentScale.FillBounds
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-
-                            Box(
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd).fillMaxHeight(0.6f)
-                                    .fillMaxWidth(0.4f)
-
-                                    .zIndex(-1f).onSizeChanged { size ->
-                                        tableSize =
-                                            size.width.toFloat() to size.height.toFloat()
-                                    }
-                            ) {
-                                Image(
-                                    painter = painterResource(Res.drawable.table),
-                                    contentDescription = stringResource(Res.string.sixth_question_hitbear_table),
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentScale = ContentScale.FillBounds
-
-                                )
-
-                                napkins.forEachIndexed { _, item ->
-                                    val xPx = tableSize.first * item.xRatio
-                                    val yPx = tableSize.second * item.yRatio
-
-                                    val napkinWidthDp = with(density) { napkinWidthPx.toDp() }
-                                    val napkinHeightDp = with(density) { napkinHeightPx.toDp() }
-                                    val xDp = with(density) { xPx.toDp() }
-                                    val yDp = with(density) { yPx.toDp() }
-
-                                    Box(
-                                        modifier = Modifier
-                                            .offset(
-                                                x = xDp,
-                                                y = yDp
-                                            ).onGloballyPositioned { coordinates ->
-                                                if (napkinResourceId == item.image) {
-                                                    napkinPosition =
-                                                        coordinates.positionInRoot()
-                                                }
-                                            }
-                                            .size(napkinWidthDp, napkinHeightDp)
-                                            .zIndex(1f)
-                                    ) {
-                                        Image(
-                                            painter = painterResource(item.image),
-                                            contentDescription = stringResource(Res.string.sixth_question_hitbear_napkin),
-                                            modifier = Modifier.fillMaxSize(),
-                                            contentScale = ContentScale.FillBounds
-                                        )
-                                    }
-                                }
-                            }
+                            TableWithNapkinsBox(
+                                tableSize = tableSize,
+                                onTableSizeChanged = { tableSize = it },
+                                napkinWidthPx = napkinWidthPx,
+                                napkinHeightPx = napkinHeightPx,
+                                napkinResourceId = napkinResourceId,
+                                onNapkinPositionCalculated = { napkinPosition = it },
+                                density = density,
+                                modifier = Modifier.align(Alignment.BottomEnd)
+                            )
                         }
                     }
                 }
@@ -345,8 +167,9 @@ class UnderstandingScreen : Screen {
             if (isDialogVisible) {
                 AudioPlayingDialog()
             }
-
         }
     }
 }
+
+
 

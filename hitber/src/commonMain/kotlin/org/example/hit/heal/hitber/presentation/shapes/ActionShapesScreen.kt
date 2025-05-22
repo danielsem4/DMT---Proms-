@@ -12,19 +12,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.getCurrentFormattedDateTime
@@ -41,6 +37,7 @@ import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.example.hit.heal.hitber.presentation.shapes.components.getShapeName
+import org.example.hit.heal.hitber.utils.InstructionText
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -79,14 +76,8 @@ class ActionShapesScreen(private val question: Int) : Screen {
             }
 
         }, question = question, buttonText = stringResource(Res.string.hitbear_continue), buttonColor = primaryColor, content = {
-            Text(
-                stringResource(Res.string.second_question_hitbear_task_instructions),
-                color = Color.Black,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-                    .padding(bottom = 30.dp)
-            )
+
+           InstructionText( stringResource(Res.string.second_question_hitbear_task_instructions))
 
             Box(
                 modifier = Modifier.fillMaxSize()
