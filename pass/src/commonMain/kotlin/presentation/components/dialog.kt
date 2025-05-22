@@ -168,10 +168,10 @@ fun InstructionsDialog(
 fun CheckUnderstandingDialog(
     onYesClick: () -> Unit,
     onNoClick: () -> Unit,
-    timeoutMillis: Long = 15_000L
+
 ) {
     LaunchedEffect(Unit) {
-        delay(timeoutMillis)
+        delay(25_000)
         onYesClick()
     }
 

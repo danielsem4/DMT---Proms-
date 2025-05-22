@@ -151,6 +151,5 @@ class EntryScreen : Screen {
             )
         }
     }
-
 }
 

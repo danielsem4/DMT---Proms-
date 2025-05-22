@@ -1,15 +1,21 @@
 package org.example.hit.heal
 
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import org.example.hit.heal.navigation.NavigationGraph
-import presentation.contatcts.ContactsScreen
 import cafe.adriel.voyager.navigator.Navigator
-import presentation.appsDeviceScreen.AppDeviceScreen
+import org.koin.compose.KoinContext
 import presentation.dialScreen.DialScreen
-import presentation.endScreen.EndScreen
 import presentation.entryScreen.EntryScreen
+import utils.LeftToRightTransition
+
 
 @Composable
 fun App(context: Any? = null) {
     Navigator(EntryScreen())
+
+    MaterialTheme {
+        KoinContext { Navigator(DialScreen()) { navigator ->
+            LeftToRightTransition(navigator = navigator)
+        } }
+    }
 }

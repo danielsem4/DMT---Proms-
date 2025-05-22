@@ -141,6 +141,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
 
     private fun startDialogInstructions() {
+        reminderJob?.cancel()
         getReminderDidNotingText()
 
         if (!isSecondInstructions) {

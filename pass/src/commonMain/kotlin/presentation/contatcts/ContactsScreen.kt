@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
@@ -38,6 +39,8 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.components.ContactData
 import presentation.components.InstructionsDialog
+import presentation.contatcts.components.ContactItem
+import presentation.contatcts.components.SearchTextField
 
 
 class ContactsScreen : Screen {
@@ -58,6 +61,14 @@ class ContactsScreen : Screen {
 
         val correctContact = stringResource(Res.string.hana_cohen)
         val phoneNumber = stringResource(Res.string.phone_number)
+
+        val listState = rememberLazyListState()
+
+        LaunchedEffect(listState.firstVisibleItemScrollOffset) {
+            if (listState.isScrollInProgress) {
+                viewModel.startScrolling()
+            }
+        }
 
         BaseTabletScreen(
             title = stringResource(Res.string.contacts),
@@ -82,18 +93,13 @@ class ContactsScreen : Screen {
                             .padding(horizontal = 16.dp)
                     ) {
                         LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize().pointerInput(Unit) {
-                                    detectDragGestures { _, _ ->
-                                         viewModel.startScrolling()
-                                    }
-                                },
+                            modifier = Modifier.fillMaxSize(),
+                            state = listState,
                             verticalArrangement = Arrangement.spacedBy(25.dp)
                         ) {
                             items(contactsList) { contact ->
                                 ContactItem(contact = contact, viewModel = viewModel)
                             }
-
                         }
 
                         Box(
@@ -147,74 +153,7 @@ class ContactsScreen : Screen {
             }
         }
     }
-
-    @Composable
-    fun ContactItem(contact: ContactData, viewModel: ContactsViewModel) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().height(120.dp)
-                .background(color = Color.White, shape = RoundedCornerShape(10.dp)).clickable {
-                    viewModel.onContactClicked(contact)
-                }
-        ) {
-            Box(
-                modifier = Modifier.padding(20.dp)
-                    .size(80.dp)
-                    .background(color = primaryColor, shape = CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = contact.name.first().toString(),
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 25.sp
-                )
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Text(
-                text = contact.name,
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
 }
 
-@Composable
-fun SearchTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = null,
-        placeholder = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End
-            ) {
-                Image(
-                    painter = painterResource(Res.drawable.search),
-                    contentDescription = stringResource(Res.string.search),
-                    modifier = Modifier.size(18.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(Res.string.search), color = Color.Gray)
-            }
-        },
-        modifier = modifier
-            .width(200.dp)
-            .height(56.dp),
-        shape = RoundedCornerShape(12.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = Color.Black,
-            unfocusedBorderColor = Color.Black,
-            textColor = Color.Black
-        ),
-        singleLine = true
-    )
-}
+
+

@@ -51,6 +51,7 @@ import presentation.components.AppData
 import presentation.components.ContactData
 import presentation.components.InstructionsDialog
 import presentation.components.circleWithPicture
+import presentation.detailedContact.components.ContactDetailsSection
 
 class DetailedContactScreen(private val contact: ContactData) : Screen {
 
@@ -154,89 +155,5 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
             }
         }
     }
-
-    @Composable
-    fun ContactDetailsSection(contact: ContactData, viewModel: DetailedContactViewModel) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(Color.White, shape = RoundedCornerShape(10.dp))
-                .padding(16.dp)
-        ) {
-            Column {
-                Text(
-                    text = stringResource(Res.string.contact_details),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(Res.drawable.black_phone),
-                            modifier = Modifier.size(35.dp)
-                                .clickable { viewModel.onUserClicked(Res.string.phone) },
-                            contentDescription = stringResource(Res.string.phone)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = contact.phoneNumber,
-                            fontSize = 16.sp,
-                            modifier = Modifier.clickable { viewModel.onUserClicked(Res.string.phone) }
-                        )
-                    }
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(Res.drawable.black_messages),
-                            modifier = Modifier.size(35.dp).clickable {
-                                viewModel.onUserClicked(Res.string.messages)
-                            },
-                            contentDescription = stringResource(Res.string.messages)
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Image(
-                            painter = painterResource(Res.drawable.black_video),
-                            modifier = Modifier.size(35.dp)
-                                .clickable { viewModel.onUserClicked(Res.string.video) },
-                            contentDescription = stringResource(Res.string.video)
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.width(8.dp))
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        stringResource(Res.string.phone), fontSize = 16.sp,
-                        color = Color.Black
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = stringResource(Res.string.Whatsapp),
-                            fontSize = 16.sp,
-                        )
-                    }
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                            painter = painterResource(Res.drawable.whatsapp),
-                            modifier = Modifier.size(40.dp)
-                                .clickable { viewModel.onUserClicked(Res.string.Whatsapp) },
-                            contentDescription = stringResource(Res.string.Whatsapp)
-                        )
-                    }
-                }
-            }
-        }
-    }
 }
+

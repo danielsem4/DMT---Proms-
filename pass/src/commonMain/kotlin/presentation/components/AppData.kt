@@ -27,7 +27,6 @@ data class AppData(
     val label: StringResource,
 )
 
-
 @Composable
 fun circleWithPicture(item: AppData, onClick: () -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {

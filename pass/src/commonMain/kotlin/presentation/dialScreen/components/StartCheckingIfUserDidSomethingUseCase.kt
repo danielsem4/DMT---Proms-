@@ -1,4 +1,4 @@
-package presentation.components
+package presentation.dialScreen.components
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

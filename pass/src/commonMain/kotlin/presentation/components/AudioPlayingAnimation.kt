@@ -21,7 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.dialog_speaker
@@ -39,10 +41,12 @@ fun AudioPlayingAnimation(
     strokeWidth: Float = 5f,
     modifier: Modifier = Modifier
 ) {
+    val layoutDirection = LocalLayoutDirection.current
+
     Box(
         modifier = modifier.size(imageSize)
     ) {
-        if (isPlaying) {
+        if (layoutDirection == LayoutDirection.Rtl && isPlaying) {
             val transition = rememberInfiniteTransition()
             val offsetY by transition.animateFloat(
                 initialValue = 0f,
@@ -85,8 +89,8 @@ fun AudioPlayingAnimation(
 
                     drawArc(
                         color = primaryColor.copy(alpha = firstCircleAlpha),
-                        startAngle = 90f,
-                        sweepAngle = -180f,
+                        startAngle = 270f,
+                        sweepAngle = 180f,
                         useCenter = false,
                         topLeft = Offset(
                             centerX - (size1 / 2),
@@ -98,8 +102,8 @@ fun AudioPlayingAnimation(
 
                     drawArc(
                         color = primaryColor.copy(alpha = secondCircleAlpha),
-                        startAngle = 90f,
-                        sweepAngle = -180f,
+                        startAngle = 270f,
+                        sweepAngle = 180f,
                         useCenter = false,
                         topLeft = Offset(
                             centerX - (size2 / 2),
@@ -111,8 +115,8 @@ fun AudioPlayingAnimation(
 
                     drawArc(
                         color = primaryColor.copy(alpha = thirdCircleAlpha),
-                        startAngle = 90f,
-                        sweepAngle = -180f,
+                        startAngle = 270f,
+                        sweepAngle = 180f,
                         useCenter = false,
                         topLeft = Offset(
                             centerX - (size3 / 2),

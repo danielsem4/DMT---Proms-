@@ -110,8 +110,6 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
             nextQuestion()
             return
         }
-
-       // startCheckingIfUserDidSomething()
         wrongContact++
         getReminderText()
     }

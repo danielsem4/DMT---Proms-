@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import presentation.components.CountdownDialogHandler
 import presentation.components.PlayAudioUseCase
-import presentation.components.StartCheckingIfUserDidSomethingUseCase
+import presentation.dialScreen.components.StartCheckingIfUserDidSomethingUseCase
 import presentation.endScreen.EndScreen
 
 class DialScreenViewModel(

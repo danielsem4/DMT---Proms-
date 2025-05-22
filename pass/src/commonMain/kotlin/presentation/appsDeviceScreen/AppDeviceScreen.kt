@@ -84,7 +84,10 @@ class AppDeviceScreen : Screen {
 
         if (showUnderstandingDialog) {
             CheckUnderstandingDialog(
-                onYesClick = { viewModel.onUnderstandingConfirmed() },
+                onYesClick = {
+                    viewModel.onUnderstandingConfirmed()
+                    viewModel.startCheckingIfUserDidSomething()
+                },
                 onNoClick = { viewModel.onUnderstandingDenied() }
             )
         }
