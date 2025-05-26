@@ -14,7 +14,7 @@ fun App(context: Any? = null) {
     Navigator(EntryScreen())
 
     MaterialTheme {
-        KoinContext { Navigator(DialScreen()) { navigator ->
+        KoinContext { Navigator(EntryScreen()) { navigator ->
             LeftToRightTransition(navigator = navigator)
         } }
     }

@@ -134,7 +134,6 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
     val isPlaying = playAudioUseCase.isPlaying
 
 
-
     init {
         startDialogInstructions()
     }
@@ -205,8 +204,10 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
         wrongApp++
 
         _nextScreen.value = if (wrongApp == 3) {
+            reminderJob?.cancel()
             ContactsScreen()
         } else {
+            reminderJob?.cancel()
             WrongAppScreen(app)
         }
     }
