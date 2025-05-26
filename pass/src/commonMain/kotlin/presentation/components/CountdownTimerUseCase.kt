@@ -4,26 +4,29 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.StateFlow
 
 class CountdownTimerUseCase(private val scope: CoroutineScope) {
 
     private var dialogJob: Job? = null
 
     fun execute(
-        countdownStart: Int,
+        isPlaying: StateFlow<Boolean>,
         onCountdownTick: (Int) -> Unit,
         onCountdownFinished: () -> Unit
     ) {
         dialogJob?.cancel()
 
         dialogJob = scope.launch {
-            val audioDuration = 10 - countdownStart
-            delay(audioDuration * 1000L)
+            var remainingTime = 9
 
-            var remainingTime = countdownStart
+            delay(1000L)
 
             while (remainingTime >= 0) {
-                onCountdownTick(remainingTime)
+                if (!isPlaying.value) {
+                    onCountdownTick(remainingTime)
+                }
+
                 delay(1000L)
                 remainingTime--
             }
@@ -36,3 +39,4 @@ class CountdownTimerUseCase(private val scope: CoroutineScope) {
         dialogJob?.cancel()
     }
 }
+

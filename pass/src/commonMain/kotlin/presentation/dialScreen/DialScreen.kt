@@ -28,25 +28,19 @@ import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.delete_number
 import dmt_proms.pass.generated.resources.dentist_pass
 import dmt_proms.pass.generated.resources.dentist_phone_number
-import dmt_proms.pass.generated.resources.dial
 import dmt_proms.pass.generated.resources.dial_keys
 import dmt_proms.pass.generated.resources.dialer
-import dmt_proms.pass.generated.resources.phone
-import dmt_proms.pass.generated.resources.white_phone
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.components.AudioPlayer
-import presentation.components.AudioPlayerMp3
 import presentation.components.CheckUnderstandingDialog
 import presentation.components.InstructionsDialog
 import presentation.dialScreen.components.DialDialog
 
 class DialScreen : Screen {
 
-    @OptIn(ExperimentalResourceApi::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current

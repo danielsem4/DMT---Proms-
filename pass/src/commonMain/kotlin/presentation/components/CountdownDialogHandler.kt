@@ -20,21 +20,20 @@ class CountdownDialogHandler(
     private val _isCountdownActive = MutableStateFlow(false)
     val isCountdownActive: StateFlow<Boolean> = _isCountdownActive
 
-    fun showCountdownDialog(duration: Int, audioText: Pair<StringResource, StringResource>) {
+    fun showCountdownDialog( isPlayingFlow: StateFlow<Boolean>, audioText: Pair<StringResource, StringResource>) {
         _dialogAudioText.value = audioText
         _showDialog.value = true
         _isCountdownActive.value = false
-        _countdown.value = duration
 
         countdownTimerUseCase.execute(
-            countdownStart = duration,
             onCountdownTick = { remainingTime ->
                 _countdown.value = remainingTime
                 _isCountdownActive.value = true
             },
             onCountdownFinished = {
                 _showDialog.value = false
-            }
+            },
+            isPlaying = isPlayingFlow
         )
     }
 

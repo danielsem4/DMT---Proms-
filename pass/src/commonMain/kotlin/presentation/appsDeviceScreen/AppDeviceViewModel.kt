@@ -215,23 +215,23 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
     private fun getReminderDidNotingText() {
         when (didNothing++) {
             0 -> countdownDialogHandler.showCountdownDialog(
-                duration = 2,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.call_to_hana_cohen_instruction_pass to Res.string.call_hana_cohen_pass
             )
 
             1 -> countdownDialogHandler.showCountdownDialog(
-                duration = 5,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
-                duration = 3,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.apps_page_second_assist to Res.string.search_contacts_list_in_the_phone_pass
             )
 
             3 -> {
                 countdownDialogHandler.showCountdownDialog(
-                    duration = 2,
+                    isPlayingFlow = isPlaying,
                     audioText = Res.string.here_persons_number to Res.string.now_the_contacts_list_will_be_opened_pass
                 )
                 reminderJob?.cancel()

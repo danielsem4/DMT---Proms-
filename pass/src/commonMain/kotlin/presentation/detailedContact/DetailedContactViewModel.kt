@@ -132,12 +132,12 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
         val count = didNothing + wrongClick
         return when (count) {
             1 -> countdownDialogHandler.showCountdownDialog(
-                duration = 5,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
-                duration = 3,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.contact_page_first_assist to Res.string.press_the_number_or_the_dial_button_pass
             )
 

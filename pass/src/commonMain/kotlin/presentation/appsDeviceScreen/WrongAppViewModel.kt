@@ -66,10 +66,10 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
         val didNothingCount = if (isSecondTimeWrongApp) ++didNothing else ++didNothingSecondTime
 
         when (didNothingCount) {
-            1 -> countdownDialogHandler.showCountdownDialog(5, Res.string.what_you_need_to_do  to Res.string.what_do_you_need_to_do_pass)
-            2 -> countdownDialogHandler.showCountdownDialog(1, Res.string.wrong_app_second_assist to Res.string.return_button_on_top_left_pass)
+            1 -> countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, Res.string.what_you_need_to_do  to Res.string.what_do_you_need_to_do_pass)
+            2 -> countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, Res.string.wrong_app_second_assist to Res.string.return_button_on_top_left_pass)
             3 -> {
-                countdownDialogHandler.showCountdownDialog(5, Res.string.wrong_app_thired_assist to Res.string.going_back_to_apss_screen_pass)
+                countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, Res.string.wrong_app_thired_assist to Res.string.going_back_to_apss_screen_pass)
                 _backToApps.value = true
             }
         }

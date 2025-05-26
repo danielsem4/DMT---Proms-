@@ -132,7 +132,7 @@ class DialScreenViewModel(
 
         stopChecks()
         countdownDialogHandler.showCountdownDialog(
-            duration = 5,
+            isPlayingFlow = isPlaying,
             audioText = Res.string.dialer_opened to Res.string.dialer_opened_pass
         )
     }
@@ -154,13 +154,13 @@ class DialScreenViewModel(
     private fun handleFirstPass() {
         when (++wrongNumberFirstTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
-                duration = 1,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.dialer_page_wrong_action_one to Res.string.wrong_number_dialed_please_try_again_pass
             )
 
             2 -> {
                 countdownDialogHandler.showCountdownDialog(
-                    duration = 3,
+                    isPlayingFlow = isPlaying,
                     audioText = Res.string.dialer_page_dentis_number_appeared to Res.string.dentist_number_showen_call_him_pass
                 )
                 _currentMissionPass.value = 3
@@ -172,7 +172,7 @@ class DialScreenViewModel(
     private fun handleSecondPass() {
         when (++wrongNumberSecondTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
-                duration = 1,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.dialer_page_wrong_action_one to Res.string.wrong_number_dialed_please_try_again_pass
             )
 
@@ -259,23 +259,23 @@ class DialScreenViewModel(
     private fun getReminderDidNotingTextFirstTime() {
         when (didNothingFirstTime++) {
             0 -> countdownDialogHandler.showCountdownDialog(
-                duration = 0,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.call_to_dentist to Res.string.second_part_of_test_instructions_pass
             )
 
             1 -> countdownDialogHandler.showCountdownDialog(
-                duration = 5,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
-                duration = 3,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.dialer_page_thired_assist to Res.string.press_the_dial_button_that_showen_down_pass
             )
 
             3 -> {
                 countdownDialogHandler.showCountdownDialog(
-                    duration = 5,
+                    isPlayingFlow = isPlaying,
                     audioText = Res.string.dialer_opened to Res.string.dialer_opened_pass
                 )
                 stopChecks()
@@ -287,18 +287,18 @@ class DialScreenViewModel(
     private fun getReminderDidNotingTextSecondTime() {
         when (++didNothingSecondTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
-                duration = 5,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
-                duration = 3,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.dialer_page_wrong_action_one to Res.string.wrong_number_dialed_please_try_again_pass
             )
 
             3 -> {
                 countdownDialogHandler.showCountdownDialog(
-                    duration = 5,
+                    isPlayingFlow = isPlaying,
                     audioText = Res.string.dialer_page_dentis_number_appeared to Res.string.dentist_number_showen_call_him_pass
                 )
                 stopChecks()
@@ -310,12 +310,12 @@ class DialScreenViewModel(
     private fun getReminderDidNotingTextThirdTime() {
         when (++didNothingThirdTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
-                duration = 5,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
-                duration = 3,
+                isPlayingFlow = isPlaying,
                 audioText = Res.string.diale_to_dentist to Res.string.call_to_detist_pass
             )
 

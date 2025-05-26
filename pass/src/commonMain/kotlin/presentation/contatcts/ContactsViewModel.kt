@@ -118,18 +118,18 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         val count = didNothing + wrongContact
         return when (count) {
             1 -> countdownDialogHandler.showCountdownDialog(
-                4,
+                isPlayingFlow = isPlaying,
                 Res.string.contacts_page_first_assist to Res.string.witch_contact_are_we_looking_for_pass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
-                4,
+                isPlayingFlow = isPlaying,
                 Res.string.contacts_page_second_assist to Res.string.search_for_hana_choen_in_contacts_pass
             )
 
             3 -> {
                 countdownDialogHandler.showCountdownDialog(
-                    5, Res.string.contacts_page_thired_assist to Res.string.search_at_latter_h_pass
+                    isPlayingFlow = isPlaying, Res.string.contacts_page_thired_assist to Res.string.search_at_latter_h_pass
                 )
             }
 
