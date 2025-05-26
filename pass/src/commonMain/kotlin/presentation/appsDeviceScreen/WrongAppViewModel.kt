@@ -44,7 +44,7 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
         reminderJob = viewModelScope.launch {
             var elapsedTime = 0
 
-            while (isActive && didNothing < 3 && didNothingSecondTime < 3) {
+            while (isActive && didNothing < 3 || didNothingSecondTime < 3) {
 
                 delay(1_000)
 
@@ -63,7 +63,7 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
     }
 
     private fun getReminderDidNothingText() {
-        val didNothingCount = if (isSecondTimeWrongApp) ++didNothing else ++didNothingSecondTime
+        val didNothingCount = if (isSecondTimeWrongApp) ++didNothingSecondTime else ++didNothing
 
         when (didNothingCount) {
             1 -> countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, Res.string.what_you_need_to_do  to Res.string.what_do_you_need_to_do_pass)
@@ -71,6 +71,7 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
             3 -> {
                 countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, Res.string.wrong_app_thired_assist to Res.string.going_back_to_apss_screen_pass)
                 _backToApps.value = true
+                isSecondTimeWrongApp = true
             }
         }
     }
