@@ -1,7 +1,9 @@
 package core.di
 
+import core.data.local.DataStoreRepository
 import core.data.remote.impl.KtorAppRemoteDataSource
 import core.domain.api.AppApi
+import core.domain.session.SessionManager
 import core.domain.use_case.LoginUseCase
 import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
