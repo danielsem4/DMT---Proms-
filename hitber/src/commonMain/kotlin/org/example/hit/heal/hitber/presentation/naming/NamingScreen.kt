@@ -32,6 +32,8 @@ import dmt_proms.hitber.generated.resources.hitbear_continue
 import getImageName
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.naming.components.NamingImages
+import org.example.hit.heal.hitber.presentation.naming.components.NamingTextFields
 import org.example.hit.heal.hitber.presentation.repetition.RepetitionScreen
 import org.example.hit.heal.hitber.utils.InstructionText
 import org.jetbrains.compose.resources.painterResource
@@ -68,67 +70,9 @@ class NamingScreen : Screen {
             buttonText = stringResource(Res.string.hitbear_continue),
             buttonColor = primaryColor,
             content = {
-                    InstructionText( stringResource(Res.string.fourth_question_hitbear_instructions))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp)
-                ) {
-                    TextField(
-                        value = answer1,
-                        onValueChange = { fourthQuestionViewModel.onAnswer1Changed(it)  },
-                        label = {
-                            Text(
-                                stringResource(Res.string.fourth_question_hitbear_what_in_the_pic),
-                                color = Color.Black
-                            )
-                        },
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = primaryColor,
-                            unfocusedBorderColor = primaryColor
-                        ),
-                        shape = RoundedCornerShape(0.dp)
-                    )
-
-                    TextField(
-                        value = answer2,
-                        onValueChange = { fourthQuestionViewModel.onAnswer2Changed(it) },
-                        label = {
-                            Text(
-                                stringResource(Res.string.fourth_question_hitbear_what_in_the_pic),
-                                color = Color.Black
-                            )
-                        },
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = primaryColor,
-                            unfocusedBorderColor = primaryColor
-                        ),
-                        shape = RoundedCornerShape(0.dp)
-                    )
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    selectedCouple?.let { (firstImage, secondImage) ->
-                        Image(
-                            painter = painterResource(firstImage),
-                            contentDescription = stringResource(Res.string.fourth_question_hitbear_pic1),
-                            modifier = Modifier.weight(1f).fillMaxHeight().padding(20.dp)
-                                .background(color = Color.White)
-                        )
-                        Image(
-                            painter = painterResource(secondImage),
-                            contentDescription = stringResource(Res.string.fourth_question_hitbear_pic2),
-                            modifier = Modifier.weight(1f).fillMaxHeight().padding(20.dp)
-                                .background(color = Color.White)
-                        )
-                    }
-
-                }
+                InstructionText(stringResource(Res.string.fourth_question_hitbear_instructions))
+                NamingTextFields(answer1, answer2, fourthQuestionViewModel)
+                NamingImages(selectedCouple)
             })
     }
 }
