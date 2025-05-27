@@ -6,14 +6,25 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import dmt_proms.hitber.generated.resources.Res
+import dmt_proms.hitber.generated.resources.eighth_question_answer_hitbear_version_1
+import dmt_proms.hitber.generated.resources.eighth_question_answer_hitbear_version_2
+import dmt_proms.hitber.generated.resources.eighth_question_answer_hitbear_version_3
+import dmt_proms.hitber.generated.resources.eighth_question_answer_hitbear_version_4
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.example.hit.heal.core.presentation.Colors.backgroundColor
-import org.example.hit.heal.hitber.presentation.writing.components.WordSlotState
-import org.example.hit.heal.hitber.presentation.writing.components.sentencesResourceId
-import org.example.hit.heal.hitber.presentation.writing.components.slotsList
+import org.example.hit.heal.hitber.presentation.writing.model.WordSlotState
+import org.example.hit.heal.hitber.presentation.writing.model.slotsList
 
 class EightQuestionViewModel: ViewModel() {
+
+    private val sentencesResourceId = listOf(
+        Res.string.eighth_question_answer_hitbear_version_1,
+        Res.string.eighth_question_answer_hitbear_version_2,
+        Res.string.eighth_question_answer_hitbear_version_3,
+        Res.string.eighth_question_answer_hitbear_version_4)
+
     private val _slotsWords = MutableStateFlow(slotsList)
     val slotsWords: StateFlow<List<WordSlotState>> = _slotsWords
 

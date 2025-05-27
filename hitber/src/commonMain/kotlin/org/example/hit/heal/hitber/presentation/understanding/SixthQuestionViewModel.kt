@@ -1,14 +1,11 @@
 package org.example.hit.heal.hitber.presentation.understanding
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
-import core.utils.getCurrentFormattedDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.example.hit.heal.hitber.ActivityViewModel
-import org.example.hit.heal.hitber.presentation.understanding.components.audioList
+import org.example.hit.heal.hitber.presentation.understanding.model.audioList
 import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource

@@ -1,14 +1,15 @@
 package org.example.hit.heal.hitber.data.model
 import core.data.model.MeasureObjectString
+import core.utils.getCurrentFormattedDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class CogData(
-    @SerialName("measurement") var measurement: Int = 20,
-    @SerialName("patient_id") var patientId: Int = 1,
-    @SerialName("date") var date: String = "2030-12-12 12:12:12.6",
-    @SerialName("clinicId") var clinicId: Int = 0,
+    @SerialName("measurement") var measurement: Int = 19,
+    @SerialName("patient_id") var patientId: Int = 168,
+    @SerialName("date") var date: String = getCurrentFormattedDateTime(),
+    @SerialName("clinicId") var clinicId: Int = 8,
     @SerialName("firstQuestion") var firstQuestion: FirstQuestion = FirstQuestion(),
     @SerialName("secondQuestion") var secondQuestion: ArrayList<SecondQuestionItem> = arrayListOf(),
     @SerialName("thirdQuestion") var thirdQuestion: ArrayList<ThirdQuestionItem> = arrayListOf(),

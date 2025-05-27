@@ -1,4 +1,4 @@
-package org.example.hit.heal.hitber.presentation.understanding.components
+package org.example.hit.heal.hitber.presentation.understanding.model
 
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.blue_napkin

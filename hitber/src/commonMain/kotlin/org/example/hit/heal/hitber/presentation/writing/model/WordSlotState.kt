@@ -1,4 +1,4 @@
-package org.example.hit.heal.hitber.presentation.writing.components
+package org.example.hit.heal.hitber.presentation.writing.model
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color

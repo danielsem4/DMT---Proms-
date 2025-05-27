@@ -22,7 +22,7 @@ import org.koin.compose.KoinContext
 fun App() {
 
     MaterialTheme {
-        KoinContext { Navigator(UnderstandingScreen()) { navigator ->
+        KoinContext { Navigator(EntryScreen()) { navigator ->
             BottomToTopTransition(navigator = navigator)
         } }
     }
