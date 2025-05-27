@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
 import org.example.hit.heal.oriantation.feature.presentation.DrawScreen
 import org.example.hit.heal.oriantation.feature.presentation.FeedbackScreen
+import org.example.hit.heal.oriantation.feature.presentation.ShapeResizeScreen
 import org.example.hit.heal.oriantation.feature.presentation.ShapesDragScreen
 
 
@@ -12,7 +13,7 @@ import org.example.hit.heal.oriantation.feature.presentation.ShapesDragScreen
 fun App(context: Any? = null) {
 //    NavigationGraph()
     MaterialTheme {
-       Navigator(FeedbackScreen())
+       Navigator(ShapeResizeScreen())
 
 
     }
