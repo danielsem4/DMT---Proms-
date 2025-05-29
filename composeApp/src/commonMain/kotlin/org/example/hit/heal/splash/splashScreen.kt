@@ -35,26 +35,22 @@ class SplashScreen(): Screen {
         val navigator = LocalNavigator.currentOrThrow
         val splashViewModel = koinViewModel<SplashViewModel>()
         val isLoggedIn by splashViewModel.isLoggedIn.collectAsState()
-    // Use safe non-suspend methods only
+        val isCheckingLogin by splashViewModel.isCheckingLogin.collectAsState()
 
 
     // Use a safe approach to image loading
     val defaultImage = painterResource(Res.drawable.med_presc)
 
-    LaunchedEffect(isLoggedIn) {
-        try {
-            delay(2000)
-            if (isLoggedIn) {
-                navigator.replace(HomeScreen())
-            } else {
-                navigator.replace(LoginScreen())
+        LaunchedEffect(isCheckingLogin) {
+            if (!isCheckingLogin) {
+                delay(2000)
+                if (isLoggedIn) {
+                    navigator.replace(HomeScreen())
+                } else {
+                    navigator.replace(LoginScreen())
+                }
             }
-        } catch (e: Exception) {
-            println("Navigation error: ${e.message}")
-            // Fallback navigation
-            navigator.replace(LoginScreen())
         }
-    }
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

@@ -61,9 +61,10 @@ kotlin {
             implementation(libs.navigation.compose)
 
             implementation(libs.coil.compose)
-            implementation(libs.datastore.preferences)
             implementation(libs.atomicfu)
 
+            implementation(libs.datastore.preferences)
+            implementation(libs.datastore)
             // DateTime
             implementation(libs.kotlinx.datetime)
         }

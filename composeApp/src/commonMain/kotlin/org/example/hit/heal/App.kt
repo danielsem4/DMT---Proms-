@@ -7,9 +7,8 @@ import cafe.adriel.voyager.navigator.Navigator
 import org.example.hit.heal.splash.SplashScreen
 
 @Composable
-fun App(context: Any? = null) {
-//    NavigationGraph()
+fun App() {
     MaterialTheme {
-        Navigator(LoginScreen())
+        Navigator(SplashScreen())
     }
 }

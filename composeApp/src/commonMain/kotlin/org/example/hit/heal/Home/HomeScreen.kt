@@ -35,15 +35,18 @@ import org.example.hit.heal.login.LoginViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 class HomeScreen(): Screen {
-
 @Composable
-    override  fun Content()
-    {
+    override  fun Content() {
+
+    val homeViewModel: HomeViewModel = koinViewModel()
     val navigator = LocalNavigator.currentOrThrow
     BaseScreen(
         title = "Home",
         navigationIcon = {
-            IconButton(onClick = (navigator::pop)) {
+            IconButton(onClick = {
+                homeViewModel.logout()
+                navigator.replace(LoginScreen())
+            }) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Logout,
                     contentDescription = "Logout",

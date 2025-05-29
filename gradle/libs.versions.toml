@@ -60,6 +60,7 @@ androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtim
 compose-ui-graphics = { module = "org.jetbrains.compose.ui:ui-graphics", version.ref = "compose-multiplatform" }
 
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
 # Koin libraries
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }

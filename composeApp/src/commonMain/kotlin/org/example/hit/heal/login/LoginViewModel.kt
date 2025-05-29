@@ -18,11 +18,14 @@ import org.koin.core.component.KoinComponent
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.local.DataStoreRepository
+import core.data.model.SuccessfulLoginResponse
+import core.data.storage.Storage
+import core.util.PrefKeys
 
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
-//    private val dataStoreRepository: DataStoreRepository
+    private val storage: Storage
 ) : ViewModel(), KoinComponent {
 
     private val _isLoading = MutableStateFlow(false)
@@ -52,7 +55,7 @@ class LoginViewModel(
                     .onSuccess { response ->
                         if (response.status == "Success") {
 
-//                            dataStoreRepository.saveLoginResponse(response)
+                            saveLoginInfo(response)
                             _isLoggedIn.value = true
                             _message.value = "Login successful"
 
@@ -79,6 +82,15 @@ class LoginViewModel(
 
     fun setMessage(message: String?) {
         _message.value = message
+    }
+
+    private fun saveLoginInfo(response: SuccessfulLoginResponse) {
+
+        viewModelScope.launch {
+            storage.writeValue(PrefKeys.clinicId, response.clinicId)
+            storage.writeValue(PrefKeys.serverUrl, response.serverUrl)
+            storage.writeValue(PrefKeys.token, response.token)
+        }
     }
 
     private fun isValidEmail(email: String): Boolean =

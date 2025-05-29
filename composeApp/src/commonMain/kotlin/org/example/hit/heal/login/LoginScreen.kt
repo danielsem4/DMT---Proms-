@@ -39,102 +39,102 @@ import org.example.hit.heal.login.LoginViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
-class LoginScreen(): Screen {
-@Composable
-override fun Content() {
-    val navigator = LocalNavigator.currentOrThrow
-    val loginViewModel: LoginViewModel = koinViewModel()
+class LoginScreen() : Screen {
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        val loginViewModel: LoginViewModel = koinViewModel()
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    val snackbarHostState = remember { SnackbarHostState() }
-    val isLoading by loginViewModel.isLoading.collectAsState()
-    val message by loginViewModel.message.collectAsState()
+        var email by remember { mutableStateOf("") }
+        var password by remember { mutableStateOf("") }
+        val snackbarHostState = remember { SnackbarHostState() }
+        val isLoading by loginViewModel.isLoading.collectAsState()
+        val message by loginViewModel.message.collectAsState()
 
-    // Show message if any
-    LaunchedEffect(message) {
-        message?.let {
-            snackbarHostState.showSnackbar(message = it)
-            loginViewModel.clearMessage()
-        }
-    }
-
-    BaseScreen(title = "Login") {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            Spacer(modifier = Modifier.height(30.dp))
-
-            // Login Image
-            Image(
-                painter = painterResource(Res.drawable.med_presc),
-                contentDescription = "Login Illustration",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .size(120.dp)
-                    .padding(bottom = 20.dp)
-            )
-
-            EmailTextField(
-                email = email,
-                onValueChange = { email = it }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            PasswordTextField(
-                password = password,
-                onValueChange = { password = it }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Show message in a Text component
-            message?.let { msg ->
-                Text(
-                    text = msg,
-                    color = if (loginViewModel.isLoggedIn.value) Color(0xFF4CAF50) else Color(
-                        0xFFE53935
-                    ),
-                    modifier = Modifier.padding(8.dp)
-                )
+        // Show message if any
+        LaunchedEffect(message) {
+            message?.let {
+                snackbarHostState.showSnackbar(message = it)
+                loginViewModel.clearMessage()
             }
+        }
 
-            Spacer(modifier = Modifier.weight(1f))
-
-            // Login Button
-            Button(
-                onClick = {
-                    if (email.isNotEmpty() && password.isNotEmpty()) {
-                        loginViewModel.login(email, password) {
-                            navigator.push(HomeScreen())
-                        }
-                    } else {
-                        loginViewModel.setMessage("Please fill in all fields")
-                    }
-                },
+        BaseScreen(title = "Login") {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .height(50.dp),
-                shape = RoundedCornerShape(33.dp),
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF6FCF97)),
-                enabled = !isLoading
+                    .fillMaxSize()
+                    .padding(16.dp)
             ) {
-                if (isLoading) {
-                    CircularProgressIndicator(
-                        color = Color.White,
-                        modifier = Modifier.size(24.dp)
-                    )
-                } else {
-                    Text("Login", fontSize = 20.sp, color = Color.White)
-                }
-            }
+                Spacer(modifier = Modifier.height(30.dp))
 
-            SnackbarHost(hostState = snackbarHostState)
+                // Login Image
+                Image(
+                    painter = painterResource(Res.drawable.med_presc),
+                    contentDescription = "Login Illustration",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .size(120.dp)
+                        .padding(bottom = 20.dp)
+                )
+
+                EmailTextField(
+                    email = email,
+                    onValueChange = { email = it }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                PasswordTextField(
+                    password = password,
+                    onValueChange = { password = it }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Show message in a Text component
+                message?.let { msg ->
+                    Text(
+                        text = msg,
+                        color = if (loginViewModel.isLoggedIn.value) Color(0xFF4CAF50) else Color(
+                            0xFFE53935
+                        ),
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                // Login Button
+                Button(
+                    onClick = {
+                        if (email.isNotEmpty() && password.isNotEmpty()) {
+                            loginViewModel.login(email, password) {
+                                navigator.push(HomeScreen())
+                            }
+                        } else {
+                            loginViewModel.setMessage("Please fill in all fields")
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(50.dp),
+                    shape = RoundedCornerShape(33.dp),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF6FCF97)),
+                    enabled = !isLoading
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            color = Color.White,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    } else {
+                        Text("Login", fontSize = 20.sp, color = Color.White)
+                    }
+                }
+
+                SnackbarHost(hostState = snackbarHostState)
+            }
         }
     }
-}
 }

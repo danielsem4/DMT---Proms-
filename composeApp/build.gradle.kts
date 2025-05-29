@@ -73,6 +73,9 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
 
+            implementation(libs.datastore.preferences)
+            implementation(libs.datastore)
+
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.tabNavigator)
             implementation(libs.voyager.transitions)
