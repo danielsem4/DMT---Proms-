@@ -25,12 +25,17 @@ class HomeViewModel(
     }
 
     // logout and clear the prefs data
-    fun logout() {
-        viewModelScope.launch {
-            storage.clearValue(PrefKeys.clinicId)
-            storage.clearValue(PrefKeys.serverUrl)
-            storage.clearValue(PrefKeys.token)
-        }
+    suspend fun logout() {
+        storage.clearValue(PrefKeys.clinicId)
+        storage.clearValue(PrefKeys.serverUrl)
+        storage.clearValue(PrefKeys.token)
+        storage.clearValue(PrefKeys.userId)
+        println(
+            "cleaned prefs:${storage.get(PrefKeys.clinicId)} ${storage.get(PrefKeys.serverUrl)}  ${
+                storage.get(
+                    PrefKeys.token
+                )
+            } ${storage.get(PrefKeys.userId)}"
+        )
     }
-
 }

@@ -90,6 +90,7 @@ class LoginViewModel(
             storage.writeValue(PrefKeys.clinicId, response.clinicId)
             storage.writeValue(PrefKeys.serverUrl, response.serverUrl)
             storage.writeValue(PrefKeys.token, response.token)
+            storage.writeValue(PrefKeys.userId, response.userId)
         }
     }
 

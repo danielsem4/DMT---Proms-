@@ -20,6 +20,7 @@ import androidx.compose.material.icons.outlined.Medication
 import androidx.compose.material.icons.outlined.MonitorHeart
 import androidx.compose.material.icons.outlined.Snowshoeing
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,6 +32,7 @@ import org.example.hit.heal.core.presentation.BaseScreen
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import kotlinx.coroutines.launch
 import org.example.hit.heal.login.LoginViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -40,12 +42,15 @@ class HomeScreen(): Screen {
 
     val homeViewModel: HomeViewModel = koinViewModel()
     val navigator = LocalNavigator.currentOrThrow
+    val scope = rememberCoroutineScope()
     BaseScreen(
         title = "Home",
         navigationIcon = {
             IconButton(onClick = {
-                homeViewModel.logout()
-                navigator.replace(LoginScreen())
+                scope.launch {
+                    homeViewModel.logout()
+                    navigator.replace(LoginScreen())
+                }
             }) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Logout,
