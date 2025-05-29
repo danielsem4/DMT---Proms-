@@ -27,7 +27,8 @@ fun RoundedButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     fontSize: TextUnit = 32.sp,
-    icon: ImageVector? = null
+    icon: ImageVector? = null,
+    enabled: Boolean = true
 ) {
     val buttonText = when (text) {
         is StringResource -> stringResource(text)
@@ -40,6 +41,7 @@ fun RoundedButton(
         colors = ButtonDefaults.buttonColors(Colors.primaryColor),
         shape = RoundedCornerShape(50),
         modifier = modifier,
+        enabled = enabled
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
