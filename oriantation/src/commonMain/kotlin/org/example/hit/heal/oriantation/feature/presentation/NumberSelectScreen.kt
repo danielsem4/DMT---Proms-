@@ -40,7 +40,7 @@ class NumberSelectScreen(
         TabletBaseScreen(
             title = "תפריט נפתח", // Replace with stringResource if you have it
             question = 2, // For "2/8"
-            onNextClick = { navigator?.push(SeasonsSelectScreen()) },
+            onNextClick = { navigator?.push(SeasonsSelectScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(32.dp))
 

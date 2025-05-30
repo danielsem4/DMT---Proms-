@@ -36,7 +36,9 @@ data class Item(
     var position: Offset = Offset.Zero
 )
 
-class ShapeResizeScreen : Screen {
+class ShapeResizeScreen(
+    private val viewModel: OrientationTestViewModel
+) : Screen {
     @Composable
     override fun Content() {
         // State for triangle scale

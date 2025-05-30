@@ -36,6 +36,7 @@ import dmt_proms.oriantation.generated.resources.spring
 import dmt_proms.oriantation.generated.resources.summer
 import dmt_proms.oriantation.generated.resources.winter
 import org.example.hit.heal.core.presentation.TabletBaseScreen
+import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -47,7 +48,9 @@ enum class Season(val displayName: String) {
     AUTUMN("סתיו")
 }
 
-class SeasonsSelectScreen : Screen {
+class SeasonsSelectScreen(
+    private val viewModel: OrientationTestViewModel
+) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
@@ -64,7 +67,7 @@ class SeasonsSelectScreen : Screen {
         TabletBaseScreen(
             title = "עונות",
             question = 3,
-            onNextClick = { navigator?.push(ShapesDragScreen()) },
+            onNextClick = { navigator?.push(ShapesDragScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
 

@@ -31,10 +31,13 @@ import dmt_proms.oriantation.generated.resources.close
 import dmt_proms.oriantation.generated.resources.hash_tag
 import dmt_proms.oriantation.generated.resources.rhomb_outline
 import dmt_proms.oriantation.generated.resources.star
+import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.example.hit.heal.oriantation.feature.presentation.components.DraggableShape
 import org.example.hit.heal.oriantation.feature.presentation.components.DraggableShapeIcon
 import org.jetbrains.compose.resources.DrawableResource
-class ShapesDragScreen : Screen {
+class ShapesDragScreen(
+    private val viewModel: OrientationTestViewModel
+) : Screen {
     @Composable
     override fun Content() {
         // Initial positions for shapes in a column on the right

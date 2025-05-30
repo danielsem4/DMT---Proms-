@@ -38,7 +38,11 @@ import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.jetbrains.compose.resources.stringResource
 import dmt_proms.oriantation.generated.resources.Res.string
 import dmt_proms.oriantation.generated.resources.trial_drag_instructions
-class DrawScreen : Screen {
+import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
+
+class DrawScreen(
+    private val viewModel: OrientationTestViewModel
+) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -79,7 +83,7 @@ class DrawScreen : Screen {
         TabletBaseScreen(
             title = "שימוש בעת",
             question = 7,
-            onNextClick = { navigator?.push(ShapesDragScreen()) },
+            onNextClick = { navigator?.push(ShapesDragScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
 
