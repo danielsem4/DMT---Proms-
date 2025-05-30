@@ -32,9 +32,12 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import dmt_proms.oriantation.generated.resources.Res
 import org.example.hit.heal.core.presentation.Colors
 import org.example.hit.heal.core.presentation.TabletBaseScreen
-
+import org.jetbrains.compose.resources.stringResource
+import dmt_proms.oriantation.generated.resources.Res.string
+import dmt_proms.oriantation.generated.resources.trial_drag_instructions
 class DrawScreen : Screen {
     @Composable
     override fun Content() {
@@ -82,7 +85,7 @@ class DrawScreen : Screen {
 
                 // Instruction text
                 Text(
-                    text = "יש לצייר צורה של איקס",
+                    text = (stringResource(string.trial_drag_instructions)),
                     color = Colors.primaryColor,
                     modifier = Modifier
                         .fillMaxWidth()

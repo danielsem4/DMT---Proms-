@@ -7,13 +7,14 @@ import org.example.hit.heal.oriantation.feature.presentation.DrawScreen
 import org.example.hit.heal.oriantation.feature.presentation.FeedbackScreen
 import org.example.hit.heal.oriantation.feature.presentation.ShapeResizeScreen
 import org.example.hit.heal.oriantation.feature.presentation.ShapesDragScreen
+import org.example.hit.heal.oriantation.feature.presentation.WelcomeScreen
 
 
 @Composable
 fun App(context: Any? = null) {
 //    NavigationGraph()
     MaterialTheme {
-       Navigator(ShapeResizeScreen())
+       Navigator(WelcomeScreen())
 
 
     }

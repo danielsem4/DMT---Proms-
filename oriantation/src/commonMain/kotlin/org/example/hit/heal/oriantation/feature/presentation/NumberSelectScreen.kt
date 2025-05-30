@@ -25,8 +25,11 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import org.example.hit.heal.core.presentation.TabletBaseScreen
+import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 
-class NumberSelectScreen : Screen {
+class NumberSelectScreen(
+    private val viewModel: OrientationTestViewModel
+) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
@@ -89,11 +92,13 @@ class NumberSelectScreen : Screen {
                     }
                     DropdownMenu(
                         expanded = expanded,
+
                         onDismissRequest = { expanded = false }
                     ) {
                         numbers.forEach { number ->
                             DropdownMenuItem(onClick = {
                                 selectedNumber = number
+                                viewModel.updateNumber(number)
                                 expanded = false
                             }) {
                                 Text(text = number.toString())
