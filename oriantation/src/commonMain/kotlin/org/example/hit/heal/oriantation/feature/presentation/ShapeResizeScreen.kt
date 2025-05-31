@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 
 data class Item(
     val id: Int,
