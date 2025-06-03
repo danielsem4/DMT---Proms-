@@ -2,7 +2,6 @@ package org.example.hit.heal.hitber.presentation.concentration
 
 import TabletBaseScreen
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,10 +13,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,16 +23,13 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.eighth_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.hitbear_start
 import dmt_proms.hitber.generated.resources.third_question_hitbear_finish_task
 import dmt_proms.hitber.generated.resources.third_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.third_question_hitbear_title
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.concentration.components.RandomNumberScreen
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
 import org.example.hit.heal.hitber.utils.InstructionText

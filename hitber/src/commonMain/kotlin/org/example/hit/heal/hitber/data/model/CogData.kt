@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CogData(
     @SerialName("measurement") var measurement: Int = 19,
-    @SerialName("patient_id") var patientId: Int = 168,
+    @SerialName("patient_id") var patientId: Int = 10,
     @SerialName("date") var date: String = getCurrentFormattedDateTime(),
-    @SerialName("clinicId") var clinicId: Int = 8,
+    @SerialName("clinicId") var clinicId: Int = 3,
     @SerialName("firstQuestion") var firstQuestion: FirstQuestion = FirstQuestion(),
     @SerialName("secondQuestion") var secondQuestion: ArrayList<SecondQuestionItem> = arrayListOf(),
     @SerialName("thirdQuestion") var thirdQuestion: ArrayList<ThirdQuestionItem> = arrayListOf(),

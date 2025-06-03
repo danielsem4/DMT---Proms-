@@ -3,7 +3,6 @@ package org.example.hit.heal.hitber.presentation.buildShape
 import TabletBaseScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -11,14 +10,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.Navigator
-import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.tenth_question_hitbear_instructions
@@ -26,13 +22,11 @@ import dmt_proms.hitber.generated.resources.tenth_question_hitbear_title
 import io.github.suwasto.capturablecompose.Capturable
 import io.github.suwasto.capturablecompose.rememberCaptureController
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.components.TenthQuestionShapesLayout
 import org.example.hit.heal.hitber.presentation.buildShape.components.handleTenthQuestionCapture
-import org.example.hit.heal.hitber.presentation.buildShape.model.BuildShapes
 import org.example.hit.heal.hitber.presentation.buildShape.model.draggableShapesItem
 import org.example.hit.heal.hitber.presentation.buildShape.model.staticShapesItem
-import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
 import org.example.hit.heal.hitber.utils.InstructionText
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel

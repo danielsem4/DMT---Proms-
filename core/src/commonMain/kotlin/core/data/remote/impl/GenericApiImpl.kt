@@ -80,6 +80,7 @@ class KtorAppRemoteDataSource(
                             append("file", base64EncodedFile, Headers.build {
                                 append(HttpHeaders.ContentDisposition, "form-data; name=\"file\"")
                                 append(HttpHeaders.ContentType, "text/plain")
+                                append(HttpHeaders.Authorization, "Bearer c7d5372a6e9027f0a12338dfe2998749c76e04fc")
                             })
                             append("file_name", imagePath)
                             append("clinic_id", clinicId)

@@ -36,12 +36,8 @@ fun isObjectInsideTargetArea(
         draggableBottom = draggableTop + draggableHeight
     }
 
-    println("Is inside?targetLeft: $targetLeft, targetTop: $targetTop, targetRight: $targetRight, targetBottom: $targetBottom")
-    println("Is inside?draggableLeft: $draggableLeft, draggableTop: $draggableTop, draggableRight: $draggableRight, draggableBottom: $draggableBottom")
-
     val isInside = draggableLeft >= targetLeft && draggableRight <= targetRight &&
             draggableTop >= targetTop && draggableBottom <= targetBottom
 
-    println("✅ Is inside? $isInside")
     return isInside
 }

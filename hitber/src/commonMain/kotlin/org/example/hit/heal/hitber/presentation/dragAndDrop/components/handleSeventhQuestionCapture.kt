@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import cafe.adriel.voyager.navigator.Navigator
 import core.utils.getCurrentFormattedDateTime
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.SeventhQuestionViewModel
 import org.example.hit.heal.hitber.presentation.writing.WritingScreen
 

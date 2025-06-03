@@ -2,11 +2,13 @@ package org.example.hit.heal.hitber.presentation.concentration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 
 class ThirdQuestionViewModel: ViewModel() {
@@ -35,7 +37,7 @@ class ThirdQuestionViewModel: ViewModel() {
 
     fun thirdQuestionAnswer(answer: Int) {
         if (_isNumberClickable.value) {
-            val reactionTime = ((Clock.System.now().toEpochMilliseconds() - numberAppearedAt) / 1000.0).toInt()
+            val reactionTime: Int = ((Clock.System.now().toEpochMilliseconds() - numberAppearedAt) / 1000).toInt()
 
             thirdQuestionAnswers.add(
                 Pair(answer, reactionTime)
@@ -47,14 +49,29 @@ class ThirdQuestionViewModel: ViewModel() {
 
     fun startRandomNumberGeneration() {
         viewModelScope.launch {
-            while (elapsedTime < 60) {
-                delay(2500)
-                numberAppearedAt = Clock.System.now().toEpochMilliseconds()
+            val now = Clock.System.now().toEpochMilliseconds()
+            numberAppearedAt = now
+
+            withContext(Dispatchers.Main) {
                 _number.value = (0..9).random()
                 _isNumberClickable.value = true
+            }
+
+            while (elapsedTime < 60) {
+                delay(2500)
+
+                val nowLoop = Clock.System.now().toEpochMilliseconds()
+                numberAppearedAt = nowLoop
+
+                withContext(Dispatchers.Main) {
+                    _number.value = (0..9).random()
+                    _isNumberClickable.value = true
+                }
+
                 elapsedTime += 2.5
             }
             _isFinished.value = true
         }
     }
+
 }

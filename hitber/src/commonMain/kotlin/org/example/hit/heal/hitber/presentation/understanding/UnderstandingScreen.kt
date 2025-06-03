@@ -30,7 +30,7 @@ import dmt_proms.hitber.generated.resources.sixth_question_hitbear_title
 import io.github.suwasto.capturablecompose.Capturable
 import io.github.suwasto.capturablecompose.rememberCaptureController
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioButton
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer

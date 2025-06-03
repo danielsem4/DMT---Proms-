@@ -3,7 +3,7 @@ package org.example.hit.heal.hitber.presentation.understanding.components
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ImageBitmap
 import core.utils.getCurrentFormattedDateTime
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.understanding.SixthQuestionViewModel
 import org.jetbrains.compose.resources.DrawableResource
 

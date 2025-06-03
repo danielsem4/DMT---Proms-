@@ -2,7 +2,7 @@ package org.example.hit.heal.di
 
 import core.di.clientRequestsModule
 import org.example.hit.heal.cdt.di.CDT_module
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.TenthQuestionViewModel
 import org.example.hit.heal.hitber.presentation.concentration.ThirdQuestionViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.SeventhQuestionViewModel

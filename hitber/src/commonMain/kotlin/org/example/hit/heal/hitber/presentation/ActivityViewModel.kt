@@ -1,4 +1,4 @@
-package org.example.hit.heal.hitber
+package org.example.hit.heal.hitber.presentation
 
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
@@ -26,7 +26,6 @@ import org.example.hit.heal.hitber.data.model.TenthQuestionType
 import org.example.hit.heal.hitber.data.model.ThirdQuestionItem
 import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
-import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -86,7 +85,7 @@ class ActivityViewModel(
         }
 
         result.thirdQuestion = ArrayList(thirdQuestionList)
-        println("FirstQuestion answer: (${result.thirdQuestion})")
+        println("thirdQuestion answer: (${result.thirdQuestion})")
     }
 
     fun setFourthQuestion(answers: List<String>, date: String) {

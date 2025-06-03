@@ -32,7 +32,7 @@ import dmt_proms.hitber.generated.resources.second_question_hitbear_task_instruc
 import dmt_proms.hitber.generated.resources.second_question_hitbear_task_retry_instructions
 import dmt_proms.hitber.generated.resources.second_question_hitbear_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask

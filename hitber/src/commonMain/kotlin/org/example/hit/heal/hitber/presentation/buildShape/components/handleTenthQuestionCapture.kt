@@ -4,7 +4,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ImageBitmap
 import cafe.adriel.voyager.navigator.Navigator
 import core.utils.getCurrentFormattedDateTime
-import org.example.hit.heal.hitber.ActivityViewModel
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.TenthQuestionViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.model.BuildShapes
 import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
