@@ -28,6 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 
 data class Item(
@@ -42,6 +44,7 @@ class ShapeResizeScreen(
 ) : Screen {
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
         // State for triangle scale
         var scale by remember { mutableStateOf(1f) }
 
@@ -51,7 +54,7 @@ class ShapeResizeScreen(
         TabletBaseScreen(
             title = "שינוי גודל",
             question = 5,
-            onNextClick = { /* TODO: Navigate to next screen */ },
+            onNextClick = { navigator?.push(FeedbackScreen()) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(

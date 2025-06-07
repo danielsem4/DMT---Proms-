@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DrawerDefaults.shape
+import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Slider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -38,8 +40,12 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import dmt_proms.oriantation.generated.resources.Res
+import dmt_proms.oriantation.generated.resources.set_health_rate
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
 
 class FeedbackScreen : Screen {
@@ -50,6 +56,8 @@ class FeedbackScreen : Screen {
         var progress by remember { mutableStateOf(0f) }
         var barWidth by remember { mutableStateOf(1f) }
 
+        val audioPlayer = remember { AudioPlayer() }
+        val audioUrl = stringResource(Res.string.set_health_rate)
         TabletBaseScreen(
             title = "הוראות קוליות",
             question = 8,
@@ -58,22 +66,21 @@ class FeedbackScreen : Screen {
                 Spacer(modifier = Modifier.height(32.dp))
 
                 // Listen button
-               Button(
-                    onClick = { /* play audio */ },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF4EC3AF)),
-                    shape = RoundedCornerShape(50.dp),
+                RoundedButton(
+                    text = "הקשב",
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .width(180.dp)
-                        .height(56.dp)
-                ) {
-                    Text(
-                        text = "הקשב",
-                        color = Color.White,
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
+                        .height(56.dp),
+                    onclick = { // Play the audio when button is clicked
+                        audioPlayer.play(audioUrl) {
+                            // This will be called when audio playback completes
+                            println("Audio playback completed")
+                        }
+                    }
+                )
+
+
 
                 Spacer(modifier = Modifier.height(32.dp))
 

@@ -24,6 +24,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.material.DrawerDefaults.shape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
 import dmt_proms.oriantation.generated.resources.Res
 import dmt_proms.oriantation.generated.resources.bleach
@@ -41,6 +43,7 @@ class ShapesDragScreen(
 ) : Screen {
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
         // Initial positions for shapes in a column on the right
         val initialOffsets = remember {
             listOf(
@@ -74,7 +77,7 @@ class ShapesDragScreen(
         TabletBaseScreen(
             title = "גרירה",
             question = 4,
-            onNextClick = { /* TODO: Navigate to next screen */ },
+            onNextClick = { navigator?.push(ShapeResizeScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(

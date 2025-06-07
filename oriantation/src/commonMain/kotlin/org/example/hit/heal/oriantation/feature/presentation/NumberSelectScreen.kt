@@ -29,8 +29,7 @@ import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 
 class NumberSelectScreen(
     private val viewModel: OrientationTestViewModel
-) : Screen {
-    @Composable
+) : Screen {    @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
         var expanded by remember { mutableStateOf(false) }
