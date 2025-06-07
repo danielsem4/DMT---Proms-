@@ -44,20 +44,25 @@ data class DraggableShape(
 
 @Composable
 fun DraggableShapeIcon(
+//    icons: List<DraggableShape>,
     drawableRes: DrawableResource,
     offset: Offset,
     onOffsetChange: (Offset) -> Unit,
     onDrop: (Offset) -> Unit
 ) {
+    var currentOffset by remember { mutableStateOf(offset) }
+    
     Box(
         modifier = Modifier
-            .offset { IntOffset(offset.x.toInt(), offset.y.toInt()) }
+            .offset { IntOffset(currentOffset.x.toInt(), currentOffset.y.toInt()) }
             .pointerInput(Unit) {
                 detectDragGestures(
-                    onDragEnd = { onDrop(offset) }
+                    onDragStart = { /* Optional: handle drag start */ },
+                    onDragEnd = { onDrop(currentOffset) }
                 ) { change, dragAmount ->
                     change.consume()
-                    onOffsetChange(offset + Offset(dragAmount.x, dragAmount.y))
+                    currentOffset = currentOffset + Offset(dragAmount.x, dragAmount.y)
+                    onOffsetChange(currentOffset)
                 }
             }
     ) {

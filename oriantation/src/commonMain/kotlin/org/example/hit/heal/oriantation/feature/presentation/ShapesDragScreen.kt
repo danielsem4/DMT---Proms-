@@ -22,6 +22,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.material.DrawerDefaults.shape
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import org.jetbrains.compose.resources.painterResource
 import dmt_proms.oriantation.generated.resources.Res
@@ -43,12 +44,12 @@ class ShapesDragScreen(
         // Initial positions for shapes in a column on the right
         val initialOffsets = remember {
             listOf(
-                Offset(800f, 100f),  // triangle
-                Offset(800f, 200f),  // diamond
-                Offset(800f, 300f),  // star
-                Offset(800f, 400f),  // hash
-                Offset(800f, 500f),  // X
-                Offset(800f, 600f)   // check
+                Offset(2000f, 100f),  // triangle
+                Offset(2000f, 250f),  // diamond
+                Offset(2000f, 400f),  // star
+                Offset(2000f, 550f),  // hash
+                Offset(2000f, 700f),  // X
+                Offset(2000f, 850f)   // check
             )
         }
 
@@ -79,6 +80,7 @@ class ShapesDragScreen(
                 Text(
                     text = "בפניך מספר צורות, עליך לגרור את המשולש לתוך הריבוע האדום משמאל",
                     color = Color(0xFF4EC3AF),
+                    textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -124,10 +126,10 @@ class ShapesDragScreen(
                                         shapes = shapes.map {
                                             if (it.id == shape.id) it.copy(isDroppedInSquare = true) else it
                                         }
-                                    }
-                                    // Keep the shape at its dropped position
-                                    shapes = shapes.map {
-                                        if (it.id == shape.id) it.copy(offset = offset) else it
+                                        // If the dropped shape is the triangle (id = 0), update the viewModel
+                                        if (shape.id == 0) {
+                                            viewModel.updateShapesDrag(true)
+                                        }
                                     }
                                 }
                             )
