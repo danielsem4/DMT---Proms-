@@ -65,7 +65,6 @@ kotlin {
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.tabNavigator
             // Basic Navigation
-            implementation(libs.navigation.compose)
             )
 
             // Koin dependencies

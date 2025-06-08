@@ -39,6 +39,7 @@ voyager = "1.0.1"
 ktor = "3.1.2"
 datastore = "1.1.1"
 atomicfu = "0.23.2"
+uiGraphicsAndroidVersion = "1.7.8"
 [libraries]
 font-awesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "fontAwesome" }
 androidx-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "foundationLayout" }
