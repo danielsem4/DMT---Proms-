@@ -83,7 +83,10 @@ class DrawScreen(
         TabletBaseScreen(
             title = "שימוש בעת",
             question = 7,
-            onNextClick = { navigator?.push(ShapesDragScreen(viewModel)) },
+            onNextClick = {
+                val bitmap = drawPathsToBitmap()
+                viewModel.updateDrawnShape(bitmap)
+                navigator?.push(FeedbackScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
 

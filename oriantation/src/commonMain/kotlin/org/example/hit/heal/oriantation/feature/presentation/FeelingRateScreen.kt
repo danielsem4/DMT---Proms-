@@ -45,10 +45,13 @@ import dmt_proms.oriantation.generated.resources.set_health_rate
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
+import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.stringResource
 import kotlin.math.roundToInt
 
-class FeedbackScreen : Screen {
+class FeedbackScreen(
+    private val viewModel: OrientationTestViewModel
+) : Screen {
     @Composable
     override fun Content() {
 
@@ -82,7 +85,7 @@ class FeedbackScreen : Screen {
 
 
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(50.dp))
 
                 // Progress bar with numbers, and make it interactive
                 Row(
@@ -92,7 +95,7 @@ class FeedbackScreen : Screen {
                         .padding(horizontal = 24.dp)
                 ) {
                     Text(
-                        text = "10",
+                        text = "0",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
@@ -107,10 +110,10 @@ class FeedbackScreen : Screen {
                             .border(1.dp, Color.White, RoundedCornerShape(16.dp))
                             .pointerInput(Unit) {
                                 detectTapGestures { offset: Offset ->
-                                    // Calculate value based on tap position (right to left)
-                                    val value = ((barWidth - offset.x) / barWidth * 10f)
+
+                                    val value = (offset.x / barWidth * 10f)
                                         .coerceIn(0f, 10f)
-                                    progress = value.toInt().toFloat()
+                                    progress = value
                                 }
                             }
                             .onSizeChanged { barWidth = it.width.toFloat() }
@@ -119,7 +122,7 @@ class FeedbackScreen : Screen {
                             Box(
                                 modifier = Modifier
                                     .fillMaxHeight()
-                                    .fillMaxWidth(fraction = (10f - progress) / 10f)
+                                    .fillMaxWidth(fraction = progress / 10f)
                                     .clip(RoundedCornerShape(16.dp))
                                     .background(
                                         Brush.horizontalGradient(
@@ -130,7 +133,7 @@ class FeedbackScreen : Screen {
                         }
                     }
                     Text(
-                        text = "0",
+                        text = "10",
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black
@@ -140,20 +143,30 @@ class FeedbackScreen : Screen {
                 // Show value and label if progress > 0
 //                if (progress > 0f) {
                     Spacer(modifier = Modifier.height(15.dp))
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxWidth()
+
+                    ) {
                         Text(
-                            text = "מצב בריאותי טוב",
+                            text = when {
+                                progress <= 3f -> "מצב בריאותי לא טוב"
+                                progress <= 6f -> "מצב בריאותי בינוני"
+                                else -> "מצב בריאותי טוב"
+                            },
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
                         )
                         Text(
                             text = progress.toInt().toString(),
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
 //                } else {

@@ -1,8 +1,10 @@
 package org.example.hit.heal.oriantation.data.model
 
+import androidx.compose.material.DrawerDefaults.shape
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.ImageBitmap
 
 class OrientationTestViewModel {
     var state by mutableStateOf(OrientationTestState())
@@ -17,8 +19,8 @@ class OrientationTestViewModel {
     }
 
 
-    fun updateDrawnShape(shape: String) {
-        state = state.copy(drawnShape = shape)
+    fun updateDrawnShape(bitmap: ImageBitmap) {
+        state = state.copy(drawnShape = bitmap)
     }
 
     fun updateShapeResize(value: Boolean) {
