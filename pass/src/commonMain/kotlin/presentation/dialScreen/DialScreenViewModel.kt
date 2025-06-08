@@ -13,6 +13,7 @@ import dmt_proms.pass.generated.resources.diale_to_dentist
 import dmt_proms.pass.generated.resources.dialer_opened
 import dmt_proms.pass.generated.resources.dialer_opened_pass
 import dmt_proms.pass.generated.resources.dialer_page_dentis_number_appeared
+import dmt_proms.pass.generated.resources.dialer_page_second_assist
 import dmt_proms.pass.generated.resources.dialer_page_thired_assist
 import dmt_proms.pass.generated.resources.dialer_page_wrong_action_one
 import dmt_proms.pass.generated.resources.family_doctor_pass
@@ -22,6 +23,7 @@ import dmt_proms.pass.generated.resources.orthopedist_pass
 import dmt_proms.pass.generated.resources.paint_clinic_pass
 import dmt_proms.pass.generated.resources.press_the_dial_button_that_showen_down_pass
 import dmt_proms.pass.generated.resources.psychiatrist_pass
+import dmt_proms.pass.generated.resources.search_dentist_number_pass
 import dmt_proms.pass.generated.resources.second_part_of_test_instructions_pass
 import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
 import dmt_proms.pass.generated.resources.what_you_need_to_do
@@ -293,7 +295,7 @@ class DialScreenViewModel(
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.dialer_page_wrong_action_one to Res.string.wrong_number_dialed_please_try_again_pass
+                audioText = Res.string.dialer_page_second_assist to Res.string.search_dentist_number_pass
             )
 
             3 -> {

@@ -116,7 +116,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
     private val _showUnderstandingDialog = MutableStateFlow(false)
     val showUnderstandingDialog: StateFlow<Boolean> = _showUnderstandingDialog
 
-    private val _isCloseIconDialog = MutableStateFlow(false)
+    private val _isCloseIconDialog = MutableStateFlow(true)
     val isCloseIconDialog: StateFlow<Boolean> = _isCloseIconDialog
 
     private val _isNextScreen = MutableStateFlow(true)
@@ -141,6 +141,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
     private fun startDialogInstructions() {
         reminderJob?.cancel()
+        _isCloseIconDialog.value = false
         getReminderDidNotingText()
 
         if (!isSecondInstructions) {

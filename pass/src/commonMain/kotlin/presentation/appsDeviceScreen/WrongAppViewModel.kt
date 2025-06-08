@@ -44,7 +44,7 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
         reminderJob = viewModelScope.launch {
             var elapsedTime = 0
 
-            while (isActive && didNothing < 3 || didNothingSecondTime < 3) {
+            while (isActive && (didNothing < 3 || didNothingSecondTime < 3)) {
 
                 delay(1_000)
 
@@ -70,8 +70,10 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
             2 -> countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, Res.string.wrong_app_second_assist to Res.string.return_button_on_top_left_pass)
             3 -> {
                 countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, Res.string.wrong_app_thired_assist to Res.string.going_back_to_apss_screen_pass)
-                _backToApps.value = true
                 isSecondTimeWrongApp = true
+                reminderJob?.cancel()
+                _backToApps.value = true
+
             }
         }
     }
@@ -82,7 +84,6 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
 
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
-        startCheckingIfUserDidSomething()
     }
 
     fun setSecondTimeWrongApp() {
