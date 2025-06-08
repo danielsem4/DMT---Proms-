@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="clock_test_title">מבחן השעון</string>
+    <string name="hit_logo_description">לוגו HIT</string>
+    <string name="clock_icon_description">אייקון שעון</string>
+    <string name="start_button_text">התחל</string>
+    <string name="footer_text">ההוראות מנוסחות בלשון זכר, אך פונות לכלל המינים</string>
+    <string name="version">גרסא</string>
+
+    <!-- Drawing Screen -->
+    <string name="draw_screen_title">צייר</string>
+    <string name="draw_instruction">צייר שעון עם כל המספרים שמראה את השעה %1$s</string>
+    <string name="erase_button_text">מחק</string>
+    <string name="clear_all_button_text">מחק הכל</string>
+    <string name="finish_button_text">סיום</string>
+
+    <string name="completion_screen_title">משימה ראשונה</string>
+    <string name="completion_screen_message">סיימת את השלב הראשון, כעת נעבור לשלב הבא</string>
+    <string name="completion_screen_message_next">לפניך משימה של כדקה שעון, אנא עקוב אחר ההנחיות בעמוד הבא בשביל להתחיל את המבחן יש ללחוץ על כפתור המשך</string>
+    <string name="next_button_text">המשך</string>
+
+    <string name="clock_screen_title">כוונון שעון</string>
+    <string name="clock_instruction">כעת, לפניך שעון שמראה את השעה 12:00, עליך לכוון את השעון באמצעות הזזת המחוגים 40 דקות קדימה, לאחר מכן יש ללחוץ על כפתור ההמשך</string>
+    <string name="clock_instruction_twelve">כעת, כוון את השעון שעה ו25 דקות קדימה, לאחר מכן יש ללחוץ על כפתור ההמשך</string>
+
+    <string name="final_screen_title">סיום המשימות</string>
+    <string name="final_screen_message">המשימה הגיעה לסיומה, תודה רבה על שיתוף הפעולה</string>
+    <string name="exit_button_text">יציאה</string>
+
+    <string name="draw_mode">ציור</string>
+    <string name="erase_mode">מחיקה</string>
+
+    <string name="drawing_instruction">בעת הציור חשוב לוודא שרק האצבע/העט על גבי הטאבלט, במידה והנחתם את היד על הטאבלט יש להרים אותה ולצייר שוב</string>
+
+</resources>

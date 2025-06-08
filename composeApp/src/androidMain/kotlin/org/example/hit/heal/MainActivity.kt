@@ -9,31 +9,26 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import org.example.hit.heal.di.initKoin
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initKoin {
-            androidLogger() // provides logger to use in android module
-            androidContext(this@MainActivity)
-        }
+//        initKoin {
+//            androidLogger() // provides logger to use in android module
+//            androidContext(this@MainActivity)
+//        }
         setContent {
 
-            val darkColor = Color.Transparent
-            val lightColor = Color.Transparent
+            val darkColor = Color.Transparent.hashCode()
+            val lightColor = Color.Transparent.hashCode()
 
             val inDarkTheme = isSystemInDarkTheme()
 
-            enableEdgeToEdge(
-                statusBarStyle = if (!inDarkTheme) SystemBarStyle.dark(darkColor.hashCode())
-                else SystemBarStyle.light(lightColor.hashCode(), lightColor.hashCode()),
-                navigationBarStyle = if (!inDarkTheme) SystemBarStyle.dark(darkColor.hashCode())
-                else SystemBarStyle.light(lightColor.hashCode(), lightColor.hashCode())
-            )
-            App(context = this)
+            val barStyle = if (!inDarkTheme) SystemBarStyle.dark(darkColor)
+            else SystemBarStyle.light(lightColor, lightColor)
+
+            enableEdgeToEdge(statusBarStyle = barStyle, navigationBarStyle = barStyle)
+            App()
         }
     }
 }

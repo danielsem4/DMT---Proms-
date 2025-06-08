@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import core.domain.onError
 import core.domain.onSuccess
 import core.domain.use_case.LoginUseCase
-import core.network.responseToResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -17,7 +16,7 @@ import org.koin.core.component.KoinComponent
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
 ) : ViewModel(), KoinComponent {
-    
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -51,7 +50,7 @@ class LoginViewModel(
                             onLoginSuccess()
                         } else {
                             _isLoggedIn.value = false
-                            _message.value = response.status ?: "Unknown error"
+                            _message.value = response.status
                         }
                     }
                     .onError { error ->
@@ -76,5 +75,7 @@ class LoginViewModel(
         Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}\$")
             .matches(email)
 
-    fun clearMessage() { _message.value = null }
+    fun clearMessage() {
+        _message.value = null
+    }
 }

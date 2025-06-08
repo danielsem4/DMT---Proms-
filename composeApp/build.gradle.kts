@@ -37,15 +37,18 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
 
+            // Koin dependencies
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
 
+            // Ktor dependencies
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(projects.ui.core)
             implementation(projects.core)
             implementation(projects.oriantation)
+            implementation(projects.clockTest)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -55,6 +58,22 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
+            // Voyager Navigator
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.screenModel)
+            implementation(libs.voyager.transitions)
+            implementation(libs.voyager.tabNavigator
+            // Basic Navigation
+            implementation(libs.navigation.compose)
+            )
+
+            // Koin dependencies
+            api(libs.koin.core)
+            implementation(libs.bundles.koin.compose)
+            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.navigation.compose)
+            implementation(libs.kotlinx.serialization) // for data serialization
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
 
@@ -66,9 +85,8 @@ kotlin {
             implementation(libs.navigation.compose)
 
             implementation(libs.coil.compose)
-            implementation(libs.voyager.navigator)
-            implementation(libs.voyager.tabNavigator)
-            implementation(libs.voyager.transitions)
+
+
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)

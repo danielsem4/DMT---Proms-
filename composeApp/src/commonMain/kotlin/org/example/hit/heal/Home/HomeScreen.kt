@@ -13,7 +13,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.outlined.AutoGraph
 import androidx.compose.material.icons.outlined.Medication
 import androidx.compose.material.icons.outlined.MonitorHeart
@@ -25,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.hit.heal.core.presentation.BaseScreen
+
 @Composable
 fun HomeScreen(
     onLogout: () -> Unit
@@ -76,7 +76,10 @@ fun HomeScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start
             ) {
-                FeatureButton(icon = Icons.Outlined.MonitorHeart, label = "Measurements", onClick = {})
+                FeatureButton(
+                    icon = Icons.Outlined.MonitorHeart,
+                    label = "Measurements",
+                    onClick = {})
             }
 
             Spacer(modifier = Modifier.height(16.dp))

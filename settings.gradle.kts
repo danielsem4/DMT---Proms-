@@ -31,4 +31,5 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":ui:core")
 include(":core")
+include(":clock_test")
 include(":oriantation")
