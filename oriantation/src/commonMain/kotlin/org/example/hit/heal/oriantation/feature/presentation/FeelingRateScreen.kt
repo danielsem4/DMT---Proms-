@@ -75,7 +75,7 @@ class FeedbackScreen(
                         .align(Alignment.CenterHorizontally)
                         .width(180.dp)
                         .height(56.dp),
-                    onclick = { // Play the audio when button is clicked
+                    onClick = { // Play the audio when button is clicked
                         audioPlayer.play(audioUrl) {
                             // This will be called when audio playback completes
                             println("Audio playback completed")
