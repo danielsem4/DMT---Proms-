@@ -35,7 +35,7 @@ class KtorAppRemoteDataSource(
 
     override suspend fun login(email: String, password: String):
             Result<SuccessfulLoginResponse, DataError.Remote> = safeCall {
-        httpClient.post("$BASE_URL/login/") {
+        httpClient.post("${BASE_URL}login/") {
             contentType(ContentType.Application.Json)
             setBody(LoginRequest(email, password))
         }

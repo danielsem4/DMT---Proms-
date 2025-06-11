@@ -61,6 +61,12 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.transitions)
+
+            // Kotlin Navigation
+//            implementation(libs.nav3.ui)
+//            implementation(libs.nav3.runtime)
+//            implementation(libs.androidx.lifecycle.viewmodel.nav3)
+
             // Basic Navigation
             implementation(libs.navigation.compose)
 

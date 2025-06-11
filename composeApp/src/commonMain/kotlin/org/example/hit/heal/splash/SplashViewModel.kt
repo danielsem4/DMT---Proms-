@@ -2,7 +2,6 @@ package org.example.hit.heal.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import core.data.local.DataStoreRepository
 import core.data.storage.Storage
 import core.util.PrefKeys
 import kotlinx.coroutines.flow.MutableStateFlow

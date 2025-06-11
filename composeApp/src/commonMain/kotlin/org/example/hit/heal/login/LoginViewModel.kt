@@ -17,7 +17,6 @@ import org.example.hit.heal.Home.HomeScreen
 import org.koin.core.component.KoinComponent
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import core.data.local.DataStoreRepository
 import core.data.model.SuccessfulLoginResponse
 import core.data.storage.Storage
 import core.util.PrefKeys
@@ -53,7 +52,7 @@ class LoginViewModel(
             try {
                 loginUseCase.execute(email, password)
                     .onSuccess { response ->
-                        if (response.status == "Success") {
+                        if (response.user!!.status == "Success") {
 
                             saveLoginInfo(response)
                             _isLoggedIn.value = true
@@ -63,7 +62,7 @@ class LoginViewModel(
 
                         } else {
                             _isLoggedIn.value = false
-                            _message.value = response.status
+                            _message.value = response.user!!.status
                         }
                     }
                     .onError { error ->
@@ -87,10 +86,10 @@ class LoginViewModel(
     private fun saveLoginInfo(response: SuccessfulLoginResponse) {
 
         viewModelScope.launch {
-            storage.writeValue(PrefKeys.clinicId, response.clinicId)
-            storage.writeValue(PrefKeys.serverUrl, response.serverUrl)
+            storage.writeValue(PrefKeys.clinicId, response.user!!.clinicId)
+            storage.writeValue(PrefKeys.serverUrl, response.user!!.server_url)
             storage.writeValue(PrefKeys.token, response.token)
-            storage.writeValue(PrefKeys.userId, response.userId)
+            storage.writeValue(PrefKeys.userId, response.user!!.id.toString())
         }
     }
 
