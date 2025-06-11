@@ -58,6 +58,7 @@ class ContactsScreen : Screen {
         val isCountdownActive by viewModel.isCountdownActive.collectAsState()
         val nextScreen by viewModel.nextScreen.collectAsState()
         val isNextScreen by viewModel.isNextScreen.collectAsState()
+        val isScrolled by viewModel.isScrolled.collectAsState()
 
         val correctContact = stringResource(Res.string.hana_cohen)
         val phoneNumber = stringResource(Res.string.phone_number)
@@ -65,8 +66,8 @@ class ContactsScreen : Screen {
         val listState = rememberLazyListState()
 
         LaunchedEffect(listState.firstVisibleItemScrollOffset) {
-            if (listState.isScrollInProgress) {
-                viewModel.startScrolling()
+            if (listState.isScrollInProgress && !isScrolled) {
+                    viewModel.startScrolling()
             }
         }
 

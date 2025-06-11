@@ -43,6 +43,10 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
 
     private val _isScrolling = MutableStateFlow(false)
 
+    private val _isScrolled = MutableStateFlow(false)
+    val isScrolled: StateFlow<Boolean> = _isScrolled
+
+
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
@@ -164,7 +168,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
 
     fun startScrolling(){
         _isScrolling.value = true
+        _isScrolled.value = true
         startCheckingIfUserDidSomething()
     }
-
 }

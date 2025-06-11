@@ -51,15 +51,16 @@ import dmt_proms.pass.generated.resources.check
 import dmt_proms.pass.generated.resources.end
 import dmt_proms.pass.generated.resources.exit
 import dmt_proms.pass.generated.resources.first_instructions_pass
+import dmt_proms.pass.generated.resources.next
 import dmt_proms.pass.generated.resources.thanks_coffe
 import dmt_proms.pass.generated.resources.thanks_vocal_pass
 
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import presentation.appsDeviceScreen.AppDeviceScreen
 import presentation.components.AudioPlayingAnimation
 import presentation.entryScreen.EntryViewModel
-import presentation.result.ResultScreen
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -100,7 +101,7 @@ class EndScreen : Screen {
                                 color = Color.LightGray,
                                 shape = RoundedCornerShape(10.dp)
                             )
-                            .padding(top = 16.dp)
+                            .padding(top = 16.dp, bottom = 16.dp)
                     ) {
                         Text(
                             text = stringResource(Res.string.thanks_coffe),
@@ -115,26 +116,19 @@ class EndScreen : Screen {
 
                     SuccessAnimation(modifier = Modifier.size(100.dp))
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
+                    Box(modifier = Modifier.fillMaxSize().padding(10.dp)) {
                         Button(
-                            onClick = {},
-                            modifier = Modifier.width(150.dp),
+                            onClick = {  },
+                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
                             colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                            shape = RoundedCornerShape(12.dp)
+                            shape = RoundedCornerShape(12.dp),
                         ) {
-                            Text(stringResource(Res.string.exit), fontSize = 20.sp, fontWeight = Bold, color = Color.White)
-                        }
-
-                        Button(
-                            onClick = { navigator?.push(ResultScreen()) },
-                            modifier = Modifier.width(150.dp),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Text("תוצאות", fontSize = 20.sp, fontWeight = Bold, color = Color.White)
+                            Text(
+                                text = stringResource(Res.string.exit),
+                                color = Color.White,
+                                fontSize = 20.sp,
+                                fontWeight = Bold
+                            )
                         }
                     }
                 }
