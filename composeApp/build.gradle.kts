@@ -75,6 +75,8 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
 
+            implementation("io.github.moonggae:kmedia:0.0.3")
+
 
 
 

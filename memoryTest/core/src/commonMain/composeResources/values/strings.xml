@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+
+    <string name="memory_test_title">Memory Test</string>
+    <string name="room_title">Room</string>"
+
+    <string name="memory_test_instructions_first_bullet">• The task takes approximately… minutes.</string>
+    <string name="memory_test_instructions_second_bullet">• The task should be completed in one go, without breaks.</string>
+    <string name="memory_test_instructions_third_bullet">• Please read the instructions all the way through.</string>
+    <string name="memory_test_instructions_fourth_bullet">• All tasks must be completed.</string>
+    <string name="memory_test_instructions_fifth_bullet">• To hear the instructions, you can click "Listen."</string>
+    <string name="memory_test_instructions_sixth_bullet">• It is recommended to perform the task in a quiet room.</string>
+    <string name="phone_call">Phone call</string>
+    <string name="calendar">Calendar</string>
+    <string name="calendar_instructions">Calendar Instructions</string>
+    <string name="eye_doctor_instructions_memory">Appointment with the eye doctor before Tuesday between 9:00 – 12:00 for one hour</string>
+    <string name="grandchildren_to_read_instructions_memory">Take the grandchildren to story hour at the library on Wednesday at 16:00</string>
+    <string name="meeting_coffee_instructions_memory">Social gathering at the coffee shop on Tuesdays at 11:00 for two hours</string>
+    <string name="gymnastics_class_instructions_memory">Gymnastics class at the community center on Sundays at 11:00 for one hour</string>
+    <string name="lecture_instructions_memory">Attend a lecture on Thursday at 15:00 for one hour</string>
+    <string name="walk_instructions_memory">Go for a morning walk twice a week for at least one hour.</string>
+    <string name="eye_activity_memory">An appointment with an ophthalmologist</string>
+    <string name="grandchildren_to_read_activity_memory">story time with grandchildren</string>
+    <string name="meeting_coffee_activity_memory">Meeting at the cafe</string>
+    <string name="gymnastics_class_activity_memory">Gymnastics class</string>
+    <string name="lecture_activity_memory">Hear a lecture</string>
+    <string name="walk_activity_memory">morning walk</string>
+    <string name="nine_oclock" translatable="false">09:00</string>
+    <string name="ten_oclock" translatable="false">10:00</string>
+    <string name="eleven_oclock" translatable="false">11:00</string>
+    <string name="twelve_oclock" translatable="false">12:00</string>
+    <string name="one_oclock" translatable="false">13:00</string>
+    <string name="two_oclock" translatable="false">14:00</string>
+    <string name="three_oclock" translatable="false">15:00</string>
+    <string name="four_oclock" translatable="false">16:00</string>
+    <string name="five_oclock" translatable="false">17:00</string>
+    <string name="six_oclock" translatable="false">18:00</string>
+    <string name="instructions_text_memory_question_trial">בשאלה הקרובה תצטרך למקם חפצים בחדרים שונים, בפניך התנסות קצרה בה תראה כיצד ניתן להחליף חדר ע"י לחיצה על הכפתורים של החדרים.</string>
+    <string name="instructions_text_memory_question">Drag and place the seven objects in all three rooms as you would arrange them in your home. You need to remember the locations of the objects. When finished, click "Continue".</string>
+    <string name="instructions_text_memory_question_1">In front of you are several objects. Drag only the objects that appeared previously and place them exactly as you did before. When finished, click "Continue".</string>
+    <string name="instructions_text_memory_question_2">In front of you are several objects. Drag only the objects that appeared previously and place them exactly as you did before. When finished, click "Continue".</string>
+    <string name="incoming_call">Incoming call</string>
+    <string name="beit_rivka">Beit rivka</string>
+    <string name="calendar_scedule_memory">You have an appointment with the eye doctor before Tuesday between 09:00 – 12:00 for an hour and a half, take the grandchildren to story hour at the library on Wednesday at 16:00, additionally, you have a social gathering at the coffee shop on Tuesdays at 11:00 for two hours, gymnastics class at the community center on Sundays at 11:00 for an hour, attend a lecture on Thursday at 19:00 for an hour, and go for a morning walk twice a week for 30 minutes.</string>
+    <string name="what_will_you_do">what will you de?</string>
+    <string name="calendar_instructions_dialog_memory">Before you is a set of hours of activities. What do you need to do to remember all the activities listed?</string>
+    <string name="the_activities_memory">You have several activities that you need to schedule in a timetable. To start the task, click Continue</string>
+    <string name="time_ended">Time ended</string>
+    <string name="time_ended_for_this_question_memory">The time for this question is over, Thanks for the cooperation move on to the next question</string>
+    <string name="bedroom">Bedroom</string>
+    <string name="salon">Salon</string>
+    <string name="kitchen">Kitchen</string>
+    <string name="talk_with_family_button_memory">I will talk with my family</string>
+    <string name="remember_all_button_memory">I will remember all</string>
+    <string name="use_calendar_button_memory">I will use the calendar</string>
+    <string name="please_place_all_activities_memory">please place all activities</string>
+    <string name="place_instructions_in_calendar_memory">You must enter the appointments in the scheduling system according to the instructions</string>
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="place_rate_memory">please rate</string>
+    <string name="rate">rate</string>
+    <string name="the_rate_is">The rate is:</string>
+    <string name="how_well_do_you_think_you_will_do_memory">How well do you think you will do in the task before you?</string>
+    <string name="how_well_do_you_feel_memory">How well do you feel you did in the assignment?</string>
+    <string name="first_one_minute_end_body_memory">Do you have all you need?</string>
+    <string name="second_one_minute_end_body_memory">Do you have all you need?</string>
+    <!--recordings-->
+    <string name="galaxy_phone_ring_2019"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fandroid_rington1.mp3?alt=media&token=a706f7ff-f315-40a6-aa91-6c09c3bdb3e3]]></string>
+    <string name="old_phone_ring"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Ftelephone_rington.mp3?alt=media&token=f5e87a64-6915-4c05-b9a4-3df7467153af]]></string>
+
+</resources>

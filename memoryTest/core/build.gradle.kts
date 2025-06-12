@@ -8,8 +8,6 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     kotlin("plugin.serialization") version "2.1.10"
-
-
 }
 
 kotlin {
@@ -37,6 +35,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+
         }
         commonMain.dependencies {
             val voyagerVersion = "1.1.0-beta02"
@@ -51,17 +51,21 @@ kotlin {
             implementation(libs.bundles.voyager.common)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
-            implementation("io.ktor:ktor-serialization-kotlinx-json:3.1.1")
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.kmp.capturable.compose)
+
+            implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
+            implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
 
 
-            implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
-            implementation("cafe.adriel.voyager:voyager-transitions:$voyagerVersion")
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
+            implementation(libs.voyager.navigator.v110beta02)
+            implementation(libs.voyager.transitions.v110beta02)
+            implementation(libs.jetbrains.kotlinx.datetime)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
 
-            implementation("network.chaintech:kmp-date-time-picker:1.0.7")
-            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.2")
+            implementation(libs.kmp.date.time.picker)
+            implementation(libs.jetbrains.kotlinx.datetime)
 
             implementation(libs.navigation.compose)
             implementation(libs.viewmodel.compose)
@@ -69,11 +73,13 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.compose.dnd)
+            implementation(libs.compose.dnd)
+            //implementation(libs.kmp.capturable.compose)
+               //drag and drop dependencies
 
-            implementation(libs.compose.dnd)  //drag and drop dependencies
-
-
-
+//audio
+            implementation("io.github.moonggae:kmedia:0.0.3")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -89,11 +95,7 @@ android {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-
         minSdk = libs.versions.android.minSdk.get().toInt()
-
-
-
     }
     packaging {
         resources {
@@ -112,6 +114,7 @@ android {
 }
 dependencies {
     implementation(libs.compose.dnd)
+
 }
 
 compose.desktop {

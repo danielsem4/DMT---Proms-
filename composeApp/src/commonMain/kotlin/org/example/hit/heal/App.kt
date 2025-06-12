@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
+import com.example.hi.heal.memoryTest.core.presentation.data.presentation.ViewModelMemoryTest.ViewModelMemoryTest
 import com.example.hi.heal.memoryTest.core.presentation.data.presentation.screens.MemoryScreen
 
 
@@ -21,6 +22,7 @@ import org.koin.dsl.module
 val appModule = module {
     viewModel { MedicationAlarmViewModel() }
     viewModel { MedicationReportViewModel() }
+    viewModel { ViewModelMemoryTest() }
 }
 
 @Composable

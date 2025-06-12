@@ -12,61 +12,53 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.example.hi.heal.memoryTest.core.presentation.data.presentation.components.CustomDialog
+import com.example.hi.heal.memoryTest.core.presentation.data.presentation.ViewModelMemoryTest.ViewModelMemoryTest
+import com.example.hi.heal.memoryTest.core.presentation.data.presentation.components.dialogs.CustomDialog
 import com.example.hi.heal.memoryTest.core.presentation.data.primaryColor
-import com.example.hi.heal.memoryTest.core.presentation.data.textColor
 import dmt_proms.memorytest.core.generated.resources.Res
-import dmt_proms.memorytest.core.generated.resources.book
 import dmt_proms.memorytest.core.generated.resources.book_icon
 import dmt_proms.memorytest.core.generated.resources.coffee_icon
-import dmt_proms.memorytest.core.generated.resources.dumbbell_icon
 import dmt_proms.memorytest.core.generated.resources.lecturer_icon
 import dmt_proms.memorytest.core.generated.resources.move_icon
 import dmt_proms.memorytest.core.generated.resources.stethoscope_icon
-import io.ktor.websocket.Frame
+
 import org.jetbrains.compose.resources.painterResource
 
-class AgendaScreen(val txtMemoryPage: Int = 1) : Screen {
+
+class AgendaScreen(val pageNumber: Int) : Screen {
     @Composable
     override fun Content() {
-
-        var showDialog by rememberSaveable { mutableStateOf(true) }
         val navigator = LocalNavigator.currentOrThrow
         var showAcceptDialog by remember { mutableStateOf(false) }
+        val viewModel: ViewModelMemoryTest = viewModel()
 
         showAcceptDialog = true
-        BaseTabletScreen(title = "בניית סדר יום", page = txtMemoryPage, totalPages = 6) {
+        BaseTabletScreen(title = "בניית סדר יום", page = pageNumber, totalPages = 6) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -94,8 +86,8 @@ class AgendaScreen(val txtMemoryPage: Int = 1) : Screen {
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         ActivityItem(
-                            text = "חוג התעמלות במתנ\"ס ביום ראשון בשעה 11:00 במשך שעה.",
-                            icon = painterResource(Res.drawable.dumbbell_icon)
+                            text = "חוג התעמלות במתנ\"ס ביום ראשון בשעה 11:00 במשך שעה."
+                            ,icon = painterResource(Res.drawable.stethoscope_icon )
                         )
                         ActivityItem(" אני הולך לעיניים ביום שישי בין השעות 09:00 - 12:00 במשך שעה.",icon = painterResource(Res.drawable.stethoscope_icon ))
                         ActivityItem("לקחת את סבתא לבית ספר לסיפור חיים ביום שני בשעה 16:00. ", icon = painterResource(Res.drawable.book_icon))
@@ -108,7 +100,9 @@ class AgendaScreen(val txtMemoryPage: Int = 1) : Screen {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
-                    onClick = {  },
+                    onClick = {
+                        viewModel.setPage(viewModel.txtMemoryPage + 1)
+                        navigator.push(AgendaContinuationScreen(pageNumber = 5))},
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = primaryColor
                     ),
@@ -118,6 +112,8 @@ class AgendaScreen(val txtMemoryPage: Int = 1) : Screen {
                         .height(50.dp)
                         .height(56.dp)
                 ) {
+
+
                     Text("התחל", color = Color.White, fontSize = 18.sp)
                 }
             }
