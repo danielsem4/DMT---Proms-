@@ -22,6 +22,6 @@ interface AppApi {
         imagePath: String,
         imageBytes: ByteArray,
         clinicId: Int,
-        userId: Int
+        userId: String
     ): EmptyResult<DataError.Remote>
 }

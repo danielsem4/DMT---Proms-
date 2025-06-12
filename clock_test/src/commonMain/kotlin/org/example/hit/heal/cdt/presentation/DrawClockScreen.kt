@@ -17,9 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -55,6 +52,7 @@ import dmt_proms.clock_test.generated.resources.drawing_instruction
 import dmt_proms.clock_test.generated.resources.erase_mode
 import dmt_proms.clock_test.generated.resources.finish_button_text
 import org.example.hit.heal.cdt.data.ClockTime
+import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
@@ -227,7 +225,7 @@ class DrawClockScreen : Screen {
                                 isEraseMode = !isEraseMode
                             },
                             fontSize = 24.sp,
-                            icon = if (isEraseMode) Icons.Default.Create else Icons.Default.Delete
+                            icon = if (isEraseMode) Resources.Icon.draw else Resources.Icon.delete
                         )
 
                         Spacer(Modifier.width(8.dp))

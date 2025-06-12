@@ -62,11 +62,6 @@ kotlin {
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.transitions)
 
-            // Kotlin Navigation
-//            implementation(libs.nav3.ui)
-//            implementation(libs.nav3.runtime)
-//            implementation(libs.androidx.lifecycle.viewmodel.nav3)
-
             // Basic Navigation
             implementation(libs.navigation.compose)
 
@@ -76,8 +71,6 @@ kotlin {
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization) // for data serialization
-            implementation(compose.materialIconsExtended)
-            implementation(libs.font.awesome)
 
             implementation(libs.datastore.preferences)
             implementation(libs.datastore)

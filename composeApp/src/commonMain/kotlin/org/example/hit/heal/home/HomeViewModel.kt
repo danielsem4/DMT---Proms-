@@ -1,4 +1,4 @@
-package org.example.hit.heal.Home
+package org.example.hit.heal.home
 
 import androidx.lifecycle.ViewModel
 import core.data.storage.Storage
@@ -29,9 +29,7 @@ class HomeViewModel(
         storage.clearValue(PrefKeys.userId)
         println(
             "cleaned prefs:${storage.get(PrefKeys.clinicId)} ${storage.get(PrefKeys.serverUrl)}  ${
-                storage.get(
-                    PrefKeys.token
-                )
+                storage.get(PrefKeys.token)
             } ${storage.get(PrefKeys.userId)}"
         )
     }

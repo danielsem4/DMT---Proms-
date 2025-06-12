@@ -30,6 +30,7 @@ import dmt_proms.clock_test.generated.resources.final_screen_message
 import dmt_proms.clock_test.generated.resources.final_screen_title
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
@@ -45,6 +46,9 @@ class FinalScreen : Screen {
         val snackbarHostState = remember { SnackbarHostState() }
         val coroutineScope = rememberCoroutineScope()
         var isButtonEnabled by  remember { mutableStateOf(true) }
+
+        // Get the string resources in the composable context
+        val successMessage = stringResource(Resources.String.sentSuccessfully)
 
         TabletBaseScreen(
             title = stringResource(Res.string.final_screen_title),
@@ -73,14 +77,14 @@ class FinalScreen : Screen {
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         RoundedButton(
-                            text = "Send",
+                            text = Resources.String.send,
                             modifier = Modifier
                                 .fillMaxWidth(0.3f)
                                 .height(60.dp),
                             onClick = {
                                 if (!isButtonEnabled) return@RoundedButton
                                 isButtonEnabled = false
-                                send(viewModel, snackbarHostState, coroutineScope)
+                                send(viewModel, snackbarHostState, coroutineScope, successMessage)
                             },
                             enabled = isButtonEnabled
                         )
@@ -106,12 +110,13 @@ class FinalScreen : Screen {
     private fun send(
         viewModel: ClockTestViewModel,
         snackbarHostState: SnackbarHostState,
-        coroutineScope: CoroutineScope
+        coroutineScope: CoroutineScope,
+        successMessage: String
     ) {
         try {
             viewModel.sendToServer(onSuccess = {
                 coroutineScope.launch {
-                    snackbarHostState.showSnackbar("Sent successfully")
+                    snackbarHostState.showSnackbar(successMessage)
                 }
             }, onFailure = { error ->
                 coroutineScope.launch {
