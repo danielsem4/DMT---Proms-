@@ -4,10 +4,12 @@ import core.di.clientRequestsModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import core.di.sessionModule
 import org.example.hit.heal.cdt.di.CDT_module
 import org.example.hit.heal.login.LoginViewModel
-import org.example.hit.heal.navigation.NavigationViewModel
 import org.koin.core.context.startKoin
+import org.example.hit.heal.Home.HomeViewModel
+import org.example.hit.heal.splash.SplashViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.core.module.dsl.viewModelOf
@@ -39,17 +41,20 @@ fun initKoin(config: KoinAppDeclaration? = null) =
 
 expect val platformModule: Module
 
-val sharedAppModules = module {
+val sharedAppModules = module{
     includes(clientRequestsModule)
+    includes(sessionModule)
 }
 
 val sharedModules = module {
     single<CoroutineScope> { CoroutineScope(Dispatchers.Main + SupervisorJob()) }
     viewModelOf(::LoginViewModel)
+    viewModelOf(::HomeViewModel)
+    viewModelOf(::SplashViewModel)
 
-    single { NavigationViewModel() }
+  //  single { NavigationViewModel() }
 //    viewModelOf(::NavigationViewModel) //should be like this instead of single
-    singleOf(::NavigationViewModel)
+
 
     single { CountdownTimerUseCase(get()) }
     single { CountdownDialogHandler(get()) }

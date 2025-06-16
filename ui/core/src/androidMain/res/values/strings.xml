@@ -1,0 +1,22 @@
+<resources>
+<!--    app common strings-->
+
+    <string name="app_name">DMT - Proms</string>
+    <string name="login">Login</string>
+
+    <!--    CDT Module  -->
+
+
+    <!--    Hitber Module  -->
+
+
+    <!--    Orientation Module  -->
+
+
+    <!--    Memory Module  -->
+
+
+    <!--    Pass Module  -->
+
+
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    app common strings-->
+
+    <string name="app_name">DMT - Proms</string>
+    <string name="login">התחברות</string>
+
+    <string name="previous">קודם</string>
+    <string name="next">הבא</string>
+    <string name="how_do_you_feel">איך אתה מרגיש?</string>
+
+    <!--    CDT Module  -->
+
+
+    <!--    Hitber Module  -->
+
+
+    <!--    Orientation Module  -->
+
+
+    <!--    Memory Module  -->
+
+
+    <!--    Pass Module  -->
+
+
+</resources>
