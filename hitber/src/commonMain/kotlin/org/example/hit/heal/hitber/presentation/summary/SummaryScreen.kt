@@ -36,7 +36,7 @@ import dmt_proms.hitber.generated.resources.summary_hitbear_exit
 import dmt_proms.hitber.generated.resources.summary_hitbear_instructions1
 import dmt_proms.hitber.generated.resources.summary_hitbear_instructions2
 import dmt_proms.hitber.generated.resources.summary_hitbear_title
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

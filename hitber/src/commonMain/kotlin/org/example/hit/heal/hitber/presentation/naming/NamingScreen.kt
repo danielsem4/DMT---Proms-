@@ -12,7 +12,7 @@ import dmt_proms.hitber.generated.resources.fourth_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.fourth_question_hitbear_title
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import getImageName
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.naming.components.NamingImages
 import org.example.hit.heal.hitber.presentation.naming.components.NamingTextFields

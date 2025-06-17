@@ -29,7 +29,7 @@ import androidx.compose.ui.window.Dialog
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.dialog_speaker
 import dmt_proms.hitber.generated.resources.sixth_question_hitbear_Speaker
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import org.example.hit.heal.core.presentation.BaseScreen
+import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScreen
 
 class RepetitionScreen : Screen {

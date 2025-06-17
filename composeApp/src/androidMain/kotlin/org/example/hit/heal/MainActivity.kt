@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        initKoin {
-//            androidLogger() // provides logger to use in android module
+//            androidLogger()
 //            androidContext(this@MainActivity)
 //        }
         setContent {
@@ -36,8 +36,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview
-@Composable
-fun AppAndroidPreview() {
-    App()
-}

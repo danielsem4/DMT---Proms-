@@ -25,7 +25,7 @@ import dmt_proms.hitber.generated.resources.second_question_hitbear_task
 import dmt_proms.hitber.generated.resources.second_question_hitbear_title
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.profile
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

@@ -26,7 +26,7 @@ import androidx.compose.ui.zIndex
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.second_question_hitbear_dialog_icon
 import dmt_proms.hitber.generated.resources.second_question_hitbear_dialog_understand
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

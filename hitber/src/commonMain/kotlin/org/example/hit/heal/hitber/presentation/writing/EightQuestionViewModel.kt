@@ -13,7 +13,7 @@ import dmt_proms.hitber.generated.resources.eighth_question_answer_hitbear_versi
 import dmt_proms.hitber.generated.resources.eighth_question_answer_hitbear_version_4
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import org.example.hit.heal.core.presentation.Colors.backgroundColor
+import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.hitber.presentation.writing.model.WordSlotState
 import org.example.hit.heal.hitber.presentation.writing.model.slotsList
 

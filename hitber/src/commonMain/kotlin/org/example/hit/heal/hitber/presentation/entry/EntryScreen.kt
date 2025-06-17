@@ -26,7 +26,7 @@ import dmt_proms.hitber.generated.resources.entry_hitbear_instructions7
 import dmt_proms.hitber.generated.resources.entry_hitbear_note
 import dmt_proms.hitber.generated.resources.entry_hitbear_title
 import dmt_proms.hitber.generated.resources.hitbear_start
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
 import org.jetbrains.compose.resources.stringResource
 

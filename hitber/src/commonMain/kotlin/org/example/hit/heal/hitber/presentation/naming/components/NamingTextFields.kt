@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.fourth_question_hitbear_what_in_the_pic
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.naming.FourthQuestionViewModel
 import org.jetbrains.compose.resources.stringResource
 

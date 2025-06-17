@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.hit.heal.cdt.data.ClockTime
-import org.example.hit.heal.core.presentation.Colors
+import org.example.hit.heal.core.presentation.primaryColor
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -103,7 +103,7 @@ fun ClockComponent(
         ) {
             // Draw clock face circle
             drawCircle(
-                color = Colors.primaryColor,
+                color = primaryColor,
                 style = Stroke(width = 8.dp.toPx()),
                 radius = size.minDimension / 2 - 8.dp.toPx()
             )
@@ -125,7 +125,7 @@ fun ClockComponent(
                 angle = hourAngle,
                 length = size.width * hourHandSizeRatio,
                 strokeWidth = 12.dp.toPx(),
-                color = Colors.primaryColor,
+                color = primaryColor,
                 isHourHand = true
             )
 
@@ -135,13 +135,13 @@ fun ClockComponent(
                 angle = minuteAngle,
                 length = size.width * minuteHandSizeRatio,
                 strokeWidth = 8.dp.toPx(),
-                color = Colors.primaryColor,
+                color = primaryColor,
                 isHourHand = false
             )
 
             // Draw center dot
             drawCircle(
-                color = Colors.primaryColor,
+                color = primaryColor,
                 radius = 8.dp.toPx(),
                 center = center
             )
@@ -166,7 +166,7 @@ private fun DrawScope.drawNumber(
         style = TextStyle(
             fontSize = 28.sp,
             textAlign = TextAlign.Center,
-            color = Colors.primaryColor
+            color = primaryColor
         )
     )
     drawText(
@@ -187,7 +187,7 @@ private fun DrawScope.drawDot(position: Int) {
         y = center.y + (radius * sin(angle)).toFloat()
     )
     drawCircle(
-        color = Colors.primaryColor,
+        color = primaryColor,
         radius = 2.dp.toPx(),
         center = dotPosition
     )

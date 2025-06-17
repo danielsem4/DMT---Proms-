@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.core.presentation.Colors
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -36,7 +36,7 @@ fun InstructionBox(
             text = text,
             fontSize = 40.sp,
             fontWeight = FontWeight.SemiBold,
-            color = Colors.primaryColor,
+            color = primaryColor,
             textAlign = TextAlign.Center,
             lineHeight = 45.sp
         )

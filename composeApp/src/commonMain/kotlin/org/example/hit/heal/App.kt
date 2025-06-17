@@ -1,6 +1,7 @@
 package org.example.hit.heal
 
 import androidx.compose.material.MaterialTheme
+import LoginScreen
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
 import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
@@ -16,9 +17,9 @@ import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScree
 import org.example.hit.heal.hitber.utils.BottomToTopTransition
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
+import org.example.hit.heal.splash.SplashScreen
 
 @Composable
-@Preview
 fun App() {
 
     MaterialTheme {
@@ -26,4 +27,7 @@ fun App() {
             BottomToTopTransition(navigator = navigator)
         } }
     }
+//    MaterialTheme {
+//        Navigator(SplashScreen())
+//    }
 }

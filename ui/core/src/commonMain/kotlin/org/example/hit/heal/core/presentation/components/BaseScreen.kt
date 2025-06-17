@@ -1,4 +1,4 @@
-package org.example.hit.heal.core.presentation
+package org.example.hit.heal.core.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,11 +25,15 @@ import dmt_proms.ui.core.generated.resources.Res
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
 import dmt_proms.ui.core.generated.resources.next
 import dmt_proms.ui.core.generated.resources.previous
-import org.example.hit.heal.core.presentation.Colors.backgroundColor
-import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+/**
+ * BaseScreen is a reusable composable that provides a standard layout
+ * for screens in the application.
+ */
 
 @Composable
 fun BaseScreen(

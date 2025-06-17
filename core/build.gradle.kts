@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -42,6 +42,8 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
+            implementation(projects.ui.core)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -61,9 +63,10 @@ kotlin {
             implementation(libs.navigation.compose)
 
             implementation(libs.coil.compose)
-            implementation(libs.datastore.preferences)
             implementation(libs.atomicfu)
 
+            implementation(libs.datastore.preferences)
+            implementation(libs.datastore)
             // DateTime
             implementation(libs.kotlinx.datetime)
         }

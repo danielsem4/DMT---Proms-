@@ -48,7 +48,7 @@ object HttpClientFactory {
             }
             defaultRequest {
                 contentType(ContentType.Application.Json)
-                header("Authorization", "Token ${TokenProvider.getCurrentToken()}")
+//                header("Authorization", "Token ${TokenProvider.getCurrentToken()}")
             }
         }
     }

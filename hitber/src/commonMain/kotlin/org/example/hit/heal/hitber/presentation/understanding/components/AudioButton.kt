@@ -20,7 +20,7 @@ import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.sixth_question_hitbear_listen
 import dmt_proms.hitber.generated.resources.sixth_question_hitbear_volume_icon
 import dmt_proms.hitber.generated.resources.speaker
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

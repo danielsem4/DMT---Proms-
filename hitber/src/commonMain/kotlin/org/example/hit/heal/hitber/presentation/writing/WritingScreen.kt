@@ -19,7 +19,7 @@ import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.eighth_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.eighth_question_hitbear_title
 import dmt_proms.hitber.generated.resources.hitbear_continue
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ActionShapesScreen
 import org.example.hit.heal.hitber.presentation.writing.components.StaticWords

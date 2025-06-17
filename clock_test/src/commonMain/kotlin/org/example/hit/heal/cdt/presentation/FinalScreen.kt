@@ -12,8 +12,11 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -41,6 +44,7 @@ class FinalScreen : Screen {
 
         val snackbarHostState = remember { SnackbarHostState() }
         val coroutineScope = rememberCoroutineScope()
+        var isButtonEnabled by  remember { mutableStateOf(true) }
 
         TabletBaseScreen(
             title = stringResource(Res.string.final_screen_title),
@@ -73,7 +77,12 @@ class FinalScreen : Screen {
                             modifier = Modifier
                                 .fillMaxWidth(0.3f)
                                 .height(60.dp),
-                            onClick = { send(viewModel, snackbarHostState, coroutineScope) }
+                            onClick = {
+                                if (!isButtonEnabled) return@RoundedButton
+                                isButtonEnabled = false
+                                send(viewModel, snackbarHostState, coroutineScope)
+                            },
+                            enabled = isButtonEnabled
                         )
                     }
                     Spacer(modifier = Modifier.height(32.dp))
