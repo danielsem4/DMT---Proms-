@@ -63,6 +63,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+            implementation(libs.androidx.multidex)
 
             // Voyager Navigator
             implementation(libs.voyager.navigator)
@@ -125,6 +126,8 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = true
+
     }
     packaging {
         resources {

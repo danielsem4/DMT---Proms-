@@ -1,4 +1,4 @@
-package presentation.components
+package core.domain.audio
 
 import android.media.MediaPlayer
 

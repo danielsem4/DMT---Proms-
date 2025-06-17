@@ -1,16 +1,10 @@
-package presentation.components
+package core.domain.audio
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.AVFAudio.AVAudioPlayer
 import platform.AVFAudio.AVAudioPlayerDelegateProtocol
 import platform.Foundation.NSURL
 import platform.darwin.NSObject
-
-class AudioPlayerDelegate(val onCompletion: () -> Unit) : NSObject(), AVAudioPlayerDelegateProtocol {
-    override fun audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully: Boolean) {
-        onCompletion()
-    }
-}
 
 actual class AudioPlayer {
     private var player: AVAudioPlayer? = null
@@ -23,5 +17,12 @@ actual class AudioPlayer {
         delegate = AudioPlayerDelegate(onCompletion)
         player?.delegate = delegate
         player?.play()
+    }
+}
+
+class AudioPlayerDelegate(val onCompletion: () -> Unit) : NSObject(),
+    AVAudioPlayerDelegateProtocol {
+    override fun audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully: Boolean) {
+        onCompletion()
     }
 }

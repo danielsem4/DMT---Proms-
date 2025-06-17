@@ -16,7 +16,7 @@ fun App() {
             LeftToRightTransition(navigator = navigator)
         } }
     }
-    MaterialTheme {
-        Navigator(SplashScreen())
-    }
+//    MaterialTheme {
+//        Navigator(SplashScreen())
+//    }
 }

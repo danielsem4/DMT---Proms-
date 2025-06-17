@@ -1,9 +1,14 @@
 package presentation.appsDeviceScreen
 
-import presentation.components.CountdownTimerUseCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import org.example.hit.heal.core.presentation.Colors
+import presentation.components.CountdownDialogHandler
+import presentation.components.AppData
+import core.domain.use_case.PlayAudioUseCase
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.apps_page_second_assist
 import dmt_proms.pass.generated.resources.calculator
@@ -28,17 +33,7 @@ import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
 import dmt_proms.pass.generated.resources.what_you_need_to_do
 import dmt_proms.pass.generated.resources.white_messages
 import dmt_proms.pass.generated.resources.white_phone
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import org.example.hit.heal.core.presentation.Colors
-import presentation.components.CountdownDialogHandler
-import presentation.components.AppData
-import presentation.components.AudioPlayer
-import presentation.components.ContactData
-import presentation.components.PlayAudioUseCase
 import presentation.contatcts.ContactsScreen
-import presentation.detailedContact.DetailedContactScreen
-import presentation.nextQuestion.NextQuestionScreen
 
 class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHandler,
                           private val playAudioUseCase: PlayAudioUseCase

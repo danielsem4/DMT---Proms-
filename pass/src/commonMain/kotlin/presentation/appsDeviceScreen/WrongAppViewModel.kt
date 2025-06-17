@@ -2,6 +2,7 @@ package presentation.appsDeviceScreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import core.domain.use_case.PlayAudioUseCase
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.going_back_to_apss_screen_pass
 import dmt_proms.pass.generated.resources.return_button_on_top_left_pass
@@ -16,7 +17,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import presentation.components.CountdownDialogHandler
-import presentation.components.PlayAudioUseCase
 
 class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandler,
                         private val playAudioUseCase: PlayAudioUseCase

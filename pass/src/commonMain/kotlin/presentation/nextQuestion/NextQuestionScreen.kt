@@ -16,19 +16,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.contact
 import dmt_proms.pass.generated.resources.finish_first_mission_pass
-import dmt_proms.pass.generated.resources.first_instructions_pass
 import dmt_proms.pass.generated.resources.first_mission_done_vocal_pass
-import dmt_proms.pass.generated.resources.search
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.components.AudioPlayingAnimation
+import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
 import presentation.dialScreen.DialScreen
 
 class NextQuestionScreen : Screen {

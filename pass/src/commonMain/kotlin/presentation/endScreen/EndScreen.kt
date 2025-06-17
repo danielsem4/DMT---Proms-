@@ -32,34 +32,29 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.util.lerp
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.check
 import dmt_proms.pass.generated.resources.end
 import dmt_proms.pass.generated.resources.exit
-import dmt_proms.pass.generated.resources.first_instructions_pass
-import dmt_proms.pass.generated.resources.next
 import dmt_proms.pass.generated.resources.thanks_coffe
 import dmt_proms.pass.generated.resources.thanks_vocal_pass
 
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.appsDeviceScreen.AppDeviceScreen
-import presentation.components.AudioPlayingAnimation
+import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
+import org.example.hit.heal.core.presentation.components.SuccessAnimation
 import presentation.entryScreen.EntryViewModel
 import kotlin.math.PI
 import kotlin.math.cos
@@ -151,103 +146,3 @@ class EndScreen : Screen {
     }
 }
 
-@Composable
-fun SuccessAnimation(modifier: Modifier = Modifier) {
-    val circleScale = remember { Animatable(0f) }
-    val morphProgress = remember { Animatable(0f) }
-    val tickAlpha = remember { Animatable(0f) }
-    val lineAlpha = remember { Animatable(1f) }
-
-    LaunchedEffect(Unit) {
-        circleScale.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(800, easing = FastOutSlowInEasing)
-        )
-
-        morphProgress.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(800, easing = LinearEasing)
-        )
-
-        tickAlpha.animateTo(
-            targetValue = 1f,
-            animationSpec = tween(500)
-        )
-
-        lineAlpha.animateTo(
-            targetValue = 0f,
-            animationSpec = tween(800, delayMillis = 500)
-        )
-    }
-
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        Canvas(modifier = Modifier.size(100.dp)) {
-            val center = this.center
-            val baseRadius = size.minDimension / 2 * circleScale.value
-
-            // Draw white background circle
-            drawCircle(
-                color = Color.White,
-                radius = baseRadius,
-                center = center
-            )
-
-            val lineCount = 12
-            val angleStep = 360f / lineCount
-            val innerRadius = baseRadius * 0.3f
-            val outerRadius = baseRadius * 1.3f
-
-            repeat(lineCount) { i ->
-                val angleRad = (i * angleStep) * (PI / 180f)
-                val direction = Offset(cos(angleRad).toFloat(), sin(angleRad).toFloat())
-
-                val positionProgress = morphProgress.value
-                val currentRadius = lerp(innerRadius, outerRadius, positionProgress)
-
-                val progressSin = sin(PI * positionProgress).toFloat() // 0 ➝ 1 ➝ 0
-                val lineLength = progressSin * baseRadius * 0.5f
-
-                val start = center + direction * (currentRadius - lineLength / 2)
-                val end = center + direction * (currentRadius + lineLength / 2)
-
-                val stroke = lerp(10f, 3f, positionProgress)
-
-                val elementAlpha = lineAlpha.value
-
-                if (progressSin > 0.05f) {
-                    drawLine(
-                        color = Color(0xFF4CAF50).copy(alpha = elementAlpha),
-                        start = start,
-                        end = end,
-                        strokeWidth = stroke,
-                        cap = StrokeCap.Round
-                    )
-                } else {
-                    drawCircle(
-                        color = Color(0xFF4CAF50).copy(alpha = elementAlpha),
-                        radius = 4f,
-                        center = center + direction * currentRadius
-                    )
-                }
-            }
-        }
-
-        // Checkmark icon
-        if (tickAlpha.value > 0f) {
-            Image(
-                painter = painterResource(Res.drawable.check),
-                contentDescription = "Success",
-                modifier = Modifier
-                    .size(50.dp)
-                    .graphicsLayer {
-                        alpha = tickAlpha.value
-                        scaleX = tickAlpha.value
-                        scaleY = tickAlpha.value
-                    }
-                    .clipToBounds()
-                    .width(50.dp * tickAlpha.value)
-            )
-        }
-
-    }
-}

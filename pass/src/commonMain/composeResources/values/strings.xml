@@ -1,4 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
 <resources>
+    <!--    app common strings-->
+
+    <string name="app_name">DMT - Proms</string>
+    <string name="login">Login</string>
+
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="how_do_you_feel">How do you feel?</string>
+
+    <!--    CDT Module  -->
+
+
+    <!--    Hitber Module  -->
+
+
+    <!--    Orientation Module  -->
+
+
+    <!--    Memory Module  -->
+
+
+    <!--    Pass Module  -->
     <string name="hana_cohen">Hana Cohen</string>
     <string-array name="person_names">
         <item>Elinor Solomon</item>
@@ -162,7 +186,6 @@
     <string name="dial">Dial</string>
 
     <string name="welcome">Welcome!</string>
-    <string name="next">Next</string>
 
     <string name="end">End</string>
 
@@ -202,7 +225,5 @@
     <string name="witch_contact_are_we_looking_for_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwhat_contact_are_you_searching.mp3?alt=media&token=87e10d59-51f4-4373-a110-934472c61499]]></string>
     <string name="wrong_number_dialed_please_try_again_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwrong_number_dialed_try_again.mp3?alt=media&token=f3b84ffa-25c7-4101-8082-e2839f79ce86]]></string>
     <string name="first_mission_done_vocal_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fmission_done.mp3?alt=media&token=d6a19387-ea70-4be7-ae39-a846d13c13bc]]></string>
-
-
 
 </resources>

@@ -36,17 +36,15 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
-
-            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
             implementation (libs.navigator)
             implementation (libs.navigator.tabs)
             implementation (libs.navigator.transitions)
+            implementation(projects.core)
             implementation(projects.ui.core)
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -56,29 +54,14 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(compose.materialIconsExtended)
-            implementation(libs.font.awesome)
-
-            implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-            api(libs.koin.core)
 
-            implementation(libs.navigation.compose)
-
-            implementation(libs.coil.compose)
-            implementation(libs.datastore.preferences)
-            implementation(libs.atomicfu)
-
-        }
-        nativeMain.dependencies {
-            implementation(libs.ktor.client.darwin)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
             implementation(compose.desktop.common)
-            implementation(libs.ktor.client.okhttp)
         }
     }
 }

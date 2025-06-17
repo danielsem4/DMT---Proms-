@@ -1,19 +1,15 @@
 package presentation.entryScreen
 
 import BaseTabletScreen
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -23,11 +19,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.pass.generated.resources.Res
@@ -36,18 +30,13 @@ import dmt_proms.pass.generated.resources.first_mission_pass
 import dmt_proms.pass.generated.resources.fmpt
 import dmt_proms.pass.generated.resources.fmpt_meaning
 import dmt_proms.pass.generated.resources.next
-import dmt_proms.pass.generated.resources.speaker
-import dmt_proms.pass.generated.resources.test_record_pass
 import dmt_proms.pass.generated.resources.the_pass_test
 import dmt_proms.pass.generated.resources.welcome
-import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.appsDeviceScreen.AppDeviceScreen
-import presentation.components.AudioPlayer
-import presentation.components.AudioPlayingAnimation
+import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
 
 class EntryScreen : Screen {
 

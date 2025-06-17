@@ -41,11 +41,11 @@ import org.example.hit.heal.core.presentation.Colors
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.StringResource
 import presentation.components.AppData
-import presentation.components.AudioPlayer
+import core.domain.audio.AudioPlayer
+import core.domain.use_case.PlayAudioUseCase
 import presentation.components.ContactData
 import presentation.components.CountdownDialogHandler
 import presentation.components.CountdownTimerUseCase
-import presentation.components.PlayAudioUseCase
 import presentation.dialScreen.DialScreen
 import presentation.nextQuestion.NextQuestionScreen
 

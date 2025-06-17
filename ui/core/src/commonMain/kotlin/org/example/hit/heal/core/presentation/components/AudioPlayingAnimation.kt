@@ -1,4 +1,4 @@
-package presentation.components
+package org.example.hit.heal.core.presentation.components
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -25,8 +25,8 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.dialog_speaker
+import dmt_proms.ui.core.generated.resources.Res
+import dmt_proms.ui.core.generated.resources.dialog_speaker
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

@@ -1,5 +1,6 @@
-package presentation.components
+package core.domain.use_case
 
+import core.domain.audio.AudioPlayer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

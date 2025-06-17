@@ -3,12 +3,11 @@ package presentation.nextQuestion
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import core.domain.use_case.PlayAudioUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import presentation.components.AudioPlayer
-import presentation.components.PlayAudioUseCase
 
 class NextQuestionViewModel( private val playAudioUseCase: PlayAudioUseCase): ViewModel() {
 

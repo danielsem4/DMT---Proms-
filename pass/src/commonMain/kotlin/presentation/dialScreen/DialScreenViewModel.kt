@@ -3,6 +3,7 @@ package presentation.dialScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
+import core.domain.use_case.PlayAudioUseCase
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.call_to_dentist
 import dmt_proms.pass.generated.resources.call_to_detist_pass
@@ -32,7 +33,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import presentation.components.CountdownDialogHandler
-import presentation.components.PlayAudioUseCase
 import presentation.dialScreen.components.StartCheckingIfUserDidSomethingUseCase
 import presentation.endScreen.EndScreen
 

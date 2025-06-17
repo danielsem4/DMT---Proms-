@@ -41,6 +41,7 @@ import dmt_proms.pass.generated.resources.no
 import dmt_proms.pass.generated.resources.yes
 import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

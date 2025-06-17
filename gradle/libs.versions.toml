@@ -18,6 +18,7 @@ junit = "4.13.2"
 koin = "4.0.0"
 kotlinx-serialization = "1.8.0"
 koinComposeMultiplatform = "4.0.0"
+multidex = "2.0.1"
 navigationCompose = "2.8.0-alpha10"
 lifecycleViewModel = "2.8.7"
 kotlin = "2.1.0"
@@ -41,6 +42,7 @@ nav3Core = "1.0.0-alpha02"
 nav3Lifecycle = "1.0.0-alpha01"
 
 [libraries]
+androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 font-awesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "fontAwesome" }
 androidx-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "foundationLayout" }
 

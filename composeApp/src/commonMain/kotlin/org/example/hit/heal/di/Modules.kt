@@ -18,10 +18,10 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import presentation.appsDeviceScreen.AppDeviceViewModel
 import presentation.appsDeviceScreen.WrongAppViewModel
-import presentation.components.AudioPlayer
+import core.domain.audio.AudioPlayer
+import core.domain.use_case.PlayAudioUseCase
 import presentation.components.CountdownDialogHandler
 import presentation.components.CountdownTimerUseCase
-import presentation.components.PlayAudioUseCase
 import presentation.contatcts.ContactsViewModel
 import presentation.detailedContact.DetailedContactScreen
 import presentation.detailedContact.DetailedContactViewModel

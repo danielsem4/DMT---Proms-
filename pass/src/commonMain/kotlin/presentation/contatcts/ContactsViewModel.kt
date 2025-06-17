@@ -3,6 +3,7 @@ package presentation.contatcts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
+import core.domain.use_case.PlayAudioUseCase
 import dmt_proms.pass.generated.resources.Res
 import dmt_proms.pass.generated.resources.contacts_page_first_assist
 import dmt_proms.pass.generated.resources.contacts_page_second_assist
@@ -21,7 +22,6 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.getStringArray
 import presentation.components.ContactData
 import presentation.components.CountdownDialogHandler
-import presentation.components.PlayAudioUseCase
 import presentation.detailedContact.DetailedContactScreen
 
 class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandler,
