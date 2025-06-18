@@ -13,9 +13,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.hitbear_continue
-import dmt_proms.hitber.generated.resources.seventh_question_hitbear_title
+import org.example.hit.heal.core.presentation.Resources.String.`continue`
+import org.example.hit.heal.core.presentation.Resources.String.seventhQuestionHitberTitle
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.DraggableCanvas
@@ -56,11 +55,11 @@ class DragAndDropScreen : Screen {
         }
 
         TabletBaseScreen(
-            title = stringResource(Res.string.seventh_question_hitbear_title),
+            title = stringResource(seventhQuestionHitberTitle),
             onNextClick = {
                 capturable?.capture?.let { it() }
             },
-            buttonText = stringResource(Res.string.hitbear_continue),
+            buttonText = stringResource(`continue`),
             buttonColor = primaryColor,
             question = 7,
             content = {

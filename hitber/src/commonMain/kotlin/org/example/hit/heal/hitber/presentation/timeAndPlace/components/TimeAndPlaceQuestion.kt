@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.drop_down
 import dmt_proms.hitber.generated.resources.drop_up
-import dmt_proms.hitber.generated.resources.first_question_hitbear_Drop_down_drop_up_Icon
+import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberDropDownDropUpIcon
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -65,7 +65,7 @@ fun TimeAndPlaceQuestion(
                     painter = painterResource(
                         if (expanded) Res.drawable.drop_up else Res.drawable.drop_down
                     ),
-                    contentDescription = stringResource(Res.string.first_question_hitbear_Drop_down_drop_up_Icon),
+                    contentDescription = stringResource(firstQuestionHitberDropDownDropUpIcon),
                     modifier = Modifier.size(20.dp)
                 )
             },

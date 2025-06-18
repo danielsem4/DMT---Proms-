@@ -26,11 +26,11 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.getCurrentFormattedDateTime
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.error_icon
-import dmt_proms.hitber.generated.resources.hitbear_continue
-import dmt_proms.hitber.generated.resources.second_question_hitbear_dialog_title
-import dmt_proms.hitber.generated.resources.second_question_hitbear_task_instructions
-import dmt_proms.hitber.generated.resources.second_question_hitbear_task_retry_instructions
-import dmt_proms.hitber.generated.resources.second_question_hitbear_title
+import org.example.hit.heal.core.presentation.Resources.String.`continue`
+import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogTitle
+import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskInstructions
+import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskRetryInstructions
+import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTitle
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
@@ -56,7 +56,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
         val listShapes by secondQuestionViewModel.listShapes.collectAsState()
         val shapeNames = selectedShapes.map { getShapeName(it.type) }
 
-        TabletBaseScreen(title = stringResource(Res.string.second_question_hitbear_title), onNextClick = {
+        TabletBaseScreen(title = stringResource(secondQuestionHitberTitle), onNextClick = {
             secondQuestionViewModel.calculateCorrectShapesCount()
             secondQuestionViewModel.updateTask()
             secondQuestionViewModel.secondQuestionAnswer(question, shapeNames)
@@ -75,9 +75,9 @@ class ActionShapesScreen(private val question: Int) : Screen {
                 }
             }
 
-        }, question = question, buttonText = stringResource(Res.string.hitbear_continue), buttonColor = primaryColor, content = {
+        }, question = question, buttonText = stringResource(`continue`), buttonColor = primaryColor, content = {
 
-           InstructionText( stringResource(Res.string.second_question_hitbear_task_instructions))
+           InstructionText( stringResource(secondQuestionHitberTaskInstructions))
 
             Box(
                 modifier = Modifier.fillMaxSize()
@@ -101,7 +101,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
 
                                 Image(
                                     painter = painterResource(shapeRes.drawable),
-                                    contentDescription = stringResource(Res.string.second_question_hitbear_title),
+                                    contentDescription = stringResource(secondQuestionHitberTitle),
                                     modifier = Modifier
                                         .background(shapeColor).weight(1f)
                                         .clickable { secondQuestionViewModel.setSelectedShapes(shapeRes) }
@@ -116,8 +116,8 @@ class ActionShapesScreen(private val question: Int) : Screen {
         if (showDialog) {
             DialogTask(
                 icon = Res.drawable.error_icon,
-                title = stringResource(Res.string.second_question_hitbear_dialog_title),
-                text = stringResource(Res.string.second_question_hitbear_task_retry_instructions),
+                title = stringResource(secondQuestionHitberDialogTitle),
+                text = stringResource(secondQuestionHitberTaskRetryInstructions),
                 onDismiss = { showDialog = false })
         }
 

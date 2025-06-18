@@ -1,17 +1,16 @@
 package org.example.hit.heal.hitber.presentation.dragAndDrop.model
 
 import androidx.compose.ui.graphics.Color
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.seventh_question_black_circle
-import dmt_proms.hitber.generated.resources.seventh_question_blue_circle
-import dmt_proms.hitber.generated.resources.seventh_question_green_circle
-import dmt_proms.hitber.generated.resources.seventh_question_yellow_circle
+import org.example.hit.heal.core.presentation.Resources.String.seventhQuestionHitberBlackCircle
+import org.example.hit.heal.core.presentation.Resources.String.seventhQuestionHitberBlueCircle
+import org.example.hit.heal.core.presentation.Resources.String.seventhQuestionHitberGreenCircle
+import org.example.hit.heal.core.presentation.Resources.String.seventhQuestionHitberYellowCircle
 
 val instructions = listOf(
-    Res.string.seventh_question_green_circle to Color.Green,
-    Res.string.seventh_question_black_circle to Color.Black,
-    Res.string.seventh_question_blue_circle to Color.Blue,
-    Res.string.seventh_question_yellow_circle to Color.Yellow
+    seventhQuestionHitberGreenCircle to Color.Green,
+    seventhQuestionHitberBlackCircle to Color.Black,
+    seventhQuestionHitberBlueCircle to Color.Blue,
+    seventhQuestionHitberYellowCircle to Color.Yellow
 )
 
 val circleColors = listOf(Color.Black, Color.Green, Color.Blue, Color.Yellow)

@@ -15,10 +15,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.getCurrentFormattedDateTime
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.eighth_question_hitbear_instructions
-import dmt_proms.hitber.generated.resources.eighth_question_hitbear_title
-import dmt_proms.hitber.generated.resources.hitbear_continue
+import org.example.hit.heal.core.presentation.Resources.String.`continue`
+import org.example.hit.heal.core.presentation.Resources.String.eighthQuestionHitberInstructions
+import org.example.hit.heal.core.presentation.Resources.String.eighthQuestionHitberTitle
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ActionShapesScreen
@@ -44,7 +43,7 @@ class WritingScreen : Screen {
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
             TabletBaseScreen(
-                title = stringResource(Res.string.eighth_question_hitbear_title),
+                title = stringResource(eighthQuestionHitberTitle),
                 onNextClick = {
                     if (allFinished) {
                         eightQuestionViewModel.eighthQuestionAnswer(sentences)
@@ -56,11 +55,11 @@ class WritingScreen : Screen {
 
                     }
                 },
-                buttonText = stringResource(Res.string.hitbear_continue),
+                buttonText = stringResource(`continue`),
                 question = 8,
                 buttonColor = if (!allFinished) Color.Gray else primaryColor,
                 content = {
-                    InstructionText(stringResource(Res.string.eighth_question_hitbear_instructions))
+                    InstructionText(stringResource(eighthQuestionHitberInstructions))
                     Box(
                         modifier = Modifier.fillMaxWidth()
                     ) {

@@ -15,10 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.first_question_hitbear_instructions
-import dmt_proms.hitber.generated.resources.first_question_hitbear_title
-import dmt_proms.hitber.generated.resources.hitbear_continue
+import org.example.hit.heal.core.presentation.Resources.String.`continue`
+import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberInstructions
+import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberTitle
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
@@ -37,7 +36,7 @@ class TimeAndPlace : Screen {
         val allAnswersFinished by firstQuestionViewModel.allAnswersFinished.collectAsState()
 
         TabletBaseScreen(
-            title = stringResource(Res.string.first_question_hitbear_title),
+            title = stringResource(firstQuestionHitberTitle),
             onNextClick = {
                 if (allAnswersFinished) {
                     viewModel.setFirstQuestion(firstQuestionViewModel.firstQuestion.value)
@@ -45,13 +44,13 @@ class TimeAndPlace : Screen {
                 }
             },
             question = 1,
-            buttonText = stringResource(Res.string.hitbear_continue),
+            buttonText = stringResource(`continue`),
             buttonColor = if (allAnswersFinished) {
                 primaryColor
             } else Color.Gray,
             content = {
                 InstructionText(
-                    stringResource(Res.string.first_question_hitbear_instructions),
+                    stringResource(firstQuestionHitberInstructions ),
                 )
 
                 Column(

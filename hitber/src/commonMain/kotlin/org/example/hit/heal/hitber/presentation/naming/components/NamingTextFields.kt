@@ -13,8 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.fourth_question_hitbear_what_in_the_pic
+import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberWhatInThePic
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.naming.FourthQuestionViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -35,7 +34,7 @@ fun NamingTextFields(
             onValueChange = { viewModel.onAnswer1Changed(it) },
             label = {
                 Text(
-                    stringResource(Res.string.fourth_question_hitbear_what_in_the_pic),
+                    stringResource(fourthQuestionHitberWhatInThePic),
                     color = Color.Black
                 )
             },
@@ -51,7 +50,7 @@ fun NamingTextFields(
             onValueChange = { viewModel.onAnswer2Changed(it) },
             label = {
                 Text(
-                    stringResource(Res.string.fourth_question_hitbear_what_in_the_pic),
+                    stringResource(fourthQuestionHitberWhatInThePic),
                     color = Color.Black
                 )
             },

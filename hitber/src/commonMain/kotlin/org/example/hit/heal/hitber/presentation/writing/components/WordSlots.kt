@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.close_icon
-import dmt_proms.hitber.generated.resources.eighth_question_hitbear_close_icon
+import org.example.hit.heal.core.presentation.Resources.String.eighthQuestionHitberCloseIcon
 import org.example.hit.heal.hitber.presentation.writing.EightQuestionViewModel
 import org.example.hit.heal.hitber.presentation.writing.model.WordSlotState
 import org.jetbrains.compose.resources.painterResource
@@ -91,7 +91,7 @@ fun WordSlot(
     ) {
         slot.word?.let {
             Image(painter = painterResource(Res.drawable.close_icon),
-                contentDescription = stringResource(Res.string.eighth_question_hitbear_close_icon),
+                contentDescription = stringResource(eighthQuestionHitberCloseIcon),
                 modifier = Modifier.size(20.dp).align(Alignment.TopStart).padding(5.dp)
                     .clickable {
                         eightQuestionViewModel.resetSlot(slot.id)

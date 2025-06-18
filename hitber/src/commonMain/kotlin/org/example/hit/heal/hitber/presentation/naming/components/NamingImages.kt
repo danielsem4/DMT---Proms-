@@ -12,9 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.fourth_question_hitbear_pic1
-import dmt_proms.hitber.generated.resources.fourth_question_hitbear_pic2
+import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberPic1
+import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberPic2
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -29,7 +28,7 @@ fun NamingImages(selectedCouple: Pair<DrawableResource, DrawableResource>?) {
         selectedCouple?.let { (firstImage, secondImage) ->
             Image(
                 painter = painterResource(firstImage),
-                contentDescription = stringResource(Res.string.fourth_question_hitbear_pic1),
+                contentDescription = stringResource(fourthQuestionHitberPic1),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
@@ -38,7 +37,7 @@ fun NamingImages(selectedCouple: Pair<DrawableResource, DrawableResource>?) {
             )
             Image(
                 painter = painterResource(secondImage),
-                contentDescription = stringResource(Res.string.fourth_question_hitbear_pic2),
+                contentDescription = stringResource(fourthQuestionHitberPic2),
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()

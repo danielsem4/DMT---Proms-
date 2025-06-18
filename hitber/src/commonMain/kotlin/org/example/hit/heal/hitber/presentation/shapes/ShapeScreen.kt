@@ -20,11 +20,11 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.second_question_hitbear_dialog_instructions
-import dmt_proms.hitber.generated.resources.second_question_hitbear_task
-import dmt_proms.hitber.generated.resources.second_question_hitbear_title
-import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.profile
+import org.example.hit.heal.core.presentation.Resources.String.`continue`
+import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogInstructions
+import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTask
+import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTitle
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
@@ -41,10 +41,10 @@ class ShapeScreen : Screen {
         val shapeSet by secondQuestionViewModel.selectedSet.collectAsState()
 
         TabletBaseScreen(
-            title = stringResource(Res.string.second_question_hitbear_title),
+            title = stringResource(secondQuestionHitberTitle),
             onNextClick = { navigator?.push(ActionShapesScreen(2)) },
             question = 2,
-            buttonText = stringResource(Res.string.hitbear_continue), buttonColor = primaryColor,
+            buttonText = stringResource(`continue`), buttonColor = primaryColor,
             content = {
 
                 Row(
@@ -57,7 +57,7 @@ class ShapeScreen : Screen {
                     shapeSet.forEach { shapeRes ->
                         Image(
                             painter = painterResource(shapeRes.drawable),
-                            contentDescription = stringResource(Res.string.second_question_hitbear_title),
+                            contentDescription = stringResource(secondQuestionHitberTitle),
                             modifier = Modifier.size(150.dp)
                         )
                     }
@@ -67,8 +67,8 @@ class ShapeScreen : Screen {
         if (showDialog) {
             DialogTask(
                 icon = Res.drawable.profile,
-                title = stringResource(Res.string.second_question_hitbear_task),
-                text = stringResource(Res.string.second_question_hitbear_dialog_instructions),
+                title = stringResource(secondQuestionHitberTask),
+                text = stringResource(secondQuestionHitberDialogInstructions),
                 onDismiss = { showDialog = false })
         }
     }

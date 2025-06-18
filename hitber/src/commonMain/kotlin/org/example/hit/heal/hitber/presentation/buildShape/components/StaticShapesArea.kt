@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Density
 import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.tenth_question_hitbear_shape_image
 import dmt_proms.hitber.generated.resources.triangle
+import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberShapeImage
 import org.example.hit.heal.hitber.presentation.buildShape.model.BuildShapes
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -37,7 +37,7 @@ fun StaticShapesArea(
     ) {
         Image(
             painter = painterResource(Res.drawable.triangle),
-            contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
+            contentDescription = stringResource(tenthQuestionHitberShapeImage),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
@@ -61,7 +61,7 @@ fun StaticShapesArea(
             ) {
                 Image(
                     painter = painterResource(shape.image),
-                    contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
+                    contentDescription = stringResource(tenthQuestionHitberShapeImage),
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.FillBounds
                 )

@@ -23,9 +23,9 @@ import androidx.compose.ui.zIndex
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.close_fridge
 import dmt_proms.hitber.generated.resources.open_fridge
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_close_fridge
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_item
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_open_fridge
+import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberCloseFridge
+import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberItem
+import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberOpenFridge
 import org.example.hit.heal.hitber.presentation.understanding.SixthQuestionViewModel
 import org.example.hit.heal.hitber.presentation.understanding.model.fridgeItems
 import org.jetbrains.compose.resources.DrawableResource
@@ -60,9 +60,9 @@ fun FridgeWithItemsBox(
             painter = if (isFridgeOpen) painterResource(Res.drawable.open_fridge)
             else painterResource(Res.drawable.close_fridge),
             contentDescription = if (isFridgeOpen)
-                stringResource(Res.string.sixth_question_hitbear_open_fridge)
+                stringResource(sixthQuestionHitberOpenFridge)
             else
-                stringResource(Res.string.sixth_question_hitbear_close_fridge),
+                stringResource(sixthQuestionHitberCloseFridge),
             modifier = Modifier
                 .fillMaxHeight()
                 .wrapContentWidth()
@@ -102,7 +102,7 @@ fun FridgeWithItemsBox(
                 ) {
                     Image(
                         painter = painterResource(item.image),
-                        contentDescription = stringResource(Res.string.sixth_question_hitbear_item),
+                        contentDescription = stringResource(sixthQuestionHitberItem),
                         modifier = Modifier.fillMaxSize(),
                         contentScale = ContentScale.FillBounds
                     )

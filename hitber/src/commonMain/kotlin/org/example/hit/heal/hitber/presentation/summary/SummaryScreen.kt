@@ -14,11 +14,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.summary_hitbear_exit
-import dmt_proms.hitber.generated.resources.summary_hitbear_instructions1
-import dmt_proms.hitber.generated.resources.summary_hitbear_instructions2
-import dmt_proms.hitber.generated.resources.summary_hitbear_title
+import org.example.hit.heal.core.presentation.Resources.String.exit
+import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions1
+import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions2
+import org.example.hit.heal.core.presentation.Resources.String.summaryHitberTitle
 import org.example.hit.heal.core.presentation.components.SuccessAnimation
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
@@ -33,10 +32,10 @@ class SummaryScreen : Screen {
         val viewModel : ActivityViewModel = koinViewModel()
 
         TabletBaseScreen(
-            title = stringResource(Res.string.summary_hitbear_title),
+            title = stringResource(summaryHitberTitle),
             onNextClick = { viewModel.uploadEvaluationResults()},
             question = 10,
-            buttonText = stringResource(Res.string.summary_hitbear_exit),
+            buttonText = stringResource(exit),
             buttonColor = primaryColor,
             content = {
 
@@ -45,8 +44,8 @@ class SummaryScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(25.dp)
                     ) {
-                    Text(stringResource(Res.string.summary_hitbear_instructions1), fontSize = 25.sp)
-                    Text(stringResource(Res.string.summary_hitbear_instructions2), fontSize = 25.sp)
+                    Text(stringResource(summaryHitberInstructions1), fontSize = 25.sp)
+                    Text(stringResource(summaryHitberInstructions2), fontSize = 25.sp)
                     SuccessAnimation(modifier = Modifier.size(100.dp))
                 }
             })

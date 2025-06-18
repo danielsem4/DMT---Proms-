@@ -8,11 +8,11 @@ import dmt_proms.hitber.generated.resources.grapes
 import dmt_proms.hitber.generated.resources.green_napkin
 import dmt_proms.hitber.generated.resources.milk
 import dmt_proms.hitber.generated.resources.red_napkin
-import dmt_proms.hitber.generated.resources.sixth_question_can_to_yellow_napkin_hitbear
-import dmt_proms.hitber.generated.resources.sixth_question_chicken_to_green_napkin_hitbear
-import dmt_proms.hitber.generated.resources.sixth_question_default_milk_to_red_napkin_hitbear
-import dmt_proms.hitber.generated.resources.sixth_question_grapes_to_blue_napkin_hitbear
 import dmt_proms.hitber.generated.resources.yellow_napkin
+import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionCanToYellowNapkinHitber
+import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionChickenToGreenNapkinHitber
+import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionDefaultMilkToRedNapkinHitber
+import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionGrapesToBlueNapkinHitber
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
@@ -24,22 +24,22 @@ data class AudioItem(
 
 val audioList = listOf(
     AudioItem(
-        Res.string.sixth_question_default_milk_to_red_napkin_hitbear,
+        sixthQuestionDefaultMilkToRedNapkinHitber,
         Res.drawable.milk,
         Res.drawable.red_napkin
     ),
     AudioItem(
-        Res.string.sixth_question_grapes_to_blue_napkin_hitbear,
+        sixthQuestionGrapesToBlueNapkinHitber,
         Res.drawable.grapes,
         Res.drawable.blue_napkin
     ),
     AudioItem(
-        Res.string.sixth_question_chicken_to_green_napkin_hitbear,
+        sixthQuestionChickenToGreenNapkinHitber,
         Res.drawable.chicken,
         Res.drawable.green_napkin
     ),
     AudioItem(
-        Res.string.sixth_question_can_to_yellow_napkin_hitbear,
+        sixthQuestionCanToYellowNapkinHitber,
         Res.drawable.coca_cola,
         Res.drawable.yellow_napkin
     )

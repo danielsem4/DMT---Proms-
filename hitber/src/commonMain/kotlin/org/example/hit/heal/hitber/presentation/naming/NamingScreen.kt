@@ -7,11 +7,10 @@ import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.getCurrentFormattedDateTime
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.fourth_question_hitbear_instructions
-import dmt_proms.hitber.generated.resources.fourth_question_hitbear_title
-import dmt_proms.hitber.generated.resources.hitbear_continue
 import getImageName
+import org.example.hit.heal.core.presentation.Resources.String.`continue`
+import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberInstructions
+import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberTitle
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.naming.components.NamingImages
@@ -35,7 +34,7 @@ class NamingScreen : Screen {
         val firstImageName = selectedCouple?.let { getImageName(it.first) } ?: ""
         val secondImageName = selectedCouple?.let { getImageName(it.second) } ?: ""
 
-        TabletBaseScreen(title = stringResource(Res.string.fourth_question_hitbear_title),
+        TabletBaseScreen(title = stringResource(fourthQuestionHitberTitle),
             onNextClick = {
                 fourthQuestionViewModel.fourthQuestionAnswer(
                     firstImageName,
@@ -48,10 +47,10 @@ class NamingScreen : Screen {
                 navigator?.push(RepetitionScreen())
             },
             question = 4,
-            buttonText = stringResource(Res.string.hitbear_continue),
+            buttonText = stringResource(`continue`),
             buttonColor = primaryColor,
             content = {
-                InstructionText(stringResource(Res.string.fourth_question_hitbear_instructions))
+                InstructionText(stringResource(fourthQuestionHitberInstructions))
                 NamingTextFields(answer1, answer2, fourthQuestionViewModel)
                 NamingImages(selectedCouple)
             })

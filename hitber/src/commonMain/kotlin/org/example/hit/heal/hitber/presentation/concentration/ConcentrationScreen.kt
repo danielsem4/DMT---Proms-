@@ -22,12 +22,11 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.getCurrentFormattedDateTime
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.hitbear_continue
-import dmt_proms.hitber.generated.resources.hitbear_start
-import dmt_proms.hitber.generated.resources.third_question_hitbear_finish_task
-import dmt_proms.hitber.generated.resources.third_question_hitbear_instructions
-import dmt_proms.hitber.generated.resources.third_question_hitbear_title
+import org.example.hit.heal.core.presentation.Resources.String.`continue`
+import org.example.hit.heal.core.presentation.Resources.String.start
+import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberFinishTask
+import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberInstructions
+import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberTitle
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.concentration.components.RandomNumberScreen
@@ -50,7 +49,7 @@ class ConcentrationScreen : Screen {
         val isNumberClickable by thirdQuestionViewModel.isNumberClickable.collectAsState()
 
         TabletBaseScreen(
-            title = stringResource(Res.string.third_question_hitbear_title),
+            title = stringResource(thirdQuestionHitberTitle),
             onNextClick = {
                 if (isFinished) {
                     viewModel.setThirdQuestion(
@@ -61,12 +60,12 @@ class ConcentrationScreen : Screen {
                 }
             },
             question = 3,
-            buttonText = stringResource(Res.string.hitbear_continue),
+            buttonText = stringResource(`continue`),
             buttonColor = if (isFinished) primaryColor else Color.Gray,
             content = {
 
                 InstructionText(
-                    stringResource(Res.string.third_question_hitbear_instructions),
+                    stringResource(thirdQuestionHitberInstructions),
                 )
 
                 if (buttonVisible) {
@@ -81,7 +80,7 @@ class ConcentrationScreen : Screen {
                         shape = RoundedCornerShape(30)
                     ) {
                         Text(
-                            stringResource(Res.string.hitbear_start),
+                            stringResource(start),
                             color = Color.White,
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold
@@ -101,7 +100,7 @@ class ConcentrationScreen : Screen {
                                 .background(color = Color.White)
                         ) {
                             Text(
-                                stringResource(Res.string.third_question_hitbear_finish_task),
+                                stringResource(thirdQuestionHitberFinishTask),
                                 color = primaryColor,
                                 fontSize = 30.sp,
                                 fontWeight = FontWeight.Bold,

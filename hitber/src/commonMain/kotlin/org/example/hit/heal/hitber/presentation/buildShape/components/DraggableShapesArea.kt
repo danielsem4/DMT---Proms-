@@ -12,8 +12,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Density
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.tenth_question_hitbear_shape_image
+import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberShapeImage
 import org.example.hit.heal.hitber.presentation.buildShape.model.BuildShapes
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -48,7 +47,7 @@ fun DraggableShapesArea(
         ) {
             Image(
                 painter = painterResource(shape.image),
-                contentDescription = stringResource(Res.string.tenth_question_hitbear_shape_image),
+                contentDescription = stringResource(tenthQuestionHitberShapeImage),
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )

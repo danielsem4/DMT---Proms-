@@ -11,9 +11,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.tenth_question_hitbear_shape_model
-import dmt_proms.hitber.generated.resources.tenth_question_hitbear_shapes
+import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberShapeModel
+import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberShapes
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -25,13 +24,13 @@ fun TopRowLabels() {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            stringResource(Res.string.tenth_question_hitbear_shape_model),
+            stringResource(tenthQuestionHitberShapeModel),
             color = Color.Black,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold
         )
         Text(
-            stringResource(Res.string.tenth_question_hitbear_shapes),
+            stringResource(tenthQuestionHitberShapes),
             color = Color.Black,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold

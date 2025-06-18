@@ -17,9 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_listen
-import dmt_proms.hitber.generated.resources.sixth_question_hitbear_volume_icon
 import dmt_proms.hitber.generated.resources.speaker
+import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberListen
+import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberVolumeIcon
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -40,14 +40,14 @@ fun AudioButton(
         ) {
             Image(
                 painter = painterResource(Res.drawable.speaker),
-                contentDescription = stringResource(Res.string.sixth_question_hitbear_volume_icon),
+                contentDescription = stringResource(sixthQuestionHitberVolumeIcon),
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .size(30.dp)
                     .background(Color.Transparent)
             )
             Text(
-                text = stringResource(Res.string.sixth_question_hitbear_listen),
+                text = stringResource(sixthQuestionHitberListen),
                 color = Color.White,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold

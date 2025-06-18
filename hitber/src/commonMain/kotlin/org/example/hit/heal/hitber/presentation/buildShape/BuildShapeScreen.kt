@@ -15,10 +15,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.hitbear_continue
-import dmt_proms.hitber.generated.resources.tenth_question_hitbear_instructions
-import dmt_proms.hitber.generated.resources.tenth_question_hitbear_title
+import org.example.hit.heal.core.presentation.Resources.String.`continue`
+import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberInstructions
+import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberTitle
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.components.TenthQuestionShapesLayout
@@ -64,16 +63,16 @@ class BuildShapeScreen : Screen {
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
             TabletBaseScreen(
-                title = stringResource(Res.string.tenth_question_hitbear_title),
+                title = stringResource(tenthQuestionHitberTitle),
                 onNextClick = {
                     capturable?.capture?.let { it() }
                 },
 
-                buttonText = stringResource(Res.string.hitbear_continue),
+                buttonText = stringResource(`continue`),
                 question = 10,
                 buttonColor = primaryColor,
                 content = {
-                    InstructionText(stringResource(Res.string.tenth_question_hitbear_instructions))
+                    InstructionText(stringResource(tenthQuestionHitberInstructions))
 
                     capturable = PlatformCapturable(
                         onCaptured = { imageBitmap ->
