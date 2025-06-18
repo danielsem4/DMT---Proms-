@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,20 +32,22 @@ fun FeatureButton(
     onClick: () -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(30.dp),
         backgroundColor = Color.White,
-        elevation = 4.dp,
-        modifier = cardModifier.clickable(onClick = onClick).wrapContentWidth()
+        modifier = cardModifier
+            .clickable(onClick = onClick)
+            .wrapContentWidth()
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.padding(16.dp)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = label,
-                modifier = Modifier.size(iconSize)
+                modifier = Modifier.size(iconSize),
+                tint = Color.Unspecified // <-- keeps original icon color
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(

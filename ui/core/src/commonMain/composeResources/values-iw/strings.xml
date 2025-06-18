@@ -33,6 +33,12 @@
     <string name="activities">פעילויות</string>
     <string name="graphs">גרפים</string>
     <string name="medications">תרופות</string>
+    <string name="document_share">שיתוף מסמכים</string>
+    <string name="chat">צ׳אט</string>
+    <string name="memory">זיכרון</string>
+    <string name="hitber">התבר</string>
+
+
     <!--    CDT Module  -->
 
 

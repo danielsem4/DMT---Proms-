@@ -32,6 +32,11 @@
     <string name="activities">Activities</string>
     <string name="graphs">Graphs</string>
     <string name="medications">Medications</string>
+    <string name="document_share">Document Share</string>
+    <string name="chat">Chat</string>
+    <string name="memory">Memory</string>
+    <string name="hitber">HitBer</string>
+
 
 
     <!--    CDT Module  -->
