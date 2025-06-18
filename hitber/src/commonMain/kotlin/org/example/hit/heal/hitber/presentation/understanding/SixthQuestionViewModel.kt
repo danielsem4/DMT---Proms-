@@ -2,6 +2,7 @@ package org.example.hit.heal.hitber.presentation.understanding
 
 import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
+import core.domain.use_case.PlayAudioUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,17 +11,18 @@ import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
-class SixthQuestionViewModel: ViewModel() {
+class SixthQuestionViewModel(private val playAudioUseCase: PlayAudioUseCase): ViewModel() {
 
     private val _audioResourceId = MutableStateFlow<StringResource?>(null)
     val audioResourceId: StateFlow<StringResource?> get() = _audioResourceId.asStateFlow()
+
+    val isPlaying = playAudioUseCase.isPlaying
 
     private val _selectedItem = MutableStateFlow<DrawableResource?>(null)
     val selectedItem: StateFlow<DrawableResource?> get() = _selectedItem.asStateFlow()
 
     private val _selectedNapkin = MutableStateFlow<DrawableResource?>(null)
     val selectedNapkin: StateFlow<DrawableResource?> get() = _selectedNapkin.asStateFlow()
-
 
     fun setRandomAudio() {
         if (_audioResourceId.value == null) {
@@ -30,6 +32,11 @@ class SixthQuestionViewModel: ViewModel() {
             _selectedNapkin.value = randomAudio.napkinColorResId
         }
     }
+
+    fun onPlayAudio(audioText: String) {
+        playAudioUseCase.playAudio(audioText)
+    }
+
 
     private val _itemLastPositions = MutableStateFlow<Map<Int, Offset>>(emptyMap())
     val itemLastPositions: StateFlow<Map<Int, Offset>> = _itemLastPositions.asStateFlow()

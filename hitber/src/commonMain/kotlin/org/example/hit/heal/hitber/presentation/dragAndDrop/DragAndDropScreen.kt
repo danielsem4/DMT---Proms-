@@ -16,15 +16,15 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.seventh_question_hitbear_title
-import io.github.suwasto.capturablecompose.Capturable
-import io.github.suwasto.capturablecompose.rememberCaptureController
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.DraggableCanvas
 import org.example.hit.heal.hitber.presentation.dragAndDrop.model.circleColors
 import org.example.hit.heal.hitber.presentation.dragAndDrop.model.circlesPositions
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.handleSeventhQuestionCapture
+import org.example.hit.heal.hitber.utils.CapturableWrapper
 import org.example.hit.heal.hitber.utils.InstructionText
+import org.example.hit.heal.hitber.utils.PlatformCapturable
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -35,13 +35,13 @@ class DragAndDropScreen : Screen {
         val density = LocalDensity.current
         val seventhQuestionViewModel: SeventhQuestionViewModel = koinViewModel()
         val viewModel: ActivityViewModel = koinViewModel()
-        val captureController = rememberCaptureController()
         var screenSize by remember { mutableStateOf(0f to 0f) }
         val targetColor by seventhQuestionViewModel.targetCircleColor.collectAsState()
         val instructionsResourceId by seventhQuestionViewModel.instructionsResourceId.collectAsState()
         val instructions = instructionsResourceId?.let { stringResource(it) }
         var targetBoxXRange by remember { mutableStateOf(0f..0f) }
         var targetBoxYRange by remember { mutableStateOf(0f..0f) }
+        var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
 
         val radiusPx = with(density) { 25.dp.toPx() }
 
@@ -58,7 +58,7 @@ class DragAndDropScreen : Screen {
         TabletBaseScreen(
             title = stringResource(Res.string.seventh_question_hitbear_title),
             onNextClick = {
-                captureController.capture()
+                capturable?.capture?.let { it() }
             },
             buttonText = stringResource(Res.string.hitbear_continue),
             buttonColor = primaryColor,
@@ -68,9 +68,8 @@ class DragAndDropScreen : Screen {
                     InstructionText(instructions)
                 }
 
-                Capturable(
-                    captureController = captureController,
-                    onCaptured = { imageBitmap ->
+                capturable = PlatformCapturable(
+                    onCaptured = {  imageBitmap ->
                         handleSeventhQuestionCapture(
                             circleOffsets = circleOffsets,
                             imageBitmap = imageBitmap,

@@ -36,9 +36,9 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.kmp.capturable.compose)
         }
         commonMain.dependencies {
-            implementation(libs.kmp.capturable.compose)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation(compose.material3)
@@ -47,7 +47,6 @@ kotlin {
             implementation (libs.navigator.transitions)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.bundles.ktor)
-            implementation(libs.bundles.coil)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -63,6 +62,7 @@ kotlin {
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.kmp.capturable.compose)
         }
     }
 }

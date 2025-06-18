@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
-
 }
 
 kotlin {
@@ -37,7 +36,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.compose)
-            implementation(libs.ktor.client.okhttp)
+            implementation(libs.kmp.capturable.compose)
 
             // Koin dependencies
             implementation(libs.koin.android)
@@ -51,21 +50,14 @@ kotlin {
             implementation(projects.ui.core)
             implementation(projects.core)
             implementation(projects.clockTest)
+            implementation(projects.pass)
 
-            implementation(libs.kmp.capturable.compose)
+            implementation(libs.kotlinx.coroutines.core)
 
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
             implementation(compose.material3)
 
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-            implementation(libs.koin.compose)
-            implementation(libs.bundles.ktor)
-            implementation(libs.bundles.coil)
-            implementation (libs.navigator)
-            implementation (libs.navigator.tabs)
-            implementation (libs.navigator.transitions)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -88,12 +80,15 @@ kotlin {
             // Basic Navigation
             implementation(libs.navigation.compose)
 
+            implementation (libs.navigator)
+            implementation (libs.navigator.tabs)
+            implementation (libs.navigator.transitions)
+
             // Koin dependencies
             api(libs.koin.core)
             implementation(libs.bundles.koin.compose)
             implementation(libs.lifecycle.viewmodel)
-            implementation(libs.navigation.compose)
-            implementation(libs.kotlinx.serialization) // for data serialization
+            implementation(libs.kotlinx.serialization)
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
 
@@ -107,13 +102,12 @@ kotlin {
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-
-
             implementation(libs.coil.compose)
-
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.kmp.capturable.compose)
+
         }
 
         desktopMain.dependencies {
@@ -135,6 +129,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+
     }
     packaging {
         resources {

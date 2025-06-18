@@ -27,19 +27,18 @@ import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.sixth_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.sixth_question_hitbear_title
-import io.github.suwasto.capturablecompose.Capturable
-import io.github.suwasto.capturablecompose.rememberCaptureController
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioButton
-import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayingDialog
 import org.example.hit.heal.hitber.presentation.understanding.components.TableWithNapkinsBox
 import org.example.hit.heal.hitber.presentation.understanding.components.FridgeWithItemsBox
 import org.example.hit.heal.hitber.presentation.understanding.model.fridgeItems
 import org.example.hit.heal.hitber.presentation.understanding.components.handleScreenshotCapture
+import org.example.hit.heal.hitber.utils.CapturableWrapper
 import org.example.hit.heal.hitber.utils.InstructionText
+import org.example.hit.heal.hitber.utils.PlatformCapturable
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -53,12 +52,12 @@ class UnderstandingScreen : Screen {
         val audioResourceId by sixthQuestionViewModel.audioResourceId.collectAsState()
         val itemResourceId by sixthQuestionViewModel.selectedItem.collectAsState()
         val napkinResourceId by sixthQuestionViewModel.selectedNapkin.collectAsState()
+        val isPlaying by sixthQuestionViewModel.isPlaying.collectAsState()
 
         val itemLastPositions by sixthQuestionViewModel.itemLastPositions.collectAsState()
-        val captureController = rememberCaptureController()
+        var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
         val audioUrl = audioResourceId?.let { stringResource(it) }
         var isAudioClicked by remember { mutableStateOf(false) }
-        val audioPlayer = remember { AudioPlayer() }
 
         var fridgeSize by remember { mutableStateOf(0f to 0f) }
         var tableSize by remember { mutableStateOf(0f to 0f) }
@@ -79,16 +78,12 @@ class UnderstandingScreen : Screen {
         val napkinWidthPx = tableSize.second * 0.1f
         val napkinHeightPx = tableSize.second * 0.1f
 
-        var isDialogVisible by remember { mutableStateOf(false) }
         var isFridgeOpen by remember { mutableStateOf(false) }
 
         LaunchedEffect(isAudioClicked) {
             if (isAudioClicked) {
                 audioUrl?.let {
-                    isDialogVisible = true
-                    audioPlayer.play(it) {
-                        isDialogVisible = false
-                    }
+                    sixthQuestionViewModel.onPlayAudio(it)
                     isAudioClicked = false
                 }
             }
@@ -98,7 +93,7 @@ class UnderstandingScreen : Screen {
             TabletBaseScreen(
                 title = stringResource(Res.string.sixth_question_hitbear_title),
                 onNextClick = {
-                    captureController.capture()
+                    capturable?.capture?.let { it() }
                 },
                 question = 6,
                 buttonText = stringResource(Res.string.hitbear_continue),
@@ -115,8 +110,7 @@ class UnderstandingScreen : Screen {
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
 
-                    Capturable(
-                        captureController = captureController,
+                    capturable = PlatformCapturable(
                         onCaptured = { imageBitmap ->
                             handleScreenshotCapture(
                                 imageBitmap = imageBitmap,
@@ -164,7 +158,7 @@ class UnderstandingScreen : Screen {
                 }
             )
 
-            if (isDialogVisible) {
+            if (isPlaying) {
                 AudioPlayingDialog()
             }
         }

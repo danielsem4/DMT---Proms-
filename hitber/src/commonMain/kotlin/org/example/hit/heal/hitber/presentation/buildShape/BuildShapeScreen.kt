@@ -19,15 +19,15 @@ import dmt_proms.hitber.generated.resources.Res
 import dmt_proms.hitber.generated.resources.hitbear_continue
 import dmt_proms.hitber.generated.resources.tenth_question_hitbear_instructions
 import dmt_proms.hitber.generated.resources.tenth_question_hitbear_title
-import io.github.suwasto.capturablecompose.Capturable
-import io.github.suwasto.capturablecompose.rememberCaptureController
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.components.TenthQuestionShapesLayout
 import org.example.hit.heal.hitber.presentation.buildShape.components.handleTenthQuestionCapture
 import org.example.hit.heal.hitber.presentation.buildShape.model.draggableShapesItem
 import org.example.hit.heal.hitber.presentation.buildShape.model.staticShapesItem
+import org.example.hit.heal.hitber.utils.CapturableWrapper
 import org.example.hit.heal.hitber.utils.InstructionText
+import org.example.hit.heal.hitber.utils.PlatformCapturable
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -39,7 +39,7 @@ class BuildShapeScreen : Screen {
         val density = LocalDensity.current
         val tenthQuestionViewModel: TenthQuestionViewModel = koinViewModel()
         val viewModel: ActivityViewModel = koinViewModel()
-        val captureController = rememberCaptureController()
+        var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
 
         var screenSize by remember { mutableStateOf(0f to 0f) }
 
@@ -66,7 +66,7 @@ class BuildShapeScreen : Screen {
             TabletBaseScreen(
                 title = stringResource(Res.string.tenth_question_hitbear_title),
                 onNextClick = {
-                    captureController.capture()
+                    capturable?.capture?.let { it() }
                 },
 
                 buttonText = stringResource(Res.string.hitbear_continue),
@@ -75,8 +75,7 @@ class BuildShapeScreen : Screen {
                 content = {
                     InstructionText(stringResource(Res.string.tenth_question_hitbear_instructions))
 
-                    Capturable(
-                        captureController = captureController,
+                    capturable = PlatformCapturable(
                         onCaptured = { imageBitmap ->
                             handleTenthQuestionCapture(
                                 imageBitmap = imageBitmap,
