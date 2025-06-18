@@ -62,7 +62,7 @@ class KtorAppRemoteDataSource(
         imagePath: String,
         imageBytes: ByteArray,
         clinicId: Int,
-        userId: Int
+        userId: String
     ): EmptyResult<DataError.Remote> {
         val token = TokenProvider.getCurrentToken()
         println("Uploading file with token: $token")

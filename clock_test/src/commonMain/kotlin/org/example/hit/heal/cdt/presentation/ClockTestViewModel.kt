@@ -68,7 +68,7 @@ class ClockTestViewModel(
             println("Entering viewmodel scope - to upload results")
             // this will run even if viewModelScope is gone
             try {
-                uploadImageUseCase.execute(imagePath, imageByteArray, clinicId, userId)
+                uploadImageUseCase.execute(imagePath, imageByteArray, clinicId, userId.toString())
                     .onSuccess {
                         println("Successfully uploaded Image")
                         cdtResults.imageUrl = MeasureObjectString(

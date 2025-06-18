@@ -7,6 +7,7 @@ import core.data.model.MeasureObjectBoolean
 import core.data.model.MeasureObjectDouble
 import core.data.model.MeasureObjectInt
 import core.data.model.MeasureObjectString
+import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.Error
 import core.domain.onError
@@ -26,6 +27,7 @@ import org.example.hit.heal.hitber.data.model.TenthQuestionType
 import org.example.hit.heal.hitber.data.model.ThirdQuestionItem
 import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
+import core.util.PrefKeys
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -34,7 +36,8 @@ import kotlinx.coroutines.withContext
 class ActivityViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
     private val uploadTestResultsUseCase: UploadTestResultsUseCase,
-    private val bitmapToUploadUseCase: BitmapToUploadUseCase
+    private val bitmapToUploadUseCase: BitmapToUploadUseCase,
+    private val storage: Storage
 ) : ViewModel() {
 
     private var result: CogData = CogData()
@@ -210,9 +213,9 @@ class ActivityViewModel(
         println("📤 התחלת העלאה, image size: ${imageByteArray.size}")
 
         uploadScope.launch {
-            val clinicId = 8
-            val userId = 168
-            val measurement =21
+            val userId = storage.get(PrefKeys.userId)!!
+            val clinicId = storage.get(PrefKeys.clinicId)!!
+            val measurement = 19
 
             val imagePath = bitmapToUploadUseCase.buildPath(
                 clinicId = clinicId,

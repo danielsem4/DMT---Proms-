@@ -45,7 +45,7 @@ val sharedModules = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::SplashViewModel)
 
-    single { ActivityViewModel(get(), get(), get()) }
+    single { ActivityViewModel(get(), get(), get(), get()) }
     viewModel { FirstQuestionViewModel() }
     single { SecondQuestionViewModel() }
     viewModel { ThirdQuestionViewModel() }

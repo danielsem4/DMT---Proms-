@@ -4,7 +4,7 @@ class BitmapToUploadUseCase {
 
     fun buildPath(
         clinicId: Int,
-        patientId: Int,
+        patientId: String,
         measurementId: Int,
         pathDate: String,
         fileName: String = "image.png",
