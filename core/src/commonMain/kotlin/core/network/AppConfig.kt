@@ -4,5 +4,4 @@ package core.network
 
 expect object AppConfig {
     val BASE_URL: String
-    val UPLOADS_BASE_URL: String
 }

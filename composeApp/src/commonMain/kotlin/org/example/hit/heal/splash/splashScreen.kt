@@ -10,25 +10,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import coil3.compose.AsyncImage
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import kotlinx.coroutines.delay
-import org.example.hit.heal.Home.HomeScreen
+import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.home.HomeScreen
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.koinInject
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+
 class SplashScreen(): Screen {
     @Composable
     override fun Content() {
@@ -62,16 +59,9 @@ class SplashScreen(): Screen {
                 contentDescription = "Logo",
                 modifier = Modifier.size(200.dp)
             )
-//            with coil
-//        if (isLoggedIn) {
-//            AsyncImage(
-//                model = imageUrl,
-//                contentDescription = "Clinic Logo",
-//                modifier = Modifier.size(200.dp)
-//            )
         } else {
             Text(
-                text = "Welcome",
+                text = stringResource(Resources.String.welcome),
                 fontSize = 24.sp
             )
         }

@@ -1,4 +1,5 @@
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,11 +34,12 @@ import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import org.example.EmailTextField
 import org.example.PasswordTextField
-import org.example.hit.heal.Home.HomeScreen
+import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.login
 import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.home.HomeScreen
 import org.example.hit.heal.login.LoginViewModel
-import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -52,91 +54,113 @@ class LoginScreen() : Screen {
         var password by remember { mutableStateOf("") }
         val snackbarHostState = remember { SnackbarHostState() }
         val isLoading by loginViewModel.isLoading.collectAsState()
-        val message by loginViewModel.message.collectAsState()
+
+        var msgResID: StringResource? by remember { mutableStateOf(null) }
+        var message: String by remember { mutableStateOf("") }
+
+        val fillMsg = stringResource(Resources.String.fill_fields)
+        val loginSuccessMsg = stringResource(Resources.String.loginSuccess)
+
+        // Convert StringResource to String when msgResID changes
+        msgResID?.let { resId ->
+            message = stringResource(resId)
+        }
 
         // Show message if any
         LaunchedEffect(message) {
-            message?.let {
-                snackbarHostState.showSnackbar(message = it)
-                loginViewModel.clearMessage()
+            if (message.isNotEmpty()) {
+                snackbarHostState.showSnackbar(message)
+                message = ""
             }
         }
 
         BaseScreen(title = stringResource(login)) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                Spacer(modifier = Modifier.height(30.dp))
-
-                // Login Image
-                Image(
-                    painter = painterResource(Res.drawable.med_presc),
-                    contentDescription = "Login Illustration",
-                    contentScale = ContentScale.Fit,
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .size(120.dp)
-                        .padding(bottom = 20.dp)
-                )
-
-                EmailTextField(
-                    email = email,
-                    onValueChange = { email = it }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                PasswordTextField(
-                    password = password,
-                    onValueChange = { password = it }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Show message in a Text component
-                message?.let { msg ->
-                    Text(
-                        text = msg,
-                        color = if (loginViewModel.isLoggedIn.value) Color(0xFF4CAF50) else Color(
-                            0xFFE53935
-                        ),
-                        modifier = Modifier.padding(8.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                // Login Button
-                Button(
-                    onClick = {
-                        if (email.isNotEmpty() && password.isNotEmpty()) {
-                            loginViewModel.login(email, password) {
-                                navigator.push(HomeScreen())
-                            }
-                        } else {
-                            loginViewModel.setMessage("Please fill in all fields")
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .height(50.dp),
-                    shape = RoundedCornerShape(33.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF6FCF97)),
-                    enabled = !isLoading
+                        .fillMaxSize()
+                        .padding(16.dp)
                 ) {
-                    if (isLoading) {
-                        CircularProgressIndicator(
-                            color = Color.White,
-                            modifier = Modifier.size(24.dp)
+                    Spacer(modifier = Modifier.height(30.dp))
+
+                    // Login Image
+                    Image(
+                        painter = painterResource(Res.drawable.med_presc),
+                        contentDescription = "Login Illustration",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .size(120.dp)
+                            .padding(bottom = 20.dp)
+                    )
+
+                    EmailTextField(
+                        email = email,
+                        onValueChange = { email = it }
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    PasswordTextField(
+                        password = password,
+                        onValueChange = { password = it }
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Show message in a Text component
+                    if (message.isNotEmpty())
+                        Text(
+                            text = message,
+                            color = if (loginViewModel.isLoggedIn.value) Color(0xFF4CAF50) else Color(
+                                0xFFE53935
+                            ),
+                            modifier = Modifier.padding(8.dp)
                         )
-                    } else {
-                        Text(stringResource(login), fontSize = 20.sp, color = Color.White)
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    // Login Button
+                    Button(
+                        onClick = {
+                            if (email.isNotEmpty() && password.isNotEmpty()) {
+                                loginViewModel.login(
+                                    email, password,
+                                    onLoginSuccess = {
+                                        message = loginSuccessMsg
+                                        navigator.push(HomeScreen())
+                                    },
+                                    onLoginFailed = { errorResID -> msgResID = errorResID }
+                                )
+                            } else {
+                                message = fillMsg
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .height(50.dp),
+                        shape = RoundedCornerShape(33.dp),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF6FCF97)),
+                        enabled = !isLoading
+                    ) {
+                        if (isLoading) {
+                            CircularProgressIndicator(
+                                color = Color.White,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        } else {
+                            Text(stringResource(login), fontSize = 20.sp, color = Color.White)
+                        }
                     }
+
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                SnackbarHost(hostState = snackbarHostState)
+                // SnackbarHost positioned at the bottom
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                )
             }
         }
     }

@@ -1,5 +1,6 @@
 package core.domain.api
 
+import core.data.model.ModulesResponse
 import core.data.model.SuccessfulLoginResponse
 import core.domain.DataError
 import core.domain.EmptyResult
@@ -22,6 +23,8 @@ interface AppApi {
         imagePath: String,
         imageBytes: ByteArray,
         clinicId: Int,
-        userId: Int
+        userId: String
     ): EmptyResult<DataError.Remote>
+
+    suspend fun getModules(clinicId: Int): Result<List<ModulesResponse>, DataError.Remote>
 }

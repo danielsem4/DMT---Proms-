@@ -11,11 +11,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Visibility
-import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,10 +23,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import org.example.hit.heal.bgGreen
-import org.example.hit.heal.lightWhite
+import org.example.hit.heal.core.presentation.LightWhite
+import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.backgroundColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RoundedTextField(
@@ -40,7 +37,7 @@ fun RoundedTextField(
     modifier: Modifier = Modifier.fillMaxWidth()
         .padding(horizontal = 16.dp)
         .background(
-            lightWhite, RoundedCornerShape(33.dp)
+            LightWhite, RoundedCornerShape(33.dp)
         ),
     label: @Composable (() -> Unit)? = null,
     leadingIcon: DrawableResource,
@@ -59,7 +56,7 @@ fun RoundedTextField(
                 painter = painterResource(leadingIcon),
                 contentDescription = null,
                 modifier = iconModifier,
-                tint = bgGreen
+                tint = backgroundColor
             )
         },
         trailingIcon = trailingIcon,
@@ -77,7 +74,7 @@ fun RoundedTextField(
     modifier: Modifier = Modifier.fillMaxWidth()
         .padding(horizontal = 16.dp)
         .background(
-            lightWhite, RoundedCornerShape(33.dp)
+            LightWhite, RoundedCornerShape(33.dp)
         ),
     label: @Composable (() -> Unit)? = null,
     leadingIcon: ImageVector,
@@ -96,7 +93,7 @@ fun RoundedTextField(
                 imageVector = leadingIcon,
                 contentDescription = null,
                 modifier = iconModifier,
-                tint = bgGreen
+                tint = backgroundColor
             )
         },
         trailingIcon = trailingIcon,
@@ -117,13 +114,13 @@ fun PasswordTextField(
     RoundedTextField(
         value = password,
         onValueChange = onValueChange,
-        label = { Text("Password") },
-        leadingIcon = Icons.Outlined.Lock,
+        label = { Text(stringResource( Resources.String.password)) },
+        leadingIcon = Resources.Icon.lock,
         iconModifier = Modifier.size(24.dp),
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
-                    imageVector = if (passwordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
+                    imageVector = if (passwordVisible) Resources.Icon.visible else Resources.Icon.invisible,
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
                     tint = Color.Black
@@ -139,7 +136,7 @@ fun PasswordTextField(
 fun EmailTextField(email: String, onValueChange: (String) -> Unit) = RoundedTextField(
     value = email,
     onValueChange = onValueChange,
-    label = { Text("Email") },
-    leadingIcon = Icons.Default.Email,
+    label = { Text(stringResource(Resources.String.email)) },
+    leadingIcon = Resources.Icon.email,
     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
 )
