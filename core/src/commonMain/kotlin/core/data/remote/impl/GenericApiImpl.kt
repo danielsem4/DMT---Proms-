@@ -1,17 +1,21 @@
 package core.data.remote.impl
 
 import core.data.model.LoginRequest
+import core.data.model.ModulesResponse
 import core.data.model.SuccessfulLoginResponse
+import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.EmptyResult
 import core.domain.Result
 import core.domain.api.AppApi
-import core.domain.session.TokenProvider
 import core.network.AppConfig.BASE_URL
 import core.network.safeCall
+import core.util.PrefKeys
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
+import io.ktor.client.request.get
+import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -29,7 +33,8 @@ class GenericApiImpl() {
 }
 
 class KtorAppRemoteDataSource(
-    private val httpClient: HttpClient
+    private val httpClient: HttpClient,
+    val storage: Storage
 ) : AppApi {
 
     override suspend fun login(email: String, password: String):
@@ -61,11 +66,8 @@ class KtorAppRemoteDataSource(
         imagePath: String,
         imageBytes: ByteArray,
         clinicId: Int,
-        userId: Int
+        userId: String
     ): EmptyResult<DataError.Remote> {
-        val token = TokenProvider.getCurrentToken()
-        println("Uploading file with token: $token")
-
         val url = "$BASE_URL/FileUpload/"
         println("Uploading to URL: $url")
 
@@ -73,6 +75,10 @@ class KtorAppRemoteDataSource(
 
         return safeCall {
             httpClient.post(url) {
+                val token: String = storage.get(PrefKeys.token)!!
+
+                header(HttpHeaders.Authorization, "Token $token")
+
                 setBody(
                     MultiPartFormDataContent(
                         formData {
@@ -88,6 +94,16 @@ class KtorAppRemoteDataSource(
                     )
                 )
             }
+        }
+    }
+
+    override suspend fun getModules(clinicId: Int):
+            Result<List<ModulesResponse>, DataError.Remote> = safeCall {
+        httpClient.get("${BASE_URL}getModules?clinic_id=$clinicId") {
+            val token: String = storage.get(PrefKeys.token)!!
+
+            header(HttpHeaders.Authorization, "Token $token")
+            contentType(ContentType.Application.Json)
         }
     }
 
