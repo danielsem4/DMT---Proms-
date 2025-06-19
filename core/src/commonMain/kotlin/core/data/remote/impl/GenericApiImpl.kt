@@ -8,7 +8,6 @@ import core.domain.Result
 import core.domain.api.AppApi
 import core.domain.session.TokenProvider
 import core.network.AppConfig.BASE_URL
-import core.network.AppConfig.UPLOADS_BASE_URL
 import core.network.safeCall
 import io.ktor.client.HttpClient
 import io.ktor.client.request.forms.MultiPartFormDataContent
@@ -45,7 +44,7 @@ class KtorAppRemoteDataSource(
         results: T,
         serializer: KSerializer<T>
     ): Result<String, DataError.Remote> {
-        val url = "$UPLOADS_BASE_URL/patientMeasureResponse/"
+        val url = "$BASE_URL/patientMeasureResponse/"
 
         val body = Json.encodeToString(serializer, results)
 
@@ -67,7 +66,7 @@ class KtorAppRemoteDataSource(
         val token = TokenProvider.getCurrentToken()
         println("Uploading file with token: $token")
 
-        val url = "$UPLOADS_BASE_URL/FileUpload/"
+        val url = "$BASE_URL/FileUpload/"
         println("Uploading to URL: $url")
 
         val base64EncodedFile: String = Base64.encode(imageBytes)

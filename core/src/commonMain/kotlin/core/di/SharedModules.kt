@@ -20,7 +20,7 @@ import org.koin.dsl.module
  */
 
 val clientRequestsModule = module {
-    single { HttpClientFactory.create(get()) } // HttpClient
+    single { HttpClientFactory.create(get(), get()) }
     singleOf(::KtorAppRemoteDataSource).bind<AppApi>()
     singleOf(::LoginUseCase)
     singleOf(::UploadFileUseCase)
