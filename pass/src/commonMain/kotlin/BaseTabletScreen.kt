@@ -29,7 +29,7 @@ fun BaseTabletScreen(
 
         Column(
             modifier = Modifier
-                .fillMaxSize() // מאפשר לתפוס את כל שטח המסך
+                .fillMaxSize()
                 .background(backgroundColor)
                 .padding(bottom = statusBarValues.calculateBottomPadding())
         ) {
@@ -53,10 +53,10 @@ fun BaseTabletScreen(
             // Dynamic Content
             Column(
                 modifier = Modifier
-                    .fillMaxSize() // ממלא את כל המסך
-                    .padding(top = 20.dp), // ה-padding שלך
+                    .fillMaxSize()
+                    .padding(top = 20.dp),
                 verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally// ממקם את התוכן במרכז אנכית
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 content()
             }

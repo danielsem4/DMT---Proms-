@@ -3,8 +3,6 @@ package presentation.dialScreen
 import BaseTabletScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,19 +17,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import androidx.compose.ui.graphics.Color
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.delete_number
-import dmt_proms.pass.generated.resources.dentist_pass
-import dmt_proms.pass.generated.resources.dentist_phone_number
-import dmt_proms.pass.generated.resources.dial_keys
-import dmt_proms.pass.generated.resources.dialer
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.example.hit.heal.core.presentation.Resources.Icon.dialKeysIcon
+import org.example.hit.heal.core.presentation.Resources.String.dentistPass
+import org.example.hit.heal.core.presentation.Resources.String.dentistPhoneNumber
+import org.example.hit.heal.core.presentation.Resources.String.dialKeys
+import org.example.hit.heal.core.presentation.Resources.String.dialer
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -46,7 +41,7 @@ class DialScreen : Screen {
         val navigator = LocalNavigator.current
 
         val viewModel: DialScreenViewModel = koinViewModel()
-        val correct = stringResource(Res.string.dentist_pass)
+        val correct = stringResource(dentistPass)
         val isDialogVisible by viewModel.isDialogVisible.collectAsState()
         val enteredNumber by viewModel.enteredNumber.collectAsState()
         val isPlaying by viewModel.isPlaying.collectAsState()
@@ -59,12 +54,10 @@ class DialScreen : Screen {
         val isCountdownActive by viewModel.isCountdownActive.collectAsState()
         val nextScreen by viewModel.nextScreen.collectAsState()
         val currentMissionPass by viewModel.currentMissionPass.collectAsState()
-        val correctNumber = stringResource(Res.string.dentist_phone_number)
-
-
+        val correctNumber = stringResource(dentistPhoneNumber)
 
         BaseTabletScreen(
-            title = stringResource(Res.string.dialer),
+            title = stringResource(dialer),
             content = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     LazyColumn(
@@ -104,8 +97,8 @@ class DialScreen : Screen {
                         onClick = { viewModel.onUserClickedDialButton() }
                     ) {
                         Image(
-                            painter = painterResource(Res.drawable.dial_keys),
-                            contentDescription = stringResource(Res.string.dial_keys),
+                            painter = painterResource(dialKeysIcon),
+                            contentDescription = stringResource(dialKeys),
                             modifier = Modifier.size(40.dp)
                         )
                     }

@@ -10,8 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.device_apps_title
+import org.example.hit.heal.core.presentation.Resources.String.deviceAppsTitle
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.components.CheckUnderstandingDialog
@@ -45,7 +44,7 @@ class AppDeviceScreen : Screen {
         val nextScreen by viewModel.nextScreen.collectAsState()
 
         BaseTabletScreen(
-            title = stringResource(Res.string.device_apps_title),
+            title = stringResource(deviceAppsTitle),
             content = {
                 Column(
                     modifier = Modifier

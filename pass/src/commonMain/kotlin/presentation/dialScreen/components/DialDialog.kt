@@ -26,13 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.delete_number
-import dmt_proms.pass.generated.resources.dial
-import dmt_proms.pass.generated.resources.phone
-import dmt_proms.pass.generated.resources.white_phone
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.example.hit.heal.core.presentation.Resources.Icon.deleteNumberIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.whitePhone
+import org.example.hit.heal.core.presentation.Resources.String.deleteNumber
+import org.example.hit.heal.core.presentation.Resources.String.dial
+import org.example.hit.heal.core.presentation.Resources.String.phone
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -68,8 +67,8 @@ fun DialDialog(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Image(
-                        painter = painterResource(Res.drawable.delete_number),
-                        contentDescription = stringResource(Res.string.delete_number),
+                        painter = painterResource(deleteNumberIcon),
+                        contentDescription = stringResource(deleteNumber),
                         modifier = Modifier
                             .size(40.dp)
                             .clickable { onDeleteClicked() }
@@ -125,14 +124,14 @@ fun DialDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = stringResource(Res.string.dial),
+                            text = stringResource(dial),
                             fontSize = 25.sp,
                             color = Color.White
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Image(
-                            painter = painterResource(Res.drawable.white_phone),
-                            contentDescription = stringResource(Res.string.phone),
+                            painter = painterResource(whitePhone),
+                            contentDescription = stringResource(phone),
                             modifier = Modifier.size(30.dp)
                         )
                     }

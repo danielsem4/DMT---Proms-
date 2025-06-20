@@ -24,15 +24,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.first_instructions_pass
-import dmt_proms.pass.generated.resources.first_mission_pass
-import dmt_proms.pass.generated.resources.fmpt
-import dmt_proms.pass.generated.resources.fmpt_meaning
-import dmt_proms.pass.generated.resources.next
-import dmt_proms.pass.generated.resources.the_pass_test
-import dmt_proms.pass.generated.resources.welcome
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.Resources.String.firstInstructionsPass
+import org.example.hit.heal.core.presentation.Resources.String.firstMissionPass
+import org.example.hit.heal.core.presentation.Resources.String.fmpt
+import org.example.hit.heal.core.presentation.Resources.String.fmptMeaning
+import org.example.hit.heal.core.presentation.Resources.String.next
+import org.example.hit.heal.core.presentation.Resources.String.thePassTest
+import org.example.hit.heal.core.presentation.Resources.String.welcome
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.appsDeviceScreen.AppDeviceScreen
@@ -46,7 +45,7 @@ class EntryScreen : Screen {
         val navigator = LocalNavigator.current
         val viewModel: EntryViewModel = koinViewModel()
         val isOverlayVisible by viewModel.isOverlayVisible.collectAsState()
-        val audioString = stringResource(Res.string.first_instructions_pass)
+        val audioString = stringResource(firstInstructionsPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
 
         LaunchedEffect(Unit) {
@@ -54,7 +53,7 @@ class EntryScreen : Screen {
         }
 
         BaseTabletScreen(
-            title = stringResource(Res.string.welcome),
+            title = stringResource(welcome),
             content = {
                 AudioPlayingAnimation(isPlaying = isPlaying,)
 
@@ -65,14 +64,14 @@ class EntryScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        stringResource(Res.string.fmpt),
+                        stringResource(fmpt),
                         color = primaryColor,
                         fontSize = 40.sp,
                         fontWeight = Bold
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
                     Text(
-                        stringResource(Res.string.fmpt_meaning),
+                        stringResource(fmptMeaning),
                         color = primaryColor,
                         fontSize = 20.sp,
                         fontWeight = Bold
@@ -89,7 +88,7 @@ class EntryScreen : Screen {
                             .padding(20.dp)
                     ) {
                         Text(
-                            text = stringResource(Res.string.first_mission_pass),
+                            text = stringResource(firstMissionPass),
                             color = primaryColor,
                             fontSize = 35.sp,
                             fontWeight = Bold,
@@ -101,7 +100,7 @@ class EntryScreen : Screen {
                         modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp)
                     ) {
                         Text(
-                            stringResource(Res.string.the_pass_test),
+                            stringResource(thePassTest),
                             fontSize = 15.sp,
                             fontWeight = Bold,
                         )
@@ -114,7 +113,7 @@ class EntryScreen : Screen {
                             shape = RoundedCornerShape(12.dp),
                         ) {
                             Text(
-                                text = stringResource(Res.string.next),
+                                text = stringResource(next),
                                 color = Color.White,
                                 fontSize = 20.sp,
                                 fontWeight = Bold

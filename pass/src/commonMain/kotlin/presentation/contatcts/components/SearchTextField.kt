@@ -16,8 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.search
+import org.example.hit.heal.core.presentation.Resources.Icon.searchIcon
+import org.example.hit.heal.core.presentation.Resources.String.search
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -37,12 +37,12 @@ fun SearchTextField(
                 horizontalArrangement = Arrangement.End
             ) {
                 Image(
-                    painter = painterResource(Res.drawable.search),
-                    contentDescription = stringResource(Res.string.search),
+                    painter = painterResource(searchIcon),
+                    contentDescription = stringResource(search),
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(Res.string.search), color = Color.Gray)
+                Text(stringResource(search), color = Color.Gray)
             }
         },
         modifier = modifier

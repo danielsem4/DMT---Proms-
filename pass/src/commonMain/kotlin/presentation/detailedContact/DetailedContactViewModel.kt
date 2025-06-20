@@ -3,50 +3,25 @@ package presentation.detailedContact
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.black_messages
-import dmt_proms.pass.generated.resources.calculator
-import dmt_proms.pass.generated.resources.camera
-import dmt_proms.pass.generated.resources.clock
-import dmt_proms.pass.generated.resources.contact_page_first_assist
-import dmt_proms.pass.generated.resources.contacts
-import dmt_proms.pass.generated.resources.contacts_page_first_assist
-import dmt_proms.pass.generated.resources.contacts_page_second_assist
-import dmt_proms.pass.generated.resources.contacts_page_thired_assist
-import dmt_proms.pass.generated.resources.documents
-import dmt_proms.pass.generated.resources.email
-import dmt_proms.pass.generated.resources.messages
-import dmt_proms.pass.generated.resources.my_files
-import dmt_proms.pass.generated.resources.phone
-import dmt_proms.pass.generated.resources.press_the_number_or_the_dial_button_pass
-import dmt_proms.pass.generated.resources.purse
-import dmt_proms.pass.generated.resources.search_at_latter_h_pass
-import dmt_proms.pass.generated.resources.search_for_hana_choen_in_contacts_pass
-import dmt_proms.pass.generated.resources.settings
-import dmt_proms.pass.generated.resources.store
-import dmt_proms.pass.generated.resources.video
-import dmt_proms.pass.generated.resources.weather
-import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
-import dmt_proms.pass.generated.resources.what_you_need_to_do
-import dmt_proms.pass.generated.resources.white_messages
-import dmt_proms.pass.generated.resources.white_phone
-import dmt_proms.pass.generated.resources.white_video
-import dmt_proms.pass.generated.resources.witch_contact_are_we_looking_for_pass
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.updateAndGet
-import org.example.hit.heal.core.presentation.Colors
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.StringResource
 import presentation.components.AppData
-import core.domain.audio.AudioPlayer
 import core.domain.use_case.PlayAudioUseCase
-import presentation.components.ContactData
+import org.example.hit.heal.core.presentation.Resources.Icon.blackMessages
+import org.example.hit.heal.core.presentation.Resources.Icon.whitePhone
+import org.example.hit.heal.core.presentation.Resources.Icon.whiteVideo
+import org.example.hit.heal.core.presentation.Resources.String.contactPageFirstAssist
+import org.example.hit.heal.core.presentation.Resources.String.messages
+import org.example.hit.heal.core.presentation.Resources.String.phone
+import org.example.hit.heal.core.presentation.Resources.String.pressTheNumberOrTheDialButtonPass
+import org.example.hit.heal.core.presentation.Resources.String.video
+import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
+import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
 import presentation.components.CountdownDialogHandler
-import presentation.components.CountdownTimerUseCase
-import presentation.dialScreen.DialScreen
 import presentation.nextQuestion.NextQuestionScreen
 
 class DetailedContactViewModel(private val countdownDialogHandler: CountdownDialogHandler,
@@ -55,19 +30,19 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
 
     val items = listOf(
         AppData(
-            imageRes = Res.drawable.white_phone,
+            imageRes = whitePhone,
             circleColor = primaryColor,
-            label = Res.string.phone,
+            label = phone,
         ),
         AppData(
-            imageRes = Res.drawable.black_messages,
+            imageRes = blackMessages,
             circleColor = primaryColor,
-            label = Res.string.messages,
+            label = messages,
         ),
         AppData(
-            imageRes = Res.drawable.white_video,
+            imageRes = whiteVideo,
             circleColor = primaryColor,
-            label = Res.string.video,
+            label = video,
         )
     )
 
@@ -118,7 +93,7 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
 
     fun onUserClicked(item: StringResource) {
 
-        if (item == Res.string.phone) {
+        if (item == phone) {
             nextQuestion()
             return
         }
@@ -133,12 +108,12 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
         return when (count) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
+                audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.contact_page_first_assist to Res.string.press_the_number_or_the_dial_button_pass
+                audioText = contactPageFirstAssist to pressTheNumberOrTheDialButtonPass
             )
 
             else -> {

@@ -4,40 +4,29 @@ import BaseTabletScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.contacts
-import dmt_proms.pass.generated.resources.plus
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
-import dmt_proms.pass.generated.resources.hana_cohen
-import dmt_proms.pass.generated.resources.phone_number
-import dmt_proms.pass.generated.resources.search
+import org.example.hit.heal.core.presentation.Resources.Icon.plusIcon
+import org.example.hit.heal.core.presentation.Resources.String.contacts
+import org.example.hit.heal.core.presentation.Resources.String.hanaCohen
+import org.example.hit.heal.core.presentation.Resources.String.phoneNumber
+import org.example.hit.heal.core.presentation.Resources.String.plus
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.components.ContactData
 import presentation.components.InstructionsDialog
 import presentation.contatcts.components.ContactItem
 import presentation.contatcts.components.SearchTextField
@@ -60,8 +49,8 @@ class ContactsScreen : Screen {
         val isNextScreen by viewModel.isNextScreen.collectAsState()
         val isScrolled by viewModel.isScrolled.collectAsState()
 
-        val correctContact = stringResource(Res.string.hana_cohen)
-        val phoneNumber = stringResource(Res.string.phone_number)
+        val correctContact = stringResource(hanaCohen)
+        val phoneNumber = stringResource(phoneNumber)
 
         val listState = rememberLazyListState()
 
@@ -72,7 +61,7 @@ class ContactsScreen : Screen {
         }
 
         BaseTabletScreen(
-            title = stringResource(Res.string.contacts),
+            title = stringResource(contacts),
             content = {
                 Column(
                     modifier = Modifier
@@ -113,8 +102,8 @@ class ContactsScreen : Screen {
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                painter = painterResource(Res.drawable.plus),
-                                contentDescription = stringResource(Res.string.plus),
+                                painter = painterResource(plusIcon),
+                                contentDescription = stringResource(plus),
                                 modifier = Modifier.size(24.dp)
                             )
                         }

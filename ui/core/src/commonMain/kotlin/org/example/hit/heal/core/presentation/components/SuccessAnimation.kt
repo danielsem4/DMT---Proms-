@@ -22,7 +22,9 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import org.example.hit.heal.core.presentation.Resources.Icon.check
+import org.example.hit.heal.core.presentation.Resources.String.dialogLike
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -110,7 +112,7 @@ fun SuccessAnimation(modifier: Modifier = Modifier) {
         if (tickAlpha.value > 0f) {
             Image(
                 painter = painterResource(check),
-                contentDescription = "Success",
+                contentDescription = stringResource(dialogLike),
                 modifier = Modifier
                     .size(50.dp)
                     .graphicsLayer {

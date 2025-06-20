@@ -293,11 +293,8 @@
 
     <string name="call_to_hana_cohen_instruction_pass">משימה ראשונה, יש להתקשר לחנה כהן</string>
     <string name="call_to_dentist">You have completed the first task; here is another one. A list of phone numbers is displayed, please call the dental clinic.</string>
-    <string name="call_to_dentist_second_part">The phone number of the dental clinic is displayed. Please call the dental clinic.</string>
-    <string name="the_app_you_entered">The app you have entered:</string>
 
     <string name="what_you_need_to_do">What do you need to do now?</string>
-    <string name="press_the_dial_btn">Press the dial button</string>
     <string name="dialer_opened">Dialer opened</string>
 
     <string name="apps_page_second_assist">Look for the contacts list on the phone</string>
@@ -314,27 +311,12 @@
     <string name="dialer_page_second_assist">Look for the dental clinics phone number</string>
     <string name="diale_to_dentist">Dial the dental clinics number</string>
     <string name="dialer_page_thired_assist">Press the dialer button shown on the left side of the screen.</string>
-    <string name="dialer_page_fourth_assist">Call the dental clinic.</string>
 
     <string name="dialer_page_wrong_action_one">You dialed the wrong number, please dial the dental clinics number</string>
-    <string name="dialer_page_invalid_number">You dialed invalid number, please try again</string>
     <string name="dialer_page_dentis_number_appeared">The phone number of the dental clinic is displayed. Please call the clinic</string>
 
-    <string name="you_moved_to_the_contacts_page">Moved to the contacts page</string>
     <string name="here_persons_number">Here is Hannah Cohens number, please call her</string>
-    <string name="dialed_to_the_wrong_number">You dialed the wrong number, please dial the dental clinics number.</string>
-
-    <string name="the_mediation_will_close_in">the mediation will close in:</string>
-
-    <string name="the_pass_test_about">The Pass test made to be used by the therapists</string>
     <string name="the_pass_test">Based on PASS Test</string>
-
-    <string-array name="subtask_verbal_grade">
-        <item>No assistance required to initiate the task, continue, or complete it</item>
-        <item>Needs indirect verbal guidance</item>
-        <item>Needs direct verbal guidance</item>
-        <item>Needs practical assistance mediation - move them to the correct screen, etc.</item>
-    </string-array>
 
     <string name="calculator">Calculator</string>
     <string name="settings">Settings</string>
@@ -381,12 +363,10 @@
     <string name="thanks_vocal_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fthanks.mp3?alt=media&token=ad0e82dc-3de5-4633-8823-d6beb27b5b42]]></string>
 
     <string name="what_do_you_need_to_do_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwhat_do_you_need_to_do.mp3?alt=media&token=ac12daaf-1dfb-4e28-9fa9-b70741362aa2]]></string>
-    <string name="call_hana_pass"><![CDATA[]]></string>
     <string name="call_to_detist_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fcall_to_dentist.mp3?alt=media&token=3106e225-52fe-4cfa-910d-c04cf587a860]]></string>
     <string name="dentist_number_showen_call_him_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fdentist_number_showen_call_him.mp3?alt=media&token=cc01a3c7-1ae3-4218-94c5-65d4498376f6]]></string>
     <string name="dialer_opened_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fdialer_opened.mp3?alt=media&token=bd5e97d6-5155-44e3-bc40-6e0f3c2db077]]></string>
     <string name="going_back_to_apss_screen_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fgoing_back_to_apps_screen.mp3?alt=media&token=1f2cbcc7-696a-4584-afa6-396b49979d4e]]></string>
-    <string name="press_the_diale_button_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fpress_the_dialer_button.mp3?alt=media&token=64180c8b-cee8-4dc3-836c-c52bf52774d5]]></string>
     <string name="press_the_dial_button_that_showen_down_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fpress_the_dialer_button_bot_left.mp3?alt=media&token=0470ee29-d479-4100-b9bc-657c1c376be3]]></string>
     <string name="press_the_number_or_the_dial_button_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fpress_the_number_or_the_call_button.mp3?alt=media&token=73a32eb4-d298-46bf-8251-cd1094cc801b]]></string>
     <string name="search_at_latter_h_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fsearch_at_latter_h.mp3?alt=media&token=86442245-328d-455a-8f60-c9b16a23588f]]></string>

@@ -22,16 +22,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.Whatsapp
-import dmt_proms.pass.generated.resources.black_messages
-import dmt_proms.pass.generated.resources.black_phone
-import dmt_proms.pass.generated.resources.black_video
-import dmt_proms.pass.generated.resources.contact_details
-import dmt_proms.pass.generated.resources.messages
-import dmt_proms.pass.generated.resources.phone
-import dmt_proms.pass.generated.resources.video
-import dmt_proms.pass.generated.resources.whatsapp
+import org.example.hit.heal.core.presentation.Resources.Icon.blackMessages
+import org.example.hit.heal.core.presentation.Resources.Icon.blackPhone
+import org.example.hit.heal.core.presentation.Resources.Icon.blackVideo
+import org.example.hit.heal.core.presentation.Resources.Icon.whatsappIcon
+import org.example.hit.heal.core.presentation.Resources.String.contactDetails
+import org.example.hit.heal.core.presentation.Resources.String.messages
+import org.example.hit.heal.core.presentation.Resources.String.phone
+import org.example.hit.heal.core.presentation.Resources.String.video
+import org.example.hit.heal.core.presentation.Resources.String.whatsapp
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import presentation.components.ContactData
@@ -47,7 +46,7 @@ fun ContactDetailsSection(contact: ContactData, viewModel: DetailedContactViewMo
     ) {
         Column {
             Text(
-                text = stringResource(Res.string.contact_details),
+                text = stringResource(contactDetails),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
             )
@@ -60,39 +59,39 @@ fun ContactDetailsSection(contact: ContactData, viewModel: DetailedContactViewMo
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
-                        painter = painterResource(Res.drawable.black_phone),
+                        painter = painterResource(blackPhone),
                         modifier = Modifier.size(35.dp)
-                            .clickable { viewModel.onUserClicked(Res.string.phone) },
-                        contentDescription = stringResource(Res.string.phone)
+                            .clickable { viewModel.onUserClicked(phone) },
+                        contentDescription = stringResource(phone)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = contact.phoneNumber,
                         fontSize = 16.sp,
-                        modifier = Modifier.clickable { viewModel.onUserClicked(Res.string.phone) }
+                        modifier = Modifier.clickable { viewModel.onUserClicked(phone) }
                     )
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
-                        painter = painterResource(Res.drawable.black_messages),
+                        painter = painterResource(blackMessages),
                         modifier = Modifier.size(35.dp).clickable {
-                            viewModel.onUserClicked(Res.string.messages)
+                            viewModel.onUserClicked(messages)
                         },
-                        contentDescription = stringResource(Res.string.messages)
+                        contentDescription = stringResource(messages)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Image(
-                        painter = painterResource(Res.drawable.black_video),
+                        painter = painterResource(blackVideo),
                         modifier = Modifier.size(35.dp)
-                            .clickable { viewModel.onUserClicked(Res.string.video) },
-                        contentDescription = stringResource(Res.string.video)
+                            .clickable { viewModel.onUserClicked(video) },
+                        contentDescription = stringResource(video)
                     )
                 }
             }
             Spacer(modifier = Modifier.width(8.dp))
             Box(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    stringResource(Res.string.phone), fontSize = 16.sp,
+                    stringResource(phone), fontSize = 16.sp,
                     color = Color.Black
                 )
             }
@@ -105,16 +104,16 @@ fun ContactDetailsSection(contact: ContactData, viewModel: DetailedContactViewMo
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        text = stringResource(Res.string.Whatsapp),
+                        text = stringResource(whatsapp),
                         fontSize = 16.sp,
                     )
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
-                        painter = painterResource(Res.drawable.whatsapp),
+                        painter = painterResource(whatsappIcon),
                         modifier = Modifier.size(40.dp)
-                            .clickable { viewModel.onUserClicked(Res.string.Whatsapp) },
-                        contentDescription = stringResource(Res.string.Whatsapp)
+                            .clickable { viewModel.onUserClicked(whatsapp) },
+                        contentDescription = stringResource(whatsapp)
                     )
                 }
             }

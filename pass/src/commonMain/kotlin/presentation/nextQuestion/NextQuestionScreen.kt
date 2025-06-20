@@ -18,11 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.contact
-import dmt_proms.pass.generated.resources.finish_first_mission_pass
-import dmt_proms.pass.generated.resources.first_mission_done_vocal_pass
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.Resources.String.contact
+import org.example.hit.heal.core.presentation.Resources.String.finishFirstMissionPass
+import org.example.hit.heal.core.presentation.Resources.String.firstMissionDoneVocalPass
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
@@ -36,7 +35,7 @@ class NextQuestionScreen : Screen {
         val viewModel: NextQuestionViewModel = koinViewModel()
         val time by viewModel.time.collectAsState()
         val navigateToDialScreen by viewModel.navigateToDialScreen.collectAsState()
-        val audioString = stringResource(Res.string.first_mission_done_vocal_pass)
+        val audioString = stringResource(firstMissionDoneVocalPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
 
         LaunchedEffect(Unit) {
@@ -50,7 +49,7 @@ class NextQuestionScreen : Screen {
         }
 
         BaseTabletScreen(
-            title = stringResource(Res.string.contact),
+            title = stringResource(contact),
             content = {
                 AudioPlayingAnimation(isPlaying = isPlaying,)
                 Box(
@@ -72,7 +71,7 @@ class NextQuestionScreen : Screen {
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = stringResource(Res.string.finish_first_mission_pass),
+                        text = stringResource(finishFirstMissionPass),
                         color = primaryColor,
                         fontSize = 30.sp,
                         fontWeight = Bold,

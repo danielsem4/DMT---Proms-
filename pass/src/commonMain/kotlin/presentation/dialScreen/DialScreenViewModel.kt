@@ -4,34 +4,33 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
 import core.domain.use_case.PlayAudioUseCase
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.call_to_dentist
-import dmt_proms.pass.generated.resources.call_to_detist_pass
-import dmt_proms.pass.generated.resources.dentist_number_showen_call_him_pass
-import dmt_proms.pass.generated.resources.dentist_pass
-import dmt_proms.pass.generated.resources.dermatologist_pass
-import dmt_proms.pass.generated.resources.diale_to_dentist
-import dmt_proms.pass.generated.resources.dialer_opened
-import dmt_proms.pass.generated.resources.dialer_opened_pass
-import dmt_proms.pass.generated.resources.dialer_page_dentis_number_appeared
-import dmt_proms.pass.generated.resources.dialer_page_second_assist
-import dmt_proms.pass.generated.resources.dialer_page_thired_assist
-import dmt_proms.pass.generated.resources.dialer_page_wrong_action_one
-import dmt_proms.pass.generated.resources.family_doctor_pass
-import dmt_proms.pass.generated.resources.neurologist_pass
-import dmt_proms.pass.generated.resources.ophthalmologist_pass
-import dmt_proms.pass.generated.resources.orthopedist_pass
-import dmt_proms.pass.generated.resources.paint_clinic_pass
-import dmt_proms.pass.generated.resources.press_the_dial_button_that_showen_down_pass
-import dmt_proms.pass.generated.resources.psychiatrist_pass
-import dmt_proms.pass.generated.resources.search_dentist_number_pass
-import dmt_proms.pass.generated.resources.second_part_of_test_instructions_pass
-import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
-import dmt_proms.pass.generated.resources.what_you_need_to_do
-import dmt_proms.pass.generated.resources.wrong_number_dialed_please_try_again_pass
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.example.hit.heal.core.presentation.Resources.String.callToDentist
+import org.example.hit.heal.core.presentation.Resources.String.callToDetistPass
+import org.example.hit.heal.core.presentation.Resources.String.dentistNumberShowenCallHimPass
+import org.example.hit.heal.core.presentation.Resources.String.dentistPass
+import org.example.hit.heal.core.presentation.Resources.String.dermatologistPass
+import org.example.hit.heal.core.presentation.Resources.String.dialeToDentist
+import org.example.hit.heal.core.presentation.Resources.String.dialerOpened
+import org.example.hit.heal.core.presentation.Resources.String.dialerOpenedPass
+import org.example.hit.heal.core.presentation.Resources.String.dialerPageDentistNumberAppeared
+import org.example.hit.heal.core.presentation.Resources.String.dialerPageSecondAssist
+import org.example.hit.heal.core.presentation.Resources.String.dialerPageThirdAssist
+import org.example.hit.heal.core.presentation.Resources.String.dialerPageWrongActionOne
+import org.example.hit.heal.core.presentation.Resources.String.familyDoctorPass
+import org.example.hit.heal.core.presentation.Resources.String.neurologistPass
+import org.example.hit.heal.core.presentation.Resources.String.ophthalmologistPass
+import org.example.hit.heal.core.presentation.Resources.String.orthopedistPass
+import org.example.hit.heal.core.presentation.Resources.String.paintClinicPass
+import org.example.hit.heal.core.presentation.Resources.String.pressTheDialButtonThatShowenDownPass
+import org.example.hit.heal.core.presentation.Resources.String.psychiatristPass
+import org.example.hit.heal.core.presentation.Resources.String.searchDentistNumberPass
+import org.example.hit.heal.core.presentation.Resources.String.secondPartOfTestInstructionsPass
+import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
+import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
+import org.example.hit.heal.core.presentation.Resources.String.wrongNumberDialedPleaseTryAgainPass
 import presentation.components.CountdownDialogHandler
 import presentation.dialScreen.components.StartCheckingIfUserDidSomethingUseCase
 import presentation.endScreen.EndScreen
@@ -43,14 +42,14 @@ class DialScreenViewModel(
 
     // --- Contacts list ---
     val contacts = listOf(
-        Res.string.dentist_pass,
-        Res.string.family_doctor_pass,
-        Res.string.paint_clinic_pass,
-        Res.string.dermatologist_pass,
-        Res.string.orthopedist_pass,
-        Res.string.neurologist_pass,
-        Res.string.ophthalmologist_pass,
-        Res.string.psychiatrist_pass
+        dentistPass,
+        familyDoctorPass,
+        paintClinicPass,
+        dermatologistPass,
+        orthopedistPass,
+        neurologistPass,
+        ophthalmologistPass,
+        psychiatristPass
     )
 
     // --- StateFlows for UI state ---
@@ -135,7 +134,7 @@ class DialScreenViewModel(
         stopChecks()
         countdownDialogHandler.showCountdownDialog(
             isPlayingFlow = isPlaying,
-            audioText = Res.string.dialer_opened to Res.string.dialer_opened_pass
+            audioText = dialerOpened to dialerOpenedPass
         )
     }
 
@@ -157,13 +156,13 @@ class DialScreenViewModel(
         when (++wrongNumberFirstTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.dialer_page_wrong_action_one to Res.string.wrong_number_dialed_please_try_again_pass
+                audioText = dialerPageWrongActionOne to wrongNumberDialedPleaseTryAgainPass
             )
 
             2 -> {
                 countdownDialogHandler.showCountdownDialog(
                     isPlayingFlow = isPlaying,
-                    audioText = Res.string.dialer_page_dentis_number_appeared to Res.string.dentist_number_showen_call_him_pass
+                    audioText = dialerPageDentistNumberAppeared to dentistNumberShowenCallHimPass
                 )
                 _currentMissionPass.value = 3
                 stopChecks()
@@ -175,7 +174,7 @@ class DialScreenViewModel(
         when (++wrongNumberSecondTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.dialer_page_wrong_action_one to Res.string.wrong_number_dialed_please_try_again_pass
+                audioText = dialerPageWrongActionOne to wrongNumberDialedPleaseTryAgainPass
             )
 
             2 -> navigateToEndScreen()
@@ -262,23 +261,23 @@ class DialScreenViewModel(
         when (didNothingFirstTime++) {
             0 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.call_to_dentist to Res.string.second_part_of_test_instructions_pass
+                audioText = callToDentist to secondPartOfTestInstructionsPass
             )
 
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
+                audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.dialer_page_thired_assist to Res.string.press_the_dial_button_that_showen_down_pass
+                audioText = dialerPageThirdAssist to pressTheDialButtonThatShowenDownPass
             )
 
             3 -> {
                 countdownDialogHandler.showCountdownDialog(
                     isPlayingFlow = isPlaying,
-                    audioText = Res.string.dialer_opened to Res.string.dialer_opened_pass
+                    audioText = dialerOpened to dialerOpenedPass
                 )
                 stopChecks()
                 _currentMissionPass.value = 2
@@ -290,18 +289,18 @@ class DialScreenViewModel(
         when (++didNothingSecondTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
+                audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.dialer_page_second_assist to Res.string.search_dentist_number_pass
+                audioText = dialerPageSecondAssist to searchDentistNumberPass
             )
 
             3 -> {
                 countdownDialogHandler.showCountdownDialog(
                     isPlayingFlow = isPlaying,
-                    audioText = Res.string.dialer_page_dentis_number_appeared to Res.string.dentist_number_showen_call_him_pass
+                    audioText = dialerPageDentistNumberAppeared to dentistNumberShowenCallHimPass
                 )
                 stopChecks()
                 _currentMissionPass.value = 3
@@ -313,12 +312,12 @@ class DialScreenViewModel(
         when (++didNothingThirdTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
+                audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.diale_to_dentist to Res.string.call_to_detist_pass
+                audioText = dialeToDentist to callToDetistPass
             )
 
             3 -> {

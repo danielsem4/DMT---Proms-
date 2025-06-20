@@ -3,19 +3,18 @@ package presentation.appsDeviceScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.domain.use_case.PlayAudioUseCase
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.going_back_to_apss_screen_pass
-import dmt_proms.pass.generated.resources.return_button_on_top_left_pass
-import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
-import dmt_proms.pass.generated.resources.what_you_need_to_do
-import dmt_proms.pass.generated.resources.wrong_app_second_assist
-import dmt_proms.pass.generated.resources.wrong_app_thired_assist
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import org.example.hit.heal.core.presentation.Resources.String.goingBackToAppsScreenPass
+import org.example.hit.heal.core.presentation.Resources.String.returnButtonOnTopLeftPass
+import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
+import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
+import org.example.hit.heal.core.presentation.Resources.String.wrongAppSecondAssist
+import org.example.hit.heal.core.presentation.Resources.String.wrongAppThirdAssist
 import presentation.components.CountdownDialogHandler
 
 class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandler,
@@ -66,10 +65,10 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
         val didNothingCount = if (isSecondTimeWrongApp) ++didNothingSecondTime else ++didNothing
 
         when (didNothingCount) {
-            1 -> countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, Res.string.what_you_need_to_do  to Res.string.what_do_you_need_to_do_pass)
-            2 -> countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, Res.string.wrong_app_second_assist to Res.string.return_button_on_top_left_pass)
+            1 -> countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, whatYouNeedToDo  to whatDoYouNeedToDoPass)
+            2 -> countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, wrongAppSecondAssist to returnButtonOnTopLeftPass)
             3 -> {
-                countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, Res.string.wrong_app_thired_assist to Res.string.going_back_to_apss_screen_pass)
+                countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, wrongAppThirdAssist to goingBackToAppsScreenPass)
                 isSecondTimeWrongApp = true
                 reminderJob?.cancel()
                 _backToApps.value = true

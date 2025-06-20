@@ -20,11 +20,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.device_app_title
-import dmt_proms.pass.generated.resources.exit
-import dmt_proms.pass.generated.resources.wrong_app_title
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.Resources.Icon.exitIcon
+import org.example.hit.heal.core.presentation.Resources.String.deviceAppTitle
+import org.example.hit.heal.core.presentation.Resources.String.exit
+import org.example.hit.heal.core.presentation.Resources.String.wrongAppTitle
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -46,12 +46,12 @@ class WrongAppScreen(private val app: AppData) : Screen {
         val navigator = LocalNavigator.current
 
         BaseTabletScreen(
-            title = stringResource(Res.string.device_app_title),
+            title = stringResource(deviceAppTitle),
             content = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Image(
-                        painter = painterResource(Res.drawable.exit),
-                        contentDescription = stringResource(Res.string.exit),
+                        painter = painterResource(exitIcon),
+                        contentDescription = stringResource(exit),
                         modifier = Modifier
                             .size(48.dp)
                             .align(Alignment.TopEnd)
@@ -63,7 +63,7 @@ class WrongAppScreen(private val app: AppData) : Screen {
 
                     Text(
                         text = buildAnnotatedString {
-                            append(stringResource(Res.string.wrong_app_title))
+                            append(stringResource(wrongAppTitle))
                             withStyle(style = SpanStyle(color = primaryColor)) {
                                 append(stringResource(app.label))
                             }

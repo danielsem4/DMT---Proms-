@@ -24,12 +24,6 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.width
@@ -37,28 +31,16 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.util.lerp
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.check
-import dmt_proms.pass.generated.resources.end
-import dmt_proms.pass.generated.resources.exit
-import dmt_proms.pass.generated.resources.thanks_coffe
-import dmt_proms.pass.generated.resources.thanks_vocal_pass
-
-import org.jetbrains.compose.resources.painterResource
+import org.example.hit.heal.core.presentation.Resources.String.end
+import org.example.hit.heal.core.presentation.Resources.String.exit
+import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe
+import org.example.hit.heal.core.presentation.Resources.String.thanksVocalPass
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
 import org.example.hit.heal.core.presentation.components.SuccessAnimation
 import presentation.entryScreen.EntryViewModel
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
 
 class EndScreen : Screen {
 
@@ -68,7 +50,7 @@ class EndScreen : Screen {
 
         val viewModel: EntryViewModel = koinViewModel()
         val isOverlayVisible by viewModel.isOverlayVisible.collectAsState()
-        val audioString = stringResource(Res.string.thanks_vocal_pass)
+        val audioString = stringResource(thanksVocalPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
 
         LaunchedEffect(Unit) {
@@ -76,7 +58,7 @@ class EndScreen : Screen {
         }
 
         BaseTabletScreen(
-            title = stringResource(Res.string.end),
+            title = stringResource(end),
             content = {
                 AudioPlayingAnimation(isPlaying = isPlaying)
 
@@ -99,7 +81,7 @@ class EndScreen : Screen {
                             .padding(top = 16.dp, bottom = 16.dp)
                     ) {
                         Text(
-                            text = stringResource(Res.string.thanks_coffe),
+                            text = stringResource(thanksCoffe),
                             color = primaryColor,
                             fontSize = 35.sp,
                             fontWeight = Bold,
@@ -119,7 +101,7 @@ class EndScreen : Screen {
                             shape = RoundedCornerShape(12.dp),
                         ) {
                             Text(
-                                text = stringResource(Res.string.exit),
+                                text = stringResource(exit),
                                 color = Color.White,
                                 fontSize = 20.sp,
                                 fontWeight = Bold

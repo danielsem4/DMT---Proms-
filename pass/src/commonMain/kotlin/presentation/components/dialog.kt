@@ -29,18 +29,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.Understanding_dialog_text
-import dmt_proms.pass.generated.resources.close
-import dmt_proms.pass.generated.resources.dialog_close
-import dmt_proms.pass.generated.resources.dialog_exclamation_mark
-import dmt_proms.pass.generated.resources.dialog_like
-import dmt_proms.pass.generated.resources.exclamation_mark
-import dmt_proms.pass.generated.resources.like
-import dmt_proms.pass.generated.resources.no
-import dmt_proms.pass.generated.resources.yes
 import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.Resources.Icon.close
+import org.example.hit.heal.core.presentation.Resources.Icon.exclamationMark
+import org.example.hit.heal.core.presentation.Resources.Icon.likeIcon
+import org.example.hit.heal.core.presentation.Resources.String.dialogClose
+import org.example.hit.heal.core.presentation.Resources.String.dialogExclamationMark
+import org.example.hit.heal.core.presentation.Resources.String.dialogLike
+import org.example.hit.heal.core.presentation.Resources.String.no
+import org.example.hit.heal.core.presentation.Resources.String.understandingDialogText
+import org.example.hit.heal.core.presentation.Resources.String.yes
 import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -76,8 +75,8 @@ fun InstructionsDialog(
         Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
 
             Image(
-                painter = painterResource(Res.drawable.exclamation_mark),
-                contentDescription = stringResource(Res.string.dialog_exclamation_mark),
+                painter = painterResource(exclamationMark),
+                contentDescription = stringResource(dialogExclamationMark),
                 modifier = Modifier
                     .size(50.dp)
                     .align(Alignment.TopCenter)
@@ -109,8 +108,8 @@ fun InstructionsDialog(
                         ) {
                             if (isCountdownActive && shouldShowCloseIcon) {
                             Image(
-                                painter = painterResource(Res.drawable.close),
-                                contentDescription = stringResource(Res.string.dialog_close),
+                                painter = painterResource(close),
+                                contentDescription = stringResource(dialogClose),
                                 modifier = Modifier
                                     .size(24.dp)
                                     .clickable { onDismiss() }
@@ -179,8 +178,8 @@ fun CheckUnderstandingDialog(
     Dialog(onDismissRequest = { onYesClick() }) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
-                painter = painterResource(Res.drawable.like),
-                contentDescription = stringResource(Res.string.dialog_like),
+                painter = painterResource(likeIcon),
+                contentDescription = stringResource(dialogLike),
                 modifier = Modifier
                     .size(50.dp)
                     .align(Alignment.TopCenter)
@@ -201,7 +200,7 @@ fun CheckUnderstandingDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = stringResource(Res.string.Understanding_dialog_text),
+                        text = stringResource(understandingDialogText),
                         textAlign = TextAlign.Center,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
@@ -219,7 +218,7 @@ fun CheckUnderstandingDialog(
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
                         ) {
                             Text(
-                                stringResource(Res.string.yes),
+                                stringResource(yes),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = primaryColor
@@ -231,7 +230,7 @@ fun CheckUnderstandingDialog(
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
                         ) {
                             Text(
-                                stringResource(Res.string.no),
+                                stringResource(no),
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = primaryColor

@@ -9,30 +9,38 @@ import org.example.hit.heal.core.presentation.Colors
 import presentation.components.CountdownDialogHandler
 import presentation.components.AppData
 import core.domain.use_case.PlayAudioUseCase
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.apps_page_second_assist
-import dmt_proms.pass.generated.resources.calculator
-import dmt_proms.pass.generated.resources.call_hana_cohen_pass
-import dmt_proms.pass.generated.resources.call_to_hana_cohen_instruction_pass
-import dmt_proms.pass.generated.resources.camera
-import dmt_proms.pass.generated.resources.clock
-import dmt_proms.pass.generated.resources.contacts
-import dmt_proms.pass.generated.resources.documents
-import dmt_proms.pass.generated.resources.email
-import dmt_proms.pass.generated.resources.here_persons_number
-import dmt_proms.pass.generated.resources.messages
-import dmt_proms.pass.generated.resources.my_files
-import dmt_proms.pass.generated.resources.now_the_contacts_list_will_be_opened_pass
-import dmt_proms.pass.generated.resources.phone
-import dmt_proms.pass.generated.resources.purse
-import dmt_proms.pass.generated.resources.search_contacts_list_in_the_phone_pass
-import dmt_proms.pass.generated.resources.settings
-import dmt_proms.pass.generated.resources.store
-import dmt_proms.pass.generated.resources.weather
-import dmt_proms.pass.generated.resources.what_do_you_need_to_do_pass
-import dmt_proms.pass.generated.resources.what_you_need_to_do
-import dmt_proms.pass.generated.resources.white_messages
-import dmt_proms.pass.generated.resources.white_phone
+import org.example.hit.heal.core.presentation.Resources.Icon.calculatorIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.cameraIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.clockIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.contactsIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.documentsIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.emailIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.purseIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.settingsIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.storeIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.weatherIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.whiteMessages
+import org.example.hit.heal.core.presentation.Resources.Icon.whitePhone
+import org.example.hit.heal.core.presentation.Resources.String.appsPageSecondAssist
+import org.example.hit.heal.core.presentation.Resources.String.calculator
+import org.example.hit.heal.core.presentation.Resources.String.callHanaCohenPass
+import org.example.hit.heal.core.presentation.Resources.String.callToHanaCohenInstructionPass
+import org.example.hit.heal.core.presentation.Resources.String.camera
+import org.example.hit.heal.core.presentation.Resources.String.clock
+import org.example.hit.heal.core.presentation.Resources.String.contacts
+import org.example.hit.heal.core.presentation.Resources.String.email
+import org.example.hit.heal.core.presentation.Resources.String.herePersonsNumber
+import org.example.hit.heal.core.presentation.Resources.String.messages
+import org.example.hit.heal.core.presentation.Resources.String.myFiles
+import org.example.hit.heal.core.presentation.Resources.String.nowTheContactsListWillBeOpenedPass
+import org.example.hit.heal.core.presentation.Resources.String.phone
+import org.example.hit.heal.core.presentation.Resources.String.purse
+import org.example.hit.heal.core.presentation.Resources.String.searchContactsListInThePhonePass
+import org.example.hit.heal.core.presentation.Resources.String.settings
+import org.example.hit.heal.core.presentation.Resources.String.store
+import org.example.hit.heal.core.presentation.Resources.String.weather
+import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
+import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
 import presentation.contatcts.ContactsScreen
 
 class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHandler,
@@ -41,64 +49,64 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
     val items = listOf(
         AppData(
-            imageRes = Res.drawable.calculator,
+            imageRes = calculatorIcon,
             circleColor = Colors.calculatorColor,
-            label = Res.string.calculator
+            label = calculator
         ),
         AppData(
-            imageRes = Res.drawable.settings,
+            imageRes = settingsIcon,
             circleColor = Colors.settingsColor,
-            label = Res.string.settings
+            label = settings
         ),
         AppData(
-            imageRes = Res.drawable.camera,
+            imageRes = cameraIcon,
             circleColor = Colors.cameraColor,
-            label = Res.string.camera
+            label = camera
         ),
         AppData(
-            imageRes = Res.drawable.email,
+            imageRes = emailIcon,
             circleColor = Colors.emailColor,
-            label = Res.string.email
+            label = email
         ),
         AppData(
-            imageRes = Res.drawable.store,
+            imageRes = storeIcon,
             circleColor = Colors.storeColor,
-            label = Res.string.store
+            label = store
         ),
         AppData(
-            imageRes = Res.drawable.clock,
+            imageRes = clockIcon,
             circleColor = Colors.clockColor,
-            label = Res.string.clock
+            label = clock
         ),
         AppData(
-            imageRes = Res.drawable.contacts,
+            imageRes = contactsIcon,
             circleColor = Colors.contactsColor,
-            label = Res.string.contacts
+            label = contacts
         ),
         AppData(
-            imageRes = Res.drawable.white_messages,
+            imageRes = whiteMessages,
             circleColor = Colors.messagesColor,
-            label = Res.string.messages
+            label = messages
         ),
         AppData(
-            imageRes = Res.drawable.purse,
+            imageRes = purseIcon,
             circleColor = Colors.purseColor,
-            label = Res.string.purse
+            label = purse
         ),
         AppData(
-            imageRes = Res.drawable.weather,
+            imageRes = weatherIcon,
             circleColor = Colors.weatherColor,
-            label = Res.string.weather
+            label = weather
         ),
         AppData(
-            imageRes = Res.drawable.documents,
+            imageRes = documentsIcon,
             circleColor = Colors.documentsColor,
-            label = Res.string.my_files
+            label = myFiles
         ),
         AppData(
-            imageRes = Res.drawable.white_phone,
+            imageRes = whitePhone,
             circleColor = Colors.phoneColor,
-            label = Res.string.phone
+            label = phone
         )
     )
 
@@ -190,7 +198,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
     fun onAppClicked(app: AppData) {
 
-        if (app.label == Res.string.contacts) {
+        if (app.label == contacts) {
             reminderJob?.cancel()
             _nextScreen.value = ContactsScreen()
             return
@@ -213,23 +221,23 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
         when (didNothing++) {
             0 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.call_to_hana_cohen_instruction_pass to Res.string.call_hana_cohen_pass
+                audioText = callToHanaCohenInstructionPass to callHanaCohenPass
             )
 
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.what_you_need_to_do to Res.string.what_do_you_need_to_do_pass
+                audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                audioText = Res.string.apps_page_second_assist to Res.string.search_contacts_list_in_the_phone_pass
+                audioText = appsPageSecondAssist to searchContactsListInThePhonePass
             )
 
             3 -> {
                 countdownDialogHandler.showCountdownDialog(
                     isPlayingFlow = isPlaying,
-                    audioText = Res.string.here_persons_number to Res.string.now_the_contacts_list_will_be_opened_pass
+                    audioText = herePersonsNumber to nowTheContactsListWillBeOpenedPass
                 )
                 reminderJob?.cancel()
                 _isNextScreen.value = false

@@ -4,14 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
 import core.domain.use_case.PlayAudioUseCase
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.contacts_page_first_assist
-import dmt_proms.pass.generated.resources.contacts_page_second_assist
-import dmt_proms.pass.generated.resources.contacts_page_thired_assist
-import dmt_proms.pass.generated.resources.person_names
-import dmt_proms.pass.generated.resources.search_at_latter_h_pass
-import dmt_proms.pass.generated.resources.search_for_hana_choen_in_contacts_pass
-import dmt_proms.pass.generated.resources.witch_contact_are_we_looking_for_pass
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +11,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import org.example.hit.heal.core.presentation.Resources.String.contactsPageFirstAssist
+import org.example.hit.heal.core.presentation.Resources.String.contactsPageSecondAssist
+import org.example.hit.heal.core.presentation.Resources.String.contactsPageThirdAssist
+import org.example.hit.heal.core.presentation.Resources.String.personNames
+import org.example.hit.heal.core.presentation.Resources.String.searchAtLatterHPass
+import org.example.hit.heal.core.presentation.Resources.String.searchForHanaChoenInContactsPass
+import org.example.hit.heal.core.presentation.Resources.String.witchContactAreWeLookingForPass
 import org.jetbrains.compose.resources.getStringArray
 import presentation.components.ContactData
 import presentation.components.CountdownDialogHandler
@@ -62,7 +61,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     val isNextScreen: StateFlow<Boolean> = _isNextScreen
 
     suspend fun loadContacts(phoneNumber: String) {
-        val names = getStringArray(Res.array.person_names).toList()
+        val names = getStringArray(personNames).toList()
         allContacts = names
             .map { name -> ContactData(name, phoneNumber) }
             .sortedBy { it.name }
@@ -123,17 +122,17 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         return when (count) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                Res.string.contacts_page_first_assist to Res.string.witch_contact_are_we_looking_for_pass
+                contactsPageFirstAssist to witchContactAreWeLookingForPass
             )
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
-                Res.string.contacts_page_second_assist to Res.string.search_for_hana_choen_in_contacts_pass
+                contactsPageSecondAssist to searchForHanaChoenInContactsPass
             )
 
             3 -> {
                 countdownDialogHandler.showCountdownDialog(
-                    isPlayingFlow = isPlaying, Res.string.contacts_page_thired_assist to Res.string.search_at_latter_h_pass
+                    isPlayingFlow = isPlaying, contactsPageThirdAssist to searchAtLatterHPass
                 )
             }
 

@@ -1,10 +1,7 @@
 package presentation.detailedContact
 
 import BaseTabletScreen
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,9 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,26 +20,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.pass.generated.resources.Res
-import dmt_proms.pass.generated.resources.Whatsapp
-import dmt_proms.pass.generated.resources.black_messages
-import dmt_proms.pass.generated.resources.black_phone
-import dmt_proms.pass.generated.resources.black_video
-import dmt_proms.pass.generated.resources.contact
-import dmt_proms.pass.generated.resources.contact_details
-import dmt_proms.pass.generated.resources.messages
-import dmt_proms.pass.generated.resources.phone
-import dmt_proms.pass.generated.resources.search
-import dmt_proms.pass.generated.resources.video
-import dmt_proms.pass.generated.resources.whatsapp
 import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.jetbrains.compose.resources.painterResource
+import org.example.hit.heal.core.presentation.Resources.String.contact
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.components.AppData
@@ -53,7 +35,7 @@ import presentation.components.InstructionsDialog
 import presentation.components.circleWithPicture
 import presentation.detailedContact.components.ContactDetailsSection
 
-class DetailedContactScreen(private val contact: ContactData) : Screen {
+class DetailedContactScreen(private val correctContact: ContactData) : Screen {
 
     @Composable
     override fun Content() {
@@ -77,7 +59,7 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
         val isNextScreen by viewModel.isNextScreen.collectAsState()
 
         BaseTabletScreen(
-            title = stringResource(Res.string.contact),
+            title = stringResource(contact),
             content = {
                 Column(
                     modifier = Modifier
@@ -97,13 +79,13 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = contact.name.first().toString(),
+                            text = correctContact.name.first().toString(),
                             fontWeight = FontWeight.Bold,
                             fontSize = 40.sp
                         )
                     }
                     Text(
-                        text = contact.name,
+                        text = correctContact.name,
                         fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                     )
@@ -119,7 +101,7 @@ class DetailedContactScreen(private val contact: ContactData) : Screen {
                     }
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    ContactDetailsSection(contact, viewModel)
+                    ContactDetailsSection(correctContact, viewModel)
                 }
             }
         )

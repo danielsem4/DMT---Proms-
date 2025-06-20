@@ -25,9 +25,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import dmt_proms.ui.core.generated.resources.Res
-import dmt_proms.ui.core.generated.resources.dialog_speaker
 import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.Resources.Icon.dialogSpeakerIcon
+import org.example.hit.heal.core.presentation.Resources.String.dialogSpeaker
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -128,8 +128,8 @@ fun AudioPlayingAnimation(
                 }
 
                 Image(
-                    painter = painterResource(Res.drawable.dialog_speaker),
-                    contentDescription = stringResource(Res.string.dialog_speaker),
+                    painter = painterResource(dialogSpeakerIcon),
+                    contentDescription = stringResource(dialogSpeaker),
                     modifier = Modifier
                         .size(imageSize)
                         .offset(y = offsetY.dp)
