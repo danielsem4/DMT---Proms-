@@ -20,9 +20,8 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.zIndex
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.close_fridge
-import dmt_proms.hitber.generated.resources.open_fridge
+import org.example.hit.heal.core.presentation.Resources.Icon.closeFridge
+import org.example.hit.heal.core.presentation.Resources.Icon.openFridge
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberCloseFridge
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberItem
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberOpenFridge
@@ -57,8 +56,8 @@ fun FridgeWithItemsBox(
             }
     ) {
         Image(
-            painter = if (isFridgeOpen) painterResource(Res.drawable.open_fridge)
-            else painterResource(Res.drawable.close_fridge),
+            painter = if (isFridgeOpen) painterResource(openFridge)
+            else painterResource(closeFridge),
             contentDescription = if (isFridgeOpen)
                 stringResource(sixthQuestionHitberOpenFridge)
             else

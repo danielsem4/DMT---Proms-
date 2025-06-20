@@ -16,8 +16,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.zIndex
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.table
+import org.example.hit.heal.core.presentation.Resources.Icon.table
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberNapkin
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberTable
 import org.example.hit.heal.hitber.presentation.understanding.model.napkins
@@ -46,7 +45,7 @@ fun TableWithNapkinsBox(
             }
     ) {
         Image(
-            painter = painterResource(Res.drawable.table),
+            painter = painterResource(table),
             contentDescription = stringResource(sixthQuestionHitberTable),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds

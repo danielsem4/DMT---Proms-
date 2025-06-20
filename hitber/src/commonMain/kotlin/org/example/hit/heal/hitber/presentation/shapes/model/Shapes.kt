@@ -1,21 +1,20 @@
 package org.example.hit.heal.hitber.presentation.shapes.model
 
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.asterisk
-import dmt_proms.hitber.generated.resources.check
-import dmt_proms.hitber.generated.resources.close
-import dmt_proms.hitber.generated.resources.cone
-import dmt_proms.hitber.generated.resources.ellipse
-import dmt_proms.hitber.generated.resources.hash_tag
-import dmt_proms.hitber.generated.resources.hexagon
-import dmt_proms.hitber.generated.resources.pentagon
-import dmt_proms.hitber.generated.resources.plus
-import dmt_proms.hitber.generated.resources.rectangle
-import dmt_proms.hitber.generated.resources.rhomb
-import dmt_proms.hitber.generated.resources.right_triangle
-import dmt_proms.hitber.generated.resources.star
-import dmt_proms.hitber.generated.resources.trapezoid
-import dmt_proms.hitber.generated.resources.triangle
+import org.example.hit.heal.core.presentation.Resources.Icon.asterisk
+import org.example.hit.heal.core.presentation.Resources.Icon.close
+import org.example.hit.heal.core.presentation.Resources.Icon.cone
+import org.example.hit.heal.core.presentation.Resources.Icon.ellipse
+import org.example.hit.heal.core.presentation.Resources.Icon.hashTag
+import org.example.hit.heal.core.presentation.Resources.Icon.hexagon
+import org.example.hit.heal.core.presentation.Resources.Icon.pentagon
+import org.example.hit.heal.core.presentation.Resources.Icon.plus
+import org.example.hit.heal.core.presentation.Resources.Icon.rectangle
+import org.example.hit.heal.core.presentation.Resources.Icon.rhomb
+import org.example.hit.heal.core.presentation.Resources.Icon.rightTriangle
+import org.example.hit.heal.core.presentation.Resources.Icon.star
+import org.example.hit.heal.core.presentation.Resources.Icon.trapezoid
+import org.example.hit.heal.core.presentation.Resources.Icon.triangle
+import org.example.hit.heal.core.presentation.Resources.Icon.check
 import org.jetbrains.compose.resources.DrawableResource
 
 val shapeSets = listOf(
@@ -47,19 +46,19 @@ enum class ShapeType {
 data class Shape(val type: ShapeType, val drawable: DrawableResource)
 
 val shapeList = listOf(
-    Shape(ShapeType.Ellipse, Res.drawable.ellipse),
-    Shape(ShapeType.Rectangle, Res.drawable.rectangle),
-    Shape(ShapeType.Pentagon, Res.drawable.pentagon),
-    Shape(ShapeType.Star, Res.drawable.star),
-    Shape(ShapeType.Hashtag, Res.drawable.hash_tag),
-    Shape(ShapeType.Rhomb, Res.drawable.rhomb),
-    Shape(ShapeType.Cone, Res.drawable.cone),
-    Shape(ShapeType.Plus, Res.drawable.plus),
-    Shape(ShapeType.Hexagon, Res.drawable.hexagon),
-    Shape(ShapeType.RightTriangle, Res.drawable.right_triangle),
-    Shape(ShapeType.Asterisk, Res.drawable.asterisk),
-    Shape(ShapeType.Check, Res.drawable.check),
-    Shape(ShapeType.Trapezoid, Res.drawable.trapezoid),
-    Shape(ShapeType.Triangle, Res.drawable.triangle),
-    Shape(ShapeType.Close, Res.drawable.close)
+    Shape(ShapeType.Ellipse, ellipse),
+    Shape(ShapeType.Rectangle, rectangle),
+    Shape(ShapeType.Pentagon, pentagon),
+    Shape(ShapeType.Star, star),
+    Shape(ShapeType.Hashtag, hashTag),
+    Shape(ShapeType.Rhomb, rhomb),
+    Shape(ShapeType.Cone, cone),
+    Shape(ShapeType.Plus, plus),
+    Shape(ShapeType.Hexagon, hexagon),
+    Shape(ShapeType.RightTriangle, rightTriangle),
+    Shape(ShapeType.Asterisk, asterisk),
+    Shape(ShapeType.Check, check),
+    Shape(ShapeType.Trapezoid, trapezoid),
+    Shape(ShapeType.Triangle, triangle),
+    Shape(ShapeType.Close, close)
 )

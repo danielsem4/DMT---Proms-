@@ -1,16 +1,15 @@
 package org.example.hit.heal.hitber.presentation.naming.model
 
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.ball
-import dmt_proms.hitber.generated.resources.balloon
-import dmt_proms.hitber.generated.resources.lemon
-import dmt_proms.hitber.generated.resources.pencil
-import dmt_proms.hitber.generated.resources.ruler
-import dmt_proms.hitber.generated.resources.table
+import org.example.hit.heal.core.presentation.Resources.Icon.ball
+import org.example.hit.heal.core.presentation.Resources.Icon.balloon
+import org.example.hit.heal.core.presentation.Resources.Icon.lemon
+import org.example.hit.heal.core.presentation.Resources.Icon.pencil
+import org.example.hit.heal.core.presentation.Resources.Icon.ruler
+import org.example.hit.heal.core.presentation.Resources.Icon.table
 
 val imageCouples = listOf(
-    Pair(Res.drawable.pencil, Res.drawable.ruler),
-    Pair(Res.drawable.table, Res.drawable.ball),
-    Pair(Res.drawable.balloon, Res.drawable.lemon),
-    Pair(Res.drawable.lemon, Res.drawable.pencil)
+    Pair(pencil, ruler),
+    Pair(table, ball),
+    Pair(balloon, lemon),
+    Pair(lemon, pencil)
 )

@@ -24,8 +24,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.getCurrentFormattedDateTime
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.error_icon
+import org.example.hit.heal.core.presentation.Resources.Icon.errorIcon
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogTitle
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskInstructions
@@ -115,7 +114,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
         })
         if (showDialog) {
             DialogTask(
-                icon = Res.drawable.error_icon,
+                icon = errorIcon,
                 title = stringResource(secondQuestionHitberDialogTitle),
                 text = stringResource(secondQuestionHitberTaskRetryInstructions),
                 onDismiss = { showDialog = false })

@@ -19,8 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.profile
+import org.example.hit.heal.core.presentation.Resources.Icon.profile
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTask
@@ -66,7 +65,7 @@ class ShapeScreen : Screen {
 
         if (showDialog) {
             DialogTask(
-                icon = Res.drawable.profile,
+                icon = profile,
                 title = stringResource(secondQuestionHitberTask),
                 text = stringResource(secondQuestionHitberDialogInstructions),
                 onDismiss = { showDialog = false })

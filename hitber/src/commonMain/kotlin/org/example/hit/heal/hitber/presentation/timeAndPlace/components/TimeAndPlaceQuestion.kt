@@ -22,9 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.drop_down
-import dmt_proms.hitber.generated.resources.drop_up
+import org.example.hit.heal.core.presentation.Resources.Icon.dropDown
+import org.example.hit.heal.core.presentation.Resources.Icon.dropUp
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberDropDownDropUpIcon
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
@@ -63,7 +62,7 @@ fun TimeAndPlaceQuestion(
             trailingIcon = {
                 Image(
                     painter = painterResource(
-                        if (expanded) Res.drawable.drop_up else Res.drawable.drop_down
+                        if (expanded) dropUp else dropDown
                     ),
                     contentDescription = stringResource(firstQuestionHitberDropDownDropUpIcon),
                     modifier = Modifier.size(20.dp)

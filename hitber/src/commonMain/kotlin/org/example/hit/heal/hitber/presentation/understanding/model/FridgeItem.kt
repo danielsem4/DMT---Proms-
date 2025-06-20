@@ -1,14 +1,13 @@
 package org.example.hit.heal.hitber.presentation.understanding.model
 
-import dmt_proms.hitber.generated.resources.Cottage
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.chicken
-import dmt_proms.hitber.generated.resources.coca_cola
-import dmt_proms.hitber.generated.resources.grapes
-import dmt_proms.hitber.generated.resources.milk
-import dmt_proms.hitber.generated.resources.orange_juice
-import dmt_proms.hitber.generated.resources.peas
-import dmt_proms.hitber.generated.resources.yogurt
+import org.example.hit.heal.core.presentation.Resources.Icon.chicken
+import org.example.hit.heal.core.presentation.Resources.Icon.cocaCola
+import org.example.hit.heal.core.presentation.Resources.Icon.cottage
+import org.example.hit.heal.core.presentation.Resources.Icon.grapes
+import org.example.hit.heal.core.presentation.Resources.Icon.milk
+import org.example.hit.heal.core.presentation.Resources.Icon.orangeJuice
+import org.example.hit.heal.core.presentation.Resources.Icon.peas
+import org.example.hit.heal.core.presentation.Resources.Icon.yogurt
 import org.jetbrains.compose.resources.DrawableResource
 
 data class FridgeItem(
@@ -18,14 +17,14 @@ data class FridgeItem(
 )
 
 val fridgeItems = listOf(
-    FridgeItem(Res.drawable.peas, 0.2f, 0.18f),
-    FridgeItem(Res.drawable.Cottage, 0.15f, 0.4f),
-    FridgeItem(Res.drawable.yogurt, 0.35f, 0.4f),
-    FridgeItem(Res.drawable.grapes, 0.15f, 0.52f),
-    FridgeItem(Res.drawable.coca_cola, 0.35f, 0.52f),
-    FridgeItem(Res.drawable.chicken, 0.25f, 0.65f),
-    FridgeItem(Res.drawable.orange_juice, 0.7f, 0.47f),
-    FridgeItem(Res.drawable.milk, 0.6f, 0.6f)
+    FridgeItem(peas, 0.2f, 0.18f),
+    FridgeItem(cottage, 0.15f, 0.4f),
+    FridgeItem(yogurt, 0.35f, 0.4f),
+    FridgeItem(grapes, 0.15f, 0.52f),
+    FridgeItem(cocaCola, 0.35f, 0.52f),
+    FridgeItem(chicken, 0.25f, 0.65f),
+    FridgeItem(orangeJuice, 0.7f, 0.47f),
+    FridgeItem(milk, 0.6f, 0.6f)
     )
 
 

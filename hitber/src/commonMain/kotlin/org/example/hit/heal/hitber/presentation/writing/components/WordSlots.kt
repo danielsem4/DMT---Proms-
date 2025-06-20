@@ -31,8 +31,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.close_icon
+import org.example.hit.heal.core.presentation.Resources.Icon.closeIcon
 import org.example.hit.heal.core.presentation.Resources.String.eighthQuestionHitberCloseIcon
 import org.example.hit.heal.hitber.presentation.writing.EightQuestionViewModel
 import org.example.hit.heal.hitber.presentation.writing.model.WordSlotState
@@ -90,7 +89,7 @@ fun WordSlot(
             .zIndex(-1f)
     ) {
         slot.word?.let {
-            Image(painter = painterResource(Res.drawable.close_icon),
+            Image(painter = painterResource(closeIcon),
                 contentDescription = stringResource(eighthQuestionHitberCloseIcon),
                 modifier = Modifier.size(20.dp).align(Alignment.TopStart).padding(5.dp)
                     .clickable {

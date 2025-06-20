@@ -1,14 +1,13 @@
 package org.example.hit.heal.hitber.presentation.understanding.model
 
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.blue_napkin
-import dmt_proms.hitber.generated.resources.chicken
-import dmt_proms.hitber.generated.resources.coca_cola
-import dmt_proms.hitber.generated.resources.grapes
-import dmt_proms.hitber.generated.resources.green_napkin
-import dmt_proms.hitber.generated.resources.milk
-import dmt_proms.hitber.generated.resources.red_napkin
-import dmt_proms.hitber.generated.resources.yellow_napkin
+import org.example.hit.heal.core.presentation.Resources.Icon.blueNapkin
+import org.example.hit.heal.core.presentation.Resources.Icon.chicken
+import org.example.hit.heal.core.presentation.Resources.Icon.cocaCola
+import org.example.hit.heal.core.presentation.Resources.Icon.grapes
+import org.example.hit.heal.core.presentation.Resources.Icon.greenNapkin
+import org.example.hit.heal.core.presentation.Resources.Icon.milk
+import org.example.hit.heal.core.presentation.Resources.Icon.redNapkin
+import org.example.hit.heal.core.presentation.Resources.Icon.yellowNapkin
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionCanToYellowNapkinHitber
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionChickenToGreenNapkinHitber
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionDefaultMilkToRedNapkinHitber
@@ -25,22 +24,22 @@ data class AudioItem(
 val audioList = listOf(
     AudioItem(
         sixthQuestionDefaultMilkToRedNapkinHitber,
-        Res.drawable.milk,
-        Res.drawable.red_napkin
+        milk,
+        redNapkin
     ),
     AudioItem(
         sixthQuestionGrapesToBlueNapkinHitber,
-        Res.drawable.grapes,
-        Res.drawable.blue_napkin
+        grapes,
+        blueNapkin
     ),
     AudioItem(
         sixthQuestionChickenToGreenNapkinHitber,
-        Res.drawable.chicken,
-        Res.drawable.green_napkin
+        chicken,
+        greenNapkin
     ),
     AudioItem(
         sixthQuestionCanToYellowNapkinHitber,
-        Res.drawable.coca_cola,
-        Res.drawable.yellow_napkin
+        cocaCola,
+        yellowNapkin
     )
 )

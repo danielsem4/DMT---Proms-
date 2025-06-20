@@ -21,8 +21,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import dmt_proms.ui.core.generated.resources.Res
-import dmt_proms.ui.core.generated.resources.check
+import org.example.hit.heal.core.presentation.Resources.Icon.check
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.PI
 import kotlin.math.cos
@@ -110,7 +109,7 @@ fun SuccessAnimation(modifier: Modifier = Modifier) {
 
         if (tickAlpha.value > 0f) {
             Image(
-                painter = painterResource(Res.drawable.check),
+                painter = painterResource(check),
                 contentDescription = "Success",
                 modifier = Modifier
                     .size(50.dp)

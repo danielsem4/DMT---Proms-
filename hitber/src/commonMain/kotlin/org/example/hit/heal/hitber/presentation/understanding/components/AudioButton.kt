@@ -16,8 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.speaker
+import org.example.hit.heal.core.presentation.Resources.Icon.speaker
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberListen
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberVolumeIcon
 import org.example.hit.heal.core.presentation.primaryColor
@@ -39,7 +38,7 @@ fun AudioButton(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                painter = painterResource(Res.drawable.speaker),
+                painter = painterResource(speaker),
                 contentDescription = stringResource(sixthQuestionHitberVolumeIcon),
                 modifier = Modifier
                     .padding(end = 8.dp)

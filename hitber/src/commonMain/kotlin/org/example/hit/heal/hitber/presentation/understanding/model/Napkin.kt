@@ -1,10 +1,9 @@
 package org.example.hit.heal.hitber.presentation.understanding.model
 
-import dmt_proms.hitber.generated.resources.Res
-import dmt_proms.hitber.generated.resources.blue_napkin
-import dmt_proms.hitber.generated.resources.green_napkin
-import dmt_proms.hitber.generated.resources.red_napkin
-import dmt_proms.hitber.generated.resources.yellow_napkin
+import org.example.hit.heal.core.presentation.Resources.Icon.blueNapkin
+import org.example.hit.heal.core.presentation.Resources.Icon.greenNapkin
+import org.example.hit.heal.core.presentation.Resources.Icon.redNapkin
+import org.example.hit.heal.core.presentation.Resources.Icon.yellowNapkin
 import org.jetbrains.compose.resources.DrawableResource
 
 data class Napkin(
@@ -14,8 +13,8 @@ data class Napkin(
 )
 
 val napkins = listOf(
-    Napkin(Res.drawable.red_napkin, 0.1f, 0.08f),
-    Napkin(Res.drawable.yellow_napkin, 0.45f, 0.05f),
-    Napkin(Res.drawable.green_napkin, 0.3f, 0.1f),
-    Napkin(Res.drawable.blue_napkin, 0.65f, 0.07f),
+    Napkin(redNapkin, 0.1f, 0.08f),
+    Napkin(yellowNapkin, 0.45f, 0.05f),
+    Napkin(greenNapkin, 0.3f, 0.1f),
+    Napkin(blueNapkin, 0.65f, 0.07f),
 )

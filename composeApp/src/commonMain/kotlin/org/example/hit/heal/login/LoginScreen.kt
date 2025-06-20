@@ -34,10 +34,8 @@ import dmt_proms.composeapp.generated.resources.med_presc
 import org.example.EmailTextField
 import org.example.PasswordTextField
 import org.example.hit.heal.Home.HomeScreen
-import org.example.hit.heal.core.presentation.Resources.String.login
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.login.LoginViewModel
-import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
