@@ -32,7 +32,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.coroutines.launch
+import org.example.hit.heal.hitber.presentation.HitberScreen
 import org.koin.compose.viewmodel.koinViewModel
+import presentation.PassScreen
 
 class HomeScreen(): Screen {
 @Composable
@@ -84,6 +86,13 @@ class HomeScreen(): Screen {
                 FeatureButton(icon = Icons.Outlined.Medication, label = "Medications", onClick = {})
                 FeatureButton(icon = Icons.Outlined.AutoGraph, label = "Graphs", onClick = {})
                 FeatureButton(icon = Icons.Outlined.Snowshoeing, label = "Activities", onClick = {})
+                FeatureButton(icon = Icons.Outlined.Snowshoeing, label = "Hitber", onClick = { navigator.push(
+                    HitberScreen()
+                )})
+                FeatureButton(icon = Icons.Outlined.Snowshoeing, label = "Pass", onClick = { navigator.push(
+                    PassScreen()
+                )})
+
             }
 
             Spacer(modifier = Modifier.height(16.dp))
