@@ -19,8 +19,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import org.example.hit.heal.presentaion.backgroundColor
-import org.example.hit.heal.presentaion.primaryColor
+import com.example.hi.heal.memoryTest.core.presentation.data.primaryColor
+
 
 
 @Composable

@@ -40,6 +40,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hi.heal.memoryTest.core.presentation.data.primaryColor
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.pills
 import kotlinx.datetime.Clock
@@ -53,8 +54,6 @@ import network.chaintech.kmp_date_time_picker.ui.datepicker.WheelDatePickerView
 import network.chaintech.kmp_date_time_picker.ui.timepicker.WheelTimePickerView
 import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
 import network.chaintech.kmp_date_time_picker.utils.WheelPickerDefaults
-import org.example.hit.heal.presentaion.backgroundColor
-import org.example.hit.heal.presentaion.primaryColor
 import org.example.hit.heal.presentaion.screens.medicationScreen.MedicationReportViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel

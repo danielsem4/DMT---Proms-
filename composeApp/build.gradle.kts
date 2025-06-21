@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     kotlin("plugin.serialization") version "2.1.10"
 
+
 }
 
 kotlin {
@@ -18,7 +19,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -29,18 +30,29 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            // Koin dependencies
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+
+            // Ktor dependencies
+            implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
             val voyagerVersion = "1.1.0-beta02"
+            implementation(projects.ui.core)
+            implementation(projects.core)
+            implementation(projects.clockTest)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -49,6 +61,35 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
+            // Voyager Navigator
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.screenModel)
+            implementation(libs.voyager.transitions)
+
+            // Basic Navigation
+            implementation(libs.navigation.compose)
+
+            // Koin dependencies
+            api(libs.koin.core)
+            implementation(libs.bundles.koin.compose)
+            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.navigation.compose)
+            implementation(libs.kotlinx.serialization) // for data serialization
+
+            implementation(libs.datastore.preferences)
+            implementation(libs.datastore)
+
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.tabNavigator)
+            implementation(libs.voyager.transitions)
+
+            implementation(libs.bundles.ktor)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
+
+            implementation(libs.coil.compose)
             implementation(libs.bundles.voyager.common)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
@@ -78,13 +119,15 @@ kotlin {
             implementation("io.github.moonggae:kmedia:0.0.3")
 
 
-
-
-
+        }
+        nativeMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+            implementation(compose.desktop.common)
+            implementation(libs.ktor.client.okhttp)
         }
     }
 }
@@ -117,6 +160,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.runtime.livedata)
+    implementation(libs.play.services.cast.framework)
     implementation(libs.androidx.material3.android)
     debugImplementation(compose.uiTooling)
 }

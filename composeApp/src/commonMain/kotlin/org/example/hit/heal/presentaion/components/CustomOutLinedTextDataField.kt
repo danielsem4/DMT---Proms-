@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hi.heal.memoryTest.core.presentation.data.primaryColor
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -50,7 +51,6 @@ import network.chaintech.kmp_date_time_picker.utils.MIN
 import network.chaintech.kmp_date_time_picker.utils.SelectorProperties
 import network.chaintech.kmp_date_time_picker.utils.WheelPickerDefaults
 import network.chaintech.kmp_date_time_picker.utils.now
-import org.example.hit.heal.presentaion.primaryColor
 import network.chaintech.kmp_date_time_picker.ui.datepicker.WheelDatePickerView as WheelDatePickerView
 
 @Composable

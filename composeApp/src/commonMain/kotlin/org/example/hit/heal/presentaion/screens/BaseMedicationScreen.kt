@@ -1,5 +1,5 @@
-package org.example.hit.heal.presentaion.screens
 
+package org.example.hit.heal.presentaion.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,19 +21,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import org.example.hit.heal.presentaion.backgroundColor
-import org.example.hit.heal.presentaion.components.RoundedButton
-import org.example.hit.heal.presentaion.primaryColor
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import com.example.hi.heal.memoryTest.core.presentation.data.backgroundColor
+import com.example.hi.heal.memoryTest.core.presentation.data.primaryColor
+import dmt_proms.composeapp.generated.resources.Res
+
+import org.jetbrains.compose.resources.stringResource
+ import org.jetbrains.compose.ui.tooling.preview.Preview
+
+/**
+ * BaseScreen is a reusable composable that provides a standard layout
+ * for screens in the application.
+ */
 
 @Composable
 fun BaseScreen(
     title: String,
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
-    prevButtonText: String = "Previous",
+     prevButtonText: String = "Previous",
     nextButtonText: String = "Next",
-    content: @Composable() (ColumnScope.() -> Unit)
+     navigationIcon: @Composable (() -> Unit)? = null,
+     content: @Composable() (ColumnScope.() -> Unit)
 ) {
     MaterialTheme {
 
@@ -50,14 +58,25 @@ fun BaseScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(primaryColor)
-                    .padding(12.dp),
-                contentAlignment = Alignment.Center
+                    .padding(12.dp)
             ) {
+                navigationIcon?.let {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .padding(top = statusBarValues.calculateTopPadding())
+                    ) {
+                        it()
+                    }
+                }
+
                 Text(
                     text = title,
                     color = Color.White,
                     style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(top = statusBarValues.calculateTopPadding())
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(top = statusBarValues.calculateTopPadding())
                 )
             }
 
@@ -79,12 +98,17 @@ fun BaseScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     onPrevClick?.let {
-                        RoundedButton(prevButtonText, Modifier, it)
+                         RoundedButton(prevButtonText, Modifier, it)
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     onNextClick?.let {
                         RoundedButton(nextButtonText, Modifier, it)
+                         RoundedButton("previous", Modifier, it)
                     }
+                    Spacer(modifier = Modifier.weight(1f))
+                    onNextClick?.let {
+                        RoundedButton("next", Modifier, it)
+                     }
                 }
             }
         }
@@ -100,7 +124,7 @@ fun SampleScreen() {
         onPrevClick = { /* Handle previous */ },
         onNextClick = { /* Handle next */ }
     ) {
-        Text(text = "How do you feel?")
+        Text(text ="how do you feel?")
         TextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
     }
 }

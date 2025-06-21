@@ -22,7 +22,8 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.presentaion.primaryColor
+import com.example.hi.heal.memoryTest.core.presentation.data.primaryColor
+
 
 @Composable
 fun CustomWeeklySelector(  selectedDays: List<Int>, onSelectionChange: (List<Int>) -> Unit) {

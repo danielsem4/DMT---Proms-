@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<resources>
+    <!--    app common strings-->
+
+    <string name="app_name">DMT - Proms</string>
+    <string name="login">Login</string>
+    <string name="logout">Log out</string>
+    <string name="home">Home</string>
+
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="send">Send</string>
+    <string name="how_do_you_feel">How do you feel?</string>
+    <string name="dont_forget">• Don't forget to take your test.</string>
+    <string name="take_pills">• Take 2 pills at 12:00</string>
+    <string name="messages">Messages</string>
+    <string name="welcome">Welcome</string>
+
+    <!--    Errors      -->
+    <string name="fill_fields">Please fill in all fields</string>
+    <string name="invalid_email">Invalid email format</string>
+    <string name="empty_pass">Password cannot be empty</string>
+    <string name="unexpected_error">Unexpected error</string>
+
+    <string name="login_success">Logged in successfully</string>
+    <string name="sent_successfully">Sent successfully</string>
+    <string name="measurements">Measurements</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="clock_test">Clock Test</string>
+    <string name="activities">Activities</string>
+    <string name="graphs">Graphs</string>
+    <string name="medications">Medications</string>
+    <string name="document_share">Document Share</string>
+    <string name="chat">Chat</string>
+    <string name="memory">Memory</string>
+    <string name="hitber">HitBer</string>
+
+
+
+    <!--    CDT Module  -->
+
+
+    <!--    Hitber Module  -->
+
+
+    <!--    Orientation Module  -->
+
+
+    <!--    Memory Module  -->
+
+
+    <!--    Pass Module  -->
+
+
+</resources>
