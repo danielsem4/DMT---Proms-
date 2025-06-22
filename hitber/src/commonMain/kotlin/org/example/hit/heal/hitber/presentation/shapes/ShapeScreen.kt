@@ -1,6 +1,6 @@
 package org.example.hit.heal.hitber.presentation.shapes
 
-import TabletBaseScreen
+import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -39,7 +39,7 @@ class ShapeScreen : Screen {
         var showDialog by remember { mutableStateOf(true) }
         val shapeSet by secondQuestionViewModel.selectedSet.collectAsState()
 
-        TabletBaseScreen(
+        HorizontalTabletBaseScreen(
             title = stringResource(secondQuestionHitberTitle),
             onNextClick = { navigator?.push(ActionShapesScreen(2)) },
             question = 2,

@@ -1,3 +1,5 @@
+package org.example.hit.heal.core.presentation.components
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 
 @Composable
-fun BaseTabletScreen(
+fun VerticalTabletBaseScreen(
     title: String,
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
@@ -33,7 +35,6 @@ fun BaseTabletScreen(
                 .background(backgroundColor)
                 .padding(bottom = statusBarValues.calculateBottomPadding())
         ) {
-            // Top Bar
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -50,7 +51,6 @@ fun BaseTabletScreen(
                 )
             }
 
-            // Dynamic Content
             Column(
                 modifier = Modifier
                     .fillMaxSize()

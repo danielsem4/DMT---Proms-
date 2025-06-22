@@ -1,4 +1,4 @@
-package org.example.hit.heal.core.presentation.components
+package org.example.hit.heal.core.presentation.utils.animations
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

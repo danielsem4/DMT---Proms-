@@ -1,4 +1,4 @@
-package core.domain.audio
+package core.utils
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.AVFAudio.AVAudioPlayer
@@ -18,11 +18,13 @@ actual class AudioPlayer {
         player?.delegate = delegate
         player?.play()
     }
-}
 
-class AudioPlayerDelegate(val onCompletion: () -> Unit) : NSObject(),
-    AVAudioPlayerDelegateProtocol {
-    override fun audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully: Boolean) {
-        onCompletion()
+    class AudioPlayerDelegate(val onCompletion: () -> Unit) : NSObject(),
+        AVAudioPlayerDelegateProtocol {
+        override fun audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully: Boolean) {
+            onCompletion()
+        }
+
     }
+
 }

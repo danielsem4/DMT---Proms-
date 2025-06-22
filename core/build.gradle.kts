@@ -38,6 +38,7 @@ kotlin {
 
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            implementation(libs.kmp.capturable.compose)
 
             implementation(libs.ktor.client.okhttp)
         }
@@ -74,6 +75,7 @@ kotlin {
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
             implementation(libs.compose.ui.graphics)
+            implementation(libs.kmp.capturable.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

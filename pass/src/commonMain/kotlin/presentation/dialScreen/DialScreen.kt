@@ -1,6 +1,6 @@
 package presentation.dialScreen
 
-import BaseTabletScreen
+import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -56,7 +56,7 @@ class DialScreen : Screen {
         val currentMissionPass by viewModel.currentMissionPass.collectAsState()
         val correctNumber = stringResource(dentistPhoneNumber)
 
-        BaseTabletScreen(
+        VerticalTabletBaseScreen(
             title = stringResource(dialer),
             content = {
                 Box(modifier = Modifier.fillMaxSize()) {

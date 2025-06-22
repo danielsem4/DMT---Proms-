@@ -1,4 +1,4 @@
-
+package org.example.hit.heal.core.presentation.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +27,7 @@ import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
 
 @Composable
-fun TabletBaseScreen(
+fun HorizontalTabletBaseScreen(
     title: String,
     onNextClick: (() -> Unit)? = null,
     buttonText: String,

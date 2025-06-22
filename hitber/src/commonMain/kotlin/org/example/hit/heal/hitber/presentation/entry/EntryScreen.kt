@@ -1,6 +1,6 @@
 package org.example.hit.heal.hitber.presentation.entry
 
-import TabletBaseScreen
+import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,7 +34,7 @@ class EntryScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.current
 
-        TabletBaseScreen(
+        HorizontalTabletBaseScreen(
             title = stringResource(entryHitberTitle),
             onNextClick = { navigator?.push(TimeAndPlace()) },
             question = 0,

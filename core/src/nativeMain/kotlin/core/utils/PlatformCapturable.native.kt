@@ -1,7 +1,8 @@
-package org.example.hit.heal.hitber.utils
+package core.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.ImageBitmap
+import core.utils.CapturableWrapper
 import io.github.suwasto.capturablecompose.Capturable
 import io.github.suwasto.capturablecompose.rememberCaptureController
 
@@ -23,4 +24,3 @@ actual fun PlatformCapturable(
         capture = { controller.capture() }
     )
 }
-

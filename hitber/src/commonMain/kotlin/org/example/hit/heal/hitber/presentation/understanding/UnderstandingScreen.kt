@@ -1,6 +1,6 @@
 package org.example.hit.heal.hitber.presentation.understanding
 
-import TabletBaseScreen
+import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberTitle
@@ -34,10 +35,9 @@ import org.example.hit.heal.hitber.presentation.understanding.components.AudioPl
 import org.example.hit.heal.hitber.presentation.understanding.components.TableWithNapkinsBox
 import org.example.hit.heal.hitber.presentation.understanding.components.FridgeWithItemsBox
 import org.example.hit.heal.hitber.presentation.understanding.model.fridgeItems
-import org.example.hit.heal.hitber.presentation.understanding.components.handleScreenshotCapture
-import org.example.hit.heal.hitber.utils.CapturableWrapper
-import org.example.hit.heal.hitber.utils.InstructionText
-import org.example.hit.heal.hitber.utils.PlatformCapturable
+import core.utils.CapturableWrapper
+import org.example.hit.heal.hitber.presentation.components.InstructionText
+import core.utils.PlatformCapturable
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -89,7 +89,7 @@ class UnderstandingScreen : Screen {
         }
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
-            TabletBaseScreen(
+            HorizontalTabletBaseScreen(
                 title = stringResource(sixthQuestionHitberTitle),
                 onNextClick = {
                     capturable?.capture?.let { it() }
@@ -111,17 +111,32 @@ class UnderstandingScreen : Screen {
 
                     capturable = PlatformCapturable(
                         onCaptured = { imageBitmap ->
-                            handleScreenshotCapture(
-                                imageBitmap = imageBitmap,
-                                viewModel = viewModel,
-                                sixthQuestionViewModel = sixthQuestionViewModel,
-                                napkinResourceId = napkinResourceId,
-                                napkinPosition = napkinPosition,
-                                napkinSize = napkinWidthPx to napkinHeightPx,
-                                itemSize = itemWidthPx to itemHeightPx,
-                                itemLastPositions = itemLastPositions,
-                                onNavigate = { navigator?.push(DragAndDropScreen()) }
+                            val timestamp = getCurrentFormattedDateTime()
+
+                            viewModel.uploadImage(
+                                bitmap = imageBitmap,
+                                date = timestamp,
+                                currentQuestion = 6,
+                                onSuccess = {},
+                                onFailure = {}
                             )
+
+                            sixthQuestionViewModel.evaluateAnswer(
+                                napkinResourceId,
+                                napkinPosition,
+                                napkinWidthPx to napkinHeightPx,
+                                itemWidthPx to itemHeightPx,
+                                itemLastPositions
+                            )
+
+                            viewModel.setSixthQuestion(
+                                sixthQuestionViewModel.isFridgeOpened,
+                                sixthQuestionViewModel.isItemMovedCorrectly,
+                                sixthQuestionViewModel.isNapkinPlacedCorrectly,
+                                date = timestamp
+                            )
+
+                            navigator?.push(DragAndDropScreen())
                         }
                     )
                     {

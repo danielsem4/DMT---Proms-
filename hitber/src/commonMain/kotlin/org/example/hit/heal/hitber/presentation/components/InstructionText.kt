@@ -1,4 +1,4 @@
-package org.example.hit.heal.hitber.utils
+package org.example.hit.heal.hitber.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -1,6 +1,6 @@
 package presentation.appsDeviceScreen
 
-import BaseTabletScreen
+import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -43,7 +43,7 @@ class AppDeviceScreen : Screen {
         val isCountdownActive by viewModel.isCountdownActive.collectAsState()
         val nextScreen by viewModel.nextScreen.collectAsState()
 
-        BaseTabletScreen(
+        VerticalTabletBaseScreen(
             title = stringResource(deviceAppsTitle),
             content = {
                 Column(

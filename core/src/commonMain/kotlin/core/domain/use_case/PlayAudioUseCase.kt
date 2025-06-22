@@ -1,6 +1,6 @@
 package core.domain.use_case
 
-import core.domain.audio.AudioPlayer
+import core.utils.AudioPlayer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

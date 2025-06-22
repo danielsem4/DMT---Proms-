@@ -5,7 +5,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import org.koin.compose.KoinContext
 import presentation.entryScreen.EntryScreen
-import utils.LeftToRightTransition
+import org.example.hit.heal.core.presentation.utils.animations.LeftToRightTransition
 
 class PassScreen : Screen {
     @Composable

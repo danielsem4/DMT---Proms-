@@ -1,6 +1,6 @@
 package org.example.hit.heal.hitber.presentation.naming
 
-import TabletBaseScreen
+import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,7 +16,7 @@ import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.naming.components.NamingImages
 import org.example.hit.heal.hitber.presentation.naming.components.NamingTextFields
 import org.example.hit.heal.hitber.presentation.repetition.RepetitionScreen
-import org.example.hit.heal.hitber.utils.InstructionText
+import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -34,7 +34,7 @@ class NamingScreen : Screen {
         val firstImageName = selectedCouple?.let { getImageName(it.first) } ?: ""
         val secondImageName = selectedCouple?.let { getImageName(it.second) } ?: ""
 
-        TabletBaseScreen(title = stringResource(fourthQuestionHitberTitle),
+        HorizontalTabletBaseScreen(title = stringResource(fourthQuestionHitberTitle),
             onNextClick = {
                 fourthQuestionViewModel.fourthQuestionAnswer(
                     firstImageName,

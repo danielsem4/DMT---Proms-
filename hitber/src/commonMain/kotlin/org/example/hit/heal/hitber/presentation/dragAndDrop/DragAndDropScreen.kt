@@ -1,6 +1,6 @@
 package org.example.hit.heal.hitber.presentation.dragAndDrop
 
-import TabletBaseScreen
+import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.seventhQuestionHitberTitle
 import org.example.hit.heal.core.presentation.primaryColor
@@ -20,10 +21,10 @@ import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.components.DraggableCanvas
 import org.example.hit.heal.hitber.presentation.dragAndDrop.model.circleColors
 import org.example.hit.heal.hitber.presentation.dragAndDrop.model.circlesPositions
-import org.example.hit.heal.hitber.presentation.dragAndDrop.components.handleSeventhQuestionCapture
-import org.example.hit.heal.hitber.utils.CapturableWrapper
-import org.example.hit.heal.hitber.utils.InstructionText
-import org.example.hit.heal.hitber.utils.PlatformCapturable
+import org.example.hit.heal.hitber.presentation.writing.WritingScreen
+import core.utils.CapturableWrapper
+import org.example.hit.heal.hitber.presentation.components.InstructionText
+import core.utils.PlatformCapturable
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -54,7 +55,7 @@ class DragAndDropScreen : Screen {
             }
         }
 
-        TabletBaseScreen(
+        HorizontalTabletBaseScreen(
             title = stringResource(seventhQuestionHitberTitle),
             onNextClick = {
                 capturable?.capture?.let { it() }
@@ -69,18 +70,32 @@ class DragAndDropScreen : Screen {
 
                 capturable = PlatformCapturable(
                     onCaptured = {  imageBitmap ->
-                        handleSeventhQuestionCapture(
-                            circleOffsets = circleOffsets,
-                            imageBitmap = imageBitmap,
-                            viewModel = viewModel,
-                            targetColor = targetColor,
-                            circleColors = circleColors,
-                            targetBoxXRange = targetBoxXRange,
-                            targetBoxYRange = targetBoxYRange,
-                            radiusPx = radiusPx,
-                            seventhQuestionViewModel = seventhQuestionViewModel,
-                            navigator = navigator
+                        val timestamp = getCurrentFormattedDateTime()
+
+                        viewModel.uploadImage(
+                            bitmap = imageBitmap,
+                            date = timestamp,
+                            currentQuestion = 7,
+                            onSuccess = { },
+                            onFailure = { }
                         )
+
+                        targetColor?.let {
+                            seventhQuestionViewModel.evaluateAnswer(
+                                circlePositions = circleOffsets,
+                                circleColors = circleColors,
+                                targetColor = it,
+                                targetBoxXRange = targetBoxXRange,
+                                targetBoxYRange = targetBoxYRange,
+                                radiusPx = radiusPx
+                            )
+                            viewModel.setSeventhQuestion(
+                                seventhQuestionViewModel.answer,
+                                timestamp
+                            )
+                        }
+
+                        navigator?.push(WritingScreen())
                     }
                 )
                 {

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
 import org.example.hit.heal.hitber.presentation.entry.EntryScreen
-import org.example.hit.heal.hitber.utils.BottomToTopTransition
+import org.example.hit.heal.core.presentation.utils.animations.BottomToTopTransition
 import org.koin.compose.KoinContext
 
 class HitberScreen : Screen {

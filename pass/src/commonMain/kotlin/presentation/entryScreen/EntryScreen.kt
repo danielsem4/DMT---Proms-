@@ -1,6 +1,6 @@
 package presentation.entryScreen
 
-import BaseTabletScreen
+import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,7 +35,7 @@ import org.example.hit.heal.core.presentation.Resources.String.welcome
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.appsDeviceScreen.AppDeviceScreen
-import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
+import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnimation
 
 class EntryScreen : Screen {
 
@@ -52,7 +52,7 @@ class EntryScreen : Screen {
             viewModel.onPlayAudioRequested(audioString)
         }
 
-        BaseTabletScreen(
+        VerticalTabletBaseScreen(
             title = stringResource(welcome),
             content = {
                 AudioPlayingAnimation(isPlaying = isPlaying,)

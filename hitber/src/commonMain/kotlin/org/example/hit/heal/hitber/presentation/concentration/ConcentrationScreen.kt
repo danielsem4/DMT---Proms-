@@ -1,6 +1,6 @@
 package org.example.hit.heal.hitber.presentation.concentration
 
-import TabletBaseScreen
+import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,7 +31,7 @@ import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.concentration.components.RandomNumberScreen
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
-import org.example.hit.heal.hitber.utils.InstructionText
+import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -48,7 +48,7 @@ class ConcentrationScreen : Screen {
         val isFinished by thirdQuestionViewModel.isFinished.collectAsState()
         val isNumberClickable by thirdQuestionViewModel.isNumberClickable.collectAsState()
 
-        TabletBaseScreen(
+        HorizontalTabletBaseScreen(
             title = stringResource(thirdQuestionHitberTitle),
             onNextClick = {
                 if (isFinished) {

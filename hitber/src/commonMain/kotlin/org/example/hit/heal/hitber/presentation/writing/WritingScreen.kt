@@ -1,6 +1,6 @@
 package org.example.hit.heal.hitber.presentation.writing
 
-import TabletBaseScreen
+import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -24,7 +24,7 @@ import org.example.hit.heal.hitber.presentation.shapes.ActionShapesScreen
 import org.example.hit.heal.hitber.presentation.writing.components.StaticWords
 import org.example.hit.heal.hitber.presentation.writing.components.WordSlots
 import org.example.hit.heal.hitber.presentation.writing.model.draggableWordsList
-import org.example.hit.heal.hitber.utils.InstructionText
+import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -42,7 +42,7 @@ class WritingScreen : Screen {
 
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
-            TabletBaseScreen(
+            HorizontalTabletBaseScreen(
                 title = stringResource(eighthQuestionHitberTitle),
                 onNextClick = {
                     if (allFinished) {

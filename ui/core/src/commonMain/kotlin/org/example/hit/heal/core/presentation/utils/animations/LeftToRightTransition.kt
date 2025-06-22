@@ -1,4 +1,4 @@
-package utils
+package org.example.hit.heal.core.presentation.utils.animations
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween

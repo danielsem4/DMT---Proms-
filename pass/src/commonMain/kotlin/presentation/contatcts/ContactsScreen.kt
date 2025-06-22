@@ -1,6 +1,6 @@
 package presentation.contatcts
 
-import BaseTabletScreen
+import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,7 +60,7 @@ class ContactsScreen : Screen {
             }
         }
 
-        BaseTabletScreen(
+        VerticalTabletBaseScreen(
             title = stringResource(contacts),
             content = {
                 Column(

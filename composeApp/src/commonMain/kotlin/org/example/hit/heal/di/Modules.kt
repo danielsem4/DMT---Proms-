@@ -27,7 +27,7 @@ import org.koin.dsl.bind
 import org.koin.dsl.module
 import presentation.appsDeviceScreen.AppDeviceViewModel
 import presentation.appsDeviceScreen.WrongAppViewModel
-import core.domain.audio.AudioPlayer
+import core.utils.AudioPlayer
 import core.domain.use_case.PlayAudioUseCase
 import presentation.components.CountdownDialogHandler
 import presentation.components.CountdownTimerUseCase

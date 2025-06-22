@@ -1,6 +1,6 @@
 package org.example.hit.heal.hitber.presentation.timeAndPlace
 
-import TabletBaseScreen
+import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -22,7 +22,7 @@ import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.Questions
-import org.example.hit.heal.hitber.utils.InstructionText
+import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -35,7 +35,7 @@ class TimeAndPlace : Screen {
         val viewModel: ActivityViewModel = koinViewModel()
         val allAnswersFinished by firstQuestionViewModel.allAnswersFinished.collectAsState()
 
-        TabletBaseScreen(
+        HorizontalTabletBaseScreen(
             title = stringResource(firstQuestionHitberTitle),
             onNextClick = {
                 if (allAnswersFinished) {

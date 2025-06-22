@@ -1,6 +1,6 @@
 package org.example.hit.heal.hitber.presentation.shapes
 
-import TabletBaseScreen
+import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,7 +36,7 @@ import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.example.hit.heal.hitber.presentation.shapes.components.getShapeName
-import org.example.hit.heal.hitber.utils.InstructionText
+import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -55,7 +55,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
         val listShapes by secondQuestionViewModel.listShapes.collectAsState()
         val shapeNames = selectedShapes.map { getShapeName(it.type) }
 
-        TabletBaseScreen(title = stringResource(secondQuestionHitberTitle), onNextClick = {
+        HorizontalTabletBaseScreen(title = stringResource(secondQuestionHitberTitle), onNextClick = {
             secondQuestionViewModel.calculateCorrectShapesCount()
             secondQuestionViewModel.updateTask()
             secondQuestionViewModel.secondQuestionAnswer(question, shapeNames)

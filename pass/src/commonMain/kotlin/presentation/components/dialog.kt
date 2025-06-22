@@ -40,7 +40,7 @@ import org.example.hit.heal.core.presentation.Resources.String.dialogLike
 import org.example.hit.heal.core.presentation.Resources.String.no
 import org.example.hit.heal.core.presentation.Resources.String.understandingDialogText
 import org.example.hit.heal.core.presentation.Resources.String.yes
-import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
+import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnimation
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

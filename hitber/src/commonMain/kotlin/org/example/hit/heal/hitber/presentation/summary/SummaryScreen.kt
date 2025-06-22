@@ -1,6 +1,6 @@
 package org.example.hit.heal.hitber.presentation.summary
 
-import TabletBaseScreen
+import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +18,7 @@ import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions1
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions2
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberTitle
-import org.example.hit.heal.core.presentation.components.SuccessAnimation
+import org.example.hit.heal.core.presentation.utils.animations.SuccessAnimation
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -31,7 +31,7 @@ class SummaryScreen : Screen {
         val navigator = LocalNavigator.current
         val viewModel : ActivityViewModel = koinViewModel()
 
-        TabletBaseScreen(
+        HorizontalTabletBaseScreen(
             title = stringResource(summaryHitberTitle),
             onNextClick = { viewModel.uploadEvaluationResults()},
             question = 10,

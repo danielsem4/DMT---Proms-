@@ -1,4 +1,4 @@
-package core.domain.audio
+package core.utils
 
 expect class AudioPlayer() {
     fun play(url: String, onCompletion: () -> Unit)

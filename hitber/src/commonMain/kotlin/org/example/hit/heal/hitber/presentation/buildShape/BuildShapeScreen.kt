@@ -1,6 +1,6 @@
 package org.example.hit.heal.hitber.presentation.buildShape
 
-import TabletBaseScreen
+import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
@@ -15,18 +15,19 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberTitle
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.components.TenthQuestionShapesLayout
-import org.example.hit.heal.hitber.presentation.buildShape.components.handleTenthQuestionCapture
 import org.example.hit.heal.hitber.presentation.buildShape.model.draggableShapesItem
 import org.example.hit.heal.hitber.presentation.buildShape.model.staticShapesItem
-import org.example.hit.heal.hitber.utils.CapturableWrapper
-import org.example.hit.heal.hitber.utils.InstructionText
-import org.example.hit.heal.hitber.utils.PlatformCapturable
+import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
+import core.utils.CapturableWrapper
+import org.example.hit.heal.hitber.presentation.components.InstructionText
+import core.utils.PlatformCapturable
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -62,7 +63,7 @@ class BuildShapeScreen : Screen {
 
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
-            TabletBaseScreen(
+            HorizontalTabletBaseScreen(
                 title = stringResource(tenthQuestionHitberTitle),
                 onNextClick = {
                     capturable?.capture?.let { it() }
@@ -76,17 +77,30 @@ class BuildShapeScreen : Screen {
 
                     capturable = PlatformCapturable(
                         onCaptured = { imageBitmap ->
-                            handleTenthQuestionCapture(
-                                imageBitmap = imageBitmap,
-                                viewModel = viewModel,
-                                tenthQuestionViewModel = tenthQuestionViewModel,
-                                itemPositions = itemPositions,
-                                draggableShapes = draggableShapesItem,
-                                staticShapes = staticShapesItem,
-                                triangleWidth = triangleWidth,
-                                triangleHeight = triangleHeight,
-                                navigator = navigator
+                            val timestamp = getCurrentFormattedDateTime()
+
+                            viewModel.uploadImage(
+                                bitmap = imageBitmap,
+                                date = timestamp,
+                                currentQuestion = 10,
+                                onSuccess = { },
+                                onFailure = { }
                             )
+
+                            tenthQuestionViewModel.uploadTenthQuestionImageAnswer(
+                                itemPositions,
+                                draggableShapesItem,
+                                staticShapesItem,
+                                triangleWidth,
+                                triangleHeight
+                            )
+
+                            viewModel.setTenthQuestion(
+                                tenthQuestionViewModel.answer,
+                                timestamp
+                            )
+
+                            navigator?.push(SummaryScreen())
                         }
                     )
                     {

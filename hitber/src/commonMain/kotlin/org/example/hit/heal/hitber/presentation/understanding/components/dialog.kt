@@ -14,7 +14,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
+import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnimation
 
 
 @Composable

@@ -1,6 +1,6 @@
 package presentation.appsDeviceScreen
 
-import BaseTabletScreen
+import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -45,7 +45,7 @@ class WrongAppScreen(private val app: AppData) : Screen {
 
         val navigator = LocalNavigator.current
 
-        BaseTabletScreen(
+        VerticalTabletBaseScreen(
             title = stringResource(deviceAppTitle),
             content = {
                 Box(modifier = Modifier.fillMaxSize()) {

@@ -1,6 +1,6 @@
 package presentation.nextQuestion
 
-import BaseTabletScreen
+import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -24,7 +24,7 @@ import org.example.hit.heal.core.presentation.Resources.String.finishFirstMissio
 import org.example.hit.heal.core.presentation.Resources.String.firstMissionDoneVocalPass
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
+import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnimation
 import presentation.dialScreen.DialScreen
 
 class NextQuestionScreen : Screen {
@@ -48,7 +48,7 @@ class NextQuestionScreen : Screen {
             }
         }
 
-        BaseTabletScreen(
+        VerticalTabletBaseScreen(
             title = stringResource(contact),
             content = {
                 AudioPlayingAnimation(isPlaying = isPlaying,)

@@ -1,6 +1,6 @@
 package presentation.endScreen
 
-import BaseTabletScreen
+import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -38,8 +38,8 @@ import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe
 import org.example.hit.heal.core.presentation.Resources.String.thanksVocalPass
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.example.hit.heal.core.presentation.components.AudioPlayingAnimation
-import org.example.hit.heal.core.presentation.components.SuccessAnimation
+import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnimation
+import org.example.hit.heal.core.presentation.utils.animations.SuccessAnimation
 import presentation.entryScreen.EntryViewModel
 
 class EndScreen : Screen {
@@ -57,7 +57,7 @@ class EndScreen : Screen {
             viewModel.onPlayAudioRequested(audioString)
         }
 
-        BaseTabletScreen(
+        VerticalTabletBaseScreen(
             title = stringResource(end),
             content = {
                 AudioPlayingAnimation(isPlaying = isPlaying)

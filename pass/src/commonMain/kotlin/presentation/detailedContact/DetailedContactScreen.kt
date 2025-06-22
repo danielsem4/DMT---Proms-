@@ -1,6 +1,6 @@
 package presentation.detailedContact
 
-import BaseTabletScreen
+import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -58,7 +58,7 @@ class DetailedContactScreen(private val correctContact: ContactData) : Screen {
         val nextScreen by viewModel.nextScreen.collectAsState()
         val isNextScreen by viewModel.isNextScreen.collectAsState()
 
-        BaseTabletScreen(
+        VerticalTabletBaseScreen(
             title = stringResource(contact),
             content = {
                 Column(
