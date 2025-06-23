@@ -31,7 +31,7 @@ import org.example.hit.heal.core.presentation.Resources.String.fmpt
 import org.example.hit.heal.core.presentation.Resources.String.fmptMeaning
 import org.example.hit.heal.core.presentation.Resources.String.next
 import org.example.hit.heal.core.presentation.Resources.String.thePassTest
-import org.example.hit.heal.core.presentation.Resources.String.welcome
+import org.example.hit.heal.core.presentation.Resources.String.welcomePass
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.appsDeviceScreen.AppDeviceScreen
@@ -53,7 +53,7 @@ class EntryScreen : Screen {
         }
 
         VerticalTabletBaseScreen(
-            title = stringResource(welcome),
+            title = stringResource(welcomePass),
             content = {
                 AudioPlayingAnimation(isPlaying = isPlaying,)
 

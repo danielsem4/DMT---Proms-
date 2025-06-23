@@ -1,5 +1,23 @@
 package org.example.hit.heal.core.presentation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.filled.ChatBubble
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Memory
+import androidx.compose.material.icons.filled.Quiz
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.AutoGraph
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Medication
+import androidx.compose.material.icons.outlined.MonitorHeart
+import androidx.compose.material.icons.outlined.Snowshoeing
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
+import androidx.compose.material.icons.rounded.Timer
+import dmt_proms.ui.core.generated.resources.activities
 import dmt_proms.ui.core.generated.resources.Res
 import dmt_proms.ui.core.generated.resources.Understanding_dialog_text
 import dmt_proms.ui.core.generated.resources.Whatsapp
@@ -182,15 +200,32 @@ import dmt_proms.ui.core.generated.resources.hash_tag
 import dmt_proms.ui.core.generated.resources.here_persons_number
 import dmt_proms.ui.core.generated.resources.hexagon
 import dmt_proms.ui.core.generated.resources.horizontal_line
+import dmt_proms.ui.core.generated.resources.chat
+import dmt_proms.ui.core.generated.resources.clock_test
+import dmt_proms.ui.core.generated.resources.document_share
+import dmt_proms.ui.core.generated.resources.dont_forget
+import dmt_proms.ui.core.generated.resources.email
+import dmt_proms.ui.core.generated.resources.empty_pass
+import dmt_proms.ui.core.generated.resources.fill_fields
+import dmt_proms.ui.core.generated.resources.graphs
+import dmt_proms.ui.core.generated.resources.hitber
+import dmt_proms.ui.core.generated.resources.home
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
+import dmt_proms.ui.core.generated.resources.invalid_email
 import dmt_proms.ui.core.generated.resources.lemon
 import dmt_proms.ui.core.generated.resources.like
 import dmt_proms.ui.core.generated.resources.login
+import dmt_proms.ui.core.generated.resources.login_success
+import dmt_proms.ui.core.generated.resources.logout
+import dmt_proms.ui.core.generated.resources.measurements
+import dmt_proms.ui.core.generated.resources.medications
+import dmt_proms.ui.core.generated.resources.memory
 import dmt_proms.ui.core.generated.resources.messages
 import dmt_proms.ui.core.generated.resources.milk
 import dmt_proms.ui.core.generated.resources.my_files
 import dmt_proms.ui.core.generated.resources.neurologist_pass
 import dmt_proms.ui.core.generated.resources.next
+import dmt_proms.ui.core.generated.resources.password
 import dmt_proms.ui.core.generated.resources.no
 import dmt_proms.ui.core.generated.resources.now_the_contacts_list_will_be_opened_pass
 import dmt_proms.ui.core.generated.resources.open_fridge
@@ -208,6 +243,12 @@ import dmt_proms.ui.core.generated.resources.plus
 import dmt_proms.ui.core.generated.resources.press_the_dial_button_that_showen_down_pass
 import dmt_proms.ui.core.generated.resources.press_the_number_or_the_dial_button_pass
 import dmt_proms.ui.core.generated.resources.previous
+import dmt_proms.ui.core.generated.resources.send
+import dmt_proms.ui.core.generated.resources.sent_successfully
+import dmt_proms.ui.core.generated.resources.take_pills
+import dmt_proms.ui.core.generated.resources.unexpected_error
+import dmt_proms.ui.core.generated.resources.welcome
+import dmt_proms.ui.core.generated.resources.Res.string as rs
 import dmt_proms.ui.core.generated.resources.profile
 import dmt_proms.ui.core.generated.resources.psychiatrist_pass
 import dmt_proms.ui.core.generated.resources.purse
@@ -291,7 +332,7 @@ import dmt_proms.ui.core.generated.resources.triangle
 import dmt_proms.ui.core.generated.resources.vertical_line
 import dmt_proms.ui.core.generated.resources.video
 import dmt_proms.ui.core.generated.resources.weather
-import dmt_proms.ui.core.generated.resources.welcome
+import dmt_proms.ui.core.generated.resources.welcome_pass
 import dmt_proms.ui.core.generated.resources.what_do_you_need_to_do_pass
 import dmt_proms.ui.core.generated.resources.what_you_need_to_do
 import dmt_proms.ui.core.generated.resources.whatsapp
@@ -387,14 +428,54 @@ object Resources {
         val whiteVideo = Res.drawable.white_video
         val yellowNapkin = Res.drawable.yellow_napkin
         val yogurt = Res.drawable.yogurt
+        val document_share = Icons.Default.Share
+        val chat = Icons.Default.ChatBubble
+        val memory = Icons.Default.Memory
+        val hitber = Icons.Default.Quiz
+        val delete = Icons.Default.Delete
+        val draw = Icons.Default.Create
+        val email = Icons.Filled.Email
+        val lock = Icons.Outlined.Lock
+        val invisible = Icons.Outlined.VisibilityOff
+        val visible = Icons.Outlined.Visibility
+        val logout = Icons.AutoMirrored.Filled.Logout
+        val graph = Icons.Outlined.AutoGraph
+        val meds = Icons.Outlined.Medication
+        val measurements = Icons.Outlined.MonitorHeart
+        val activities = Icons.Outlined.Snowshoeing
+        val clock = Icons.Rounded.Timer
     }
 
     object String {
-        val appName = Res.string.app_name
-        val login = Res.string.login
-        val previous = Res.string.previous
-        val next = Res.string.next
-        val howDoYouFeel = Res.string.how_do_you_feel
+        val send = rs.send
+        val measurements = rs.measurements
+        val password = rs.password
+        val document_share = rs.document_share
+        val chat = rs.chat
+        val memory = rs.memory
+        val hitber = rs.hitber
+        val email = rs.email
+        val clockTest = rs.clock_test
+        val activities = rs.activities
+        val medications = rs.medications
+        val sentSuccessfully = rs.sent_successfully
+        val welcome = rs.welcome
+        val empty_password = rs.empty_pass
+        val invalid_email = rs.invalid_email
+        val fill_fields = rs.fill_fields
+        val messages = rs.messages
+        val take_pills = rs.take_pills
+        val logout = rs.logout
+        val home = rs.home
+        val dont_forget = rs.dont_forget
+        val login = rs.login
+        val next = rs.next
+        val loginSuccess = rs.login_success
+        val previous = rs.previous
+        val graphs = rs.graphs
+        val appName = rs.app_name
+        val howDoYouFeel = rs.how_do_you_feel
+        val unexpectedError = rs.unexpected_error
 
         val exit = Res.string.exit
         val `continue` = Res.string.`continue`
@@ -626,11 +707,9 @@ object Resources {
         val calculator = Res.string.calculator
         val settings = Res.string.settings
         val camera = Res.string.camera
-        val email = Res.string.email
         val store = Res.string.store
         val clock = Res.string.clock
         val contacts = Res.string.contacts
-        val messages = Res.string.messages
         val purse = Res.string.purse
         val weather = Res.string.weather
         val myFiles = Res.string.my_files
@@ -647,7 +726,7 @@ object Resources {
         val deleteNumber = Res.string.delete_number
         val dial = Res.string.dial
 
-        val welcome = Res.string.welcome
+        val welcomePass = Res.string.welcome_pass
         val end = Res.string.end
 
         val dialogSpeaker = Res.string.dialog_speaker

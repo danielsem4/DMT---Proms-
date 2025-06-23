@@ -25,8 +25,8 @@ object Colors {
  */
 
 
-val primaryColor = Color(0xFF6FCF97)
-val backgroundColor = Color(0xFFDFF5E9)
+val primaryColor = Color(0xFF41CEA4)
+val backgroundColor = Color(0xFFC3E5D9)
 
 val GrayLighter = Color(0xFFFAFAFA)
 val Gray = Color(0xFFF1F1F1)
@@ -35,6 +35,7 @@ val GrayDarker = Color(0xFFEBEBEB)
 val Yellowish = Color(0xFFEEFF00)
 val Orange = Color(0xFFF24C00)
 val White = Color(0xFFFFFFFF)
+val LightWhite = Color(0x43FCFCFC)
 val Black = Color(0xFF000000)
 val Red = Color(0xFFDD0000)
 

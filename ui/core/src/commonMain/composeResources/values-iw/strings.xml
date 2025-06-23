@@ -4,13 +4,44 @@
 
     <string name="app_name">DMT - Proms</string>
     <string name="login">התחברות</string>
+    <string name="logout">התנתק</string>
+    <string name="home">בית</string>
+    <string name="welcome">ברוכים הבאים</string>
+
 
     <string name="previous">קודם</string>
+    <string name="next">הבא</string>
+    <string name="send">שלח</string>
     <string name="how_do_you_feel">איך אתה מרגיש?</string>
 
     <string name="exit">יציאה</string>
     <string name="continue">המשך</string>
     <string name="start">התחל</string>
+
+
+    <string name="dont_forget">• לא לשכוח לעשות את המבחן</string>
+    <string name="take_pills">• לקחת 2 כדורים ב-12:00</string>
+    <string name="messages">הודעות</string>
+    <string name="fill_fields">נא למלא את כל השדות</string>
+    <string name="unexpected_error">שגיאה לא צפויה</string>
+    <string name="invalid_email">פורמט אימייל לא חוקי</string>
+    <string name="empty_pass">לא ניתן להשאיר את הסיסמה ריקה</string>
+
+
+    <string name="login_success">נכנסת בהצלחה</string>
+    <string name="sent_successfully">נשלח בהצלחה</string>
+
+    <string name="measurements">מדידות</string>
+    <string name="password">סיסמה</string>
+    <string name="email">אימייל</string>
+    <string name="clock_test">מבחן השעון</string>
+    <string name="activities">פעילויות</string>
+    <string name="graphs">גרפים</string>
+    <string name="medications">תרופות</string>
+    <string name="document_share">שיתוף מסמכים</string>
+    <string name="chat">צ׳אט</string>
+    <string name="memory">זיכרון</string>
+    <string name="hitber">התבר</string>
 
 
     <!--    CDT Module  -->
@@ -316,11 +347,9 @@
     <string name="calculator">מחשבון</string>
     <string name="settings">הגדרות</string>
     <string name="camera">מצלמה</string>
-    <string name="email">אימייל</string>
     <string name="store">חנות</string>
     <string name="clock">שעון</string>
     <string name="contacts">אנשי קשר</string>
-    <string name="messages">הודעות</string>
     <string name="purse">ארנק</string>
     <string name="weather">מזג אוויר</string>
     <string name="my_files">הקבצים שלי</string>
@@ -335,8 +364,7 @@
     <string name="delete_number">מחיקת מספר</string>
     <string name="dial">חיוג</string>
 
-    <string name="welcome">ברוך הבא!</string>
-    <string name="next">הבא</string>
+    <string name="welcome_pass">ברוך הבא!</string>
 
     <string name="end">סיום</string>
 

@@ -72,11 +72,6 @@ kotlin {
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.transitions)
 
-            // Kotlin Navigation
-//            implementation(libs.nav3.ui)
-//            implementation(libs.nav3.runtime)
-//            implementation(libs.androidx.lifecycle.viewmodel.nav3)
-
             // Basic Navigation
             implementation(libs.navigation.compose)
 
@@ -91,6 +86,8 @@ kotlin {
             implementation(libs.kotlinx.serialization)
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
+            implementation(libs.navigation.compose)
+            implementation(libs.kotlinx.serialization) // for data serialization
 
             implementation(libs.datastore.preferences)
             implementation(libs.datastore)
@@ -129,7 +126,6 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
-
     }
     packaging {
         resources {

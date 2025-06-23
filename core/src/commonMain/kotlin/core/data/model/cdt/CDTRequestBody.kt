@@ -5,9 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CDTRequestBody(
-    @SerialName("measurement") var measurement: Int = 0,
-    @SerialName("patient_id") var patientId: Int = 0,
-    @SerialName("date") var date: String = "2030-12-12 12:12:12.6",
-    @SerialName("clinicId") var clinicId: Int = 0,
+    @SerialName("measurement") var measurement: Int,
+    @SerialName("patient_id") var patientId: String,
+    @SerialName("date") var date: String,
+    @SerialName("clinicId") var clinicId: Int,
     @SerialName("test") var test: CDTResults = CDTResults(),
 )

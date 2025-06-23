@@ -15,15 +15,14 @@ import org.example.hit.heal.hitber.presentation.shapes.SecondQuestionViewModel
 import org.example.hit.heal.hitber.presentation.timeAndPlace.FirstQuestionViewModel
 import org.example.hit.heal.hitber.presentation.understanding.SixthQuestionViewModel
 import org.example.hit.heal.hitber.presentation.writing.EightQuestionViewModel
+import org.example.hit.heal.home.HomeViewModel
 import org.example.hit.heal.login.LoginViewModel
-import org.koin.core.context.startKoin
-import org.example.hit.heal.Home.HomeViewModel
 import org.example.hit.heal.splash.SplashViewModel
+import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
-import org.koin.dsl.bind
 import org.koin.dsl.module
 import presentation.appsDeviceScreen.AppDeviceViewModel
 import presentation.appsDeviceScreen.WrongAppViewModel
