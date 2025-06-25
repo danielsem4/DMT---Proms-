@@ -34,6 +34,7 @@ import org.example.hit.heal.core.presentation.Black
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.hitber.presentation.HitberScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -190,7 +191,7 @@ class HomeScreen() : Screen {
                 icon = Resources.Icon.hitber,
                 label = stringResource(Resources.String.hitber),
                 fontSize = fontSize,
-                onClick = { /* handle hitber click */ }
+                onClick = { navigator.push(HitberScreen()) }
             )
 
             // Clock

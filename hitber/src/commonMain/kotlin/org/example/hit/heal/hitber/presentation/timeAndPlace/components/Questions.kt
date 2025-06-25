@@ -63,6 +63,8 @@ import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitb
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberQuestion5
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberQuestion6
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberQuestion7
+import org.example.hit.heal.core.presentation.components.DropDownItem
+import org.example.hit.heal.core.presentation.components.DropDownQuestionField
 import org.example.hit.heal.hitber.presentation.timeAndPlace.FirstQuestionViewModel
 import org.jetbrains.compose.resources.stringResource
 
@@ -171,7 +173,7 @@ fun Questions(viewModel: FirstQuestionViewModel) {
 
 
     questionsData.forEach { questionData ->
-        TimeAndPlaceQuestion(
+        DropDownQuestionField(
             question = questionData.question,
             dropDownItems = questionData.answers.map { DropDownItem(it) },
             onItemClick = { selectedAnswer ->

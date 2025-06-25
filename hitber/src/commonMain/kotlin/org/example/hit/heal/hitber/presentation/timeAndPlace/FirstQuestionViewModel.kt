@@ -6,7 +6,7 @@ import core.utils.getCurrentFormattedDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.example.hit.heal.hitber.data.model.FirstQuestion
-import org.example.hit.heal.hitber.presentation.timeAndPlace.components.DropDownItem
+import org.example.hit.heal.core.presentation.components.DropDownItem
 
 class FirstQuestionViewModel : ViewModel() {
 

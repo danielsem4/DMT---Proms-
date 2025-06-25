@@ -39,7 +39,8 @@ kotlin {
             implementation (libs.navigator)
             implementation (libs.navigator.tabs)
             implementation (libs.navigator.transitions)
-            implementation(compose.materialIconsExtended) // icons
+            implementation(compose.materialIconsExtended)
+            implementation(compose.material3)
         }
     }
 }

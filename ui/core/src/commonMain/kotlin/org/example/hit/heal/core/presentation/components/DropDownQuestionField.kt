@@ -1,4 +1,4 @@
-package org.example.hit.heal.hitber.presentation.timeAndPlace.components
+package org.example.hit.heal.core.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,7 +33,7 @@ data class DropDownItem(val text: String)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimeAndPlaceQuestion(
+fun DropDownQuestionField(
     question: String,
     dropDownItems: List<DropDownItem>,
     modifier: Modifier = Modifier,
