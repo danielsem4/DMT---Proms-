@@ -17,6 +17,9 @@
     <string name="messages">Messages</string>
     <string name="welcome">Welcome</string>
 
+    <string name="are_you_sure">Are you sure?</string>
+
+
     <!--    Errors      -->
     <string name="fill_fields">Please fill in all fields</string>
     <string name="invalid_email">Invalid email format</string>
