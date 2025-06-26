@@ -21,6 +21,7 @@ import dmt_proms.ui.core.generated.resources.activities
 import dmt_proms.ui.core.generated.resources.app_name
 import dmt_proms.ui.core.generated.resources.chat
 import dmt_proms.ui.core.generated.resources.clock_test
+import dmt_proms.ui.core.generated.resources.disk_full
 import dmt_proms.ui.core.generated.resources.document_share
 import dmt_proms.ui.core.generated.resources.dont_forget
 import dmt_proms.ui.core.generated.resources.email
@@ -31,6 +32,7 @@ import dmt_proms.ui.core.generated.resources.hitber
 import dmt_proms.ui.core.generated.resources.home
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
 import dmt_proms.ui.core.generated.resources.invalid_email
+import dmt_proms.ui.core.generated.resources.local_unknown
 import dmt_proms.ui.core.generated.resources.login
 import dmt_proms.ui.core.generated.resources.login_success
 import dmt_proms.ui.core.generated.resources.logout
@@ -39,11 +41,17 @@ import dmt_proms.ui.core.generated.resources.medications
 import dmt_proms.ui.core.generated.resources.memory
 import dmt_proms.ui.core.generated.resources.messages
 import dmt_proms.ui.core.generated.resources.next
+import dmt_proms.ui.core.generated.resources.no_internet
 import dmt_proms.ui.core.generated.resources.password
 import dmt_proms.ui.core.generated.resources.previous
+import dmt_proms.ui.core.generated.resources.remote_unknown
+import dmt_proms.ui.core.generated.resources.request_timeout
 import dmt_proms.ui.core.generated.resources.send
 import dmt_proms.ui.core.generated.resources.sent_successfully
+import dmt_proms.ui.core.generated.resources.serialization_error
+import dmt_proms.ui.core.generated.resources.server_error
 import dmt_proms.ui.core.generated.resources.take_pills
+import dmt_proms.ui.core.generated.resources.too_many_requests
 import dmt_proms.ui.core.generated.resources.unexpected_error
 import dmt_proms.ui.core.generated.resources.welcome
 import dmt_proms.ui.core.generated.resources.Res.string as rs
@@ -104,7 +112,18 @@ object Resources {
         val graphs = rs.graphs
         val appName = rs.app_name
         val howDoYouFeel = rs.how_do_you_feel
+
+        // Error messages
+        val noInternet = rs.no_internet
+        val diskFull = rs.disk_full
+        val localUnknown = rs.local_unknown
+        val requestTimeout = rs.request_timeout
+        val tooManyRequests = rs.too_many_requests
+        val serverError = rs.server_error
+        val serializationError = rs.serialization_error
+        val remoteUnknown = rs.remote_unknown
         val unexpectedError = rs.unexpected_error
+
     }
 
 }

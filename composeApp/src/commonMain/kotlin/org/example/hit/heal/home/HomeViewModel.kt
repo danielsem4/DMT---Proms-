@@ -25,29 +25,30 @@ class HomeViewModel(
     private val _features = MutableStateFlow<List<ModulesResponse>>(emptyList())
     val features: StateFlow<List<ModulesResponse>> = _features
 
-    fun loadFeatures(){
+    fun loadFeatures() {
         viewModelScope.launch {
-            api.getModules(clinicId = storage.get(PrefKeys.clinicId)!!)
-                .onSuccess {
-                    _features.value = it
-                    println("Features fetched:\n ${it.map { m -> m.toString() + "\n" }}")
-                }.onError {
+            val clinicId = storage.get(PrefKeys.clinicId)
+            if (clinicId == null) {
+                println("clinicId is null")
+                return@launch
+            }
+            api.getModules(clinicId)
+                .onSuccess { result ->
+                    val updated = result + ModulesResponse("Clock", 16, true)
+                    _features.value = updated
+                    println("Features fetched:\n ${updated.joinToString("\n")}")
+                }
+                .onError {
                     _features.value = emptyList()
                     println("Error getting features: $it")
                 }
         }
     }
 
-    // logout and clear the prefs data
     suspend fun logout() {
         storage.clearValue(PrefKeys.clinicId)
         storage.clearValue(PrefKeys.serverUrl)
         storage.clearValue(PrefKeys.token)
         storage.clearValue(PrefKeys.userId)
-        println(
-            "cleaned prefs:${storage.get(PrefKeys.clinicId)} ${storage.get(PrefKeys.serverUrl)}  ${
-                storage.get(PrefKeys.token)
-            } ${storage.get(PrefKeys.userId)}"
-        )
     }
 }
