@@ -7,8 +7,8 @@ import androidx.compose.ui.graphics.Color
  */
 
 
-val primaryColor = Color(0xFF008EAE)
-val backgroundColor = Color(0xFFf0f9ff)
+val primaryColor = Color(0xFF41CEA4)
+val backgroundColor = Color(0xFFC3E5D9)
 
 val GrayLighter = Color(0xFFFAFAFA)
 val Gray = Color(0xFFF1F1F1)
@@ -16,12 +16,11 @@ val GrayDarker = Color(0xFFEBEBEB)
 
 val Yellowish = Color(0xFFEEFF00)
 val Orange = Color(0xFFF24C00)
-val Green = Color(0xFF00B300)
 val White = Color(0xFFFFFFFF)
 val LightWhite = Color(0x43FCFCFC)
 val Black = Color(0xFF000000)
 val Red = Color(0xFFDD0000)
-val OffWhite = Color(0xFFF8F8F8)
+
 
 val Surface = White
 val SurfaceLighter = GrayLighter

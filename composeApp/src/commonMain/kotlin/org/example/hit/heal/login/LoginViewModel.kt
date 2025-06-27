@@ -10,7 +10,6 @@ import core.domain.onError
 import core.domain.onSuccess
 import core.domain.use_case.LoginUseCase
 import core.util.PrefKeys
-import core.utils.toUiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -36,7 +35,7 @@ class LoginViewModel(
         onLoginSuccess: () -> Unit,
         onLoginFailed: (message: StringResource) -> Unit
     ) {
-        // 1) validation
+        // 1) validate
         if (!isValidEmail(email)) {
             onLoginFailed(Resources.String.invalid_email)
             return
@@ -45,38 +44,42 @@ class LoginViewModel(
             onLoginFailed(Resources.String.empty_password)
             return
         }
-
         viewModelScope.launch {
             _isLoading.value = true
+            try {
+                loginUseCase.execute(email, password)
+                    .onSuccess { response ->
+                        if (response.user!!.status == "Success") {
 
-            loginUseCase.execute(email, password)
-                .onSuccess { response ->
-                    if (response.user?.status == "Success") {
-                        saveLoginInfo(response)
+                            saveLoginInfo(response)
+                            _isLoggedIn.value = true
 
-                        _isLoggedIn.value = true
-                        onLoginSuccess()
-                    } else {
-                        onLoginFailed(Resources.String.localUnknown)
+                            onLoginSuccess()
+
+                        } else {
+                            _isLoggedIn.value = false
+                        }
+                    }
+                    .onError { error ->
+                        println("Login error: $error")
                         _isLoggedIn.value = false
                     }
-                }
-                .onError { error ->
-                    println("Login error: $error")
-                    onLoginFailed(error.toUiText())
-                    _isLoggedIn.value = false
-                }
-
-            // 4) only clear loading here
-            _isLoading.value = false
+            } catch (e: Exception) {
+                _isLoggedIn.value = false
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
-    private suspend fun saveLoginInfo(response: SuccessfulLoginResponse) {
-        storage.writeValue(PrefKeys.clinicId, response.user!!.clinicId)
-        storage.writeValue(PrefKeys.serverUrl, response.user!!.server_url)
-        storage.writeValue(PrefKeys.token, response.token)
-        storage.writeValue(PrefKeys.userId, response.user!!.id.toString())
+    private fun saveLoginInfo(response: SuccessfulLoginResponse) {
+
+        viewModelScope.launch {
+            storage.writeValue(PrefKeys.clinicId, response.user!!.clinicId)
+            storage.writeValue(PrefKeys.serverUrl, response.user!!.server_url)
+            storage.writeValue(PrefKeys.token, response.token)
+            storage.writeValue(PrefKeys.userId, response.user!!.id.toString())
+        }
     }
 
     private fun isValidEmail(email: String): Boolean =

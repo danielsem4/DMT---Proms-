@@ -7,7 +7,6 @@ sealed interface DataError : Error {
         TOO_MANY_REQUESTS,
         NO_INTERNET,
         SERVER,
-        FORBIDDEN,
         SERIALIZATION,
         UNKNOWN
     }
