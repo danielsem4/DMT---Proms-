@@ -31,6 +31,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.input.key.Key.Companion.Home
 import androidx.compose.ui.text.style.TextAlign
 import org.example.hit.heal.core.presentation.Resources.String.end
 import org.example.hit.heal.core.presentation.Resources.String.exit
@@ -91,11 +92,11 @@ class EndScreen : Screen {
                         )
                     }
 
-                    SuccessAnimation(modifier = Modifier.size(100.dp))
+                    SuccessAnimation(modifier = Modifier.size(100.dp).padding(top = 50.dp))
 
                     Box(modifier = Modifier.fillMaxSize().padding(10.dp)) {
                         Button(
-                            onClick = {  },
+                            onClick = { },
                             modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
                             colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                             shape = RoundedCornerShape(12.dp),

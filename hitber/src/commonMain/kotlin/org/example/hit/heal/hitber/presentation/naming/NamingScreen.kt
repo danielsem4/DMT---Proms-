@@ -11,7 +11,7 @@ import getImageName
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberTitle
-import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.naming.components.NamingImages
 import org.example.hit.heal.hitber.presentation.naming.components.NamingTextFields

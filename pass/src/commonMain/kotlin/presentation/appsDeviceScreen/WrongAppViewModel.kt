@@ -34,6 +34,7 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
     private var isSecondTimeWrongApp = false
 
     private var reminderJob: Job? = null
+    private var elapsedSeconds = 0
 
     val isPlaying = playAudioUseCase.isPlaying
 
@@ -41,8 +42,6 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
-            var elapsedTime = 0
-
             while (isActive && (didNothing < 3 || didNothingSecondTime < 3)) {
 
                 delay(1_000)
@@ -51,11 +50,11 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
                     continue
                 }
 
-                elapsedTime++
+                elapsedSeconds++
 
-                if (elapsedTime >= 15) {
+                if (elapsedSeconds >= 15) {
                     getReminderDidNothingText()
-                    elapsedTime = 0
+                    elapsedSeconds = 0
                 }
             }
         }

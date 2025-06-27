@@ -27,7 +27,7 @@ import org.example.hit.heal.core.presentation.Resources.String.start
 import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberFinishTask
 import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberTitle
-import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.concentration.components.RandomNumberScreen
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen

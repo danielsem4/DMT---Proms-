@@ -60,6 +60,7 @@ import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.HitberScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import presentation.PassScreen
 
 /**
  *
@@ -231,9 +232,9 @@ class HomeScreen : Screen {
 
     private fun navigateTo(moduleId: Int, navigator: Navigator) {
         when (moduleId) {
+            19 ->  navigator.push(HitberScreen())
             17 -> navigator.push(CDTLandingScreen())
-            15 ->  navigator.push(HitberScreen())
-
+            16 -> navigator.push(PassScreen())
             else -> { }
         }
     }
@@ -263,6 +264,7 @@ class HomeScreen : Screen {
         20 -> stringResource(Resources.String.memory)
         19 -> stringResource(Resources.String.hitber)
         17 -> stringResource(Resources.String.clockTest)
+        16 -> stringResource(Resources.String.pass)
 //        21 -> stringResource(Resources.String.orientation)
         else -> "Unknown"
     }

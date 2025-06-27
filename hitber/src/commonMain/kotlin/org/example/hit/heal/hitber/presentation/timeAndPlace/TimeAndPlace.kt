@@ -18,7 +18,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberTitle
-import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.Questions

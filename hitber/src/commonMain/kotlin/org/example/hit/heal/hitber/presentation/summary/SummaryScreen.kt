@@ -19,7 +19,7 @@ import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInst
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions2
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberTitle
 import org.example.hit.heal.core.presentation.utils.animations.SuccessAnimation
-import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -33,7 +33,8 @@ class SummaryScreen : Screen {
 
         HorizontalTabletBaseScreen(
             title = stringResource(summaryHitberTitle),
-            onNextClick = { viewModel.uploadEvaluationResults()},
+            onNextClick = { viewModel.uploadEvaluationResults()
+               },
             question = 10,
             buttonText = stringResource(exit),
             buttonColor = primaryColor,

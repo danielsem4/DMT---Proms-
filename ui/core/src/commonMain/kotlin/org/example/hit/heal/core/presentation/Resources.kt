@@ -236,6 +236,7 @@ import dmt_proms.ui.core.generated.resources.ophthalmologist_pass
 import dmt_proms.ui.core.generated.resources.orange_juice
 import dmt_proms.ui.core.generated.resources.orthopedist_pass
 import dmt_proms.ui.core.generated.resources.paint_clinic_pass
+import dmt_proms.ui.core.generated.resources.pass
 import dmt_proms.ui.core.generated.resources.peas
 import dmt_proms.ui.core.generated.resources.pencil
 import dmt_proms.ui.core.generated.resources.pentagon
@@ -462,6 +463,7 @@ object Resources {
         val chat = rs.chat
         val memory = rs.memory
         val hitber = rs.hitber
+        val pass = rs.pass
         val email = rs.email
         val clockTest = rs.clock_test
         val activities = rs.activities

@@ -49,6 +49,8 @@
     <string name="chat">Chat</string>
     <string name="memory">Memory</string>
     <string name="hitber">HitBer</string>
+    <string name="pass">Pass</string>
+
 
 
 
@@ -331,9 +333,9 @@
     <string name="device_app_title">app</string>
     <string name="wrong_app_title">The app you enter is: </string>
 
-    <string name="first_mission_pass">You have a phone task, you need to call Hannah Cohen</string>
+    <string name="first_mission_pass">Hello, the occupational therapist would like to assess your functional ability in using a phone. In the next few minutes, two tasks related to phone usage will appear on the tablet, which serves as the phone. Follow the instructions. Let's begin.</string>
 
-    <string name="call_to_hana_cohen_instruction_pass">משימה ראשונה, יש להתקשר לחנה כהן</string>
+    <string name="call_to_hana_cohen_instruction_pass">First task: call Hana Cohen.</string>
     <string name="call_to_dentist">You have completed the first task; here is another one. A list of phone numbers is displayed, please call the dental clinic.</string>
 
     <string name="what_you_need_to_do">What do you need to do now?</string>

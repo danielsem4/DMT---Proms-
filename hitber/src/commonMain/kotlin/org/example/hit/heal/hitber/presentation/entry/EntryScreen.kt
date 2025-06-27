@@ -25,7 +25,7 @@ import org.example.hit.heal.core.presentation.Resources.String.entryHitberInstru
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberNote
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberTitle
 import org.example.hit.heal.core.presentation.Resources.String.start
-import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
 import org.jetbrains.compose.resources.stringResource
 

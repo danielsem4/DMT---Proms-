@@ -50,8 +50,8 @@
     <string name="document_share">שיתוף מסמכים</string>
     <string name="chat">צ׳אט</string>
     <string name="memory">זיכרון</string>
-    <string name="hitber">התבר</string>
-
+    <string name="hitber">Hitber</string>
+    <string name="pass">Pass</string>
 
     <!--    CDT Module  -->
 

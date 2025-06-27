@@ -37,6 +37,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     private var correctContact = ContactData("", "")
 
     private var reminderJob: Job? = null
+    private var elapsedSeconds = 0
 
     val isPlaying = playAudioUseCase.isPlaying
 
@@ -85,7 +86,6 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
-            var elapsedTime = 0
 
             while (isActive && didNothing + wrongContact <= 4) {
 
@@ -95,12 +95,12 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
                     continue
                 }
 
-                elapsedTime++
+                elapsedSeconds++
 
-                if (elapsedTime >= if (_isScrolling.value) 25 else 15) {
+                if (elapsedSeconds >= if (_isScrolling.value) 25 else 15) {
                     didNothing++
                     getReminderText()
-                    elapsedTime = 0
+                    elapsedSeconds = 0
                     _isScrolling.value = false
                 }
 
@@ -168,6 +168,6 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     fun startScrolling(){
         _isScrolling.value = true
         _isScrolled.value = true
-        startCheckingIfUserDidSomething()
+        elapsedSeconds = 0
     }
 }

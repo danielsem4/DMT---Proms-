@@ -57,6 +57,7 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
     private var wrongClick = 0
 
     private var reminderJob: Job? = null
+    private var elapsedSeconds = 0
 
     private val _nextScreen = MutableStateFlow<Screen?>(null)
     val nextScreen = _nextScreen.asStateFlow()
@@ -69,8 +70,6 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
-            var elapsedTime = 0
-
             while (isActive && didNothing + wrongClick <= 3) {
 
                 delay(1_000)
@@ -79,12 +78,12 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
                     continue
                 }
 
-                elapsedTime++
+                elapsedSeconds++
 
-                if (elapsedTime >= 15) {
+                if (elapsedSeconds >= 15) {
                     didNothing++
                     getReminderText()
-                    elapsedTime = 0
+                    elapsedSeconds = 0
                 }
 
             }
@@ -98,7 +97,6 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
             return
         }
 
-        startCheckingIfUserDidSomething()
         wrongClick++
         getReminderText()
     }
@@ -128,7 +126,7 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
 
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
-        startCheckingIfUserDidSomething()
+        elapsedSeconds = 0
     }
 
 

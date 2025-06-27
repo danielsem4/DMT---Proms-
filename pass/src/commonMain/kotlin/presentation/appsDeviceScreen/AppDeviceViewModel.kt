@@ -133,6 +133,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
     private var isSecondInstructions = false
 
     private var reminderJob: Job? = null
+    private var elapsedSeconds = 0
 
     val isPlaying = playAudioUseCase.isPlaying
 
@@ -159,7 +160,6 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
-            var elapsedTime = 0
 
             while (isActive && didNothing <= 3) {
 
@@ -169,12 +169,12 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
                     continue
                 }
 
-                elapsedTime++
+                elapsedSeconds++
 
-                if (elapsedTime >= 15) {
+                if (elapsedSeconds >= 15) {
                     getReminderDidNotingText()
                     _isCloseIconDialog.value = true
-                    elapsedTime = 0
+                    elapsedSeconds = 0
                 }
             }
         }
@@ -197,21 +197,16 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
 
     fun onAppClicked(app: AppData) {
-
+        reminderJob?.cancel()
         if (app.label == contacts) {
-            reminderJob?.cancel()
             _nextScreen.value = ContactsScreen()
             return
         }
-
-        startCheckingIfUserDidSomething()
         wrongApp++
 
         _nextScreen.value = if (wrongApp == 3) {
-            reminderJob?.cancel()
             ContactsScreen()
         } else {
-            reminderJob?.cancel()
             WrongAppScreen(app)
         }
     }
@@ -253,7 +248,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
-        startCheckingIfUserDidSomething()
+        elapsedSeconds = 0
     }
 
 }

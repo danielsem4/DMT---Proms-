@@ -24,7 +24,7 @@ import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTask
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTitle
-import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

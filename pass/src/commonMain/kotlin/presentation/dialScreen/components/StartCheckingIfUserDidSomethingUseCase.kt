@@ -22,8 +22,9 @@ class StartCheckingIfUserDidSomethingUseCase(
     ) {
         reminderJob?.cancel()
 
+        var elapsedSeconds = 0
+
         reminderJob = coroutineScope.launch {
-            var elapsedTime = 0
 
             while (isActive && getDidNothingCount() <= maxAttempts) {
                 delay(1_000)
@@ -32,12 +33,12 @@ class StartCheckingIfUserDidSomethingUseCase(
                     continue
                 }
 
-                elapsedTime++
+                elapsedSeconds++
 
-                if (elapsedTime >= intervalSeconds) {
+                if (elapsedSeconds >= intervalSeconds) {
                     getReminderDidNotingText()
                     updateCloseIconDialog(true)
-                    elapsedTime = 0
+                    elapsedSeconds = 0
                 }
             }
         }

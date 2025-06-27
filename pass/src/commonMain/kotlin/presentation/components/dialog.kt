@@ -1,6 +1,7 @@
 package presentation.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +33,7 @@ import androidx.compose.ui.zIndex
 import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.Resources.Icon.close
+import org.example.hit.heal.core.presentation.Resources.Icon.closeIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.exclamationMark
 import org.example.hit.heal.core.presentation.Resources.Icon.likeIcon
 import org.example.hit.heal.core.presentation.Resources.String.dialogClose
@@ -72,13 +74,13 @@ fun InstructionsDialog(
             onDismiss()
         }
     }) {
-        Box(modifier = Modifier.fillMaxWidth().height(200.dp)) {
+        Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
 
             Image(
                 painter = painterResource(exclamationMark),
                 contentDescription = stringResource(dialogExclamationMark),
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(60.dp)
                     .align(Alignment.TopCenter)
                     .zIndex(1f)
             )
@@ -108,10 +110,10 @@ fun InstructionsDialog(
                         ) {
                             if (isCountdownActive && shouldShowCloseIcon) {
                             Image(
-                                painter = painterResource(close),
+                                painter = painterResource(closeIcon),
                                 contentDescription = stringResource(dialogClose),
                                 modifier = Modifier
-                                    .size(24.dp)
+                                    .size(25.dp)
                                     .clickable { onDismiss() }
                             )
                         }
@@ -121,7 +123,7 @@ fun InstructionsDialog(
                             if (isCountdownActive) {
                                 Text(
                                     text = "$secondsLeft",
-                                    fontSize = 16.sp,
+                                    fontSize = 20.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = primaryColor
                                 )
@@ -148,15 +150,16 @@ fun InstructionsDialog(
 
                     }
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(35.dp))
 
                     Text(
                         text = text,
-                        fontSize = 20.sp,
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         color = primaryColor,
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        lineHeight = 50.sp
                     )
                 }
             }
@@ -176,12 +179,12 @@ fun CheckUnderstandingDialog(
     }
 
     Dialog(onDismissRequest = { onYesClick() }) {
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
             Image(
                 painter = painterResource(likeIcon),
                 contentDescription = stringResource(dialogLike),
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(60.dp)
                     .align(Alignment.TopCenter)
                     .zIndex(1f)
             )
@@ -191,7 +194,7 @@ fun CheckUnderstandingDialog(
                 elevation = 8.dp,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(top = 32.dp)
+                    .padding(top = 5.dp)
             ) {
                 Column(
                     modifier = Modifier
@@ -202,12 +205,12 @@ fun CheckUnderstandingDialog(
                     Text(
                         text = stringResource(understandingDialogText),
                         textAlign = TextAlign.Center,
-                        fontSize = 20.sp,
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         color = primaryColor
                     )
 
-                    Spacer(modifier = Modifier.padding(25.dp))
+                    Spacer(modifier = Modifier.padding(35.dp))
 
                     Row(
                         horizontalArrangement = Arrangement.SpaceEvenly,
@@ -219,7 +222,7 @@ fun CheckUnderstandingDialog(
                         ) {
                             Text(
                                 stringResource(yes),
-                                fontSize = 20.sp,
+                                fontSize = 25.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = primaryColor
                             )
@@ -231,7 +234,7 @@ fun CheckUnderstandingDialog(
                         ) {
                             Text(
                                 stringResource(no),
-                                fontSize = 20.sp,
+                                fontSize = 25.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = primaryColor
                             )

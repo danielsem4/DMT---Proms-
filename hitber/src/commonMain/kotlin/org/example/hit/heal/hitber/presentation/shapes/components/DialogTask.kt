@@ -25,7 +25,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogIcon
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberUnderstand
-import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -33,7 +33,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun DialogTask(icon: DrawableResource, title: String,text: String, onDismiss: () -> Unit) {
     Dialog(onDismissRequest =  onDismiss) {
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
             Image(
                 painter = painterResource(icon),
                 contentDescription = stringResource(secondQuestionHitberDialogIcon),
@@ -57,7 +57,7 @@ fun DialogTask(icon: DrawableResource, title: String,text: String, onDismiss: ()
                 ) {
                     Text(
                         text = title,
-                        fontSize = 24.sp,
+                        fontSize = 35.sp,
                         fontWeight = FontWeight.Bold,
                         color = primaryColor,
                         textAlign = TextAlign.Center
@@ -65,10 +65,11 @@ fun DialogTask(icon: DrawableResource, title: String,text: String, onDismiss: ()
                     Spacer(modifier = Modifier.height(16.dp))
                     Text(
                         text = text,
-                        fontSize = 18.sp,
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         color = primaryColor,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        lineHeight = 50.sp
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                     Button(
@@ -77,7 +78,7 @@ fun DialogTask(icon: DrawableResource, title: String,text: String, onDismiss: ()
                         colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
 
                         ) {
-                        Text(stringResource(secondQuestionHitberUnderstand), color = Color.White)
+                        Text(stringResource(secondQuestionHitberUnderstand), color = Color.White, fontSize = 25.sp,)
                     }
                 }
             }
