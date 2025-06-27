@@ -43,9 +43,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.ModulesResponse
 import kotlinx.coroutines.launch
+import org.example.hit.heal.cdt.presentation.CDTLandingScreen
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Red
@@ -122,7 +124,7 @@ class HomeScreen : Screen {
                                 feature = feature,
                                 fontSize = 14.sp,
                                 onClick = {
-                                    // navigate based on feature.module_id
+                                    navigateTo(feature.module_id, navigator)
                                 }
                             )
                         }
@@ -225,6 +227,15 @@ class HomeScreen : Screen {
             }
         }
     }
+
+    private fun navigateTo(moduleId: Int, navigator: Navigator) {
+        when (moduleId) {
+            17 -> navigator.push(CDTLandingScreen())
+
+            else -> { }
+        }
+    }
+
 
     @Composable
     private fun iconFor(id: Int) = when (id) {
