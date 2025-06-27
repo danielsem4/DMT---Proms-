@@ -83,8 +83,9 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
-
             implementation(libs.coil.compose)
+
+            implementation(libs.messagebar.kmp)
 
         }
         nativeMain.dependencies {
