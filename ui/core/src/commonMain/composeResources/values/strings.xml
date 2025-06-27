@@ -17,11 +17,24 @@
     <string name="messages">Messages</string>
     <string name="welcome">Welcome</string>
 
+    <string name="are_you_sure">Are you sure?</string>
+
+
     <!--    Errors      -->
     <string name="fill_fields">Please fill in all fields</string>
     <string name="invalid_email">Invalid email format</string>
     <string name="empty_pass">Password cannot be empty</string>
-    <string name="unexpected_error">Unexpected error</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="login_error">Login issues</string>
+    <string name="disk_full">Your device is out of storage</string>
+    <string name="local_unknown">An unknown local error occurred</string>
+    <string name="request_timeout">The request timed out</string>
+    <string name="too_many_requests">Too many requests sent. Please try again later</string>
+    <string name="server_error">A server error occurred</string>
+    <string name="serialization_error">There was a problem processing the server response</string>
+    <string name="remote_unknown">An unknown server error occurred</string>
+    <string name="unexpected_error">An unexpected error occurred</string>
+
 
     <string name="login_success">Logged in successfully</string>
     <string name="sent_successfully">Sent successfully</string>
