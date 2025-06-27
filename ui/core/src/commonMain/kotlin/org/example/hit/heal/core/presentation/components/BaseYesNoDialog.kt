@@ -101,7 +101,7 @@ fun BaseYesNoDialog(
                     RoundedGradientButton(
                         text = dismissButtonText,
                         gradient = Brush.horizontalGradient(
-                            colors = listOf(dismissButtonColor, GrayLighter)
+                            colors = listOf(dismissButtonColor, dismissButtonColor)
                         ),
                         onClick = onDismissButtonClick,
                         modifier= Modifier.weight(1f)
@@ -111,7 +111,7 @@ fun BaseYesNoDialog(
                     RoundedGradientButton(
                         text = confirmButtonText,
                         gradient = Brush.horizontalGradient(
-                            colors = listOf(confirmButtonColor, GrayLighter)
+                            colors = listOf(confirmButtonColor, confirmButtonColor)
                         ),
                         onClick = onConfirm,
                         modifier= Modifier.weight(1f)

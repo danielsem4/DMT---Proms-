@@ -233,9 +233,10 @@ class HomeScreen : Screen {
         5 -> Resources.Icon.chat
         7 -> Resources.Icon.meds
         8 -> Resources.Icon.activities
-        13 -> Resources.Icon.memory
-        15 -> Resources.Icon.hitber
-        16 -> Resources.Icon.clock
+        20 -> Resources.Icon.memory
+        19 -> Resources.Icon.hitber
+        17 -> Resources.Icon.clock
+//        21 -> Resources.Icon.orientation
         else -> Resources.Icon.document_share
     }
 
@@ -246,9 +247,10 @@ class HomeScreen : Screen {
         5 -> stringResource(Resources.String.chat)
         7 -> stringResource(Resources.String.medications)
         8 -> stringResource(Resources.String.activities)
-        13 -> stringResource(Resources.String.memory)
-        15 -> stringResource(Resources.String.hitber)
-        16 -> stringResource(Resources.String.clockTest)
+        20 -> stringResource(Resources.String.memory)
+        19 -> stringResource(Resources.String.hitber)
+        17 -> stringResource(Resources.String.clockTest)
+//        21 -> stringResource(Resources.String.orientation)
         else -> "Unknown"
     }
 }

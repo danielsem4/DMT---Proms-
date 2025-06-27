@@ -36,7 +36,7 @@ class HomeViewModel(
                 .onSuccess { result ->
                     val updated = result + ModulesResponse("Clock", 16, true)
                     _features.value = updated
-                    println("Features fetched:\n ${updated.joinToString("\n")}")
+                    println("Features fetched: $updated")
                 }
                 .onError {
                     _features.value = emptyList()
