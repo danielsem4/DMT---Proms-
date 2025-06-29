@@ -22,6 +22,10 @@
     <string name="invalid_email">פורמט אימייל לא חוקי</string>
     <string name="empty_pass">לא ניתן להשאיר את הסיסמה ריקה</string>
 
+    <!--    alert dialog-->
+    <string name="yes">כן</string>
+    <string name="no">לא</string>
+    <string name="logout_confirmation">האם אתה בטוח שברצונך להתנתק?</string>
 
     <string name="login_success">נכנסת בהצלחה</string>
     <string name="sent_successfully">נשלח בהצלחה</string>

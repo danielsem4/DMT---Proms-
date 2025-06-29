@@ -28,7 +28,10 @@ fun RoundedButton(
     onClick: () -> Unit,
     fontSize: TextUnit = 32.sp,
     icon: ImageVector? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    buttonColor: Color = primaryColor, // Default background color for the button
+    contentColor: Color = Color.White, // Default color for text
+    iconColor: Color = Color.White // Default color for the icon
 ) {
     val buttonText = when (text) {
         is StringResource -> stringResource(text)
@@ -38,7 +41,7 @@ fun RoundedButton(
 
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(primaryColor),
+        colors = ButtonDefaults.buttonColors(backgroundColor = buttonColor, contentColor = contentColor), // contentColor here still refers to text/icon tint by default in ButtonDefaults
         shape = RoundedCornerShape(50),
         modifier = modifier,
         enabled = enabled
@@ -50,13 +53,13 @@ fun RoundedButton(
                 Icon(
                     imageVector = icon,
                     contentDescription = buttonText,
-                    tint = Color.White
+                    tint = iconColor // Use the new iconColor parameter for tint
                 )
                 Spacer(Modifier.width(8.dp))
             }
             Text(
                 text = buttonText,
-                color = Color.White,
+                color = contentColor, // Use contentColor for the text color
                 fontSize = fontSize,
                 modifier = Modifier.padding(horizontal = if (icon == null) 8.dp else 0.dp)
             )

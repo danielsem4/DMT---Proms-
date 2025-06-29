@@ -17,6 +17,12 @@
     <string name="messages">Messages</string>
     <string name="welcome">Welcome</string>
 
+    <!--    alert dialog-->
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="logout_confirmation">Are you sure you want to logout?</string>
+
     <!--    Errors      -->
     <string name="fill_fields">Please fill in all fields</string>
     <string name="invalid_email">Invalid email format</string>
@@ -36,7 +42,6 @@
     <string name="chat">Chat</string>
     <string name="memory">Memory</string>
     <string name="hitber">HitBer</string>
-
 
 
     <!--    CDT Module  -->

@@ -45,6 +45,8 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import core.domain.use_case.DrawPathsToBitmapUseCase
 import dmt_proms.clock_test.generated.resources.Res
 import dmt_proms.clock_test.generated.resources.clear_all_button_text
+import dmt_proms.clock_test.generated.resources.clear_all_dialog_message
+import dmt_proms.clock_test.generated.resources.clear_all_dialog_title
 import dmt_proms.clock_test.generated.resources.draw_instruction
 import dmt_proms.clock_test.generated.resources.draw_mode
 import dmt_proms.clock_test.generated.resources.draw_screen_title
@@ -53,6 +55,7 @@ import dmt_proms.clock_test.generated.resources.erase_mode
 import dmt_proms.clock_test.generated.resources.finish_button_text
 import org.example.hit.heal.cdt.data.ClockTime
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
@@ -78,6 +81,7 @@ class DrawClockScreen : Screen {
         var isDrawing by remember { mutableStateOf(false) }
         var canvasSize by remember { mutableStateOf(Size.Zero) }
         var isButtonEnabled by remember { mutableStateOf(true) }
+        var showClearAllDialog by remember { mutableStateOf(false) } // State for dialog visibility
 
         fun updatePathsInViewModel() {
             viewModel.updateDrawnPaths(paths.toList())
@@ -211,8 +215,7 @@ class DrawClockScreen : Screen {
                             text = stringResource(Res.string.clear_all_button_text),
                             modifier = Modifier.weight(1f),
                             onClick = {
-                                paths.clear()
-                                viewModel.clearDrawnPaths()
+                                showClearAllDialog = true // Show dialog instead of clearing directly
                             }
                         )
 
@@ -255,5 +258,21 @@ class DrawClockScreen : Screen {
                 }
             }
         )
+
+        // Clear All Confirmation Dialog
+        if (showClearAllDialog) {
+            BaseYesNoDialog(
+                onDismissRequest = { showClearAllDialog = false },
+                title = stringResource(Res.string.clear_all_dialog_title),
+//                icon = Icons.Default.Warning, // Using a default warning icon
+                message = stringResource(Res.string.clear_all_dialog_message),
+                onConfirm = {
+                    paths.clear()
+                    viewModel.clearDrawnPaths()
+                    showClearAllDialog = false
+                },
+                onDismissButtonClick = { showClearAllDialog = false }
+            )
+        }
     }
 }
