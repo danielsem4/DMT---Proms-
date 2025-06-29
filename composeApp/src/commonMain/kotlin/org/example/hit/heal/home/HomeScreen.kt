@@ -1,6 +1,9 @@
 package org.example.hit.heal.home
 
 import LoginScreen
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -9,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -19,9 +23,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -30,6 +38,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.ModulesResponse
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.example.hit.heal.cdt.presentation.CDTLandingScreen
 import org.example.hit.heal.core.presentation.Black
@@ -111,10 +120,15 @@ class HomeScreen() : Screen {
                         maxItemsInEachRow = if (isTablet) 8 else 3,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        activeFeatures.forEach { feature ->
-                            FeatureTile(feature, fontSize, onClick = {
-                                navigateTo(feature, navigator)
-                            })
+                        activeFeatures.forEachIndexed { index, feature -> // Use forEachIndexed to get the index
+                            FeatureTile(
+                                feature = feature,
+                                fontSize = fontSize,
+                                animationDelay = index * 100L, // Staggered delay for each tile
+                                onClick = {
+                                    navigateTo(feature, navigator)
+                                }
+                            )
                         }
                     }
                 }
@@ -125,12 +139,40 @@ class HomeScreen() : Screen {
     }
 
     @Composable
-    private fun FeatureTile(feature: ModulesResponse, fontSize: TextUnit, onClick: () -> Unit) {
+    private fun FeatureTile(
+        feature: ModulesResponse,
+        fontSize: TextUnit,
+        animationDelay: Long, // New parameter for staggered animation
+        onClick: () -> Unit
+    ) {
+        var animated by remember { mutableStateOf(false) } // State to trigger animation
+
+        LaunchedEffect(Unit) {
+            // Delay animation based on index to create a staggered effect
+            delay(animationDelay)
+            animated = true
+        }
+
+        val offsetY by animateDpAsState(
+            targetValue = if (animated) 0.dp else 20.dp, // Slides up from 20dp below
+            animationSpec = tween(durationMillis = 500), // Animation duration
+            label = "feature_tile_offset_y_animation"
+        )
+        val alpha by animateFloatAsState(
+            targetValue = if (animated) 1f else 0f, // Fades in from transparent
+            animationSpec = tween(durationMillis = 500), // Animation duration
+            label = "feature_tile_alpha_animation"
+        )
+
         FeatureButton(
             icon = iconFor(feature),
             label = labelFor(feature),
             fontSize = fontSize,
-            onClick = onClick
+            onClick = onClick,
+            cardModifier = Modifier
+                .padding(8.dp)
+                .offset(y = offsetY) // Apply the animated offset
+                .alpha(alpha) // Apply the animated alpha
         )
     }
 
