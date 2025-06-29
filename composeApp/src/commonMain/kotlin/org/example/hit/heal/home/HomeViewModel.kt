@@ -25,16 +25,21 @@ class HomeViewModel(
     private val _features = MutableStateFlow<List<ModulesResponse>>(emptyList())
     val features: StateFlow<List<ModulesResponse>> = _features
 
-    fun loadFeatures(){
+    fun loadFeatures() {
         viewModelScope.launch {
-            api.getModules(clinicId = storage.get(PrefKeys.clinicId)!!)
-                .onSuccess {
-                    _features.value = it
-                    println("Features fetched:\n ${it.map { m -> m.toString() + "\n" }}")
-                }.onError {
-                    _features.value = emptyList()
-                    println("Error getting features: $it")
-                }
+            storage.get(PrefKeys.clinicId)?.let { id ->
+                api.getModules(clinicId = id)
+                    .onSuccess {
+                        _features.value = it
+                        println("Features fetched:\n ${it.map { m -> m.toString() + "\n" }}")
+                    }.onError {
+                        _features.value = emptyList()
+                        println("Error getting features: $it")
+                    }
+            } ?: run {
+                _features.value = emptyList()
+                println("Error getting clinicId")
+            }
         }
     }
 

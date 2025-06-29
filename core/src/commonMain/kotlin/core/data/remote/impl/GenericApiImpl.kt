@@ -34,7 +34,7 @@ class GenericApiImpl() {
 
 class KtorAppRemoteDataSource(
     private val httpClient: HttpClient,
-    val storage: Storage
+    private val storage: Storage
 ) : AppApi {
 
     override suspend fun login(email: String, password: String):
@@ -56,6 +56,10 @@ class KtorAppRemoteDataSource(
         return safeCall {
             httpClient.post(url) {
                 contentType(ContentType.Application.Json)
+
+                val token: String = storage.get(PrefKeys.token)!!
+                header(HttpHeaders.Authorization, "Token $token")
+
                 setBody(body)
             }
         }

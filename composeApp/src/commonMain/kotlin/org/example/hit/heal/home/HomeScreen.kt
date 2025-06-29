@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,6 +48,7 @@ class HomeScreen() : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val scope = rememberCoroutineScope()
         val features by homeViewModel.features.collectAsState()
+        val activeFeatures = features.filter({ feature -> feature.active })
 
         LaunchedEffect(Unit) {
             homeViewModel.loadFeatures()
@@ -102,12 +105,17 @@ class HomeScreen() : Screen {
                         .align(Alignment.CenterHorizontally)
                 ) {
                     val isTablet = maxWidth > 600.dp
+                    val fontSize = if (isTablet) 20.sp else 12.sp
 
                     FlowRow(
                         maxItemsInEachRow = if (isTablet) 8 else 3,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        featureButtons(features, navigator, isTablet)
+                        activeFeatures.forEach { feature ->
+                            FeatureTile(feature, fontSize, onClick = {
+                                navigateTo(feature, navigator)
+                            })
+                        }
                     }
                 }
 
@@ -117,94 +125,61 @@ class HomeScreen() : Screen {
     }
 
     @Composable
-    private fun featureButtons(
-        features: List<ModulesResponse>,
-        navigator: Navigator,
-        isTablet: Boolean
-    ) {
-        val fontSize = if (isTablet) 20.sp else 12.sp
+    private fun FeatureTile(feature: ModulesResponse, fontSize: TextUnit, onClick: () -> Unit) {
+        FeatureButton(
+            icon = iconFor(feature),
+            label = labelFor(feature),
+            fontSize = fontSize,
+            onClick = onClick
+        )
+    }
 
-        val activeFeatures = features.filter({ feature -> feature.active })
-        activeFeatures.forEach { feature ->
-            createFeatureButton(
-                featureId = feature.module_id,
-                navigator = navigator,
-                fontSize = fontSize
-            )
+    private fun navigateTo(feature: ModulesResponse, navigator: Navigator) =
+        when (feature.module_id) {
+            17 -> navigator.push(CDTLandingScreen())
+
+            else -> println("No action for feature: $feature")
+        }
+
+    @Composable
+    private fun iconFor(feature: ModulesResponse) = when (feature.module_id) {
+        3 -> Resources.Icon.document_share
+        4 -> Resources.Icon.measurements
+        5 -> Resources.Icon.chat
+        7 -> Resources.Icon.meds
+        8 -> Resources.Icon.activities
+        20 -> Resources.Icon.memory
+        19 -> Resources.Icon.hitber
+        17 -> Resources.Icon.clock
+        // Add mappings for other module_ids that should have icons
+
+//        29 -> Resources.Icon.document_report
+        // For "ParkinsonStatus" (module_id 1), if it becomes active:
+//        1 -> Resources.Icon.status_icon
+        else -> {
+            println("No icon for feature: $feature")
+            Icons.Default.Warning
         }
     }
 
     @Composable
-    fun createFeatureButton(featureId: Int, navigator: Navigator, fontSize: TextUnit) {
-        when (featureId) {
-            // document share
-            3 -> FeatureButton(
-                icon = Resources.Icon.document_share,
-                label = stringResource(Resources.String.document_share),
-                fontSize = fontSize,
-                onClick = { /* handle document share click */ }
-            )
+    private fun labelFor(feature: ModulesResponse) = when (feature.module_id) {
+        3 -> stringResource(Resources.String.document_share)
+        4 -> stringResource(Resources.String.measurements)
+        5 -> stringResource(Resources.String.chat)
+        7 -> stringResource(Resources.String.medications)
+        8 -> stringResource(Resources.String.activities)
+        20 -> stringResource(Resources.String.memory)
+        19 -> stringResource(Resources.String.hitber)
+        17 -> stringResource(Resources.String.clockTest)
 
-            // measurements
-            4 -> FeatureButton(
-                icon = Resources.Icon.measurements,
-                label = stringResource(Resources.String.measurements),
-                fontSize = fontSize,
-                onClick = { /* handle measurements click */ }
-            )
-
-            // chat
-            5 -> FeatureButton(
-                icon = Resources.Icon.chat,
-                label = stringResource(Resources.String.chat),
-                fontSize = fontSize,
-                onClick = { /* handle chat click */ }
-            )
-
-            // medications
-            7 -> FeatureButton(
-                icon = Resources.Icon.meds,
-                label = stringResource(Resources.String.medications),
-                fontSize = fontSize,
-                onClick = { /* handle medications click */ }
-            )
-
-            // Activities
-            8 -> FeatureButton(
-                icon = Resources.Icon.activities,
-                label = stringResource(Resources.String.activities),
-                fontSize = fontSize,
-                onClick = { /* handle activities click */ }
-            )
-
-            // Memory
-            13 -> FeatureButton(
-                icon = Resources.Icon.memory,
-                label = stringResource(Resources.String.memory),
-                fontSize = fontSize,
-                onClick = { /* handle memory click */ }
-            )
-
-            // HitBer
-            15 -> FeatureButton(
-                icon = Resources.Icon.hitber,
-                label = stringResource(Resources.String.hitber),
-                fontSize = fontSize,
-                onClick = { /* handle hitber click */ }
-            )
-
-            // Clock
-            16 -> FeatureButton(
-                icon = Resources.Icon.clock,
-                label = stringResource(Resources.String.clockTest),
-                fontSize = fontSize,
-                onClick = { navigator.push(CDTLandingScreen()) }
-            )
-
-            // Unknown module
-            else -> {
-                Text("Unknown module id: $featureId")
-            }
+        // For example, for "Parkinson report" (module_id 29):
+//        29 -> stringResource(Resources.String.parkinson_report_label)
+        // For "ParkinsonStatus" (module_id 1):
+//        1 -> stringResource(Resources.String.parkinson_status_label)
+        else -> {
+            println("No label for feature: $feature")
+            feature.module_name
         }
     }
 }
