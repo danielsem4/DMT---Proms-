@@ -2,7 +2,7 @@ package org.example.hit.heal
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import org.example.hit.heal.core.di.initKoin
+import org.example.hit.heal.di.initKoin
 
 fun main() {
     initKoin()

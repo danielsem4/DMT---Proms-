@@ -8,7 +8,7 @@ import org.koin.compose.KoinContext
 @Composable
 fun CDTApp() {
     KoinContext {
-        Navigator(screen = LandingScreen()) { navigator ->
+        Navigator(screen = CDTLandingScreen()) { navigator ->
             FadeTransition(navigator)
         }
     }

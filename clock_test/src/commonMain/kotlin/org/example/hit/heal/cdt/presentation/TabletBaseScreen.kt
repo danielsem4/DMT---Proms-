@@ -21,9 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import org.example.hit.heal.core.presentation.Colors.backgroundColor
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.primaryColor
 
 @Composable
 fun TabletBaseScreen(

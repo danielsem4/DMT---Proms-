@@ -17,9 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -31,24 +28,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.CanvasDrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import core.domain.use_case.DrawPathsToBitmapUseCase
 import dmt_proms.clock_test.generated.resources.Res
 import dmt_proms.clock_test.generated.resources.clear_all_button_text
 import dmt_proms.clock_test.generated.resources.draw_instruction
@@ -58,8 +52,9 @@ import dmt_proms.clock_test.generated.resources.drawing_instruction
 import dmt_proms.clock_test.generated.resources.erase_mode
 import dmt_proms.clock_test.generated.resources.finish_button_text
 import org.example.hit.heal.cdt.data.ClockTime
-import org.example.hit.heal.core.presentation.Colors
+import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -82,37 +77,10 @@ class DrawClockScreen : Screen {
         var isEraseMode by remember { mutableStateOf(false) }
         var isDrawing by remember { mutableStateOf(false) }
         var canvasSize by remember { mutableStateOf(Size.Zero) }
-        val density = LocalDensity.current
+        var isButtonEnabled by remember { mutableStateOf(true) }
 
         fun updatePathsInViewModel() {
             viewModel.updateDrawnPaths(paths.toList())
-        }
-
-        fun drawPathsToBitmap(): ImageBitmap {
-            val bitmap = ImageBitmap(canvasSize.width.toInt(), canvasSize.height.toInt())
-            val canvas = Canvas(bitmap)
-            val drawScope = CanvasDrawScope()
-
-            drawScope.draw(
-                density = density,
-                layoutDirection = LayoutDirection.Ltr,
-                canvas = canvas,
-                size = canvasSize
-            ) {
-                drawRect(
-                    color = Color.White,
-                    size = size
-                )
-                paths.forEach { path ->
-                    drawPath(
-                        path = path,
-                        color = Colors.primaryColor,
-                        style = Stroke(width = 4.dp.toPx())
-                    )
-                }
-            }
-
-            return bitmap
         }
 
         TabletBaseScreen(
@@ -121,31 +89,32 @@ class DrawClockScreen : Screen {
             content = {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxSize() // Use fillMaxSize for the Column to take all available space
                         .padding(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(.08f),
+                            .fillMaxHeight(.08f), // This box takes 8% of the remaining height
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = instructions,
                             fontSize = 30.sp,
                             fontWeight = FontWeight.SemiBold,
-                            color = Colors.primaryColor,
+                            color = primaryColor,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
                     }
 
+                    // Canvas Box takes the majority of the remaining space
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(.75f)
-                            .border(2.dp, Colors.primaryColor, RoundedCornerShape(8.dp))
+                            .weight(1f) // Assign weight to this Box to make it fill available space
+                            .border(2.dp, primaryColor, RoundedCornerShape(8.dp))
                             .background(Color.White)
                             .onSizeChanged {
                                 canvasSize = it.toSize()
@@ -206,14 +175,14 @@ class DrawClockScreen : Screen {
                             paths.forEach { path ->
                                 drawPath(
                                     path = path,
-                                    color = Colors.primaryColor,
+                                    color = primaryColor,
                                     style = Stroke(width = 4.dp.toPx())
                                 )
                             }
                             currentPath?.let { path ->
                                 drawPath(
                                     path = path,
-                                    color = Colors.primaryColor,
+                                    color = primaryColor,
                                     style = Stroke(width = 4.dp.toPx())
                                 )
                             }
@@ -224,7 +193,7 @@ class DrawClockScreen : Screen {
                                 text = stringResource(Res.string.drawing_instruction),
                                 fontSize = 26.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Colors.primaryColor,
+                                color = primaryColor,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.align(Alignment.TopCenter).padding(8.dp)
                             )
@@ -235,8 +204,7 @@ class DrawClockScreen : Screen {
 
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
+                            .fillMaxWidth(), // Removed .height(50.dp) and fillMaxHeight
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         RoundedButton(
@@ -257,12 +225,12 @@ class DrawClockScreen : Screen {
                                 isEraseMode = !isEraseMode
                             },
                             fontSize = 24.sp,
-                            icon = if (isEraseMode) Icons.Default.Create else Icons.Default.Delete
+                            icon = if (isEraseMode) Resources.Icon.draw else Resources.Icon.delete
                         )
 
                         Spacer(Modifier.width(8.dp))
 
-                        var isButtonEnabled by remember { mutableStateOf(true) }
+                        val density = LocalDensity.current
 
                         RoundedButton(
                             text = stringResource(Res.string.finish_button_text),
@@ -270,11 +238,18 @@ class DrawClockScreen : Screen {
                             onClick = {
                                 if (!isButtonEnabled) return@RoundedButton
                                 isButtonEnabled = false
-                                val image = drawPathsToBitmap()
+                                val image = DrawPathsToBitmapUseCase.drawPathsToBitmap(
+                                    canvasSize,
+                                    paths,
+                                    density
+                                )
+
+
                                 viewModel.saveBitmap(image)
                                 viewModel.stopDrawingTimer()
                                 navigator.replace(InfoScreen())
-                            }
+                            },
+                            enabled = isButtonEnabled
                         )
                     }
                 }

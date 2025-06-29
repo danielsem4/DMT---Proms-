@@ -12,6 +12,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -35,6 +38,7 @@ class SetTimeClockScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinViewModel<ClockTestViewModel>()
+        var isButtonEnabled by  remember { mutableStateOf(true) }
 
         // Start timing for setting the first clock when the screen loads
         viewModel.startSettingFirstClockTimer()
@@ -94,6 +98,8 @@ class SetTimeClockScreen : Screen {
                             .fillMaxWidth(0.3f)
                             .height(60.dp),
                         onClick = {
+                            if (!isButtonEnabled) return@RoundedButton
+
                             if (!isSecondStep) {
                                 viewModel.setSecondStep(true)
                                 // Stop timing for setting the first clock
@@ -101,11 +107,13 @@ class SetTimeClockScreen : Screen {
                                 // Start timing for setting the second clock
                                 viewModel.startSettingSecondClockTimer()
                             } else {
+                                isButtonEnabled = false
                                 // Stop timing for setting the second clock
                                 viewModel.stopSettingSecondClockTimer()
                                 navigator.replace(FinalScreen())
                             }
-                        }
+                        },
+                        enabled = isButtonEnabled
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))

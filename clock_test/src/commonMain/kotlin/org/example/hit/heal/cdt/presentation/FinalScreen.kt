@@ -12,8 +12,11 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -27,6 +30,7 @@ import dmt_proms.clock_test.generated.resources.final_screen_message
 import dmt_proms.clock_test.generated.resources.final_screen_title
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.jetbrains.compose.resources.stringResource
@@ -41,6 +45,10 @@ class FinalScreen : Screen {
 
         val snackbarHostState = remember { SnackbarHostState() }
         val coroutineScope = rememberCoroutineScope()
+        var isButtonEnabled by  remember { mutableStateOf(true) }
+
+        // Get the string resources in the composable context
+        val successMessage = stringResource(Resources.String.sentSuccessfully)
 
         TabletBaseScreen(
             title = stringResource(Res.string.final_screen_title),
@@ -69,11 +77,16 @@ class FinalScreen : Screen {
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         RoundedButton(
-                            text = "Send",
+                            text = Resources.String.send,
                             modifier = Modifier
                                 .fillMaxWidth(0.3f)
                                 .height(60.dp),
-                            onClick = { send(viewModel, snackbarHostState, coroutineScope) }
+                            onClick = {
+                                if (!isButtonEnabled) return@RoundedButton
+                                isButtonEnabled = false
+                                send(viewModel, snackbarHostState, coroutineScope, successMessage)
+                            },
+                            enabled = isButtonEnabled
                         )
                     }
                     Spacer(modifier = Modifier.height(32.dp))
@@ -97,12 +110,13 @@ class FinalScreen : Screen {
     private fun send(
         viewModel: ClockTestViewModel,
         snackbarHostState: SnackbarHostState,
-        coroutineScope: CoroutineScope
+        coroutineScope: CoroutineScope,
+        successMessage: String
     ) {
         try {
             viewModel.sendToServer(onSuccess = {
                 coroutineScope.launch {
-                    snackbarHostState.showSnackbar("Sent successfully")
+                    snackbarHostState.showSnackbar(successMessage)
                 }
             }, onFailure = { error ->
                 coroutineScope.launch {

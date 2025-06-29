@@ -1,4 +1,4 @@
-package org.example.hit.heal.Home
+package org.example.hit.heal.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,10 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun MessagesSection(
-    title: String = "Messages",
+    title: String = stringResource(Resources.String.messages),
     content: @Composable () -> Unit
 ) {
     Card(
@@ -34,7 +37,7 @@ fun MessagesSection(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0xFF6FCF97)) // Use desired header background color
+                    .background(primaryColor)
                     .padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 Text(

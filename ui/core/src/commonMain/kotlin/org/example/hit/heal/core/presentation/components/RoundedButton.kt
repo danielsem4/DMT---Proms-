@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.core.presentation.Colors
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -27,7 +27,8 @@ fun RoundedButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     fontSize: TextUnit = 32.sp,
-    icon: ImageVector? = null
+    icon: ImageVector? = null,
+    enabled: Boolean = true
 ) {
     val buttonText = when (text) {
         is StringResource -> stringResource(text)
@@ -37,9 +38,10 @@ fun RoundedButton(
 
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(Colors.primaryColor),
+        colors = ButtonDefaults.buttonColors(primaryColor),
         shape = RoundedCornerShape(50),
         modifier = modifier,
+        enabled = enabled
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically

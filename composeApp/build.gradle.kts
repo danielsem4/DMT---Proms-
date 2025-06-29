@@ -1,4 +1,3 @@
-
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -16,7 +15,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -27,12 +26,12 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     jvm("desktop")
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -65,7 +64,6 @@ kotlin {
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.tabNavigator
             // Basic Navigation
-            )
 
             // Koin dependencies
             api(libs.koin.core)
@@ -75,16 +73,17 @@ kotlin {
             implementation(libs.kotlinx.serialization) // for data serialization
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
+            implementation(libs.datastore.preferences)
+            implementation(libs.datastore)
 
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-            api(libs.koin.core)
 
-            implementation(libs.navigation.compose)
 
             implementation(libs.coil.compose)
 
+            implementation(libs.messagebar.kmp)
 
         }
         nativeMain.dependencies {

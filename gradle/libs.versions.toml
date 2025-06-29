@@ -1,5 +1,4 @@
 [versions]
-
 agp = "8.10.0"
 android-compileSdk = "35"
 android-minSdk = "24"
@@ -25,20 +24,25 @@ kotlin = "2.1.0"
 kotlinx-coroutines = "1.10.1"
 kotlinxDatetime = "0.6.2"
 uiGraphicsAndroid = "1.7.8"
-runtimeLivedata = "1.7.8"
-coil-compose = "3.0.0"
+
 
 kotlin-date-time = "0.6.2"
 
-playServicesCastFramework = "22.0.0"
 coil = "2.4.0"
 kotlinStdlib = "2.1.0"
 runner = "1.6.2"
 core = "1.6.1"
 voyager = "1.0.1"
 ktor = "3.1.2"
+runtimeLivedata = "1.7.8"
+coil-compose = "3.0.0"
+playServicesCastFramework = "22.0.0"
 datastore = "1.1.1"
 atomicfu = "0.23.2"
+nav3Core = "1.0.0-alpha02"
+nav3Lifecycle = "1.0.0-alpha01"
+messagebar = "1.0.7"
+
 uiGraphicsAndroidVersion = "1.7.8"
 [libraries]
 font-awesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "fontAwesome" }
@@ -66,7 +70,15 @@ androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtim
 compose-ui-graphics = { module = "org.jetbrains.compose.ui:ui-graphics", version.ref = "compose-multiplatform" }
 
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
+
+# Navigation 3 libraries
+nav3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
+nav3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+androidx-lifecycle-viewmodel-nav3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "nav3Lifecycle" }
+
+
 # Koin libraries
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
@@ -102,6 +114,10 @@ androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
+
+messagebar-kmp = { module = "com.stevdza-san:messagebarkmp", version.ref = "messagebar" }
+
+
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroidVersion" }

@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModel
 import core.data.model.MeasureObjectString
 import core.data.model.cdt.CDTRequestBody
 import core.data.model.cdt.CDTResults
+import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.Error
 import core.domain.onError
 import core.domain.onSuccess
 import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
+import core.util.PrefKeys
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
@@ -29,6 +31,7 @@ import org.example.hit.heal.cdt.data.ClockTime
 class ClockTestViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
     private val uploadCDTResultsUseCase: UploadTestResultsUseCase,
+    private val storage: Storage,
 ) : ViewModel() {
 
     private val _currentClockSetTime = MutableStateFlow(ClockTime(12, 0))
@@ -48,26 +51,28 @@ class ClockTestViewModel(
 
     /** Sends the clock drawing and results to the server */
     fun sendToServer(onSuccess: (() -> Unit)?, onFailure: ((message: Error) -> Unit)?) {
-        if (clockDrawing.width == 1 && clockDrawing.height == 1) {
-            println("❌ Failed to convert image: clockDrawing is not set.")
+        if (clockDrawing.width == 1 || clockDrawing.height == 1) {
+            println("Failed to convert image: clockDrawing is not set.")
             onFailure?.invoke(DataError.Local.EMPTY_FILE)
             return
         }
         val imageByteArray = clockDrawing.toByteArray()
 
-        val measurement = 21
-        val userId = 168
-        val clinicId = 6
-        val date = getCurrentFormattedDateTime()
         val version = 1
+        val measurement = 21
+        val date = getCurrentFormattedDateTime()
         val imgName = "clock_image.png"
-        val imagePath = "clinics/$clinicId/patients/$userId/measurements/$measurement/" +
-                "$date/$version/$imgName"
 
         uploadScope.launch {
             println("Entering viewmodel scope - to upload results")
             // this will run even if viewModelScope is gone
             try {
+                val userId = storage.get(PrefKeys.userId)!!
+                val clinicId = storage.get(PrefKeys.clinicId)!!
+
+                val imagePath = "clinics/$clinicId/patients/$userId/measurements/$measurement/" +
+                        "$date/$version/$imgName"
+
                 uploadImageUseCase.execute(imagePath, imageByteArray, clinicId, userId)
                     .onSuccess {
                         println("Successfully uploaded Image")
