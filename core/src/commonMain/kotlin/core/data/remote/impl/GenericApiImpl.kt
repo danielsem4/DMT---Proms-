@@ -17,10 +17,8 @@ import core.network.postWithAuth
 import core.network.safeCall
 import core.util.PrefKeys
 import io.ktor.client.HttpClient
-import io.ktor.client.request.accept
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
-import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
@@ -36,13 +34,11 @@ import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 
-class GenericApiImpl() {
-
-}
+class GenericApiImpl
 
 class KtorAppRemoteDataSource(
     private val httpClient: HttpClient,
-    val storage: Storage
+    private val storage: Storage
 ) : AppApi {
 
     override suspend fun login(email: String, password: String):
@@ -64,6 +60,10 @@ class KtorAppRemoteDataSource(
         return safeCall {
             httpClient.post(url) {
                 contentType(ContentType.Application.Json)
+
+                val token: String = storage.get(PrefKeys.token)!!
+                header(HttpHeaders.Authorization, "Token $token")
+
                 setBody(body)
             }
         }

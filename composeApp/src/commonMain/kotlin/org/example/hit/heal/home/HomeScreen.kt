@@ -1,31 +1,20 @@
 package org.example.hit.heal.home
 
 import LoginScreen
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -36,8 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,33 +35,29 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.ModulesResponse
 import kotlinx.coroutines.launch
 import org.example.hit.heal.cdt.presentation.CDTLandingScreen
-import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Red
 import org.example.hit.heal.core.presentation.Resources
-import org.example.hit.heal.core.presentation.TextWhite
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
-import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-/**
- *
- */
-
 class HomeScreen : Screen {
+    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     override fun Content() {
-        val viewModel: HomeViewModel = koinViewModel()
-        val features by viewModel.features.collectAsState(initial = emptyList())
+
+        val homeViewModel: HomeViewModel = koinViewModel()
         val navigator = LocalNavigator.currentOrThrow
         var showDialog by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
+        val features by homeViewModel.features.collectAsState()
+        val activeFeatures = features.filter({ feature -> feature.active })
 
         LaunchedEffect(Unit) {
-            viewModel.loadFeatures()
+            homeViewModel.loadFeatures()
         }
 
         BaseScreen(
@@ -90,15 +73,10 @@ class HomeScreen : Screen {
             }
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
-                val minMsgHeight = maxHeight / 2
+                val minMsgHeight = maxHeight / 2 //TODO use in MessagesSection
 
                 Column(Modifier.fillMaxSize()) {
-                    MessagesSection(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = minMsgHeight)
-                            .padding(16.dp)
-                    ) {
+                    MessagesSection {
                         Text(
                             stringResource(Resources.String.dont_forget),
                             fontSize = 18.sp,
@@ -112,133 +90,75 @@ class HomeScreen : Screen {
                         )
                     }
 
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(minSize = 100.dp),
-                        contentPadding = PaddingValues(16.dp),
+                    // Push the feature buttons to the bottom of the screen
+                    Spacer(modifier = Modifier.weight(.2f))
+
+                    // Feature buttons layout - using BoxWithConstraints for responsive design
+                    BoxWithConstraints(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f)
+                            .align(Alignment.CenterHorizontally)
                     ) {
-                        items(features.filter { it.active }) { feature ->
-                            FeatureTile(
-                                feature = feature,
-                                fontSize = 14.sp,
-                                onClick = {
-                                    navigateTo(feature.module_id, navigator)
-                                }
-                            )
+                        val isTablet = maxWidth > 600.dp
+                        val fontSize = if (isTablet) 20.sp else 12.sp
+
+                        FlowRow(
+                            maxItemsInEachRow = if (isTablet) 8 else 3,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            activeFeatures.forEach { feature ->
+                                FeatureTile(feature, fontSize, onClick = {
+                                    navigateTo(feature, navigator)
+                                })
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if (showDialog) {
-            BaseYesNoDialog(
-                onDismissRequest = { showDialog = false },
-                title = "Logout",
-                icon = Resources.Icon.logout,
-                message = "Are you sure you want to logout?",
-                confirmButtonText = "Yes",
-                confirmButtonColor = Green,
-                onConfirm = {
+            if (showDialog) {
+                BaseYesNoDialog(
+                    onDismissRequest = { showDialog = false },
+                    title = "Logout",
+                    icon = Resources.Icon.logout,
+                    message = "Are you sure you want to logout?",
+                    confirmButtonText = "Yes",
+                    confirmButtonColor = Green,
+                    onConfirm = {
 
-                    showDialog = false
-                    scope.launch {
-                        viewModel.logout()
-                        navigator.replace(LoginScreen())
-                    }
-                },
-                dismissButtonText = "No",
-                dismissButtonColor = Red,
-                onDismissButtonClick = { showDialog = false }
-            )
-        }
-    }
-
-    @Composable
-    private fun MessagesSection(
-        modifier: Modifier = Modifier,
-        content: @Composable ColumnScope.() -> Unit
-    ) {
-        Card(
-            shape = RoundedCornerShape(12.dp),
-            elevation = 4.dp,
-            backgroundColor = MaterialTheme.colors.surface,
-            modifier = modifier
-        ) {
-            Column {
-                // Header chip
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(primaryColor)
-                ) {
-                    Text(
-                        text = stringResource(Resources.String.messages),
-                        style = MaterialTheme.typography.subtitle1,
-                        fontSize = EXTRA_MEDIUM,
-                        color = TextWhite,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp),
-                        textAlign = TextAlign.Center,
-                    )
-                }
-                Spacer(Modifier.height(12.dp))
-                content()
-            }
-        }
-    }
-
-    @Composable
-    private fun FeatureTile(
-        feature: ModulesResponse,
-        fontSize: TextUnit,
-        onClick: () -> Unit
-    ) {
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            elevation = 2.dp,
-            modifier = Modifier
-                .aspectRatio(1f)
-                .padding(8.dp)
-                .clickable { onClick() }
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    imageVector = iconFor(feature.module_id),
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp),
-                    tint = primaryColor
-                )
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = labelFor(feature.module_id),
-                    fontSize = fontSize,
-                    color = MaterialTheme.colors.onSurface
+                        showDialog = false
+                        scope.launch {
+                            homeViewModel.logout()
+                            navigator.replace(LoginScreen())
+                        }
+                    },
+                    dismissButtonText = "No",
+                    dismissButtonColor = Red,
+                    onDismissButtonClick = { showDialog = false }
                 )
             }
         }
     }
 
-    private fun navigateTo(moduleId: Int, navigator: Navigator) {
-        when (moduleId) {
+    @Composable
+    private fun FeatureTile(feature: ModulesResponse, fontSize: TextUnit, onClick: () -> Unit) {
+        FeatureButton(
+            icon = iconFor(feature),
+            label = labelFor(feature),
+            fontSize = fontSize,
+            onClick = onClick
+        )
+    }
+
+    private fun navigateTo(feature: ModulesResponse, navigator: Navigator) =
+        when (feature.module_id) {
             17 -> navigator.push(CDTLandingScreen())
 
-            else -> { }
+            else -> println("No action for feature: $feature")
         }
-    }
-
 
     @Composable
-    private fun iconFor(id: Int) = when (id) {
+    private fun iconFor(feature: ModulesResponse) = when (feature.module_id) {
         3 -> Resources.Icon.document_share
         4 -> Resources.Icon.measurements
         5 -> Resources.Icon.chat
@@ -247,12 +167,19 @@ class HomeScreen : Screen {
         20 -> Resources.Icon.memory
         19 -> Resources.Icon.hitber
         17 -> Resources.Icon.clock
-//        21 -> Resources.Icon.orientation
-        else -> Resources.Icon.document_share
+        // Add mappings for other module_ids that should have icons
+
+//        29 -> Resources.Icon.document_report
+        // For "ParkinsonStatus" (module_id 1), if it becomes active:
+//        1 -> Resources.Icon.status_icon
+        else -> {
+            println("No icon for feature: $feature")
+            Icons.Default.Warning
+        }
     }
 
     @Composable
-    private fun labelFor(id: Int) = when (id) {
+    private fun labelFor(feature: ModulesResponse) = when (feature.module_id) {
         3 -> stringResource(Resources.String.document_share)
         4 -> stringResource(Resources.String.measurements)
         5 -> stringResource(Resources.String.chat)
@@ -261,7 +188,14 @@ class HomeScreen : Screen {
         20 -> stringResource(Resources.String.memory)
         19 -> stringResource(Resources.String.hitber)
         17 -> stringResource(Resources.String.clockTest)
-//        21 -> stringResource(Resources.String.orientation)
-        else -> "Unknown"
+
+        // For example, for "Parkinson report" (module_id 29):
+//        29 -> stringResource(Resources.String.parkinson_report_label)
+        // For "ParkinsonStatus" (module_id 1):
+//        1 -> stringResource(Resources.String.parkinson_status_label)
+        else -> {
+            println("No label for feature: $feature")
+            feature.module_name
+        }
     }
 }

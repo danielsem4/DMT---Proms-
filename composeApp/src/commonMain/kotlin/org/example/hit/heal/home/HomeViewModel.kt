@@ -42,6 +42,19 @@ class HomeViewModel(
                     _features.value = emptyList()
                     println("Error getting features: $it")
                 }
+            storage.get(PrefKeys.clinicId)?.let { id ->
+                api.getModules(clinicId = id)
+                    .onSuccess {
+                        _features.value = it
+                        println("Features fetched:\n ${it.map { m -> m.toString() + "\n" }}")
+                    }.onError {
+                        _features.value = emptyList()
+                        println("Error getting features: $it")
+                    }
+            } ?: run {
+                _features.value = emptyList()
+                println("Error getting clinicId")
+            }
         }
     }
 
