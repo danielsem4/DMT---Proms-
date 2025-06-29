@@ -24,8 +24,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import dmt_proms.oriantation.generated.resources.Res.string
+import dmt_proms.oriantation.generated.resources.entry_Oriantation_title
+import dmt_proms.oriantation.generated.resources.sec_question_instraction
+import dmt_proms.oriantation.generated.resources.sec_question_number
+import dmt_proms.oriantation.generated.resources.sec_question_title
+
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 class NumberSelectScreen(
     private val viewModel: OrientationTestViewModel
@@ -37,7 +45,7 @@ class NumberSelectScreen(
         val numbers = (0..20).toList()
 
         TabletBaseScreen(
-            title = "תפריט נפתח", // Replace with stringResource if you have it
+            title = (stringResource(string.sec_question_title)),
             question = 2, // For "2/8"
             onNextClick = { navigator?.push(SeasonsSelectScreen(viewModel)) },
             content = {
@@ -60,7 +68,7 @@ class NumberSelectScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "כעת, נא לבחור בספרה 4 ואז ללחוץ כל כפתור הבא", // Replace with stringResource if you have it
+                            text = stringResource(string.sec_question_instraction),
                             color = Color(0xFF4EC3AF),
                             fontSize = 22.sp
                         )

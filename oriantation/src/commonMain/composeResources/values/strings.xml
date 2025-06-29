@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
+    <string name=" e"> e</string>
     <string name="entry_Oriantation_title">אורינטציה</string>
     <string name="entry_Oriantation_welcome_note">ברוך הבא</string>
     <string name="entry_Oriantation_instructions">לפניך התנסות קצרה בשימוש בטאבלט. נסה לעקוב אחר ההנחיות ולבצע</string>
     <string name="entry_Oriantation_button_text">הבא</string>
 
+    <string name="sec_question_title">תפריט נפתח</string>
+    <string name="sec_question_instraction">כעת נא לבחור בספרה 4 ואז ללחוץ על כפתור הבא</string>
+    <string name="sec_question_number">המספר שנבחר כרגע הוא</string>
+
     <string name="entry_instructions_app_trial">לפניך התנסות קצרה בשימוש בטבלט. נסה לעקוב אחר ההנחיות ולבצע</string>
     <string name="dropdown_instructions_app_trial">כעת, נא לבחור בספרה 4 ואז ללחוץ על כפתור "הבא"</string>
     <string name="seasons_instructions_app_trial">לפניך 4 כפתורים שמציגים את עונות השנה, אנו נמצאים על הסתיו, נא לשנות את העונה לקיץ</string>
     <string name="trial_drag_instructions">בפניך מספר צורות, עליך לגרור את המשולש לתוך הריבוע האדום משמאל</string>
+
     <string name="trial_pinch_instructions">כעת, עליך להגדיל את המשולש באמצעות הרחקה של 2 אצבעות על הצורה.</string>
+
     <string name="seasons_instructions_app_trial2">כעת, יש לשנות את העונה לחורף</string>
     <string name="trial_draw_instructions">יש לצייר צורה של איקס</string>
     <string name="trial_end_test_instructions">הניסיון הגיע לסיומו, תודה רבה על שיתוף הפעולה</string>
     <string name="edit_text_dialog_instruction">יש לרשום בתיבה מתחת מה דעתך על המשימה,כדי לסגור את המקלדת יש ללחוץ על התמונה של המקלדת. בסיום לחץ על כפתור הX</string>
+    <string name="fiht "> e</string>
+
     <string name="you_in_the_summer">כרגע נמצאים בעונת הקיץ</string>
     <string name="you_in_the_winter">כרגע נמצאים בעונת החורף</string>
     <string name="you_in_the_spring">כרגע נמצאים בעונת האביב</string>
