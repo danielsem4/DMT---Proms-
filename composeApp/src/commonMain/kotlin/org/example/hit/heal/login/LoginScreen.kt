@@ -156,12 +156,13 @@ class LoginScreen() : Screen {
                     Spacer(modifier = Modifier.height(16.dp))
                 }
 
-                // SnackbarHost positioned at the bottom
+
                 SnackbarHost(
                     hostState = snackbarHostState,
                     modifier = Modifier.align(Alignment.BottomCenter)
                 )
             }
+
         }
     }
 }
