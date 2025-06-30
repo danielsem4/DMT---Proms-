@@ -17,6 +17,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.Sizes.paddingNone
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -26,7 +30,7 @@ fun RoundedButton(
     text: Any, // Can be either String or StringResource
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    fontSize: TextUnit = 32.sp,
+    fontSize: TextUnit = LARGE,
     icon: ImageVector? = null,
     enabled: Boolean = true
 ) {
@@ -52,13 +56,13 @@ fun RoundedButton(
                     contentDescription = buttonText,
                     tint = Color.White
                 )
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.width(spacingSm))
             }
             Text(
                 text = buttonText,
                 color = Color.White,
                 fontSize = fontSize,
-                modifier = Modifier.padding(horizontal = if (icon == null) 8.dp else 0.dp)
+                modifier = Modifier.padding(horizontal = if (icon == null) paddingSm else paddingNone)
             )
         }
     }

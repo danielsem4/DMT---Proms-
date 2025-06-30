@@ -23,6 +23,8 @@ import org.example.hit.heal.core.presentation.GrayLighter
 import org.example.hit.heal.core.presentation.LightWhite
 import org.example.hit.heal.core.presentation.OffWhite
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.radiusXl
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
@@ -42,7 +44,7 @@ fun SimpleInputText(
     visualTransformation: Boolean = false,
     modifier: Modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = 16.dp),
+        .padding(horizontal = paddingMd),
 ) {
     OutlinedTextField(
         value = value,
@@ -52,7 +54,7 @@ fun SimpleInputText(
         trailingIcon = trailingIcon,
         modifier = modifier,
         keyboardOptions = keyboardOptions,
-        shape = RoundedCornerShape(33.dp),
+        shape = RoundedCornerShape(radiusXl),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             backgroundColor = White,
             focusedBorderColor = primaryColor,
