@@ -53,7 +53,7 @@ fun TabletBaseScreen(
                 Text(
                     text = title,
                     color = Color.White,
-                    style = MaterialTheme.typography.h2,
+                    style = MaterialTheme.typography.h6,
                     modifier = Modifier.padding(top = statusBarValues.calculateTopPadding())
                 )
                 topRightText?.let {
