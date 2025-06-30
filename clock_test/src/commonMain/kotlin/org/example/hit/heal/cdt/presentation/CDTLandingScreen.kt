@@ -1,11 +1,11 @@
 package org.example.hit.heal.cdt.presentation
 
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.EaseInCubic
-import androidx.compose.animation.core.AnimationSpec // Import AnimationSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -71,7 +71,7 @@ fun CDTLandingScreenContent() {
 
     // ── Auto-start animation after initial display ──────────────────────
     LaunchedEffect(Unit) {
-        delay(500) // Show initial state for 0.5 seconds
+        delay(800) // Slightly increased initial delay for a calmer start
         state = ScreenState.Animating
         println("LandingScreen: Auto-starting animation")
     }
@@ -80,14 +80,14 @@ fun CDTLandingScreenContent() {
     LaunchedEffect(state) {
         println("LandingScreen: state -> $state")
         if (state == ScreenState.Animating) {
-            delay(1200) // Allow logo animation to complete
+            delay(1600) // Increased delay to ensure logo animation has fully settled
             state = ScreenState.ShowContent
             println("LandingScreen: state -> ShowContent (after delay)")
         } else if (state == ScreenState.ShowContent) {
             // Trigger button animation first
             buttonState = ButtonState.Visible
             // Wait for a short moment after the button animation starts before starting text animation
-            delay(100) // Reduced delay to start text earlier
+            delay(300) // Increased delay for better separation and smoother flow
             // Then trigger text animation
             textState = TextState.Visible
         }
@@ -99,10 +99,10 @@ fun CDTLandingScreenContent() {
         content = {
             if (state != ScreenState.ShowContent) {
                 // Initial animation sequence (without BaseScreen)
-                initialStep(state)
+                InitialStep(state)
             } else {
                 // Final content using TabletBaseScreen
-                secondState(navigator, buttonState, textState)
+                SecondState(navigator, buttonState, textState)
             }
         }
     )
@@ -110,7 +110,7 @@ fun CDTLandingScreenContent() {
 }
 
 @Composable
-private fun initialStep(state: ScreenState) {
+private fun InitialStep(state: ScreenState) {
     BoxWithConstraints(Modifier.fillMaxSize()) {
 
         val finalLogoSize = 150.dp
@@ -119,7 +119,8 @@ private fun initialStep(state: ScreenState) {
         val targetY = if (state == ScreenState.Initial) 0.dp else (maxHeight / 2 - 16.dp - (finalLogoSize / 2))
 
         // Define a common animation spec for logo movements, correctly typed for Dp
-        val logoAnimationSpec: AnimationSpec<Dp> = spring(dampingRatio = 0.8f, stiffness = 100f)
+        // Reduced stiffness further for slower movement, and adjusted dampingRatio for smoother settlement
+        val logoAnimationSpec: AnimationSpec<Dp> = spring(dampingRatio = 0.7f, stiffness = 50f) // Softer spring
 
         val targetSize = if (state == ScreenState.Initial) 450.dp else finalLogoSize
         val animatedSize by animateDpAsState(
@@ -162,7 +163,7 @@ private fun initialStep(state: ScreenState) {
 }
 
 @Composable
-private fun secondState(navigator: Navigator, buttonState: ButtonState, textState: TextState) {
+private fun SecondState(navigator: Navigator, buttonState: ButtonState, textState: TextState) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -190,7 +191,8 @@ private fun secondState(navigator: Navigator, buttonState: ButtonState, textStat
         // Start button with slide-up animation
         val buttonOffsetY by animateDpAsState(
             targetValue = if (buttonState == ButtonState.Hidden) 100.dp else 0.dp,
-            animationSpec = spring(dampingRatio = 0.7f, stiffness = 120f),
+            // Reduced stiffness and slightly higher damping for a more 'cushioned' and slower stop
+            animationSpec = spring(dampingRatio = 0.75f, stiffness = 60f),
             label = "button_slide_animation"
         )
 
@@ -214,12 +216,14 @@ private fun secondState(navigator: Navigator, buttonState: ButtonState, textStat
         // Description text with slide-in animation from bottom
         val textOffsetY by animateDpAsState(
             targetValue = if (textState == TextState.Hidden) 500.dp else 0.dp,
-            animationSpec = tween(durationMillis = 700, easing = EaseInCubic),
+            // Increased duration further and ensured a good easing for smoothness
+            animationSpec = tween(durationMillis = 1500, easing = FastOutSlowInEasing),
             label = "text_slide_animation"
         )
         val textAlpha by animateFloatAsState(
             targetValue = if (textState == TextState.Hidden) 0f else 1f,
-            animationSpec = tween(durationMillis = 500),
+            // Increased duration to match the longer slide, ensuring smooth fade-in over time
+            animationSpec = tween(durationMillis = 1200),
             label = "text_fade_animation"
         )
 
@@ -231,7 +235,7 @@ private fun secondState(navigator: Navigator, buttonState: ButtonState, textStat
                 .padding(horizontal = 32.dp)
                 .offset(y = textOffsetY)
                 .fillMaxWidth()
-                .alpha(textAlpha) // Uncomment if you want fade-in with slide
+                .alpha(textAlpha)
         )
 
         Spacer(modifier = Modifier.weight(1f))

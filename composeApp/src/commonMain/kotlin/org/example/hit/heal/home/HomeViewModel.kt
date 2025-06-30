@@ -27,28 +27,32 @@ class HomeViewModel(
 
     fun loadFeatures() {
         viewModelScope.launch {
-            val clinicId = storage.get(PrefKeys.clinicId)
-            if (clinicId == null) {
-                println("clinicId is null")
-                return@launch
+            storage.get(PrefKeys.clinicId)?.let { id ->
+                api.getModules(clinicId = id)
+                    .onSuccess {
+                        _features.value = it
+                        println("Features fetched:\n ${it.map { m -> m.toString() + "\n" }}")
+                    }.onError {
+                        _features.value = emptyList()
+                        println("Error getting features: $it")
+                    }
+            } ?: run {
+                _features.value = emptyList()
+                println("Error getting clinicId")
             }
-            api.getModules(clinicId)
-                .onSuccess { result ->
-                    val updated = result + ModulesResponse("Clock", 16, true)
-                    _features.value = updated
-                    println("Features fetched: $updated")
-                }
-                .onError {
-                    _features.value = emptyList()
-                    println("Error getting features: $it")
-                }
         }
     }
 
+    // logout and clear the prefs data
     suspend fun logout() {
         storage.clearValue(PrefKeys.clinicId)
         storage.clearValue(PrefKeys.serverUrl)
         storage.clearValue(PrefKeys.token)
         storage.clearValue(PrefKeys.userId)
+        println(
+            "cleaned prefs:${storage.get(PrefKeys.clinicId)} ${storage.get(PrefKeys.serverUrl)}  ${
+                storage.get(PrefKeys.token)
+            } ${storage.get(PrefKeys.userId)}"
+        )
     }
 }

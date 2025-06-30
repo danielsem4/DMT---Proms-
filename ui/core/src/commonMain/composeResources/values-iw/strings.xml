@@ -13,24 +13,19 @@
     <string name="next">הבא</string>
     <string name="send">שלח</string>
     <string name="how_do_you_feel">איך אתה מרגיש?</string>
-    <string name="are_you_sure">האם את/ה בטוח/ה?</string>
 
     <string name="dont_forget">• לא לשכוח לעשות את המבחן</string>
     <string name="take_pills">• לקחת 2 כדורים ב-12:00</string>
     <string name="messages">הודעות</string>
     <string name="fill_fields">נא למלא את כל השדות</string>
+    <string name="unexpected_error">שגיאה לא צפויה</string>
     <string name="invalid_email">פורמט אימייל לא חוקי</string>
     <string name="empty_pass">לא ניתן להשאיר את הסיסמה ריקה</string>
-    <string name="no_internet">אין חיבור לאינטרנט</string>
-    <string name="login_error">בעיות התחברות</string>
-    <string name="disk_full">המכשיר שלך מלא ואין מקום פנוי</string>
-    <string name="local_unknown">אירעה שגיאה לא צפויה במכשיר</string>
-    <string name="request_timeout">הבקשה נכשלה עקב חוסר תגובה</string>
-    <string name="too_many_requests">שלחת יותר מדי בקשות. נסה שוב מאוחר יותר</string>
-    <string name="server_error">אירעה שגיאה בשרת</string>
-    <string name="serialization_error">אירעה שגיאה בעיבוד תגובת השרת</string>
-    <string name="remote_unknown">אירעה שגיאה לא צפויה בשרת</string>
-    <string name="unexpected_error">אירעה שגיאה בלתי צפויה</string>
+
+    <!--    alert dialog-->
+    <string name="yes">כן</string>
+    <string name="no">לא</string>
+    <string name="logout_confirmation">האם אתה בטוח שברצונך להתנתק?</string>
 
     <string name="login_success">נכנסת בהצלחה</string>
     <string name="sent_successfully">נשלח בהצלחה</string>

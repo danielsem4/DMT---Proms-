@@ -26,7 +26,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-class SplashScreen(): Screen {
+class SplashScreen() : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -35,8 +35,8 @@ class SplashScreen(): Screen {
         val isCheckingLogin by splashViewModel.isCheckingLogin.collectAsState()
 
 
-    // Use a safe approach to image loading
-    val defaultImage = painterResource(Res.drawable.med_presc)
+        // Use a safe approach to image loading
+        val defaultImage = painterResource(Res.drawable.med_presc)
 
         LaunchedEffect(isCheckingLogin) {
             if (!isCheckingLogin) {
@@ -48,23 +48,23 @@ class SplashScreen(): Screen {
                 }
             }
         }
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        if (isLoggedIn) {
-            // Use Image instead of AsyncImage to avoid potential Coil issues
-            Image(
-                painter = defaultImage,
-                contentDescription = "Logo",
-                modifier = Modifier.size(200.dp)
-            )
-        } else {
-            Text(
-                text = stringResource(Resources.String.welcome),
-                fontSize = 24.sp
-            )
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            if (isLoggedIn) {
+                // Use Image instead of AsyncImage to avoid potential Coil issues
+                Image(
+                    painter = defaultImage,
+                    contentDescription = "Logo",
+                    modifier = Modifier.size(200.dp)
+                )
+            } else {
+                Text(
+                    text = stringResource(Resources.String.welcome),
+                    fontSize = 24.sp
+                )
+            }
         }
     }
-}
 }

@@ -30,4 +30,7 @@
     <string name="draw_mode">Draw</string>
     <string name="erase_mode">Erase</string>
     <string name="drawing_instruction">While drawing, make sure only your finger/stylus is on the tablet. If you placed your hand on the tablet, lift it and draw again.</string>
+
+    <string name="clear_all_dialog_title">Clear Drawing</string>
+    <string name="clear_all_dialog_message">Are you sure you want to clear the entire drawing?</string>
 </resources>
