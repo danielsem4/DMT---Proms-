@@ -37,9 +37,14 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import org.example.hit.heal.core.presentation.ButtonPrimary
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.IconPrimary
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.login
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingXl
 import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.SimpleInputText
@@ -91,9 +96,9 @@ class LoginScreen : Screen {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(16.dp)
+                            .padding(spacingMd)
                     ) {
-                        Spacer(modifier = Modifier.height(30.dp))
+                        Spacer(modifier = Modifier.height(spacingXl))
 
                         Image(
                             painter = painterResource(Res.drawable.med_presc),
@@ -101,7 +106,7 @@ class LoginScreen : Screen {
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
                                 .size(120.dp)
-                                .padding(bottom = 20.dp)
+                                .padding(bottom = paddingLg)
                         )
 
                         SimpleInputText(
@@ -119,7 +124,7 @@ class LoginScreen : Screen {
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                         )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(spacingMd))
 
                         SimpleInputText(
                             value = password,
@@ -182,12 +187,12 @@ class LoginScreen : Screen {
                             } else {
                                 Text(
                                     text = stringResource(login),
-                                    fontSize = 20.sp,
+                                    fontSize = EXTRA_MEDIUM,
                                     color = Color.White
                                 )
                             }
                         }
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(spacingMd))
                     }
                 }
             }

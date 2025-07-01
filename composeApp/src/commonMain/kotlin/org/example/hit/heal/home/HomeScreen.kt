@@ -49,9 +49,20 @@ import core.data.model.ModulesResponse
 import kotlinx.coroutines.launch
 import org.example.hit.heal.cdt.presentation.CDTLandingScreen
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.REGULAR
 import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Red
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes.elevationMd
+import org.example.hit.heal.core.presentation.Sizes.elevationSm
+import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.radiusLg
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.TextWhite
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
@@ -99,24 +110,24 @@ class HomeScreen : Screen {
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(min = minMsgHeight)
-                            .padding(16.dp)
+                            .padding(paddingMd)
                     ) {
                         Text(
                             stringResource(Resources.String.dont_forget),
-                            fontSize = 18.sp,
+                            fontSize = MEDIUM,
                             color = MaterialTheme.colors.onSurface
                         )
-                        Spacer(Modifier.height(8.dp))
+                        Spacer(Modifier.height(spacingSm))
                         Text(
                             stringResource(Resources.String.take_pills),
-                            fontSize = 18.sp,
+                            fontSize = MEDIUM,
                             color = MaterialTheme.colors.onSurface
                         )
                     }
 
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(minSize = 100.dp),
-                        contentPadding = PaddingValues(16.dp),
+                        contentPadding = PaddingValues(paddingMd),
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
@@ -124,7 +135,7 @@ class HomeScreen : Screen {
                         items(features.filter { it.active }) { feature ->
                             FeatureTile(
                                 feature = feature,
-                                fontSize = 14.sp,
+                                fontSize = REGULAR,
                                 onClick = {
                                     navigateTo(feature.module_id, navigator)
                                 }
@@ -164,8 +175,8 @@ class HomeScreen : Screen {
         content: @Composable ColumnScope.() -> Unit
     ) {
         Card(
-            shape = RoundedCornerShape(12.dp),
-            elevation = 4.dp,
+            shape = RoundedCornerShape(radiusMd),
+            elevation = elevationMd,
             backgroundColor = MaterialTheme.colors.surface,
             modifier = modifier
         ) {
@@ -173,7 +184,7 @@ class HomeScreen : Screen {
                 // Header chip
                 Box(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(radiusMd))
                         .background(primaryColor)
                 ) {
                     Text(
@@ -183,11 +194,11 @@ class HomeScreen : Screen {
                         color = TextWhite,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(paddingSm),
                         textAlign = TextAlign.Center,
                     )
                 }
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(spacingMd))
                 content()
             }
         }
@@ -200,27 +211,27 @@ class HomeScreen : Screen {
         onClick: () -> Unit
     ) {
         Card(
-            shape = RoundedCornerShape(16.dp),
-            elevation = 2.dp,
+            shape = RoundedCornerShape(radiusLg),
+            elevation = elevationSm,
             modifier = Modifier
                 .aspectRatio(1f)
-                .padding(8.dp)
+                .padding(paddingSm)
                 .clickable { onClick() }
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(paddingMd),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
                     painter = painterResource(iconFor(feature.module_id)),
                     contentDescription = null,
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(iconSizeLg),
                     tint = primaryColor
                 )
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(spacingSm))
                 Text(
                     text = labelFor(feature.module_id),
                     fontSize = fontSize,
