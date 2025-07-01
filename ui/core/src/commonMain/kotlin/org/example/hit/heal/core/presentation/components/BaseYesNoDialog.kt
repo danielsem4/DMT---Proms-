@@ -10,47 +10,36 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import org.example.hit.heal.core.presentation.GrayLighter
+import dmt_proms.ui.core.generated.resources.Res
+import dmt_proms.ui.core.generated.resources.no
+import dmt_proms.ui.core.generated.resources.yes
 import org.example.hit.heal.core.presentation.Red
-import org.example.hit.heal.core.presentation.Resources.Icon.email
-import org.example.hit.heal.core.presentation.TextWhite
 import org.example.hit.heal.core.presentation.White
-import org.example.hit.heal.core.presentation.backgroundColor
-import org.example.hit.heal.core.presentation.components.widgets.RoundedGradientButton
 import org.example.hit.heal.core.presentation.primaryColor
-import org.jetbrains.compose.resources.painterResource
-
-/**
- *
- */
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun BaseYesNoDialog(
     onDismissRequest: () -> Unit,
     title: String,
-    icon: ImageVector = email,
+    icon: ImageVector? = null,
     message: String,
-    confirmButtonText: String,
+    confirmButtonText: String = stringResource(Res.string.yes),
     confirmButtonColor: Color = primaryColor,
     onConfirm: () -> Unit,
-    dismissButtonText: String,
+    dismissButtonText: String = stringResource(Res.string.no),
     dismissButtonColor: Color = Red,
     onDismissButtonClick: () -> Unit
 ) {
@@ -67,20 +56,22 @@ fun BaseYesNoDialog(
                     .padding(horizontal = 24.dp, vertical = 32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    tint = Color(0xFF66CC99),
-                    modifier = Modifier.size(64.dp)
-                )
+                if (icon != null) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = primaryColor,
+                        modifier = Modifier.size(64.dp)
+                    )
+                }
 
                 Spacer(Modifier.height(16.dp))
 
                 Text(
                     text = title,
-                    fontSize = 20.sp,
+                    fontSize = 28.sp,
                     textAlign = TextAlign.Center,
-                    color = Color(0xFF66CC99),
+                    color = primaryColor,
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -88,7 +79,7 @@ fun BaseYesNoDialog(
 
                 Text(
                     text = message,
-                    fontSize = 16.sp,
+                    fontSize = 22.sp,
                     textAlign = TextAlign.Center,
                     color = Color.DarkGray,
                     modifier = Modifier.fillMaxWidth()
@@ -97,24 +88,20 @@ fun BaseYesNoDialog(
                 Spacer(Modifier.height(24.dp))
 
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    // “No” — grey gradient
-                    RoundedGradientButton(
+                    // “No”
+                    RoundedButton(
                         text = dismissButtonText,
-                        gradient = Brush.horizontalGradient(
-                            colors = listOf(dismissButtonColor, dismissButtonColor)
-                        ),
                         onClick = onDismissButtonClick,
-                        modifier= Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        buttonColor = dismissButtonColor
                     )
 
-                    // “Yes” — green gradient
-                    RoundedGradientButton(
+                    // “Yes”
+                    RoundedButton(
                         text = confirmButtonText,
-                        gradient = Brush.horizontalGradient(
-                            colors = listOf(confirmButtonColor, confirmButtonColor)
-                        ),
+                        modifier = Modifier.weight(1f),
                         onClick = onConfirm,
-                        modifier= Modifier.weight(1f)
+                        buttonColor = confirmButtonColor
                     )
                 }
             }

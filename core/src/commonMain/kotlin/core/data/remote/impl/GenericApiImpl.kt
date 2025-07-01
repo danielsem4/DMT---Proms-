@@ -75,18 +75,26 @@ class KtorAppRemoteDataSource(
         imageBytes: ByteArray,
         clinicId: Int,
         userId: String
-    ): EmptyResult<DataError.Remote> {
+    ): EmptyResult<DataError.Remote> { // This translates to Result<Unit, DataError.Remote> for safeCall
         val url = "${BASE_URL}FileUpload/"
         val base64EncodedFile: String = Base64.encode(imageBytes)
 
-        return safeCall {
+        return safeCall { // T will be Unit here due to the return type of EmptyResult
             httpClient.post(url) {
+                val token: String = storage.get(PrefKeys.token)
+                    ?: throw IllegalStateException("Auth token not found")
+
+                header(HttpHeaders.Authorization, "Token $token")
+
                 setBody(
                     MultiPartFormDataContent(
                         formData {
                             append("file", base64EncodedFile, Headers.build {
                                 append(HttpHeaders.ContentDisposition, "form-data; name=\"file\"")
-                                append(HttpHeaders.ContentType, "text/plain")
+                                append(
+                                    HttpHeaders.ContentType,
+                                    "text/plain"
+                                ) // Content-Type for this specific part
                             })
                             append("file_name", imagePath)
                             append("clinic_id", clinicId)
@@ -95,6 +103,7 @@ class KtorAppRemoteDataSource(
                         }
                     )
                 )
+                // Ktor handles the main "Content-Type: multipart/form-data" header automatically
             }
         }
     }
