@@ -57,6 +57,7 @@ import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -82,9 +83,10 @@ class HomeScreen : Screen {
             navigationIcon = {
                 IconButton(onClick = { showDialog = true }) {
                     Icon(
-                        imageVector = Resources.Icon.logout,
+                        painter = painterResource(Resources.Icon.logoutIcon),
                         contentDescription = stringResource(Resources.String.logout),
-                        tint = White
+                        tint = White,
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
@@ -137,7 +139,7 @@ class HomeScreen : Screen {
             BaseYesNoDialog(
                 onDismissRequest = { showDialog = false },
                 title = "Logout",
-                icon = Resources.Icon.logout,
+                icon = Resources.Icon.logoutIcon,
                 message = "Are you sure you want to logout?",
                 confirmButtonText = "Yes",
                 confirmButtonColor = Green,
@@ -213,7 +215,7 @@ class HomeScreen : Screen {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
-                    imageVector = iconFor(feature.module_id),
+                    painter = painterResource(iconFor(feature.module_id)),
                     contentDescription = null,
                     modifier = Modifier.size(32.dp),
                     tint = primaryColor
@@ -239,16 +241,16 @@ class HomeScreen : Screen {
 
     @Composable
     private fun iconFor(id: Int) = when (id) {
-        3 -> Resources.Icon.document_share
-        4 -> Resources.Icon.measurements
-        5 -> Resources.Icon.chat
-        7 -> Resources.Icon.meds
-        8 -> Resources.Icon.activities
-        20 -> Resources.Icon.memory
-        19 -> Resources.Icon.hitber
-        17 -> Resources.Icon.clock
+        3 -> Resources.Icon.fileUploadIcon
+        4 -> Resources.Icon.evaluationLogo
+        5 -> Resources.Icon.chatIcon
+        7 -> Resources.Icon.medIcon
+        8 -> Resources.Icon.exerciseIcon
+        20 -> Resources.Icon.memoryModuleIcon
+        19 -> Resources.Icon.hitbearModuleIcon
+        17 -> Resources.Icon.clockIcon
 //        21 -> Resources.Icon.orientation
-        else -> Resources.Icon.document_share
+        else -> Resources.Icon.binIcon
     }
 
     @Composable

@@ -25,6 +25,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import org.example.hit.heal.core.presentation.LightWhite
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -115,14 +116,14 @@ fun PasswordTextField(
         value = password,
         onValueChange = onValueChange,
         label = { Text(stringResource( Resources.String.password)) },
-        leadingIcon = Resources.Icon.lock,
-        iconModifier = Modifier.size(24.dp),
+        leadingIcon = Resources.Icon.lockIcon,
+        iconModifier = Modifier.size(iconSizeMd),
         trailingIcon = {
             IconButton(onClick = { passwordVisible = !passwordVisible }) {
                 Icon(
-                    imageVector = if (passwordVisible) Resources.Icon.visible else Resources.Icon.invisible,
+                    painter = if (passwordVisible) painterResource(Resources.Icon.openEyeIcon) else painterResource(Resources.Icon.closedEyeIcon),
                     contentDescription = null,
-                    modifier = Modifier.size(24.dp),
+                    modifier = Modifier.size(iconSizeMd),
                     tint = Color.Black
                 )
             }
@@ -137,6 +138,6 @@ fun EmailTextField(email: String, onValueChange: (String) -> Unit) = RoundedText
     value = email,
     onValueChange = onValueChange,
     label = { Text(stringResource(Resources.String.email)) },
-    leadingIcon = Resources.Icon.email,
+    leadingIcon = Resources.Icon.emailIcon,
     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
 )

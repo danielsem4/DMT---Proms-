@@ -3,6 +3,7 @@ package org.example.hit.heal.core.presentation.components
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -17,8 +18,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
 import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -27,7 +31,7 @@ fun RoundedButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     fontSize: TextUnit = 32.sp,
-    icon: ImageVector? = null,
+    icon: DrawableResource? = null,
     enabled: Boolean = true
 ) {
     val buttonText = when (text) {
@@ -48,9 +52,11 @@ fun RoundedButton(
         ) {
             if (icon != null) {
                 Icon(
-                    imageVector = icon,
+                    painter = painterResource(icon),
                     contentDescription = buttonText,
-                    tint = Color.White
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(iconSizeMd)
                 )
                 Spacer(Modifier.width(8.dp))
             }
