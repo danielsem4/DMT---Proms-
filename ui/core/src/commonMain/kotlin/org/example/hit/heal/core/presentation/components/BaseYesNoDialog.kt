@@ -10,31 +10,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import org.example.hit.heal.core.presentation.GrayLighter
 import org.example.hit.heal.core.presentation.Red
-import org.example.hit.heal.core.presentation.Resources.Icon.email
-import org.example.hit.heal.core.presentation.TextWhite
+import org.example.hit.heal.core.presentation.Resources.Icon.warningIcon
 import org.example.hit.heal.core.presentation.White
-import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.components.widgets.RoundedGradientButton
 import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 /**
@@ -45,7 +38,7 @@ import org.jetbrains.compose.resources.painterResource
 fun BaseYesNoDialog(
     onDismissRequest: () -> Unit,
     title: String,
-    icon: ImageVector = email,
+    icon: DrawableResource = warningIcon,
     message: String,
     confirmButtonText: String,
     confirmButtonColor: Color = primaryColor,
@@ -68,7 +61,7 @@ fun BaseYesNoDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
-                    imageVector = icon,
+                    painter = painterResource(icon),
                     contentDescription = null,
                     tint = Color(0xFF66CC99),
                     modifier = Modifier.size(64.dp)

@@ -40,6 +40,7 @@ import org.example.hit.heal.core.presentation.ButtonPrimary
 import org.example.hit.heal.core.presentation.IconPrimary
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.login
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.SimpleInputText
 import org.example.hit.heal.home.HomeScreen
@@ -109,9 +110,10 @@ class LoginScreen : Screen {
                             label = stringResource(Resources.String.email),
                             leadingIcon = {
                                 Icon(
-                                    imageVector = Resources.Icon.email,
+                                    painter = painterResource(Resources.Icon.emailIcon),
                                     contentDescription = null,
-                                    tint = IconPrimary
+                                    tint = IconPrimary,
+                                    modifier = Modifier.size(iconSizeMd)
                                 )
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
@@ -125,18 +127,19 @@ class LoginScreen : Screen {
                             label = stringResource(Resources.String.password),
                             leadingIcon = {
                                 Icon(
-                                    imageVector = Resources.Icon.lock,
+                                    painter = painterResource(Resources.Icon.lockIcon),
                                     contentDescription = null,
-                                    tint = IconPrimary
+                                    tint = IconPrimary,
+                                    modifier = Modifier.size(iconSizeMd)
                                 )
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                             trailingIcon = {
                                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                     Icon(
-                                        imageVector = if (passwordVisible) Resources.Icon.visible else Resources.Icon.invisible,
+                                        painter = if (passwordVisible) painterResource(Resources.Icon.openEyeIcon) else painterResource(Resources.Icon.closedEyeIcon),
                                         contentDescription = null,
-                                        modifier = Modifier.size(24.dp),
+                                        modifier = Modifier.size(iconSizeMd),
                                         tint = Color.Black
                                     )
                                 }
@@ -174,7 +177,7 @@ class LoginScreen : Screen {
                             if (isLoading) {
                                 CircularProgressIndicator(
                                     color = Color.White,
-                                    modifier = Modifier.size(24.dp)
+                                    modifier = Modifier.size(iconSizeMd)
                                 )
                             } else {
                                 Text(
