@@ -58,6 +58,7 @@ import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -228,7 +229,7 @@ class DrawClockScreen : Screen {
                                 isEraseMode = !isEraseMode
                             },
                             fontSize = 24.sp,
-                            icon = if (isEraseMode) Resources.Icon.draw else Resources.Icon.delete
+                            icon = if (isEraseMode) Resources.Icon.pencilIcon else Resources.Icon.binIcon
                         )
 
                         Spacer(Modifier.width(8.dp))

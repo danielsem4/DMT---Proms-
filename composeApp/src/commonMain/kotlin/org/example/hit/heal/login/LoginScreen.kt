@@ -33,9 +33,15 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import org.example.EmailTextField
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.PasswordTextField
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.login
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingXl
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.home.HomeScreen
 import org.example.hit.heal.login.LoginViewModel
@@ -80,9 +86,9 @@ class LoginScreen() : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp)
+                        .padding(spacingMd)
                 ) {
-                    Spacer(modifier = Modifier.height(30.dp))
+                    Spacer(modifier = Modifier.height(spacingXl))
 
                     // Login Image
                     Image(
@@ -91,7 +97,7 @@ class LoginScreen() : Screen {
                         contentScale = ContentScale.Fit,
                         modifier = Modifier
                             .size(120.dp)
-                            .padding(bottom = 20.dp)
+                            .padding(bottom = paddingLg)
                     )
 
                     EmailTextField(
@@ -106,7 +112,7 @@ class LoginScreen() : Screen {
                         onValueChange = { password = it }
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(spacingMd))
 
                     // Show message in a Text component
                     if (message.isNotEmpty())
@@ -146,14 +152,14 @@ class LoginScreen() : Screen {
                         if (isLoading) {
                             CircularProgressIndicator(
                                 color = Color.White,
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(iconSizeMd)
                             )
                         } else {
-                            Text(stringResource(login), fontSize = 20.sp, color = Color.White)
+                            Text(stringResource(login), fontSize = EXTRA_MEDIUM, color = Color.White)
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(spacingMd))
                 }
 
                 // SnackbarHost positioned at the bottom

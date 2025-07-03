@@ -3,6 +3,7 @@ package org.example.hit.heal.core.presentation.components
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -17,8 +18,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.Sizes.paddingNone
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
 import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -26,8 +34,8 @@ fun RoundedButton(
     text: Any, // Can be either String or StringResource
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    fontSize: TextUnit = 32.sp,
-    icon: ImageVector? = null,
+    fontSize: TextUnit = LARGE,
+    icon: DrawableResource? = null,
     enabled: Boolean = true,
     buttonColor: Color = primaryColor, // Default background color for the button
     contentColor: Color = Color.White, // Default color for text
@@ -51,17 +59,19 @@ fun RoundedButton(
         ) {
             if (icon != null) {
                 Icon(
-                    imageVector = icon,
+                    painter = painterResource(icon),
                     contentDescription = buttonText,
-                    tint = iconColor // Use the new iconColor parameter for tint
+                    tint = iconColor, // Use the new iconColor parameter for tint
+                    modifier = Modifier
+                        .size(iconSizeMd)
                 )
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.width(spacingSm))
             }
             Text(
                 text = buttonText,
                 color = contentColor, // Use contentColor for the text color
                 fontSize = fontSize,
-                modifier = Modifier.padding(horizontal = if (icon == null) 8.dp else 0.dp)
+                modifier = Modifier.padding(horizontal = if (icon == null) paddingSm else paddingNone)
             )
         }
     }
