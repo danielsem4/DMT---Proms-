@@ -2,10 +2,21 @@ package org.example.hit.heal.core.presentation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
+import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Memory
+import androidx.compose.material.icons.filled.Quiz
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.AutoGraph
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Medication
+import androidx.compose.material.icons.outlined.MonitorHeart
+import androidx.compose.material.icons.outlined.Snowshoeing
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
+import androidx.compose.material.icons.rounded.Timer
 import dmt_proms.ui.core.generated.resources.Res
 import dmt_proms.ui.core.generated.resources.activities
 import dmt_proms.ui.core.generated.resources.app_name
@@ -18,6 +29,7 @@ import dmt_proms.ui.core.generated.resources.check
 import dmt_proms.ui.core.generated.resources.circle_outlined
 import dmt_proms.ui.core.generated.resources.clock
 import dmt_proms.ui.core.generated.resources.clock_test
+import dmt_proms.ui.core.generated.resources.disk_full
 import dmt_proms.ui.core.generated.resources.document_share
 import dmt_proms.ui.core.generated.resources.dont_forget
 import dmt_proms.ui.core.generated.resources.elipsa_outlined
@@ -95,7 +107,22 @@ import dmt_proms.ui.core.generated.resources.Res.string as rs
 object Resources {
 
     object Icon {
-
+        val document_share = Icons.Default.Share
+        val chat = Icons.Default.ChatBubble
+        val memory = Icons.Default.Memory
+        val hitber = Icons.Default.Quiz
+        val delete = Icons.Default.Delete
+        val draw = Icons.Default.Create
+        val email = Icons.Filled.Email
+        val lock = Icons.Outlined.Lock
+        val invisible = Icons.Outlined.VisibilityOff
+        val visible = Icons.Outlined.Visibility
+        val logout = Icons.AutoMirrored.Filled.Logout
+        val graph = Icons.Outlined.AutoGraph
+        val meds = Icons.Outlined.Medication
+        val measurements = Icons.Outlined.MonitorHeart
+        val activities = Icons.Outlined.Snowshoeing
+        val clock = Icons.Rounded.Timer
         val emailIcon = Res.drawable.email
         val clockIcon = Res.drawable.clock
         val spinIcon = Res.drawable.spin_360
@@ -115,9 +142,10 @@ object Resources {
         val warningIcon = Res.drawable.warning
         val joggingIcon = Res.drawable.jogging
 
-//        val lemonIcon = Res.drawable.lemon
+        //        val lemonIcon = Res.drawable.lemon
         val napkinIcon = Res.drawable.napkin
-//        val tableIcon = Res.drawable.table
+
+        //        val tableIcon = Res.drawable.table
         val rulerIcon = Res.drawable.ruler
 
         val plusIcon = Res.drawable.plus
@@ -176,6 +204,16 @@ object Resources {
         val graphs = rs.graphs
         val appName = rs.app_name
         val howDoYouFeel = rs.how_do_you_feel
+
+        // Error messages
+        val noInternet = rs.no_internet
+        val diskFull = rs.disk_full
+        val localUnknown = rs.local_unknown
+        val requestTimeout = rs.request_timeout
+        val tooManyRequests = rs.too_many_requests
+        val serverError = rs.server_error
+        val serializationError = rs.serialization_error
+        val remoteUnknown = rs.remote_unknown
         val unexpectedError = rs.unexpected_error
     }
 

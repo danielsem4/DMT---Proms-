@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -58,7 +60,6 @@ import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.primaryColor
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -265,7 +266,7 @@ class DrawClockScreen : Screen {
             BaseYesNoDialog(
                 onDismissRequest = { showClearAllDialog = false },
                 title = stringResource(Res.string.clear_all_dialog_title),
-//                icon = Icons.Default.Warning, // Using a default warning icon
+                icon = Icons.Default.Warning,
                 message = stringResource(Res.string.clear_all_dialog_message),
                 onConfirm = {
                     paths.clear()

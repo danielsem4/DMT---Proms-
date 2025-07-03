@@ -21,6 +21,15 @@
     <string name="unexpected_error">שגיאה לא צפויה</string>
     <string name="invalid_email">פורמט אימייל לא חוקי</string>
     <string name="empty_pass">לא ניתן להשאיר את הסיסמה ריקה</string>
+    <string name="no_internet">אין חיבור לאינטרנט</string>
+    <string name="login_error">בעיות התחברות</string>
+    <string name="disk_full">המכשיר שלך מלא ואין מקום פנוי</string>
+    <string name="local_unknown">אירעה שגיאה לא צפויה במכשיר</string>
+    <string name="remote_unknown">אירעה שגיאה לא צפויה בשרת</string>
+    <string name="request_timeout">הבקשה נכשלה עקב חוסר תגובה</string>
+    <string name="serialization_error">אירעה שגיאה בעיבוד תגובת השרת</string>
+    <string name="server_error">אירעה שגיאה בשרת</string>
+    <string name="too_many_requests">שלחת יותר מדי בקשות. נסה שוב מאוחר יותר</string>
 
     <!--    alert dialog-->
     <string name="yes">כן</string>
