@@ -1,4 +1,3 @@
-// file: HomeScreen.kt
 package org.example.hit.heal.home
 
 import LoginScreen
@@ -54,26 +53,12 @@ import kotlinx.coroutines.launch
 import org.example.hit.heal.cdt.presentation.CDTLandingScreen
 import org.example.hit.heal.core.presentation.Black
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
-import org.example.hit.heal.core.presentation.FontSize.MEDIUM
-import org.example.hit.heal.core.presentation.FontSize.REGULAR
-import org.example.hit.heal.core.presentation.Green
-import org.example.hit.heal.core.presentation.Red
 import org.example.hit.heal.core.presentation.Resources
-import org.example.hit.heal.core.presentation.Sizes.elevationMd
-import org.example.hit.heal.core.presentation.Sizes.elevationSm
-import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
-import org.example.hit.heal.core.presentation.Sizes.paddingMd
-import org.example.hit.heal.core.presentation.Sizes.paddingSm
-import org.example.hit.heal.core.presentation.Sizes.radiusLg
-import org.example.hit.heal.core.presentation.Sizes.radiusMd
-import org.example.hit.heal.core.presentation.Sizes.spacingMd
-import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.TextWhite
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.primaryColor
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -95,13 +80,12 @@ class HomeScreen : Screen {
             title = stringResource(Resources.String.home), navigationIcon = {
                 IconButton(onClick = { showDialog = true }) {
                     Icon(
-                        painter = painterResource(Resources.Icon.logoutIcon),
+                        imageVector = Resources.Icon.logout,
                         contentDescription = stringResource(Resources.String.logout),
-                        tint = White,
-                        modifier = Modifier.size(24.dp)
+                        tint = White
                     )
                 }
-            })
+            }) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize().padding(16.dp)
@@ -111,39 +95,36 @@ class HomeScreen : Screen {
                     // Content below the header inside the MessagesSection
                     Spacer(modifier = Modifier.height(8.dp))
 
-                Column(Modifier.fillMaxSize()) {
-                    MessagesSection(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = minMsgHeight)
-                            .padding(paddingMd)
-                    ) {
-                        Text(
-                            stringResource(Resources.String.dont_forget),
-                            fontSize = MEDIUM,
-                            color = MaterialTheme.colors.onSurface
-                        )
-                        Spacer(Modifier.height(spacingSm))
-                        Text(
-                            stringResource(Resources.String.take_pills),
-                            fontSize = MEDIUM,
-                            color = MaterialTheme.colors.onSurface
-                        )
-                    }
+                    Text(
+                        stringResource(Resources.String.dont_forget),
+                        fontSize = 18.sp,
+                        color = Black
+                    )
+                    Text(
+                        stringResource(Resources.String.take_pills), fontSize = 18.sp, color = Black
+                    )
+                }
 
-                    LazyVerticalGrid(
-                        columns = GridCells.Adaptive(minSize = 100.dp),
-                        contentPadding = PaddingValues(paddingMd),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
+                // Push the feature buttons to the bottom of the screen
+                Spacer(modifier = Modifier.weight(.2f))
+
+                // Feature buttons layout - using BoxWithConstraints for responsive design
+                BoxWithConstraints(
+                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
+                ) {
+                    val isTablet = maxWidth > 600.dp
+                    val fontSize = if (isTablet) 20.sp else 12.sp
+
+                    FlowRow(
+                        maxItemsInEachRow = if (isTablet) 8 else 3,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
                         features.filter { it.active }.mapIndexed { index, feature ->
                             Pair(index, feature)
                         }.forEach { (index, feature) ->
                             FeatureTile(
                                 feature = feature,
-                                fontSize = REGULAR,
+                                fontSize = fontSize,
                                 animationDelay = index * 100L,
                                 onClick = {
                                     navigateTo(feature, navigator)
@@ -160,7 +141,7 @@ class HomeScreen : Screen {
             BaseYesNoDialog(
                 onDismissRequest = { showDialog = false },
                 title = "Logout",
-                icon = Resources.Icon.logoutIcon,
+                icon = Resources.Icon.logout,
                 message = "Are you sure you want to logout?",
                 onConfirm = {
                     showDialog = false
@@ -178,26 +159,26 @@ class HomeScreen : Screen {
         content: @Composable ColumnScope.() -> Unit
     ) {
         Card(
-            shape = RoundedCornerShape(radiusMd),
-            elevation = elevationMd,
+            shape = RoundedCornerShape(12.dp),
+            elevation = 4.dp,
             backgroundColor = MaterialTheme.colors.surface,
             modifier = Modifier.fillMaxWidth().heightIn(min = 150.dp).padding(16.dp)
         ) {
             Column {
                 // Header chip
                 Box(
-                    modifier = Modifier.clip(RoundedCornerShape(radiusMd)).background(primaryColor)
+                    modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(primaryColor)
                 ) {
                     Text(
                         text = stringResource(Resources.String.messages),
                         style = MaterialTheme.typography.subtitle1,
                         fontSize = EXTRA_MEDIUM,
                         color = TextWhite,
-                        modifier = Modifier.fillMaxWidth().padding(paddingSm),
+                        modifier = Modifier.fillMaxWidth().padding(10.dp),
                         textAlign = TextAlign.Center,
                     )
                 }
-                Spacer(Modifier.height(spacingMd))
+                Spacer(Modifier.height(12.dp))
                 content()
             }
         }
@@ -240,6 +221,7 @@ class HomeScreen : Screen {
     private fun navigateTo(feature: ModulesResponse, navigator: Navigator) =
         when (feature.module_id) {
             17 -> navigator.push(CDTLandingScreen())
+
             else -> println("No action for feature: $feature")
         }
 
@@ -254,7 +236,6 @@ class HomeScreen : Screen {
         20 -> Resources.Icon.memory
         19 -> Resources.Icon.hitber
         17 -> Resources.Icon.clock
-//        21 -> Resources.Icon.orientation
         else -> {
             println("No icon for feature: $feature")
             Icons.Default.Warning
