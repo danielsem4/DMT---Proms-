@@ -1,5 +1,5 @@
  package org.example.hit.heal.presentaion.screens
- package org.example.hit.heal.core.presentation.components
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,17 +21,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
- import org.example.hit.heal.presentaion.backgroundColor
-import org.example.hit.heal.presentaion.components.RoundedButton
-import org.example.hit.heal.presentaion.primaryColor
+
  import dmt_proms.ui.core.generated.resources.Res
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
 import dmt_proms.ui.core.generated.resources.next
 import dmt_proms.ui.core.generated.resources.previous
 import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
->>>>>>>> origin/main:ui/core/src/commonMain/kotlin/org/example/hit/heal/core/presentation/components/BaseScreen.kt
+
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**

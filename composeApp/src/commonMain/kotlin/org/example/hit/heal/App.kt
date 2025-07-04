@@ -12,8 +12,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 
 import cafe.adriel.voyager.transitions.SlideTransition
-import com.example.hi.heal.memoryTest.core.presentation.data.presentation.ViewModelMemoryTest.ViewModelMemoryTest
-import com.example.hi.heal.memoryTest.core.presentation.data.presentation.screens.MemoryScreen
+import com.example.new_memory_test.presentation.screens.MemoryScreen.MemoryScreen
+import org.example.hit.heal.di.appModule
 
 
 import org.example.hit.heal.presentaion.screens.alarmReport.AlarmReportMedicationScreen
@@ -33,21 +33,21 @@ import org.koin.dsl.module
 @Composable
 fun App() {
 
-   // startKoin {
-   //     modules(appModule)
+     //startKoin {
+        //modules(appModule)
         // }
-        // //Navigator(screen = AlarmReportMedicationScreen()) { navigator ->
-        // //    SlideTransition(navigator)
-        // //}
-        //
-        // MaterialTheme {
-   //     Navigator(screen = MemoryScreen()) { navigator ->
-   //         SlideTransition(navigator)
-            //     }
-            // }
-        //
+        //Navigator(screen = AlarmReportMedicationScreen()) { navigator ->
+        //    SlideTransition(navigator)
+        //}
+
     MaterialTheme {
-        Navigator(SplashScreen())
-    }
+        Navigator(screen = MemoryScreen()) { navigator ->
+            SlideTransition(navigator)
+                 }
+         }
+
+    //MaterialTheme {
+    //    Navigator(SplashScreen())
+    //}
 }
 

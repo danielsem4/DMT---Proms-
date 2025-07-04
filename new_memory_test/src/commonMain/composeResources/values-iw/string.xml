@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+
+
+    <string name="day_sunday">ראשון</string>
+    <string name="day_monday">שני</string>
+    <string name="day_tuesday">שלישי</string>
+    <string name="day_wednesday">רביעי</string>
+    <string name="day_thursday">חמישי</string>
+
+    <string name="hour_09_00">09:00</string>
+    <string name="hour_10_00">10:00</string>
+    <string name="hour_11_00">11:00</string>
+    <string name="hour_12_00">12:00</string>
+    <string name="hour_13_00">13:00</string>
+    <string name="hour_14_00">14:00</string>
+    <string name="hour_15_00">15:00</string>
+    <string name="hour_16_00">16:00</string>
+
+    <string name="book_circle">ספר</string>
+    <string name="dumbbell_circle">משקולת</string>
+    <string name="move_circle">תנועה</string>
+    <string name="lecturer_circle">הרצאה</string>
+    <string name="coffee_circle">קפה</string>
+    <string name="stethoscope_circle">רופא</string>
+
+    <string name="book_circle_text">לקחת את הנכדים לשעת סיפור בספרייה ביום רביעי בשעה 16:00</string>
+    <string name="dumbbell_circle_text">חוג התעמלות במתנ"ס בימי ראשון בשעה 11:00 למשך שעה</string>
+    <string name="move_circle_text">לצאת להליכת בוקר פעמיים בשבוע למשך שעה לפחות</string>
+    <string name="lecturer_circle_text">לשמוע הרצאה ביום חמישי בשעה 15:00 במשך שעה</string>
+    <string name="coffee_circle_text">מפגש חברתי בבית הקפה בימי שלישי בשעה 11:00 למשך שעתיים</string>
+    <string name="stethoscope_circle_text">תור לרופא עיניים לפני יום שלישי בין השעות 12:00–9:00 במשך שעה</string>
+
+    <string name="build_schedule_continuation">בניית סדר יום המשך</string>
+
+    <string name="instruction_text_agenda_continuation">עליך להכניס למערכת השעות את הפגישות לפי ההוראות. לחיצה על הפגישה תציג את הזמן.</string>
+
+    <string name="room_title">מסך החדר</string>
+    <string name="continue_button">המשך</string>
+    <string name="build_schedule">בניית סדר יום</string>
+    <string name="place_activities">יש למקם את כל הפעילויות ביומן לפני שממשיכים</string>
+
+
+    <string name="incoming_call_title">שיחה נכנסת</string>
+    <string name="incoming_call_text">שיחה נכנסת</string>
+    <string name="call_from">בית רבקה</string>
+    <string name="phone_number">052-538-1648</string>
+    <string name="thank_you_title">תודה</string>
+    <string name="thank_you_description">המשימה הסתיימה, תודה רבה על שיתוף הפעולה</string>
+
+
+    <!--recordings-->
+    <!-- <string name="galaxy_phone_ring_2019"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fandroid_rington1.mp3?alt=media&token=a706f7ff-f315-40a6-aa91-6c09c3bdb3e3]]></string>-->
+    <!--<string name="old_phone_ring"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Ftelephone_rington.mp3?alt=media&token=f5e87a64-6915-4c05-b9a4-3df7467153af]]></string>-->
+
+</resources>

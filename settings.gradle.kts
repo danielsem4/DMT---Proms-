@@ -27,6 +27,7 @@ dependencyResolutionManagement {
         }
         mavenCentral()
         maven("https://jitpack.io")
+        gradlePluginPortal()
 
 
     }
@@ -35,4 +36,4 @@ include(":composeApp")
 include(":ui:core")
 include(":core")
 include(":clock_test")
-include(":memoryTest:core")
+include(":new_memory_test")

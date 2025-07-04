@@ -36,9 +36,10 @@ import org.example.EmailTextField
 import org.example.PasswordTextField
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.login
-import org.example.hit.heal.core.presentation.components.BaseScreen
+
 import org.example.hit.heal.home.HomeScreen
 import org.example.hit.heal.login.LoginViewModel
+import org.example.hit.heal.presentaion.screens.BaseScreen
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

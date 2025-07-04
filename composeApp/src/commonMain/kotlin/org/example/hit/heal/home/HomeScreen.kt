@@ -33,7 +33,8 @@ import org.example.hit.heal.cdt.presentation.CDTLandingScreen
 import org.example.hit.heal.core.presentation.Black
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.White
-import org.example.hit.heal.core.presentation.components.BaseScreen
+
+import org.example.hit.heal.presentaion.screens.BaseScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 

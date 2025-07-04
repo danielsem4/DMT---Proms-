@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -38,6 +38,7 @@ kotlin {
 
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            implementation(libs.kmp.capturable.compose)
 
             implementation(libs.ktor.client.okhttp)
         }
@@ -69,10 +70,12 @@ kotlin {
             implementation(libs.datastore)
             // DateTime
             implementation(libs.kotlinx.datetime)
+
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
             implementation(libs.compose.ui.graphics)
+            implementation(libs.kmp.capturable.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
