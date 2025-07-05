@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.ObserveLifecycle
 import org.example.hit.heal.core.presentation.Resources.String.deviceAppsTitle
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -68,16 +69,31 @@ class AppDeviceScreen : Screen {
             }
         )
 
-        LaunchedEffect(Unit) {
-            viewModel.startCheckingIfUserDidSomething()
-        }
 
         LaunchedEffect(nextScreen) {
             if (isNextScreen) {
                 nextScreen?.let { screen ->
-                    navigator?.push(screen)
+                    navigator?.push (screen)
                     viewModel.clearNextScreen()
                 }
+            }
+        }
+
+        ObserveLifecycle(
+            onStop = {
+                viewModel.stopAll()
+                println("elapsed:onStop")
+            },
+            onStart = {
+                viewModel.startCheckingIfUserDidSomething()
+                println("elapsed:onStart")
+
+            }
+        )
+
+        DisposableEffect(Unit) {
+            onDispose {
+                viewModel.stopAll()
             }
         }
 
@@ -85,7 +101,6 @@ class AppDeviceScreen : Screen {
             CheckUnderstandingDialog(
                 onYesClick = {
                     viewModel.onUnderstandingConfirmed()
-                    viewModel.startCheckingIfUserDidSomething()
                 },
                 onNoClick = { viewModel.onUnderstandingDenied() }
             )
@@ -105,7 +120,7 @@ class AppDeviceScreen : Screen {
                         viewModel.hideReminderDialog()
 
                         nextScreen?.let { screen ->
-                            navigator?.push(screen)
+                            navigator?.push (screen)
                             viewModel.clearNextScreen()
                         }
                     }

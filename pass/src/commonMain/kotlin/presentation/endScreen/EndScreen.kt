@@ -33,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.input.key.Key.Companion.Home
 import androidx.compose.ui.text.style.TextAlign
+import core.utils.ObserveLifecycle
 import org.example.hit.heal.core.presentation.Resources.String.end
 import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe
@@ -48,28 +49,31 @@ class EndScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-
         val viewModel: EntryViewModel = koinViewModel()
         val isOverlayVisible by viewModel.isOverlayVisible.collectAsState()
         val audioString = stringResource(thanksVocalPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
 
-        LaunchedEffect(Unit) {
-            viewModel.onPlayAudioRequested(audioString)
-        }
+        ObserveLifecycle(
+            onStop = {
+                viewModel.stopAudio()
+            },
+            onStart = {
+                viewModel.onPlayAudioRequested(audioString)
+            }
+        )
 
         VerticalTabletBaseScreen(
             title = stringResource(end),
             content = {
-                AudioPlayingAnimation(isPlaying = isPlaying)
-
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(vertical = 24.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceBetween
+                    verticalArrangement = Arrangement.spacedBy(45.dp)
                 ) {
+
+                    AudioPlayingAnimation(isPlaying = isPlaying)
+
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -79,7 +83,6 @@ class EndScreen : Screen {
                                 color = Color.LightGray,
                                 shape = RoundedCornerShape(10.dp)
                             )
-                            .padding(top = 16.dp, bottom = 16.dp)
                     ) {
                         Text(
                             text = stringResource(thanksCoffe),
@@ -90,13 +93,14 @@ class EndScreen : Screen {
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
                         )
+
                     }
 
-                    SuccessAnimation(modifier = Modifier.size(100.dp).padding(top = 50.dp))
+                    SuccessAnimation(modifier = Modifier.size(100.dp))
 
                     Box(modifier = Modifier.fillMaxSize().padding(10.dp)) {
                         Button(
-                            onClick = { },
+                            onClick = { navigator?.popUntilRoot() },
                             modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
                             colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                             shape = RoundedCornerShape(12.dp),

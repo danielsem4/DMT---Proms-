@@ -36,6 +36,7 @@ import org.example.hit.heal.hitber.presentation.understanding.components.TableWi
 import org.example.hit.heal.hitber.presentation.understanding.components.FridgeWithItemsBox
 import org.example.hit.heal.hitber.presentation.understanding.model.fridgeItems
 import core.utils.CapturableWrapper
+import core.utils.ObserveLifecycle
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import core.utils.PlatformCapturable
 import org.jetbrains.compose.resources.stringResource
@@ -87,6 +88,13 @@ class UnderstandingScreen : Screen {
                 }
             }
         }
+        ObserveLifecycle(
+            onStop = {
+                sixthQuestionViewModel.stopAudio()
+                isAudioClicked = false
+            },
+            onStart = {}
+        )
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
             HorizontalTabletBaseScreen(
@@ -136,7 +144,7 @@ class UnderstandingScreen : Screen {
                                 date = timestamp
                             )
 
-                            navigator?.push(DragAndDropScreen())
+                            navigator?.replace(DragAndDropScreen())
                         }
                     )
                     {

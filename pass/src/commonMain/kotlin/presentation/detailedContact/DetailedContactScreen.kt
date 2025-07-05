@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.ObserveLifecycle
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.Resources.String.contact
 import org.jetbrains.compose.resources.stringResource
@@ -35,12 +36,16 @@ import presentation.components.InstructionsDialog
 import presentation.components.circleWithPicture
 import presentation.detailedContact.components.ContactDetailsSection
 
-class DetailedContactScreen(private val correctContact: ContactData) : Screen {
+class DetailedContactScreen() : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
         val viewModel: DetailedContactViewModel = koinViewModel()
+        val correctContact = DetailedContactCache.lastContact ?: ContactData(
+            name = "Unknown",
+            phoneNumber = "000-0000000"
+        )
 
         val contactChatData: List<AppData> = viewModel.items.map { item ->
             AppData(
@@ -106,18 +111,24 @@ class DetailedContactScreen(private val correctContact: ContactData) : Screen {
             }
         )
 
-        LaunchedEffect(Unit) {
-            viewModel.startCheckingIfUserDidSomething()
-        }
 
         LaunchedEffect(nextScreen) {
             if (isNextScreen) {
                 nextScreen?.let { screen ->
-                    navigator?.push(screen)
+                    navigator?.replace(screen)
                     viewModel.clearNextScreen()
                 }
             }
         }
+
+        ObserveLifecycle(
+            onStop = {
+                viewModel.stopAll()
+            },
+            onStart = {
+                viewModel.startCheckingIfUserDidSomething()
+            }
+        )
 
 
         if (showDialog) {

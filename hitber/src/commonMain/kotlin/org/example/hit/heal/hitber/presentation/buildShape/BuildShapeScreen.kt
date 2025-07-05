@@ -100,7 +100,7 @@ class BuildShapeScreen : Screen {
                                 timestamp
                             )
 
-                            navigator?.push(SummaryScreen())
+                            navigator?.replace(SummaryScreen())
                         }
                     )
                     {

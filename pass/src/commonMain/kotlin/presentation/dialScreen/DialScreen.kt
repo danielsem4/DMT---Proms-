@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import androidx.compose.ui.graphics.Color
+import core.utils.ObserveLifecycle
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.Resources.Icon.dialKeysIcon
 import org.example.hit.heal.core.presentation.Resources.String.dentistPass
@@ -107,7 +108,6 @@ class DialScreen : Screen {
             }
         )
 
-
         if (isDialogVisible) {
             DialDialog(
                 enteredNumber = enteredNumber,
@@ -116,10 +116,6 @@ class DialScreen : Screen {
                 onDial = { viewModel.checkCorrectNumber(correctNumber) },
                 onDeleteClicked = { viewModel.deleteLastDigit() }
             )
-        }
-
-        LaunchedEffect(Unit) {
-            viewModel.startFirstCheck()
         }
 
         LaunchedEffect(nextScreen) {
@@ -136,6 +132,15 @@ class DialScreen : Screen {
                 viewModel.toggleDialog()
             }
         }
+
+        ObserveLifecycle(
+            onStop = {
+                viewModel.stopAll()
+            },
+            onStart = {
+                viewModel.startFirstCheck()
+            }
+        )
 
         if (showUnderstandingDialog) {
             CheckUnderstandingDialog(
@@ -155,13 +160,14 @@ class DialScreen : Screen {
                     isCountdownActive = isCountdownActive,
                     onPlayAudio = { viewModel.onPlayAudioRequested(audioString) },
                     onDismiss = {
-                        viewModel.hideReminderDialog()
-
-                        nextScreen?.let { screen ->
-                            navigator?.push(screen)
+                        if (nextScreen != null) {
+                            navigator?.push(nextScreen!!)
                             viewModel.clearNextScreen()
+                        } else {
+                            viewModel.hideReminderDialog()
                         }
                     }
+
                 )
             }
         }

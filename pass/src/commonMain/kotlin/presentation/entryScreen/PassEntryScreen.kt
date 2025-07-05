@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.ObserveLifecycle
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.Resources.String.firstInstructionsPass
 import org.example.hit.heal.core.presentation.Resources.String.firstMissionPass
@@ -37,7 +38,7 @@ import org.koin.compose.viewmodel.koinViewModel
 import presentation.appsDeviceScreen.AppDeviceScreen
 import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnimation
 
-class EntryScreen : Screen {
+class PassEntryScreen : Screen {
 
     @Composable
     override fun Content() {
@@ -48,9 +49,16 @@ class EntryScreen : Screen {
         val audioString = stringResource(firstInstructionsPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
 
-        LaunchedEffect(Unit) {
-            viewModel.onPlayAudioRequested(audioString)
-        }
+
+        ObserveLifecycle(
+            onStop = {
+                viewModel.stopAudio()
+            },
+            onStart = {
+                viewModel.onPlayAudioRequested(audioString)
+            }
+        )
+
 
         VerticalTabletBaseScreen(
             title = stringResource(welcomePass),
@@ -107,7 +115,7 @@ class EntryScreen : Screen {
                     }
                     Box(modifier = Modifier.fillMaxSize().padding(10.dp)) {
                         Button(
-                            onClick = { navigator?.push(AppDeviceScreen()) },
+                            onClick = { navigator?.replace(AppDeviceScreen()) },
                             modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
                             colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                             shape = RoundedCornerShape(12.dp),

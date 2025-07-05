@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.ObserveLifecycle
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.Resources.String.contact
 import org.example.hit.heal.core.presentation.Resources.String.finishFirstMissionPass
@@ -38,15 +39,23 @@ class NextQuestionScreen : Screen {
         val audioString = stringResource(firstMissionDoneVocalPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
 
-        LaunchedEffect(Unit) {
-            viewModel.onPlayAudioRequested(audioString)
-        }
 
         LaunchedEffect(navigateToDialScreen) {
             if (navigateToDialScreen) {
-                navigator?.push(DialScreen())
+                navigator?.replace(DialScreen())
             }
         }
+
+        ObserveLifecycle(
+            onStop = {
+                viewModel.stopAll()
+            },
+            onStart = {
+                viewModel.onPlayAudioRequested(audioString)
+                viewModel.startCountdown()
+            }
+        )
+
 
         VerticalTabletBaseScreen(
             title = stringResource(contact),

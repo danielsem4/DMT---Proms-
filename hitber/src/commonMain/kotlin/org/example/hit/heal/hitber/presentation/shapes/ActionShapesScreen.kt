@@ -66,11 +66,11 @@ class ActionShapesScreen(private val question: Int) : Screen {
                 secondQuestionViewModel.resetSelectedShapes()
                 if(question == 2) {
                     viewModel.setSecondQuestion(secondQuestionViewModel.secondQuestionAnswersMap, getCurrentFormattedDateTime())
-                    navigator?.push(ConcentrationScreen())
+                    navigator?.replace(ConcentrationScreen())
                 }
 
                 else {viewModel.setNinthQuestion(secondQuestionViewModel.secondQuestionAnswersMap, getCurrentFormattedDateTime())
-                    navigator?.push(BuildShapeScreen())
+                    navigator?.replace(BuildShapeScreen())
                 }
             }
 

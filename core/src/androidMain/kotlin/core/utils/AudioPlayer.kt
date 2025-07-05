@@ -15,4 +15,14 @@ actual class AudioPlayer {
             }
         }
     }
+
+    actual fun stop() {
+        mediaPlayer?.let {
+            if (it.isPlaying) {
+                it.stop()
+            }
+            it.release()
+            mediaPlayer = null
+        }
+    }
 }

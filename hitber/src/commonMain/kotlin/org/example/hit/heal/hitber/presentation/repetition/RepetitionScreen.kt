@@ -69,7 +69,7 @@ class RepetitionScreen : Screen {
                         .width(200.dp)
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 16.dp),
-                    onClick = { navigator?.push(UnderstandingScreen())},
+                    onClick = { navigator?.replace(UnderstandingScreen())},
                     colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
                     shape = RoundedCornerShape(50)
                 ) {

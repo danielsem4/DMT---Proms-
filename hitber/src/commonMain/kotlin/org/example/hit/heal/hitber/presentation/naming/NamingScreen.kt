@@ -44,7 +44,7 @@ class NamingScreen : Screen {
                     fourthQuestionViewModel.fourthQuestionAnswers,
                     getCurrentFormattedDateTime()
                 )
-                navigator?.push(RepetitionScreen())
+                navigator?.replace(RepetitionScreen())
             },
             question = 4,
             buttonText = stringResource(`continue`),

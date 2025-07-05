@@ -29,14 +29,14 @@ import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
 import org.jetbrains.compose.resources.stringResource
 
-class EntryScreen : Screen {
+class HitberEntryScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
 
         HorizontalTabletBaseScreen(
             title = stringResource(entryHitberTitle),
-            onNextClick = { navigator?.push(TimeAndPlace()) },
+            onNextClick = { navigator?.replace(TimeAndPlace()) },
             question = 0,
             buttonText = stringResource(start),
             buttonColor = primaryColor,

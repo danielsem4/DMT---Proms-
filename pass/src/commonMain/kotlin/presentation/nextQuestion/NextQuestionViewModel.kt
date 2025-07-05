@@ -1,6 +1,6 @@
 package presentation.nextQuestion
 
-import androidx.compose.runtime.MutableState
+import kotlinx.coroutines.Job
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.domain.use_case.PlayAudioUseCase
@@ -23,13 +23,25 @@ class NextQuestionViewModel( private val playAudioUseCase: PlayAudioUseCase): Vi
         playAudioUseCase.playAudio(audioText)
     }
 
-    init {
-        viewModelScope.launch {
+    private var countdownJob: Job? = null
+
+    fun startCountdown() {
+        countdownJob?.cancel()
+
+        countdownJob = viewModelScope.launch {
             while (_time.value > 0) {
                 delay(1000L)
                 _time.value -= 1
             }
             _navigateToDialScreen.value = true
         }
+    }
+
+
+    fun stopAll() {
+        countdownJob?.cancel()
+        countdownJob = null
+        _time.value = 8
+        playAudioUseCase.stopAudio()
     }
 }

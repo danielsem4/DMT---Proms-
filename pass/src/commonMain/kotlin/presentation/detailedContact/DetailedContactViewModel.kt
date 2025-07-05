@@ -83,7 +83,6 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
                 if (elapsedSeconds >= 15) {
                     didNothing++
                     getReminderText()
-                    elapsedSeconds = 0
                 }
 
             }
@@ -135,8 +134,16 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
     }
 
     private fun nextQuestion(){
-        reminderJob?.cancel()
         _isNextScreen.value = true
         _nextScreen.value = NextQuestionScreen()
+    }
+
+    fun stopAll() {
+        println("didNothing: $didNothing")
+        println("wrongClick: $wrongClick")
+        playAudioUseCase.stopAudio()
+        countdownDialogHandler.hideDialog()
+        reminderJob?.cancel()
+        reminderJob = null
     }
 }

@@ -41,7 +41,7 @@ class ShapeScreen : Screen {
 
         HorizontalTabletBaseScreen(
             title = stringResource(secondQuestionHitberTitle),
-            onNextClick = { navigator?.push(ActionShapesScreen(2)) },
+            onNextClick = { navigator?.replace(ActionShapesScreen(2)) },
             question = 2,
             buttonText = stringResource(`continue`), buttonColor = primaryColor,
             content = {

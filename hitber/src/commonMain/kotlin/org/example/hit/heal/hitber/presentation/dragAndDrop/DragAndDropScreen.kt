@@ -95,7 +95,7 @@ class DragAndDropScreen : Screen {
                             )
                         }
 
-                        navigator?.push(WritingScreen())
+                        navigator?.replace(WritingScreen())
                     }
                 )
                 {

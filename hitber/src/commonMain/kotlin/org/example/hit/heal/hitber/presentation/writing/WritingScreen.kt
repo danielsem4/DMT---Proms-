@@ -51,7 +51,7 @@ class WritingScreen : Screen {
                             eightQuestionViewModel.answer,
                             getCurrentFormattedDateTime()
                         )
-                        navigator?.push(ActionShapesScreen(9))
+                        navigator?.replace(ActionShapesScreen(9))
 
                     }
                 },

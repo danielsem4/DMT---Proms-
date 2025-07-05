@@ -40,7 +40,7 @@ class TimeAndPlace : Screen {
             onNextClick = {
                 if (allAnswersFinished) {
                     viewModel.setFirstQuestion(firstQuestionViewModel.firstQuestion.value)
-                    navigator?.push(ShapeScreen())
+                    navigator?.replace(ShapeScreen())
                 }
             },
             question = 1,

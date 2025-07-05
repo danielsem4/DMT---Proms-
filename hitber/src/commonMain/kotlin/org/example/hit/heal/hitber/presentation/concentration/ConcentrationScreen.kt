@@ -56,7 +56,7 @@ class ConcentrationScreen : Screen {
                         thirdQuestionViewModel.thirdQuestionAnswers,
                         getCurrentFormattedDateTime()
                     )
-                    navigator?.push(NamingScreen())
+                    navigator?.replace(NamingScreen())
                 }
             },
             question = 3,

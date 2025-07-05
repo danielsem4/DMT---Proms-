@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.ObserveLifecycle
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.example.hit.heal.core.presentation.Resources.Icon.plusIcon
@@ -114,17 +115,25 @@ class ContactsScreen : Screen {
         LaunchedEffect(Unit) {
             viewModel.loadContacts(phoneNumber)
             viewModel.setCorrectContact(correctContact, phoneNumber)
-            viewModel.startCheckingIfUserDidSomething()
         }
 
         LaunchedEffect(nextScreen) {
             if (isNextScreen) {
                 nextScreen?.let { screen ->
-                    navigator?.push(screen)
+                    navigator?.replace(screen)
                     viewModel.clearNextScreen()
                 }
             }
         }
+
+        ObserveLifecycle(
+            onStop = {
+                viewModel.stopAll()
+            },
+            onStart = {
+                viewModel.startCheckingIfUserDidSomething()
+            }
+        )
 
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->

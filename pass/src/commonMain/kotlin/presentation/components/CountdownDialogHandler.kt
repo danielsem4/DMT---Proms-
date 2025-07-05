@@ -39,6 +39,7 @@ class CountdownDialogHandler(
 
     fun hideDialog() {
         _showDialog.value = false
+        countdownTimerUseCase.cancel()
     }
 
     fun showDialog() {

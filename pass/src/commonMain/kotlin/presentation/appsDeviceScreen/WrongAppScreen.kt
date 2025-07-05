@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.lifecycle.DefaultScreenLifecycleOwner.onDispose
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.ObserveLifecycle
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.Resources.Icon.exitIcon
 import org.example.hit.heal.core.presentation.Resources.String.deviceAppTitle
@@ -33,10 +34,11 @@ import org.koin.compose.viewmodel.koinViewModel
 import presentation.components.InstructionsDialog
 import presentation.components.AppData
 
-class WrongAppScreen(private val app: AppData) : Screen {
+class WrongAppScreen : Screen {
 
     @Composable
     override fun Content() {
+        val navigator = LocalNavigator.current
         val viewModel: WrongAppViewModel = koinViewModel()
         val showDialog by viewModel.showDialog.collectAsState()
         val dialogAudioText by viewModel.dialogAudioText.collectAsState()
@@ -44,8 +46,7 @@ class WrongAppScreen(private val app: AppData) : Screen {
         val countdown by viewModel.countdown.collectAsState()
         val backToApps by viewModel.backToApps.collectAsState()
         val isCountdownActive by viewModel.isCountdownActive.collectAsState()
-
-        val navigator = LocalNavigator.current
+        val appLabel = WrongAppCache.lastWrongApp?.let { stringResource(it.label) } ?: ""
 
         VerticalTabletBaseScreen(
             title = stringResource(deviceAppTitle),
@@ -59,7 +60,7 @@ class WrongAppScreen(private val app: AppData) : Screen {
                             .align(Alignment.TopEnd)
                             .clickable {
                                 viewModel.setSecondTimeWrongApp()
-                                navigator?.push(AppDeviceScreen())
+                                navigator?.push (AppDeviceScreen())
                             }
                     )
 
@@ -67,8 +68,7 @@ class WrongAppScreen(private val app: AppData) : Screen {
                         text = buildAnnotatedString {
                             append(stringResource(wrongAppTitle))
                             withStyle(style = SpanStyle(color = primaryColor)) {
-                                append(stringResource(app.label))
-                            }
+                                append(appLabel)                            }
                         },
                         modifier = Modifier.align(Alignment.Center), fontSize = 30.sp
                     )
@@ -76,10 +76,20 @@ class WrongAppScreen(private val app: AppData) : Screen {
             }
         )
 
-        LaunchedEffect(Unit) {
-            viewModel.startCheckingIfUserDidSomething()
-        }
+        ObserveLifecycle(
+            onStop = {
+                viewModel.stopAll()
+            },
+            onStart = {
+                viewModel.startCheckingIfUserDidSomething()
+            }
+        )
 
+        DisposableEffect(Unit) {
+            onDispose {
+                viewModel.stopAll()
+            }
+        }
 
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->
@@ -96,7 +106,7 @@ class WrongAppScreen(private val app: AppData) : Screen {
                         viewModel.hideReminderDialog()
                         if (backToApps) {
                             viewModel.setBackToApps()
-                            navigator?.push(AppDeviceScreen())
+                            navigator?.push (AppDeviceScreen())
                         }
                     }
                 )

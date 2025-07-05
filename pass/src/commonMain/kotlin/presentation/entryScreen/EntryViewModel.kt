@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import core.utils.AudioPlayer
 import core.domain.use_case.PlayAudioUseCase
 
 class EntryViewModel(private val playAudioUseCase: PlayAudioUseCase) : ViewModel() {
@@ -15,9 +14,9 @@ class EntryViewModel(private val playAudioUseCase: PlayAudioUseCase) : ViewModel
     private val _isOverlayVisible = MutableStateFlow(true)
     val isOverlayVisible: StateFlow<Boolean> = _isOverlayVisible
 
+
     fun onPlayAudioRequested(audioText: String) {
         _isOverlayVisible.value = true
-
         playAudioUseCase.playAudio(audioText)
 
         viewModelScope.launch {
@@ -27,5 +26,10 @@ class EntryViewModel(private val playAudioUseCase: PlayAudioUseCase) : ViewModel
                 }
             }
         }
+    }
+
+    fun stopAudio() {
+        playAudioUseCase.stopAudio()
+        _isOverlayVisible.value = false
     }
 }

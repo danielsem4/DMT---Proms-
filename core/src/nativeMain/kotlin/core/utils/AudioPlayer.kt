@@ -19,12 +19,20 @@ actual class AudioPlayer {
         player?.play()
     }
 
+    actual fun stop() {
+        player?.let {
+            if (it.isPlaying()) {
+                it.stop()
+            }
+            player = null
+            delegate = null
+        }
+    }
+
     class AudioPlayerDelegate(val onCompletion: () -> Unit) : NSObject(),
         AVAudioPlayerDelegateProtocol {
         override fun audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully: Boolean) {
             onCompletion()
         }
-
     }
-
 }

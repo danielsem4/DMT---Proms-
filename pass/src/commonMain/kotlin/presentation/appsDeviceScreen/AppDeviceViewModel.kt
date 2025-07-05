@@ -9,6 +9,7 @@ import org.example.hit.heal.core.presentation.Colors
 import presentation.components.CountdownDialogHandler
 import presentation.components.AppData
 import core.domain.use_case.PlayAudioUseCase
+import kotlinx.coroutines.NonCancellable.isActive
 import org.example.hit.heal.core.presentation.Resources.Icon.calculatorIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.cameraIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.clockIcon
@@ -142,9 +143,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
         startDialogInstructions()
     }
 
-
     private fun startDialogInstructions() {
-        reminderJob?.cancel()
         _isCloseIconDialog.value = false
         getReminderDidNotingText()
 
@@ -157,14 +156,13 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
 
     fun startCheckingIfUserDidSomething() {
-        reminderJob?.cancel()
+        println("viewModelScope isActive: ${viewModelScope.coroutineContext[Job]?.isActive}")
 
         reminderJob = viewModelScope.launch {
-
+            println("Coroutine started")
             while (isActive && didNothing <= 3) {
 
                 delay(1_000)
-
                 if (showDialog.value) {
                     continue
                 }
@@ -174,7 +172,6 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
                 if (elapsedSeconds >= 15) {
                     getReminderDidNotingText()
                     _isCloseIconDialog.value = true
-                    elapsedSeconds = 0
                 }
             }
         }
@@ -186,6 +183,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
     fun onUnderstandingConfirmed() {
         _showUnderstandingDialog.value = false
+        elapsedSeconds = 0
     }
 
     fun onUnderstandingDenied() {
@@ -197,7 +195,6 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
 
     fun onAppClicked(app: AppData) {
-        reminderJob?.cancel()
         if (app.label == contacts) {
             _nextScreen.value = ContactsScreen()
             return
@@ -207,7 +204,8 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
         _nextScreen.value = if (wrongApp == 3) {
             ContactsScreen()
         } else {
-            WrongAppScreen(app)
+            WrongAppCache.lastWrongApp = app
+            WrongAppScreen()
         }
     }
 
@@ -234,7 +232,6 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
                     isPlayingFlow = isPlaying,
                     audioText = herePersonsNumber to nowTheContactsListWillBeOpenedPass
                 )
-                reminderJob?.cancel()
                 _isNextScreen.value = false
                 _nextScreen.value = ContactsScreen()
             }
@@ -251,4 +248,12 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
         elapsedSeconds = 0
     }
 
+    fun stopAll() {
+        println("didNothing: $didNothing")
+        println("wrongApp: $wrongApp")
+        playAudioUseCase.stopAudio()
+        hideReminderDialog()
+        reminderJob?.cancel()
+        reminderJob = null
+    }
 }

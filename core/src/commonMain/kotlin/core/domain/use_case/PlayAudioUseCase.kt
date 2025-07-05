@@ -12,10 +12,15 @@ class PlayAudioUseCase(
     val isPlaying: StateFlow<Boolean> = _isPlaying
 
     fun playAudio(audioText: String) {
+        stopAudio()
         _isPlaying.value = true
         audioPlayer.play(audioText) {
             _isPlaying.value = false
         }
     }
 
+    fun stopAudio() {
+        audioPlayer.stop()
+        _isPlaying.value = false
+    }
 }

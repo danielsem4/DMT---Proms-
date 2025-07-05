@@ -213,15 +213,13 @@ class ActivityViewModel(
         println("📤 התחלת העלאה, image size: ${imageByteArray.size}")
 
         uploadScope.launch {
-//            val userId = storage.get(PrefKeys.userId)!!
-//            val clinicId = storage.get(PrefKeys.clinicId)!!
-            val userId =1
-            val clinicId = 1
+            val userId = storage.get(PrefKeys.userId)!!
+            val clinicId = storage.get(PrefKeys.clinicId)!!
             val measurement = 19
 
             val imagePath = bitmapToUploadUseCase.buildPath(
                 clinicId = clinicId,
-                patientId = userId.toString(),
+                patientId = userId,
                 measurementId = measurement,
                 pathDate = date
             )
@@ -234,7 +232,7 @@ class ActivityViewModel(
                     imagePath = imagePath,
                     bytes = imageByteArray,
                     clinicId = clinicId,
-                    userId = userId.toString()
+                    userId = userId
                 ).onSuccess {
                     saveUploadedImageUrl(currentQuestion, imagePath, date)
                     println("✅ העלאה הצליחה")

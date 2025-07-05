@@ -327,8 +327,18 @@ class DialScreenViewModel(
     }
 
     private fun navigateToEndScreen() {
-        stopChecks()
         _isNextScreen.value = true
         _nextScreen.value = EndScreen()
+    }
+
+    fun stopAll() {
+        println("didNothingFirstTime: $didNothingFirstTime")
+        println("didNothingSecondTime: $didNothingSecondTime")
+        println("didNothingThirdTime: $didNothingThirdTime")
+        println("wrongNumberFirstTime: $wrongNumberFirstTime")
+        println("wrongNumberSecondTime: $wrongNumberSecondTime")
+        playAudioUseCase.stopAudio()
+        countdownDialogHandler.hideDialog()
+        stopChecks()
     }
 }

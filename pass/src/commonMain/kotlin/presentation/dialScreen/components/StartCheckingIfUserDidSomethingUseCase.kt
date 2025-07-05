@@ -46,6 +46,7 @@ class StartCheckingIfUserDidSomethingUseCase(
 
     fun stop() {
         reminderJob?.cancel()
+        reminderJob = null
     }
 }
 

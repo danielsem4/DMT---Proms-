@@ -34,6 +34,7 @@ class SummaryScreen : Screen {
         HorizontalTabletBaseScreen(
             title = stringResource(summaryHitberTitle),
             onNextClick = { viewModel.uploadEvaluationResults()
+                navigator?.pop()
                },
             question = 10,
             buttonText = stringResource(exit),

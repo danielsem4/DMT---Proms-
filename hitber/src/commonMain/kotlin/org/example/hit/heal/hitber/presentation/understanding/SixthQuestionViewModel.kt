@@ -37,6 +37,9 @@ class SixthQuestionViewModel(private val playAudioUseCase: PlayAudioUseCase): Vi
         playAudioUseCase.playAudio(audioText)
     }
 
+    fun stopAudio() {
+        playAudioUseCase.stopAudio()
+    }
 
     private val _itemLastPositions = MutableStateFlow<Map<Int, Offset>>(emptyMap())
     val itemLastPositions: StateFlow<Map<Int, Offset>> = _itemLastPositions.asStateFlow()

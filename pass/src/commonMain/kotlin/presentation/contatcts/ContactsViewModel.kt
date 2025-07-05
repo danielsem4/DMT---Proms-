@@ -1,5 +1,6 @@
 package presentation.contatcts
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
@@ -21,6 +22,7 @@ import org.example.hit.heal.core.presentation.Resources.String.witchContactAreWe
 import org.jetbrains.compose.resources.getStringArray
 import presentation.components.ContactData
 import presentation.components.CountdownDialogHandler
+import presentation.detailedContact.DetailedContactCache
 import presentation.detailedContact.DetailedContactScreen
 
 class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandler,
@@ -69,6 +71,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         _contactsList.value = allContacts
     }
 
+
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
 
@@ -100,7 +103,6 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
                 if (elapsedSeconds >= if (_isScrolling.value) 25 else 15) {
                     didNothing++
                     getReminderText()
-                    elapsedSeconds = 0
                     _isScrolling.value = false
                 }
 
@@ -143,9 +145,9 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     }
 
     private fun nextQuestion(){
-        reminderJob?.cancel()
         _isNextScreen.value = true
-        _nextScreen.value = DetailedContactScreen(correctContact)
+        DetailedContactCache.lastContact = correctContact
+        _nextScreen.value = DetailedContactScreen()
     }
 
     fun onPlayAudioRequested(audioText: String) {
@@ -154,7 +156,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
 
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
-        startCheckingIfUserDidSomething()
+        elapsedSeconds = 0
     }
 
     fun clearNextScreen() {
@@ -169,5 +171,14 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         _isScrolling.value = true
         _isScrolled.value = true
         elapsedSeconds = 0
+    }
+
+    fun stopAll() {
+        println("didNothing: $didNothing")
+        println("wrongContact: $wrongContact")
+        playAudioUseCase.stopAudio()
+        countdownDialogHandler.hideDialog()
+        reminderJob?.cancel()
+        reminderJob = null
     }
 }
