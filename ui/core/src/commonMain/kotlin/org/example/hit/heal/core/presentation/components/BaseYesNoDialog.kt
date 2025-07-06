@@ -19,14 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
-import org.example.hit.heal.core.presentation.GrayLighter
+import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Red
-import org.example.hit.heal.core.presentation.Resources.Icon.email
 import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingXl
@@ -34,7 +31,6 @@ import org.example.hit.heal.core.presentation.Sizes.radiusLg
 import org.example.hit.heal.core.presentation.Sizes.spacingLg
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingSm
-import org.example.hit.heal.core.presentation.TextWhite
 import org.example.hit.heal.core.presentation.Resources.Icon.warningIcon
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.widgets.RoundedGradientButton
@@ -43,7 +39,7 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
 /**
- *
+ * A base dialog component that displays a confirmation message with "Yes" and "No" options.
  */
 
 @Composable
@@ -103,23 +99,19 @@ fun BaseYesNoDialog(
 
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(spacingMd)) {
                     // “No” — grey gradient
-                    RoundedGradientButton(
+                    RoundedButton(
                         text = dismissButtonText,
-                        gradient = Brush.horizontalGradient(
-                            colors = listOf(dismissButtonColor, dismissButtonColor)
-                        ),
                         onClick = onDismissButtonClick,
-                        modifier= Modifier.weight(1f)
+                        modifier= Modifier.weight(1f),
+                        buttonColor = dismissButtonColor
                     )
 
                     // “Yes” — green gradient
-                    RoundedGradientButton(
+                    RoundedButton(
                         text = confirmButtonText,
-                        gradient = Brush.horizontalGradient(
-                            colors = listOf(confirmButtonColor, confirmButtonColor)
-                        ),
                         onClick = onConfirm,
-                        modifier= Modifier.weight(1f)
+                        modifier= Modifier.weight(1f),
+                        buttonColor = confirmButtonColor
                     )
                 }
             }

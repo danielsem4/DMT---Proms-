@@ -40,7 +40,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -54,6 +53,7 @@ import org.example.hit.heal.core.presentation.FontSize.REGULAR
 import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Red
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Resources.String.logout
 import org.example.hit.heal.core.presentation.Sizes.elevationMd
 import org.example.hit.heal.core.presentation.Sizes.elevationSm
 import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
@@ -149,7 +149,7 @@ class HomeScreen : Screen {
         if (showDialog) {
             BaseYesNoDialog(
                 onDismissRequest = { showDialog = false },
-                title = "Logout",
+                title = stringResource(logout),
                 icon = Resources.Icon.logoutIcon,
                 message = "Are you sure you want to logout?",
                 confirmButtonText = "Yes",
@@ -245,7 +245,7 @@ class HomeScreen : Screen {
         when (moduleId) {
             17 -> navigator.push(CDTLandingScreen())
 
-            else -> { }
+            else -> {  }
         }
     }
 

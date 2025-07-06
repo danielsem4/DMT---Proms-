@@ -47,7 +47,12 @@ import dmt_proms.clock_test.generated.resources.hit_logo
 import dmt_proms.clock_test.generated.resources.hit_logo_description
 import dmt_proms.clock_test.generated.resources.start_button_text
 import kotlinx.coroutines.delay
+import org.example.hit.heal.core.presentation.Resources.Icon.clockIcon
+import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingXxl
 import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
@@ -94,7 +99,7 @@ fun CDTLandingScreenContent() {
     }
 
 
-    TabletBaseScreen(
+    BaseScreen(
         title = stringResource(Res.string.clock_test_title),
         content = {
             if (state != ScreenState.ShowContent) {
@@ -167,7 +172,7 @@ private fun secondState(navigator: Navigator, buttonState: ButtonState, textStat
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(spacingXxl))
 
         // "Clock test" text above the clock
         Text(
@@ -175,17 +180,17 @@ private fun secondState(navigator: Navigator, buttonState: ButtonState, textStat
             style = MaterialTheme.typography.h3,
             color = primaryColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = paddingMd)
         )
 
         // Clock icon
         Image(
-            painter = painterResource(Res.drawable.clock),
+            painter = painterResource(clockIcon),
             contentDescription = stringResource(Res.string.clock_icon_description),
-            modifier = Modifier.size(150.dp)
+            modifier = Modifier.size(iconSizeXl)
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(spacingXxl))
 
         // Start button with slide-up animation
         val buttonOffsetY by animateDpAsState(

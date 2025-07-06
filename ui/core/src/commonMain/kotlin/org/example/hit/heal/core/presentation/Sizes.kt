@@ -16,6 +16,7 @@ object Sizes {
     val spacingMd = 16.dp
     val spacingLg = 24.dp
     val spacingXl = 32.dp
+    val spacingXxl = 48.dp
 
     // Corner radius
     val radiusSm = 4.dp

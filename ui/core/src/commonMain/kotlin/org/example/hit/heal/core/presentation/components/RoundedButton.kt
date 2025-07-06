@@ -36,7 +36,10 @@ fun RoundedButton(
     onClick: () -> Unit,
     fontSize: TextUnit = LARGE,
     icon: DrawableResource? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    buttonColor: Color = primaryColor,
+    contentColor: Color = Color.White,
+    iconColor: Color = Color.White
 ) {
     val buttonText = when (text) {
         is StringResource -> stringResource(text)
@@ -46,7 +49,7 @@ fun RoundedButton(
 
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.buttonColors(primaryColor),
+        colors = ButtonDefaults.buttonColors(buttonColor),
         shape = RoundedCornerShape(50),
         modifier = modifier,
         enabled = enabled
@@ -58,7 +61,7 @@ fun RoundedButton(
                 Icon(
                     painter = painterResource(icon),
                     contentDescription = buttonText,
-                    tint = Color.White,
+                    tint = iconColor,
                     modifier = Modifier
                         .size(iconSizeMd)
                 )
@@ -66,7 +69,7 @@ fun RoundedButton(
             }
             Text(
                 text = buttonText,
-                color = Color.White,
+                color = contentColor,
                 fontSize = fontSize,
                 modifier = Modifier.padding(horizontal = if (icon == null) paddingSm else paddingNone)
             )

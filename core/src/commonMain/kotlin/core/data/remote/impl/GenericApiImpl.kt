@@ -58,14 +58,15 @@ class KtorAppRemoteDataSource(
         serializer: KSerializer<T>
     ): Result<String, DataError.Remote> {
         val url = "${BASE_URL}patientMeasureResponse/"
-
         val body = Json.encodeToString(serializer, results)
+        println("the body is: $body")
 
-        return safeCall {
-            httpClient.post(url) {
-                contentType(ContentType.Application.Json)
-                setBody(body)
-            }
+        return httpClient.postWithAuth<String>(
+            url = url,
+            storage = storage
+        ) {
+            contentType(ContentType.Application.Json)
+            setBody(body)
         }
     }
 
@@ -79,23 +80,24 @@ class KtorAppRemoteDataSource(
         val url = "${BASE_URL}FileUpload/"
         val base64EncodedFile: String = Base64.encode(imageBytes)
 
-        return safeCall {
-            httpClient.post(url) {
-                setBody(
-                    MultiPartFormDataContent(
-                        formData {
-                            append("file", base64EncodedFile, Headers.build {
-                                append(HttpHeaders.ContentDisposition, "form-data; name=\"file\"")
-                                append(HttpHeaders.ContentType, "text/plain")
-                            })
-                            append("file_name", imagePath)
-                            append("clinic_id", clinicId)
-                            append("user_id", userId)
-                            append("path", imagePath)
-                        }
-                    )
+        return httpClient.postWithAuth<Unit>(
+            url = url,
+            storage = storage
+        ) {
+            setBody(
+                MultiPartFormDataContent(
+                    formData {
+                        append("file", base64EncodedFile, Headers.build {
+                            append(HttpHeaders.ContentDisposition, "form-data; name=\"file\"")
+                            append(HttpHeaders.ContentType, "text/plain")
+                        })
+                        append("file_name", imagePath)
+                        append("clinic_id", clinicId)
+                        append("user_id", userId)
+                        append("path", imagePath)
+                    }
                 )
-            }
+            )
         }
     }
 
@@ -116,8 +118,8 @@ class KtorAppRemoteDataSource(
         patientId: Int
     ): Result<List<Medication>, DataError.Remote> =
         httpClient.getWithAuth<List<Medication>>(
-            url      = "${BASE_URL}Medication_list/",
-            storage  = storage
+            url = "${BASE_URL}Medication_list/",
+            storage = storage
         ) {
             parameter("clinic_id",  clinicId)
             parameter("patient_id", patientId)
@@ -127,7 +129,7 @@ class KtorAppRemoteDataSource(
         body: MedicationReport
     ): Result<Unit, DataError.Remote> =
         httpClient.postWithAuth<Unit>(
-            url      = "${BASE_URL}report_medication/",
+            url = "${BASE_URL}report_medication/",
             storage  = storage
         ) {
             setBody(body)
@@ -138,8 +140,8 @@ class KtorAppRemoteDataSource(
         results: Request
     ): Result<Unit, DataError.Remote> =
         httpClient.postWithAuth<Unit>(
-            url      = "${BASE_URL}patientNotificationData/",
-            storage  = storage
+            url = "${BASE_URL}patientNotificationData/",
+            storage = storage
         ) {
             setBody(results)
         }

@@ -35,9 +35,11 @@ suspend inline fun <reified T> HttpClient.postWithAuth(
     block: HttpRequestBuilder.() -> Unit = {}
 ): core.domain.Result<T, DataError.Remote> = safeCall {
     post(url) {
+        println("postWithAuth: $url")
         storage.get(PrefKeys.token)
             ?.takeIf { it.isNotBlank() }
-            ?.let { header(HttpHeaders.Authorization, "token $it") }
+            ?.let { header(HttpHeaders.Authorization, "token $it")
+                println("postWithAuth token: $it")}
         block()
     }
 }
