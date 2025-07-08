@@ -1,10 +1,13 @@
 package core.domain.api
 
+import core.data.model.Medications.Medication
+import core.data.model.Medications.MedicationReport
 import core.data.model.ModulesResponse
 import core.data.model.SuccessfulLoginResponse
 import core.domain.DataError
 import core.domain.EmptyResult
 import core.domain.Result
+import io.ktor.http.cio.Request
 import kotlinx.serialization.KSerializer
 
 
@@ -26,5 +29,18 @@ interface AppApi {
         userId: String
     ): EmptyResult<DataError.Remote>
 
-    suspend fun getModules(clinicId: Int): Result<List<ModulesResponse>, DataError.Remote>
+    suspend fun getModules(clinicId: Int): Result<ArrayList<ModulesResponse>, DataError.Remote>
+
+    suspend fun getAllPatientMedicines(
+        clinicId: Int,
+        patientId: Int
+    ): Result<List<Medication>, DataError.Remote>
+
+    suspend fun reportMedicationTook(
+        body: MedicationReport
+    ): Result<Unit, DataError.Remote>
+
+    suspend fun setMedicationNotifications(
+        results: Request
+    ): Result<Unit, DataError.Remote>
 }

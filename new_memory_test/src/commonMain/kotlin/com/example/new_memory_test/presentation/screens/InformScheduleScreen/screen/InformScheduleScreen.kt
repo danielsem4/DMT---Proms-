@@ -40,13 +40,6 @@ import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import com.example.new_memory_test.presentation.screens.InformScheduleScreen.components.ActivityItem
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.screen.ScheduleScreen
 import com.example.new_memory_test.primaryColor
-import dmt_proms.new_memory_test.generated.resources.Res
-import dmt_proms.new_memory_test.generated.resources.book_agenda
-import dmt_proms.new_memory_test.generated.resources.coffee_agenda
-import dmt_proms.new_memory_test.generated.resources.dumbbell_agenda
-import dmt_proms.new_memory_test.generated.resources.move_agenda
-import dmt_proms.new_memory_test.generated.resources.stethoscope_agenda
-import dmt_proms.new_memory_test.generated.resources.teach_agenda
 import org.example.hit.heal.core.presentation.Resources
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -87,27 +80,27 @@ class InformScheduleScreen(val pageNumber: Int) : Screen {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         ActivityItem(
                             stringResource(Resources.String.dumbbell_circle_text),
-                            icon = painterResource(Res.drawable.dumbbell_agenda)
+                            icon = painterResource(Resources.Icon.dumbbellScheduleIcon)
                         )
                         ActivityItem(
                             stringResource(Resources.String.stethoscope_circle_text),
-                            icon = painterResource(Res.drawable.stethoscope_agenda)
+                            icon = painterResource(Resources.Icon.stethascopeScheduleIcon)
                         )
                         ActivityItem(
                             stringResource(Resources.String.book_circle_text),
-                            icon = painterResource(Res.drawable.book_agenda)
+                            icon = painterResource(Resources.Icon.bookScheduleIcon)
                         )
                         ActivityItem(
                             stringResource(Resources.String.coffee_circle_text),
-                            icon = painterResource(Res.drawable.coffee_agenda)
+                            icon = painterResource(Resources.Icon.coffeeScheduleIcon)
                         )
                         ActivityItem(
                             stringResource(Resources.String.lecturer_circle_text),
-                            icon = painterResource(Res.drawable.teach_agenda)
+                            icon = painterResource(Resources.Icon.teachScheduleIcon)
                         )
                         ActivityItem(
                             stringResource(Resources.String.move_circle_text),
-                            icon = painterResource(Res.drawable.move_agenda)
+                            icon = painterResource(Resources.Icon.moveScheduleIcon)
                         )
                     }
                 }

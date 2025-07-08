@@ -16,7 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.data.DraggableCircle
-import com.example.new_memory_test.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import com.mohamedrejeb.compose.dnd.DragAndDropState
 import com.mohamedrejeb.compose.dnd.drop.dropTarget
 import kotlin.collections.plus

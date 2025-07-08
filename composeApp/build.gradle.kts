@@ -83,7 +83,6 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
-
             implementation(libs.coil.compose)
             implementation(libs.bundles.voyager.common)
             implementation(libs.ktor.client.core)
@@ -105,6 +104,8 @@ kotlin {
 
             //implementation("io.github.moonggae:kmedia:0.0.3")
 
+
+          implementation(libs.messagebar.kmp)
 
         }
         nativeMain.dependencies {

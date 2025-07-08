@@ -42,7 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.example.new_memory_test.backgroundColor
+
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.components.dialogs.RatingDialog
 import com.example.new_memory_test.presentation.screens.BaseTabletScreen
@@ -53,23 +53,13 @@ import com.example.new_memory_test.presentation.screens.RoomScreen.components.Dr
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.zonePosition.getZoneForPosition
 import com.example.new_memory_test.presentation.screens.RoomScreen.data.DataItem
-import com.example.new_memory_test.primaryColor
-import dmt_proms.new_memory_test.generated.resources.Res
-import dmt_proms.new_memory_test.generated.resources.app
-import dmt_proms.new_memory_test.generated.resources.backpack
-import dmt_proms.new_memory_test.generated.resources.book
-import dmt_proms.new_memory_test.generated.resources.bottle
-import dmt_proms.new_memory_test.generated.resources.coffee
 
-import dmt_proms.new_memory_test.generated.resources.dress
-import dmt_proms.new_memory_test.generated.resources.glasses
-import dmt_proms.new_memory_test.generated.resources.keys
-import dmt_proms.new_memory_test.generated.resources.phone
-import dmt_proms.new_memory_test.generated.resources.records
-import dmt_proms.new_memory_test.generated.resources.shoes
-import dmt_proms.new_memory_test.generated.resources.wallet
+
 import kotlinx.coroutines.delay
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -94,18 +84,18 @@ class RoomsScreens(val pageNumber: Int) : Screen {
 
         //autoSwitchingRooms = false
         val allItems : List<Pair<Int, DrawableResource>> = listOf(
-             Res.drawable.glasses,
-            Res.drawable.book,
-            Res.drawable.dress,
-            Res.drawable.phone,
-            Res.drawable.keys,
-            Res.drawable.wallet,
-            Res.drawable.coffee,
-            Res.drawable.backpack,
-            Res.drawable.app,
-            Res.drawable.shoes,
-            Res.drawable.records,
-            Res.drawable.bottle
+            Resources.Icon.glassesImage,
+            Resources.Icon.bookImage,
+            Resources.Icon.dressImage,
+            Resources.Icon.phoneImage,
+            Resources.Icon.keysImage,
+            Resources.Icon.walletImage,
+            Resources.Icon.coffeeImage,
+            Resources.Icon.backpackIcon,
+            Resources.Icon.appIcon,
+            Resources.Icon.shoesImages,
+            Resources.Icon.recordsIcon,
+            Resources.Icon.bottleImage
         ).mapIndexed { index, res -> index to res }
 
         //Doing random schake of items
@@ -304,7 +294,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                     ) {
                         Text(
                             text = formatTime(timeLeft),
-                            fontSize = 20.sp,
+                            fontSize = EXTRA_MEDIUM,
                             color = primaryColor,
                             fontWeight = FontWeight.Companion.Bold
                         )

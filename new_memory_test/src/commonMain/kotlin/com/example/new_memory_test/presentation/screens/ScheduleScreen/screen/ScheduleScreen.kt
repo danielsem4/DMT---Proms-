@@ -46,48 +46,11 @@ import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsS
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.DraggableCirclesPalet
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.TimeSlotBox
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.data.DraggableCircle
-import com.example.new_memory_test.primaryColor
+
 import com.mohamedrejeb.compose.dnd.DragAndDropContainer
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
-import dmt_proms.new_memory_test.generated.resources.Res
-import dmt_proms.new_memory_test.generated.resources.book_circle
-import dmt_proms.new_memory_test.generated.resources.book_circle_text
-import dmt_proms.new_memory_test.generated.resources.book_icon
-import dmt_proms.new_memory_test.generated.resources.build_schedule
-import dmt_proms.new_memory_test.generated.resources.build_schedule_continuation
-import dmt_proms.new_memory_test.generated.resources.coffee_circle
-import dmt_proms.new_memory_test.generated.resources.coffee_circle_text
-import dmt_proms.new_memory_test.generated.resources.coffeee_icon
-import dmt_proms.new_memory_test.generated.resources.continue_button
-import dmt_proms.new_memory_test.generated.resources.day_monday
-import dmt_proms.new_memory_test.generated.resources.day_sunday
-import dmt_proms.new_memory_test.generated.resources.day_thursday
-import dmt_proms.new_memory_test.generated.resources.day_tuesday
-import dmt_proms.new_memory_test.generated.resources.day_wednesday
-import dmt_proms.new_memory_test.generated.resources.dumbbell_circle
-import dmt_proms.new_memory_test.generated.resources.dumbbell_circle_text
-import dmt_proms.new_memory_test.generated.resources.dumbbell_icon
-import dmt_proms.new_memory_test.generated.resources.hour_09_00
-import dmt_proms.new_memory_test.generated.resources.hour_10_00
-import dmt_proms.new_memory_test.generated.resources.hour_11_00
-import dmt_proms.new_memory_test.generated.resources.hour_12_00
-import dmt_proms.new_memory_test.generated.resources.hour_13_00
-import dmt_proms.new_memory_test.generated.resources.hour_14_00
-import dmt_proms.new_memory_test.generated.resources.hour_15_00
-import dmt_proms.new_memory_test.generated.resources.hour_16_00
-import dmt_proms.new_memory_test.generated.resources.instruction_text_agenda_continuation
-import dmt_proms.new_memory_test.generated.resources.lecturer_circle
-import dmt_proms.new_memory_test.generated.resources.lecturer_circle_text
-import dmt_proms.new_memory_test.generated.resources.move_circle
-import dmt_proms.new_memory_test.generated.resources.move_circle_text
-import dmt_proms.new_memory_test.generated.resources.move_icon
-import dmt_proms.new_memory_test.generated.resources.next
-import dmt_proms.new_memory_test.generated.resources.place_activities
-import dmt_proms.new_memory_test.generated.resources.stethoscope_circle
-import dmt_proms.new_memory_test.generated.resources.stethoscope_circle_text
-import dmt_proms.new_memory_test.generated.resources.stethoscope_icon
-import dmt_proms.new_memory_test.generated.resources.teach_icon
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -124,29 +87,29 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
         val circlesPalletFirst = listOf(
             DraggableCircle(
                 stringResource(Resources.String.book_circle),
-                painterResource(Res.drawable.book_icon)
+                painterResource(Resources.Icon.bookIcon)
             ),
             DraggableCircle(
                 stringResource(Resources.String.dumbbell_circle),
-                painterResource(Res.drawable.dumbbell_icon)),
+                painterResource(Resources.Icon.dumblertIcon)),
 
             DraggableCircle(
                 stringResource(Resources.String.move_circle),
-                painterResource(Res.drawable.move_icon))
+                painterResource(Resources.Icon.moveIcon))
 
         )
         val circlesPalletSecond = listOf(
             DraggableCircle(
                 stringResource(Resources.String.lecturer_circle),
-                painterResource(Res.drawable.teach_icon)
+                painterResource(Resources.Icon.teachIcon)
             ),
             DraggableCircle(
                 stringResource(Resources.String.coffee_circle),
-                painterResource(Res.drawable.coffeee_icon)
+                painterResource(Resources.Icon.coffeIcon)
             ),
             DraggableCircle(
                 stringResource(Resources.String.stethoscope_circle),
-                painterResource(Res.drawable.stethoscope_icon)
+                painterResource(Resources.Icon.stethoscopeImage)
             )
         )
         val idToTextMap = mapOf(

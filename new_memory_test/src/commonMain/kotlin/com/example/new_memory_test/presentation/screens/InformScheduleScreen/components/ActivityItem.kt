@@ -17,6 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
+import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
 
 
 @Composable
@@ -24,23 +28,23 @@ fun ActivityItem(text: String, icon: Painter) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = spacingMd, vertical = spacingSm),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
         Text(
             text = text,
             textAlign = TextAlign.Right,
-            fontSize = 16.sp,
+            fontSize = EXTRA_REGULAR ,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(spacingSm)
         )
         Spacer(modifier = Modifier.size(10.dp))
         Icon(
             painter = icon,
             contentDescription = null,
             tint = Color.Unspecified,
-            modifier = Modifier.size(45.dp)
+            modifier = Modifier.size(iconSizeLg) //need check
         )
     }
 }

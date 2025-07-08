@@ -55,6 +55,7 @@ import org.example.hit.heal.cdt.data.ClockTime
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -91,14 +92,14 @@ class DrawClockScreen : Screen {
             content = {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxSize() // Use fillMaxSize for the Column to take all available space
                         .padding(8.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(.08f),
+                            .fillMaxHeight(.08f), // This box takes 8% of the remaining height
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -111,10 +112,11 @@ class DrawClockScreen : Screen {
                         )
                     }
 
+                    // Canvas Box takes the majority of the remaining space
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(.75f)
+                            .weight(1f) // Assign weight to this Box to make it fill available space
                             .border(2.dp, primaryColor, RoundedCornerShape(8.dp))
                             .background(Color.White)
                             .onSizeChanged {
@@ -205,8 +207,7 @@ class DrawClockScreen : Screen {
 
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
+                            .fillMaxWidth(), // Removed .height(50.dp) and fillMaxHeight
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         RoundedButton(
@@ -227,7 +228,7 @@ class DrawClockScreen : Screen {
                                 isEraseMode = !isEraseMode
                             },
                             fontSize = 24.sp,
-                            icon = if (isEraseMode) Resources.Icon.draw else Resources.Icon.delete
+                            icon = if (isEraseMode) Resources.Icon.pencilIcon else Resources.Icon.binIcon
                         )
 
                         Spacer(Modifier.width(8.dp))

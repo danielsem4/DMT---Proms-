@@ -32,22 +32,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.example.new_memory_test.backgroundColor
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.components.CircleWithPipeImage
 import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
 import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import com.example.new_memory_test.presentation.screens.InformScheduleScreen.effects.RipplePulseEffect
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
-import com.example.new_memory_test.primaryColor
-import dmt_proms.new_memory_test.generated.resources.Res
-import dmt_proms.new_memory_test.generated.resources.call_accept
-import dmt_proms.new_memory_test.generated.resources.call_remove
-
-import org.jetbrains.compose.resources.Resource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.primaryColor
 
 
 class CallScreen(val pageNumber: Int )  : Screen {
@@ -124,7 +119,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
                         )
 
                         CircleWithPipeImage(
-                            imagePainter = painterResource(resource = Res.drawable.call_accept),
+                            imagePainter = painterResource(resource = Resources.Icon.callAccept),
                             color = primaryColor,
                             onClick = {
 
@@ -144,7 +139,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
                         )
 
                         CircleWithPipeImage(
-                            imagePainter = painterResource(Res.drawable.call_remove),
+                            imagePainter = painterResource(resource = Resources.Icon.callDecline),
                             color = Color.Companion.Red,
                             onClick = {
                                 viewModel.setDisagree()

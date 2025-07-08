@@ -1,28 +1,45 @@
 package org.example.hit.heal.home
 
 import LoginScreen
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -30,182 +47,234 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.ModulesResponse
 import kotlinx.coroutines.launch
 import org.example.hit.heal.cdt.presentation.CDTLandingScreen
-import org.example.hit.heal.core.presentation.Black
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.REGULAR
+import org.example.hit.heal.core.presentation.Green
+import org.example.hit.heal.core.presentation.Red
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Resources.String.logout
+import org.example.hit.heal.core.presentation.Sizes.elevationMd
+import org.example.hit.heal.core.presentation.Sizes.elevationSm
+import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.radiusLg
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
+import org.example.hit.heal.core.presentation.TextWhite
 import org.example.hit.heal.core.presentation.White
-
+import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.presentaion.screens.BaseScreen
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-class HomeScreen() : Screen {
-    @OptIn(ExperimentalLayoutApi::class)
+/**
+ *
+ */
+
+class HomeScreen : Screen {
     @Composable
     override fun Content() {
-
-        val homeViewModel: HomeViewModel = koinViewModel()
+        val viewModel: HomeViewModel = koinViewModel()
+        val features by viewModel.features.collectAsState(initial = emptyList())
         val navigator = LocalNavigator.currentOrThrow
+        var showDialog by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
-        val features by homeViewModel.features.collectAsState()
 
         LaunchedEffect(Unit) {
-            homeViewModel.loadFeatures()
+            viewModel.loadFeatures()
         }
 
         BaseScreen(
             title = stringResource(Resources.String.home),
             navigationIcon = {
-                IconButton(onClick = {
-                    scope.launch {
-                        homeViewModel.logout()
-                        navigator.replace(LoginScreen())
-                    }
-                }) {
+                IconButton(onClick = { showDialog = true }) {
                     Icon(
-                        imageVector = Resources.Icon.logout,
+                        painter = painterResource(Resources.Icon.logoutIcon),
                         contentDescription = stringResource(Resources.String.logout),
-                        tint = White
+                        tint = White,
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
         ) {
+            BoxWithConstraints(Modifier.fillMaxSize()) {
+                val minMsgHeight = maxHeight / 2
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                // Using the updated MessagesSection with a distinct header style
-                MessagesSection {
-                    // Content below the header inside the MessagesSection
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        stringResource(Resources.String.dont_forget),
-                        fontSize = 18.sp,
-                        color = Black
-                    )
-                    Text(
-                        stringResource(Resources.String.take_pills),
-                        fontSize = 18.sp,
-                        color = Black
-                    )
-                }
-
-                // Push the feature buttons to the bottom of the screen
-                Spacer(modifier = Modifier.weight(.2f))
-
-                // Feature buttons layout - using BoxWithConstraints for responsive design
-                BoxWithConstraints(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    val isTablet = maxWidth > 600.dp
-
-                    FlowRow(
-                        maxItemsInEachRow = if (isTablet) 8 else 3,
-                        modifier = Modifier.fillMaxWidth()
+                Column(Modifier.fillMaxSize()) {
+                    MessagesSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = minMsgHeight)
+                            .padding(paddingMd)
                     ) {
-                        featureButtons(features, navigator, isTablet)
+                        Text(
+                            stringResource(Resources.String.dont_forget),
+                            fontSize = MEDIUM,
+                            color = MaterialTheme.colors.onSurface
+                        )
+                        Spacer(Modifier.height(spacingSm))
+                        Text(
+                            stringResource(Resources.String.take_pills),
+                            fontSize = MEDIUM,
+                            color = MaterialTheme.colors.onSurface
+                        )
+                    }
+
+                    LazyVerticalGrid(
+                        columns = GridCells.Adaptive(minSize = 100.dp),
+                        contentPadding = PaddingValues(paddingMd),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) {
+                        items(features.filter { it.active }) { feature ->
+                            FeatureTile(
+                                feature = feature,
+                                fontSize = REGULAR,
+                                onClick = {
+                                    navigateTo(feature.module_id, navigator)
+                                }
+                            )
+                        }
                     }
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
             }
+        }
+
+        if (showDialog) {
+            BaseYesNoDialog(
+                onDismissRequest = { showDialog = false },
+                title = stringResource(logout),
+                icon = Resources.Icon.logoutIcon,
+                message = "Are you sure you want to logout?",
+                confirmButtonText = "Yes",
+                confirmButtonColor = Green,
+                onConfirm = {
+
+                    showDialog = false
+                    scope.launch {
+                        viewModel.logout()
+                        navigator.replace(LoginScreen())
+                    }
+                },
+                dismissButtonText = "No",
+                dismissButtonColor = Red,
+                onDismissButtonClick = { showDialog = false }
+            )
         }
     }
 
     @Composable
-    private fun featureButtons(
-        features: List<ModulesResponse>,
-        navigator: Navigator,
-        isTablet: Boolean
+    private fun MessagesSection(
+        modifier: Modifier = Modifier,
+        content: @Composable ColumnScope.() -> Unit
     ) {
-        val fontSize = if (isTablet) 20.sp else 12.sp
-
-        val activeFeatures = features.filter({ feature -> feature.active })
-        activeFeatures.forEach { feature ->
-            createFeatureButton(
-                featureId = feature.module_id,
-                navigator = navigator,
-                fontSize = fontSize
-            )
+        Card(
+            shape = RoundedCornerShape(radiusMd),
+            elevation = elevationMd,
+            backgroundColor = MaterialTheme.colors.surface,
+            modifier = modifier
+        ) {
+            Column {
+                // Header chip
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(radiusMd))
+                        .background(primaryColor)
+                ) {
+                    Text(
+                        text = stringResource(Resources.String.messages),
+                        style = MaterialTheme.typography.subtitle1,
+                        fontSize = EXTRA_MEDIUM,
+                        color = TextWhite,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(paddingSm),
+                        textAlign = TextAlign.Center,
+                    )
+                }
+                Spacer(Modifier.height(spacingMd))
+                content()
+            }
         }
     }
 
     @Composable
-    fun createFeatureButton(featureId: Int, navigator: Navigator, fontSize: TextUnit) {
-        when (featureId) {
-            // document share
-            3 -> FeatureButton(
-                icon = Resources.Icon.document_share,
-                label = stringResource(Resources.String.document_share),
-                fontSize = fontSize,
-                onClick = { /* handle document share click */ }
-            )
-
-            // measurements
-            4 -> FeatureButton(
-                icon = Resources.Icon.measurements,
-                label = stringResource(Resources.String.measurements),
-                fontSize = fontSize,
-                onClick = { /* handle measurements click */ }
-            )
-
-            // chat
-            5 -> FeatureButton(
-                icon = Resources.Icon.chat,
-                label = stringResource(Resources.String.chat),
-                fontSize = fontSize,
-                onClick = { /* handle chat click */ }
-            )
-
-            // medications
-            7 -> FeatureButton(
-                icon = Resources.Icon.meds,
-                label = stringResource(Resources.String.medications),
-                fontSize = fontSize,
-                onClick = { /* handle medications click */ }
-            )
-
-            // Activities
-            8 -> FeatureButton(
-                icon = Resources.Icon.activities,
-                label = stringResource(Resources.String.activities),
-                fontSize = fontSize,
-                onClick = { /* handle activities click */ }
-            )
-
-            // Memory
-            13 -> FeatureButton(
-                icon = Resources.Icon.memory,
-                label = stringResource(Resources.String.memory),
-                fontSize = fontSize,
-                onClick = { /* handle memory click */ }
-            )
-
-            // HitBer
-            15 -> FeatureButton(
-                icon = Resources.Icon.hitber,
-                label = stringResource(Resources.String.hitber),
-                fontSize = fontSize,
-                onClick = { /* handle hitber click */ }
-            )
-
-            // Clock
-            16 -> FeatureButton(
-                icon = Resources.Icon.clock,
-                label = stringResource(Resources.String.clockTest),
-                fontSize = fontSize,
-                onClick = { navigator.push(CDTLandingScreen()) }
-            )
-
-            // Unknown module
-            else -> {
-                Text("Unknown module id: $featureId")
+    private fun FeatureTile(
+        feature: ModulesResponse,
+        fontSize: TextUnit,
+        onClick: () -> Unit
+    ) {
+        Card(
+            shape = RoundedCornerShape(radiusLg),
+            elevation = elevationSm,
+            modifier = Modifier
+                .aspectRatio(1f)
+                .padding(paddingSm)
+                .clickable { onClick() }
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingMd),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    painter = painterResource(iconFor(feature.module_id)),
+                    contentDescription = null,
+                    modifier = Modifier.size(iconSizeLg),
+                    tint = primaryColor
+                )
+                Spacer(Modifier.height(spacingSm))
+                Text(
+                    text = labelFor(feature.module_id),
+                    fontSize = fontSize,
+                    color = MaterialTheme.colors.onSurface
+                )
             }
         }
+    }
+
+    private fun navigateTo(moduleId: Int, navigator: Navigator) {
+        when (moduleId) {
+            17 -> navigator.push(CDTLandingScreen())
+
+            else -> {  }
+        }
+    }
+
+
+    @Composable
+    private fun iconFor(id: Int) = when (id) {
+        3 -> Resources.Icon.fileUploadIcon
+        4 -> Resources.Icon.evaluationLogo
+        5 -> Resources.Icon.chatIcon
+        7 -> Resources.Icon.medIcon
+        8 -> Resources.Icon.exerciseIcon
+        20 -> Resources.Icon.memoryModuleIcon
+        19 -> Resources.Icon.hitbearModuleIcon
+        17 -> Resources.Icon.clockIcon
+//        21 -> Resources.Icon.orientation
+        else -> Resources.Icon.binIcon
+    }
+
+    @Composable
+    private fun labelFor(id: Int) = when (id) {
+        3 -> stringResource(Resources.String.document_share)
+        4 -> stringResource(Resources.String.measurements)
+        5 -> stringResource(Resources.String.chat)
+        7 -> stringResource(Resources.String.medications)
+        8 -> stringResource(Resources.String.activities)
+        20 -> stringResource(Resources.String.memory)
+        19 -> stringResource(Resources.String.hitber)
+        17 -> stringResource(Resources.String.clockTest)
+//        21 -> stringResource(Resources.String.orientation)
+        else -> "Unknown"
     }
 }

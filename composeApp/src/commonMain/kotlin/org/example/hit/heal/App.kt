@@ -1,9 +1,9 @@
 package org.example.hit.heal
 
-import LoginScreen
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.SlideTransition
 import org.example.hit.heal.splash.SplashScreen
 import MedicationAlarmViewModel
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,12 +40,21 @@ fun App() {
         //    SlideTransition(navigator)
         //}
 
+  //  MaterialTheme {
+  //      Navigator(SplashScreen())
+  //  }
+
+    //MaterialTheme {
+    //    Navigator(SplashScreen()) { navigator ->
+    //        SlideTransition(navigator) // This defines the animation for ALL transitions
+    //    }
+    //}
+
     MaterialTheme {
         Navigator(screen = MemoryScreen()) { navigator ->
             SlideTransition(navigator)
-                 }
-         }
-
+        }
+    }
     //MaterialTheme {
     //    Navigator(SplashScreen())
     //}
