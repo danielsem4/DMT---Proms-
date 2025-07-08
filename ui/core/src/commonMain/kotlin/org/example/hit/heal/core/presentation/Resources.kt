@@ -28,6 +28,7 @@ import dmt_proms.ui.core.generated.resources.balloon
 import dmt_proms.ui.core.generated.resources.bin
 import dmt_proms.ui.core.generated.resources.apps_page_second_assist
 import dmt_proms.ui.core.generated.resources.arrow_key
+import dmt_proms.ui.core.generated.resources.asterisk_image
 import dmt_proms.ui.core.generated.resources.ball
 import dmt_proms.ui.core.generated.resources.balloon_image
 import dmt_proms.ui.core.generated.resources.black_circle
@@ -454,7 +455,7 @@ object Resources {
         val starOutlineIcon = Res.drawable.star_outlined
         val trapezeIcon = Res.drawable.trapeze
         val xIcon = Res.drawable.x
-        val asterisk = Res.drawable.asterisk
+        val asterisk = Res.drawable.asterisk_image
         val arrowKey = Res.drawable.arrow_key
         val ball = Res.drawable.ball
         val balloon = Res.drawable.balloon_image

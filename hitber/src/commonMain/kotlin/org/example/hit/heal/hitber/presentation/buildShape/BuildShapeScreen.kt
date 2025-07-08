@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.BackPressHandler
 import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberInstructions
@@ -28,6 +29,7 @@ import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
 import core.utils.CapturableWrapper
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import core.utils.PlatformCapturable
+import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -58,6 +60,27 @@ class BuildShapeScreen : Screen {
         }
         val triangleHeight by remember(screenSize) {
             derivedStateOf { 0.5f * screenSize.second }
+        }
+
+        var showBackDialog by remember { mutableStateOf(false) }
+
+        BackPressHandler {
+            showBackDialog = true
+        }
+
+        if (showBackDialog) {
+            BaseYesNoDialog(
+                onDismissRequest = { showBackDialog = false },
+                title = "אישור חזרה",
+                message = "מעבר אחורה יחזור למסך הבית",
+                confirmButtonText = "כן",
+                onConfirm = {
+                    showBackDialog = false
+                    navigator?.pop()
+                },
+                dismissButtonText = "לא",
+                onDismissButtonClick = { showBackDialog = false }
+            )
         }
 
 
