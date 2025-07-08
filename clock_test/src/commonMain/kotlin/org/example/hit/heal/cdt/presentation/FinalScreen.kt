@@ -31,8 +31,10 @@ import dmt_proms.clock_test.generated.resources.final_screen_title
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -50,7 +52,8 @@ class FinalScreen : Screen {
         // Get the string resources in the composable context
         val successMessage = stringResource(Resources.String.sentSuccessfully)
 
-        TabletBaseScreen(
+        BaseScreen(
+            config = ScreenConfig.TabletConfig,
             title = stringResource(Res.string.final_screen_title),
             content = {
                 Column(
