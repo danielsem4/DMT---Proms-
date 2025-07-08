@@ -24,7 +24,7 @@ fun RipplePulseEffect(
 ) {
     val infiniteTransition = rememberInfiniteTransition()
 
-    // Для каждой волны создаём свою анимацию с разной задержкой
+
     val animations = List(pulseCount) { index ->
         val delayMillis = index * 600 // сдвиг между волнами
         infiniteTransition.animateFloat(

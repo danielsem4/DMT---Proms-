@@ -9,7 +9,11 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.data.DataItem
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.PluralStringResource
+import org.jetbrains.compose.resources.StringResource
 import kotlin.math.absoluteValue
 
 class ViewModelMemoryTest(   ) : ViewModel() {
@@ -158,6 +162,21 @@ class ViewModelMemoryTest(   ) : ViewModel() {
     fun setPage(page: Int) {
         txtMemoryPage = page
     }
+
+  // private val _audioResourceId = MutableStateFlow<StringResource?>(null)
+  // val audioResourceId = _audioResourceId.asStateFlow()
+
+  // val isPlaying = playAudioUseCase.isPlaying
+
+  // fun setAudio(stringResource: StringResource) {
+  //     _audioResourceId.value =  StringResource(stringResource) // или другой способ хранения строки
+  // }
+
+  // fun onPlayAudio() {
+  //     val text = _audioResourceId.value?.let { it.toString() } ?: return
+  //     playAudioUseCase.playAudio(text)
+  // }
+
 
     fun saveScreenshot(bytes: ByteArray) {
 

@@ -87,6 +87,7 @@ import dmt_proms.new_memory_test.generated.resources.stethoscope_circle
 import dmt_proms.new_memory_test.generated.resources.stethoscope_circle_text
 import dmt_proms.new_memory_test.generated.resources.stethoscope_icon
 import dmt_proms.new_memory_test.generated.resources.teach_icon
+import org.example.hit.heal.core.presentation.Resources
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -96,24 +97,24 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
 
         val viewModel: ViewModelMemoryTest = viewModel()
         val days = listOf(
-            stringResource(Res.string.day_sunday),
-            stringResource(Res.string.day_monday),
-            stringResource(Res.string.day_tuesday),
-            stringResource(Res.string.day_wednesday),
-            stringResource(Res.string.day_thursday)
+            stringResource(Resources.String.day_sunday),
+            stringResource(Resources.String.day_monday),
+            stringResource(Resources.String.day_tuesday),
+            stringResource(Resources.String.day_wednesday),
+            stringResource(Resources.String.day_thursday)
         )
 
         val hours = listOf(
-            stringResource(Res.string.hour_09_00),
-            stringResource(Res.string.hour_10_00),
-            stringResource(Res.string.hour_11_00),
-            stringResource(Res.string.hour_12_00),
-            stringResource(Res.string.hour_13_00),
-            stringResource(Res.string.hour_14_00),
-            stringResource(Res.string.hour_15_00),
-            stringResource(Res.string.hour_16_00)
+            stringResource(Resources.String.hour_09_00),
+            stringResource(Resources.String.hour_10_00),
+            stringResource(Resources.String.hour_11_00),
+            stringResource(Resources.String.hour_12_00),
+            stringResource(Resources.String.hour_13_00),
+            stringResource(Resources.String.hour_14_00),
+            stringResource(Resources.String.hour_15_00),
+            stringResource(Resources.String.hour_16_00)
         )
-        val circles = stringResource(Res.string.book_circle )
+        val circles = stringResource(Resources.String.book_circle )
 
 
         val droppedState = remember {
@@ -122,39 +123,39 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
 
         val circlesPalletFirst = listOf(
             DraggableCircle(
-                stringResource(Res.string.book_circle),
+                stringResource(Resources.String.book_circle),
                 painterResource(Res.drawable.book_icon)
             ),
             DraggableCircle(
-                stringResource(Res.string.dumbbell_circle),
+                stringResource(Resources.String.dumbbell_circle),
                 painterResource(Res.drawable.dumbbell_icon)),
 
             DraggableCircle(
-                stringResource( Res.string.move_circle),
+                stringResource(Resources.String.move_circle),
                 painterResource(Res.drawable.move_icon))
 
         )
         val circlesPalletSecond = listOf(
             DraggableCircle(
-                stringResource(Res.string.lecturer_circle),
+                stringResource(Resources.String.lecturer_circle),
                 painterResource(Res.drawable.teach_icon)
             ),
             DraggableCircle(
-                stringResource(Res.string.coffee_circle),
+                stringResource(Resources.String.coffee_circle),
                 painterResource(Res.drawable.coffeee_icon)
             ),
             DraggableCircle(
-                stringResource(Res.string.stethoscope_circle),
+                stringResource(Resources.String.stethoscope_circle),
                 painterResource(Res.drawable.stethoscope_icon)
             )
         )
         val idToTextMap = mapOf(
-            stringResource(Res.string.book_circle) to stringResource(Res.string.book_circle_text) ,
-            stringResource(Res.string.dumbbell_circle) to stringResource(Res.string.dumbbell_circle_text),
-            stringResource( Res.string.move_circle) to stringResource(Res.string.move_circle_text),
-            stringResource(Res.string.lecturer_circle) to stringResource(Res.string.lecturer_circle_text),
-            stringResource(Res.string.coffee_circle)  to stringResource(Res.string.coffee_circle_text),
-            stringResource(Res.string.stethoscope_circle) to stringResource(Res.string.stethoscope_circle_text)
+            stringResource(Resources.String.book_circle) to stringResource(Resources.String.book_circle_text) ,
+            stringResource(Resources.String.dumbbell_circle) to stringResource(Resources.String.dumbbell_circle_text),
+            stringResource(Resources.String.move_circle) to stringResource(Resources.String.move_circle_text),
+            stringResource(Resources.String.lecturer_circle) to stringResource(Resources.String.lecturer_circle_text),
+            stringResource(Resources.String.coffee_circle)  to stringResource(Resources.String.coffee_circle_text),
+            stringResource(Resources.String.stethoscope_circle) to stringResource(Resources.String.stethoscope_circle_text)
         )
         val dragAndDropState = rememberDragAndDropState<DraggableCircle>()
         val navigator = LocalNavigator.currentOrThrow
@@ -376,7 +377,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                         .height(50.dp)
                                 ) {
                                     Text(
-                                        text ="המשך",
+                                        text = stringResource(Resources.String.next),
                                         fontSize = 24.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = Color.White
@@ -394,10 +395,10 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                             modifier = Modifier.size(40.dp)
                                         )
                                     },
-                                    title ="build_schedule",
-                                    description = "build_schedule",
+                                    title =stringResource(Resources.String.build_schedule) ,
+                                    description = stringResource(Resources.String.build_schedule),
                                     buttons = listOf(
-                                        stringResource(Res.string.next) to {
+                                        stringResource(Resources.String.next) to {
                                             showAcceptDialog = false
                                         }
                                     )

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <resources>
     <!--    app common strings-->
 
@@ -49,11 +48,84 @@
 
 
     <!--    Memory Module  -->
+    <string name="build_schedule">Building the daily schedule</string>
+    <string name="build_schedule_continuation">Building the continuation of the daily schedule</string>
+    <string name="instruction_text_agenda_continuation">You need to enter the meetings into the schedule according to the instructions. Tapping on a meeting will show the time.</string>
+    <string name="place_activities">All activities must be placed in the calendar before continuing</string>
 
+    <string name="day_sunday">Sunday</string>
+    <string name="day_monday">Monday</string>
+    <string name="day_tuesday">Tuesday</string>
+    <string name="day_wednesday">Wednesday</string>
+    <string name="day_thursday">Thursday</string>
 
+    <string name="hour_09_00">09:00</string>
+    <string name="hour_10_00">10:00</string>
+    <string name="hour_11_00">11:00</string>
+    <string name="hour_12_00">12:00</string>
+    <string name="hour_13_00">13:00</string>
+    <string name="hour_14_00">14:00</string>
+    <string name="hour_15_00">15:00</string>
+    <string name="hour_16_00">16:00</string>
 
+    <string name="book_circle">Book</string>
+    <string name="dumbbell_circle">Dumbbell</string>
+    <string name="move_circle">Move</string>
+    <string name="lecturer_circle">Lecture</string>
+    <string name="coffee_circle">Coffee</string>
+    <string name="stethoscope_circle">Doctor</string>
 
+    <string name="book_circle_text">Take the grandchildren to a story hour at the library on Wednesday at 16:00</string>
+    <string name="dumbbell_circle_text">Exercise class at the community center on Sundays at 11:00 for one hour</string>
+    <string name="move_circle_text">Go for a morning walk twice a week for at least one hour</string>
+    <string name="lecturer_circle_text">Attend a lecture on Thursday at 15:00 for one hour</string>
+    <string name="coffee_circle_text">Social meeting at the cafe on Tuesdays at 11:00 for two hours</string>
+    <string name="stethoscope_circle_text">Eye doctor appointment before Tuesday between 09:00–12:00 for one hour</string>
 
+    <!--Call Screen Memory Module -->
+    <string name="incoming_call_title">Incoming Call</string>
+    <string name="incoming_call_text">Incoming Call</string>
+    <string name="call_from">Beit Rivka</string>
+    <string name="phone_number">052-538-1648</string>
+    <string name="thank_you_title">Thank you</string>
+    <string name="thank_you_description">The task is completed, thank you very much for your cooperation</string>
+
+    <!--MemoryScreen Memory Module-->
+    <string name="memory_title">Memory Test</string>
+    <string name="task_duration">The task takes about 20 minutes</string>
+    <string name="instructions">Instructions</string>
+    <string name="task_continuity">You must complete the task without interruptions</string>
+    <string name="read_instructions">Read the instructions to the end</string>
+    <string name="complete_all_tasks">All tasks must be completed</string>
+    <string name="listen_instruction_tip">To hear the instructions, press Listen</string>
+    <string name="quiet_room_tip">It is recommended to perform the task in a quiet room</string>
+    <string name="good_luck">Good luck!</string>
+    <string name="press_start_to_begin">To start the task, press Start</string>
+
+    <!--Room Screen Memory Module -->
+    <string name="room_title">Room Screen</string>
+    <string name="bedroom">Bedroom</string>
+    <string name="living_room">Living Room</string>
+    <string name="kitchen">Kitchen</string>
+    <string name="drag_and_place_instruction">Drag and place the seven objects in the three rooms as you would place them in your home. You must remember the location of the objects. When finished, press Continue.</string>
+
+    <!--Dialogs Memory Module-->
+    <string name="remember_all">I will remember everything</string>
+    <string name="talk_to_family">Talk to the family</string>
+    <string name="use_diary">Use the diary</string>
+    <string name="what_will_you_do">What will you do?</string>
+    <string name="memory_instruction">Here is a schedule of activities. What should you do to remember all the listed activities?</string>
+    <string name="rate_your_feelings">Rate your feelings</string>
+    <string name="rate_expected_success">How well do you think you will do in the upcoming task?</string>
+    <string name="rate">Rate</string>
+
+    <!--All Memory Module -->
+    <string name="delete">Delete</string>
+    <string name="continue_button">Continue</string>
+    <string name="start_button">Start</string>
+    <!-- recordings -->
+    <string name="galaxy_phone_ring_2019"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fandroid_rington1.mp3?alt=media&token=a706f7ff-f315-40a6-aa91-6c09c3bdb3e3]]></string>
+    <string name="old_phone_ring"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Ftelephone_rington.mp3?alt=media&token=f5e87a64-6915-4c05-b9a4-3df7467153af]]></string>
 
     <!--    Pass Module  -->
 

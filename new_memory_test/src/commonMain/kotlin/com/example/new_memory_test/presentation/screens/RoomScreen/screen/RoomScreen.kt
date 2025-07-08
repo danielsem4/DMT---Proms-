@@ -69,6 +69,7 @@ import dmt_proms.new_memory_test.generated.resources.records
 import dmt_proms.new_memory_test.generated.resources.shoes
 import dmt_proms.new_memory_test.generated.resources.wallet
 import kotlinx.coroutines.delay
+import org.example.hit.heal.core.presentation.Resources
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -164,7 +165,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                         .padding(16.dp)
                 ) {
                     Text(
-                        text = "גרור ומקם את שבעת החצפים בכל שלשת החדרים, כפי שהיית ממקם בביתך. עליך לזכור את מיקום החפצים. בסיום לחץ על המשך",
+                        text = stringResource(Resources.String.drag_and_place_instruction),
                         fontSize = 18.sp,
                         textAlign = TextAlign.Companion.Right,
                         fontWeight = FontWeight.Companion.Bold,
@@ -187,7 +188,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                 modifier = Modifier.Companion.height(36.dp)
                             ) {
                                 Text(
-                                    text = room.displayName,
+                                    text =  stringResource(room.displayName),
                                     color = Color.Companion.White,
                                     fontSize = 16.sp
                                 )
@@ -318,7 +319,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                 .height(50.dp)
                         ) {
                             Text(
-                                text = "המשך",
+                                text = stringResource(Resources.String.next),
                                 fontSize = 32.sp,
                                 fontWeight = FontWeight.Companion.Bold,
                                 color = Color.Companion.White

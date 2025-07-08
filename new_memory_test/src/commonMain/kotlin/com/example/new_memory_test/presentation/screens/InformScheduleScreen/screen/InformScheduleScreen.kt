@@ -47,7 +47,9 @@ import dmt_proms.new_memory_test.generated.resources.dumbbell_agenda
 import dmt_proms.new_memory_test.generated.resources.move_agenda
 import dmt_proms.new_memory_test.generated.resources.stethoscope_agenda
 import dmt_proms.new_memory_test.generated.resources.teach_agenda
+import org.example.hit.heal.core.presentation.Resources
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 class InformScheduleScreen(val pageNumber: Int) : Screen {
     @Composable
@@ -57,7 +59,7 @@ class InformScheduleScreen(val pageNumber: Int) : Screen {
         val viewModel: ViewModelMemoryTest = viewModel()
 
         showAcceptDialog = true
-        BaseTabletScreen(title = "בניית סדר יום", page = pageNumber, totalPages = 6) {
+        BaseTabletScreen(title = stringResource(Resources.String.build_schedule), page = pageNumber, totalPages = 6) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -65,7 +67,7 @@ class InformScheduleScreen(val pageNumber: Int) : Screen {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "לפניך מספר פעילויות שעליך לעשות לשבץ במערכת שעות. להתחלת המשימה לחץ על המשך",
+                    text =  stringResource(Resources.String.memory_instruction),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = primaryColor,
@@ -84,27 +86,27 @@ class InformScheduleScreen(val pageNumber: Int) : Screen {
                 ) {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         ActivityItem(
-                            "חוג התעמלות במתנ\"ס ביום ראשון בשעה 11:00 במשך שעה ",
+                            stringResource(Resources.String.dumbbell_circle_text),
                             icon = painterResource(Res.drawable.dumbbell_agenda)
                         )
                         ActivityItem(
-                            " אני הולך לעיניים ביום שישי בין השעות 09:00 - 12:00 במשך שעה",
+                            stringResource(Resources.String.stethoscope_circle_text),
                             icon = painterResource(Res.drawable.stethoscope_agenda)
                         )
                         ActivityItem(
-                            "לקחת את סבתא לבית ספר לסיפור חיים ביום שני בשעה 16:00",
+                            stringResource(Resources.String.book_circle_text),
                             icon = painterResource(Res.drawable.book_agenda)
                         )
                         ActivityItem(
-                            "שיחה עם מדריך בבית ספר לסיפור חיים ביום חמישי בשעה 15:00 במשך שעה",
+                            stringResource(Resources.String.coffee_circle_text),
                             icon = painterResource(Res.drawable.coffee_agenda)
                         )
                         ActivityItem(
-                            "עזרה למורה לכתיבה ביום ראשון בשעה 15:00 במשך שעה",
+                            stringResource(Resources.String.lecturer_circle_text),
                             icon = painterResource(Res.drawable.teach_agenda)
                         )
                         ActivityItem(
-                            "אני מתפלל בבית כנסת ביום שישי בבוקר במשך שעה עשר דקות",
+                            stringResource(Resources.String.move_circle_text),
                             icon = painterResource(Res.drawable.move_agenda)
                         )
                     }
@@ -125,7 +127,7 @@ class InformScheduleScreen(val pageNumber: Int) : Screen {
                         .height(50.dp)
                         .height(56.dp)
                 ) {
-                    Text("התחל", color = Color.White, fontSize = 18.sp)
+                    Text(stringResource(Resources.String.start_button), color = Color.White, fontSize = 18.sp)
                 }
             }
 
@@ -140,14 +142,14 @@ class InformScheduleScreen(val pageNumber: Int) : Screen {
                             modifier = Modifier.size(40.dp)
                         )
                     },
-                    title = "מה תעשה ?",
-                    description = "לפניך מערכת שעות של פעילויות. מה עליך לעשות כדי לזכור את כל הפעילויות המפורטות?",
+                    title =stringResource(Resources.String.whatWillYouDo),
+                    description = stringResource(Resources.String.memory_instruction),
                     buttons = listOf(
-                        "אזכור הכל" to { viewModel.selectedReminderOption.value = "אזכור הכל"
+                        stringResource(Resources.String.remember_all) to { viewModel.selectedReminderOption.value = "אזכור הכל"
                             showAcceptDialog = false },
-                        "אדבר עם המשפחה" to { viewModel.selectedReminderOption.value = "אדבר עם המשפחה"
+                        stringResource(Resources.String.talk_to_family) to { viewModel.selectedReminderOption.value = "אדבר עם המשפחה"
                             showAcceptDialog = false },
-                        "אשתמש ביומן" to { viewModel.selectedReminderOption.value = "אשתמש ביומן"
+                        stringResource(Resources.String.use_diary) to { viewModel.selectedReminderOption.value = "אשתמש ביומן"
                             showAcceptDialog = false }
                     )
                 )

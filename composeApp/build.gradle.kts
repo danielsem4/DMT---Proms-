@@ -101,7 +101,7 @@ kotlin {
             implementation(libs.jetbrains.kotlinx.datetime)
 
             implementation(libs.viewmodel.compose)
-
+            implementation(libs.kotlinx.serialization)
 
             //implementation("io.github.moonggae:kmedia:0.0.3")
 

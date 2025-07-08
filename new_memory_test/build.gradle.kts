@@ -44,6 +44,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.kotlinx.serialization.json)
 
+                implementation(project(":ui:core"))
                 val voyagerVersion = "1.1.0-beta02"
                 implementation(compose.runtime)
                 implementation(compose.foundation)

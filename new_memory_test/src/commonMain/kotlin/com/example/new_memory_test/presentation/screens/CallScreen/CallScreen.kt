@@ -43,8 +43,11 @@ import com.example.new_memory_test.primaryColor
 import dmt_proms.new_memory_test.generated.resources.Res
 import dmt_proms.new_memory_test.generated.resources.call_accept
 import dmt_proms.new_memory_test.generated.resources.call_remove
-import org.jetbrains.compose.resources.painterResource
 
+import org.jetbrains.compose.resources.Resource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import org.example.hit.heal.core.presentation.Resources
 
 
 class CallScreen(val pageNumber: Int )  : Screen {
@@ -57,7 +60,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
         val viewModel: ViewModelMemoryTest = viewModel()
 
 
-        BaseTabletScreen(title = "שיחה נכנסת", page = pageNumber, totalPages = 6) {
+        BaseTabletScreen(title = stringResource(Resources.String.incoming_call_title), page = pageNumber, totalPages = 6) {
 
             Column(
                 modifier = Modifier.Companion
@@ -67,7 +70,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
                 horizontalAlignment = Alignment.Companion.CenterHorizontally
             ) {
                 Text(
-                    text = "שיחה נכנסת",
+                    text = stringResource(Resources.String.incoming_call_text),
                     fontSize = 32.sp,
                     color = primaryColor,
                     fontWeight = FontWeight.Companion.Bold,
@@ -79,7 +82,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
                 )
 
                 Text(
-                    text = "בית רבקה",
+                    text = stringResource(Resources.String.call_from),
                     fontSize = 24.sp,
                     color = primaryColor,
                     fontWeight = FontWeight.Companion.Bold,
@@ -90,7 +93,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
                 )
 
                 Text(
-                    text = "052-538-1648",
+                    text = stringResource(Resources.String.phone_number),
                     fontSize = 24.sp,
                     color = primaryColor,
                     fontWeight = FontWeight.Companion.Bold,
@@ -164,10 +167,10 @@ class CallScreen(val pageNumber: Int )  : Screen {
                         modifier = Modifier.Companion.size(40.dp)
                     )
                 },
-                title = "תודה",
-                description = "המשימה הסתיימה, תודה רבה על שיתוף הפעולה",
+                title = stringResource(Resources.String.thank_you_title),
+                description = stringResource(Resources.String.thank_you_description),
                 buttons = listOf(
-                    "הבא" to {
+                    stringResource(Resources.String.next) to {
                         showAcceptDialog = false
                         viewModel.setPage(viewModel.txtMemoryPage + 1)
                         navigator.push(RoomsScreens(pageNumber = 4))

@@ -9,7 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dmt_proms.new_memory_test.generated.resources.Res
 import dmt_proms.new_memory_test.generated.resources.delete_icon
+import org.example.hit.heal.core.presentation.Resources
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun DeleteIcon(
@@ -18,7 +20,7 @@ fun DeleteIcon(
 ) {
     Image(
         painter = painterResource(Res.drawable.delete_icon),
-        contentDescription = "Delete",
+        contentDescription = stringResource(Resources.String.delete),
         modifier = modifier
             .size(30.dp)
             .padding(10.dp)

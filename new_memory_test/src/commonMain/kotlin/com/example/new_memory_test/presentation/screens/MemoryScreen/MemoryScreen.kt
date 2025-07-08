@@ -29,6 +29,8 @@ import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import com.example.new_memory_test.primaryColor
+import org.example.hit.heal.core.presentation.Resources
+import org.jetbrains.compose.resources.stringResource
 
 class MemoryScreen : Screen {
 
@@ -36,7 +38,7 @@ class MemoryScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = viewModel()
-        BaseTabletScreen(title = "Memory", page = 1, totalPages =6 ){
+        BaseTabletScreen(title = stringResource(Resources.String.memory_title), page = 1, totalPages =6 ){
 
             Column(
                 modifier = Modifier
@@ -47,22 +49,22 @@ class MemoryScreen : Screen {
 
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
-                    text = "הוראות",
+                    text = stringResource(Resources.String.instructions),
                     fontSize = 32.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                BulletPointText(text = "המשימה אורכת כ-20 דקות ")
-                BulletPointText(text = "יש להשלים את המשימה ברצף, ללא הפסקות ")
-                BulletPointText(text = "יש לקרוא את ההנחיות עד הסוף ")
-                BulletPointText(text = "יש להשלים את כל המטלות ")
-                BulletPointText(text = "לשמיעת ההוראות ניתן ללחוץ על הקשב ")
-                BulletPointText(text = " מומלץ לבצע את המשימה בחדר שקט ")
+                BulletPointText(text = stringResource(Resources.String.task_duration ))
+                BulletPointText(text =  stringResource(Resources.String.task_continuity ))
+                BulletPointText(text = stringResource(Resources.String.read_instructions ))
+                BulletPointText(text = stringResource(Resources.String.complete_all_tasks ))
+                BulletPointText(text = stringResource(Resources.String.listen_instruction_tip ))
+                BulletPointText(text = stringResource(Resources.String.quiet_room_tip ))
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
-                    text = "בהצלחה !",
+                    text = stringResource(Resources.String.good_luck ),
                     fontSize = 32.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Center
@@ -70,7 +72,7 @@ class MemoryScreen : Screen {
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
-                    text = " לתחילת המשימה לחץ על התחל",
+                    text = stringResource(Resources.String.press_start_to_begin ),
                     fontSize = 16.sp,
                     color = Color.Black,
                     textAlign = TextAlign.Center
@@ -88,7 +90,7 @@ class MemoryScreen : Screen {
                         .fillMaxWidth(0.2f)
                         .height(50.dp)
                 ) {
-                    Text(text = "התחל", fontSize = 24.sp,  color = Color.White)
+                    Text( stringResource(Resources.String.next), fontSize = 24.sp,  color = Color.White)
                 }
                 Spacer(modifier = Modifier.height(40.dp))
             }
