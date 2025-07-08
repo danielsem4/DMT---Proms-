@@ -26,7 +26,7 @@ import kotlinx.serialization.json.Json
  * Factory for HttpClient settings
  */
 object HttpClientFactory {
-    fun create(engine: HttpClientEngine, storage: Storage): HttpClient =
+    fun create(engine: HttpClientEngine): HttpClient =
         HttpClient(engine) {
             expectSuccess = false
 

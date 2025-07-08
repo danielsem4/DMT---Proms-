@@ -30,16 +30,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import org.example.hit.heal.core.presentation.ButtonPrimary
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.IconPrimary
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.login
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingXl
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.SimpleInputText
 import org.example.hit.heal.home.HomeScreen
@@ -90,9 +94,9 @@ class LoginScreen : Screen {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(16.dp)
+                            .padding(spacingMd)
                     ) {
-                        Spacer(modifier = Modifier.height(30.dp))
+                        Spacer(modifier = Modifier.height(spacingXl))
 
                         Image(
                             painter = painterResource(Res.drawable.med_presc),
@@ -100,7 +104,7 @@ class LoginScreen : Screen {
                             contentScale = ContentScale.Fit,
                             modifier = Modifier
                                 .size(120.dp)
-                                .padding(bottom = 20.dp)
+                                .padding(bottom = paddingLg)
                         )
 
                         SimpleInputText(
@@ -109,15 +113,16 @@ class LoginScreen : Screen {
                             label = stringResource(Resources.String.email),
                             leadingIcon = {
                                 Icon(
-                                    imageVector = Resources.Icon.email,
+                                    painter = painterResource(Resources.Icon.emailIcon),
                                     contentDescription = null,
-                                    tint = IconPrimary
+                                    tint = IconPrimary,
+                                    modifier = Modifier.size(iconSizeMd)
                                 )
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
                         )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(spacingMd))
 
                         SimpleInputText(
                             value = password,
@@ -125,18 +130,19 @@ class LoginScreen : Screen {
                             label = stringResource(Resources.String.password),
                             leadingIcon = {
                                 Icon(
-                                    imageVector = Resources.Icon.lock,
+                                    painter = painterResource(Resources.Icon.lockIcon),
                                     contentDescription = null,
-                                    tint = IconPrimary
+                                    tint = IconPrimary,
+                                    modifier = Modifier.size(iconSizeMd)
                                 )
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                             trailingIcon = {
                                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                     Icon(
-                                        imageVector = if (passwordVisible) Resources.Icon.visible else Resources.Icon.invisible,
+                                        painter = if (passwordVisible) painterResource(Resources.Icon.openEyeIcon) else painterResource(Resources.Icon.closedEyeIcon),
                                         contentDescription = null,
-                                        modifier = Modifier.size(24.dp),
+                                        modifier = Modifier.size(iconSizeMd),
                                         tint = Color.Black
                                     )
                                 }
@@ -174,17 +180,17 @@ class LoginScreen : Screen {
                             if (isLoading) {
                                 CircularProgressIndicator(
                                     color = Color.White,
-                                    modifier = Modifier.size(24.dp)
+                                    modifier = Modifier.size(iconSizeMd)
                                 )
                             } else {
                                 Text(
                                     text = stringResource(login),
-                                    fontSize = 20.sp,
+                                    fontSize = EXTRA_MEDIUM,
                                     color = Color.White
                                 )
                             }
                         }
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(spacingMd))
                     }
                 }
             }

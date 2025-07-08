@@ -25,6 +25,9 @@ import dmt_proms.ui.core.generated.resources.Res
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
 import dmt_proms.ui.core.generated.resources.next
 import dmt_proms.ui.core.generated.resources.previous
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.paddingXs
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
@@ -58,7 +61,7 @@ fun BaseScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(primaryColor)
-                    .padding(12.dp)
+                    .padding(paddingSm)
             ) {
                 navigationIcon?.let {
                     Box(
@@ -73,6 +76,7 @@ fun BaseScreen(
                 Text(
                     text = title,
                     color = Color.White,
+                    fontSize = EXTRA_MEDIUM,
                     style = MaterialTheme.typography.h6,
                     modifier = Modifier
                         .align(Alignment.Center)
@@ -82,7 +86,9 @@ fun BaseScreen(
 
             // Dynamic Content
             Column(
-                modifier = Modifier.padding(8.dp).weight(1f),
+                modifier = Modifier
+                    .padding(paddingSm)
+                    .weight(1f),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -94,7 +100,7 @@ fun BaseScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 4.dp),
+                        .padding(horizontal = paddingSm, vertical = paddingXs),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     onPrevClick?.let {

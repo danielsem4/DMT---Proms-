@@ -14,7 +14,7 @@ import org.example.hit.heal.core.presentation.Resources.Icon.star
 import org.example.hit.heal.core.presentation.Resources.Icon.trapezoid
 import org.example.hit.heal.core.presentation.Resources.Icon.triangle
 import org.example.hit.heal.core.presentation.Resources.Icon.check
-import org.example.hit.heal.core.presentation.Resources.Icon.plusIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.plusIconHitber
 import org.jetbrains.compose.resources.DrawableResource
 
 val shapeSets = listOf(
@@ -53,7 +53,7 @@ val shapeList = listOf(
     Shape(ShapeType.Hashtag, hashTag),
     Shape(ShapeType.Rhomb, rhomb),
     Shape(ShapeType.Cone, cone),
-    Shape(ShapeType.Plus, plusIcon),
+    Shape(ShapeType.Plus, plusIconHitber),
     Shape(ShapeType.Hexagon, hexagon),
     Shape(ShapeType.RightTriangle, rightTriangle),
     Shape(ShapeType.Asterisk, asterisk),

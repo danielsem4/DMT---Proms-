@@ -21,7 +21,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
 import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
-import org.example.hit.heal.core.presentation.Resources.Icon.plusIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.plusIconHitber
 import org.example.hit.heal.core.presentation.Resources.String.contacts
 import org.example.hit.heal.core.presentation.Resources.String.hanaCohen
 import org.example.hit.heal.core.presentation.Resources.String.phoneNumber
@@ -103,7 +103,7 @@ class ContactsScreen : Screen {
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                painter = painterResource(plusIcon),
+                                painter = painterResource(plusIconHitber),
                                 contentDescription = stringResource(plus),
                                 modifier = Modifier.size(24.dp)
                             )

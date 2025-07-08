@@ -17,16 +17,19 @@ import androidx.compose.material.icons.outlined.Snowshoeing
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.rounded.Timer
-import dmt_proms.ui.core.generated.resources.activities
 import dmt_proms.ui.core.generated.resources.Res
+import dmt_proms.ui.core.generated.resources.activities
 import dmt_proms.ui.core.generated.resources.Understanding_dialog_text
 import dmt_proms.ui.core.generated.resources.Whatsapp
 import dmt_proms.ui.core.generated.resources.app_name
+import dmt_proms.ui.core.generated.resources.arrow_down
+import dmt_proms.ui.core.generated.resources.asterisk
+import dmt_proms.ui.core.generated.resources.balloon
+import dmt_proms.ui.core.generated.resources.bin
 import dmt_proms.ui.core.generated.resources.apps_page_second_assist
 import dmt_proms.ui.core.generated.resources.arrow_key
-import dmt_proms.ui.core.generated.resources.asterisk
 import dmt_proms.ui.core.generated.resources.ball
-import dmt_proms.ui.core.generated.resources.balloon
+import dmt_proms.ui.core.generated.resources.balloon_image
 import dmt_proms.ui.core.generated.resources.black_circle
 import dmt_proms.ui.core.generated.resources.black_messages
 import dmt_proms.ui.core.generated.resources.black_phone
@@ -201,34 +204,57 @@ import dmt_proms.ui.core.generated.resources.here_persons_number
 import dmt_proms.ui.core.generated.resources.hexagon
 import dmt_proms.ui.core.generated.resources.horizontal_line
 import dmt_proms.ui.core.generated.resources.chat
+import dmt_proms.ui.core.generated.resources.check_image
+import dmt_proms.ui.core.generated.resources.circle_outlined
+import dmt_proms.ui.core.generated.resources.clock_image
 import dmt_proms.ui.core.generated.resources.clock_test
 import dmt_proms.ui.core.generated.resources.disk_full
 import dmt_proms.ui.core.generated.resources.document_share
 import dmt_proms.ui.core.generated.resources.dont_forget
-import dmt_proms.ui.core.generated.resources.email
+import dmt_proms.ui.core.generated.resources.elipsa_outlined
+import dmt_proms.ui.core.generated.resources.email_image
 import dmt_proms.ui.core.generated.resources.empty_pass
+import dmt_proms.ui.core.generated.resources.evaluation
+import dmt_proms.ui.core.generated.resources.exercise
+import dmt_proms.ui.core.generated.resources.eye
+import dmt_proms.ui.core.generated.resources.file_upload
 import dmt_proms.ui.core.generated.resources.fill_fields
+import dmt_proms.ui.core.generated.resources.filled_circle
+import dmt_proms.ui.core.generated.resources.football
 import dmt_proms.ui.core.generated.resources.graphs
+import dmt_proms.ui.core.generated.resources.hash
+import dmt_proms.ui.core.generated.resources.hide_eye
+import dmt_proms.ui.core.generated.resources.hitbear
 import dmt_proms.ui.core.generated.resources.hitber
 import dmt_proms.ui.core.generated.resources.home
+import dmt_proms.ui.core.generated.resources.horizontal_stroke
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
 import dmt_proms.ui.core.generated.resources.invalid_email
+import dmt_proms.ui.core.generated.resources.jogging
 import dmt_proms.ui.core.generated.resources.lemon
 import dmt_proms.ui.core.generated.resources.like
 import dmt_proms.ui.core.generated.resources.local_unknown
+import dmt_proms.ui.core.generated.resources.lock
 import dmt_proms.ui.core.generated.resources.login
 import dmt_proms.ui.core.generated.resources.login_success
 import dmt_proms.ui.core.generated.resources.logout
 import dmt_proms.ui.core.generated.resources.measurements
+import dmt_proms.ui.core.generated.resources.med_icon
 import dmt_proms.ui.core.generated.resources.medications
 import dmt_proms.ui.core.generated.resources.memory
 import dmt_proms.ui.core.generated.resources.messages
 import dmt_proms.ui.core.generated.resources.milk
 import dmt_proms.ui.core.generated.resources.my_files
 import dmt_proms.ui.core.generated.resources.neurologist_pass
+import dmt_proms.ui.core.generated.resources.napkin
 import dmt_proms.ui.core.generated.resources.next
 import dmt_proms.ui.core.generated.resources.no_internet
+import dmt_proms.ui.core.generated.resources.open_bin
 import dmt_proms.ui.core.generated.resources.password
+import dmt_proms.ui.core.generated.resources.pencil
+import dmt_proms.ui.core.generated.resources.pentagon
+import dmt_proms.ui.core.generated.resources.pill
+import dmt_proms.ui.core.generated.resources.plus
 import dmt_proms.ui.core.generated.resources.no
 import dmt_proms.ui.core.generated.resources.now_the_contacts_list_will_be_opened_pass
 import dmt_proms.ui.core.generated.resources.open_fridge
@@ -238,36 +264,49 @@ import dmt_proms.ui.core.generated.resources.orthopedist_pass
 import dmt_proms.ui.core.generated.resources.paint_clinic_pass
 import dmt_proms.ui.core.generated.resources.pass
 import dmt_proms.ui.core.generated.resources.peas
-import dmt_proms.ui.core.generated.resources.pencil
-import dmt_proms.ui.core.generated.resources.pentagon
+import dmt_proms.ui.core.generated.resources.pencil_image
+import dmt_proms.ui.core.generated.resources.pentagon_image
 import dmt_proms.ui.core.generated.resources.person_names
 import dmt_proms.ui.core.generated.resources.phone
 import dmt_proms.ui.core.generated.resources.phone_number
-import dmt_proms.ui.core.generated.resources.plus
+import dmt_proms.ui.core.generated.resources.plus_image
 import dmt_proms.ui.core.generated.resources.press_the_dial_button_that_showen_down_pass
 import dmt_proms.ui.core.generated.resources.press_the_number_or_the_dial_button_pass
 import dmt_proms.ui.core.generated.resources.previous
+import dmt_proms.ui.core.generated.resources.rectangle
 import dmt_proms.ui.core.generated.resources.remote_unknown
 import dmt_proms.ui.core.generated.resources.request_timeout
+import dmt_proms.ui.core.generated.resources.rhombus
+import dmt_proms.ui.core.generated.resources.ruler
 import dmt_proms.ui.core.generated.resources.send
 import dmt_proms.ui.core.generated.resources.sent_successfully
 import dmt_proms.ui.core.generated.resources.serialization_error
 import dmt_proms.ui.core.generated.resources.server_error
+import dmt_proms.ui.core.generated.resources.spin_360
+import dmt_proms.ui.core.generated.resources.stand_from_chair
+import dmt_proms.ui.core.generated.resources.star_outlined
 import dmt_proms.ui.core.generated.resources.take_pills
 import dmt_proms.ui.core.generated.resources.too_many_requests
+import dmt_proms.ui.core.generated.resources.trapeze
+import dmt_proms.ui.core.generated.resources.triangle
+import dmt_proms.ui.core.generated.resources.triangle_90
 import dmt_proms.ui.core.generated.resources.unexpected_error
+import dmt_proms.ui.core.generated.resources.vertical_stroke
+import dmt_proms.ui.core.generated.resources.warning
 import dmt_proms.ui.core.generated.resources.welcome
+import dmt_proms.ui.core.generated.resources.x
+import dmt_proms.ui.core.generated.resources.yoga
 import dmt_proms.ui.core.generated.resources.Res.string as rs
 import dmt_proms.ui.core.generated.resources.profile
 import dmt_proms.ui.core.generated.resources.psychiatrist_pass
 import dmt_proms.ui.core.generated.resources.purse
-import dmt_proms.ui.core.generated.resources.rectangle
+import dmt_proms.ui.core.generated.resources.rectangle_image
 import dmt_proms.ui.core.generated.resources.red_napkin
 import dmt_proms.ui.core.generated.resources.return_button_on_top_left_pass
 import dmt_proms.ui.core.generated.resources.rhomb
 import dmt_proms.ui.core.generated.resources.right_triangle
 import dmt_proms.ui.core.generated.resources.rotate_star
-import dmt_proms.ui.core.generated.resources.ruler
+import dmt_proms.ui.core.generated.resources.ruler_image
 import dmt_proms.ui.core.generated.resources.search
 import dmt_proms.ui.core.generated.resources.search_at_latter_h_pass
 import dmt_proms.ui.core.generated.resources.search_contacts_list_in_the_phone_pass
@@ -337,7 +376,6 @@ import dmt_proms.ui.core.generated.resources.third_question_hitber_finish_task
 import dmt_proms.ui.core.generated.resources.third_question_hitber_instructions
 import dmt_proms.ui.core.generated.resources.third_question_hitber_title
 import dmt_proms.ui.core.generated.resources.trapezoid
-import dmt_proms.ui.core.generated.resources.triangle
 import dmt_proms.ui.core.generated.resources.vertical_line
 import dmt_proms.ui.core.generated.resources.video
 import dmt_proms.ui.core.generated.resources.weather
@@ -366,10 +404,60 @@ import dmt_proms.ui.core.generated.resources.yogurt
 object Resources {
 
     object Icon {
+
+        val emailIcon = Res.drawable.email
+        val clockIcon = Res.drawable.clock
+        val spinIcon = Res.drawable.spin_360
+        val balloonIcon = Res.drawable.balloon
+        val closedEyeIcon = Res.drawable.hide_eye
+        val openEyeIcon = Res.drawable.eye
+        val logoutIcon = Res.drawable.logout
+        val chatIcon = Res.drawable.chat
+        val fileUploadIcon = Res.drawable.file_upload
+        val pencilIcon = Res.drawable.pencil
+        val exerciseIcon = Res.drawable.exercise
+        val yogaIcon = Res.drawable.yoga
+        val lockIcon = Res.drawable.lock
+        val ballIcon = Res.drawable.football
+        val standFromChairIcon = Res.drawable.stand_from_chair
+        val pillIcon = Res.drawable.pill
+        val warningIcon = Res.drawable.warning
+        val joggingIcon = Res.drawable.jogging
+
+//        val lemonIcon = Res.drawable.lemon
+        val napkinIcon = Res.drawable.napkin
+//        val tableIcon = Res.drawable.table
+        val rulerIcon = Res.drawable.ruler
+
+        val plusIconHitber = Res.drawable.plus
+        val arrowDownIcon = Res.drawable.arrow_down
+        val asteriskIcon = Res.drawable.asterisk
+        val binIcon = Res.drawable.bin
+        val openBinIcon = Res.drawable.open_bin
+        val checkIcon = Res.drawable.check
+        val outlineCircleIcon = Res.drawable.circle_outlined
+        val filledCircleIcon = Res.drawable.filled_circle
+        val hitbearModuleIcon = Res.drawable.hitbear
+        val memoryModuleIcon = Res.drawable.memory
+        val elipsaIcon = Res.drawable.elipsa_outlined
+        val hashMarkIcon = Res.drawable.hash
+        val hexagonIcon = Res.drawable.hexagon
+        val pentagonIcon = Res.drawable.pentagon
+        val triangleIcon = Res.drawable.triangle
+        val triangle90Icon = Res.drawable.triangle_90
+        val horizontalStrokeIcon = Res.drawable.horizontal_stroke
+        val verticalStrokeIcon = Res.drawable.vertical_stroke
+        val medIcon = Res.drawable.med_icon
+        val evaluationLogo = Res.drawable.evaluation
+        val rectangleIcon = Res.drawable.rectangle
+        val rhombusIcon = Res.drawable.rhombus
+        val starOutlineIcon = Res.drawable.star_outlined
+        val trapezeIcon = Res.drawable.trapeze
+        val xIcon = Res.drawable.x
         val asterisk = Res.drawable.asterisk
         val arrowKey = Res.drawable.arrow_key
         val ball = Res.drawable.ball
-        val balloon = Res.drawable.balloon
+        val balloon = Res.drawable.balloon_image
         val blackCircle = Res.drawable.black_circle
         val blackMessages = Res.drawable.black_messages
         val blackPhone = Res.drawable.black_phone
@@ -377,10 +465,10 @@ object Resources {
         val blueNapkin = Res.drawable.blue_napkin
         val calculatorIcon = Res.drawable.calculator
         val cameraIcon = Res.drawable.camera
-        val check = Res.drawable.check
+        val check = Res.drawable.check_image
         val chicken = Res.drawable.chicken
         val circle = Res.drawable.circle
-        val clockIcon = Res.drawable.clock
+        val clockIconPass = Res.drawable.clock_image
         val close = Res.drawable.close
         val closeFridge = Res.drawable.close_fridge
         val closeIcon = Res.drawable.close_icon
@@ -395,7 +483,7 @@ object Resources {
         val dropDown = Res.drawable.drop_down
         val dropUp = Res.drawable.drop_up
         val ellipse = Res.drawable.ellipse
-        val emailIcon = Res.drawable.email
+        val emailIconPass = Res.drawable.email_image
         val errorIcon = Res.drawable.error_icon
         val exclamationMark = Res.drawable.exclamation_mark
         val exitIcon = Res.drawable.exit
@@ -410,17 +498,17 @@ object Resources {
         val openFridge = Res.drawable.open_fridge
         val orangeJuice = Res.drawable.orange_juice
         val peas = Res.drawable.peas
-        val pencil = Res.drawable.pencil
-        val pentagon = Res.drawable.pentagon
-        val plusIcon = Res.drawable.plus
+        val pencil = Res.drawable.pencil_image
+        val pentagon = Res.drawable.pentagon_image
+        val plusIcon = Res.drawable.plus_image
         val profileIcon = Res.drawable.profile
         val purseIcon = Res.drawable.purse
-        val rectangle = Res.drawable.rectangle
+        val rectangle = Res.drawable.rectangle_image
         val redNapkin = Res.drawable.red_napkin
         val rhomb = Res.drawable.rhomb
         val rightTriangle = Res.drawable.right_triangle
         val rotateStar = Res.drawable.rotate_star
-        val ruler = Res.drawable.ruler
+        val ruler = Res.drawable.ruler_image
         val searchIcon = Res.drawable.search
         val settingsIcon = Res.drawable.settings
         val speaker = Res.drawable.speaker

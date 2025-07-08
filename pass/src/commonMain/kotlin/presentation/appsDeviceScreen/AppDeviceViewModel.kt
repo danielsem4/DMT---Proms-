@@ -9,13 +9,13 @@ import org.example.hit.heal.core.presentation.Colors
 import presentation.components.CountdownDialogHandler
 import presentation.components.AppData
 import core.domain.use_case.PlayAudioUseCase
-import kotlinx.coroutines.NonCancellable.isActive
 import org.example.hit.heal.core.presentation.Resources.Icon.calculatorIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.cameraIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.clockIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.clockIconPass
 import org.example.hit.heal.core.presentation.Resources.Icon.contactsIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.documentsIcon
-import org.example.hit.heal.core.presentation.Resources.Icon.emailIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.emailIconPass
 import org.example.hit.heal.core.presentation.Resources.Icon.purseIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.settingsIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.storeIcon
@@ -65,7 +65,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
             label = camera
         ),
         AppData(
-            imageRes = emailIcon,
+            imageRes = emailIconPass,
             circleColor = Colors.emailColor,
             label = email
         ),
@@ -75,7 +75,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
             label = store
         ),
         AppData(
-            imageRes = clockIcon,
+            imageRes = clockIconPass,
             circleColor = Colors.clockColor,
             label = clock
         ),

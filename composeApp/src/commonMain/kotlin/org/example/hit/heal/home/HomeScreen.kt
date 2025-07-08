@@ -40,7 +40,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -49,15 +48,28 @@ import core.data.model.ModulesResponse
 import kotlinx.coroutines.launch
 import org.example.hit.heal.cdt.presentation.CDTLandingScreen
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.REGULAR
 import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Red
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Resources.String.logout
+import org.example.hit.heal.core.presentation.Sizes.elevationMd
+import org.example.hit.heal.core.presentation.Sizes.elevationSm
+import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.radiusLg
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.TextWhite
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.entry.HitberEntryScreen
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.dialScreen.DialScreen
@@ -85,9 +97,10 @@ class HomeScreen : Screen {
             navigationIcon = {
                 IconButton(onClick = { showDialog = true }) {
                     Icon(
-                        imageVector = Resources.Icon.logout,
+                        painter = painterResource(Resources.Icon.logoutIcon),
                         contentDescription = stringResource(Resources.String.logout),
-                        tint = White
+                        tint = White,
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
@@ -100,24 +113,24 @@ class HomeScreen : Screen {
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(min = minMsgHeight)
-                            .padding(16.dp)
+                            .padding(paddingMd)
                     ) {
                         Text(
                             stringResource(Resources.String.dont_forget),
-                            fontSize = 18.sp,
+                            fontSize = MEDIUM,
                             color = MaterialTheme.colors.onSurface
                         )
-                        Spacer(Modifier.height(8.dp))
+                        Spacer(Modifier.height(spacingSm))
                         Text(
                             stringResource(Resources.String.take_pills),
-                            fontSize = 18.sp,
+                            fontSize = MEDIUM,
                             color = MaterialTheme.colors.onSurface
                         )
                     }
 
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(minSize = 100.dp),
-                        contentPadding = PaddingValues(16.dp),
+                        contentPadding = PaddingValues(paddingMd),
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
@@ -125,7 +138,7 @@ class HomeScreen : Screen {
                         items(features.filter { it.active }) { feature ->
                             FeatureTile(
                                 feature = feature,
-                                fontSize = 14.sp,
+                                fontSize = REGULAR,
                                 onClick = {
                                     navigateTo(feature.module_id, navigator)
                                 }
@@ -139,8 +152,8 @@ class HomeScreen : Screen {
         if (showDialog) {
             BaseYesNoDialog(
                 onDismissRequest = { showDialog = false },
-                title = "Logout",
-                icon = Resources.Icon.logout,
+                title = stringResource(logout),
+                icon = Resources.Icon.logoutIcon,
                 message = "Are you sure you want to logout?",
                 confirmButtonText = "Yes",
                 confirmButtonColor = Green,
@@ -165,8 +178,8 @@ class HomeScreen : Screen {
         content: @Composable ColumnScope.() -> Unit
     ) {
         Card(
-            shape = RoundedCornerShape(12.dp),
-            elevation = 4.dp,
+            shape = RoundedCornerShape(radiusMd),
+            elevation = elevationMd,
             backgroundColor = MaterialTheme.colors.surface,
             modifier = modifier
         ) {
@@ -174,7 +187,7 @@ class HomeScreen : Screen {
                 // Header chip
                 Box(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(RoundedCornerShape(radiusMd))
                         .background(primaryColor)
                 ) {
                     Text(
@@ -184,11 +197,11 @@ class HomeScreen : Screen {
                         color = TextWhite,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(10.dp),
+                            .padding(paddingSm),
                         textAlign = TextAlign.Center,
                     )
                 }
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(spacingMd))
                 content()
             }
         }
@@ -201,27 +214,27 @@ class HomeScreen : Screen {
         onClick: () -> Unit
     ) {
         Card(
-            shape = RoundedCornerShape(16.dp),
-            elevation = 2.dp,
+            shape = RoundedCornerShape(radiusLg),
+            elevation = elevationSm,
             modifier = Modifier
                 .aspectRatio(1f)
-                .padding(8.dp)
+                .padding(paddingSm)
                 .clickable { onClick() }
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(paddingMd),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
-                    imageVector = iconFor(feature.module_id),
+                    painter = painterResource(iconFor(feature.module_id)),
                     contentDescription = null,
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(iconSizeLg),
                     tint = primaryColor
                 )
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(spacingSm))
                 Text(
                     text = labelFor(feature.module_id),
                     fontSize = fontSize,
@@ -236,23 +249,24 @@ class HomeScreen : Screen {
             19 ->  navigator.push(HitberEntryScreen())
             17 -> navigator.push(CDTLandingScreen())
             16 -> navigator.push(PassEntryScreen())
-            else -> { }
+            else -> {  }
+
         }
     }
 
 
     @Composable
     private fun iconFor(id: Int) = when (id) {
-        3 -> Resources.Icon.document_share
-        4 -> Resources.Icon.measurements
-        5 -> Resources.Icon.chat
-        7 -> Resources.Icon.meds
-        8 -> Resources.Icon.activities
-        20 -> Resources.Icon.memory
-        19 -> Resources.Icon.hitber
-        17 -> Resources.Icon.clock
+        3 -> Resources.Icon.fileUploadIcon
+        4 -> Resources.Icon.evaluationLogo
+        5 -> Resources.Icon.chatIcon
+        7 -> Resources.Icon.medIcon
+        8 -> Resources.Icon.exerciseIcon
+        20 -> Resources.Icon.memoryModuleIcon
+        19 -> Resources.Icon.hitbearModuleIcon
+        17 -> Resources.Icon.clockIcon
 //        21 -> Resources.Icon.orientation
-        else -> Resources.Icon.document_share
+        else -> Resources.Icon.binIcon
     }
 
     @Composable
