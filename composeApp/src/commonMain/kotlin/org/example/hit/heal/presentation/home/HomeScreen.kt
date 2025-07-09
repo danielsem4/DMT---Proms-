@@ -1,6 +1,5 @@
-package org.example.hit.heal.home
+package org.example.hit.heal.presentation.home
 
-import LoginScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -68,6 +67,9 @@ import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.presentation.activities.ActivitiesScreen
+import org.example.hit.heal.presentation.evaluation.AllEvaluationsScreen
+import org.example.hit.heal.presentation.login.LoginScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -95,7 +97,7 @@ class HomeScreen : Screen {
                 IconButton(onClick = { showDialog = true }) {
                     Icon(
                         painter = painterResource(Resources.Icon.logoutIcon),
-                        contentDescription = stringResource(Resources.String.logout),
+                        contentDescription = stringResource(logout),
                         tint = White,
                         modifier = Modifier.size(24.dp)
                     )
@@ -137,7 +139,7 @@ class HomeScreen : Screen {
                                 feature = feature,
                                 fontSize = REGULAR,
                                 onClick = {
-                                    navigateTo(feature.module_id, navigator)
+                                    navigateTo(feature.module_name, navigator)
                                 }
                             )
                         }
@@ -226,14 +228,14 @@ class HomeScreen : Screen {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
-                    painter = painterResource(iconFor(feature.module_id)),
+                    painter = painterResource(iconFor(feature.module_name)),
                     contentDescription = null,
                     modifier = Modifier.size(iconSizeLg),
                     tint = primaryColor
                 )
                 Spacer(Modifier.height(spacingSm))
                 Text(
-                    text = labelFor(feature.module_id),
+                    text = labelFor(feature.module_name),
                     fontSize = fontSize,
                     color = MaterialTheme.colors.onSurface
                 )
@@ -241,40 +243,41 @@ class HomeScreen : Screen {
         }
     }
 
-    private fun navigateTo(moduleId: Int, navigator: Navigator) {
-        when (moduleId) {
-            17 -> navigator.push(CDTLandingScreen())
-
+    private fun navigateTo(moduleName: String, navigator: Navigator) {
+        when (moduleName) {
+            "cdt" -> navigator.push(CDTLandingScreen())
+            "measurements" -> navigator.push(AllEvaluationsScreen())
+            "Activities" -> navigator.push(ActivitiesScreen())
             else -> {  }
         }
     }
 
 
     @Composable
-    private fun iconFor(id: Int) = when (id) {
-        3 -> Resources.Icon.fileUploadIcon
-        4 -> Resources.Icon.evaluationLogo
-        5 -> Resources.Icon.chatIcon
-        7 -> Resources.Icon.medIcon
-        8 -> Resources.Icon.exerciseIcon
-        20 -> Resources.Icon.memoryModuleIcon
-        19 -> Resources.Icon.hitbearModuleIcon
-        17 -> Resources.Icon.clockIcon
-//        21 -> Resources.Icon.orientation
+    private fun iconFor(moduleName: String) = when (moduleName) {
+        "document share" -> Resources.Icon.fileUploadIcon
+        "measurements" -> Resources.Icon.evaluationLogo
+        "chat" -> Resources.Icon.chatIcon
+        "medications" -> Resources.Icon.medIcon
+        "Activities" -> Resources.Icon.exerciseIcon
+        "Memory" -> Resources.Icon.memoryModuleIcon
+        "HitBer" -> Resources.Icon.hitbearModuleIcon
+        "cdt" -> Resources.Icon.clockIcon
+        "Orientation" -> Resources.Icon.memoryModuleIcon
         else -> Resources.Icon.binIcon
     }
 
     @Composable
-    private fun labelFor(id: Int) = when (id) {
-        3 -> stringResource(Resources.String.document_share)
-        4 -> stringResource(Resources.String.measurements)
-        5 -> stringResource(Resources.String.chat)
-        7 -> stringResource(Resources.String.medications)
-        8 -> stringResource(Resources.String.activities)
-        20 -> stringResource(Resources.String.memory)
-        19 -> stringResource(Resources.String.hitber)
-        17 -> stringResource(Resources.String.clockTest)
-//        21 -> stringResource(Resources.String.orientation)
+    private fun labelFor(moduleName: String) = when (moduleName) {
+        "document share" -> stringResource(Resources.String.document_share)
+        "measurements" -> stringResource(Resources.String.measurements)
+        "chat" -> stringResource(Resources.String.chat)
+        "medications" -> stringResource(Resources.String.medications)
+        "Activities" -> stringResource(Resources.String.activities)
+        "Memory" -> stringResource(Resources.String.memory)
+        "HitBer" -> stringResource(Resources.String.hitber)
+        "cdt" -> stringResource(Resources.String.clockTest)
+        "Orientation" -> "Orientation"
         else -> "Unknown"
     }
 }
