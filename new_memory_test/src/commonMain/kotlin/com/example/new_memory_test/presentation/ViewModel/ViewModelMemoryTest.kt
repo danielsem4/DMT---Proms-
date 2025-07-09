@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
+import com.example.new_memory_test.data.model.MemoryData
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.data.DataItem
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +27,19 @@ class ViewModelMemoryTest(   ) : ViewModel() {
     val thirdRoundItems = mutableListOf<DataItem>()
 
     private val _initialItemIds = mutableListOf<Int>()
+
+
+
+    private var result: MemoryData = MemoryData()
+    fun getResult(): MemoryData {
+        return result
+    }
+    fun setResult(result: MemoryData) {
+        result.PhoneCallResult= emptyList()
+        this.result = result
+    }
+
+
 
     //Choose reminder option in custom dialog
     val selectedReminderOption = mutableStateOf<String?>(null)

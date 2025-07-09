@@ -43,7 +43,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.kotlinx.serialization.json)
-
+                implementation(projects.core)
                 implementation(project(":ui:core"))
                 val voyagerVersion = "1.1.0-beta02"
                 implementation(compose.runtime)
