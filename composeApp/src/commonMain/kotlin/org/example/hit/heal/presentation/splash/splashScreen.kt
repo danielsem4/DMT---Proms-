@@ -1,6 +1,5 @@
-package org.example.hit.heal.splash
+package org.example.hit.heal.presentation.splash
 
-import LoginScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,10 +20,15 @@ import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.med_presc
 import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Resources
-import org.example.hit.heal.home.HomeScreen
+import org.example.hit.heal.presentation.home.HomeScreen
+import org.example.hit.heal.presentation.login.LoginScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+
+/**
+ *
+ */
 
 class SplashScreen(): Screen {
     @Composable
