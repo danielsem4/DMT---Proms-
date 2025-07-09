@@ -17,8 +17,10 @@ import core.network.postWithAuth
 import core.network.safeCall
 import core.util.PrefKeys
 import io.ktor.client.HttpClient
+import io.ktor.client.request.accept
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
+import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
@@ -34,11 +36,13 @@ import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 
-class GenericApiImpl
+class GenericApiImpl() {
+
+}
 
 class KtorAppRemoteDataSource(
     private val httpClient: HttpClient,
-    private val storage: Storage
+    val storage: Storage
 ) : AppApi {
 
     override suspend fun login(email: String, password: String):
@@ -54,18 +58,15 @@ class KtorAppRemoteDataSource(
         serializer: KSerializer<T>
     ): Result<String, DataError.Remote> {
         val url = "${BASE_URL}patientMeasureResponse/"
-
         val body = Json.encodeToString(serializer, results)
+        println("the body is: $body")
 
-        return safeCall {
-            httpClient.post(url) {
-                contentType(ContentType.Application.Json)
-
-                val token: String = storage.get(PrefKeys.token)!!
-                header(HttpHeaders.Authorization, "Token $token")
-
-                setBody(body)
-            }
+        return httpClient.postWithAuth<String>(
+            url = url,
+            storage = storage
+        ) {
+            contentType(ContentType.Application.Json)
+            setBody(body)
         }
     }
 
@@ -75,36 +76,28 @@ class KtorAppRemoteDataSource(
         imageBytes: ByteArray,
         clinicId: Int,
         userId: String
-    ): EmptyResult<DataError.Remote> { // This translates to Result<Unit, DataError.Remote> for safeCall
+    ): EmptyResult<DataError.Remote> {
         val url = "${BASE_URL}FileUpload/"
         val base64EncodedFile: String = Base64.encode(imageBytes)
 
-        return safeCall { // T will be Unit here due to the return type of EmptyResult
-            httpClient.post(url) {
-                val token: String = storage.get(PrefKeys.token)
-                    ?: throw IllegalStateException("Auth token not found")
-
-                header(HttpHeaders.Authorization, "Token $token")
-
-                setBody(
-                    MultiPartFormDataContent(
-                        formData {
-                            append("file", base64EncodedFile, Headers.build {
-                                append(HttpHeaders.ContentDisposition, "form-data; name=\"file\"")
-                                append(
-                                    HttpHeaders.ContentType,
-                                    "text/plain"
-                                ) // Content-Type for this specific part
-                            })
-                            append("file_name", imagePath)
-                            append("clinic_id", clinicId)
-                            append("user_id", userId)
-                            append("path", imagePath)
-                        }
-                    )
+        return httpClient.postWithAuth<Unit>(
+            url = url,
+            storage = storage
+        ) {
+            setBody(
+                MultiPartFormDataContent(
+                    formData {
+                        append("file", base64EncodedFile, Headers.build {
+                            append(HttpHeaders.ContentDisposition, "form-data; name=\"file\"")
+                            append(HttpHeaders.ContentType, "text/plain")
+                        })
+                        append("file_name", imagePath)
+                        append("clinic_id", clinicId)
+                        append("user_id", userId)
+                        append("path", imagePath)
+                    }
                 )
-                // Ktor handles the main "Content-Type: multipart/form-data" header automatically
-            }
+            )
         }
     }
 
@@ -125,8 +118,8 @@ class KtorAppRemoteDataSource(
         patientId: Int
     ): Result<List<Medication>, DataError.Remote> =
         httpClient.getWithAuth<List<Medication>>(
-            url      = "${BASE_URL}Medication_list/",
-            storage  = storage
+            url = "${BASE_URL}Medication_list/",
+            storage = storage
         ) {
             parameter("clinic_id",  clinicId)
             parameter("patient_id", patientId)
@@ -136,7 +129,7 @@ class KtorAppRemoteDataSource(
         body: MedicationReport
     ): Result<Unit, DataError.Remote> =
         httpClient.postWithAuth<Unit>(
-            url      = "${BASE_URL}report_medication/",
+            url = "${BASE_URL}report_medication/",
             storage  = storage
         ) {
             setBody(body)
@@ -147,8 +140,8 @@ class KtorAppRemoteDataSource(
         results: Request
     ): Result<Unit, DataError.Remote> =
         httpClient.postWithAuth<Unit>(
-            url      = "${BASE_URL}patientNotificationData/",
-            storage  = storage
+            url = "${BASE_URL}patientNotificationData/",
+            storage = storage
         ) {
             setBody(results)
         }

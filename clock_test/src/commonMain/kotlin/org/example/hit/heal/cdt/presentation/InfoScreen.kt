@@ -22,12 +22,14 @@ import dmt_proms.clock_test.generated.resources.completion_screen_message_next
 import dmt_proms.clock_test.generated.resources.completion_screen_title
 import dmt_proms.clock_test.generated.resources.next_button_text
 import org.example.hit.heal.cdt.data.ClockTime
+import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-class InfoScreen() : Screen {
+class InfoScreen : Screen {
     @Composable
     override fun Content() {
         var isFirstMessage by remember { mutableStateOf(true) }
@@ -37,7 +39,8 @@ class InfoScreen() : Screen {
         // Reset the state of the clock step before use
         viewModel.setSecondStep(false)
 
-        TabletBaseScreen(
+        BaseScreen(
+            config = ScreenConfig.TabletConfig,
             title = stringResource(Res.string.completion_screen_title),
             topRightText = "1/3",
             content = {

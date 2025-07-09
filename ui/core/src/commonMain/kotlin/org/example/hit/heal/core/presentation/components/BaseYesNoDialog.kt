@@ -16,91 +16,101 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import dmt_proms.ui.core.generated.resources.Res
-import dmt_proms.ui.core.generated.resources.no
-import dmt_proms.ui.core.generated.resources.yes
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
+import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Red
+import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
+import org.example.hit.heal.core.presentation.Sizes.paddingXl
+import org.example.hit.heal.core.presentation.Sizes.radiusLg
+import org.example.hit.heal.core.presentation.Sizes.spacingLg
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
+import org.example.hit.heal.core.presentation.Resources.Icon.warningIcon
 import org.example.hit.heal.core.presentation.White
+import org.example.hit.heal.core.presentation.components.widgets.RoundedGradientButton
 import org.example.hit.heal.core.presentation.primaryColor
-import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
+
+/**
+ * A base dialog component that displays a confirmation message with "Yes" and "No" options.
+ */
 
 @Composable
 fun BaseYesNoDialog(
     onDismissRequest: () -> Unit,
     title: String,
-    icon: ImageVector? = null,
+    icon: DrawableResource = warningIcon,
     message: String,
-    confirmButtonText: String = stringResource(Res.string.yes),
+    confirmButtonText: String,
     confirmButtonColor: Color = primaryColor,
     onConfirm: () -> Unit,
-    dismissButtonText: String = stringResource(Res.string.no),
+    dismissButtonText: String,
     dismissButtonColor: Color = Red,
     onDismissButtonClick: () -> Unit
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
         Card(
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(radiusLg),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp)
+                .padding(paddingLg)
         ) {
             Column(
                 modifier = Modifier
                     .background(White)
-                    .padding(horizontal = 24.dp, vertical = 32.dp),
+                    .padding(horizontal = paddingLg, vertical = paddingXl),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                if (icon != null) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
-                        tint = primaryColor,
-                        modifier = Modifier.size(64.dp)
-                    )
-                }
+                Icon(
+                    painter = painterResource(icon),
+                    contentDescription = null,
+                    tint = Color(0xFF66CC99),
+                    modifier = Modifier.size(iconSizeXl)
+                )
 
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(spacingMd))
 
                 Text(
                     text = title,
-                    fontSize = 28.sp,
+                    fontSize = EXTRA_MEDIUM,
                     textAlign = TextAlign.Center,
-                    color = primaryColor,
+                    color = Color(0xFF66CC99),
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(spacingSm))
 
                 Text(
                     text = message,
-                    fontSize = 22.sp,
+                    fontSize = EXTRA_REGULAR,
                     textAlign = TextAlign.Center,
                     color = Color.DarkGray,
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(spacingLg))
 
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    // “No”
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(spacingMd)) {
+                    // “No” — grey gradient
                     RoundedButton(
                         text = dismissButtonText,
                         onClick = onDismissButtonClick,
-                        modifier = Modifier.weight(1f),
+                        modifier= Modifier.weight(1f),
                         buttonColor = dismissButtonColor
                     )
 
-                    // “Yes”
+                    // “Yes” — green gradient
                     RoundedButton(
                         text = confirmButtonText,
-                        modifier = Modifier.weight(1f),
                         onClick = onConfirm,
+                        modifier= Modifier.weight(1f),
                         buttonColor = confirmButtonColor
                     )
                 }
