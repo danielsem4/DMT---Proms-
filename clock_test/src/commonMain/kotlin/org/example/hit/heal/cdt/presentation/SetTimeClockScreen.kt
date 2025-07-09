@@ -28,8 +28,10 @@ import dmt_proms.clock_test.generated.resources.clock_screen_title
 import dmt_proms.clock_test.generated.resources.next_button_text
 import org.example.hit.heal.cdt.data.ClockTime
 import org.example.hit.heal.cdt.presentation.components.ClockComponent
+import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -51,7 +53,8 @@ class SetTimeClockScreen : Screen {
 
         val currentTime by viewModel.getCurrentClockSetTime().collectAsState()
 
-        TabletBaseScreen(
+        BaseScreen(
+            config = ScreenConfig.TabletConfig,
             title = stringResource(Res.string.clock_screen_title),
             topRightText = if (isSecondStep) "3/3" else "2/3",
             content = {

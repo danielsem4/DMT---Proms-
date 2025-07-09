@@ -72,9 +72,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-/**
- *
- */
 
 class HomeScreen : Screen {
     @Composable
@@ -95,7 +92,7 @@ class HomeScreen : Screen {
                 IconButton(onClick = { showDialog = true }) {
                     Icon(
                         painter = painterResource(Resources.Icon.logoutIcon),
-                        contentDescription = stringResource(Resources.String.logout),
+                        contentDescription = stringResource(logout),
                         tint = White,
                         modifier = Modifier.size(24.dp)
                     )
@@ -138,6 +135,7 @@ class HomeScreen : Screen {
                                 fontSize = REGULAR,
                                 onClick = {
                                     navigateTo(feature.module_id, navigator)
+                                    println("clicked on $feature")
                                 }
                             )
                         }
@@ -243,9 +241,8 @@ class HomeScreen : Screen {
 
     private fun navigateTo(moduleId: Int, navigator: Navigator) {
         when (moduleId) {
-            17 -> navigator.push(CDTLandingScreen())
-
-            else -> {  }
+            16 -> navigator.push(CDTLandingScreen())
+            else -> println("Action for module $moduleId not implemented yet")
         }
     }
 
@@ -257,9 +254,9 @@ class HomeScreen : Screen {
         5 -> Resources.Icon.chatIcon
         7 -> Resources.Icon.medIcon
         8 -> Resources.Icon.exerciseIcon
-        20 -> Resources.Icon.memoryModuleIcon
+        16 -> Resources.Icon.clockIcon
         19 -> Resources.Icon.hitbearModuleIcon
-        17 -> Resources.Icon.clockIcon
+        20 -> Resources.Icon.memoryModuleIcon
 //        21 -> Resources.Icon.orientation
         else -> Resources.Icon.binIcon
     }
@@ -271,9 +268,9 @@ class HomeScreen : Screen {
         5 -> stringResource(Resources.String.chat)
         7 -> stringResource(Resources.String.medications)
         8 -> stringResource(Resources.String.activities)
-        20 -> stringResource(Resources.String.memory)
+        16 -> stringResource(Resources.String.clockTest)
         19 -> stringResource(Resources.String.hitber)
-        17 -> stringResource(Resources.String.clockTest)
+        20 -> stringResource(Resources.String.memory)
 //        21 -> stringResource(Resources.String.orientation)
         else -> "Unknown"
     }
