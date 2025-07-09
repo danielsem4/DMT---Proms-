@@ -75,9 +75,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import presentation.dialScreen.DialScreen
 import presentation.entryScreen.PassEntryScreen
 
-/**
- *
- */
 
 class HomeScreen : Screen {
     @Composable
@@ -92,13 +89,18 @@ class HomeScreen : Screen {
             viewModel.loadFeatures()
         }
 
+        LaunchedEffect(features) {
+            println("All features: $features")
+        }
+
+
         BaseScreen(
             title = stringResource(Resources.String.home),
             navigationIcon = {
                 IconButton(onClick = { showDialog = true }) {
                     Icon(
                         painter = painterResource(Resources.Icon.logoutIcon),
-                        contentDescription = stringResource(Resources.String.logout),
+                        contentDescription = stringResource(logout),
                         tint = White,
                         modifier = Modifier.size(24.dp)
                     )
@@ -141,6 +143,7 @@ class HomeScreen : Screen {
                                 fontSize = REGULAR,
                                 onClick = {
                                     navigateTo(feature.module_id, navigator)
+                                    println("clicked on $feature")
                                 }
                             )
                         }
@@ -246,10 +249,9 @@ class HomeScreen : Screen {
 
     private fun navigateTo(moduleId: Int, navigator: Navigator) {
         when (moduleId) {
-            19 ->  navigator.push(HitberEntryScreen())
-            17 -> navigator.push(CDTLandingScreen())
-            16 -> navigator.push(PassEntryScreen())
-            else -> {  }
+            16 -> navigator.push(CDTLandingScreen())
+            22 ->  navigator.push(HitberEntryScreen())
+            else -> println("Action for module $moduleId not implemented yet")
 
         }
     }
@@ -262,9 +264,9 @@ class HomeScreen : Screen {
         5 -> Resources.Icon.chatIcon
         7 -> Resources.Icon.medIcon
         8 -> Resources.Icon.exerciseIcon
+        16 -> Resources.Icon.clockIcon
+        22 -> Resources.Icon.hitbearModuleIcon
         20 -> Resources.Icon.memoryModuleIcon
-        19 -> Resources.Icon.hitbearModuleIcon
-        17 -> Resources.Icon.clockIcon
 //        21 -> Resources.Icon.orientation
         else -> Resources.Icon.binIcon
     }
@@ -276,10 +278,10 @@ class HomeScreen : Screen {
         5 -> stringResource(Resources.String.chat)
         7 -> stringResource(Resources.String.medications)
         8 -> stringResource(Resources.String.activities)
+        16 -> stringResource(Resources.String.clockTest)
+        22 -> stringResource(Resources.String.hitber)
         20 -> stringResource(Resources.String.memory)
-        19 -> stringResource(Resources.String.hitber)
         17 -> stringResource(Resources.String.clockTest)
-        16 -> stringResource(Resources.String.pass)
 //        21 -> stringResource(Resources.String.orientation)
         else -> "Unknown"
     }

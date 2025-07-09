@@ -53,9 +53,10 @@ import dmt_proms.clock_test.generated.resources.erase_mode
 import dmt_proms.clock_test.generated.resources.finish_button_text
 import org.example.hit.heal.cdt.data.ClockTime
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -84,7 +85,8 @@ class DrawClockScreen : Screen {
             viewModel.updateDrawnPaths(paths.toList())
         }
 
-        TabletBaseScreen(
+        BaseScreen(
+            config = ScreenConfig.TabletConfig,
             title = formattedTitle,
             topRightText = "1/3",
             content = {
