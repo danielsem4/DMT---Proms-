@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -28,15 +29,14 @@ fun FeatureButton(
     label: String,
     cardModifier: Modifier = Modifier.padding(16.dp),
     iconSize: Dp = 48.dp,
+    iconColor: Color = Color.Unspecified,
     fontSize: TextUnit = 14.sp,
     onClick: () -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(30.dp),
         backgroundColor = Color.White,
-        modifier = cardModifier
-            .clickable(onClick = onClick)
-            .wrapContentWidth()
+        modifier = cardModifier.clickable(onClick = onClick).wrapContentWidth()
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -47,13 +47,15 @@ fun FeatureButton(
                 imageVector = icon,
                 contentDescription = label,
                 modifier = Modifier.size(iconSize),
-                tint = Color.Unspecified // <-- keeps original icon color
+                tint = iconColor
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = label,
                 fontSize = fontSize,
-                color = Color.Black
+                color = Color.Black,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

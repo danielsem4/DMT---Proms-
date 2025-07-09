@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
+import kotlinx.serialization.json.Json
 import org.example.hit.heal.cdt.data.ClockTime
 
 
@@ -89,6 +90,17 @@ class ClockTestViewModel(
                             clinicId = clinicId,
                             test = cdtResults
                         )
+                        // Create a Json instance (you can configure it if needed)
+                        val json = Json {
+                            prettyPrint =
+                                true // Makes the output readable with line breaks and indentation
+                            encodeDefaults = true // Includes fields with default values
+                        }
+                        // Encode the object to a JSON string
+                        val jsonString = json.encodeToString(body)
+
+                        // Print the JSON string
+                        println(jsonString)
 
                         uploadCDTResultsUseCase.execute(body, CDTRequestBody.serializer())
                             .onSuccess {
@@ -106,7 +118,7 @@ class ClockTestViewModel(
                         onFailure?.invoke(error)
                     }
             } catch (e: Exception) {
-                println("🚨 Unexpected error: ${e.message}")
+                println("Unexpected error: ${e.message}")
                 onFailure?.invoke(DataError.Remote.UNKNOWN)
             }
         }
