@@ -20,7 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.primaryColor
 import presentation.components.ContactData
 import presentation.contatcts.ContactsViewModel
 
@@ -29,7 +30,7 @@ fun ContactItem(contact: ContactData, viewModel: ContactsViewModel) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth().height(120.dp)
-            .background(color = Color.White, shape = RoundedCornerShape(10.dp)).clickable {
+            .background(color = Color.White, shape = RoundedCornerShape(radiusMd)).clickable {
                 viewModel.onContactClicked(contact)
             }
     ) {

@@ -1,6 +1,8 @@
 package org.example.hit.heal.hitber.presentation.buildShape
 
-import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.derivedStateOf
@@ -9,10 +11,13 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.BackPressHandler
@@ -20,7 +25,6 @@ import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberTitle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.components.TenthQuestionShapesLayout
 import org.example.hit.heal.hitber.presentation.buildShape.model.draggableShapesItem
@@ -29,7 +33,10 @@ import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
 import core.utils.CapturableWrapper
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import core.utils.PlatformCapturable
+import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
+import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -86,15 +93,10 @@ class BuildShapeScreen : Screen {
 
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
-            HorizontalTabletBaseScreen(
+            BaseScreen(
                 title = stringResource(tenthQuestionHitberTitle),
-                onNextClick = {
-                    capturable?.capture?.let { it() }
-                },
-
-                buttonText = stringResource(`continue`),
-                question = 10,
-                buttonColor = primaryColor,
+                config = ScreenConfig.TabletConfig,
+                topRightText = "10/10",
                 content = {
                     InstructionText(stringResource(tenthQuestionHitberInstructions))
 
@@ -135,6 +137,16 @@ class BuildShapeScreen : Screen {
                             triangleHeight = triangleHeight,
                             density = density,
                             onScreenSizeChanged = { screenSize = it }
+                        )
+                    }
+
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        RoundedButton(
+                            text = stringResource(`continue`),
+                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                            onClick = {
+                                capturable?.capture?.let { it() }
+                            }
                         )
                     }
                 })

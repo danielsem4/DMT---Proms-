@@ -1,9 +1,14 @@
 package org.example.hit.heal.hitber.presentation.timeAndPlace
 
-import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -22,9 +27,12 @@ import core.utils.BackPressHandler
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberTitle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.Resources.Icon.chicken
+import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
+import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.Questions
@@ -63,32 +71,38 @@ class TimeAndPlace : Screen {
             )
         }
 
-        HorizontalTabletBaseScreen(
+        BaseScreen(
             title = stringResource(firstQuestionHitberTitle),
-            onNextClick = {
-                if (allAnswersFinished) {
-                    viewModel.setFirstQuestion(firstQuestionViewModel.firstQuestion.value)
-                    navigator?.replace(ShapeScreen())
-                }
-            },
-            question = 1,
-            buttonText = stringResource(`continue`),
-            buttonColor = if (allAnswersFinished) {
-                primaryColor
-            } else Color.Gray,
+            config = ScreenConfig.TabletConfig,
+            topRightText = "1/10",
             content = {
+
                 InstructionText(
                     stringResource(firstQuestionHitberInstructions ),
                 )
 
                 Column(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp).verticalScroll(rememberScrollState()),
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
+                        .padding(horizontal = 16.dp,).verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Questions(firstQuestionViewModel)
                 }
+                Box(modifier = Modifier.fillMaxSize()) {
+                    RoundedButton(
+                        text = stringResource(`continue`),
+                        modifier = Modifier.width(200.dp).align(Alignment.BottomCenter),
+                        buttonColor = if (allAnswersFinished) primaryColor else Color.Gray,
+                        onClick = {
+                            if (allAnswersFinished) {
+                                viewModel.setFirstQuestion(firstQuestionViewModel.firstQuestion.value)
+                                navigator?.replace(ShapeScreen())
+                            }
+                        }
+                    )
+                }
+
             })
 
     }

@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import kotlinx.coroutines.launch
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.writing.EightQuestionViewModel
 import org.example.hit.heal.hitber.presentation.writing.model.DraggableWordState
 import org.jetbrains.compose.resources.stringResource

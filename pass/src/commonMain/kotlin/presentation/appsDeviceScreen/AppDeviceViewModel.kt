@@ -5,17 +5,15 @@ import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import org.example.hit.heal.core.presentation.Colors
 import presentation.components.CountdownDialogHandler
 import presentation.components.AppData
 import core.domain.use_case.PlayAudioUseCase
 import org.example.hit.heal.core.presentation.Resources.Icon.calculatorIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.cameraIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.clockIcon
-import org.example.hit.heal.core.presentation.Resources.Icon.clockIconPass
 import org.example.hit.heal.core.presentation.Resources.Icon.contactsIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.documentsIcon
-import org.example.hit.heal.core.presentation.Resources.Icon.emailIconPass
+import org.example.hit.heal.core.presentation.Resources.Icon.emailIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.purseIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.settingsIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.storeIcon
@@ -42,6 +40,18 @@ import org.example.hit.heal.core.presentation.Resources.String.store
 import org.example.hit.heal.core.presentation.Resources.String.weather
 import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
 import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
+import org.example.hit.heal.core.presentation.calculatorColor
+import org.example.hit.heal.core.presentation.cameraColor
+import org.example.hit.heal.core.presentation.clockColor
+import org.example.hit.heal.core.presentation.contactsColor
+import org.example.hit.heal.core.presentation.documentsColor
+import org.example.hit.heal.core.presentation.emailColor
+import org.example.hit.heal.core.presentation.messagesColor
+import org.example.hit.heal.core.presentation.phoneColor
+import org.example.hit.heal.core.presentation.purseColor
+import org.example.hit.heal.core.presentation.settingsColor
+import org.example.hit.heal.core.presentation.storeColor
+import org.example.hit.heal.core.presentation.weatherColor
 import presentation.contatcts.ContactsScreen
 
 class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHandler,
@@ -51,62 +61,62 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
     val items = listOf(
         AppData(
             imageRes = calculatorIcon,
-            circleColor = Colors.calculatorColor,
+            circleColor = calculatorColor,
             label = calculator
         ),
         AppData(
             imageRes = settingsIcon,
-            circleColor = Colors.settingsColor,
+            circleColor = settingsColor,
             label = settings
         ),
         AppData(
             imageRes = cameraIcon,
-            circleColor = Colors.cameraColor,
+            circleColor = cameraColor,
             label = camera
         ),
         AppData(
-            imageRes = emailIconPass,
-            circleColor = Colors.emailColor,
+            imageRes = emailIcon,
+            circleColor = emailColor,
             label = email
         ),
         AppData(
             imageRes = storeIcon,
-            circleColor = Colors.storeColor,
+            circleColor = storeColor,
             label = store
         ),
         AppData(
-            imageRes = clockIconPass,
-            circleColor = Colors.clockColor,
+            imageRes = clockIcon,
+            circleColor = clockColor,
             label = clock
         ),
         AppData(
             imageRes = contactsIcon,
-            circleColor = Colors.contactsColor,
+            circleColor = contactsColor,
             label = contacts
         ),
         AppData(
             imageRes = whiteMessages,
-            circleColor = Colors.messagesColor,
+            circleColor = messagesColor,
             label = messages
         ),
         AppData(
             imageRes = purseIcon,
-            circleColor = Colors.purseColor,
+            circleColor = purseColor,
             label = purse
         ),
         AppData(
             imageRes = weatherIcon,
-            circleColor = Colors.weatherColor,
+            circleColor = weatherColor,
             label = weather
         ),
         AppData(
             imageRes = documentsIcon,
-            circleColor = Colors.documentsColor,
+            circleColor = documentsColor,
             label = myFiles
         ),
         AppData(
             imageRes = whitePhone,
-            circleColor = Colors.phoneColor,
+            circleColor = phoneColor,
             label = phone
         )
     )
@@ -156,10 +166,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
 
     fun startCheckingIfUserDidSomething() {
-        println("viewModelScope isActive: ${viewModelScope.coroutineContext[Job]?.isActive}")
-
         reminderJob = viewModelScope.launch {
-            println("Coroutine started")
             while (isActive && didNothing <= 3) {
 
                 delay(1_000)

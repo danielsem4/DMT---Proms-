@@ -3,7 +3,9 @@ package org.example.hit.heal.hitber.presentation.dragAndDrop.components
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -26,7 +28,7 @@ fun DraggableCanvas(
 ) {
     Canvas(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth().fillMaxHeight(0.85f)
             .onSizeChanged { size ->
                 onScreenSizeChanged(size.width.toFloat() to size.height.toFloat())
             }

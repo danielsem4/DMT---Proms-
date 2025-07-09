@@ -23,7 +23,7 @@ fun NamingImages(selectedCouple: Pair<DrawableResource, DrawableResource>?) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
     ) {
         selectedCouple?.let { (firstImage, secondImage) ->
             Image(

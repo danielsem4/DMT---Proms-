@@ -1,6 +1,7 @@
 package org.example.hit.heal.hitber.presentation.understanding
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import core.domain.use_case.PlayAudioUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,15 +22,15 @@ class SixthQuestionViewModel(private val playAudioUseCase: PlayAudioUseCase): Vi
     private val _selectedItem = MutableStateFlow<DrawableResource?>(null)
     val selectedItem: StateFlow<DrawableResource?> get() = _selectedItem.asStateFlow()
 
-    private val _selectedNapkin = MutableStateFlow<DrawableResource?>(null)
-    val selectedNapkin: StateFlow<DrawableResource?> get() = _selectedNapkin.asStateFlow()
+    private val _selectedNapkin = MutableStateFlow<Color?>(null)
+    val selectedNapkin: StateFlow<Color?> get() = _selectedNapkin.asStateFlow()
 
     fun setRandomAudio() {
         if (_audioResourceId.value == null) {
             val randomAudio = audioList.random()
             _audioResourceId.value = randomAudio.audioResId
             _selectedItem.value = randomAudio.itemResId
-            _selectedNapkin.value = randomAudio.napkinColorResId
+            _selectedNapkin.value = randomAudio.napkinTint
         }
     }
 
@@ -63,7 +64,7 @@ class SixthQuestionViewModel(private val playAudioUseCase: PlayAudioUseCase): Vi
     }
 
     fun evaluateAnswer(
-        napkinResourceId: DrawableResource?,
+        napkinResourceId: Color?,
         napkinPosition: Offset,
         napkinSize: Pair<Float, Float>,
         itemSize: Pair<Float, Float>,

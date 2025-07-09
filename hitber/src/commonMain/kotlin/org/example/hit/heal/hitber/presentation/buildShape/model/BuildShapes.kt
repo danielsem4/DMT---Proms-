@@ -1,12 +1,12 @@
 package org.example.hit.heal.hitber.presentation.buildShape.model
 
-import org.example.hit.heal.core.presentation.Resources.Icon.arrowKey
-import org.example.hit.heal.core.presentation.Resources.Icon.blackCircle
-import org.example.hit.heal.core.presentation.Resources.Icon.circle
-import org.example.hit.heal.core.presentation.Resources.Icon.horizontalLine
+import org.example.hit.heal.core.presentation.Resources.Icon.arrowUpIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.filledCircleIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.horizontalStrokeIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.outlineCircleIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.rotateStar
-import org.example.hit.heal.core.presentation.Resources.Icon.triangle
-import org.example.hit.heal.core.presentation.Resources.Icon.verticalLine
+import org.example.hit.heal.core.presentation.Resources.Icon.triangleIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.verticalStrokeIcon
 import org.jetbrains.compose.resources.DrawableResource
 
 data class BuildShapes(
@@ -21,21 +21,21 @@ data class BuildShapes(
 )
 
 val staticShapesItem = listOf(
-    BuildShapes(triangle, 0.05f, 0.4f, 0.4f, 0.4f, "triangle"),
+    BuildShapes(triangleIcon, 0.05f, 0.4f, 0.4f, 0.4f, "triangle"),
     BuildShapes(rotateStar, 0.5f, -0.25f, 0.5f, 0.5f,"star",20f, 25f),
-    BuildShapes(arrowKey, 0.5f, 0.45f, 0.8f, 0.5f, "arrow key",25f, 20f),
-    BuildShapes(circle, 0.15f, 0.65f, 0.2f, 0.2f, "circle", 15f, 20f),
-    BuildShapes(blackCircle, 0.6f, 0.65f, 0.2f, 0.2f, "black circle",15f, 20f),
-    BuildShapes(verticalLine, 0.22f, 0.3f, 0.45f, 0.5f, "vertical line",20f, 15f),
-    BuildShapes(horizontalLine, 0.2f, 0.1f, 0.5f, 0.8f, "horizontal line", 15f, 15f)
+    BuildShapes(arrowUpIcon, 0.5f, 0.45f, 0.8f, 0.5f, "arrow key",25f, 20f),
+    BuildShapes(outlineCircleIcon, 0.15f, 0.65f, 0.21f, 0.21f, "circle", 15f, 20f),
+    BuildShapes(filledCircleIcon, 0.6f, 0.65f, 0.2f, 0.2f, "black circle",15f, 20f),
+    BuildShapes(verticalStrokeIcon, 0.07f, 0.12f, 0.7f, 0.8f, "vertical line",20f, 15f),
+    BuildShapes(horizontalStrokeIcon, 0.2f, 0.12f, 0.5f, 0.8f, "horizontal line", 15f, 15f)
 )
 
 val draggableShapesItem = listOf(
-    BuildShapes(triangle, 0.8f, 0.05f, 0.8f, 1f, "triangle"),
+    BuildShapes(triangleIcon, 0.8f, 0.05f, 0.8f, 1f, "triangle"),
     BuildShapes(rotateStar, 0.87f, 0.7f, 0.5f, 0.5f, "star"),
-    BuildShapes(arrowKey, 0.7f, 0.1f, 0.8f, 0.5f, "arrow key"),
-    BuildShapes(circle, 0.95f, 0.55f, 0.2f, 0.2f, "circle"),
-    BuildShapes(blackCircle, 0.88f, 0.55f, 0.2f, 0.2f, "black circle"),
-    BuildShapes(verticalLine, 0.75f, 0.7f, 0.45f, 0.5f, "vertical line"),
-    BuildShapes(horizontalLine, 0.65f, 0.4f, 0.5f, 0.8f, "horizontal line")
+    BuildShapes(arrowUpIcon, 0.7f, 0.1f, 0.8f, 0.5f, "arrow key"),
+    BuildShapes(outlineCircleIcon, 0.95f, 0.55f, 0.21f, 0.21f, "circle"),
+    BuildShapes(filledCircleIcon, 0.88f, 0.55f, 0.2f, 0.2f, "black circle"),
+    BuildShapes(verticalStrokeIcon, 0.75f, 0.55f, 0.7f, 0.8f, "vertical line"),
+    BuildShapes(horizontalStrokeIcon, 0.65f, 0.4f, 0.5f, 0.8f, "horizontal line")
 )

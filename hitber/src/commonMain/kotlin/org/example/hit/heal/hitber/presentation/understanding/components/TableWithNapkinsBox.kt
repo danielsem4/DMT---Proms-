@@ -7,20 +7,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import org.example.hit.heal.core.presentation.Resources.Icon.table
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberNapkin
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberTable
 import org.example.hit.heal.hitber.presentation.understanding.model.napkins
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -30,7 +32,7 @@ fun TableWithNapkinsBox(
     onTableSizeChanged: (Pair<Float, Float>) -> Unit,
     napkinWidthPx: Float,
     napkinHeightPx: Float,
-    napkinResourceId: DrawableResource?,
+    napkinResourceId: Color?,
     onNapkinPositionCalculated: (Offset) -> Unit,
     density: Density,
     modifier: Modifier = Modifier
@@ -64,19 +66,20 @@ fun TableWithNapkinsBox(
                 modifier = Modifier
                     .offset(x = xDp, y = yDp)
                     .onGloballyPositioned { coordinates ->
-                        if (napkinResourceId == item.image) {
+                        if (napkinResourceId == item.tint) {
                             onNapkinPositionCalculated(coordinates.positionInRoot())
                         }
                     }
                     .size(napkinWidthDp, napkinHeightDp)
                     .zIndex(1f)
             ) {
-                Image(
+                Icon(
                     painter = painterResource(item.image),
-                    contentDescription = stringResource(sixthQuestionHitberNapkin),
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.FillBounds
+                    contentDescription = null,
+                    tint = item.tint,
+                    modifier = Modifier.size(64.dp)
                 )
+
             }
         }
     }

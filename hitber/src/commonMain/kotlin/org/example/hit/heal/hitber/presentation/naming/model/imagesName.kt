@@ -1,10 +1,10 @@
 
 import androidx.compose.runtime.Composable
-import org.example.hit.heal.core.presentation.Resources.Icon.ball
-import org.example.hit.heal.core.presentation.Resources.Icon.balloon
+import org.example.hit.heal.core.presentation.Resources.Icon.ballIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.balloonIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.lemon
-import org.example.hit.heal.core.presentation.Resources.Icon.pencil
-import org.example.hit.heal.core.presentation.Resources.Icon.ruler
+import org.example.hit.heal.core.presentation.Resources.Icon.pencilIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.rulerIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.table
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberBall
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberBalloon
@@ -18,11 +18,11 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun getImageName(imageId: DrawableResource): String {
     return when (imageId) {
-        pencil -> stringResource(fourthQuestionHitberPencil)
-        ruler -> stringResource(fourthQuestionHitberRuler)
+        pencilIcon -> stringResource(fourthQuestionHitberPencil)
+        rulerIcon -> stringResource(fourthQuestionHitberRuler)
         table -> stringResource(fourthQuestionHitberTable)
-        ball -> stringResource(fourthQuestionHitberBall)
-        balloon -> stringResource(fourthQuestionHitberBalloon)
+        ballIcon -> stringResource(fourthQuestionHitberBall)
+        balloonIcon -> stringResource(fourthQuestionHitberBalloon)
         lemon -> stringResource(fourthQuestionHitberLemon)
         else -> ""
     }

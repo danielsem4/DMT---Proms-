@@ -1,6 +1,5 @@
 package presentation.contatcts
 
-import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,17 +14,23 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.painterResource
-import org.example.hit.heal.core.presentation.Resources.Icon.plusIconHitber
+import org.example.hit.heal.core.presentation.Resources.Icon.plusIcon
 import org.example.hit.heal.core.presentation.Resources.String.contacts
 import org.example.hit.heal.core.presentation.Resources.String.hanaCohen
 import org.example.hit.heal.core.presentation.Resources.String.phoneNumber
 import org.example.hit.heal.core.presentation.Resources.String.plus
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
+import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.components.InstructionsDialog
@@ -61,13 +66,14 @@ class ContactsScreen : Screen {
             }
         }
 
-        VerticalTabletBaseScreen(
+        BaseScreen(
             title = stringResource(contacts),
+            config = ScreenConfig.TabletConfig,
             content = {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(paddingMd),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
@@ -76,17 +82,17 @@ class ContactsScreen : Screen {
                         onValueChange = { viewModel.onSearchQueryChanged(it) }
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(paddingMd))
 
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = 16.dp)
+                            .padding(horizontal = paddingMd)
                     ) {
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             state = listState,
-                            verticalArrangement = Arrangement.spacedBy(25.dp)
+                            verticalArrangement = Arrangement.spacedBy(paddingLg)
                         ) {
                             items(contactsList) { contact ->
                                 ContactItem(contact = contact, viewModel = viewModel)
@@ -96,16 +102,16 @@ class ContactsScreen : Screen {
                         Box(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(16.dp)
-                                .size(50.dp)
-                                .background(primaryColor, shape = RoundedCornerShape(10.dp))
+                                .padding(paddingMd)
+                                .size(iconSizeXl)
+                                .background(primaryColor, shape = RoundedCornerShape(radiusMd))
                                 .clickable { },
                             contentAlignment = Alignment.Center
                         ) {
                             Image(
-                                painter = painterResource(plusIconHitber),
+                                painter = painterResource(plusIcon),
                                 contentDescription = stringResource(plus),
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(iconSizeMd)
                             )
                         }
                     }

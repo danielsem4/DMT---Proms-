@@ -1,6 +1,5 @@
 package presentation.entryScreen
 
-import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,7 +22,9 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
 import org.example.hit.heal.core.presentation.Resources.String.firstInstructionsPass
 import org.example.hit.heal.core.presentation.Resources.String.firstMissionPass
 import org.example.hit.heal.core.presentation.Resources.String.fmpt
@@ -33,6 +32,12 @@ import org.example.hit.heal.core.presentation.Resources.String.fmptMeaning
 import org.example.hit.heal.core.presentation.Resources.String.next
 import org.example.hit.heal.core.presentation.Resources.String.thePassTest
 import org.example.hit.heal.core.presentation.Resources.String.welcomePass
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.appsDeviceScreen.AppDeviceScreen
@@ -59,11 +64,12 @@ class PassEntryScreen : Screen {
             }
         )
 
-
-        VerticalTabletBaseScreen(
+        BaseScreen(
             title = stringResource(welcomePass),
+            config = ScreenConfig.TabletConfig,
             content = {
-                AudioPlayingAnimation(isPlaying = isPlaying,)
+                AudioPlayingAnimation(isPlaying = isPlaying)
+
 
                 Column(
                     modifier = Modifier
@@ -74,25 +80,27 @@ class PassEntryScreen : Screen {
                     Text(
                         stringResource(fmpt),
                         color = primaryColor,
-                        fontSize = 40.sp,
+                        fontSize = EXTRA_LARGE,
                         fontWeight = Bold
                     )
                     Spacer(modifier = Modifier.padding(10.dp))
                     Text(
                         stringResource(fmptMeaning),
                         color = primaryColor,
-                        fontSize = 20.sp,
+                        fontSize = EXTRA_MEDIUM,
                         fontWeight = Bold
                     )
                     Spacer(modifier = Modifier.padding(50.dp))
 
                     Box(
-                        modifier = Modifier.align(Alignment.CenterHorizontally).border(
-                            width = 2.dp,
-                            color = Color.LightGray,
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                            .background(Color.White, shape = RoundedCornerShape(10.dp))
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .border(
+                                width = 2.dp,
+                                color = Color.LightGray,
+                                shape = RoundedCornerShape(radiusMd)
+                            )
+                            .background(Color.White, shape = RoundedCornerShape(radiusMd))
                             .padding(20.dp)
                     ) {
                         Text(
@@ -105,34 +113,29 @@ class PassEntryScreen : Screen {
                     }
 
                     Box(
-                        modifier = Modifier.align(Alignment.CenterHorizontally).padding(16.dp)
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(paddingMd)
                     ) {
                         Text(
                             stringResource(thePassTest),
-                            fontSize = 15.sp,
+                            fontSize = EXTRA_REGULAR,
                             fontWeight = Bold,
                         )
                     }
-                    Box(modifier = Modifier.fillMaxSize().padding(10.dp)) {
-                        Button(
-                            onClick = { navigator?.replace(AppDeviceScreen()) },
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        RoundedButton(
+                            text = stringResource(next),
                             modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                            shape = RoundedCornerShape(12.dp),
-                        ) {
-                            Text(
-                                text = stringResource(next),
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                fontWeight = Bold
-                            )
-                        }
+                            onClick = {
+                                navigator?.replace(AppDeviceScreen())
+                            }
+                        )
                     }
                 }
-
-
             }
         )
+
         if (isOverlayVisible) {
             Box(
                 modifier = Modifier

@@ -1,6 +1,5 @@
 package presentation.endScreen
 
-import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -23,21 +21,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import org.example.hit.heal.core.presentation.Colors.primaryColor
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.input.key.Key.Companion.Home
 import androidx.compose.ui.text.style.TextAlign
 import core.utils.ObserveLifecycle
 import org.example.hit.heal.core.presentation.Resources.String.end
 import org.example.hit.heal.core.presentation.Resources.String.exit
+import org.example.hit.heal.core.presentation.Resources.String.next
 import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe
 import org.example.hit.heal.core.presentation.Resources.String.thanksVocalPass
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnimation
@@ -63,8 +62,9 @@ class EndScreen : Screen {
             }
         )
 
-        VerticalTabletBaseScreen(
+        BaseScreen(
             title = stringResource(end),
+            config = ScreenConfig.TabletConfig,
             content = {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -77,11 +77,11 @@ class EndScreen : Screen {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color.White, shape = RoundedCornerShape(10.dp))
+                            .background(Color.White, shape = RoundedCornerShape(radiusMd))
                             .border(
                                 width = 2.dp,
                                 color = Color.LightGray,
-                                shape = RoundedCornerShape(10.dp)
+                                shape = RoundedCornerShape(radiusMd)
                             )
                     ) {
                         Text(
@@ -98,20 +98,14 @@ class EndScreen : Screen {
 
                     SuccessAnimation(modifier = Modifier.size(100.dp))
 
-                    Box(modifier = Modifier.fillMaxSize().padding(10.dp)) {
-                        Button(
-                            onClick = { navigator?.popUntilRoot() },
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        RoundedButton(
+                            text = stringResource(exit),
                             modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                            shape = RoundedCornerShape(12.dp),
-                        ) {
-                            Text(
-                                text = stringResource(exit),
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                fontWeight = Bold
-                            )
-                        }
+                            onClick = {
+                                navigator?.popUntilRoot()
+                            }
+                        )
                     }
                 }
             }

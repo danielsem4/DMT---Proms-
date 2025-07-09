@@ -32,7 +32,7 @@ fun TenthQuestionShapesLayout(
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth().fillMaxHeight(0.85f)
             .background(color = Color.White, shape = RoundedCornerShape(4.dp))
             .onSizeChanged { size ->
                 val sizePair = size.width.toFloat() to size.height.toFloat()

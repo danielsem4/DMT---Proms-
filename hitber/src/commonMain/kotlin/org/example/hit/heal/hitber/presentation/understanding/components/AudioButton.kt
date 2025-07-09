@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import org.example.hit.heal.core.presentation.Resources.Icon.speaker
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberListen
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberVolumeIcon
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 

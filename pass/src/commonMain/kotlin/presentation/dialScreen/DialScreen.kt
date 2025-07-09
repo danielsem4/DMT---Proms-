@@ -1,6 +1,5 @@
 package presentation.dialScreen
 
-import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,16 +21,23 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import androidx.compose.ui.graphics.Color
 import core.utils.ObserveLifecycle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Resources.Icon.dialKeysIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.likeIcon
 import org.example.hit.heal.core.presentation.Resources.String.dentistPass
 import org.example.hit.heal.core.presentation.Resources.String.dentistPhoneNumber
 import org.example.hit.heal.core.presentation.Resources.String.dialKeys
 import org.example.hit.heal.core.presentation.Resources.String.dialer
+import org.example.hit.heal.core.presentation.Resources.String.no
+import org.example.hit.heal.core.presentation.Resources.String.understandingDialogText
+import org.example.hit.heal.core.presentation.Resources.String.yes
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
+import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.components.CheckUnderstandingDialog
 import presentation.components.InstructionsDialog
 import presentation.dialScreen.components.DialDialog
 
@@ -57,8 +63,9 @@ class DialScreen : Screen {
         val currentMissionPass by viewModel.currentMissionPass.collectAsState()
         val correctNumber = stringResource(dentistPhoneNumber)
 
-        VerticalTabletBaseScreen(
+        BaseScreen(
             title = stringResource(dialer),
+            config = ScreenConfig.TabletConfig,
             content = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     LazyColumn(
@@ -143,9 +150,22 @@ class DialScreen : Screen {
         )
 
         if (showUnderstandingDialog) {
-            CheckUnderstandingDialog(
-                onYesClick = { viewModel.onUnderstandingConfirmed() },
-                onNoClick = { viewModel.onUnderstandingDenied() }
+            LaunchedEffect(Unit) {
+                delay(25_000)
+                viewModel.onUnderstandingConfirmed()
+            }
+
+            BaseYesNoDialog(
+                onDismissRequest = { viewModel.onUnderstandingConfirmed() },
+                title = stringResource(understandingDialogText),
+                icon = likeIcon,
+                message = "",
+                confirmButtonText = stringResource(yes),
+                confirmButtonColor = primaryColor,
+                onConfirm = { viewModel.onUnderstandingConfirmed() },
+                dismissButtonText = stringResource(no),
+                dismissButtonColor = primaryColor,
+                onDismissButtonClick = { viewModel.onUnderstandingDenied() }
             )
         }
 

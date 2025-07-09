@@ -1,12 +1,15 @@
 package org.example.hit.heal.hitber.presentation.shapes
 
-import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,7 +27,9 @@ import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTask
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTitle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -39,28 +44,36 @@ class ShapeScreen : Screen {
         var showDialog by remember { mutableStateOf(true) }
         val shapeSet by secondQuestionViewModel.selectedSet.collectAsState()
 
-        HorizontalTabletBaseScreen(
+        BaseScreen(
             title = stringResource(secondQuestionHitberTitle),
-            onNextClick = { navigator?.replace(ActionShapesScreen(2)) },
-            question = 2,
-            buttonText = stringResource(`continue`), buttonColor = primaryColor,
+            config = ScreenConfig.TabletConfig,
+            topRightText = "2/10",
             content = {
-
                 Row(
-                    modifier = Modifier.fillMaxSize()
-                        .background(color = Color.White),
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.9f)
+                    .background(color = Color.White),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 )
                 {
                     shapeSet.forEach { shapeRes ->
-                        Image(
+                        Icon(
                             painter = painterResource(shapeRes.drawable),
                             contentDescription = stringResource(secondQuestionHitberTitle),
+                            tint = Color.Unspecified,
                             modifier = Modifier.size(150.dp)
                         )
-                    }
+                    }}
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        RoundedButton(
+                            text = stringResource(`continue`),
+                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                            onClick = {
+                                navigator?.replace(ActionShapesScreen(2))
+                            }
+                        )
                 }
+
             })
 
         if (showDialog) {

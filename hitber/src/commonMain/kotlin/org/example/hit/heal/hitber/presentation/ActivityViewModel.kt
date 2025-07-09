@@ -48,10 +48,10 @@ class ActivityViewModel(
     }
 
     fun setSecondQuestion(
-        answers: ArrayList<Map<Int, String>>,
+        answers:  List<Pair<Map<Int, String>, Int>>,
         date: String
     ) {
-        val secondQuestionList = answers.map { map ->
+        val secondQuestionList = answers.map { (map, correctShapesCount) ->
             val shapesList = map.values.toList()
             SecondQuestionItem(
                 selectedShapes = SelectedShapesStringList(
@@ -59,7 +59,7 @@ class ActivityViewModel(
                     dateTime = date
                 ),
                 wrongShapes = MeasureObjectInt(
-                    value = 5 - shapesList.size,
+                    value = 5 - correctShapesCount,
                     dateTime = date
                 )
             )
@@ -150,10 +150,10 @@ class ActivityViewModel(
     }
 
     fun setNinthQuestion(
-        answers: List<Map<Int, String>>,
+        answers:  List<Pair<Map<Int, String>, Int>>,
         date: String
     ) {
-        val ninthQuestionList = answers.map { map ->
+        val ninthQuestionList = answers.map { (map, correctShapesCount) ->
             val shapesList = map.values.toList()
             SecondQuestionItem(
                 selectedShapes = SelectedShapesStringList(
@@ -161,7 +161,7 @@ class ActivityViewModel(
                     dateTime = date
                 ),
                 wrongShapes = MeasureObjectInt(
-                    value = 5 - shapesList.size,
+                    value = 5 - correctShapesCount,
                     dateTime = date
                 )
             )
@@ -196,63 +196,63 @@ class ActivityViewModel(
 
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-    fun uploadImage(
-        onSuccess: (() -> Unit)? = null,
-        onFailure: ((message: Error) -> Unit)? = null,
-        bitmap: ImageBitmap,
-        date: String,
-        currentQuestion: Int
-    ) {
-        if (bitmap.width <= 1 || bitmap.height <= 1) {
-            println("❌ תמונה לא תקינה")
-            onFailure?.invoke(DataError.Local.EMPTY_FILE)
-            return
-        }
+        fun uploadImage(
+            onSuccess: (() -> Unit)? = null,
+            onFailure: ((message: Error) -> Unit)? = null,
+            bitmap: ImageBitmap,
+            date: String,
+            currentQuestion: Int
+        ) {
+            if (bitmap.width <= 1 || bitmap.height <= 1) {
+                println("❌ תמונה לא תקינה")
+                onFailure?.invoke(DataError.Local.EMPTY_FILE)
+                return
+            }
 
-        val imageByteArray = bitmap.toByteArray()
-        println("📤 התחלת העלאה, image size: ${imageByteArray.size}")
+            val imageByteArray = bitmap.toByteArray()
+            println("📤 התחלת העלאה, image size: ${imageByteArray.size}")
 
-        uploadScope.launch {
-            val userId = storage.get(PrefKeys.userId)!!
-            val clinicId = storage.get(PrefKeys.clinicId)!!
-            val measurement = 19
+            uploadScope.launch {
+                val userId = storage.get(PrefKeys.userId)!!
+                val clinicId = storage.get(PrefKeys.clinicId)!!
+                val measurement = 19
 
-            val imagePath = bitmapToUploadUseCase.buildPath(
-                clinicId = clinicId,
-                patientId = userId,
-                measurementId = measurement,
-                pathDate = date
-            )
-
-
-            println("📁 Path: $imagePath")
-
-            try {
-                uploadImageUseCase.execute(
-                    imagePath = imagePath,
-                    bytes = imageByteArray,
+                val imagePath = bitmapToUploadUseCase.buildPath(
                     clinicId = clinicId,
-                    userId = userId
-                ).onSuccess {
-                    saveUploadedImageUrl(currentQuestion, imagePath, date)
-                    println("✅ העלאה הצליחה")
-                    withContext(Dispatchers.Main) {
-                        onSuccess?.invoke()
+                    patientId = userId,
+                    measurementId = measurement,
+                    pathDate = date
+                )
+
+
+                println("📁 Path: $imagePath")
+
+                try {
+                    uploadImageUseCase.execute(
+                        imagePath = imagePath,
+                        bytes = imageByteArray,
+                        clinicId = clinicId,
+                        userId = userId
+                    ).onSuccess {
+                        saveUploadedImageUrl(currentQuestion, imagePath, date)
+                        println("✅ העלאה הצליחה")
+                        withContext(Dispatchers.Main) {
+                            onSuccess?.invoke()
+                        }
+                    }.onError {
+                        println("❌ שגיאה בהעלאה: $it")
+                        withContext(Dispatchers.Main) {
+                            onFailure?.invoke(it)
+                        }
                     }
-                }.onError {
-                    println("❌ שגיאה בהעלאה: $it")
+                } catch (e: Exception) {
+                    println("🚨 שגיאה חריגה: ${e.message}")
                     withContext(Dispatchers.Main) {
-                        onFailure?.invoke(it)
+                        onFailure?.invoke(DataError.Remote.UNKNOWN)
                     }
-                }
-            } catch (e: Exception) {
-                println("🚨 שגיאה חריגה: ${e.message}")
-                withContext(Dispatchers.Main) {
-                    onFailure?.invoke(DataError.Remote.UNKNOWN)
                 }
             }
         }
-    }
 
 
     private fun saveUploadedImageUrl(currentQuestion: Int?, uploadedUrl: String, date: String) {

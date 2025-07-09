@@ -1,10 +1,12 @@
 package org.example.hit.heal.hitber.presentation.entry
 
-import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,9 +32,11 @@ import org.example.hit.heal.core.presentation.Resources.String.entryHitberInstru
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberNote
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberTitle
 import org.example.hit.heal.core.presentation.Resources.String.start
-import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.Resources.Icon.chicken
+import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
+import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
 import org.jetbrains.compose.resources.stringResource
 
@@ -64,14 +68,11 @@ class HitberEntryScreen : Screen {
         }
 
 
-        HorizontalTabletBaseScreen(
+        BaseScreen(
             title = stringResource(entryHitberTitle),
-            onNextClick = { navigator?.replace(TimeAndPlace()) },
-            question = 0,
-            buttonText = stringResource(start),
-            buttonColor = primaryColor,
+            config = ScreenConfig.TabletConfig,
+            topRightText = "0/10",
             content = {
-
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -93,6 +94,16 @@ class HitberEntryScreen : Screen {
 
                     Text(stringResource(entryHitberInstructions7), fontSize = 25.sp)
                     Text(stringResource(entryHitberGoodLuck), fontSize = 25.sp)
+
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        RoundedButton(
+                            text = stringResource(start),
+                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                            onClick = {
+                                navigator?.replace(TimeAndPlace())
+                            }
+                        )
+                    }
                 }
             })
     }

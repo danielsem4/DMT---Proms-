@@ -22,20 +22,14 @@ import dmt_proms.ui.core.generated.resources.activities
 import dmt_proms.ui.core.generated.resources.Understanding_dialog_text
 import dmt_proms.ui.core.generated.resources.Whatsapp
 import dmt_proms.ui.core.generated.resources.app_name
-import dmt_proms.ui.core.generated.resources.arrow_down
 import dmt_proms.ui.core.generated.resources.asterisk
 import dmt_proms.ui.core.generated.resources.balloon
 import dmt_proms.ui.core.generated.resources.bin
 import dmt_proms.ui.core.generated.resources.apps_page_second_assist
-import dmt_proms.ui.core.generated.resources.arrow_key
-import dmt_proms.ui.core.generated.resources.asterisk_image
-import dmt_proms.ui.core.generated.resources.ball
-import dmt_proms.ui.core.generated.resources.balloon_image
-import dmt_proms.ui.core.generated.resources.black_circle
+import dmt_proms.ui.core.generated.resources.arrow_up
 import dmt_proms.ui.core.generated.resources.black_messages
 import dmt_proms.ui.core.generated.resources.black_phone
 import dmt_proms.ui.core.generated.resources.black_video
-import dmt_proms.ui.core.generated.resources.blue_napkin
 import dmt_proms.ui.core.generated.resources.calculator
 import dmt_proms.ui.core.generated.resources.call_hana_cohen_pass
 import dmt_proms.ui.core.generated.resources.call_to_dentist
@@ -44,9 +38,7 @@ import dmt_proms.ui.core.generated.resources.call_to_hana_cohen_instruction_pass
 import dmt_proms.ui.core.generated.resources.camera
 import dmt_proms.ui.core.generated.resources.check
 import dmt_proms.ui.core.generated.resources.chicken
-import dmt_proms.ui.core.generated.resources.circle
 import dmt_proms.ui.core.generated.resources.clock
-import dmt_proms.ui.core.generated.resources.close
 import dmt_proms.ui.core.generated.resources.close_fridge
 import dmt_proms.ui.core.generated.resources.close_icon
 import dmt_proms.ui.core.generated.resources.coca_cola
@@ -97,7 +89,6 @@ import dmt_proms.ui.core.generated.resources.eighth_question_word_hitber_grandma
 import dmt_proms.ui.core.generated.resources.eighth_question_word_hitber_had
 import dmt_proms.ui.core.generated.resources.eighth_question_word_hitber_with
 import dmt_proms.ui.core.generated.resources.eighth_question_word_hitber_yesterday
-import dmt_proms.ui.core.generated.resources.ellipse
 import dmt_proms.ui.core.generated.resources.email
 import dmt_proms.ui.core.generated.resources.end
 import dmt_proms.ui.core.generated.resources.entry_hitber_good_luck
@@ -198,22 +189,16 @@ import dmt_proms.ui.core.generated.resources.fourth_question_hitber_title
 import dmt_proms.ui.core.generated.resources.fourth_question_hitber_what_in_the_pic
 import dmt_proms.ui.core.generated.resources.going_back_to_apss_screen_pass
 import dmt_proms.ui.core.generated.resources.grapes
-import dmt_proms.ui.core.generated.resources.green_napkin
 import dmt_proms.ui.core.generated.resources.hana_cohen
-import dmt_proms.ui.core.generated.resources.hash_tag
 import dmt_proms.ui.core.generated.resources.here_persons_number
 import dmt_proms.ui.core.generated.resources.hexagon
-import dmt_proms.ui.core.generated.resources.horizontal_line
 import dmt_proms.ui.core.generated.resources.chat
-import dmt_proms.ui.core.generated.resources.check_image
 import dmt_proms.ui.core.generated.resources.circle_outlined
-import dmt_proms.ui.core.generated.resources.clock_image
 import dmt_proms.ui.core.generated.resources.clock_test
 import dmt_proms.ui.core.generated.resources.disk_full
 import dmt_proms.ui.core.generated.resources.document_share
 import dmt_proms.ui.core.generated.resources.dont_forget
 import dmt_proms.ui.core.generated.resources.elipsa_outlined
-import dmt_proms.ui.core.generated.resources.email_image
 import dmt_proms.ui.core.generated.resources.empty_pass
 import dmt_proms.ui.core.generated.resources.evaluation
 import dmt_proms.ui.core.generated.resources.exercise
@@ -265,12 +250,9 @@ import dmt_proms.ui.core.generated.resources.orthopedist_pass
 import dmt_proms.ui.core.generated.resources.paint_clinic_pass
 import dmt_proms.ui.core.generated.resources.pass
 import dmt_proms.ui.core.generated.resources.peas
-import dmt_proms.ui.core.generated.resources.pencil_image
-import dmt_proms.ui.core.generated.resources.pentagon_image
 import dmt_proms.ui.core.generated.resources.person_names
 import dmt_proms.ui.core.generated.resources.phone
 import dmt_proms.ui.core.generated.resources.phone_number
-import dmt_proms.ui.core.generated.resources.plus_image
 import dmt_proms.ui.core.generated.resources.press_the_dial_button_that_showen_down_pass
 import dmt_proms.ui.core.generated.resources.press_the_number_or_the_dial_button_pass
 import dmt_proms.ui.core.generated.resources.previous
@@ -301,13 +283,8 @@ import dmt_proms.ui.core.generated.resources.Res.string as rs
 import dmt_proms.ui.core.generated.resources.profile
 import dmt_proms.ui.core.generated.resources.psychiatrist_pass
 import dmt_proms.ui.core.generated.resources.purse
-import dmt_proms.ui.core.generated.resources.rectangle_image
-import dmt_proms.ui.core.generated.resources.red_napkin
 import dmt_proms.ui.core.generated.resources.return_button_on_top_left_pass
-import dmt_proms.ui.core.generated.resources.rhomb
-import dmt_proms.ui.core.generated.resources.right_triangle
 import dmt_proms.ui.core.generated.resources.rotate_star
-import dmt_proms.ui.core.generated.resources.ruler_image
 import dmt_proms.ui.core.generated.resources.search
 import dmt_proms.ui.core.generated.resources.search_at_latter_h_pass
 import dmt_proms.ui.core.generated.resources.search_contacts_list_in_the_phone_pass
@@ -357,7 +334,6 @@ import dmt_proms.ui.core.generated.resources.sixth_question_hitber_table
 import dmt_proms.ui.core.generated.resources.sixth_question_hitber_title
 import dmt_proms.ui.core.generated.resources.sixth_question_hitber_volume_icon
 import dmt_proms.ui.core.generated.resources.speaker
-import dmt_proms.ui.core.generated.resources.star
 import dmt_proms.ui.core.generated.resources.start
 import dmt_proms.ui.core.generated.resources.store
 import dmt_proms.ui.core.generated.resources.summary_hitber_instructions1
@@ -376,8 +352,6 @@ import dmt_proms.ui.core.generated.resources.the_pass_test
 import dmt_proms.ui.core.generated.resources.third_question_hitber_finish_task
 import dmt_proms.ui.core.generated.resources.third_question_hitber_instructions
 import dmt_proms.ui.core.generated.resources.third_question_hitber_title
-import dmt_proms.ui.core.generated.resources.trapezoid
-import dmt_proms.ui.core.generated.resources.vertical_line
 import dmt_proms.ui.core.generated.resources.video
 import dmt_proms.ui.core.generated.resources.weather
 import dmt_proms.ui.core.generated.resources.welcome_pass
@@ -392,7 +366,6 @@ import dmt_proms.ui.core.generated.resources.wrong_app_second_assist
 import dmt_proms.ui.core.generated.resources.wrong_app_thired_assist
 import dmt_proms.ui.core.generated.resources.wrong_app_title
 import dmt_proms.ui.core.generated.resources.wrong_number_dialed_please_try_again_pass
-import dmt_proms.ui.core.generated.resources.yellow_napkin
 import dmt_proms.ui.core.generated.resources.yes
 import dmt_proms.ui.core.generated.resources.yogurt
 
@@ -430,8 +403,8 @@ object Resources {
 //        val tableIcon = Res.drawable.table
         val rulerIcon = Res.drawable.ruler
 
-        val plusIconHitber = Res.drawable.plus
-        val arrowDownIcon = Res.drawable.arrow_down
+        val plusIcon = Res.drawable.plus
+        val arrowUpIcon = Res.drawable.arrow_up
         val asteriskIcon = Res.drawable.asterisk
         val binIcon = Res.drawable.bin
         val openBinIcon = Res.drawable.open_bin
@@ -455,22 +428,12 @@ object Resources {
         val starOutlineIcon = Res.drawable.star_outlined
         val trapezeIcon = Res.drawable.trapeze
         val xIcon = Res.drawable.x
-        val asterisk = Res.drawable.asterisk_image
-        val arrowKey = Res.drawable.arrow_key
-        val ball = Res.drawable.ball
-        val balloon = Res.drawable.balloon_image
-        val blackCircle = Res.drawable.black_circle
         val blackMessages = Res.drawable.black_messages
         val blackPhone = Res.drawable.black_phone
         val blackVideo = Res.drawable.black_video
-        val blueNapkin = Res.drawable.blue_napkin
         val calculatorIcon = Res.drawable.calculator
         val cameraIcon = Res.drawable.camera
-        val check = Res.drawable.check_image
         val chicken = Res.drawable.chicken
-        val circle = Res.drawable.circle
-        val clockIconPass = Res.drawable.clock_image
-        val close = Res.drawable.close
         val closeFridge = Res.drawable.close_fridge
         val closeIcon = Res.drawable.close_icon
         val cocaCola = Res.drawable.coca_cola
@@ -483,48 +446,29 @@ object Resources {
         val documentsIcon = Res.drawable.documents
         val dropDown = Res.drawable.drop_down
         val dropUp = Res.drawable.drop_up
-        val ellipse = Res.drawable.ellipse
-        val emailIconPass = Res.drawable.email_image
         val errorIcon = Res.drawable.error_icon
         val exclamationMark = Res.drawable.exclamation_mark
         val exitIcon = Res.drawable.exit
         val grapes = Res.drawable.grapes
-        val greenNapkin = Res.drawable.green_napkin
-        val hashTag = Res.drawable.hash_tag
-        val hexagon = Res.drawable.hexagon
-        val horizontalLine = Res.drawable.horizontal_line
         val lemon = Res.drawable.lemon
         val likeIcon = Res.drawable.like
         val milk = Res.drawable.milk
         val openFridge = Res.drawable.open_fridge
         val orangeJuice = Res.drawable.orange_juice
         val peas = Res.drawable.peas
-        val pencil = Res.drawable.pencil_image
-        val pentagon = Res.drawable.pentagon_image
-        val plusIcon = Res.drawable.plus_image
         val profileIcon = Res.drawable.profile
         val purseIcon = Res.drawable.purse
-        val rectangle = Res.drawable.rectangle_image
-        val redNapkin = Res.drawable.red_napkin
-        val rhomb = Res.drawable.rhomb
-        val rightTriangle = Res.drawable.right_triangle
         val rotateStar = Res.drawable.rotate_star
-        val ruler = Res.drawable.ruler_image
         val searchIcon = Res.drawable.search
         val settingsIcon = Res.drawable.settings
         val speaker = Res.drawable.speaker
-        val star = Res.drawable.star
         val storeIcon = Res.drawable.store
         val table = Res.drawable.table
-        val trapezoid = Res.drawable.trapezoid
-        val triangle = Res.drawable.triangle
-        val verticalLine = Res.drawable.vertical_line
         val weatherIcon = Res.drawable.weather
         val whatsappIcon = Res.drawable.whatsapp
         val whiteMessages = Res.drawable.white_messages
         val whitePhone = Res.drawable.white_phone
         val whiteVideo = Res.drawable.white_video
-        val yellowNapkin = Res.drawable.yellow_napkin
         val yogurt = Res.drawable.yogurt
         val document_share = Icons.Default.Share
         val chat = Icons.Default.ChatBubble

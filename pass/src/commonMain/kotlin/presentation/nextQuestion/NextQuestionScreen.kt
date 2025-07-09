@@ -1,6 +1,5 @@
 package presentation.nextQuestion
 
-import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -15,14 +14,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.contact
 import org.example.hit.heal.core.presentation.Resources.String.finishFirstMissionPass
 import org.example.hit.heal.core.presentation.Resources.String.firstMissionDoneVocalPass
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnimation
@@ -57,8 +61,9 @@ class NextQuestionScreen : Screen {
         )
 
 
-        VerticalTabletBaseScreen(
+        BaseScreen(
             title = stringResource(contact),
+            config = ScreenConfig.TabletConfig,
             content = {
                 AudioPlayingAnimation(isPlaying = isPlaying,)
                 Box(
@@ -71,20 +76,20 @@ class NextQuestionScreen : Screen {
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.White, shape = RoundedCornerShape(10.dp))
+                        .background(Color.White, shape = RoundedCornerShape(radiusMd))
                         .border(
                             width = 2.dp,
                             color = Color.LightGray,
-                            shape = RoundedCornerShape(10.dp)
+                            shape = RoundedCornerShape(radiusMd)
                         )
-                        .padding(16.dp)
+                        .padding(paddingMd)
                 ) {
                     Text(
                         text = stringResource(finishFirstMissionPass),
                         color = primaryColor,
-                        fontSize = 30.sp,
+                        fontSize = LARGE,
                         fontWeight = Bold,
-                        lineHeight = 40.sp,
+                        lineHeight = EXTRA_LARGE,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
 
@@ -93,7 +98,7 @@ class NextQuestionScreen : Screen {
                     Text(
                         text = time.toString(),
                         color = primaryColor,
-                        fontSize = 30.sp,
+                        fontSize = LARGE,
                         fontWeight = Bold,
                     )
 

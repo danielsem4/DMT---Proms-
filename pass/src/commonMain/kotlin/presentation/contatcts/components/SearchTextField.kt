@@ -18,6 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.example.hit.heal.core.presentation.Resources.Icon.searchIcon
 import org.example.hit.heal.core.presentation.Resources.String.search
+import org.example.hit.heal.core.presentation.Sizes.heightMd
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -39,16 +43,16 @@ fun SearchTextField(
                 Image(
                     painter = painterResource(searchIcon),
                     contentDescription = stringResource(search),
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(paddingMd)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(paddingSm))
                 Text(stringResource(search), color = Color.Gray)
             }
         },
         modifier = modifier
             .width(200.dp)
-            .height(56.dp),
-        shape = RoundedCornerShape(12.dp),
+            .height(heightMd),
+        shape = RoundedCornerShape(radiusMd),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
             unfocusedBorderColor = Color.Black,

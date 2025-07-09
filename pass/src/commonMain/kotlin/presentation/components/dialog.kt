@@ -1,7 +1,6 @@
 package presentation.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,33 +14,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
-import kotlinx.coroutines.delay
-import org.example.hit.heal.core.presentation.Colors.primaryColor
-import org.example.hit.heal.core.presentation.Resources.Icon.close
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.Icon.closeIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.exclamationMark
-import org.example.hit.heal.core.presentation.Resources.Icon.likeIcon
 import org.example.hit.heal.core.presentation.Resources.String.dialogClose
 import org.example.hit.heal.core.presentation.Resources.String.dialogExclamationMark
-import org.example.hit.heal.core.presentation.Resources.String.dialogLike
-import org.example.hit.heal.core.presentation.Resources.String.no
-import org.example.hit.heal.core.presentation.Resources.String.understandingDialogText
-import org.example.hit.heal.core.presentation.Resources.String.yes
+import org.example.hit.heal.core.presentation.Sizes.elevationLg
+import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.paddingXl
+import org.example.hit.heal.core.presentation.Sizes.radiusLg
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnimation
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -86,16 +84,16 @@ fun InstructionsDialog(
             )
 
             Card(
-                shape = RoundedCornerShape(16.dp),
-                elevation = 8.dp,
+                shape = RoundedCornerShape(radiusLg),
+                elevation = elevationLg,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(top = 32.dp)
+                    .padding(top = paddingXl)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 16.dp, vertical = 16.dp)
+                        .padding(horizontal = paddingMd, vertical = paddingMd)
                 ) {
                     Row(
                         modifier = Modifier
@@ -113,17 +111,17 @@ fun InstructionsDialog(
                                 painter = painterResource(closeIcon),
                                 contentDescription = stringResource(dialogClose),
                                 modifier = Modifier
-                                    .size(25.dp)
+                                    .size(iconSizeMd)
                                     .clickable { onDismiss() }
                             )
                         }
 
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(paddingSm))
 
                             if (isCountdownActive) {
                                 Text(
                                     text = "$secondsLeft",
-                                    fontSize = 20.sp,
+                                    fontSize = EXTRA_MEDIUM,
                                     fontWeight = FontWeight.Bold,
                                     color = primaryColor
                                 )
@@ -142,7 +140,7 @@ fun InstructionsDialog(
                                     size1 = 20f,
                                     size2 = 40f,
                                     size3 = 60f,
-                                    imageSize = 30.dp,
+                                    imageSize = iconSizeLg,
                                     strokeWidth = 2f
                                 )
                             }
@@ -150,11 +148,11 @@ fun InstructionsDialog(
 
                     }
 
-                    Spacer(modifier = Modifier.height(35.dp))
+                    Spacer(modifier = Modifier.height(paddingXl))
 
                     Text(
                         text = text,
-                        fontSize = 30.sp,
+                        fontSize = LARGE,
                         fontWeight = FontWeight.Bold,
                         color = primaryColor,
                         modifier = Modifier.fillMaxWidth(),
@@ -167,84 +165,84 @@ fun InstructionsDialog(
     }
 }
 
-@Composable
-fun CheckUnderstandingDialog(
-    onYesClick: () -> Unit,
-    onNoClick: () -> Unit,
-
-) {
-    LaunchedEffect(Unit) {
-        delay(25_000)
-        onYesClick()
-    }
-
-    Dialog(onDismissRequest = { onYesClick() }) {
-        Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
-            Image(
-                painter = painterResource(likeIcon),
-                contentDescription = stringResource(dialogLike),
-                modifier = Modifier
-                    .size(60.dp)
-                    .align(Alignment.TopCenter)
-                    .zIndex(1f)
-            )
-
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                elevation = 8.dp,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(top = 5.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(30.dp)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(understandingDialogText),
-                        textAlign = TextAlign.Center,
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = primaryColor
-                    )
-
-                    Spacer(modifier = Modifier.padding(35.dp))
-
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Button(
-                            onClick = onYesClick,
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
-                        ) {
-                            Text(
-                                stringResource(yes),
-                                fontSize = 25.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = primaryColor
-                            )
-                        }
-
-                        Button(
-                            onClick = onNoClick,
-                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
-                        ) {
-                            Text(
-                                stringResource(no),
-                                fontSize = 25.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = primaryColor
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-
+//@Composable
+//fun CheckUnderstandingDialog(
+//    onYesClick: () -> Unit,
+//    onNoClick: () -> Unit,
+//
+//) {
+//    LaunchedEffect(Unit) {
+//        delay(25_000)
+//        onYesClick()
+//    }
+//
+//    Dialog(onDismissRequest = { onYesClick() }) {
+//        Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
+//            Image(
+//                painter = painterResource(likeIcon),
+//                contentDescription = stringResource(dialogLike),
+//                modifier = Modifier
+//                    .size(60.dp)
+//                    .align(Alignment.TopCenter)
+//                    .zIndex(1f)
+//            )
+//
+//            Card(
+//                shape = RoundedCornerShape(radiusLg),
+//                elevation = elevationLg,
+//                modifier = Modifier
+//                    .align(Alignment.Center)
+//                    .padding(top = paddingXs)
+//            ) {
+//                Column(
+//                    modifier = Modifier
+//                        .padding(30.dp)
+//                        .fillMaxWidth(),
+//                    horizontalAlignment = Alignment.CenterHorizontally
+//                ) {
+//                    Text(
+//                        text = stringResource(understandingDialogText),
+//                        textAlign = TextAlign.Center,
+//                        fontSize = 30.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        color = primaryColor
+//                    )
+//
+//                    Spacer(modifier = Modifier.padding(35.dp))
+//
+//                    Row(
+//                        horizontalArrangement = Arrangement.SpaceEvenly,
+//                        modifier = Modifier.fillMaxWidth()
+//                    ) {
+//                        Button(
+//                            onClick = onYesClick,
+//                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+//                        ) {
+//                            Text(
+//                                stringResource(yes),
+//                                fontSize = 25.sp,
+//                                fontWeight = FontWeight.Bold,
+//                                color = primaryColor
+//                            )
+//                        }
+//
+//                        Button(
+//                            onClick = onNoClick,
+//                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+//                        ) {
+//                            Text(
+//                                stringResource(no),
+//                                fontSize = 25.sp,
+//                                fontWeight = FontWeight.Bold,
+//                                color = primaryColor
+//                            )
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//
 

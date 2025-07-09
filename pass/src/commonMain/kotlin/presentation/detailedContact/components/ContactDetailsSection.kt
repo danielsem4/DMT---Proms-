@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
 import org.example.hit.heal.core.presentation.Resources.Icon.blackMessages
 import org.example.hit.heal.core.presentation.Resources.Icon.blackPhone
 import org.example.hit.heal.core.presentation.Resources.Icon.blackVideo
@@ -31,6 +32,9 @@ import org.example.hit.heal.core.presentation.Resources.String.messages
 import org.example.hit.heal.core.presentation.Resources.String.phone
 import org.example.hit.heal.core.presentation.Resources.String.video
 import org.example.hit.heal.core.presentation.Resources.String.whatsapp
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import presentation.components.ContactData
@@ -41,13 +45,13 @@ fun ContactDetailsSection(contact: ContactData, viewModel: DetailedContactViewMo
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White, shape = RoundedCornerShape(10.dp))
-            .padding(16.dp)
+            .background(Color.White, shape = RoundedCornerShape(radiusMd))
+            .padding(paddingMd)
     ) {
         Column {
             Text(
                 text = stringResource(contactDetails),
-                fontSize = 16.sp,
+                fontSize = EXTRA_REGULAR,
                 fontWeight = FontWeight.Bold,
             )
 
@@ -64,10 +68,10 @@ fun ContactDetailsSection(contact: ContactData, viewModel: DetailedContactViewMo
                             .clickable { viewModel.onUserClicked(phone) },
                         contentDescription = stringResource(phone)
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(paddingSm))
                     Text(
                         text = contact.phoneNumber,
-                        fontSize = 16.sp,
+                        fontSize = EXTRA_REGULAR,
                         modifier = Modifier.clickable { viewModel.onUserClicked(phone) }
                     )
                 }
@@ -79,7 +83,7 @@ fun ContactDetailsSection(contact: ContactData, viewModel: DetailedContactViewMo
                         },
                         contentDescription = stringResource(messages)
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(paddingSm))
                     Image(
                         painter = painterResource(blackVideo),
                         modifier = Modifier.size(35.dp)
@@ -88,15 +92,15 @@ fun ContactDetailsSection(contact: ContactData, viewModel: DetailedContactViewMo
                     )
                 }
             }
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(paddingSm))
             Box(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    stringResource(phone), fontSize = 16.sp,
+                    stringResource(phone), fontSize = EXTRA_REGULAR,
                     color = Color.Black
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(paddingMd))
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -105,7 +109,7 @@ fun ContactDetailsSection(contact: ContactData, viewModel: DetailedContactViewMo
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         text = stringResource(whatsapp),
-                        fontSize = 16.sp,
+                        fontSize = EXTRA_REGULAR,
                     )
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {

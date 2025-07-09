@@ -1,6 +1,5 @@
 package presentation.detailedContact
 
-import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,8 +25,12 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.contact
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.components.AppData
@@ -63,8 +66,9 @@ class DetailedContactScreen() : Screen {
         val nextScreen by viewModel.nextScreen.collectAsState()
         val isNextScreen by viewModel.isNextScreen.collectAsState()
 
-        VerticalTabletBaseScreen(
+        BaseScreen(
             title = stringResource(contact),
+            config = ScreenConfig.TabletConfig,
             content = {
                 Column(
                     modifier = Modifier
@@ -86,12 +90,12 @@ class DetailedContactScreen() : Screen {
                         Text(
                             text = correctContact.name.first().toString(),
                             fontWeight = FontWeight.Bold,
-                            fontSize = 40.sp
+                            fontSize = EXTRA_LARGE
                         )
                     }
                     Text(
                         text = correctContact.name,
-                        fontSize = 30.sp,
+                        fontSize = LARGE,
                         fontWeight = FontWeight.Bold,
                     )
 

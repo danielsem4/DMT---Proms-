@@ -1,9 +1,10 @@
 package org.example.hit.heal.hitber.presentation.concentration
 
-import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,7 +28,10 @@ import org.example.hit.heal.core.presentation.Resources.String.start
 import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberFinishTask
 import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberTitle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.concentration.components.RandomNumberScreen
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
@@ -48,22 +52,11 @@ class ConcentrationScreen : Screen {
         val isFinished by thirdQuestionViewModel.isFinished.collectAsState()
         val isNumberClickable by thirdQuestionViewModel.isNumberClickable.collectAsState()
 
-        HorizontalTabletBaseScreen(
+        BaseScreen(
             title = stringResource(thirdQuestionHitberTitle),
-            onNextClick = {
-                if (isFinished) {
-                    viewModel.setThirdQuestion(
-                        thirdQuestionViewModel.thirdQuestionAnswers,
-                        getCurrentFormattedDateTime()
-                    )
-                    navigator?.replace(NamingScreen())
-                }
-            },
-            question = 3,
-            buttonText = stringResource(`continue`),
-            buttonColor = if (isFinished) primaryColor else Color.Gray,
+            config = ScreenConfig.TabletConfig,
+            topRightText = "3/10",
             content = {
-
                 InstructionText(
                     stringResource(thirdQuestionHitberInstructions),
                 )
@@ -89,14 +82,14 @@ class ConcentrationScreen : Screen {
                     }
                     Box(
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth().fillMaxHeight(0.8f)
                             .background(color = Color.White)
                     )
                 } else {
                     if (isFinished) {
                         Box(
                             modifier = Modifier
-                                .fillMaxSize()
+                                .fillMaxWidth().fillMaxHeight(0.85f)
                                 .background(color = Color.White)
                         ) {
                             Text(
@@ -112,6 +105,23 @@ class ConcentrationScreen : Screen {
                             number = number,
                             isClickable = isNumberClickable,
                             onNumberClicked = { thirdQuestionViewModel.thirdQuestionAnswer(it) })
+                }
+
+                Box(modifier = Modifier.fillMaxSize()) {
+                    RoundedButton(
+                        text = stringResource(`continue`),
+                        modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                        buttonColor = if (isFinished) primaryColor else Color.Gray,
+                        onClick = {
+                            if (isFinished) {
+                                viewModel.setThirdQuestion(
+                                    thirdQuestionViewModel.thirdQuestionAnswers,
+                                    getCurrentFormattedDateTime()
+                                )
+                                navigator?.replace(NamingScreen())
+                            }
+                        }
+                    )
                 }
             })
     }

@@ -1,9 +1,14 @@
 package org.example.hit.heal.hitber.presentation.naming
 
-import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.getCurrentFormattedDateTime
@@ -11,7 +16,9 @@ import getImageName
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberTitle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.naming.components.NamingImages
 import org.example.hit.heal.hitber.presentation.naming.components.NamingTextFields
@@ -34,25 +41,31 @@ class NamingScreen : Screen {
         val firstImageName = selectedCouple?.let { getImageName(it.first) } ?: ""
         val secondImageName = selectedCouple?.let { getImageName(it.second) } ?: ""
 
-        HorizontalTabletBaseScreen(title = stringResource(fourthQuestionHitberTitle),
-            onNextClick = {
-                fourthQuestionViewModel.fourthQuestionAnswer(
-                    firstImageName,
-                    secondImageName
-                )
-                viewModel.setFourthQuestion(
-                    fourthQuestionViewModel.fourthQuestionAnswers,
-                    getCurrentFormattedDateTime()
-                )
-                navigator?.replace(RepetitionScreen())
-            },
-            question = 4,
-            buttonText = stringResource(`continue`),
-            buttonColor = primaryColor,
+        BaseScreen(title = stringResource(fourthQuestionHitberTitle),
+            config = ScreenConfig.TabletConfig,
+            topRightText = "4/10",
             content = {
                 InstructionText(stringResource(fourthQuestionHitberInstructions))
                 NamingTextFields(answer1, answer2, fourthQuestionViewModel)
                 NamingImages(selectedCouple)
+
+                Box(modifier = Modifier.fillMaxSize()) {
+                    RoundedButton(
+                        text = stringResource(`continue`),
+                        modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                        onClick = {
+                            fourthQuestionViewModel.fourthQuestionAnswer(
+                                firstImageName,
+                                secondImageName
+                            )
+                            viewModel.setFourthQuestion(
+                                fourthQuestionViewModel.fourthQuestionAnswers,
+                                getCurrentFormattedDateTime()
+                            )
+                            navigator?.replace(RepetitionScreen())
+                        }
+                    )
+                }
             })
     }
 }

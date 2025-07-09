@@ -26,12 +26,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
 import org.example.hit.heal.core.presentation.Resources.Icon.deleteNumberIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.whitePhone
 import org.example.hit.heal.core.presentation.Resources.String.deleteNumber
 import org.example.hit.heal.core.presentation.Resources.String.dial
 import org.example.hit.heal.core.presentation.Resources.String.phone
+import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.Sizes.widthLg
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -53,13 +59,13 @@ fun DialDialog(
             modifier = Modifier
                 .fillMaxWidth().fillMaxHeight(0.5f)
                 .background(Color(0xFFD3D3D3)).align(Alignment.BottomCenter),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(paddingMd)
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth().height(60.dp)
-                    .border(2.dp, Color.Black, RoundedCornerShape(10.dp))
-                    .padding(8.dp)
+                    .border(2.dp, Color.Black, RoundedCornerShape(radiusMd))
+                    .padding(paddingSm)
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -85,7 +91,7 @@ fun DialDialog(
             Column(
                 modifier = Modifier.fillMaxWidth().padding(top = 50.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(paddingMd)
             ) {
                 val numbers = listOf(
                     listOf("3", "2", "1"),
@@ -95,7 +101,7 @@ fun DialDialog(
                 )
                 numbers.forEach { row ->
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        horizontalArrangement = Arrangement.spacedBy(paddingMd)
                     ) {
                         row.forEach { number ->
                             Button(
@@ -103,7 +109,7 @@ fun DialDialog(
                                 modifier = Modifier.width(100.dp).height(70.dp),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
                             ) {
-                                Text(text = number, fontSize = 40.sp, color = Color.Black)
+                                Text(text = number, fontSize = EXTRA_LARGE, color = Color.Black)
                             }
                         }
                     }
@@ -115,7 +121,7 @@ fun DialDialog(
                     onClick = onDial,
                     modifier = Modifier
                         .align(Alignment.BottomCenter).height(100.dp)
-                        .width(160.dp)
+                        .width(widthLg)
                         .padding(20.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor)
                 ) {
@@ -128,11 +134,11 @@ fun DialDialog(
                             fontSize = 25.sp,
                             color = Color.White
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(paddingSm))
                         Image(
                             painter = painterResource(whitePhone),
                             contentDescription = stringResource(phone),
-                            modifier = Modifier.size(30.dp)
+                            modifier = Modifier.size(iconSizeLg)
                         )
                     }
                 }

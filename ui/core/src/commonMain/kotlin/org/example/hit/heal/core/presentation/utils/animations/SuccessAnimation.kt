@@ -5,10 +5,10 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import org.example.hit.heal.core.presentation.Resources.Icon.check
+import org.example.hit.heal.core.presentation.Resources.Icon.checkIcon
 import org.example.hit.heal.core.presentation.Resources.String.dialogLike
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -110,9 +110,10 @@ fun SuccessAnimation(modifier: Modifier = Modifier) {
         }
 
         if (tickAlpha.value > 0f) {
-            Image(
-                painter = painterResource(check),
+            Icon(
+                painter = painterResource(checkIcon),
                 contentDescription = stringResource(dialogLike),
+                tint = Color.Unspecified,
                 modifier = Modifier
                     .size(50.dp)
                     .graphicsLayer {

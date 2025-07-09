@@ -72,8 +72,6 @@ import org.example.hit.heal.hitber.presentation.entry.HitberEntryScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.dialScreen.DialScreen
-import presentation.entryScreen.PassEntryScreen
 
 
 class HomeScreen : Screen {

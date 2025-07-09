@@ -7,7 +7,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.jetbrains.compose.resources.StringResource
 import presentation.components.AppData
 import core.domain.use_case.PlayAudioUseCase
@@ -21,6 +20,7 @@ import org.example.hit.heal.core.presentation.Resources.String.pressTheNumberOrT
 import org.example.hit.heal.core.presentation.Resources.String.video
 import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
 import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
+import org.example.hit.heal.core.presentation.primaryColor
 import presentation.components.CountdownDialogHandler
 import presentation.nextQuestion.NextQuestionScreen
 

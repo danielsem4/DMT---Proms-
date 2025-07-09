@@ -1,23 +1,25 @@
 package org.example.hit.heal.hitber.presentation.shapes
 
-import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -30,7 +32,10 @@ import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHit
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskRetryInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTitle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
@@ -55,31 +60,14 @@ class ActionShapesScreen(private val question: Int) : Screen {
         val listShapes by secondQuestionViewModel.listShapes.collectAsState()
         val shapeNames = selectedShapes.map { getShapeName(it.type) }
 
-        HorizontalTabletBaseScreen(title = stringResource(secondQuestionHitberTitle), onNextClick = {
-            secondQuestionViewModel.calculateCorrectShapesCount()
-            secondQuestionViewModel.updateTask()
-            secondQuestionViewModel.secondQuestionAnswer(question, shapeNames)
-
-            if (attempt < 3) {
-                showDialog = true
-            } else {
-                secondQuestionViewModel.resetSelectedShapes()
-                if(question == 2) {
-                    viewModel.setSecondQuestion(secondQuestionViewModel.secondQuestionAnswersMap, getCurrentFormattedDateTime())
-                    navigator?.replace(ConcentrationScreen())
-                }
-
-                else {viewModel.setNinthQuestion(secondQuestionViewModel.secondQuestionAnswersMap, getCurrentFormattedDateTime())
-                    navigator?.replace(BuildShapeScreen())
-                }
-            }
-
-        }, question = question, buttonText = stringResource(`continue`), buttonColor = primaryColor, content = {
-
+        BaseScreen(title = stringResource(secondQuestionHitberTitle),
+            config = ScreenConfig.TabletConfig,
+            topRightText = "$question/10",
+            content = {
            InstructionText( stringResource(secondQuestionHitberTaskInstructions))
 
             Box(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
                     .background(Color.White, shape = RoundedCornerShape(4))
                     .padding(16.dp)
             ) {
@@ -98,19 +86,44 @@ class ActionShapesScreen(private val question: Int) : Screen {
                                 val isSelected = selectedShapes.contains(shapeRes)
                                 val shapeColor = if (isSelected) primaryColor else Color.Transparent
 
-                                Image(
+                                Icon(
                                     painter = painterResource(shapeRes.drawable),
                                     contentDescription = stringResource(secondQuestionHitberTitle),
                                     modifier = Modifier
                                         .background(shapeColor).weight(1f)
-                                        .clickable { secondQuestionViewModel.setSelectedShapes(shapeRes) }
+                                        .clickable { secondQuestionViewModel.setSelectedShapes(shapeRes) },
+                                    tint = Color.Unspecified,
                                 )
                             }
                         }
                     }
                 }
             }
+                Box(modifier = Modifier.fillMaxSize()) {
+                    RoundedButton(
+                        text = stringResource(`continue`),
+                        modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                        onClick = {
+                            secondQuestionViewModel.calculateCorrectShapesCount()
+                            secondQuestionViewModel.updateTask()
+                            secondQuestionViewModel.secondQuestionAnswer(question, shapeNames)
 
+                            if (attempt < 3) {
+                                showDialog = true
+                            } else {
+                                secondQuestionViewModel.resetSelectedShapes()
+                                if(question == 2) {
+                                    viewModel.setSecondQuestion(secondQuestionViewModel.secondQuestionAnswersList, getCurrentFormattedDateTime())
+                                    navigator?.replace(ConcentrationScreen())
+                                }
+
+                                else {viewModel.setNinthQuestion(secondQuestionViewModel.secondQuestionAnswersList, getCurrentFormattedDateTime())
+                                    navigator?.replace(BuildShapeScreen())
+                                }
+                            }
+                        }
+                    )
+                }
         })
         if (showDialog) {
             DialogTask(

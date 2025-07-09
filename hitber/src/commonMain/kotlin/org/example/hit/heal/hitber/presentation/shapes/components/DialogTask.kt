@@ -25,7 +25,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogIcon
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberUnderstand
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

@@ -3,7 +3,9 @@ package org.example.hit.heal.hitber.presentation.concentration.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.example.hit.heal.core.presentation.Colors.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 
 @Composable
 fun RandomNumberScreen(number: Int, isClickable: Boolean, onNumberClicked: (Int) -> Unit) {
@@ -27,7 +29,7 @@ fun RandomNumberScreen(number: Int, isClickable: Boolean, onNumberClicked: (Int)
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth().fillMaxHeight(0.85f)
             .background(if (isClicked) primaryColor else Color.White)
             .clickable(enabled = isClickable) {
                 isClicked = true

@@ -21,7 +21,7 @@ class SecondQuestionViewModel: ViewModel() {
     private val _attempt = MutableStateFlow(1)
     val attempt: StateFlow<Int> = _attempt.asStateFlow()
 
-    var secondQuestionAnswersMap: ArrayList<Map<Int, String>> = arrayListOf()
+    var secondQuestionAnswersList: ArrayList<Pair<Map<Int, String>, Int>> = arrayListOf()
     private var correctShapesCount = 0
     private var distractorToRemove = 0
 
@@ -103,8 +103,7 @@ class SecondQuestionViewModel: ViewModel() {
         }.toMap()
 
         when (questionNumber) {
-            2 -> secondQuestionAnswersMap.add(map)
-            9 -> secondQuestionAnswersMap.add(map)
+            2, 9 -> secondQuestionAnswersList.add(Pair(map, correctShapesCount))
         }
 
         _selectedShapes.value = emptyList()

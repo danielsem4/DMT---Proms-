@@ -1,20 +1,20 @@
 package org.example.hit.heal.hitber.presentation.shapes.model
 
-import org.example.hit.heal.core.presentation.Resources.Icon.asterisk
-import org.example.hit.heal.core.presentation.Resources.Icon.close
+import org.example.hit.heal.core.presentation.Resources.Icon.asteriskIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.cone
-import org.example.hit.heal.core.presentation.Resources.Icon.ellipse
-import org.example.hit.heal.core.presentation.Resources.Icon.hashTag
-import org.example.hit.heal.core.presentation.Resources.Icon.hexagon
-import org.example.hit.heal.core.presentation.Resources.Icon.pentagon
-import org.example.hit.heal.core.presentation.Resources.Icon.rectangle
-import org.example.hit.heal.core.presentation.Resources.Icon.rhomb
-import org.example.hit.heal.core.presentation.Resources.Icon.rightTriangle
-import org.example.hit.heal.core.presentation.Resources.Icon.star
-import org.example.hit.heal.core.presentation.Resources.Icon.trapezoid
-import org.example.hit.heal.core.presentation.Resources.Icon.triangle
-import org.example.hit.heal.core.presentation.Resources.Icon.check
-import org.example.hit.heal.core.presentation.Resources.Icon.plusIconHitber
+import org.example.hit.heal.core.presentation.Resources.Icon.checkIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.elipsaIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.hashMarkIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.hexagonIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.pentagonIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.plusIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.rectangleIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.rhombusIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.starOutlineIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.trapezeIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.triangle90Icon
+import org.example.hit.heal.core.presentation.Resources.Icon.triangleIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.xIcon
 import org.jetbrains.compose.resources.DrawableResource
 
 val shapeSets = listOf(
@@ -46,19 +46,19 @@ enum class ShapeType {
 data class Shape(val type: ShapeType, val drawable: DrawableResource)
 
 val shapeList = listOf(
-    Shape(ShapeType.Ellipse, ellipse),
-    Shape(ShapeType.Rectangle, rectangle),
-    Shape(ShapeType.Pentagon, pentagon),
-    Shape(ShapeType.Star, star),
-    Shape(ShapeType.Hashtag, hashTag),
-    Shape(ShapeType.Rhomb, rhomb),
+    Shape(ShapeType.Ellipse, elipsaIcon),
+    Shape(ShapeType.Rectangle, rectangleIcon),
+    Shape(ShapeType.Pentagon, pentagonIcon),
+    Shape(ShapeType.Star, starOutlineIcon),
+    Shape(ShapeType.Hashtag, hashMarkIcon),
+    Shape(ShapeType.Rhomb, rhombusIcon),
     Shape(ShapeType.Cone, cone),
-    Shape(ShapeType.Plus, plusIconHitber),
-    Shape(ShapeType.Hexagon, hexagon),
-    Shape(ShapeType.RightTriangle, rightTriangle),
-    Shape(ShapeType.Asterisk, asterisk),
-    Shape(ShapeType.Check, check),
-    Shape(ShapeType.Trapezoid, trapezoid),
-    Shape(ShapeType.Triangle, triangle),
-    Shape(ShapeType.Close, close)
+    Shape(ShapeType.Plus, plusIcon),
+    Shape(ShapeType.Hexagon, hexagonIcon),
+    Shape(ShapeType.RightTriangle, triangle90Icon),
+    Shape(ShapeType.Asterisk, asteriskIcon),
+    Shape(ShapeType.Check, checkIcon),
+    Shape(ShapeType.Trapezoid, trapezeIcon),
+    Shape(ShapeType.Triangle, triangleIcon),
+    Shape(ShapeType.Close, xIcon)
 )

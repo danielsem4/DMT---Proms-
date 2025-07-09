@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
@@ -45,7 +46,7 @@ fun circleWithPicture(item: AppData, onClick: () -> Unit) {
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(paddingSm))
 
         Text(text = stringResource(item.label) , fontSize = 25.sp)
     }

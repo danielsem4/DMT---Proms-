@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Density
-import org.example.hit.heal.core.presentation.Resources.Icon.triangle
+import org.example.hit.heal.core.presentation.Resources.Icon.triangleIcon
 import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberShapeImage
 import org.example.hit.heal.hitber.presentation.buildShape.model.BuildShapes
 import org.jetbrains.compose.resources.painterResource
@@ -35,7 +35,7 @@ fun StaticShapesArea(
             )
     ) {
         Image(
-            painter = painterResource(triangle),
+            painter = painterResource(triangleIcon),
             contentDescription = stringResource(tenthQuestionHitberShapeImage),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds

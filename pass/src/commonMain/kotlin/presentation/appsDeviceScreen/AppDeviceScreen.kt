@@ -1,20 +1,28 @@
 package presentation.appsDeviceScreen
 
-import org.example.hit.heal.core.presentation.components.VerticalTabletBaseScreen
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
+import kotlinx.coroutines.delay
+import org.example.hit.heal.core.presentation.Resources.Icon.likeIcon
 import org.example.hit.heal.core.presentation.Resources.String.deviceAppsTitle
+import org.example.hit.heal.core.presentation.Resources.String.no
+import org.example.hit.heal.core.presentation.Resources.String.understandingDialogText
+import org.example.hit.heal.core.presentation.Resources.String.yes
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
+import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.components.CheckUnderstandingDialog
 import presentation.components.InstructionsDialog
 import presentation.components.AppData
 import presentation.components.circleWithPicture
@@ -44,18 +52,19 @@ class AppDeviceScreen : Screen {
         val isCountdownActive by viewModel.isCountdownActive.collectAsState()
         val nextScreen by viewModel.nextScreen.collectAsState()
 
-        VerticalTabletBaseScreen(
+        BaseScreen(
             title = stringResource(deviceAppsTitle),
+            config = ScreenConfig.TabletConfig,
             content = {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp)
+                        .padding(paddingMd)
                 ) {
                     LazyVerticalGrid(
                         columns = GridCells.Fixed(4),
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(8.dp),
+                        contentPadding = PaddingValues(paddingSm),
                         verticalArrangement = Arrangement.SpaceEvenly,
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
@@ -82,12 +91,9 @@ class AppDeviceScreen : Screen {
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()
-                println("elapsed:onStop")
             },
             onStart = {
                 viewModel.startCheckingIfUserDidSomething()
-                println("elapsed:onStart")
-
             }
         )
 
@@ -98,13 +104,26 @@ class AppDeviceScreen : Screen {
         }
 
         if (showUnderstandingDialog) {
-            CheckUnderstandingDialog(
-                onYesClick = {
-                    viewModel.onUnderstandingConfirmed()
-                },
-                onNoClick = { viewModel.onUnderstandingDenied() }
+            LaunchedEffect(Unit) {
+                delay(25_000)
+                viewModel.onUnderstandingConfirmed()
+            }
+
+            BaseYesNoDialog(
+                onDismissRequest = { viewModel.onUnderstandingConfirmed() },
+                title = stringResource(understandingDialogText),
+                icon = likeIcon,
+                message = "",
+                confirmButtonText = stringResource(yes),
+                confirmButtonColor = primaryColor,
+                onConfirm = { viewModel.onUnderstandingConfirmed() },
+                dismissButtonText = stringResource(no),
+                dismissButtonColor = primaryColor,
+                onDismissButtonClick = { viewModel.onUnderstandingDenied() }
             )
         }
+
+
 
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->

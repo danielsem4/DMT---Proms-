@@ -1,20 +1,19 @@
 package org.example.hit.heal.hitber.presentation.understanding.model
 
-import org.example.hit.heal.core.presentation.Resources.Icon.blueNapkin
-import org.example.hit.heal.core.presentation.Resources.Icon.greenNapkin
-import org.example.hit.heal.core.presentation.Resources.Icon.redNapkin
-import org.example.hit.heal.core.presentation.Resources.Icon.yellowNapkin
+import androidx.compose.ui.graphics.Color
+import org.example.hit.heal.core.presentation.Resources.Icon.napkinIcon
 import org.jetbrains.compose.resources.DrawableResource
 
 data class Napkin(
-    val image: DrawableResource,
+    val image: DrawableResource = napkinIcon,
     val xRatio: Float,
     val yRatio: Float,
+    val tint: Color
 )
 
 val napkins = listOf(
-    Napkin(redNapkin, 0.1f, 0.08f),
-    Napkin(yellowNapkin, 0.45f, 0.05f),
-    Napkin(greenNapkin, 0.3f, 0.1f),
-    Napkin(blueNapkin, 0.65f, 0.07f),
+    Napkin(xRatio = 0.1f,yRatio = 0.08f, tint =  Color.Red),
+    Napkin(xRatio = 0.3f, yRatio = 0.1f, tint = Color.Green),
+    Napkin(xRatio = 0.45f, yRatio = 0.05f, tint = Color.Yellow),
+    Napkin(xRatio = 0.65f, yRatio = 0.07f, tint= Color.Blue),
 )

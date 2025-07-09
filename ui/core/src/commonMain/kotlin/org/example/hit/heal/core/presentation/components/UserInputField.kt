@@ -8,8 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import org.example.hit.heal.core.presentation.Colors.primaryColor
-
+import org.example.hit.heal.core.presentation.primaryColor
 
 @Composable
 fun UserInputField(

@@ -1,9 +1,11 @@
 package org.example.hit.heal.hitber.presentation.understanding
 
-import org.example.hit.heal.core.presentation.components.HorizontalTabletBaseScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -21,13 +23,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberTitle
-import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioButton
@@ -39,6 +41,9 @@ import core.utils.CapturableWrapper
 import core.utils.ObserveLifecycle
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import core.utils.PlatformCapturable
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -97,16 +102,11 @@ class UnderstandingScreen : Screen {
         )
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
-            HorizontalTabletBaseScreen(
+            BaseScreen(
                 title = stringResource(sixthQuestionHitberTitle),
-                onNextClick = {
-                    capturable?.capture?.let { it() }
-                },
-                question = 6,
-                buttonText = stringResource(`continue`),
-                buttonColor = primaryColor,
+                config = ScreenConfig.TabletConfig,
+                topRightText = "6/10",
                 content = {
-
                     InstructionText(stringResource(sixthQuestionHitberInstructions))
 
                     AudioButton(
@@ -149,7 +149,7 @@ class UnderstandingScreen : Screen {
                     )
                     {
                         Box(
-                            modifier = Modifier.fillMaxSize()
+                            modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
                                 .background(color = Color.White, shape = RoundedCornerShape(4))
                         ) {
                             FridgeWithItemsBox(
@@ -176,6 +176,16 @@ class UnderstandingScreen : Screen {
                                 modifier = Modifier.align(Alignment.BottomEnd)
                             )
                         }
+                    }
+
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        RoundedButton(
+                            text = stringResource(`continue`),
+                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                            onClick = {
+                                capturable?.capture?.let { it() }
+                            }
+                        )
                     }
                 }
             )
