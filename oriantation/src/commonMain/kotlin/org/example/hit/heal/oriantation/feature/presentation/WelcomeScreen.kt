@@ -35,11 +35,10 @@ import dmt_proms.oriantation.generated.resources.entry_Oriantation_title
 import dmt_proms.oriantation.generated.resources.entry_Oriantation_welcome_note
 import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.stringResource
-import org.example.hit.heal.core.presentation.Colors.primaryColor
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 
-class WelcomeScreen: Screen {
+class OriantationWelcomeScreen: Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current

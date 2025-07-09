@@ -68,6 +68,7 @@ import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.oriantation.feature.presentation.OriantationWelcomeScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -242,7 +243,9 @@ class HomeScreen : Screen {
     private fun navigateTo(moduleId: Int, navigator: Navigator) {
         when (moduleId) {
             16 -> navigator.push(CDTLandingScreen())
+            20 -> navigator.push(OriantationWelcomeScreen())
             else -> println("Action for module $moduleId not implemented yet")
+
         }
     }
 
