@@ -1,7 +1,5 @@
 package org.example.hit.heal.presentation.home
-
-import LoginScreen
-import MedicationScreen
+ import MedicationScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -252,6 +250,8 @@ class HomeScreen : Screen {
             "cdt" -> navigator.push(CDTLandingScreen())
             "measurements" -> navigator.push(AllEvaluationsScreen())
             "Activities" -> navigator.push(ActivitiesScreen())
+            "medications" -> navigator.push(AlarmReportMedicationScreen())
+            "Memory" -> navigator.push(MemoryScreen())
             else -> {  }
         }
     }

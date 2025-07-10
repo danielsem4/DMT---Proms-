@@ -195,7 +195,7 @@ class MedicationViewModel
             clinic_id = clinicId!!,
             patient_id = patientId!!,
             medication_id = idMedication,
-            timestamp = "2025-07-10T13:45:00+03:00"
+            timestamp = "2024-12-12 12:12:12"
         )
         val result = remoteDataSource.reportMedicationTook(report)
         result.onSuccess {
