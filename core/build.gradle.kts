@@ -56,6 +56,10 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
 
+            implementation (libs.navigator)
+            implementation (libs.navigator.tabs)
+            implementation (libs.navigator.transitions)
+
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)

@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+
 }
 
 kotlin {
@@ -17,6 +18,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -27,25 +29,35 @@ kotlin {
             isStatic = true
         }
     }
+
     jvm("desktop")
 
     sourceSets {
         val desktopMain by getting
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.compose)
+            implementation(libs.kmp.capturable.compose)
             // Koin dependencies
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+
             // Ktor dependencies
             implementation(libs.ktor.client.okhttp)
 
         }
         commonMain.dependencies {
+            implementation(projects.hitber)
             val voyagerVersion = "1.1.0-beta02"
             implementation(projects.ui.core)
             implementation(projects.core)
             implementation(projects.clockTest)
+            implementation(projects.pass)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.datetime)
+            implementation(compose.material3)
             //implementation(projects.memoryTest)
 
             implementation(projects.newMemoryTest)
@@ -66,39 +78,37 @@ kotlin {
             // Basic Navigation
             implementation(libs.navigation.compose)
 
+            implementation (libs.navigator)
+            implementation (libs.navigator.tabs)
+            implementation (libs.navigator.transitions)
+
             // Koin dependencies
             api(libs.koin.core)
             implementation(libs.bundles.koin.compose)
             implementation(libs.lifecycle.viewmodel)
 
-            implementation(libs.kotlinx.serialization) // for data serialization
-
+            implementation(compose.materialIconsExtended)
+            implementation(libs.font.awesome)
+            implementation(libs.navigation.compose)
+             // for data serialization
             implementation(libs.datastore.preferences)
             implementation(libs.datastore)
-
             implementation(libs.voyager.tabNavigator)
-
-
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-
             implementation(libs.coil.compose)
             implementation(libs.bundles.voyager.common)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
-
-
-            implementation(libs.voyager.navigator.v110beta02)
-            implementation(libs.voyager.transitions.v110beta02)
+           // implementation(libs.voyager.navigator.v110beta02)
+            //implementation(libs.voyager.transitions.v110beta02)
             implementation(libs.jetbrains.kotlinx.datetime)
             implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
-
             implementation(libs.kmp.date.time.picker)
             implementation(libs.jetbrains.kotlinx.datetime)
-
             implementation(libs.viewmodel.compose)
             implementation(libs.kotlinx.serialization)
 
@@ -110,7 +120,10 @@ kotlin {
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.kmp.capturable.compose)
+
         }
+
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)

@@ -16,6 +16,11 @@
     <string name="are_you_sure">האם את/ה בטוח/ה?</string>
     <string name="evaluation">הערכה</string>
 
+    <string name="exit">יציאה</string>
+    <string name="continue">המשך</string>
+    <string name="start">התחל</string>
+
+
     <string name="dont_forget">• לא לשכוח לעשות את המבחן</string>
     <string name="take_pills">• לקחת 2 כדורים ב-12:00</string>
     <string name="messages">הודעות</string>
@@ -46,8 +51,8 @@
     <string name="document_share">שיתוף מסמכים</string>
     <string name="chat">צ׳אט</string>
     <string name="memory">זיכרון</string>
-    <string name="hitber">התבר</string>
-
+    <string name="hitber">Hitber</string>
+    <string name="pass">Pass</string>
 
     //Medications
     <string name="select_date">בחר תאריך</string>
@@ -89,7 +94,175 @@
 
 
     <!--    Hitber Module  -->
+    <string name="entry_hitber_title">HITBER</string>
+    <string name="entry_hitber_note">הערה</string>
+    <string name="entry_hitber_instructions1">• המשימה אורכת כ-20 דקות.</string>
+    <string name="entry_hitber_instructions2">• יש להשלים את המשימה ברצף, ללא הפסקות.</string>
+    <string name="entry_hitber_instructions3">• יש לקרוא את ההנחיות עד הסוף.</string>
+    <string name="entry_hitber_instructions4">• יש להשלים את כל המטלות.</string>
+    <string name="entry_hitber_instructions5">• לשמיעת ההוראות ניתן ללחוץ על "הקשב".</string>
+    <string name="entry_hitber_instructions6">• מומלץ לבצע את המשימות בחדר שקט.</string>
+    <string name="entry_hitber_instructions7">• ההוראות מנוסחות בלשון זכר אך מתייחסות לכל המינים.</string>
+    <string name="entry_hitber_good_luck">בהצלחה!</string>
 
+    <string name="first_question_hitber_title">זמן ומקום</string>
+    <string name="first_question_hitber_instructions">בחר את התשובה הנכונה. לבחירת התשובה הנכונה יש ללחוץ על השאלה</string>
+    <string name="first_question_hitber_Drop_down_drop_up_Icon">Drop down drop up Icon</string>
+
+    <string name="first_question_hitber_question1">איזה יום היום?</string>
+    <string name="first_question_hitber_answer1_1">ראשון</string>
+    <string name="first_question_hitber_answer1_2">שני</string>
+    <string name="first_question_hitber_answer1_3">שלישי</string>
+    <string name="first_question_hitber_answer1_4">רביעי</string>
+    <string name="first_question_hitber_answer1_5">חמישי</string>
+    <string name="first_question_hitber_answer1_6">שישי</string>
+    <string name="first_question_hitber_answer1_7">שבת</string>
+
+    <string name="first_question_hitber_question2">באיזה חודש אנחנו נמצאים?</string>
+    <string name="first_question_hitber_answer2_1">ינואר</string>
+    <string name="first_question_hitber_answer2_2">פברואר</string>
+    <string name="first_question_hitber_answer2_3">מרץ</string>
+    <string name="first_question_hitber_answer2_4">אפריל</string>
+    <string name="first_question_hitber_answer2_5">מאי</string>
+    <string name="first_question_hitber_answer2_6">יוני</string>
+    <string name="first_question_hitber_answer2_7">יולי</string>
+    <string name="first_question_hitber_answer2_8">אוגוסט</string>
+    <string name="first_question_hitber_answer2_9">ספטמבר</string>
+    <string name="first_question_hitber_answer2_10">אוקטובר</string>
+    <string name="first_question_hitber_answer2_11">נובמבר</string>
+    <string name="first_question_hitber_answer2_12">דצמבר</string>
+
+    <string name="first_question_hitber_question3">באיזו שנה אנחנו נמצאים?</string>
+    <string name="first_question_hitber_answer3_1">1994</string>
+    <string name="first_question_hitber_answer3_2">2024</string>
+    <string name="first_question_hitber_answer3_3">1964</string>
+    <string name="first_question_hitber_answer3_4">2025</string>
+    <string name="first_question_hitber_answer3_5">2000</string>
+    <string name="first_question_hitber_answer3_6">2023</string>
+    <string name="first_question_hitber_answer3_7">1924</string>
+    <string name="first_question_hitber_answer3_8">1948</string>
+
+    <string name="first_question_hitber_question4">באיזו עיר אתה נמצא כרגע?</string>
+    <string name="first_question_hitber_answer4_1">גני תקווה</string>
+    <string name="first_question_hitber_answer4_2">חיפה</string>
+    <string name="first_question_hitber_answer4_3">תל אביב</string>
+    <string name="first_question_hitber_answer4_4">פתח תקווה</string>
+    <string name="first_question_hitber_answer4_5">ראשון לציון</string>
+    <string name="first_question_hitber_answer4_6">כפר סבא</string>
+    <string name="first_question_hitber_answer4_7">ראש העין</string>
+    <string name="first_question_hitber_answer4_8">בני ברק</string>
+    <string name="first_question_hitber_answer4_9">ירושלים</string>
+    <string name="first_question_hitber_answer4_10">באר שבע</string>
+
+    <string name="first_question_hitber_question5">באיזו מדינה אתה גר?</string>
+    <string name="first_question_hitber_answer5_1">מרוקו</string>
+    <string name="first_question_hitber_answer5_2">ארצות הברית</string>
+    <string name="first_question_hitber_answer5_3">עיראק</string>
+    <string name="first_question_hitber_answer5_4">לבנון</string>
+    <string name="first_question_hitber_answer5_5">ישראל</string>
+    <string name="first_question_hitber_answer5_6">תימן</string>
+    <string name="first_question_hitber_answer5_7">רוסיה</string>
+    <string name="first_question_hitber_answer5_8">אתיופיה</string>
+
+    <string name="first_question_hitber_question6">באיזה איזור בישראל אתה נמצא?</string>
+    <string name="first_question_hitber_answer6_1">מרכז</string>
+    <string name="first_question_hitber_answer6_2">צפון</string>
+    <string name="first_question_hitber_answer6_3">דרום</string>
+    <string name="first_question_hitber_answer6_4">הגליל המערבי</string>
+    <string name="first_question_hitber_answer6_5">צפון השרון</string>
+    <string name="first_question_hitber_answer6_6">מישור החוף</string>
+
+    <string name="first_question_hitber_question7">למה אתה עונה לשאלון הזה?</string>
+    <string name="first_question_hitber_answer7_1">אני לא יודע</string>
+    <string name="first_question_hitber_answer7_2">כי אני בודק את תפקוד החשיבה שלי</string>
+    <string name="first_question_hitber_answer7_3">אמרו לי להגיע</string>
+    <string name="first_question_hitber_answer7_4">זו פעילות שגרתית עבורי</string>
+
+
+    <string name="second_question_hitber_title">צורות</string>
+    <string name="second_question_hitber_task">משימה</string>
+    <string name="second_question_hitber_dialog_instructions">לפניך 5 צורות, יש לזכור אותן להמשך המשימה בסיום לחץ על המשך</string>
+    <string name="second_question_hitber_dialog_title">בחר 5 צורות</string>
+    <string name="second_question_hitber_task_instructions">לפניך מספר צורות, עליך לבחור את 5 הצורות שראית לפני מספר דקות באמצעות לחיצה עליהן, אם אינך זוכר אפשר לנחש. בסיום לחץ על המשך</string>
+    <string name="second_question_hitber_task_retry_instructions">אנא בחר את 5 הצורות שראית לפני מספר שאלות.</string>
+    <string name="second_question_hitber_dialog_icon">profile icon</string>
+    <string name="second_question_hitber_dialog_understand">הבנתי</string>
+    <string name="second_question_hitber_ellipse">אליפסה</string>
+    <string name="second_question_hitber_rectangle">מלבן</string>
+    <string name="second_question_hitber_pentagon">מחומש</string>
+    <string name="second_question_hitber_star">כוכב</string>
+    <string name="second_question_hitber_hash_tag">סולמית</string>
+    <string name="second_question_hitber_rhomb">מעוין</string>
+    <string name="second_question_hitber_cone">חרוט</string>
+    <string name="second_question_hitber_plus">פלוס</string>
+    <string name="second_question_hitber_hexagon">משושה</string>
+    <string name="second_question_hitber_right_triangle">משולש ישר</string>
+    <string name="second_question_hitber_asterisk">כוכבית</string>
+    <string name="second_question_hitber_check">וי</string>
+    <string name="second_question_hitber_trapezoid">טרפז</string>
+    <string name="second_question_hitber_triangle">משולש</string>
+    <string name="second_question_hitber_close">איקס</string>
+
+    <string name="third_question_hitber_title">ריכוז</string>
+    <string name="third_question_hitber_instructions">בדקה הקרובה יופיעו במרכז המסך מספרים, בכל פעם שתראה את הספרה 7 עליך ללחוץ על המסך. להתחלת המטלה יש ללחוץ על התחל. בסיום המטלה תופיע ההודעה תודה. לחץ על המשך</string>
+    <string name="third_question_hitber_finish_task">תודה, אנא עבור לשאלה הבאה</string>
+
+    <string name="fourth_question_hitber_title">שיום</string>
+    <string name="fourth_question_hitber_instructions">כתוב מה מוצג בתמונה. לכתיבת התשובה יש ללחוץ על השאלה. בסיום לחץ על המשך</string>
+    <string name="fourth_question_hitber_what_in_the_pic">מה מופיע בתמונה?</string>
+    <string name="fourth_question_hitber_pic1">תמונה1</string>
+    <string name="fourth_question_hitber_pic2">תמונה2</string>
+    <string name="fourth_question_hitber_pencil">עיפרון</string>
+    <string name="fourth_question_hitber_ruler">סרגל</string>
+    <string name="fourth_question_hitber_table">שולחן</string>
+    <string name="fourth_question_hitber_ball">כדור</string>
+    <string name="fourth_question_hitber_balloon">בלון</string>
+    <string name="fourth_question_hitber_lemon">לימון</string>
+
+    <string name="sixth_question_hitber_title">הבנת הוראות</string>
+    <string name="sixth_question_hitber_instructions">בחלק זה תתבקש לבצע מטלה. לשמיעת המטלה לחץ על הקשב. בסיום לחץ על המשך.</string>
+    <string name="sixth_question_hitber_volume_icon">רמקול אייקון</string>
+    <string name="sixth_question_hitber_listen">הקשב</string>
+    <string name="sixth_question_hitber_open_fridge">לפתוח מקרר</string>
+    <string name="sixth_question_hitber_close_fridge">לסגור מקרר</string>
+    <string name="sixth_question_hitber_table">שולחן</string>
+    <string name="sixth_question_hitber_item">פריט</string>
+    <string name="sixth_question_hitber_napkin">מפית</string>
+    <string name="sixth_question_hitber_Speaker">רמקול</string>
+    <string name="sixth_question_default_milk_to_red_napkin_hitber"><![CDATA[https://firebasestorage.googleapis.com/v0/b/minimental-hit.appspot.com/o/Three%20Phase%20Instruction%20Versions%2FMyRec_0526_1313%D7%94%D7%95%D7%A8%D7%90%D7%94%20%D7%AA%D7%9C%D7%AA%20%D7%A9%D7%9C%D7%91%D7%99%D7%AA.mp3?alt=media&token=3c76d7dc-b264-4bdb-83fe-4ce16eaa5e44]]></string>
+    <string name="sixth_question_grapes_to_blue_napkin_hitber"><![CDATA[https://firebasestorage.googleapis.com/v0/b/minimental-hit.appspot.com/o/Three%20Phase%20Instruction%20Versions%2FMyRec_0526_1328%D7%92%D7%A8%D7%A1%D7%94%20%D7%A9%D7%A0%D7%99%D7%94%20%D7%94%D7%95%D7%A8%D7%90%D7%94%20%D7%AA%D7%9C%D7%AA%20%D7%A9%D7%9C%D7%91%D7%99%D7%AA.mp3?alt=media&token=24ba10bd-e6e6-415b-9397-0317c4c0cc3e]]></string>
+    <string name="sixth_question_chicken_to_green_napkin_hitber"><![CDATA[https://firebasestorage.googleapis.com/v0/b/minimental-hit.appspot.com/o/Three%20Phase%20Instruction%20Versions%2FMyRec_0526_1330%D7%92%D7%A8%D7%A1%D7%94%20%D7%A9%D7%9C%D7%99%D7%A9%D7%99%D7%AA%20%D7%94%D7%95%D7%A8%D7%90%D7%AA%20%D7%AA%D7%9C%D7%AA%20%D7%A9%D7%9C%D7%91%D7%99%D7%AA.mp3?alt=media&token=d5204567-d417-41b1-80f5-8739ef2e0cf8]]></string>
+    <string name="sixth_question_can_to_yellow_napkin_hitber"><![CDATA[https://firebasestorage.googleapis.com/v0/b/minimental-hit.appspot.com/o/Three%20Phase%20Instruction%20Versions%2FMyRec_0526_1331%D7%92%D7%A8%D7%A1%D7%94%20%D7%A8%D7%91%D7%99%D7%A2%D7%99%D7%AA%20%D7%94%D7%95%D7%A8%D7%90%D7%94%20%D7%AA%D7%9C%D7%AA%20%D7%A9%D7%9C%D7%91%D7%99%D7%AA.mp3?alt=media&token=e706eeb4-647c-4910-8a24-6b1dc3eba139]]></string>
+
+    <string name="seventh_question_hitber_title">גרור ושחרר</string>
+    <string name="seventh_question_hitber_green_circle">גרור את העיגול הירוק לתוך הריבוע, בסיום לחץ על המשך.</string>
+    <string name="seventh_question_hitber_yellow_circle">גרור את העיגול הצהוב לתוך הריבוע, בסיום לחץ על המשך.</string>
+    <string name="seventh_question_hitber_black_circle">גרור את העיגול השחור לתוך הריבוע, בסיום לחץ על המשך.</string>
+    <string name="seventh_question_hitber_blue_circle">גרור את העיגול הכחול לתוך הריבוע, בסיום לחץ על המשך.</string>
+
+    <string name="eighth_question_hitber_title">כתיבה</string>
+    <string name="eighth_question_hitber_instructions">בחלק זה עליך להרכיב משפט מהמילים המוצגות לפניך. לשיבוץ מילה במשפט יש לגרור אותה למשבצת שתבחר. אם תרצה לשנות את המיקום של מילה שכבר שובצה, צריך שוב לגרור אותה ממחסן המילים ולשבץ אותה מחדש בסיום לחץ על המשך.</string>
+    <string name="eighth_question_hitber_close_icon">אייקון סגירה</string>
+    <string name="eighth_question_word_hitber_yesterday">אתמול</string>
+    <string name="eighth_question_word_hitber_I">אכלתי</string>
+    <string name="eighth_question_word_hitber_had">ארוחת</string>
+    <string name="eighth_question_word_hitber_dinner">ערב</string>
+    <string name="eighth_question_word_hitber_with">עם</string>
+    <string name="eighth_question_word_hitber_grandma">סבתא</string>
+    <string name="eighth_question_answer_hitber_version_1">סבתא עם ערב ארוחת אכלתי אתמול</string>
+    <string name="eighth_question_answer_hitber_version_2">ערב  ארוחת סבתא עם אכלתי אתמול</string>
+    <string name="eighth_question_answer_hitber_version_3">אתמול ערב ארוחת סבתא עם אכלתי</string>
+    <string name="eighth_question_answer_hitber_version_4">אתמול סבתא עם ערב ארוחת אכלתי</string>
+
+    <string name="tenth_question_hitber_title">בנה צורה</string>
+    <string name="tenth_question_hitber_instructions">עליך להעתיק את התמונה שמוצגת בצד שמאל, למרכז המסך. את התמונה יש להעתיק באמצעות הצורות המופיעות בצד ימין. את הצורות צריך לגרור ולסדר במרכז המסך. בסיום לחץ על המשך</string>
+    <string name="tenth_question_hitber_shape_model">דגם הצורה שיש לבנות</string>
+    <string name="tenth_question_hitber_shapes">הצורות שלרשותך</string>
+    <string name="tenth_question_hitber_shape_image">תמונה של צורה</string>
+
+    <string name="summary_hitber_title">סיכום</string>
+    <string name="summary_hitber_instructions1">סיימת את המבחן.</string>
+    <string name="summary_hitber_instructions2">נא ליצור קשר עם המטפל/ת לפרטים נוספים.</string>
 
     <!--    Orientation Module  -->
 
@@ -179,6 +352,183 @@
 
 
     <!--    Pass Module  -->
+    <string name="hana_cohen">חנה כהן</string>
+    <string-array name="person_names">
+        <item>אלינור סולומון</item>
+        <item>אבנר גבני</item>
+        <item>אמיל זרמון</item>
+        <item>אדל בדש</item>
+        <item>בוב ששון</item>
+        <item>בן גיברי</item>
+        <item>בתיה כהן</item>
+        <item>גילי ריד</item>
+        <item>גל שיר</item>
+        <item>דודו לוי</item>
+        <item>דוד כהן</item>
+        <item>דני אבדיה</item>
+        <item>הודיה לוי</item>
+        <item>חיים כאן</item>
+        <item>חנה כהן</item>
+        <item>חנה יאיר</item>
+        <item>חנן דור</item>
+        <item>יוסי שיטרית</item>
+        <item>יוסי כהן</item>
+        <item>לאונרד סושרד</item>
+        <item>ליעד לוי</item>
+        <item>ליאור בורשן</item>
+        <item>מני חמם</item>
+        <item>מור שלם</item>
+        <item>מאי מזרחי</item>
+        <item>נועה נרקיס</item>
+        <item>נריה קפלן</item>
+        <item>נאווה ברדה</item>
+        <item>סמי ביטמן</item>
+        <item>סימה לוב</item>
+        <item>עמית דיגמי</item>
+        <item>עדן למה</item>
+        <item>עומר בכר</item>
+        <item>פרי ישראלי</item>
+        <item>שאול גל</item>
+        <item>שיר גולומב</item>
+        <item>שושי שלו</item>
+        <item>שרה כהן</item>
+        <item>תומר אסור</item>
+        <item>תמר הרשקוביץ</item>
+        <item>עמית לוי</item>
+        <item>נועה כהן</item>
+        <item>יונתן מזרחי</item>
+        <item>מאיה שמשון</item>
+        <item>דוד בן עמי</item>
+        <item>ליאור אזולאי</item>
+        <item>שירה חזן</item>
+        <item>עומר נחמיאס</item>
+        <item>אביב קליין</item>
+        <item>דניאלה מלכה</item>
+        <item>ארז גולדברג</item>
+        <item>נטע שושן</item>
+        <item>עידן זמיר</item>
+        <item>יעל פלד</item>
+        <item>רוני יעקב</item>
+        <item>גיא בר עם</item>
+        <item>טל ירון</item>
+        <item>סיון מויאל</item>
+        <item>גילעד נוביק</item>
+        <item>רונית רז</item>
+        <item>אברהם לוי</item>
+        <item>הדס שני</item>
+        <item>אליעזר דרור</item>
+        <item>נגה סבג</item>
+        <item>מיטל נהרי</item>
+        <item>יואב ששון</item>
+        <item>טליה עמית</item>
+        <item>יצחק דהן</item>
+        <item>מיכל ברקוביץ</item>
+    </string-array>
+    <string name="phone_number">1648–538–052</string>
+
+    <string name="thanks_coffe">המשימה הסתיימה, תודה רבה על שיתוף הפעולה</string>
+
+    <!-- the dialer question numbers -->
+    <string name="dentist_pass">מרפאת שיניים: 052-258-1194</string>
+    <string name="family_doctor_pass">רופא משפחה: 054-228-6972</string>
+    <string name="paint_clinic_pass">מרפאת כאב: 050-333-1528</string>
+    <string name="dermatologist_pass">רופא עור: 052-260-1048</string>
+    <string name="orthopedist_pass">אורתופד: 053-128-8891</string>
+    <string name="neurologist_pass">נוירולוג: 050-501-6390</string>
+    <string name="ophthalmologist_pass">מרפאת עיניים: 052-246-7628</string>
+    <string name="psychiatrist_pass">פסיכיאטר: 054-187-2399</string>
+
+    <string name="device_apps_title">אפליקציות המכשיר</string>
+    <string name="device_app_title">אפליקציה</string>
+    <string name="wrong_app_title">האפליקציה שנכנסת אליה היא: </string>
+
+    <string name="first_mission_pass">שלום, המרפאה בעיסוק רוצה לבדוק את היכולת התפקודית שימוש בטלפון. בדקות הקרובות יופיעו בטאבלט, שמשמש כמכשיר הפלאפון, שתי משימות הקשורות לשימוש בפלאפון. פעלו על פי ההוראות. מתחילים.</string>
+
+    <string name="call_to_hana_cohen_instruction_pass">משימה ראשונה, יש להתקשר לחנה כהן</string>
+    <string name="call_to_dentist">ועכשיו למשימה השנייה, מוצגת רשימת מספרי טלפון, יש להתקשר למרפאת השיניים.</string>
+
+    <string name="what_you_need_to_do">מה יש לעשות?</string>
+    <string name="dialer_opened">נפתח החייגן</string>
+
+    <string name="apps_page_second_assist">יש לחפש את רשימת אנשי הקשר בפלאפון</string>
+    <string name="wrong_app_second_assist">כפתור החזרה ממוקם בחלק העליון של המסך בצד שמאל</string>
+    <string name="wrong_app_thired_assist">חוזרים למסך האפליקציות</string>
+
+    <string name="contacts_page_first_assist">איזה איש קשר מחפשים?</string>
+    <string name="contacts_page_second_assist">יש לחפש את חנה כהן באנשי הקשר</string>
+    <string name="contacts_page_thired_assist">יש לחפש באות ח</string>
+
+    <string name="contact_page_first_assist">יש ללחוץ על המספר עצמו או על כפתור החיוג.</string>
+    <string name="finish_first_mission_pass">המשימה הראשונה הושלמה, מייד נעבור למשימה השנייה</string>
+
+    <string name="dialer_page_second_assist">יש לחפש את המספר של מרפאת השיניים</string>
+    <string name="diale_to_dentist">יש לחייג למרפאת השיניים</string>
+    <string name="dialer_page_thired_assist">יש ללחוץ על כפתור החיוג שנמצא בצד שמאל של המסך</string>
+
+    <string name="dialer_page_wrong_action_one">חיוג מספר לא נכון, יש לחייג שוב למספר של מרפאת השיניים</string>
+    <string name="dialer_page_dentis_number_appeared">מוצג מספר הטלפון של מרפאת השיניים, יש לחייג למרפאה</string>
+
+    <string name="here_persons_number">כעת רשימת אנשי הקשר תפתח</string>
+    <string name="the_pass_test">מבוסס על מבחן ה-PASS</string>
+
+    <string name="calculator">מחשבון</string>
+    <string name="settings">הגדרות</string>
+    <string name="camera">מצלמה</string>
+    <string name="store">חנות</string>
+    <string name="clock">שעון</string>
+    <string name="contacts">אנשי קשר</string>
+    <string name="purse">ארנק</string>
+    <string name="weather">מזג אוויר</string>
+    <string name="my_files">הקבצים שלי</string>
+    <string name="phone">טלפון</string>
+    <string name="video">וידיאו</string>
+
+    <string name="contact">איש קשר</string>
+    <string name="contact_details">פרטים ליצירת קשר</string>
+
+    <string name="dialer">חייגן</string>
+    <string name="dial_keys">כפתורים</string>
+    <string name="delete_number">מחיקת מספר</string>
+    <string name="dial">חיוג</string>
+
+    <string name="welcome_pass">ברוך הבא!</string>
+
+    <string name="end">סיום</string>
+
+    <string name="dialog_speaker">רמקול דיאלוג</string>
+    <string name="dialog_exclamation_mark">סימן קריאה דיאלוג</string>
+    <string name="dialog_close">סגור דיאלוג</string>
+    <string name="dialog_like">לייק דיאלוג</string>
+    <string name="Understanding_dialog_text">האם ההוראה הייתה מובנת?</string>
+    <string name="yes">כן</string>
+    <string name="no">לא</string>
+    <string name="plus">פלוס</string>
+    <string name="search">חיפוש</string>
+
+
+    <!-- recordings -->
+    <string name="test_record_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/minimental%20instructions%2F%D7%A9%D7%90%D7%9C%D7%94%20%D7%A9%D7%A9%20%D7%96%D7%94%D7%91.mp4?alt=media&token=70a7006d-f076-4f71-8e8d-79b2d5ee45be]]></string>
+    <string name="first_instructions_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fentry_instructions%20(online-audio-converter.com).mp3?alt=media&token=a359ae4f-4460-4830-a683-c7b6a435ad6a]]></string>
+    <string name="call_hana_cohen_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fcall_hana_choen%20(online-audio-converter.com).mp3?alt=media&token=4eb8faac-ccf7-44ca-981c-6fd98914a747]]></string>
+    <string name="second_part_of_test_instructions_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fsecond_mission_instructions.mp3?alt=media&token=b68f80ad-3f0c-408c-aa13-b70dce1a23ce]]></string>
+    <string name="thanks_vocal_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fthanks.mp3?alt=media&token=ad0e82dc-3de5-4633-8823-d6beb27b5b42]]></string>
+
+    <string name="what_do_you_need_to_do_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwhat_do_you_need_to_do.mp3?alt=media&token=ac12daaf-1dfb-4e28-9fa9-b70741362aa2]]></string>
+    <string name="call_to_detist_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fcall_to_dentist.mp3?alt=media&token=3106e225-52fe-4cfa-910d-c04cf587a860]]></string>
+    <string name="dentist_number_showen_call_him_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fdentist_number_showen_call_him.mp3?alt=media&token=cc01a3c7-1ae3-4218-94c5-65d4498376f6]]></string>
+    <string name="dialer_opened_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fdialer_opened.mp3?alt=media&token=bd5e97d6-5155-44e3-bc40-6e0f3c2db077]]></string>
+    <string name="going_back_to_apss_screen_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fgoing_back_to_apps_screen.mp3?alt=media&token=1f2cbcc7-696a-4584-afa6-396b49979d4e]]></string>
+    <string name="press_the_dial_button_that_showen_down_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fpress_the_dialer_button_bot_left.mp3?alt=media&token=0470ee29-d479-4100-b9bc-657c1c376be3]]></string>
+    <string name="press_the_number_or_the_dial_button_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fpress_the_number_or_the_call_button.mp3?alt=media&token=73a32eb4-d298-46bf-8251-cd1094cc801b]]></string>
+    <string name="search_at_latter_h_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fsearch_at_latter_h.mp3?alt=media&token=86442245-328d-455a-8f60-c9b16a23588f]]></string>
+    <string name="search_dentist_number_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fsearch_dentist_number.mp3?alt=media&token=cfda0521-5733-4703-b0d7-cb75d232a63b]]></string>
+    <string name="search_for_hana_choen_in_contacts_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fsearch_hana_choen.mp3?alt=media&token=cef8c350-3fa7-47fb-8f35-039e5a04f0c0]]></string>
+    <string name="search_contacts_list_in_the_phone_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fsearch_the_contacts_on_phone.mp3?alt=media&token=4aae204c-dddd-423a-80de-b52f1f3e44db]]></string>
+    <string name="now_the_contacts_list_will_be_opened_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fthe_contact_list_will_be_opend_now.mp3?alt=media&token=e0874654-db3d-4ae0-af46-d2dffa584fc3]]></string>
+    <string name="return_button_on_top_left_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fthe_exit_button_top_left.mp3?alt=media&token=bedd62b4-cf36-4e9d-985f-63b887159c5c]]></string>
+    <string name="witch_contact_are_we_looking_for_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwhat_contact_are_you_searching.mp3?alt=media&token=87e10d59-51f4-4373-a110-934472c61499]]></string>
+    <string name="wrong_number_dialed_please_try_again_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwrong_number_dialed_try_again.mp3?alt=media&token=f3b84ffa-25c7-4101-8082-e2839f79ce86]]></string>
+    <string name="first_mission_done_vocal_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fmission_done.mp3?alt=media&token=d6a19387-ea70-4be7-ae39-a846d13c13bc]]></string>
 
 
 </resources>
