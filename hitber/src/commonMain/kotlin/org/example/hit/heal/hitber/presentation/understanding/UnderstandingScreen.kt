@@ -41,6 +41,7 @@ import core.utils.CapturableWrapper
 import core.utils.ObserveLifecycle
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import core.utils.PlatformCapturable
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -85,21 +86,6 @@ class UnderstandingScreen : Screen {
 
         var isFridgeOpen by remember { mutableStateOf(false) }
 
-        LaunchedEffect(isAudioClicked) {
-            if (isAudioClicked) {
-                audioUrl?.let {
-                    sixthQuestionViewModel.onPlayAudio(it)
-                    isAudioClicked = false
-                }
-            }
-        }
-        ObserveLifecycle(
-            onStop = {
-                sixthQuestionViewModel.stopAudio()
-                isAudioClicked = false
-            },
-            onStart = {}
-        )
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
             BaseScreen(
@@ -119,6 +105,8 @@ class UnderstandingScreen : Screen {
 
                     capturable = PlatformCapturable(
                         onCaptured = { imageBitmap ->
+                            println("📸 Captured image size: ${imageBitmap.width}x${imageBitmap.height}")
+
                             val timestamp = getCurrentFormattedDateTime()
 
                             viewModel.uploadImage(
@@ -189,6 +177,25 @@ class UnderstandingScreen : Screen {
                     }
                 }
             )
+            LaunchedEffect(isAudioClicked) {
+                if (isAudioClicked) {
+                    audioUrl?.let {
+                        sixthQuestionViewModel.onPlayAudio(it)
+                        isAudioClicked = false
+                    }
+                }
+            }
+            ObserveLifecycle(
+                onStop = {
+                    sixthQuestionViewModel.stopAudio()
+                    isAudioClicked = false
+                },
+                onStart = {}
+            )
+
+            RegisterBackHandler(this) {
+                navigator?.pop()
+            }
 
             if (isPlaying) {
                 AudioPlayingDialog()

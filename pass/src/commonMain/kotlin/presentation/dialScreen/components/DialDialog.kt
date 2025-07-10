@@ -21,9 +21,12 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
@@ -31,6 +34,18 @@ import org.example.hit.heal.core.presentation.Resources.Icon.deleteNumberIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.whitePhone
 import org.example.hit.heal.core.presentation.Resources.String.deleteNumber
 import org.example.hit.heal.core.presentation.Resources.String.dial
+import org.example.hit.heal.core.presentation.Resources.String.key0
+import org.example.hit.heal.core.presentation.Resources.String.key1
+import org.example.hit.heal.core.presentation.Resources.String.key2
+import org.example.hit.heal.core.presentation.Resources.String.key3
+import org.example.hit.heal.core.presentation.Resources.String.key4
+import org.example.hit.heal.core.presentation.Resources.String.key5
+import org.example.hit.heal.core.presentation.Resources.String.key6
+import org.example.hit.heal.core.presentation.Resources.String.key7
+import org.example.hit.heal.core.presentation.Resources.String.key8
+import org.example.hit.heal.core.presentation.Resources.String.key9
+import org.example.hit.heal.core.presentation.Resources.String.keyHash
+import org.example.hit.heal.core.presentation.Resources.String.keyStar
 import org.example.hit.heal.core.presentation.Resources.String.phone
 import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
@@ -49,97 +64,103 @@ fun DialDialog(
     onDial: () -> Unit,
     onDeleteClicked: () -> Unit
 ) {
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-
-    ) {
-        Column(
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Box(
             modifier = Modifier
-                .fillMaxWidth().fillMaxHeight(0.5f)
-                .background(Color(0xFFD3D3D3)).align(Alignment.BottomCenter),
-            verticalArrangement = Arrangement.spacedBy(paddingMd)
+                .fillMaxSize()
+
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth().height(60.dp)
-                    .border(2.dp, Color.Black, RoundedCornerShape(radiusMd))
-                    .padding(paddingSm)
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Image(
-                        painter = painterResource(deleteNumberIcon),
-                        contentDescription = stringResource(deleteNumber),
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clickable { onDeleteClicked() }
-                    )
-                    Text(
-                        text = enteredNumber,
-                        fontSize = 25.sp,
-                        color = Color.Gray,
-                    )
-                }
-            }
-
-
             Column(
-                modifier = Modifier.fillMaxWidth().padding(top = 50.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth().fillMaxHeight(0.5f)
+                    .background(Color(0xFFD3D3D3)).align(Alignment.BottomCenter),
                 verticalArrangement = Arrangement.spacedBy(paddingMd)
             ) {
-                val numbers = listOf(
-                    listOf("3", "2", "1"),
-                    listOf("6", "5", "4"),
-                    listOf("9", "8", "7"),
-                    listOf("#", "0", "*")
-                )
-                numbers.forEach { row ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth().height(60.dp)
+                        .border(2.dp, Color.Black, RoundedCornerShape(radiusMd))
+                        .padding(paddingSm)
+                ) {
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(paddingMd)
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        row.forEach { number ->
-                            Button(
-                                onClick = { onNumberClicked(number) },
-                                modifier = Modifier.width(100.dp).height(70.dp),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
-                            ) {
-                                Text(text = number, fontSize = EXTRA_LARGE, color = Color.Black)
+                        Image(
+                            painter = painterResource(deleteNumberIcon),
+                            contentDescription = stringResource(deleteNumber),
+                            modifier = Modifier
+                                .size(40.dp)
+                                .clickable { onDeleteClicked() }
+                        )
+                        Text(
+                            text = enteredNumber,
+                            fontSize = 25.sp,
+                            color = Color.Gray,
+                        )
+                    }
+                }
+
+
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(top = 50.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(paddingMd)
+                ) {
+                    val keypadKeys = listOf(
+                        listOf(stringResource(key3), stringResource(key2), stringResource(key1)),
+                        listOf(stringResource(key6), stringResource(key5), stringResource(key4)),
+                        listOf(stringResource(key9), stringResource(key8), stringResource(key7)),
+                        listOf(
+                            stringResource(keyHash),
+                            stringResource(key0),
+                            stringResource(keyStar)
+                        )
+                    )
+
+                    keypadKeys.forEach { row ->
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(paddingMd)
+                        ) {
+                            row.forEach { key ->
+                                Button(
+                                    onClick = { onNumberClicked(key) },
+                                    modifier = Modifier.width(100.dp).height(70.dp),
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
+                                ) {
+                                    Text(text = key, fontSize = EXTRA_LARGE, color = Color.Black)
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Button(
-                    onClick = onDial,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter).height(100.dp)
-                        .width(widthLg)
-                        .padding(20.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor)
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    Button(
+                        onClick = onDial,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter).height(100.dp)
+                            .width(widthLg)
+                            .padding(20.dp),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor)
                     ) {
-                        Text(
-                            text = stringResource(dial),
-                            fontSize = 25.sp,
-                            color = Color.White
-                        )
-                        Spacer(modifier = Modifier.width(paddingSm))
-                        Image(
-                            painter = painterResource(whitePhone),
-                            contentDescription = stringResource(phone),
-                            modifier = Modifier.size(iconSizeLg)
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(dial),
+                                fontSize = 25.sp,
+                                color = Color.White
+                            )
+                            Spacer(modifier = Modifier.width(paddingSm))
+                            Image(
+                                painter = painterResource(whitePhone),
+                                contentDescription = stringResource(phone),
+                                modifier = Modifier.size(iconSizeLg)
+                            )
+                        }
                     }
                 }
             }

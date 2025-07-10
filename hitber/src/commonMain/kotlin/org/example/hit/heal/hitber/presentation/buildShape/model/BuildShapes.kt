@@ -22,12 +22,12 @@ data class BuildShapes(
 
 val staticShapesItem = listOf(
     BuildShapes(triangleIcon, 0.05f, 0.4f, 0.4f, 0.4f, "triangle"),
-    BuildShapes(rotateStar, 0.5f, -0.25f, 0.5f, 0.5f,"star",20f, 25f),
-    BuildShapes(arrowUpIcon, 0.5f, 0.45f, 0.8f, 0.5f, "arrow key",25f, 20f),
-    BuildShapes(outlineCircleIcon, 0.15f, 0.65f, 0.21f, 0.21f, "circle", 15f, 20f),
-    BuildShapes(filledCircleIcon, 0.6f, 0.65f, 0.2f, 0.2f, "black circle",15f, 20f),
-    BuildShapes(verticalStrokeIcon, 0.07f, 0.12f, 0.7f, 0.8f, "vertical line",20f, 15f),
-    BuildShapes(horizontalStrokeIcon, 0.2f, 0.12f, 0.5f, 0.8f, "horizontal line", 15f, 15f)
+    BuildShapes(rotateStar, 0.5f, -0.25f, 0.5f, 0.5f,"star",25f, 30f),
+    BuildShapes(arrowUpIcon, 0.5f, 0.45f, 0.8f, 0.5f, "arrow key",30f, 25f),
+    BuildShapes(outlineCircleIcon, 0.15f, 0.65f, 0.21f, 0.21f, "circle", 25f, 25f),
+    BuildShapes(filledCircleIcon, 0.6f, 0.65f, 0.2f, 0.2f, "black circle",25f, 25f),
+    BuildShapes(verticalStrokeIcon, 0.07f, 0.12f, 0.7f, 0.8f, "vertical line",20f, 40f),
+    BuildShapes(horizontalStrokeIcon, 0.2f, 0.12f, 0.5f, 0.8f, "horizontal line", 35f, 40f)
 )
 
 val draggableShapesItem = listOf(

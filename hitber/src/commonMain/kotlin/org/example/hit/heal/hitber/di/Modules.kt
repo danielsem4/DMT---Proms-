@@ -13,7 +13,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val Hitber_module = module {
-    single { ActivityViewModel(get(), get(), get(), get()) }
+    single { ActivityViewModel(get(), get(), get(), get(), get()) }
     viewModel { FirstQuestionViewModel() }
     single { SecondQuestionViewModel() }
     viewModel { ThirdQuestionViewModel() }

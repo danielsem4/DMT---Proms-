@@ -11,7 +11,7 @@ object AppDeviceProgressCache {
     var wrongApp = 0
     var isSecondInstructions = false
 
-    fun reset() {
+    fun resetAppDeviceProgress() {
         didNothing = 0
         wrongApp = 0
         isSecondInstructions = false
@@ -23,7 +23,7 @@ object AppProgressCache {
     var didNothingSecondTime = 0
     var isSecondTimeWrongApp = false
 
-    fun resetAll() {
+    fun resetAppProgress() {
         didNothing = 0
         didNothingSecondTime = 0
         isSecondTimeWrongApp = false

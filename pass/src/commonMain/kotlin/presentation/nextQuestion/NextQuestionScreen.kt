@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.contact
@@ -42,24 +43,6 @@ class NextQuestionScreen : Screen {
         val navigateToDialScreen by viewModel.navigateToDialScreen.collectAsState()
         val audioString = stringResource(firstMissionDoneVocalPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
-
-
-        LaunchedEffect(navigateToDialScreen) {
-            if (navigateToDialScreen) {
-                navigator?.replace(DialScreen())
-            }
-        }
-
-        ObserveLifecycle(
-            onStop = {
-                viewModel.stopAll()
-            },
-            onStart = {
-                viewModel.onPlayAudioRequested(audioString)
-                viewModel.startCountdown()
-            }
-        )
-
 
         BaseScreen(
             title = stringResource(contact),
@@ -105,5 +88,24 @@ class NextQuestionScreen : Screen {
                 }
             }}
         )
+
+        LaunchedEffect(navigateToDialScreen) {
+            if (navigateToDialScreen) {
+                navigator?.replace(DialScreen())
+            }
+        }
+
+        ObserveLifecycle(
+            onStop = {
+                viewModel.stopAll()
+            },
+            onStart = {
+                viewModel.onPlayAudioRequested(audioString)
+                viewModel.startCountdown()
+            }
+        )
+
+        RegisterBackHandler(this) {
+            navigator?.popUntilRoot()        }
     }
 }

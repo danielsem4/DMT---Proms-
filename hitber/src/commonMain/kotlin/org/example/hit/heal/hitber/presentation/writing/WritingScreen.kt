@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.eighthQuestionHitberInstructions
@@ -80,6 +81,10 @@ class WritingScreen : Screen {
                         )
                     }
                 })
+
+            RegisterBackHandler(this) {
+                navigator?.pop()
+            }
         }
     }
 }

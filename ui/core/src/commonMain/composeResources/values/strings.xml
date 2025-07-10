@@ -19,6 +19,8 @@
     <string name="evaluation">Evaluation</string>
 
     <string name="are_you_sure">Are you sure?</string>
+    <string name="back_confirmation_message">Going back will return to the home screen</string>
+
 
 
     <!--    Errors      -->
@@ -316,6 +318,24 @@
         <item>Michal Berkowitz</item>
     </string-array>
     <string name="phone_number">052–538–1648</string>
+
+    <string name="key_1">1</string>
+    <string name="key_2">2</string>
+    <string name="key_3">3</string>
+    <string name="key_4">4</string>
+    <string name="key_5">5</string>
+    <string name="key_6">6</string>
+    <string name="key_7">7</string>
+    <string name="key_8">8</string>
+    <string name="key_9">9</string>
+    <string name="key_0">0</string>
+    <string name="key_star">*</string>
+    <string name="key_hash">#</string>
+
+    <string name="default_name">Unknown</string>
+    <string name="default_phone">000-0000000</string>
+
+
 
     <string name="thanks_coffe">Thank you very much for your cooperation</string>
     <string name="fmpt" translatable="false">FMPT</string>

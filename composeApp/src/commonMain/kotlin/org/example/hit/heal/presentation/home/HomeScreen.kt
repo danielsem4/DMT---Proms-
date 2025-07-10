@@ -256,7 +256,7 @@ class HomeScreen : Screen {
             "cdt" -> navigator.push(CDTLandingScreen())
             "measurements" -> navigator.push(AllEvaluationsScreen())
             "Activities" -> navigator.push(ActivitiesScreen())
-            "HitBer" -> navigator.push(UnderstandingScreen())
+            "HitBer" -> navigator.push(HitberEntryScreen())
             else -> {  }
         }
     }

@@ -7,9 +7,11 @@ import core.data.model.MeasureObjectBoolean
 import core.data.model.MeasureObjectDouble
 import core.data.model.MeasureObjectInt
 import core.data.model.MeasureObjectString
+import core.data.model.evaluation.Evaluation
 import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.Error
+import core.domain.api.AppApi
 import core.domain.onError
 import core.domain.onSuccess
 import kotlinx.coroutines.Dispatchers
@@ -28,19 +30,29 @@ import org.example.hit.heal.hitber.data.model.ThirdQuestionItem
 import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.util.PrefKeys
+import core.util.PrefKeys.clinicId
+import core.util.PrefKeys.userId
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
+import org.example.hit.heal.core.presentation.Resources.String.clockTest
 
 class ActivityViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
     private val uploadTestResultsUseCase: UploadTestResultsUseCase,
     private val bitmapToUploadUseCase: BitmapToUploadUseCase,
+    private val api: AppApi,
     private val storage: Storage
 ) : ViewModel() {
 
     private var result: CogData = CogData()
+
+    private val _hitberTest = MutableStateFlow<Evaluation?>(null)
+    val hitberTest: StateFlow<Evaluation?> = _hitberTest.asStateFlow()
 
     fun setFirstQuestion(firstQuestion: FirstQuestion) {
         result.firstQuestion = firstQuestion
@@ -196,7 +208,24 @@ class ActivityViewModel(
 
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
-        fun uploadImage(
+    fun loadEvaluation(evaluationName: String) {
+        viewModelScope.launch {
+            val clinicId = storage.get(PrefKeys.clinicId) ?: return@launch
+            val patientId = storage.get(PrefKeys.userId)?.toIntOrNull() ?: return@launch
+
+            api.getSpecificEvaluation(clinicId, patientId, evaluationName)
+                .onSuccess { fetched ->
+                    _hitberTest.value = fetched
+                    println("fetched evaluation: $fetched")
+                }
+                .onError { error ->
+                    // post an error to a MessageBarState here todo
+                    println("Error fetching evaluation: $error")
+                }
+        }
+    }
+
+    fun uploadImage(
             onSuccess: (() -> Unit)? = null,
             onFailure: ((message: Error) -> Unit)? = null,
             bitmap: ImageBitmap,
@@ -213,17 +242,16 @@ class ActivityViewModel(
             println("📤 התחלת העלאה, image size: ${imageByteArray.size}")
 
             uploadScope.launch {
-                val userId = storage.get(PrefKeys.userId)!!
-                val clinicId = storage.get(PrefKeys.clinicId)!!
-                val measurement = 19
+//                val userId = storage.get(PrefKeys.userId)!!
+//                val clinicId = storage.get(PrefKeys.clinicId)!!
+                val measurement = hitberTest.value?.id ?: 19
 
                 val imagePath = bitmapToUploadUseCase.buildPath(
-                    clinicId = clinicId,
-                    patientId = userId,
+                    clinicId = 0,
+                    patientId = 0.toString(),
                     measurementId = measurement,
                     pathDate = date
                 )
-
 
                 println("📁 Path: $imagePath")
 
@@ -231,8 +259,8 @@ class ActivityViewModel(
                     uploadImageUseCase.execute(
                         imagePath = imagePath,
                         bytes = imageByteArray,
-                        clinicId = clinicId,
-                        userId = userId
+                        clinicId = 0,
+                        userId = 0.toString()
                     ).onSuccess {
                         saveUploadedImageUrl(currentQuestion, imagePath, date)
                         println("✅ העלאה הצליחה")
@@ -278,7 +306,7 @@ class ActivityViewModel(
 
                 val userId = storage.get(PrefKeys.userId)!!.toInt()
                 val clinicId = storage.get(PrefKeys.clinicId)!!
-                val measurement = 19
+                val measurement = hitberTest.value?.id ?: 19
 
                 result.patientId = userId
                 result.clinicId = clinicId

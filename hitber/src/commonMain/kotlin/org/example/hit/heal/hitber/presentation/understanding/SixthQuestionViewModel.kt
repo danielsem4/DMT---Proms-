@@ -78,7 +78,7 @@ class SixthQuestionViewModel(private val playAudioUseCase: PlayAudioUseCase): Vi
                     draggablePosition = itemPosition,
                     targetSize = napkinSize,
                     draggableSize = itemSize,
-                    threshold = 40f,
+                    threshold = 80f,
                     isCircle = false
                 )
             }

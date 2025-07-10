@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,9 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
+import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberGoodLuck
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberInstructions1
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberInstructions2
@@ -37,17 +40,16 @@ import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class HitberEntryScreen() : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-
-        RegisterBackHandler(this) {
-            navigator?.pop()
-        }
+        val viewModel: ActivityViewModel = koinViewModel()
 
         BaseScreen(
             title = stringResource(entryHitberTitle),
@@ -87,5 +89,13 @@ class HitberEntryScreen() : Screen {
                     }
                 }
             })
+
+        RegisterBackHandler(this) {
+            navigator?.pop()
+        }
+
+        LaunchedEffect(Unit) {
+            viewModel.loadEvaluation("HitBer")
+        }
     }
 }

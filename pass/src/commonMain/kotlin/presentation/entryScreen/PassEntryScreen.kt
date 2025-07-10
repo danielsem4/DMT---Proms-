@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
@@ -148,6 +149,9 @@ class PassEntryScreen : Screen {
                     )
             )
         }
+
+        RegisterBackHandler(this) {
+            navigator?.popUntilRoot()        }
     }
 }
 

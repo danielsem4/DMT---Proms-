@@ -32,6 +32,7 @@ import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
 import core.utils.CapturableWrapper
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import core.utils.PlatformCapturable
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.components.RoundedButton
@@ -127,6 +128,10 @@ class BuildShapeScreen : Screen {
                         )
                     }
                 })
+
+            RegisterBackHandler(this) {
+                navigator?.pop()
+            }
         }
     }
 }

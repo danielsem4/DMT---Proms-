@@ -28,6 +28,7 @@ import org.example.hit.heal.hitber.presentation.writing.WritingScreen
 import core.utils.CapturableWrapper
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import core.utils.PlatformCapturable
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -122,6 +123,10 @@ class DragAndDropScreen : Screen {
                     )
                 }
             })
+
+        RegisterBackHandler(this) {
+            navigator?.pop()
+        }
     }
 }
 

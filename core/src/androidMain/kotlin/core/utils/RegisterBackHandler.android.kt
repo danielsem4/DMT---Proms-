@@ -5,8 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import cafe.adriel.voyager.core.screen.Screen
 import androidx.activity.compose.BackHandler
-import org.example.hit.heal.core.presentation.Resources.Icon.chicken
+import org.example.hit.heal.core.presentation.Resources.Icon.errorIcon
+import org.example.hit.heal.core.presentation.Resources.String.areYouSure
+import org.example.hit.heal.core.presentation.Resources.String.backConfirmationMessage
+import org.example.hit.heal.core.presentation.Resources.String.no
+import org.example.hit.heal.core.presentation.Resources.String.yes
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 actual fun RegisterBackHandler(screen: Screen, onPop: () -> Unit) {
@@ -15,21 +20,20 @@ actual fun RegisterBackHandler(screen: Screen, onPop: () -> Unit) {
     if (showDialog.value) {
         BaseYesNoDialog(
                 onDismissRequest = { showDialog.value = false },
-                icon = chicken,
-                title = "אישור חזרה",
-                message = "מעבר אחורה יחזור למסך הבית",
-                confirmButtonText = "כן",
+                icon = errorIcon,
+                title = stringResource(areYouSure),
+                message = stringResource(backConfirmationMessage),
+                confirmButtonText = stringResource(yes),
                 onConfirm = {
                     showDialog.value = false
                     onPop()
                 },
-                dismissButtonText = "לא",
+                dismissButtonText = stringResource(no),
                 onDismissButtonClick = { showDialog.value = false }
             )
     }
 
     if (screen is BackHandler) {
-        // Use screen's own handler
         BackHandler {
             val handled = screen.onBackPressed()
             if (!handled) {
@@ -37,7 +41,6 @@ actual fun RegisterBackHandler(screen: Screen, onPop: () -> Unit) {
             }
         }
     } else {
-        // Default behavior: show dialog
         BackHandler {
             showDialog.value = true
         }

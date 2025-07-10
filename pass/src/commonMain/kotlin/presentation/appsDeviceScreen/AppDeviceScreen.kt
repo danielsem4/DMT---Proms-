@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
+import core.utils.RegisterBackHandler
 import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Resources.Icon.likeIcon
 import org.example.hit.heal.core.presentation.Resources.String.deviceAppsTitle
@@ -145,5 +146,8 @@ class AppDeviceScreen : Screen {
                 )
             }
         }
+
+        RegisterBackHandler(this) {
+            navigator?.popUntilRoot()        }
     }
 }

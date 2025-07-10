@@ -54,9 +54,9 @@ import org.example.hit.heal.core.presentation.storeColor
 import org.example.hit.heal.core.presentation.weatherColor
 import presentation.appsDeviceScreen.AppDeviceProgressCache.didNothing
 import presentation.appsDeviceScreen.AppDeviceProgressCache.isSecondInstructions
-import presentation.appsDeviceScreen.AppDeviceProgressCache.reset
+import presentation.appsDeviceScreen.AppDeviceProgressCache.resetAppDeviceProgress
 import presentation.appsDeviceScreen.AppDeviceProgressCache.wrongApp
-import presentation.appsDeviceScreen.AppProgressCache.resetAll
+import presentation.appsDeviceScreen.AppProgressCache.resetAppProgress
 import presentation.contatcts.ContactsScreen
 
 class AppDeviceViewModel(
@@ -200,13 +200,11 @@ class AppDeviceViewModel(
         if (app.label == contacts) {
             _nextScreen.value = ContactsScreen()
             resetAll()
-            reset()
             return
         }
         wrongApp++
 
         _nextScreen.value = if (wrongApp == 3) {
-            reset()
             resetAll()
 
             ContactsScreen()
@@ -239,10 +237,9 @@ class AppDeviceViewModel(
                     isPlayingFlow = isPlaying,
                     audioText = herePersonsNumber to nowTheContactsListWillBeOpenedPass
                 )
+                resetAll()
                 _isNextScreen.value = false
                 _nextScreen.value = ContactsScreen()
-                resetAll()
-                reset()
             }
         }
     }
@@ -263,6 +260,11 @@ class AppDeviceViewModel(
         countdownDialogHandler.hideDialog()
         reminderJob?.cancel()
         reminderJob = null
+    }
+
+    private fun resetAll(){
+        resetAppProgress()
+        resetAppDeviceProgress()
     }
 
 }

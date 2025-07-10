@@ -18,8 +18,9 @@ import androidx.compose.ui.text.withStyle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.LARGE
-import org.example.hit.heal.core.presentation.Resources.Icon.exitIcon
+import org.example.hit.heal.core.presentation.Resources.Icon.logoutIcon
 import org.example.hit.heal.core.presentation.Resources.String.deviceAppTitle
 import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.wrongAppTitle
@@ -52,7 +53,7 @@ class WrongAppScreen : Screen {
             content = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Image(
-                        painter = painterResource(exitIcon),
+                        painter = painterResource(logoutIcon),
                         contentDescription = stringResource(exit),
                         modifier = Modifier
                             .size(iconSizeXl)
@@ -109,6 +110,9 @@ class WrongAppScreen : Screen {
                 )
             }
         }
+
+        RegisterBackHandler(this) {
+            navigator?.popUntilRoot()        }
     }
 }
 

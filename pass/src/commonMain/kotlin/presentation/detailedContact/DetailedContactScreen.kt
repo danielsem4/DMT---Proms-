@@ -25,9 +25,12 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.contact
+import org.example.hit.heal.core.presentation.Resources.String.defaultName
+import org.example.hit.heal.core.presentation.Resources.String.defaultPhone
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
@@ -46,8 +49,8 @@ class DetailedContactScreen() : Screen {
         val navigator = LocalNavigator.current
         val viewModel: DetailedContactViewModel = koinViewModel()
         val correctContact = DetailedContactCache.lastContact ?: ContactData(
-            name = "Unknown",
-            phoneNumber = "000-0000000"
+            name = stringResource(defaultName),
+            phoneNumber = stringResource(defaultPhone)
         )
 
         val contactChatData: List<AppData> = viewModel.items.map { item ->
@@ -151,6 +154,9 @@ class DetailedContactScreen() : Screen {
                 )
             }
         }
+
+        RegisterBackHandler(this) {
+            navigator?.popUntilRoot()        }
     }
 }
 

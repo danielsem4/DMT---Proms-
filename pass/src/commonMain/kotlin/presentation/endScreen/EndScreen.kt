@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.style.TextAlign
 import core.utils.ObserveLifecycle
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.Resources.String.end
 import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.next
@@ -123,6 +124,10 @@ class EndScreen : Screen {
                         interactionSource = remember { MutableInteractionSource() }
                     )
             )
+        }
+
+        RegisterBackHandler(this) {
+            navigator?.popUntilRoot()
         }
     }
 }
