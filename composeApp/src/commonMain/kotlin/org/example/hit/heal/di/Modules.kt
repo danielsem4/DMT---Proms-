@@ -2,16 +2,15 @@ package org.example.hit.heal.di
 
 import core.di.AudioModule
 import core.di.clientRequestsModule
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import core.di.sessionModule
 import di.Pass_module
 import org.example.hit.heal.cdt.di.CDT_module
 import org.example.hit.heal.hitber.di.Hitber_module
-import org.example.hit.heal.home.HomeViewModel
-import org.example.hit.heal.login.LoginViewModel
-import org.example.hit.heal.splash.SplashViewModel
+import org.example.hit.heal.presentation.home.HomeViewModel
+import org.example.hit.heal.presentation.login.LoginViewModel
+import org.example.hit.heal.presentation.splash.SplashViewModel
+import org.example.hit.heal.presentation.evaluation.EvaluationsViewModel
+import org.example.hit.heal.presentation.activities.ActivitiesViewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf
@@ -30,19 +29,20 @@ fun initKoin(config: KoinAppDeclaration? = null) =
 
 expect val platformModule: Module
 
-val sharedAppModules = module {
+val sharedAppModules = module{
     includes(clientRequestsModule)
     includes(sessionModule)
     includes(AudioModule)
 }
 
 val sharedModules = module {
-    single<CoroutineScope> { CoroutineScope(Dispatchers.Main + SupervisorJob()) }
     viewModelOf(::LoginViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SplashViewModel)
 
     includes(Hitber_module)
     includes(Pass_module)
+    viewModelOf(::EvaluationsViewModel)
+    viewModelOf(::ActivitiesViewModel)
     includes(CDT_module)
 }

@@ -33,14 +33,14 @@ object HttpClientFactory {
             install(ContentNegotiation) {
                 json(Json {
                     ignoreUnknownKeys = true
-                    isLenient       = true
-                    prettyPrint     = true
-                    encodeDefaults  = true
+                    isLenient = true
+                    prettyPrint = true
+                    encodeDefaults = true
                 })
             }
 
             install(HttpTimeout) {
-                socketTimeoutMillis  = 20_000
+                socketTimeoutMillis = 20_000
                 requestTimeoutMillis = 20_000
             }
 

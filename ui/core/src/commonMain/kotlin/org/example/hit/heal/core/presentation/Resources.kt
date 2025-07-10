@@ -518,6 +518,7 @@ object Resources {
         val graphs = rs.graphs
         val appName = rs.app_name
         val howDoYouFeel = rs.how_do_you_feel
+        val evaluationText = rs.evaluation
 
         // Error messages
         val noInternet = rs.no_internet

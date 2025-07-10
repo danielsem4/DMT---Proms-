@@ -1,5 +1,6 @@
-//package com.yourapp.ui.screens
+package org.example.hit.heal.presentation.login
 
+import ContentWithMessageBar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -46,35 +48,37 @@ import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingXl
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.SimpleInputText
-import org.example.hit.heal.home.HomeScreen
-import org.example.hit.heal.login.LoginViewModel
+import org.example.hit.heal.presentation.home.HomeScreen
+import org.example.hit.heal.presentation.login.LoginViewModel
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import rememberMessageBarState
+
+/**
+ * LoginScreen is a composable function that represents the login screen of the application.
+ * It allows users to enter their email and password to log in.
+ */
 
 class LoginScreen : Screen {
     @Composable
     override fun Content() {
-        val navigator       = LocalNavigator.currentOrThrow
+        val navigator = LocalNavigator.currentOrThrow
         val loginViewModel: LoginViewModel = koinViewModel()
 
-        var email    by remember { mutableStateOf("") }
+        var email by remember { mutableStateOf("") }
         var password by remember { mutableStateOf("") }
         var passwordVisible by remember { mutableStateOf(false) }
         val isLoading by loginViewModel.isLoading.collectAsState()
 
-        // Holds just the StringResource ID returned by VM
         var errorResID: StringResource? by remember { mutableStateOf(null) }
 
-        // Static strings prepared in-composition
         val fillFields   = stringResource(Resources.String.fill_fields)
         val loginSuccess = stringResource(Resources.String.loginSuccess)
 
-        // 1) Create your MessageBar state
         val messageBarState = rememberMessageBarState()
 
-        // 2) Whenever VM signals an error, convert & show it here
         errorResID?.let { resId ->
             val text = stringResource(resId)
             LaunchedEffect(text) {
@@ -83,7 +87,6 @@ class LoginScreen : Screen {
             }
         }
 
-        // 3) Wrap your UI in the MessageBar container
         ContentWithMessageBar(
             messageBarState = messageBarState,
             position = MessageBarPosition.BOTTOM
@@ -119,7 +122,10 @@ class LoginScreen : Screen {
                                     modifier = Modifier.size(iconSizeMd)
                                 )
                             },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                            keyboardActions = KeyboardActions(
+                                onDone = {  }
+                            ),
                         )
 
                         Spacer(modifier = Modifier.height(spacingMd))
@@ -137,6 +143,9 @@ class LoginScreen : Screen {
                                 )
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            keyboardActions = KeyboardActions(
+                                onDone = {  }
+                            ),
                             trailingIcon = {
                                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                                     Icon(

@@ -272,18 +272,26 @@ class ActivityViewModel(
     fun uploadEvaluationResults(
         onSuccess: (() -> Unit)? = null,
         onFailure: ((message: Error) -> Unit)? = null
-    ) {
-        println("results object: $result")
-
-        viewModelScope.launch {
+    ) {  println("results object: $result")
+        uploadScope.launch {
             try {
+
+                val userId = storage.get(PrefKeys.userId)!!.toInt()
+                val clinicId = storage.get(PrefKeys.clinicId)!!
+                val measurement = 19
+
+                result.patientId = userId
+                result.clinicId = clinicId
+                result.measurement = measurement
+                println("results object: $result")
+
                 val uploadResult = uploadTestResultsUseCase.execute(result, CogData.serializer())
 
                 uploadResult.onSuccess {
-                    println("✅ העלאה הצליחה")
+                    println("✅ העלאה של הכל הצליחה")
                     onSuccess?.invoke()
                 }.onError { error ->
-                    println("❌ שגיאה בהעלאה: $error")
+                    println("❌ שגיאה העלאה: $error")
                     onFailure?.invoke(error)
                 }
 

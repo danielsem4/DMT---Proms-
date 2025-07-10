@@ -54,6 +54,7 @@ nav3Core = "1.0.0-alpha02"
 nav3Lifecycle = "1.0.0-alpha01"
 messagebar = "1.0.7"
 
+
 [libraries]
 androidx-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundationAndroid" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }

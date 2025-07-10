@@ -1,4 +1,4 @@
-package org.example.hit.heal.splash
+package org.example.hit.heal.presentation.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

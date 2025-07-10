@@ -55,7 +55,13 @@ class SummaryScreen : Screen {
                         text = stringResource(exit),
                         modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
                         onClick = {
-                            viewModel.uploadEvaluationResults()
+                            viewModel.uploadEvaluationResults(
+                                onSuccess = {
+                                    println("success")
+                                            },
+                                onFailure = {
+                                    println("failure")
+                                })
                             navigator?.pop()
                         }
                     )
