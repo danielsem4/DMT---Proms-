@@ -1,4 +1,4 @@
-package org.example.hit.heal.home
+package org.example.hit.heal.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

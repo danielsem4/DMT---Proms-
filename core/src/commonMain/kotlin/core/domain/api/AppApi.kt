@@ -1,9 +1,12 @@
 package core.domain.api
 
+import core.data.model.ActivityItem
+import core.data.model.ActivityItemReport
 import core.data.model.Medications.Medication
 import core.data.model.Medications.MedicationReport
 import core.data.model.ModulesResponse
 import core.data.model.SuccessfulLoginResponse
+import core.data.model.evaluation.Evaluation
 import core.domain.DataError
 import core.domain.EmptyResult
 import core.domain.Result
@@ -27,7 +30,7 @@ interface AppApi {
         imageBytes: ByteArray,
         clinicId: Int,
         userId: String
-    ): EmptyResult<DataError.Remote>
+    ): Result<Int, DataError.Remote>
 
     suspend fun getModules(clinicId: Int): Result<ArrayList<ModulesResponse>, DataError.Remote>
 
@@ -43,4 +46,23 @@ interface AppApi {
     suspend fun setMedicationNotifications(
         results: Request
     ): Result<Unit, DataError.Remote>
+
+    suspend fun getPatientMeasureReport(
+        clinicId: Int,
+        patientId: Int
+    ): Result<List<Evaluation>, DataError.Remote>
+
+    suspend fun getSpecificEvaluation(
+        clinicId: Int,
+        patientId: Int,
+        evaluationName: String
+    ): Result<Evaluation, DataError.Remote>
+
+    suspend fun reportActivity(
+        body: ActivityItemReport
+    ): Result<Unit, DataError.Remote>
+
+    suspend fun getPatientActivities(
+        clinicId: Int
+    ): Result<List<ActivityItem>, DataError.Remote>
 }

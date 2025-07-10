@@ -3,12 +3,15 @@ package org.example.hit.heal.cdt.presentation
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import core.data.model.MeasureObjectString
 import core.data.model.cdt.CDTRequestBody
 import core.data.model.cdt.CDTResults
+import core.data.model.evaluation.Evaluation
 import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.Error
+import core.domain.api.AppApi
 import core.domain.onError
 import core.domain.onSuccess
 import core.domain.use_case.cdt.UploadFileUseCase
@@ -22,18 +25,23 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
-import kotlinx.serialization.json.Json
 import org.example.hit.heal.cdt.data.ClockTime
 
 
 class ClockTestViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
     private val uploadCDTResultsUseCase: UploadTestResultsUseCase,
+    private val api: AppApi,
     private val storage: Storage,
 ) : ViewModel() {
+
+    // the clock test as we get it from the server
+    private val _clockTest = MutableStateFlow<Evaluation?>(null)
+    val clockTest: StateFlow<Evaluation?> = _clockTest.asStateFlow()
 
     private val _currentClockSetTime = MutableStateFlow(ClockTime(12, 0))
     private val _isSecondStep: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -50,6 +58,23 @@ class ClockTestViewModel(
 
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
+    fun loadEvaluation(evaluationName: String) {
+        viewModelScope.launch {
+            val clinicId = storage.get(PrefKeys.clinicId) ?: return@launch
+            val patientId = storage.get(PrefKeys.userId)?.toIntOrNull() ?: return@launch
+
+            api.getSpecificEvaluation(clinicId, patientId, evaluationName)
+                .onSuccess { fetched ->
+                    _clockTest.value = fetched
+                    println("fetched evaluation: $fetched")
+                }
+                .onError { error ->
+                    // post an error to a MessageBarState here todo
+                    println("Error fetching evaluation: $error")
+                }
+        }
+    }
+
     /** Sends the clock drawing and results to the server */
     fun sendToServer(onSuccess: (() -> Unit)?, onFailure: ((message: Error) -> Unit)?) {
         if (clockDrawing.width == 1 || clockDrawing.height == 1) {
@@ -60,7 +85,7 @@ class ClockTestViewModel(
         val imageByteArray = clockDrawing.toByteArray()
 
         val version = 1
-        val measurement = 21
+        val measurement = 17
         val date = getCurrentFormattedDateTime()
         val imgName = "clock_image.png"
 
@@ -90,17 +115,6 @@ class ClockTestViewModel(
                             clinicId = clinicId,
                             test = cdtResults
                         )
-                        // Create a Json instance (you can configure it if needed)
-                        val json = Json {
-                            prettyPrint =
-                                true // Makes the output readable with line breaks and indentation
-                            encodeDefaults = true // Includes fields with default values
-                        }
-                        // Encode the object to a JSON string
-                        val jsonString = json.encodeToString(body)
-
-                        // Print the JSON string
-                        println(jsonString)
 
                         uploadCDTResultsUseCase.execute(body, CDTRequestBody.serializer())
                             .onSuccess {
@@ -118,7 +132,7 @@ class ClockTestViewModel(
                         onFailure?.invoke(error)
                     }
             } catch (e: Exception) {
-                println("Unexpected error: ${e.message}")
+                println("🚨Unexpected error: ${e.message}")
                 onFailure?.invoke(DataError.Remote.UNKNOWN)
             }
         }
