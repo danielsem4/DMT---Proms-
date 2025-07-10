@@ -48,6 +48,42 @@
     <string name="hitber">התבר</string>
 
 
+    //Medications
+    <string name="select_date">בחר תאריך</string>
+    <string name="empty_string"></string>
+    <string name="week_day_s">א</string>
+    <string name="week_day_m">ב</string>
+    <string name="week_day_tu">ג</string>
+    <string name="week_day_w">ד</string>
+    <string name="week_day_th">ה</string>
+    <string name="week_day_f">ו</string>
+    <string name="week_day_sa">ש</string>
+    <string name="report_medication_taken">דיווח על נטילת תרופה</string>
+    <string name="report_message">נטלתי את %1$s:\nתאריך: %2$s\nשעה: %3$s</string>
+    <string name="save">שמור</string>
+    <string name="date">תאריך</string>
+    <string name="time">שעה</string>
+    <string name="dash">-</string>
+    <string name="select_date_label">בחר תאריך</string>
+    <string name="select_time_label">בחר שעה</string>
+    <string name="search_hint">חפש...</string>
+
+    <string name="report_medication">דווח על תרופה</string>
+    <string name="set_medication_alarm">קבע תזכורת לתרופה</string>
+    <string name="daily">יומי</string>
+    <string name="weekly">שבועי</string>
+    <string name="start_date_empty">יש להזין תאריך התחלה</string>
+    <string name="end_before_start">תאריך הסיום לא יכול להיות לפני תאריך ההתחלה</string>
+    <string name="back">חזור</string>
+    <string name="when_notification">מתי ברצונך לקבל התראה?</string>
+    <string name="how_many_times_per_day">כמה פעמים ביום</string>
+    <string name="select_week_days">בחר ימי שבוע</string>
+    <string name="start_time">שעת התחלה</string>
+    <string name="notification_start_question">מאיזה תאריך תתחיל ההתראה?</string>
+    <string name="start_date">תאריך התחלה</string>
+    <string name="end_date">תאריך סיום</string>
+    <string name="leave_end_date_empty">השאר ריק אם אינך רוצה תאריך סיום</string>
+
     <!--    CDT Module  -->
 
 

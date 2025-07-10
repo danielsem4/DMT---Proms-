@@ -118,15 +118,3 @@ fun BaseScreen(
 }
 
 
-@Preview
-@Composable
-fun SampleScreen() {
-    BaseScreen(
-        title = "Sample",
-        onPrevClick = { /* Handle previous */ },
-        onNextClick = { /* Handle next */ }
-    ) {
-        Text(text ="how do you feel?")
-        TextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
-    }
-}

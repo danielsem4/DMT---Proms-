@@ -50,6 +50,42 @@
     <string name="hitber">HitBer</string>
 
 
+    //Medications
+    <string name="select_date">Select a date</string>
+    <string name="empty_string"> </string>
+    <string name="week_day_s">S</string>
+    <string name="week_day_m">M</string>
+    <string name="week_day_tu">T</string>
+    <string name="week_day_w">W</string>
+    <string name="week_day_th">T</string>
+    <string name="week_day_f">F</string>
+    <string name="week_day_sa">S</string>
+    <string name="report_medication_taken">Report Medication taken</string>
+    <string name="report_message">I took %1$s on:\nDate: %2$s\nTime: %3$s</string>
+    <string name="save">Save</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="dash">-</string>
+    <string name="select_date_label">Select Date</string>
+    <string name="select_time_label">Select Time</string>
+    <string name="search_hint">search...</string>
+
+    <string name="report_medication">Report medication</string>
+    <string name="set_medication_alarm">Set medication alarm</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="start_date_empty">Start date cannot be empty</string>
+    <string name="end_before_start">End date cannot be earlier than start date</string>
+    <string name="back">Back</string>
+    <string name="when_notification">When do you want to get notification</string>
+    <string name="how_many_times_per_day">How many times per day</string>
+    <string name="select_week_days">Select week days</string>
+    <string name="start_time">Start time</string>
+    <string name="notification_start_question">What date you want the notification will work?</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="leave_end_date_empty">Leave empty to not set end date</string>
+
 
     <!--    CDT Module  -->
 

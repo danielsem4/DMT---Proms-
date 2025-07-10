@@ -1,27 +1,22 @@
 package org.example.hit.heal.presentaion.components
 
-import MedicationAlarmViewModel
+
+import MedicationViewModel
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,33 +25,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.new_memory_test.primaryColor
+import core.data.model.Medications.Medication
+
 
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.pills
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atTime
-import kotlinx.datetime.toLocalDateTime
 import network.chaintech.kmp_date_time_picker.ui.datepicker.WheelDatePickerView
 import network.chaintech.kmp_date_time_picker.ui.timepicker.WheelTimePickerView
 import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
 import network.chaintech.kmp_date_time_picker.utils.WheelPickerDefaults
-import org.example.hit.heal.presentaion.screens.medicationScreen.MedicationReportViewModel
+import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -64,8 +52,9 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @Composable
 fun ReportMedicationDialog(
     medicationName: String,
+    medication: Medication,
     onDismiss: () -> Unit,
-    viewModel: MedicationReportViewModel = koinViewModel()
+    viewModel: MedicationViewModel = koinViewModel()
 ) {
 
     var showDatePicker by remember { mutableStateOf(false) }
@@ -82,7 +71,7 @@ fun ReportMedicationDialog(
             ) {
 
                 Text(
-                    text = "Report Medication taken",
+                    text = stringResource(Resources.String.reportMedicationTaken),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = Color.Black,
@@ -112,25 +101,25 @@ fun ReportMedicationDialog(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = { viewModel.validateAndSave(onDismiss) },
+                    onClick = { viewModel.validateAndSave(medication) },
                     colors = ButtonDefaults.buttonColors(primaryColor),
                     shape = RoundedCornerShape(50)
                 ) {
-                    Text("Save", fontWeight = FontWeight.Bold, color = Color.White, fontSize = 18.sp)
+                    Text(stringResource(Resources.String.save), fontWeight = FontWeight.Bold, color = Color.White, fontSize = 18.sp)
                 }
                 Button(
                     onClick = { showDatePicker = true },
                     colors = ButtonDefaults.buttonColors(primaryColor),
                     shape = RoundedCornerShape(50)
                 ) {
-                    Text("Date", fontWeight = FontWeight.Bold, color = Color.White, fontSize = 18.sp)
+                    Text(stringResource(Resources.String.date), fontWeight = FontWeight.Bold, color = Color.White, fontSize = 18.sp)
                 }
                 Button(
                     onClick = { showTimePicker = true },
                     colors = ButtonDefaults.buttonColors(primaryColor),
                     shape = RoundedCornerShape(50)
                 ) {
-                    Text("Time", fontWeight = FontWeight.Bold, color = Color.White, fontSize = 18.sp)
+                    Text(stringResource(Resources.String.time), fontWeight = FontWeight.Bold, color = Color.White, fontSize = 18.sp)
                 }
             }
         }
@@ -173,7 +162,7 @@ fun normalizeDateString(dateString: String): String {
 fun DatePicker(onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
     WheelDatePickerView(
         modifier = Modifier.padding(10.dp),
-        title = "Select Date",
+        title = stringResource(Resources.String.selectDate),
         showDatePicker = true,
         height = 200.dp,
         titleStyle = TextStyle(
@@ -207,7 +196,7 @@ fun DatePicker(onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
 fun TimePicker(onTimeSelected: (String) -> Unit, onDismiss: () -> Unit) {
     WheelTimePickerView(
         modifier = Modifier.padding(10.dp),
-        title = "Select Time",
+        title =stringResource(Resources.String.selectTimeLabel),
         showTimePicker = true,
         height = 200.dp,
         titleStyle = TextStyle(

@@ -22,12 +22,24 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.new_memory_test.primaryColor
+import org.example.hit.heal.core.presentation.Resources
+
+
+import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
 fun CustomWeeklySelector(  selectedDays: List<Int>, onSelectionChange: (List<Int>) -> Unit) {
-    val days = listOf("S", "M", "T", "W", "T", "F", "S")
+    val days = listOf(
+        stringResource(Resources.String.weekDayS),
+        stringResource(Resources.String.weekDayM),
+        stringResource(Resources.String.weekDayTu),
+        stringResource(Resources.String.weekDayW),
+        stringResource(Resources.String.weekDayTh),
+        stringResource(Resources.String.weekDayF),
+        stringResource(Resources.String.weekDaySa)
+    )
 
 
     Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()) {

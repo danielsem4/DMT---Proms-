@@ -177,6 +177,41 @@ import dmt_proms.ui.core.generated.resources.stethoscope_agenda
 import dmt_proms.ui.core.generated.resources.teach_agenda
 import dmt_proms.ui.core.generated.resources.teach_icon
 import dmt_proms.ui.core.generated.resources.wallet
+import dmt_proms.ui.core.generated.resources.select_date
+import dmt_proms.ui.core.generated.resources.empty_string
+import dmt_proms.ui.core.generated.resources.week_day_s
+import dmt_proms.ui.core.generated.resources.week_day_m
+import dmt_proms.ui.core.generated.resources.week_day_tu
+import dmt_proms.ui.core.generated.resources.week_day_w
+import dmt_proms.ui.core.generated.resources.week_day_th
+import dmt_proms.ui.core.generated.resources.week_day_f
+import dmt_proms.ui.core.generated.resources.week_day_sa
+import dmt_proms.ui.core.generated.resources.report_medication_taken
+import dmt_proms.ui.core.generated.resources.report_message
+import dmt_proms.ui.core.generated.resources.save
+import dmt_proms.ui.core.generated.resources.date
+import dmt_proms.ui.core.generated.resources.time
+import dmt_proms.ui.core.generated.resources.dash
+import dmt_proms.ui.core.generated.resources.select_date_label
+import dmt_proms.ui.core.generated.resources.select_time_label
+import dmt_proms.ui.core.generated.resources.search_hint
+import dmt_proms.ui.core.generated.resources.report_medication
+import dmt_proms.ui.core.generated.resources.set_medication_alarm
+import dmt_proms.ui.core.generated.resources.daily
+import dmt_proms.ui.core.generated.resources.weekly
+import dmt_proms.ui.core.generated.resources.start_date_empty
+import dmt_proms.ui.core.generated.resources.end_before_start
+import dmt_proms.ui.core.generated.resources.back
+import dmt_proms.ui.core.generated.resources.when_notification
+import dmt_proms.ui.core.generated.resources.how_many_times_per_day
+import dmt_proms.ui.core.generated.resources.select_week_days
+import dmt_proms.ui.core.generated.resources.start_time
+import dmt_proms.ui.core.generated.resources.notification_start_question
+import dmt_proms.ui.core.generated.resources.start_date
+import dmt_proms.ui.core.generated.resources.end_date
+import dmt_proms.ui.core.generated.resources.leave_end_date_empty
+
+
 
 
 import dmt_proms.ui.core.generated.resources.Res.string as rs
@@ -241,6 +276,8 @@ object Resources {
         val starOutlineIcon = Res.drawable.star_outlined
         val trapezeIcon = Res.drawable.trapeze
         val xIcon = Res.drawable.x
+
+
 
 
 
@@ -322,7 +359,40 @@ object Resources {
         val unexpectedError = rs.unexpected_error
 
 
-
+        //Medications
+        val selectDate = rs.select_date
+        val emptyString = rs.empty_string
+        val weekDayS = rs.week_day_s
+        val weekDayM = rs.week_day_m
+        val weekDayTu = rs.week_day_tu
+        val weekDayW = rs.week_day_w
+        val weekDayTh =rs.week_day_th
+        val weekDayF = rs.week_day_f
+        val weekDaySa = rs.week_day_sa
+        val reportMedicationTaken = rs.report_medication_taken
+        val reportMessage =rs.report_message
+        val save = rs.save
+        val date = rs.date
+        val time = rs.time
+        val dash = rs.dash
+        val selectDateLabel = rs.select_date_label
+        val selectTimeLabel = rs.select_time_label
+        val searchHint = rs.search_hint
+        val reportMedication = rs.report_medication
+        val setMedicationAlarm = rs.set_medication_alarm
+        val daily = rs.daily
+        val weekly = rs.weekly
+        val startDateEmpty = rs.start_date_empty
+        val endBeforeStart = rs.end_before_start
+        val back = rs.back
+        val whenNotification =rs.when_notification
+        val howManyTimesPerDay = rs.how_many_times_per_day
+        val selectWeekDays = rs.select_week_days
+        val startTime = rs.start_time
+        val notificationStartQuestion = rs.notification_start_question
+        val startDate = rs.start_date
+        val endDate = rs.end_date
+        val leaveEndDateEmpty = rs.leave_end_date_empty
 
         //MemoryTestModule
         val day_sunday = rs.day_sunday

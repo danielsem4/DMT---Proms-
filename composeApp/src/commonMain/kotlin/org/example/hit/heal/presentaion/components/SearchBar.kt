@@ -20,6 +20,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.new_memory_test.primaryColor
+import org.example.hit.heal.core.presentation.Resources
+import org.jetbrains.compose.resources.stringResource
 
 
 @Composable
@@ -40,7 +42,7 @@ fun SearchBar(
             cursorColor = primaryColor,
             unfocusedBorderColor = Color.Black
         ),
-        placeholder = { Text("search...") },
+        placeholder = { Text(stringResource(Resources.String.searchHint)) },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,

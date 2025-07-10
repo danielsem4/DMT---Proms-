@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import org.example.hit.heal.splash.SplashScreen
-import MedicationAlarmViewModel
+
 import androidx.compose.foundation.layout.fillMaxSize
 
 import androidx.compose.runtime.*
@@ -17,7 +17,6 @@ import org.example.hit.heal.di.appModule
 
 
 import org.example.hit.heal.presentaion.screens.alarmReport.AlarmReportMedicationScreen
-import org.example.hit.heal.presentaion.screens.medicationScreen.MedicationReportViewModel
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -44,17 +43,20 @@ fun App() {
   //      Navigator(SplashScreen())
   //  }
 
-    //MaterialTheme {
-    //    Navigator(SplashScreen()) { navigator ->
-    //        SlideTransition(navigator) // This defines the animation for ALL transitions
-    //    }
-    //}
-
-    MaterialTheme {
-        Navigator(screen = MemoryScreen()) { navigator ->
-            SlideTransition(navigator)
+     MaterialTheme {
+        Navigator(SplashScreen()) { navigator ->
+            SlideTransition(navigator) // This defines the animation for ALL transitions
         }
-    }
+        //Navigator(screen = AlarmReportMedicationScreen()) { navigator ->
+        //    SlideTransition(navigator)
+        //}
+     }
+
+   // MaterialTheme {
+   //     Navigator(screen = MemoryScreen()) { navigator ->
+   //         SlideTransition(navigator)
+   //     }
+   // }
     //MaterialTheme {
     //    Navigator(SplashScreen())
     //}

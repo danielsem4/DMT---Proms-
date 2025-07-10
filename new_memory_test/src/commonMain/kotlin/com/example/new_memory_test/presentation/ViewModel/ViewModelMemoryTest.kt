@@ -17,7 +17,7 @@ import org.jetbrains.compose.resources.PluralStringResource
 import org.jetbrains.compose.resources.StringResource
 import kotlin.math.absoluteValue
 
-class ViewModelMemoryTest(   ) : ViewModel() {
+class ViewModelMemoryTest( ) : ViewModel() {
     var txtMemoryPage by mutableStateOf(1)
     private val _placedItems = mutableStateListOf<DataItem>()
     val placedItems: List<DataItem> get() = _placedItems.toList()

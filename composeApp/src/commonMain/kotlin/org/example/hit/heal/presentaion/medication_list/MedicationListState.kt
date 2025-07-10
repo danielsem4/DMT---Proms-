@@ -1,6 +1,7 @@
 package org.example.hit.heal.presentaion.medication_list
 
-import org.example.hit.heal.domain.Medication
+import core.data.model.Medications.Medication
+
 
 class MedicationListState() {
 

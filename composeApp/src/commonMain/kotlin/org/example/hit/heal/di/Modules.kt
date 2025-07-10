@@ -1,5 +1,8 @@
 package org.example.hit.heal.di
 
+
+import MedicationViewModel
+import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import core.di.clientRequestsModule
 import core.di.sessionModule
 import org.example.hit.heal.cdt.di.CDT_module
@@ -33,5 +36,9 @@ val sharedModules = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SplashViewModel)
+
+    viewModelOf(::MedicationViewModel)
+    viewModelOf(::ViewModelMemoryTest)
+
     includes(CDT_module)
 }

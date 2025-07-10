@@ -1,6 +1,7 @@
 package org.example.hit.heal.home
 
 import LoginScreen
+import MedicationScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +45,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.example.new_memory_test.presentation.screens.MemoryScreen.MemoryScreen
 import core.data.model.ModulesResponse
 import kotlinx.coroutines.launch
 import org.example.hit.heal.cdt.presentation.CDTLandingScreen
@@ -68,6 +70,7 @@ import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.presentaion.screens.BaseScreen
+import org.example.hit.heal.presentaion.screens.alarmReport.AlarmReportMedicationScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -241,7 +244,10 @@ class HomeScreen : Screen {
 
     private fun navigateTo(moduleId: Int, navigator: Navigator) {
         when (moduleId) {
+            7-> navigator.push(AlarmReportMedicationScreen())
+            13 -> navigator.push(MemoryScreen())
             16 -> navigator.push(CDTLandingScreen())
+
             else -> println("Action for module $moduleId not implemented yet")
         }
     }
@@ -254,9 +260,9 @@ class HomeScreen : Screen {
         5 -> Resources.Icon.chatIcon
         7 -> Resources.Icon.medIcon
         8 -> Resources.Icon.exerciseIcon
+        13 -> Resources.Icon.memoryModuleIcon
         16 -> Resources.Icon.clockIcon
         19 -> Resources.Icon.hitbearModuleIcon
-        20 -> Resources.Icon.memoryModuleIcon
 //        21 -> Resources.Icon.orientation
         else -> Resources.Icon.binIcon
     }
@@ -268,9 +274,9 @@ class HomeScreen : Screen {
         5 -> stringResource(Resources.String.chat)
         7 -> stringResource(Resources.String.medications)
         8 -> stringResource(Resources.String.activities)
+        13-> stringResource(Resources.String.memory)
         16 -> stringResource(Resources.String.clockTest)
         19 -> stringResource(Resources.String.hitber)
-        20 -> stringResource(Resources.String.memory)
 //        21 -> stringResource(Resources.String.orientation)
         else -> "Unknown"
     }

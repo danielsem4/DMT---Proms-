@@ -52,6 +52,8 @@ import network.chaintech.kmp_date_time_picker.utils.MIN
 import network.chaintech.kmp_date_time_picker.utils.SelectorProperties
 import network.chaintech.kmp_date_time_picker.utils.WheelPickerDefaults
 import network.chaintech.kmp_date_time_picker.utils.now
+import org.example.hit.heal.core.presentation.Resources
+import org.jetbrains.compose.resources.stringResource
 import network.chaintech.kmp_date_time_picker.ui.datepicker.WheelDatePickerView as WheelDatePickerView
 
 @Composable
@@ -114,7 +116,7 @@ fun CustomDatePickerBox(
             contentAlignment = Alignment.CenterStart
         ) {
             Text(
-                text = value.ifEmpty { "Select a date" },
+                text = value.ifEmpty { stringResource(Resources.String.selectDate) },
                 color = if (isError) Color.Red else Color.Black,
                 fontSize = 16.sp
             )

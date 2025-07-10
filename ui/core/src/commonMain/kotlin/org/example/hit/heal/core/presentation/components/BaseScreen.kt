@@ -45,6 +45,8 @@ fun BaseScreen(
     config: ScreenConfig = ScreenConfig.PhoneConfig, // Use ScreenConfig to define layout
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
+    prevButtonText: String = stringResource(Res.string.previous),
+    nextButtonText: String = stringResource(Res.string.next),
     navigationIcon: @Composable (() -> Unit)? = null,
     topRightText: String? = null, // For tablet
     snackbarHost: @Composable (() -> Unit)? = null, // For tablet
@@ -114,11 +116,11 @@ fun BaseScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     onPrevClick?.let {
-                        RoundedButton(stringResource(Res.string.previous), Modifier, it)
+                        RoundedButton(prevButtonText, Modifier, it)
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     onNextClick?.let {
-                        RoundedButton(stringResource(Res.string.next), Modifier, it)
+                        RoundedButton(nextButtonText, Modifier, it)
                     }
                 }
             } else if (!config.showNavigationButtons && buttons.isNotEmpty()) {

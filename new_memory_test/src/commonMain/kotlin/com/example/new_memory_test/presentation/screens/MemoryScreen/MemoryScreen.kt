@@ -62,7 +62,6 @@ class MemoryScreen : Screen {
                 BulletPointText(text =  stringResource(Resources.String.task_continuity ))
                 BulletPointText(text = stringResource(Resources.String.read_instructions ))
                 BulletPointText(text = stringResource(Resources.String.complete_all_tasks ))
-                BulletPointText(text = stringResource(Resources.String.listen_instruction_tip ))
                 BulletPointText(text = stringResource(Resources.String.quiet_room_tip ))
                 Spacer(modifier = Modifier.weight(1f))
 

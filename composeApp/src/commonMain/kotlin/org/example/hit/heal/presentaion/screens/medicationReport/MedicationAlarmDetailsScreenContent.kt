@@ -1,7 +1,7 @@
 package org.example.hit.heal.presentaion.screens.medicationReport
 
 
-import MedicationAlarmViewModel
+import MedicationViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,24 +15,30 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.presentaion.components.CustomDatePickerBox
 import org.example.hit.heal.presentaion.components.CustomDropdownMenu
 
 import org.example.hit.heal.presentaion.components.CustomWeeklySelector
 
-import org.example.hit.heal.presentaion.screens.BaseScreen
+
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
 
-class MedicationAlarmDetailsScreenContent (private val  medicationName: String) : Screen {
+class MedicationAlarmDetailsScreenContent () : Screen {
     @OptIn(KoinExperimentalAPI::class)
     @Composable
     override fun Content() {
 
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = koinViewModel<MedicationAlarmViewModel>()
+        val viewModel = koinViewModel<MedicationViewModel>()
 
+        val medicationName = viewModel.medicationName.collectAsState().value
+        val medicationchoose = viewModel.getMedication()
         val selectedFrequency by viewModel.selectedFrequency.collectAsState()
         val selectedTimeBetweenDoses by viewModel.selectedTimeBetweenDoses.collectAsState()
         val selectedStartTime by viewModel.selectedStartTime.collectAsState()
@@ -43,39 +49,47 @@ class MedicationAlarmDetailsScreenContent (private val  medicationName: String) 
         var isError by remember { mutableStateOf(false) }
         var errorMessage by remember { mutableStateOf("") }
 
-        val frequencyOptions = listOf("Daily", "Weekly")
+        val frequencyOptions = listOf(stringResource(Resources.String.daily), stringResource(Resources.String.weekly))
         val timeBetweenDosesOptions = listOf("1", "2", "4", "6")
-        val startTimeOptions = generateTimeSlots()
 
-        fun validateInput(): Boolean {
+
+        fun validateInput(): Boolean{
             if (selectedStartDate.isBlank()) {
                 errorMessage = "Start date cannot be empty"
                 isError = true
-                return false
+
             }
-            if (selectedEndDate.isNotBlank() && selectedEndDate < selectedStartDate) {
+            else if (selectedEndDate.isNotBlank() && selectedEndDate < selectedStartDate) {
                 errorMessage = "End date cannot be earlier than start date"
                 isError = true
-                return false
+
             }
-            isError = false
-            errorMessage = ""
-            return true
+            else {
+                isError =false
+                errorMessage =""
+                viewModel.buildAndSendMedication(medicationchoose, medicationName)
+                navigator.pop()
+                return true
+            }
+            return false
+
         }
+
 
         BaseScreen(
             title = medicationName,
-            prevButtonText = "Back",
-            nextButtonText = "Save",
+            config = ScreenConfig.PhoneConfig,
             onPrevClick =
             { navigator.pop() },
             onNextClick =
             {
                 if (validateInput()) {
-
                     navigator.pop()
                 }
-            }
+            },
+            prevButtonText = stringResource(Resources.String.back),
+            nextButtonText = stringResource(Resources.String.save),
+
         )
         {
             Column(
@@ -86,7 +100,7 @@ class MedicationAlarmDetailsScreenContent (private val  medicationName: String) 
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    "When do you want to get notification",
+                    stringResource(Resources.String.whenNotification),
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
                     modifier = Modifier.padding(top = 8.dp)
@@ -99,9 +113,9 @@ class MedicationAlarmDetailsScreenContent (private val  medicationName: String) 
                     modifier = Modifier.fillMaxWidth()
                 )
 
-                if (selectedFrequency == "Daily") {
+                if (selectedFrequency == stringResource(Resources.String.daily)) {
                     Text(
-                        "How many times per day",
+                        stringResource(Resources.String.howManyTimesPerDay),
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp,
                         modifier = Modifier.padding(top = 8.dp)
@@ -114,9 +128,9 @@ class MedicationAlarmDetailsScreenContent (private val  medicationName: String) 
                     )
                 }
 
-                if (selectedFrequency == "Weekly") {
+                if (selectedFrequency == stringResource(Resources.String.weekly)) {
                     Text(
-                        "Select week days",
+                        stringResource(Resources.String.selectWeekDays),
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp,
                         modifier = Modifier.padding(top = 8.dp)
@@ -129,20 +143,20 @@ class MedicationAlarmDetailsScreenContent (private val  medicationName: String) 
                 }
 
                 Text(
-                    "Start time",
+                    stringResource(Resources.String.startTime),
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
                     modifier = Modifier.padding(top = 8.dp)
                 )
                 CustomDropdownMenu(
                     selectedOption = selectedStartTime,
-                    options = startTimeOptions,
+                    options = generateTimeSlots(),
                     onOptionSelected = { viewModel.setStartTime(it) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 Text(
-                    "What date you want the notification will work?",
+                    stringResource(Resources.String.notificationStartQuestion),
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
                     modifier = Modifier.padding(top = 32.dp)
@@ -151,14 +165,14 @@ class MedicationAlarmDetailsScreenContent (private val  medicationName: String) 
                 CustomDatePickerBox(
                     value = selectedStartDate,
                     onValueChange = { viewModel.setStartDate(it) },
-                    label = "Start date",
+                    label = stringResource(Resources.String.startDate),
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 CustomDatePickerBox(
                     value = selectedEndDate,
                     onValueChange = { viewModel.setEndDate(it) },
-                    label = "End date",
+                    label = stringResource(Resources.String.endDate),
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -172,7 +186,7 @@ class MedicationAlarmDetailsScreenContent (private val  medicationName: String) 
                 }
 
                 Text(
-                    "Leave empty to not set end date",
+                    stringResource(Resources.String.leaveEndDateEmpty),
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
                     color = Color.Gray,
@@ -186,15 +200,5 @@ class MedicationAlarmDetailsScreenContent (private val  medicationName: String) 
 }
 
 
-    private fun generateTimeSlots(): List<String> {
-        val timeSlots = mutableListOf<String>()
-        for (hour in 0..23) {
-            for (minute in listOf(0, 15, 30, 45)) {
-                val formattedTime =
-                    "${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}"
-                timeSlots.add(formattedTime)
-            }
-        }
-        return timeSlots
-    }
+
 
