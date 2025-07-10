@@ -36,8 +36,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(compose.materialIconsExtended) // icons
-           //need check if i need it
+            implementation(compose.materialIconsExtended)
         }
     }
 }

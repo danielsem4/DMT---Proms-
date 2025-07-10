@@ -61,6 +61,7 @@ voyagerVersion = "1.1.0-beta02"
 xicon_pack_z = "1.1.1"
 messagebar = "1.0.7"
 
+
 [libraries]
 draganddrop = { module = "io.github.mohamedrejeb.compose-drag-and-drop:draganddrop", version.ref = "draganddrop" }
 jetbrains-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetimeVersion" }

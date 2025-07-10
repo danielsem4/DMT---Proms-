@@ -8,6 +8,7 @@ import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.ensureActive
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlin.coroutines.coroutineContext
 
@@ -47,15 +48,10 @@ suspend inline fun <reified T> responseToResult(
 
     return when (response.status.value) {
         in 200..299 -> {
-            runCatching {
-                json.decodeFromString<T>(text)
-            }.fold(
-                onSuccess = { Result.Success(it) },
-                onFailure = { err ->
-                    println("deserialization error: ${err.message}")
-                    Result.Error(DataError.Remote.SERIALIZATION)
-                }
-            )
+            println("HTTP 200 response body: $text")
+
+            val parsed: T = response.body()
+            Result.Success(parsed)
         }
         403 -> Result.Error(DataError.Remote.FORBIDDEN)
         404 -> Result.Error(DataError.Remote.NO_INTERNET)
