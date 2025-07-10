@@ -24,8 +24,9 @@ import org.example.hit.heal.core.presentation.primaryColor
 import presentation.components.CountdownDialogHandler
 import presentation.nextQuestion.NextQuestionScreen
 
-class DetailedContactViewModel(private val countdownDialogHandler: CountdownDialogHandler,
-                               private val playAudioUseCase: PlayAudioUseCase
+class DetailedContactViewModel(
+    private val countdownDialogHandler: CountdownDialogHandler,
+    private val playAudioUseCase: PlayAudioUseCase
 ) : ViewModel() {
 
     val items = listOf(
@@ -57,7 +58,6 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
     private var wrongClick = 0
 
     private var reminderJob: Job? = null
-    private var elapsedSeconds = 0
 
     private val _nextScreen = MutableStateFlow<Screen?>(null)
     val nextScreen = _nextScreen.asStateFlow()
@@ -70,20 +70,12 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
-            while (isActive && didNothing + wrongClick <= 3) {
+            if (didNothing + wrongClick <= 3) {
 
-                delay(1_000)
+                delay(15_000)
 
-                if (showDialog.value) {
-                    continue
-                }
-
-                elapsedSeconds++
-
-                if (elapsedSeconds >= 15) {
-                    didNothing++
-                    getReminderText()
-                }
+                didNothing++
+                getReminderText()
 
             }
         }
@@ -125,7 +117,7 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
 
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
-        elapsedSeconds = 0
+        startCheckingIfUserDidSomething()
     }
 
 
@@ -133,7 +125,7 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
         _nextScreen.value = null
     }
 
-    private fun nextQuestion(){
+    private fun nextQuestion() {
         _isNextScreen.value = true
         _nextScreen.value = NextQuestionScreen()
     }
@@ -142,7 +134,7 @@ class DetailedContactViewModel(private val countdownDialogHandler: CountdownDial
         println("didNothing: $didNothing")
         println("wrongClick: $wrongClick")
         playAudioUseCase.stopAudio()
-        countdownDialogHandler.hideDialog()
+        hideReminderDialog()
         reminderJob?.cancel()
         reminderJob = null
     }

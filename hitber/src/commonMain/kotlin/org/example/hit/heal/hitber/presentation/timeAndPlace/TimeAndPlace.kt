@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import core.utils.BackPressHandler
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberTitle
@@ -48,28 +47,6 @@ class TimeAndPlace : Screen {
         val firstQuestionViewModel: FirstQuestionViewModel = koinViewModel()
         val viewModel: ActivityViewModel = koinViewModel()
         val allAnswersFinished by firstQuestionViewModel.allAnswersFinished.collectAsState()
-
-        var showBackDialog by remember { mutableStateOf(false) }
-
-        BackPressHandler {
-            showBackDialog = true
-        }
-
-        if (showBackDialog) {
-            BaseYesNoDialog(
-                onDismissRequest = { showBackDialog = false },
-                icon = chicken,
-                title = "אישור חזרה",
-                message = "מעבר אחורה יחזור למסך הבית",
-                confirmButtonText = "כן",
-                onConfirm = {
-                    showBackDialog = false
-                    navigator?.popUntilRoot()
-                },
-                dismissButtonText = "לא",
-                onDismissButtonClick = { showBackDialog = false }
-            )
-        }
 
         BaseScreen(
             title = stringResource(firstQuestionHitberTitle),

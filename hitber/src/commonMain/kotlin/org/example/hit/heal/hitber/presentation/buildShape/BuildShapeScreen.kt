@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import core.utils.BackPressHandler
 import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitberInstructions
@@ -68,28 +67,6 @@ class BuildShapeScreen : Screen {
         val triangleHeight by remember(screenSize) {
             derivedStateOf { 0.5f * screenSize.second }
         }
-
-        var showBackDialog by remember { mutableStateOf(false) }
-
-        BackPressHandler {
-            showBackDialog = true
-        }
-
-        if (showBackDialog) {
-            BaseYesNoDialog(
-                onDismissRequest = { showBackDialog = false },
-                title = "אישור חזרה",
-                message = "מעבר אחורה יחזור למסך הבית",
-                confirmButtonText = "כן",
-                onConfirm = {
-                    showBackDialog = false
-                    navigator?.pop()
-                },
-                dismissButtonText = "לא",
-                onDismissButtonClick = { showBackDialog = false }
-            )
-        }
-
 
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {

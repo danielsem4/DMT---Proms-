@@ -216,8 +216,6 @@ class DialScreenViewModel(
         useCase.start(
             getDidNothingCount = { didNothingFirstTime },
             maxAttempts = 3,
-            intervalSeconds = 15,
-            showDialog = { showDialog.value }
         )
     }
 
@@ -231,8 +229,6 @@ class DialScreenViewModel(
         useCaseSecond.start(
             getDidNothingCount = { didNothingSecondTime },
             maxAttempts = 3,
-            intervalSeconds = 15,
-            showDialog = { showDialog.value }
         )
     }
 
@@ -246,8 +242,6 @@ class DialScreenViewModel(
         useCaseThird.start(
             getDidNothingCount = { didNothingThirdTime },
             maxAttempts = 3,
-            intervalSeconds = 15,
-            showDialog = { showDialog.value }
         )
     }
 

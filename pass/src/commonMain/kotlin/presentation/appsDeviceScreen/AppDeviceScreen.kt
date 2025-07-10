@@ -96,7 +96,6 @@ class AppDeviceScreen : Screen {
                 viewModel.startCheckingIfUserDidSomething()
             }
         )
-
         DisposableEffect(Unit) {
             onDispose {
                 viewModel.stopAll()

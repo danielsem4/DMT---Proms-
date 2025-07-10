@@ -15,10 +15,14 @@ import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDo
 import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
 import org.example.hit.heal.core.presentation.Resources.String.wrongAppSecondAssist
 import org.example.hit.heal.core.presentation.Resources.String.wrongAppThirdAssist
+import presentation.appsDeviceScreen.AppProgressCache.didNothing
+import presentation.appsDeviceScreen.AppProgressCache.didNothingSecondTime
+import presentation.appsDeviceScreen.AppProgressCache.isSecondTimeWrongApp
 import presentation.components.CountdownDialogHandler
 
-class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandler,
-                        private val playAudioUseCase: PlayAudioUseCase
+class WrongAppViewModel(
+    private val countdownDialogHandler: CountdownDialogHandler,
+    private val playAudioUseCase: PlayAudioUseCase,
 ) : ViewModel() {
 
     val dialogAudioText = countdownDialogHandler.dialogAudioText
@@ -29,32 +33,17 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
     private val _backToApps = MutableStateFlow(false)
     val backToApps: StateFlow<Boolean> = _backToApps
 
-    private var didNothing = 0
-    private var didNothingSecondTime = 0
-    private var isSecondTimeWrongApp = false
-
     private var reminderJob: Job? = null
-    private var elapsedSeconds = 0
 
     val isPlaying = playAudioUseCase.isPlaying
 
     fun startCheckingIfUserDidSomething() {
         reminderJob?.cancel()
-        elapsedSeconds = 0
 
         reminderJob = viewModelScope.launch {
-            while (isActive && (didNothing < 3 || didNothingSecondTime < 3)) {
-                delay(1_000)
-
-                if (showDialog.value) {
-                    continue
-                }
-
-                elapsedSeconds++
-
-                if (elapsedSeconds >= 15) {
-                    getReminderDidNothingText()
-                }
+            if (didNothing < 3 || didNothingSecondTime < 3) {
+                delay(15_000)
+                getReminderDidNothingText()
             }
         }
     }
@@ -63,13 +52,23 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
         val didNothingCount = if (isSecondTimeWrongApp) ++didNothingSecondTime else ++didNothing
 
         when (didNothingCount) {
-            1 -> countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, whatYouNeedToDo  to whatDoYouNeedToDoPass)
-            2 -> countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, wrongAppSecondAssist to returnButtonOnTopLeftPass)
+            1 -> countdownDialogHandler.showCountdownDialog(
+                isPlayingFlow = isPlaying,
+                whatYouNeedToDo to whatDoYouNeedToDoPass
+            )
+
+            2 -> countdownDialogHandler.showCountdownDialog(
+                isPlayingFlow = isPlaying,
+                wrongAppSecondAssist to returnButtonOnTopLeftPass
+            )
+
             3 -> {
-                countdownDialogHandler.showCountdownDialog(isPlayingFlow = isPlaying, wrongAppThirdAssist to goingBackToAppsScreenPass)
+                countdownDialogHandler.showCountdownDialog(
+                    isPlayingFlow = isPlaying,
+                    wrongAppThirdAssist to goingBackToAppsScreenPass
+                )
                 isSecondTimeWrongApp = true
                 _backToApps.value = true
-
             }
         }
     }
@@ -80,7 +79,7 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
 
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
-        elapsedSeconds = 0
+        startCheckingIfUserDidSomething()
     }
 
     fun setSecondTimeWrongApp() {
@@ -95,8 +94,9 @@ class WrongAppViewModel(private val countdownDialogHandler: CountdownDialogHandl
         println("didNothing: $didNothing")
         println("didNothingSecondTime: $didNothingSecondTime")
         playAudioUseCase.stopAudio()
-        hideReminderDialog()
+        countdownDialogHandler.hideDialog()
         reminderJob?.cancel()
         reminderJob = null
     }
+
 }

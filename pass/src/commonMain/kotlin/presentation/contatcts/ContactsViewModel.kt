@@ -39,7 +39,6 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     private var correctContact = ContactData("", "")
 
     private var reminderJob: Job? = null
-    private var elapsedSeconds = 0
 
     val isPlaying = playAudioUseCase.isPlaying
 
@@ -48,6 +47,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     private val _isScrolled = MutableStateFlow(false)
     val isScrolled: StateFlow<Boolean> = _isScrolled
 
+    private val seconds = 15_000L
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
@@ -90,22 +90,12 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
 
         reminderJob = viewModelScope.launch {
 
-            while (isActive && didNothing + wrongContact <= 4) {
-
-                delay(1_000)
-
-                if (showDialog.value) {
-                    continue
-                }
-
-                elapsedSeconds++
-
-                if (elapsedSeconds >= if (_isScrolling.value) 25 else 15) {
+            if (didNothing + wrongContact <= 4) {
+                seconds >= if (_isScrolling.value) 25_000L else 15_000L
+                    delay(seconds)
                     didNothing++
                     getReminderText()
                     _isScrolling.value = false
-                }
-
             }
         }
     }
@@ -156,7 +146,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
 
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
-        elapsedSeconds = 0
+        startCheckingIfUserDidSomething()
     }
 
     fun clearNextScreen() {
@@ -170,14 +160,14 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     fun startScrolling(){
         _isScrolling.value = true
         _isScrolled.value = true
-        elapsedSeconds = 0
+        startCheckingIfUserDidSomething()
     }
 
     fun stopAll() {
         println("didNothing: $didNothing")
         println("wrongContact: $wrongContact")
         playAudioUseCase.stopAudio()
-        countdownDialogHandler.hideDialog()
+        hideReminderDialog()
         reminderJob?.cancel()
         reminderJob = null
     }

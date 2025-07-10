@@ -16,14 +16,12 @@ import presentation.nextQuestion.NextQuestionViewModel
 
 val Pass_module = module {
     viewModel  { EntryViewModel(get()) }
-    single { AppDeviceViewModel(get(), get()) }
-    single { WrongAppViewModel(get(), get()) }
+    viewModel { AppDeviceViewModel(get(), get()) }
+    viewModel { WrongAppViewModel(get(), get()) }
     viewModel { ContactsViewModel(get(), get()) }
     viewModel { DetailedContactViewModel(get(), get()) }
     viewModel { NextQuestionViewModel(get()) }
     viewModel { DialScreenViewModel(get(), get()) }
-    single { AudioPlayer() }
-    single { PlayAudioUseCase(get()) }
     single { CountdownDialogHandler(get()) }
     single { CountdownTimerUseCase(get()) }
 }

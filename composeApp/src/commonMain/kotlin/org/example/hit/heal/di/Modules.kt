@@ -1,5 +1,6 @@
 package org.example.hit.heal.di
 
+import core.di.AudioModule
 import core.di.clientRequestsModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +33,7 @@ expect val platformModule: Module
 val sharedAppModules = module {
     includes(clientRequestsModule)
     includes(sessionModule)
+    includes(AudioModule)
 }
 
 val sharedModules = module {
@@ -39,7 +41,6 @@ val sharedModules = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SplashViewModel)
-
 
     includes(Hitber_module)
     includes(Pass_module)

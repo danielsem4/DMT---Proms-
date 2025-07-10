@@ -74,7 +74,11 @@ class WrongAppScreen : Screen {
                 }
             }
         )
-
+        DisposableEffect(Unit) {
+            onDispose {
+                viewModel.stopAll()
+            }
+        }
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()
@@ -83,12 +87,6 @@ class WrongAppScreen : Screen {
                 viewModel.startCheckingIfUserDidSomething()
             }
         )
-
-        DisposableEffect(Unit) {
-            onDispose {
-                viewModel.stopAll()
-            }
-        }
 
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->

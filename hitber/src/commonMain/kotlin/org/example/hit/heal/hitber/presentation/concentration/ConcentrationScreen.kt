@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -39,7 +36,6 @@ import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-
 class ConcentrationScreen : Screen {
     @Composable
     override fun Content() {
@@ -62,24 +58,15 @@ class ConcentrationScreen : Screen {
                 )
 
                 if (buttonVisible) {
-                    Button(
-                        modifier = Modifier.width(300.dp).padding(bottom = 20.dp)
+                    RoundedButton(
+                        text = stringResource(start),
+                        modifier = Modifier.width(200.dp).padding(bottom = 10.dp)
                             .align(Alignment.CenterHorizontally),
                         onClick = {
                             thirdQuestionViewModel.startButtonSetVisible(false)
                             thirdQuestionViewModel.startRandomNumberGeneration()
-                        },
-                        colors = ButtonDefaults.buttonColors(primaryColor),
-                        shape = RoundedCornerShape(30)
-                    ) {
-                        Text(
-                            stringResource(start),
-                            color = Color.White,
-                            fontSize = 25.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-
-                    }
+                        }
+                    )
                     Box(
                         modifier = Modifier
                             .fillMaxWidth().fillMaxHeight(0.8f)

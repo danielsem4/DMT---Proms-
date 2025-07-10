@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import core.utils.BackPressHandler
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberGoodLuck
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberInstructions1
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberInstructions2
@@ -40,33 +40,14 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
 import org.jetbrains.compose.resources.stringResource
 
-class HitberEntryScreen : Screen {
+class HitberEntryScreen() : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
 
-        var showBackDialog by remember { mutableStateOf(false) }
-
-        BackPressHandler {
-            showBackDialog = true
+        RegisterBackHandler(this) {
+            navigator?.pop()
         }
-
-        if (showBackDialog) {
-            BaseYesNoDialog(
-                onDismissRequest = { showBackDialog = false },
-                icon = chicken,
-                title = "אישור חזרה",
-                message = "מעבר אחורה יחזור למסך הבית",
-                confirmButtonText = "כן",
-                onConfirm = {
-                    showBackDialog = false
-                    navigator?.pop()
-                },
-                dismissButtonText = "לא",
-                onDismissButtonClick = { showBackDialog = false }
-            )
-        }
-
 
         BaseScreen(
             title = stringResource(entryHitberTitle),

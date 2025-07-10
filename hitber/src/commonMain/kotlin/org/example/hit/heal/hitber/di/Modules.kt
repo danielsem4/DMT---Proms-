@@ -1,7 +1,5 @@
 package org.example.hit.heal.hitber.di
 
-import core.domain.use_case.PlayAudioUseCase
-import core.utils.AudioPlayer
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.TenthQuestionViewModel
 import org.example.hit.heal.hitber.presentation.concentration.ThirdQuestionViewModel
@@ -24,7 +22,4 @@ val Hitber_module = module {
     viewModel { SeventhQuestionViewModel() }
     viewModel { EightQuestionViewModel() }
     viewModel { TenthQuestionViewModel() }
-    single { AudioPlayer() }
-    single { PlayAudioUseCase(get()) }
-
 }

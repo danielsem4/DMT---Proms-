@@ -6,9 +6,11 @@ import core.data.storage.Storage
 import core.domain.api.AppApi
 import core.domain.use_case.BitmapToUploadUseCase
 import core.domain.use_case.LoginUseCase
+import core.domain.use_case.PlayAudioUseCase
 import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.network.HttpClientFactory
+import core.utils.AudioPlayer
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -28,6 +30,12 @@ val clientRequestsModule = module {
     singleOf(::UploadTestResultsUseCase)
     single { BitmapToUploadUseCase() }
 }
+
+val AudioModule = module {
+    single { AudioPlayer() }
+    single { PlayAudioUseCase(get()) }
+}
+
 
 val sessionModule = module {
     single<Storage> {DataStoreStorage(get())}

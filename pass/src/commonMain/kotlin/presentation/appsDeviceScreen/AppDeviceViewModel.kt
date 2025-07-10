@@ -52,10 +52,16 @@ import org.example.hit.heal.core.presentation.purseColor
 import org.example.hit.heal.core.presentation.settingsColor
 import org.example.hit.heal.core.presentation.storeColor
 import org.example.hit.heal.core.presentation.weatherColor
+import presentation.appsDeviceScreen.AppDeviceProgressCache.didNothing
+import presentation.appsDeviceScreen.AppDeviceProgressCache.isSecondInstructions
+import presentation.appsDeviceScreen.AppDeviceProgressCache.reset
+import presentation.appsDeviceScreen.AppDeviceProgressCache.wrongApp
+import presentation.appsDeviceScreen.AppProgressCache.resetAll
 import presentation.contatcts.ContactsScreen
 
-class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHandler,
-                          private val playAudioUseCase: PlayAudioUseCase
+class AppDeviceViewModel(
+    private val countdownDialogHandler: CountdownDialogHandler,
+    private val playAudioUseCase: PlayAudioUseCase
 ) : ViewModel() {
 
     val items = listOf(
@@ -121,7 +127,6 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
         )
     )
 
-
     val dialogAudioText = countdownDialogHandler.dialogAudioText
     val showDialog = countdownDialogHandler.showDialog
     val countdown = countdownDialogHandler.countdown
@@ -139,12 +144,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
     private val _nextScreen = MutableStateFlow<Screen?>(null)
     val nextScreen = _nextScreen.asStateFlow()
 
-    private var didNothing = 0
-    private var wrongApp = 0
-    private var isSecondInstructions = false
-
     private var reminderJob: Job? = null
-    private var elapsedSeconds = 0
 
     val isPlaying = playAudioUseCase.isPlaying
 
@@ -166,20 +166,15 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
 
     fun startCheckingIfUserDidSomething() {
+        reminderJob?.cancel()
+
         reminderJob = viewModelScope.launch {
-            while (isActive && didNothing <= 3) {
+            if (didNothing <= 3) {
 
-                delay(1_000)
-                if (showDialog.value) {
-                    continue
-                }
+                delay(15_000)
+                getReminderDidNotingText()
+                _isCloseIconDialog.value = true
 
-                elapsedSeconds++
-
-                if (elapsedSeconds >= 15) {
-                    getReminderDidNotingText()
-                    _isCloseIconDialog.value = true
-                }
             }
         }
     }
@@ -190,7 +185,7 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
     fun onUnderstandingConfirmed() {
         _showUnderstandingDialog.value = false
-        elapsedSeconds = 0
+        startCheckingIfUserDidSomething()
     }
 
     fun onUnderstandingDenied() {
@@ -204,11 +199,16 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
     fun onAppClicked(app: AppData) {
         if (app.label == contacts) {
             _nextScreen.value = ContactsScreen()
+            resetAll()
+            reset()
             return
         }
         wrongApp++
 
         _nextScreen.value = if (wrongApp == 3) {
+            reset()
+            resetAll()
+
             ContactsScreen()
         } else {
             WrongAppCache.lastWrongApp = app
@@ -241,10 +241,11 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
                 )
                 _isNextScreen.value = false
                 _nextScreen.value = ContactsScreen()
+                resetAll()
+                reset()
             }
         }
     }
-
 
     fun clearNextScreen() {
         _nextScreen.value = null
@@ -252,15 +253,16 @@ class AppDeviceViewModel( private val countdownDialogHandler: CountdownDialogHan
 
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
-        elapsedSeconds = 0
+        startCheckingIfUserDidSomething()
     }
 
     fun stopAll() {
         println("didNothing: $didNothing")
         println("wrongApp: $wrongApp")
         playAudioUseCase.stopAudio()
-        hideReminderDialog()
+        countdownDialogHandler.hideDialog()
         reminderJob?.cancel()
         reminderJob = null
     }
+
 }

@@ -69,9 +69,11 @@ import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.entry.HitberEntryScreen
+import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import presentation.entryScreen.PassEntryScreen
 
 
 class HomeScreen : Screen {
@@ -88,7 +90,7 @@ class HomeScreen : Screen {
         }
 
         LaunchedEffect(features) {
-            println("All features: $features")
+            println("All features: ${features.toString().replace(",","\n")}")
         }
 
 
@@ -248,7 +250,7 @@ class HomeScreen : Screen {
     private fun navigateTo(moduleId: Int, navigator: Navigator) {
         when (moduleId) {
             16 -> navigator.push(CDTLandingScreen())
-            22 ->  navigator.push(HitberEntryScreen())
+            22 ->  navigator.push(UnderstandingScreen())
             else -> println("Action for module $moduleId not implemented yet")
 
         }

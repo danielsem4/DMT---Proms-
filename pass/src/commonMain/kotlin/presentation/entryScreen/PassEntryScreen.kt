@@ -54,7 +54,6 @@ class PassEntryScreen : Screen {
         val audioString = stringResource(firstInstructionsPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
 
-
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAudio()

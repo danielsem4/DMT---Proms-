@@ -17,29 +17,17 @@ class StartCheckingIfUserDidSomethingUseCase(
     fun start(
         getDidNothingCount: () -> Int,
         maxAttempts: Int,
-        intervalSeconds: Int = 15,
-        showDialog: () -> Boolean
     ) {
         reminderJob?.cancel()
 
-        var elapsedSeconds = 0
 
         reminderJob = coroutineScope.launch {
 
             while (isActive && getDidNothingCount() <= maxAttempts) {
-                delay(1_000)
+                delay(15_000)
 
-                if (showDialog()) {
-                    continue
-                }
-
-                elapsedSeconds++
-
-                if (elapsedSeconds >= intervalSeconds) {
                     getReminderDidNotingText()
                     updateCloseIconDialog(true)
-                    elapsedSeconds = 0
-                }
             }
         }
     }
