@@ -38,6 +38,7 @@ nav3Core = "1.0.0-alpha02"
 nav3Lifecycle = "1.0.0-alpha01"
 messagebar = "1.0.7"
 
+
 [libraries]
 font-awesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "fontAwesome" }
 androidx-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "foundationLayout" }

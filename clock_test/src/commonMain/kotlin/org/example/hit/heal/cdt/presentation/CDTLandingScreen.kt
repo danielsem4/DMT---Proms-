@@ -22,6 +22,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,6 +58,7 @@ import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 private enum class ScreenState { Initial, Animating, ShowContent }
 private enum class ButtonState { Hidden, Visible }
@@ -73,10 +75,14 @@ fun CDTLandingScreenContent() {
     var buttonState by remember { mutableStateOf(ButtonState.Hidden) }
     var textState by remember { mutableStateOf(TextState.Hidden) }
     val navigator = LocalNavigator.currentOrThrow
+    val viewModel = koinViewModel<ClockTestViewModel>()
+
+    val evaluation by viewModel.clockTest.collectAsState()
 
     // ── Auto-start animation after initial display ──────────────────────
     LaunchedEffect(Unit) {
         delay(500) // Show initial state for 0.5 seconds
+        viewModel.loadEvaluation("CDT")
         state = ScreenState.Animating
         println("LandingScreen: Auto-starting animation")
     }
