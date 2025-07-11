@@ -13,7 +13,7 @@ import presentation.entryScreen.PassEntryScreen
 @Composable
 fun App() {
     MaterialTheme {
-        Navigator(PassEntryScreen()) { navigator ->
+        Navigator(SplashScreen()) { navigator ->
             SlideTransition(navigator)
         }
     }
