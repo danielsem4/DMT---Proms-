@@ -193,8 +193,12 @@ class AppDeviceViewModel(
         isSecondInstructions = true
         didNothing--
         startDialogInstructions()
+        reminderJob?.cancel()
     }
 
+    fun onUnderstandingDidNothing(){
+        _showUnderstandingDialog.value = false
+    }
 
     fun onAppClicked(app: AppData) {
         if (app.label == contacts) {

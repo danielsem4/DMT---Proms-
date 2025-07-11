@@ -105,12 +105,12 @@ class AppDeviceScreen : Screen {
 
         if (showUnderstandingDialog) {
             LaunchedEffect(Unit) {
-                delay(25_000)
-                viewModel.onUnderstandingConfirmed()
+                delay(30_000)
+                viewModel.onUnderstandingDidNothing()
             }
 
             BaseYesNoDialog(
-                onDismissRequest = { viewModel.onUnderstandingConfirmed() },
+                onDismissRequest = {  },
                 title = stringResource(understandingDialogText),
                 icon = likeIcon,
                 message = "",

@@ -47,7 +47,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     private val _isScrolled = MutableStateFlow(false)
     val isScrolled: StateFlow<Boolean> = _isScrolled
 
-    private val seconds = 15_000L
+    private var seconds = 15_000L
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
@@ -91,7 +91,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         reminderJob = viewModelScope.launch {
 
             if (didNothing + wrongContact <= 4) {
-                seconds >= if (_isScrolling.value) 25_000L else 15_000L
+                seconds = if (_isScrolling.value) 25_000L else 15_000L
                     delay(seconds)
                     didNothing++
                     getReminderText()
@@ -110,6 +110,8 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     }
 
     private fun getReminderText() {
+        reminderJob?.cancel()
+
         val count = didNothing + wrongContact
         return when (count) {
             1 -> countdownDialogHandler.showCountdownDialog(

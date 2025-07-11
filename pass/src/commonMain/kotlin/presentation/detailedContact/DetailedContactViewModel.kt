@@ -76,13 +76,11 @@ class DetailedContactViewModel(
 
                 didNothing++
                 getReminderText()
-
             }
         }
     }
 
     fun onUserClicked(item: StringResource) {
-
         if (item == phone) {
             nextQuestion()
             return
@@ -93,6 +91,8 @@ class DetailedContactViewModel(
     }
 
     private fun getReminderText() {
+        reminderJob?.cancel()
+
         val count = didNothing + wrongClick
         return when (count) {
             1 -> countdownDialogHandler.showCountdownDialog(

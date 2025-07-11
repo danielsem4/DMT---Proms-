@@ -20,10 +20,9 @@ class StartCheckingIfUserDidSomethingUseCase(
     ) {
         reminderJob?.cancel()
 
-
         reminderJob = coroutineScope.launch {
 
-            while (isActive && getDidNothingCount() <= maxAttempts) {
+            if (getDidNothingCount() <= maxAttempts) {
                 delay(15_000)
 
                     getReminderDidNotingText()

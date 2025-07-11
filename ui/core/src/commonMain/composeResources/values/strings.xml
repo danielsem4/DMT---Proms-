@@ -375,7 +375,7 @@
 
     <string name="dialer_page_second_assist">Look for the dental clinics phone number</string>
     <string name="diale_to_dentist">Dial the dental clinics number</string>
-    <string name="dialer_page_thired_assist">Press the dialer button shown on the left side of the screen.</string>
+    <string name="dialer_page_thired_assist">Press the dialer button shown on the bottom of the screen.</string>
 
     <string name="dialer_page_wrong_action_one">You dialed the wrong number, please dial the dental clinics number</string>
     <string name="dialer_page_dentis_number_appeared">The phone number of the dental clinic is displayed. Please call the clinic</string>

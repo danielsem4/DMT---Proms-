@@ -64,7 +64,7 @@ fun DialDialog(
     onDial: () -> Unit,
     onDeleteClicked: () -> Unit
 ) {
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Box(
             modifier = Modifier
                 .fillMaxSize()

@@ -125,6 +125,11 @@ class DialScreenViewModel(
         isSecondInstructions = true
         didNothingFirstTime--
         startDialogInstructions()
+        stopChecks()
+    }
+
+    fun onUnderstandingDidNothing(){
+        _showUnderstandingDialog.value = false
     }
 
     fun onUserClickedDialButton() {
@@ -153,6 +158,7 @@ class DialScreenViewModel(
     }
 
     private fun handleFirstPass() {
+        stopChecks()
         when (++wrongNumberFirstTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
@@ -171,6 +177,7 @@ class DialScreenViewModel(
     }
 
     private fun handleSecondPass() {
+        stopChecks()
         when (++wrongNumberSecondTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
