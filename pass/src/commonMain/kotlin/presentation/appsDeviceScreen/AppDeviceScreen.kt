@@ -24,6 +24,7 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import presentation.appsDeviceScreen.AppDeviceProgressCache.resetAppDeviceProgress
 import presentation.components.InstructionsDialog
 import presentation.components.AppData
 import presentation.components.circleWithPicture
@@ -104,11 +105,6 @@ class AppDeviceScreen : Screen {
         }
 
         if (showUnderstandingDialog) {
-            LaunchedEffect(Unit) {
-                delay(30_000)
-                viewModel.onUnderstandingDidNothing()
-            }
-
             BaseYesNoDialog(
                 onDismissRequest = {  },
                 title = stringResource(understandingDialogText),
@@ -148,6 +144,8 @@ class AppDeviceScreen : Screen {
         }
 
         RegisterBackHandler(this) {
-            navigator?.popUntilRoot()        }
+            resetAppDeviceProgress()
+            navigator?.popUntilRoot()
+        }
     }
 }

@@ -135,7 +135,7 @@ class AppDeviceViewModel(
     private val _showUnderstandingDialog = MutableStateFlow(false)
     val showUnderstandingDialog: StateFlow<Boolean> = _showUnderstandingDialog
 
-    private val _isCloseIconDialog = MutableStateFlow(true)
+    private val _isCloseIconDialog = MutableStateFlow(false)
     val isCloseIconDialog: StateFlow<Boolean> = _isCloseIconDialog
 
     private val _isNextScreen = MutableStateFlow(true)
@@ -148,24 +148,24 @@ class AppDeviceViewModel(
 
     val isPlaying = playAudioUseCase.isPlaying
 
-
-    init {
-        startDialogInstructions()
-    }
-
-    private fun startDialogInstructions() {
-        _isCloseIconDialog.value = false
-        getReminderDidNotingText()
+    private fun startDialogUnderstanding() {
+        _isCloseIconDialog.value = true
 
         if (!isSecondInstructions) {
             _showUnderstandingDialog.value = true
-        } else {
-            _isCloseIconDialog.value = true
         }
     }
 
-
     fun startCheckingIfUserDidSomething() {
+        if(didNothing == -1){
+            getReminderDidNotingText()
+            return
+        }
+
+        if(didNothing == 0 &&  !_isCloseIconDialog.value){
+            startDialogUnderstanding()
+        }
+
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
@@ -173,8 +173,6 @@ class AppDeviceViewModel(
 
                 delay(15_000)
                 getReminderDidNotingText()
-                _isCloseIconDialog.value = true
-
             }
         }
     }
@@ -192,11 +190,11 @@ class AppDeviceViewModel(
         _showUnderstandingDialog.value = false
         isSecondInstructions = true
         didNothing--
-        startDialogInstructions()
+        getReminderDidNotingText()
         reminderJob?.cancel()
     }
 
-    fun onUnderstandingDidNothing(){
+    private fun onUnderstandingDidNothing(){
         _showUnderstandingDialog.value = false
     }
 
@@ -220,16 +218,17 @@ class AppDeviceViewModel(
 
 
     private fun getReminderDidNotingText() {
-        when (didNothing++) {
+        when (++didNothing) {
             0 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
                 audioText = callToHanaCohenInstructionPass to callHanaCohenPass
             )
 
-            1 -> countdownDialogHandler.showCountdownDialog(
+            1 -> {onUnderstandingDidNothing()
+                countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
                 audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
-            )
+            )}
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,

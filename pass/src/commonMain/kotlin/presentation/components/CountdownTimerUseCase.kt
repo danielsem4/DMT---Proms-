@@ -30,7 +30,6 @@ class CountdownTimerUseCase(private val scope: CoroutineScope) {
                 delay(1000L)
                 remainingTime--
             }
-
             onCountdownFinished()
         }
     }

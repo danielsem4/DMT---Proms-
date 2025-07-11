@@ -31,6 +31,7 @@ import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import presentation.appsDeviceScreen.AppProgressCache.resetAppProgress
 import presentation.components.InstructionsDialog
 
 class WrongAppScreen : Screen {
@@ -112,7 +113,9 @@ class WrongAppScreen : Screen {
         }
 
         RegisterBackHandler(this) {
-            navigator?.popUntilRoot()        }
+            resetAppProgress()
+            navigator?.popUntilRoot()
+        }
     }
 }
 

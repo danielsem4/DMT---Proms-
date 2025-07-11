@@ -151,11 +151,6 @@ class DialScreen : Screen {
         )
 
         if (showUnderstandingDialog) {
-            LaunchedEffect(Unit) {
-                delay(30_000)
-                viewModel.onUnderstandingDidNothing()
-            }
-
             BaseYesNoDialog(
                 onDismissRequest = { },
                 title = stringResource(understandingDialogText),

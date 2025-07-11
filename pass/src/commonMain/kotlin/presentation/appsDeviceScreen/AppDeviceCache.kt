@@ -7,7 +7,7 @@ object WrongAppCache {
 }
 
 object AppDeviceProgressCache {
-    var didNothing = 0
+    var didNothing = -1
     var wrongApp = 0
     var isSecondInstructions = false
 
