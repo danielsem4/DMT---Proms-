@@ -4,7 +4,7 @@ import core.di.clientRequestsModule
 import core.di.sessionModule
 import org.example.hit.heal.cdt.di.CDT_module
 import org.example.hit.heal.presentation.activities.ActivitiesViewModel
-import org.example.hit.heal.presentation.evaluation.EvaluationViewModel
+import org.example.hit.heal.presentation.evaluation.EvaluationTestViewModel
 import org.example.hit.heal.presentation.evaluation.EvaluationsViewModel
 import org.example.hit.heal.presentation.home.HomeViewModel
 import org.example.hit.heal.presentation.login.LoginViewModel
@@ -38,6 +38,6 @@ val sharedModules = module {
     viewModelOf(::SplashViewModel)
     viewModelOf(::ActivitiesViewModel)
     viewModelOf(::EvaluationsViewModel)
-    viewModelOf(::EvaluationViewModel)
+    viewModelOf(::EvaluationTestViewModel)
     includes(CDT_module)
 }

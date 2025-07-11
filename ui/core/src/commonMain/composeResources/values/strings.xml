@@ -52,8 +52,8 @@
     <string name="memory">Memory</string>
     <string name="hitber">HitBer</string>
     <string name="done">Done</string>
-
-
+    <string name="back">Back</string>
+    <string name="no_evaluation_object_to_display">No evaluation object to display.</string>
 
     <!--    CDT Module  -->
 

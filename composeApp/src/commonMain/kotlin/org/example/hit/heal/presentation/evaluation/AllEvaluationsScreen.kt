@@ -52,7 +52,11 @@ class AllEvaluationsScreen : Screen {
             messageBarState = messageBarState,
             position = MessageBarPosition.BOTTOM
         ) {
-            BaseScreen(title = stringResource(evaluationText)) {
+            BaseScreen(
+                title = stringResource(evaluationText),
+                onPrevClick = {
+                    navigator.pop()
+                }) {
                 Box(Modifier.fillMaxSize()) {
                     if (isLoading) {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -82,7 +86,7 @@ class AllEvaluationsScreen : Screen {
                                 EvaluationItemCard(
                                     item = evaluation,
                                     onClick = {
-                                        navigator.push(EvaluationScreen(evaluation))
+                                        navigator.push(EvaluationTestScreen(evaluation))
                                     }
                                 )
                             }

@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 // ViewModel to Manage Evaluations
-class EvaluationViewModel(
+class EvaluationTestViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
     private val storage: Storage,
 ) : ViewModel() {
@@ -569,5 +569,11 @@ class EvaluationViewModel(
                     println(it)
                 }
         }
+    }
+
+    fun submitEvaluation(id: Int, answers: Map<Int, EvaluationAnswer>) {
+        println("Submit test: $id")
+        println(answers)
+//        TODO send to server
     }
 }

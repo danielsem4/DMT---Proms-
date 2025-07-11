@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import dmt_proms.ui.core.generated.resources.Res
-import dmt_proms.ui.core.generated.resources.done
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
 import dmt_proms.ui.core.generated.resources.next
 import dmt_proms.ui.core.generated.resources.previous
@@ -47,9 +46,6 @@ fun BaseScreen(
     config: ScreenConfig = ScreenConfig.PhoneConfig, // Use ScreenConfig to define layout
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
-    onDoneClick: (() -> Unit)? = null,
-    isNextEnabled: Boolean = true,
-    isDoneEnabled: Boolean = true,
     navigationIcon: @Composable (() -> Unit)? = null,
     topRightText: String? = null, // For tablet
     snackbarHost: @Composable (() -> Unit)? = null, // For tablet
@@ -115,7 +111,7 @@ fun BaseScreen(
 
             // Bottom Navigation Bar
             if (config.showNavigationButtons &&
-                (onPrevClick != null || onNextClick != null || onDoneClick != null)
+                (onPrevClick != null || onNextClick != null)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth()
@@ -129,14 +125,6 @@ fun BaseScreen(
                     onNextClick?.let {
                         RoundedButton(
                             text = stringResource(Res.string.next),
-                            enabled = isNextEnabled,
-                            onClick = it
-                        )
-                    }
-                    onDoneClick?.let {
-                        RoundedButton(
-                            text = stringResource(Res.string.done),
-                            enabled = isDoneEnabled,
                             onClick = it
                         )
                     }

@@ -48,8 +48,9 @@
     <string name="memory">זיכרון</string>
     <string name="hitber">התבר</string>
     <string name="done">Done</string>
+    <string name="back">חזור</string>
 
-
+    <string name="no_evaluation_object_to_display">אין אובייקט הערכה להצגה.</string>
     <!--    CDT Module  -->
 
 
