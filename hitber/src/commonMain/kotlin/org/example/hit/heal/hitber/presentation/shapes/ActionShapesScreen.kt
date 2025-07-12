@@ -131,7 +131,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                                         secondQuestionViewModel.secondQuestionAnswersList,
                                         getCurrentFormattedDateTime()
                                     )
-                                    secondQuestionViewModel.resetSelectedSet()
+                                    secondQuestionViewModel.resetAll()
                                     navigator?.replace(BuildShapeScreen())
                                 }
                             }
@@ -141,7 +141,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
             })
 
         RegisterBackHandler(this) {
-            secondQuestionViewModel.resetSelectedSet()
+            secondQuestionViewModel.resetAll()
             navigator?.pop()
         }
 

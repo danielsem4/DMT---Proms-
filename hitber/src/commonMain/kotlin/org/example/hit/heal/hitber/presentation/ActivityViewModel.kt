@@ -32,9 +32,11 @@ import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.util.PrefKeys
 import core.util.PrefKeys.clinicId
 import core.util.PrefKeys.userId
+import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -113,7 +115,6 @@ class ActivityViewModel(
         result.fourthQuestion = ArrayList(measureObjects)
         println("FirstQuestion answer: (${result.fourthQuestion})")
     }
-
 
     fun setSixthQuestion(
         fridgeOpened: Boolean,
@@ -230,7 +231,8 @@ class ActivityViewModel(
         onFailure: ((message: Error) -> Unit)? = null,
         bitmap: ImageBitmap,
         date: String,
-        currentQuestion: Int
+        currentQuestion: Int,
+        maxRetries: Int = 3
     ) {
         if (bitmap.width <= 1 || bitmap.height <= 1) {
             println("❌ תמונה לא תקינה")
@@ -242,45 +244,64 @@ class ActivityViewModel(
         println("📤 התחלת העלאה, image size: ${imageByteArray.size}")
 
         uploadScope.launch {
-            val userId = storage.get(PrefKeys.userId)!!
-            val clinicId = storage.get(PrefKeys.clinicId)!!
-            val measurement = hitberTest.value?.id ?: 19
+            var attempt = 0
+            var success = false
+            while (attempt < maxRetries && !success) {
+                try {
+                    val userId = storage.get(PrefKeys.userId)!!
+                    val clinicId = storage.get(PrefKeys.clinicId)!!
+                    val measurement = hitberTest.value?.id ?: 19
 
-            val imagePath = bitmapToUploadUseCase.buildPath(
-                clinicId = clinicId,
-                patientId = userId,
-                measurementId = measurement,
-                pathDate = date
-            )
+                    val imagePath = bitmapToUploadUseCase.buildPath(
+                        clinicId = clinicId,
+                        patientId = userId,
+                        measurementId = measurement,
+                        pathDate = date
+                    )
 
-            println("📁 Path: $imagePath")
+                    println("📁 Path: $imagePath")
 
-            try {
-                uploadImageUseCase.execute(
-                    imagePath = imagePath,
-                    bytes = imageByteArray,
-                    clinicId = clinicId,
-                    userId = userId
-                ).onSuccess {
-                    saveUploadedImageUrl(currentQuestion, imagePath, date)
-                    println("✅ העלאה הצליחה")
-                    withContext(Dispatchers.Main) {
-                        onSuccess?.invoke()
+                    val result = uploadImageUseCase.execute(
+                        imagePath = imagePath,
+                        bytes = imageByteArray,
+                        clinicId = clinicId,
+                        userId = userId
+                    )
+
+                    result.onSuccess {
+                        println("✅ העלאה הצליחה")
+                        saveUploadedImageUrl(currentQuestion, imagePath, date)
+                        withContext(Dispatchers.Main) {
+                            onSuccess?.invoke()
+                        }
+                        success = true
+                    }.onError {
+                        println("❌ שגיאה בהעלאה: $it")
+                        if (attempt == maxRetries - 1) {
+                            withContext(Dispatchers.Main) {
+                                onFailure?.invoke(it)
+                            }
+                        } else {
+                            println("ניסיון מחדש אחרי שגיאה...")
+                            delay(1000L * (attempt + 1))
+                        }
                     }
-                }.onError {
-                    println("❌ שגיאה בהעלאה: $it")
-                    withContext(Dispatchers.Main) {
-                        onFailure?.invoke(it)
+                } catch (e: Exception) {
+                    println("🚨 שגיאה חריגה: ${e.message}")
+                    if (attempt == maxRetries - 1) {
+                        withContext(Dispatchers.Main) {
+                            onFailure?.invoke(DataError.Remote.UNKNOWN)
+                        }
+                    } else {
+                        println("ניסיון מחדש אחרי שגיאה חריגה...")
+                        delay(1000L * (attempt + 1))
                     }
                 }
-            } catch (e: Exception) {
-                println("🚨 שגיאה חריגה: ${e.message}")
-                withContext(Dispatchers.Main) {
-                    onFailure?.invoke(DataError.Remote.UNKNOWN)
-                }
+                attempt++
             }
         }
     }
+
 
 
     private fun saveUploadedImageUrl(currentQuestion: Int?, uploadedUrl: String, date: String) {
@@ -306,10 +327,16 @@ class ActivityViewModel(
                 val userId = storage.get(PrefKeys.userId)!!.toInt()
                 val clinicId = storage.get(PrefKeys.clinicId)!!
                 val measurement = hitberTest.value?.id ?: 19
+                val date = getCurrentFormattedDateTime()
+
+                if (result.fifthQuestion.isEmpty()) {
+                    result.fifthQuestion = arrayListOf()
+                }
 
                 result.patientId = userId
                 result.clinicId = clinicId
                 result.measurement = measurement
+                result.date = date
                 println("results object: $result")
 
                 val uploadResult = uploadTestResultsUseCase.execute(result, CogData.serializer())

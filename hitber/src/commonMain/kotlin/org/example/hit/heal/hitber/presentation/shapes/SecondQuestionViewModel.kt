@@ -119,7 +119,8 @@ class SecondQuestionViewModel: ViewModel() {
         _listShapes.value = shapeList
     }
 
-    fun resetSelectedSet(){
+    fun resetAll(){
+        resetSelectedShapes()
         _selectedSet.value = emptyList()
     }
 }

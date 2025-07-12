@@ -84,6 +84,7 @@ class ShapeScreen : Screen {
         }
 
         RegisterBackHandler(this) {
+            secondQuestionViewModel.resetAll()
             navigator?.pop()
         }
 

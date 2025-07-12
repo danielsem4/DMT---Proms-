@@ -12,7 +12,7 @@ object AppDeviceProgressCache {
     var isSecondInstructions = false
 
     fun resetAppDeviceProgress() {
-        didNothing = 0
+        didNothing = -1
         wrongApp = 0
         isSecondInstructions = false
     }
