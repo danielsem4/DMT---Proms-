@@ -1,8 +1,11 @@
 package org.example.hit.heal.di
 
+import core.di.AudioModule
 import core.di.clientRequestsModule
 import core.di.sessionModule
+import di.Pass_module
 import org.example.hit.heal.cdt.di.CDT_module
+import org.example.hit.heal.hitber.di.Hitber_module
 import org.example.hit.heal.presentation.home.HomeViewModel
 import org.example.hit.heal.presentation.login.LoginViewModel
 import org.example.hit.heal.presentation.splash.SplashViewModel
@@ -20,7 +23,7 @@ fun initKoin(config: KoinAppDeclaration? = null) =
         modules(
             sharedModules,
             sharedAppModules,
-            platformModule,
+            platformModule
         )
     }
 
@@ -29,12 +32,16 @@ expect val platformModule: Module
 val sharedAppModules = module{
     includes(clientRequestsModule)
     includes(sessionModule)
+    includes(AudioModule)
 }
 
 val sharedModules = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SplashViewModel)
+
+    includes(Hitber_module)
+    includes(Pass_module)
     viewModelOf(::EvaluationsViewModel)
     viewModelOf(::ActivitiesViewModel)
     includes(CDT_module)

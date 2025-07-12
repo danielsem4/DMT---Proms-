@@ -10,6 +10,7 @@ import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 
 
+@OptIn(ExperimentalForeignApi::class)
 fun createDataStore(): DataStore<Preferences> {
 
     return core.data.storage.createDataStore {

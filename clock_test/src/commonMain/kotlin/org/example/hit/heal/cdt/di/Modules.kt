@@ -10,4 +10,5 @@ import org.koin.dsl.module
 val CDT_module = module {
     singleOf(::ClockTestViewModel)
     singleOf(::KtorAppRemoteDataSource).bind<AppApi>()
+
 }

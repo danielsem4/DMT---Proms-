@@ -37,6 +37,11 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(compose.materialIconsExtended)
+            implementation (libs.navigator)
+            implementation (libs.navigator.tabs)
+            implementation (libs.navigator.transitions)
+            implementation(compose.materialIconsExtended)
+            implementation(compose.material3)
         }
     }
 }
