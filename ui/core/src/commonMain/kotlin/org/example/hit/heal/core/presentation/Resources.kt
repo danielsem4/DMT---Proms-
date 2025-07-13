@@ -5,6 +5,7 @@ import dmt_proms.ui.core.generated.resources.activities
 import dmt_proms.ui.core.generated.resources.app_name
 import dmt_proms.ui.core.generated.resources.arrow_down
 import dmt_proms.ui.core.generated.resources.asterisk
+import dmt_proms.ui.core.generated.resources.back
 import dmt_proms.ui.core.generated.resources.balloon
 import dmt_proms.ui.core.generated.resources.bin
 import dmt_proms.ui.core.generated.resources.chat
@@ -14,6 +15,7 @@ import dmt_proms.ui.core.generated.resources.clock
 import dmt_proms.ui.core.generated.resources.clock_test
 import dmt_proms.ui.core.generated.resources.disk_full
 import dmt_proms.ui.core.generated.resources.document_share
+import dmt_proms.ui.core.generated.resources.done
 import dmt_proms.ui.core.generated.resources.dont_forget
 import dmt_proms.ui.core.generated.resources.elipsa_outlined
 import dmt_proms.ui.core.generated.resources.email
@@ -48,6 +50,7 @@ import dmt_proms.ui.core.generated.resources.memory
 import dmt_proms.ui.core.generated.resources.messages
 import dmt_proms.ui.core.generated.resources.napkin
 import dmt_proms.ui.core.generated.resources.next
+import dmt_proms.ui.core.generated.resources.no_evaluation_object_to_display
 import dmt_proms.ui.core.generated.resources.no_internet
 import dmt_proms.ui.core.generated.resources.open_bin
 import dmt_proms.ui.core.generated.resources.password
@@ -170,10 +173,13 @@ object Resources {
         val next = rs.next
         val loginSuccess = rs.login_success
         val previous = rs.previous
+        val back = rs.back
         val graphs = rs.graphs
         val appName = rs.app_name
         val howDoYouFeel = rs.how_do_you_feel
         val evaluationText = rs.evaluation
+        val done = rs.done
+        val no_evaluation_object_to_display = rs.no_evaluation_object_to_display
 
         // Error messages
         val noInternet = rs.no_internet
