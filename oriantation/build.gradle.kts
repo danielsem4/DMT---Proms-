@@ -33,7 +33,6 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.ui.core)
             implementation(projects.core)
-
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
