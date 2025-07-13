@@ -65,8 +65,10 @@ class ClockTestViewModel(
 
     fun loadEvaluation(evaluationName: String) {
         viewModelScope.launch {
-            val clinicId = storage.get(PrefKeys.clinicId) ?: return@launch
-            val patientId = storage.get(PrefKeys.userId)?.toIntOrNull() ?: return@launch
+            val clinicId: Int = storage.get(PrefKeys.clinicId)
+                ?: return@launch
+            val patientId: Int = storage.get(PrefKeys.userId)?.toIntOrNull()
+                ?: return@launch
 
             api.getSpecificEvaluation(clinicId, patientId, evaluationName)
                 .onSuccess { fetched ->
@@ -74,7 +76,7 @@ class ClockTestViewModel(
                     println("fetched evaluation: $fetched")
                 }
                 .onError { error ->
-                    // post an error to a MessageBarState here todo
+                    //TODO post an error to a MessageBarState here
                     println("Error fetching evaluation: $error")
                 }
         }
@@ -90,7 +92,7 @@ class ClockTestViewModel(
         val imageByteArray = clockDrawing.toByteArray()
 
         val version = 1
-        val measurement = 17
+        val measurement = clockTest.value?.id ?: 17
         val date = getCurrentFormattedDateTime()
         val imgName = "clock_image.png"
 
