@@ -1,5 +1,6 @@
 package org.example.hit.heal.core.presentation
 
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.ChatBubble
@@ -17,12 +18,14 @@ import androidx.compose.material.icons.outlined.Snowshoeing
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.rounded.Timer
+
 import dmt_proms.ui.core.generated.resources.Res
 import dmt_proms.ui.core.generated.resources.activities
 import dmt_proms.ui.core.generated.resources.Understanding_dialog_text
 import dmt_proms.ui.core.generated.resources.Whatsapp
 import dmt_proms.ui.core.generated.resources.app_name
 import dmt_proms.ui.core.generated.resources.asterisk
+import dmt_proms.ui.core.generated.resources.back
 import dmt_proms.ui.core.generated.resources.balloon
 import dmt_proms.ui.core.generated.resources.bin
 import dmt_proms.ui.core.generated.resources.apps_page_second_assist
@@ -200,6 +203,7 @@ import dmt_proms.ui.core.generated.resources.default_name
 import dmt_proms.ui.core.generated.resources.default_phone
 import dmt_proms.ui.core.generated.resources.disk_full
 import dmt_proms.ui.core.generated.resources.document_share
+import dmt_proms.ui.core.generated.resources.done
 import dmt_proms.ui.core.generated.resources.dont_forget
 import dmt_proms.ui.core.generated.resources.elipsa_outlined
 import dmt_proms.ui.core.generated.resources.empty_pass
@@ -250,6 +254,7 @@ import dmt_proms.ui.core.generated.resources.my_files
 import dmt_proms.ui.core.generated.resources.neurologist_pass
 import dmt_proms.ui.core.generated.resources.napkin
 import dmt_proms.ui.core.generated.resources.next
+import dmt_proms.ui.core.generated.resources.no_evaluation_object_to_display
 import dmt_proms.ui.core.generated.resources.no_internet
 import dmt_proms.ui.core.generated.resources.open_bin
 import dmt_proms.ui.core.generated.resources.password
@@ -290,6 +295,7 @@ import dmt_proms.ui.core.generated.resources.trapeze
 import dmt_proms.ui.core.generated.resources.triangle
 import dmt_proms.ui.core.generated.resources.triangle_90
 import dmt_proms.ui.core.generated.resources.unexpected_error
+import dmt_proms.ui.core.generated.resources.uploading
 import dmt_proms.ui.core.generated.resources.vertical_stroke
 import dmt_proms.ui.core.generated.resources.warning
 import dmt_proms.ui.core.generated.resources.welcome
@@ -504,6 +510,7 @@ object Resources {
     }
 
     object String {
+        val uploading = rs.uploading
         val send = rs.send
         val measurements = rs.measurements
         val password = rs.password
@@ -530,12 +537,18 @@ object Resources {
         val next = rs.next
         val loginSuccess = rs.login_success
         val previous = rs.previous
+        val back = rs.back
         val graphs = rs.graphs
         val appName = rs.app_name
         val howDoYouFeel = rs.how_do_you_feel
         val evaluationText = rs.evaluation
+
         val areYouSure = Res.string.are_you_sure
         val backConfirmationMessage = Res.string.back_confirmation_message
+
+        val done = rs.done
+        val no_evaluation_object_to_display = rs.no_evaluation_object_to_display
+
 
         // Error messages
         val noInternet = rs.no_internet
