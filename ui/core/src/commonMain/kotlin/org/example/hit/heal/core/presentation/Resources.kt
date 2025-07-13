@@ -77,6 +77,7 @@ import dmt_proms.ui.core.generated.resources.trapeze
 import dmt_proms.ui.core.generated.resources.triangle
 import dmt_proms.ui.core.generated.resources.triangle_90
 import dmt_proms.ui.core.generated.resources.unexpected_error
+import dmt_proms.ui.core.generated.resources.uploading
 import dmt_proms.ui.core.generated.resources.vertical_stroke
 import dmt_proms.ui.core.generated.resources.warning
 import dmt_proms.ui.core.generated.resources.welcome
@@ -146,6 +147,7 @@ object Resources {
     }
 
     object String {
+        val uploading = rs.uploading
         val send = rs.send
         val measurements = rs.measurements
         val password = rs.password
