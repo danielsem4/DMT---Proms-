@@ -21,7 +21,7 @@ import org.example.hit.heal.core.presentation.Resources.String.video
 import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
 import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
 import org.example.hit.heal.core.presentation.primaryColor
-import presentation.components.CountdownDialogHandler
+import utils.CountdownDialogHandler
 import presentation.nextQuestion.NextQuestionScreen
 
 class DetailedContactViewModel(

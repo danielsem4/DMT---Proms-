@@ -42,16 +42,12 @@ import presentation.components.InstructionsDialog
 import presentation.components.circleWithPicture
 import presentation.detailedContact.components.ContactDetailsSection
 
-class DetailedContactScreen() : Screen {
+class DetailedContactScreen(private val correctContact: ContactData) : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
         val viewModel: DetailedContactViewModel = koinViewModel()
-        val correctContact = DetailedContactCache.lastContact ?: ContactData(
-            name = stringResource(defaultName),
-            phoneNumber = stringResource(defaultPhone)
-        )
 
         val contactChatData: List<AppData> = viewModel.items.map { item ->
             AppData(

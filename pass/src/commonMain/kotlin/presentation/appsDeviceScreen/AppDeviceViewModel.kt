@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import presentation.components.CountdownDialogHandler
+import utils.CountdownDialogHandler
 import presentation.components.AppData
 import core.domain.use_case.PlayAudioUseCase
 import org.example.hit.heal.core.presentation.Resources.Icon.calculatorIcon
@@ -52,11 +52,6 @@ import org.example.hit.heal.core.presentation.purseColor
 import org.example.hit.heal.core.presentation.settingsColor
 import org.example.hit.heal.core.presentation.storeColor
 import org.example.hit.heal.core.presentation.weatherColor
-import presentation.appsDeviceScreen.AppDeviceProgressCache.didNothing
-import presentation.appsDeviceScreen.AppDeviceProgressCache.isSecondInstructions
-import presentation.appsDeviceScreen.AppDeviceProgressCache.resetAppDeviceProgress
-import presentation.appsDeviceScreen.AppDeviceProgressCache.wrongApp
-import presentation.appsDeviceScreen.AppProgressCache.resetAppProgress
 import presentation.contatcts.ContactsScreen
 
 class AppDeviceViewModel(
@@ -146,6 +141,10 @@ class AppDeviceViewModel(
 
     private var reminderJob: Job? = null
 
+    private var didNothing = -1
+    private var wrongApp = 0
+    private var isSecondInstructions = false
+
     val isPlaying = playAudioUseCase.isPlaying
 
     private fun startDialogUnderstanding() {
@@ -201,18 +200,14 @@ class AppDeviceViewModel(
     fun onAppClicked(app: AppData) {
         if (app.label == contacts) {
             _nextScreen.value = ContactsScreen()
-            resetAll()
             return
         }
         wrongApp++
 
         _nextScreen.value = if (wrongApp == 3) {
-            resetAll()
-
             ContactsScreen()
         } else {
-            WrongAppCache.lastWrongApp = app
-            WrongAppScreen()
+            WrongAppScreen(app)
         }
     }
 
@@ -240,7 +235,6 @@ class AppDeviceViewModel(
                     isPlayingFlow = isPlaying,
                     audioText = herePersonsNumber to nowTheContactsListWillBeOpenedPass
                 )
-                resetAll()
                 _isNextScreen.value = false
                 _nextScreen.value = ContactsScreen()
             }
@@ -265,9 +259,9 @@ class AppDeviceViewModel(
         reminderJob = null
     }
 
-    private fun resetAll(){
-        resetAppProgress()
-        resetAppDeviceProgress()
+    fun resetAppDeviceProgress() {
+        didNothing = -1
+        wrongApp = 0
+        isSecondInstructions = false
     }
-
 }

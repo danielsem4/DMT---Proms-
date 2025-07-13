@@ -60,17 +60,16 @@ class TimeAndPlace : Screen {
                 )
 
                 Column(
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
+                    modifier = Modifier.fillMaxWidth().weight(1f)
                         .padding(horizontal = 16.dp,).verticalScroll(rememberScrollState()),
                     verticalArrangement = Arrangement.spacedBy(25.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Questions(firstQuestionViewModel)
                 }
-                Box(modifier = Modifier.fillMaxSize()) {
                     RoundedButton(
                         text = stringResource(`continue`),
-                        modifier = Modifier.width(200.dp).align(Alignment.BottomCenter),
+                        modifier = Modifier.width(200.dp).align(Alignment.CenterHorizontally),
                         buttonColor = if (allAnswersFinished) primaryColor else Color.Gray,
                         onClick = {
                             if (allAnswersFinished) {
@@ -79,7 +78,6 @@ class TimeAndPlace : Screen {
                             }
                         }
                     )
-                }
 
             })
 

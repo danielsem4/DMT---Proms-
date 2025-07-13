@@ -77,7 +77,7 @@ class EndScreen : Screen {
 
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxWidth().weight(1f)
                             .background(Color.White, shape = RoundedCornerShape(radiusMd))
                             .border(
                                 width = 2.dp,
@@ -99,15 +99,14 @@ class EndScreen : Screen {
 
                     SuccessAnimation(modifier = Modifier.size(100.dp))
 
-                    Box(modifier = Modifier.fillMaxSize()) {
                         RoundedButton(
                             text = stringResource(exit),
-                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
                             onClick = {
                                 navigator?.popUntilRoot()
                             }
                         )
-                    }
+
                 }
             }
         )

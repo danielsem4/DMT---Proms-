@@ -68,7 +68,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                 InstructionText(stringResource(secondQuestionHitberTaskInstructions))
 
                 Box(
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
+                    modifier = Modifier.fillMaxWidth().weight(1f)
                         .background(Color.White, shape = RoundedCornerShape(4))
                         .padding(16.dp)
                 ) {
@@ -107,10 +107,9 @@ class ActionShapesScreen(private val question: Int) : Screen {
                         }
                     }
                 }
-                Box(modifier = Modifier.fillMaxSize()) {
                     RoundedButton(
                         text = stringResource(`continue`),
-                        modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                        modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
                         onClick = {
                             secondQuestionViewModel.calculateCorrectShapesCount()
                             secondQuestionViewModel.updateTask()
@@ -137,7 +136,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                             }
                         }
                     )
-                }
+
             })
 
         RegisterBackHandler(this) {

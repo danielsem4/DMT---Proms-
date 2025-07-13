@@ -4,13 +4,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -70,68 +74,76 @@ class PassEntryScreen : Screen {
             content = {
                 AudioPlayingAnimation(isPlaying = isPlaying)
 
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Column(
                     modifier = Modifier
-                        .padding(top = 40.dp)
-                        .align(Alignment.CenterHorizontally),
+                        .fillMaxSize()
+                        .padding(horizontal = 30.dp),
+                    verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        stringResource(fmpt),
-                        color = primaryColor,
-                        fontSize = EXTRA_LARGE,
-                        fontWeight = Bold
-                    )
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Text(
-                        stringResource(fmptMeaning),
-                        color = primaryColor,
-                        fontSize = EXTRA_MEDIUM,
-                        fontWeight = Bold
-                    )
-                    Spacer(modifier = Modifier.padding(50.dp))
-
-                    Box(
+                    Column(
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .border(
-                                width = 2.dp,
-                                color = Color.LightGray,
-                                shape = RoundedCornerShape(radiusMd)
-                            )
-                            .background(Color.White, shape = RoundedCornerShape(radiusMd))
-                            .padding(20.dp)
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = stringResource(firstMissionPass),
+                            stringResource(fmpt),
                             color = primaryColor,
-                            fontSize = 35.sp,
-                            fontWeight = Bold,
-                            lineHeight = 60.sp
+                            fontSize = EXTRA_LARGE,
+                            fontWeight = Bold
                         )
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(paddingMd)
-                    ) {
+                        Spacer(modifier = Modifier.padding(10.dp))
                         Text(
-                            stringResource(thePassTest),
-                            fontSize = EXTRA_REGULAR,
-                            fontWeight = Bold,
+                            stringResource(fmptMeaning),
+                            color = primaryColor,
+                            fontSize = EXTRA_MEDIUM,
+                            fontWeight = Bold
                         )
+                        Spacer(modifier = Modifier.padding(50.dp))
+
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .border(
+                                    width = 2.dp,
+                                    color = Color.LightGray,
+                                    shape = RoundedCornerShape(radiusMd)
+                                )
+                                .background(Color.White, shape = RoundedCornerShape(radiusMd))
+                                .padding(20.dp)
+                        ) {
+                            Text(
+                                text = stringResource(firstMissionPass),
+                                color = primaryColor,
+                                fontSize = 35.sp,
+                                fontWeight = Bold,
+                                lineHeight = 60.sp
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(paddingMd)
+                        ) {
+                            Text(
+                                stringResource(thePassTest),
+                                fontSize = EXTRA_REGULAR,
+                                fontWeight = Bold,
+                            )
+                        }
                     }
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        RoundedButton(
-                            text = stringResource(next),
-                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
-                            onClick = {
-                                navigator?.replace(AppDeviceScreen())
-                            }
-                        )
-                    }
+                    RoundedButton(
+                        text = stringResource(next),
+                        modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
+                        onClick = {
+                            navigator?.replace(AppDeviceScreen())
+                        }
+                    )
                 }
             }
         )
@@ -151,7 +163,8 @@ class PassEntryScreen : Screen {
         }
 
         RegisterBackHandler(this) {
-            navigator?.popUntilRoot()        }
+            navigator?.popUntilRoot()
+        }
     }
 }
 

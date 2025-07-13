@@ -22,7 +22,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import androidx.compose.ui.graphics.Color
 import core.utils.ObserveLifecycle
 import core.utils.RegisterBackHandler
-import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Resources.Icon.dialKeysIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.likeIcon
 import org.example.hit.heal.core.presentation.Resources.String.dentistPass
@@ -94,7 +93,6 @@ class DialScreen : Screen {
                             }
                         }
                     }
-
 
                     Button(
                         modifier = Modifier

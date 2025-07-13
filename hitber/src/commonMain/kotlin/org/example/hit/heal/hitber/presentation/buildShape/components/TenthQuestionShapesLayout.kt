@@ -3,7 +3,6 @@ package org.example.hit.heal.hitber.presentation.buildShape.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -26,20 +25,20 @@ fun TenthQuestionShapesLayout(
     triangleWidth: Float,
     triangleHeight: Float,
     density: Density,
-    onScreenSizeChanged: (Pair<Float, Float>) -> Unit
+    onScreenSizeChanged: (Pair<Float, Float>) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val screenSize = remember { mutableStateOf(0f to 0f) }
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth().fillMaxHeight(0.85f)
+        modifier = modifier
             .background(color = Color.White, shape = RoundedCornerShape(4.dp))
             .onSizeChanged { size ->
                 val sizePair = size.width.toFloat() to size.height.toFloat()
                 screenSize.value = sizePair
                 onScreenSizeChanged(sizePair)
             }
-    ) {
+    )  {
         Box(
             modifier = Modifier
                 .align(Alignment.CenterEnd)

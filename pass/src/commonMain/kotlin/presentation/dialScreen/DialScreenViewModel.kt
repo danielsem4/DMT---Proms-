@@ -31,9 +31,8 @@ import org.example.hit.heal.core.presentation.Resources.String.secondPartOfTestI
 import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
 import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
 import org.example.hit.heal.core.presentation.Resources.String.wrongNumberDialedPleaseTryAgainPass
-import presentation.appsDeviceScreen.AppDeviceProgressCache.didNothing
-import presentation.components.CountdownDialogHandler
-import presentation.dialScreen.components.StartCheckingIfUserDidSomethingUseCase
+import utils.CountdownDialogHandler
+import utils.StartCheckingIfUserDidSomethingUseCase
 import presentation.endScreen.EndScreen
 
 class DialScreenViewModel(

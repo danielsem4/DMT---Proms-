@@ -1,6 +1,7 @@
 package org.example.hit.heal.hitber.presentation.buildShape
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -31,10 +32,9 @@ import org.example.hit.heal.hitber.presentation.buildShape.model.staticShapesIte
 import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
 import core.utils.CapturableWrapper
 import org.example.hit.heal.hitber.presentation.components.InstructionText
-import core.utils.PlatformCapturable
 import core.utils.RegisterBackHandler
+import core.utils.platformCapturable
 import org.example.hit.heal.core.presentation.components.BaseScreen
-import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.jetbrains.compose.resources.stringResource
@@ -76,58 +76,65 @@ class BuildShapeScreen : Screen {
                 config = ScreenConfig.TabletConfig,
                 topRightText = "10/10",
                 content = {
-                    InstructionText(stringResource(tenthQuestionHitberInstructions))
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        InstructionText(stringResource(tenthQuestionHitberInstructions))
 
-                    capturable = PlatformCapturable(
-                        onCaptured = { imageBitmap ->
-                            val timestamp = getCurrentFormattedDateTime()
+                        capturable = platformCapturable(
+                            modifier = Modifier.weight(1f),
+                            onCaptured = { imageBitmap ->
+                                val timestamp = getCurrentFormattedDateTime()
 
-                            viewModel.uploadImage(
-                                bitmap = imageBitmap,
-                                date = timestamp,
-                                currentQuestion = 10,
-                                onSuccess = { },
-                                onFailure = { }
+                                viewModel.uploadImage(
+                                    bitmap = imageBitmap,
+                                    date = timestamp,
+                                    currentQuestion = 10
+                                )
+
+                                tenthQuestionViewModel.uploadTenthQuestionImageAnswer(
+                                    itemPositions,
+                                    draggableShapesItem,
+                                    staticShapesItem,
+                                    triangleWidth,
+                                    triangleHeight
+                                )
+
+                                viewModel.setTenthQuestion(
+                                    tenthQuestionViewModel.answer,
+                                    timestamp
+                                )
+
+                                viewModel.uploadEvaluationResults()
+
+                                navigator?.replace(SummaryScreen())
+                            }
+                        ) {
+                            TenthQuestionShapesLayout(
+                                staticShapesItem = staticShapesItem,
+                                draggableShapesItem = draggableShapesItem,
+                                itemPositions = itemPositions,
+                                triangleWidth = triangleWidth,
+                                triangleHeight = triangleHeight,
+                                density = density,
+                                onScreenSizeChanged = { screenSize = it },
+                                modifier = Modifier.weight(1f)
                             )
-
-                            tenthQuestionViewModel.uploadTenthQuestionImageAnswer(
-                                itemPositions,
-                                draggableShapesItem,
-                                staticShapesItem,
-                                triangleWidth,
-                                triangleHeight
-                            )
-
-                            viewModel.setTenthQuestion(
-                                tenthQuestionViewModel.answer,
-                                timestamp
-                            )
-
-                            navigator?.replace(SummaryScreen())
                         }
-                    )
-                    {
-                        TenthQuestionShapesLayout(
-                            staticShapesItem = staticShapesItem,
-                            draggableShapesItem = draggableShapesItem,
-                            itemPositions = itemPositions,
-                            triangleWidth = triangleWidth,
-                            triangleHeight = triangleHeight,
-                            density = density,
-                            onScreenSizeChanged = { screenSize = it }
-                        )
-                    }
 
-                    Box(modifier = Modifier.fillMaxSize()) {
                         RoundedButton(
                             text = stringResource(`continue`),
-                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .width(200.dp),
                             onClick = {
-                                capturable?.capture?.let { it() }
+                                capturable?.capture?.invoke()
                             }
                         )
                     }
-                })
+                }
+            )
 
             RegisterBackHandler(this) {
                 navigator?.pop()

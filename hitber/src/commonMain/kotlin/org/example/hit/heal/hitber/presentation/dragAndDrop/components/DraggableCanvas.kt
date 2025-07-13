@@ -28,7 +28,7 @@ fun DraggableCanvas(
 ) {
     Canvas(
         modifier = Modifier
-            .fillMaxWidth().fillMaxHeight(0.85f)
+            .fillMaxSize()
             .onSizeChanged { size ->
                 onScreenSizeChanged(size.width.toFloat() to size.height.toFloat())
             }
