@@ -33,11 +33,12 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dmt_proms.oriantation.generated.resources.Res
-import org.example.hit.heal.core.presentation.Colors
+
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.jetbrains.compose.resources.stringResource
 import dmt_proms.oriantation.generated.resources.Res.string
 import dmt_proms.oriantation.generated.resources.trial_drag_instructions
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 
 class DrawScreen(
@@ -72,7 +73,7 @@ class DrawScreen(
                 paths.forEach { path ->
                     drawPath(
                         path = path,
-                        color = Colors.primaryColor,
+                        color = primaryColor,
                         style = Stroke(width = 4.dp.toPx())
                     )
                 }
@@ -93,7 +94,7 @@ class DrawScreen(
                 // Instruction text
                 Text(
                     text = (stringResource(string.trial_drag_instructions)),
-                    color = Colors.primaryColor,
+                    color = primaryColor,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
@@ -138,7 +139,7 @@ class DrawScreen(
                     paths.forEach { path ->
                         drawPath(
                             path = path,
-                            color = Colors.primaryColor,
+                            color = primaryColor,
                             style = Stroke(width = 4.dp.toPx())
                         )
                     }
@@ -146,7 +147,7 @@ class DrawScreen(
                     currentPath?.let { path ->
                         drawPath(
                             path = path,
-                            color = Colors.primaryColor,
+                            color = primaryColor,
                             style = Stroke(width = 4.dp.toPx())
                         )
                     }

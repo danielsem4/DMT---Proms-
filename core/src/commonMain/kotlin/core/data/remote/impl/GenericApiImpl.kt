@@ -1,10 +1,13 @@
 package core.data.remote.impl
 
+import core.data.model.ActivityItem
+import core.data.model.ActivityItemReport
 import core.data.model.LoginRequest
 import core.data.model.Medications.Medication
 import core.data.model.Medications.MedicationReport
 import core.data.model.ModulesResponse
 import core.data.model.SuccessfulLoginResponse
+import core.data.model.evaluation.Evaluation
 import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.EmptyResult
@@ -12,16 +15,13 @@ import core.domain.Result
 import core.domain.api.AppApi
 import core.domain.map
 import core.network.AppConfig.BASE_URL
+import core.network.AppConfig.BASE_URL_DEV
 import core.network.getWithAuth
 import core.network.postWithAuth
 import core.network.safeCall
-import core.util.PrefKeys
 import io.ktor.client.HttpClient
-import io.ktor.client.request.accept
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
-import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -35,19 +35,22 @@ import kotlinx.serialization.json.Json
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-
-class GenericApiImpl() {
-
-}
+/**
+ * Remote data source implementation using Ktor HttpClient.
+ * Handles all network calls defined in the AppApi interface.
+ */
 
 class KtorAppRemoteDataSource(
     private val httpClient: HttpClient,
     val storage: Storage
 ) : AppApi {
 
+    // Base URL for all endpoints
+    private val baseUrl = BASE_URL
+
     override suspend fun login(email: String, password: String):
             Result<SuccessfulLoginResponse, DataError.Remote> = safeCall {
-        httpClient.post("${BASE_URL}login/") {
+        httpClient.post("${baseUrl}login/") {
             contentType(ContentType.Application.Json)
             setBody(LoginRequest(email, password))
         }
@@ -57,15 +60,16 @@ class KtorAppRemoteDataSource(
         results: T,
         serializer: KSerializer<T>
     ): Result<String, DataError.Remote> {
-        val url = "${BASE_URL}patientMeasureResponse/"
-
+        val url = "${baseUrl}patientMeasureResponse/"
         val body = Json.encodeToString(serializer, results)
+        println("the body is: $body")
 
-        return safeCall {
-            httpClient.post(url) {
-                contentType(ContentType.Application.Json)
-                setBody(body)
-            }
+        return httpClient.postWithAuth<String>(
+            url = url,
+            storage = storage
+        ) {
+            contentType(ContentType.Application.Json)
+            setBody(body)
         }
     }
 
@@ -75,34 +79,35 @@ class KtorAppRemoteDataSource(
         imageBytes: ByteArray,
         clinicId: Int,
         userId: String
-    ): EmptyResult<DataError.Remote> {
-        val url = "${BASE_URL}FileUpload/"
+    ): Result<Int, DataError.Remote> {
+        val url = "${baseUrl}FileUpload/"
         val base64EncodedFile: String = Base64.encode(imageBytes)
 
-        return safeCall {
-            httpClient.post(url) {
-                setBody(
-                    MultiPartFormDataContent(
-                        formData {
-                            append("file", base64EncodedFile, Headers.build {
-                                append(HttpHeaders.ContentDisposition, "form-data; name=\"file\"")
-                                append(HttpHeaders.ContentType, "text/plain")
-                            })
-                            append("file_name", imagePath)
-                            append("clinic_id", clinicId)
-                            append("user_id", userId)
-                            append("path", imagePath)
-                        }
-                    )
+        return httpClient.postWithAuth<Int>(
+            url = url,
+            storage = storage
+        ) {
+            setBody(
+                MultiPartFormDataContent(
+                    formData {
+                        append("file", base64EncodedFile, Headers.build {
+                            append(HttpHeaders.ContentDisposition, "form-data; name=\"file\"")
+                            append(HttpHeaders.ContentType, "text/plain")
+                        })
+                        append("file_name", imagePath)
+                        append("clinic_id", clinicId)
+                        append("user_id", userId)
+                        append("path", imagePath)
+                    }
                 )
-            }
+            )
         }
     }
 
     override suspend fun getModules(clinicId: Int): Result<ArrayList<ModulesResponse>, DataError.Remote> =
         httpClient
             .getWithAuth<List<ModulesResponse>>(
-                "${BASE_URL}getModules",
+                "${baseUrl}getModules/",
                 storage
             ) {
                 parameter("clinic_id", clinicId)
@@ -116,8 +121,8 @@ class KtorAppRemoteDataSource(
         patientId: Int
     ): Result<List<Medication>, DataError.Remote> =
         httpClient.getWithAuth<List<Medication>>(
-            url      = "${BASE_URL}Medication_list/",
-            storage  = storage
+            url = "${baseUrl}Medication_list/",
+            storage = storage
         ) {
             parameter("clinic_id",  clinicId)
             parameter("patient_id", patientId)
@@ -127,7 +132,7 @@ class KtorAppRemoteDataSource(
         body: MedicationReport
     ): Result<Unit, DataError.Remote> =
         httpClient.postWithAuth<Unit>(
-            url      = "${BASE_URL}report_medication/",
+            url = "${baseUrl}report_medication/",
             storage  = storage
         ) {
             setBody(body)
@@ -138,10 +143,58 @@ class KtorAppRemoteDataSource(
         results: Request
     ): Result<Unit, DataError.Remote> =
         httpClient.postWithAuth<Unit>(
-            url      = "${BASE_URL}patientNotificationData/",
-            storage  = storage
+            url = "${baseUrl}patientNotificationData/",
+            storage = storage
         ) {
             setBody(results)
         }
+
+    override suspend fun getPatientMeasureReport(
+        clinicId: Int,
+        patientId: Int
+    ): Result<List<Evaluation>, DataError.Remote> =
+        httpClient.getWithAuth<List<Evaluation>>(
+            url = "${baseUrl}PatientMeasurements/",
+            storage = storage
+        ) {
+            parameter("clinic_id", clinicId)
+            parameter("patient_id", patientId)
+        }
+
+    override suspend fun getSpecificEvaluation(
+        clinicId: Int,
+        patientId: Int,
+        evaluationName: String
+    ): Result<Evaluation, DataError.Remote> =
+        httpClient.getWithAuth<Evaluation>(
+            url = "${baseUrl}getOneEvaluation/",
+            storage = storage
+        ) {
+            parameter("clinic_id",  clinicId)
+            parameter("patient_id", patientId)
+            parameter("Evaluation_name", evaluationName)
+        }
+
+    override suspend fun reportActivity(
+        body: ActivityItemReport
+    ): Result<Unit, DataError.Remote> =
+        httpClient.postWithAuth<Unit>(
+            url = "${baseUrl}Activity_report/",
+            storage = storage
+        ) {
+            contentType(ContentType.Application.Json)
+            setBody(body)
+        }
+
+    override suspend fun getPatientActivities(
+        clinicId: Int
+    ): Result<List<ActivityItem>, DataError.Remote> =
+        httpClient.getWithAuth<List<ActivityItem>>(
+            url = "${baseUrl}Activities_list/",
+            storage = storage
+        ) {
+            parameter("clinic_id", clinicId)
+        }
+
 
 }

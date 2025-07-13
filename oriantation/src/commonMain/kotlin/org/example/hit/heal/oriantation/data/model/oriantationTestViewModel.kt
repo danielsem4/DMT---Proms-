@@ -1,41 +1,44 @@
 package org.example.hit.heal.oriantation.data.model
 
-import androidx.compose.material.DrawerDefaults.shape
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
+import core.utils.toByteArray
+
 
 class OrientationTestViewModel {
-    var state by mutableStateOf(OrientationTestState())
+    var trialData by mutableStateOf(TrialData())
         private set
+    var drawnShape: ByteArray? = null
 
     fun updateNumber(number: Int) {
-        state = state.copy(selectedNumber = number)
+        trialData.response.selectedNumber.value = number.toString()
     }
 
     fun updateSeason(season: String) {
-        state = state.copy(selectedSeason = season)
+        trialData.response.selectedSeasons.value = listOf(season)
     }
 
 
     fun updateDrawnShape(bitmap: ImageBitmap) {
-        state = state.copy(drawnShape = bitmap)
+        drawnShape = bitmap.toByteArray()
+
     }
 
     fun updateShapeResize(value: Boolean) {
-        state = state.copy(shapeResizeValue = value)
+        trialData.response.isTriangleSizeChanged.value = value
     }
 
     fun updateShapesDrag(result: Boolean) {
-        state = state.copy(shapesDragResult = result)
+        trialData.response.isTriangleDragged.value = result
     }
 
     fun updateFeelingRate(rate: Int) {
-        state = state.copy(feelingRate = rate)
+        trialData.response.healthLevel.value = rate.toString()
     }
 
-    fun getTestResults(): OrientationTestState {
-        return state
+    fun getTestResults() = trialData.also {
+        println("Test results: $it")
     }
 }

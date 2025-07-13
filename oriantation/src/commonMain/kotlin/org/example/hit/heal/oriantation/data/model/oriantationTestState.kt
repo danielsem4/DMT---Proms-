@@ -1,13 +1,15 @@
 package org.example.hit.heal.oriantation.data.model
 
-import androidx.compose.ui.graphics.ImageBitmap
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class OrientationTestState(
-    val selectedNumber: Int = 0,
-    val selectedSeason: String = "",
+    @SerialName("selectedNumber") var selectedNumber: Int = 0,
+    @SerialName("selectedSeason") var selectedSeason: String = "",
 
-    val drawnShape: ImageBitmap? = null,
-    val shapeResizeValue: Boolean = false,
-    val shapesDragResult: Boolean = false,
-    val feelingRate: Int = 0
+    @SerialName("drawnShape") var drawnShape: ByteArray? = null,
+    @SerialName("shapeResizValue") var shapeResizeValue: Boolean = false,
+    @SerialName("shapesDragResult") var shapesDragResult: Boolean = false,
+    @SerialName("feelingRate") var feelingRate: Int = 0
 )

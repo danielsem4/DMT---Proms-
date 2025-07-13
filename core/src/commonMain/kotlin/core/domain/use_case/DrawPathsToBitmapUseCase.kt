@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import org.example.hit.heal.core.presentation.primaryColor
 
 object DrawPathsToBitmapUseCase {
 
@@ -18,7 +17,7 @@ object DrawPathsToBitmapUseCase {
         canvasSize: Size,
         paths: List<Path>,
         density: Density,
-        pathColor: Color = primaryColor,
+        pathColor: Color = Color.White,
         backgroundColor: Color = Color.White,
     ): ImageBitmap {
         val bitmap = ImageBitmap(canvasSize.width.toInt(), canvasSize.height.toInt())

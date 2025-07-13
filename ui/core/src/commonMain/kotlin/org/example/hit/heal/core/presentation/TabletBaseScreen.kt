@@ -26,8 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.example.hit.heal.core.presentation.Colors.backgroundColor
-import org.example.hit.heal.core.presentation.Colors.primaryColor
 
 @Composable
 fun TabletBaseScreen(

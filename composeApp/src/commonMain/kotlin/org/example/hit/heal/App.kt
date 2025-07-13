@@ -3,16 +3,14 @@ package org.example.hit.heal
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.Navigator
-
-import org.example.hit.heal.oriantation.feature.presentation.WelcomeScreen
-
+import cafe.adriel.voyager.transitions.SlideTransition
+import org.example.hit.heal.presentation.splash.SplashScreen
 
 @Composable
-fun App(context: Any? = null) {
-//    NavigationGraph()
+fun App() {
     MaterialTheme {
-       Navigator(WelcomeScreen())
-
-
+        Navigator(SplashScreen()) { navigator ->
+            SlideTransition(navigator)
+        }
     }
 }

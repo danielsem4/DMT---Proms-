@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-    <string name=" e"> e</string>
+
     <string name="entry_Oriantation_title">אורינטציה</string>
     <string name="entry_Oriantation_welcome_note">ברוך הבא</string>
     <string name="entry_Oriantation_instructions">לפניך התנסות קצרה בשימוש בטאבלט. נסה לעקוב אחר ההנחיות ולבצע</string>
@@ -21,7 +21,7 @@
     <string name="trial_draw_instructions">יש לצייר צורה של איקס</string>
     <string name="trial_end_test_instructions">הניסיון הגיע לסיומו, תודה רבה על שיתוף הפעולה</string>
     <string name="edit_text_dialog_instruction">יש לרשום בתיבה מתחת מה דעתך על המשימה,כדי לסגור את המקלדת יש ללחוץ על התמונה של המקלדת. בסיום לחץ על כפתור הX</string>
-    <string name="fiht "> e</string>
+
 
     <string name="you_in_the_summer">כרגע נמצאים בעונת הקיץ</string>
     <string name="you_in_the_winter">כרגע נמצאים בעונת החורף</string>

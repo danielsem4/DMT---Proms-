@@ -22,6 +22,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,11 +48,17 @@ import dmt_proms.clock_test.generated.resources.hit_logo
 import dmt_proms.clock_test.generated.resources.hit_logo_description
 import dmt_proms.clock_test.generated.resources.start_button_text
 import kotlinx.coroutines.delay
+import org.example.hit.heal.core.presentation.Resources.Icon.clockIcon
+import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingXxl
 import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 private enum class ScreenState { Initial, Animating, ShowContent }
 private enum class ButtonState { Hidden, Visible }
@@ -68,10 +75,14 @@ fun CDTLandingScreenContent() {
     var buttonState by remember { mutableStateOf(ButtonState.Hidden) }
     var textState by remember { mutableStateOf(TextState.Hidden) }
     val navigator = LocalNavigator.currentOrThrow
+    val viewModel = koinViewModel<ClockTestViewModel>()
+
+    val evaluation by viewModel.clockTest.collectAsState()
 
     // ── Auto-start animation after initial display ──────────────────────
     LaunchedEffect(Unit) {
         delay(500) // Show initial state for 0.5 seconds
+        viewModel.loadEvaluation("CDT")
         state = ScreenState.Animating
         println("LandingScreen: Auto-starting animation")
     }
@@ -94,7 +105,7 @@ fun CDTLandingScreenContent() {
     }
 
 
-    TabletBaseScreen(
+    BaseScreen(
         title = stringResource(Res.string.clock_test_title),
         content = {
             if (state != ScreenState.ShowContent) {
@@ -167,7 +178,7 @@ private fun secondState(navigator: Navigator, buttonState: ButtonState, textStat
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(spacingXxl))
 
         // "Clock test" text above the clock
         Text(
@@ -175,17 +186,17 @@ private fun secondState(navigator: Navigator, buttonState: ButtonState, textStat
             style = MaterialTheme.typography.h3,
             color = primaryColor,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = paddingMd)
         )
 
         // Clock icon
         Image(
-            painter = painterResource(Res.drawable.clock),
+            painter = painterResource(clockIcon),
             contentDescription = stringResource(Res.string.clock_icon_description),
-            modifier = Modifier.size(150.dp)
+            modifier = Modifier.size(iconSizeXl)
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(spacingXxl))
 
         // Start button with slide-up animation
         val buttonOffsetY by animateDpAsState(

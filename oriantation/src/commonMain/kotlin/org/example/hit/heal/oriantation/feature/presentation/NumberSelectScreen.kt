@@ -2,7 +2,9 @@ package org.example.hit.heal.oriantation.feature.presentation
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,14 +27,10 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.oriantation.generated.resources.Res.string
-import dmt_proms.oriantation.generated.resources.entry_Oriantation_title
 import dmt_proms.oriantation.generated.resources.sec_question_instraction
-import dmt_proms.oriantation.generated.resources.sec_question_number
 import dmt_proms.oriantation.generated.resources.sec_question_title
-
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
-import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
 class NumberSelectScreen(
@@ -78,7 +76,7 @@ class NumberSelectScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 // Number Selector
-                Box(
+                Column (
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
@@ -99,7 +97,10 @@ class NumberSelectScreen(
                     }
                     DropdownMenu(
                         expanded = expanded,
-
+                        modifier = Modifier.
+                            fillMaxWidth().
+                            padding(horizontal = 24.dp).
+                            fillMaxHeight(0.5f),
                         onDismissRequest = { expanded = false }
                     ) {
                         numbers.forEach { number ->
@@ -108,7 +109,10 @@ class NumberSelectScreen(
                                 viewModel.updateNumber(number)
                                 expanded = false
                             }) {
-                                Text(text = number.toString())
+                                Text(text = number.toString()
+                                ,modifier = Modifier.
+                                    fillMaxWidth()
+                                )
                             }
                         }
                     }

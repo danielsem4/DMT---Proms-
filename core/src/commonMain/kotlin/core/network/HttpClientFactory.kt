@@ -26,21 +26,21 @@ import kotlinx.serialization.json.Json
  * Factory for HttpClient settings
  */
 object HttpClientFactory {
-    fun create(engine: HttpClientEngine, storage: Storage): HttpClient =
+    fun create(engine: HttpClientEngine): HttpClient =
         HttpClient(engine) {
             expectSuccess = false
 
             install(ContentNegotiation) {
                 json(Json {
                     ignoreUnknownKeys = true
-                    isLenient       = true
-                    prettyPrint     = true
-                    encodeDefaults  = true
+                    isLenient = true
+                    prettyPrint = true
+                    encodeDefaults = true
                 })
             }
 
             install(HttpTimeout) {
-                socketTimeoutMillis  = 20_000
+                socketTimeoutMillis = 20_000
                 requestTimeoutMillis = 20_000
             }
 
