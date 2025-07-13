@@ -38,6 +38,7 @@ kotlin {
 
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            implementation(libs.kmp.capturable.compose)
 
             implementation(libs.ktor.client.okhttp)
         }
@@ -55,6 +56,10 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
 
+            implementation (libs.navigator)
+            implementation (libs.navigator.tabs)
+            implementation (libs.navigator.transitions)
+
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -69,10 +74,12 @@ kotlin {
             implementation(libs.datastore)
             // DateTime
             implementation(libs.kotlinx.datetime)
+
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
             implementation(libs.compose.ui.graphics)
+            implementation(libs.kmp.capturable.compose)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

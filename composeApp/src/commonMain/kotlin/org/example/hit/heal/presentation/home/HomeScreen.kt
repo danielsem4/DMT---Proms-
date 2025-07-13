@@ -67,12 +67,15 @@ import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.hitber.presentation.entry.HitberEntryScreen
+import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScreen
 import org.example.hit.heal.presentation.activities.ActivitiesScreen
 import org.example.hit.heal.presentation.evaluation.AllEvaluationsScreen
 import org.example.hit.heal.presentation.login.LoginScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import presentation.entryScreen.PassEntryScreen
 
 /**
  *
@@ -90,6 +93,11 @@ class HomeScreen : Screen {
         LaunchedEffect(Unit) {
             viewModel.loadFeatures()
         }
+
+        LaunchedEffect(features) {
+            println("All features: ${features.toString().replace(",","\n")}")
+        }
+
 
         BaseScreen(
             title = stringResource(Resources.String.home),
@@ -248,6 +256,7 @@ class HomeScreen : Screen {
             "cdt" -> navigator.push(CDTLandingScreen())
             "measurements" -> navigator.push(AllEvaluationsScreen())
             "Activities" -> navigator.push(ActivitiesScreen())
+            "HitBer" -> navigator.push(HitberEntryScreen())
             else -> {  }
         }
     }
