@@ -16,10 +16,6 @@ import org.koin.android.ext.koin.androidLogger
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        initKoin {
-//            androidLogger()
-//            androidContext(this@MainActivity)
-//        }
         setContent {
 
             val darkColor = Color.Transparent.hashCode()

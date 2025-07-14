@@ -13,4 +13,5 @@ import org.koin.dsl.module
 
 actual val platformModuleCore = module {
     single<DataStore<Preferences>> { createDataStore(androidContext()) }
+
 }
