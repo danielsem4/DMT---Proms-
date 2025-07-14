@@ -2,66 +2,50 @@ package core.utils
 
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.*
-import platform.AVFAudio.*
+import platform.AVFoundation.AVPlayer
+import platform.AVFoundation.AVPlayerItem
+import platform.AVFoundation.AVPlayerItemDidPlayToEndTimeNotification
+import platform.AVFoundation.pause
+import platform.AVFoundation.play
 import platform.Foundation.*
-import platform.darwin.NSObject
+import platform.darwin.NSObjectProtocol
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 @OptIn(ExperimentalForeignApi::class)
 actual class AudioPlayer {
-    private var player: AVAudioPlayer? = null
-    private var delegate: AudioPlayerDelegate? = null
+    private var player: AVPlayer? = null
+    private var observer: NSObjectProtocol? = null
 
     actual suspend fun play(url: String, onCompletion: () -> Unit) {
         stop()
 
-        val nsUrl = NSURL(string = url)
-        val data = withContext(Dispatchers.Default) {
-            NSData.dataWithContentsOfURL(nsUrl)
-        } ?: throw Exception("Failed to load audio data")
+        val nsUrl = NSURL.URLWithString(url)
+            ?: throw IllegalArgumentException("Invalid URL: $url")
 
-        val tempFilePath = NSTemporaryDirectory() + "temp_audio.mp3"
-        val success = data.writeToFile(tempFilePath, atomically = true)
-        if (!success) throw Exception("Failed to write temp audio file")
+        val playerItem = AVPlayerItem(nsUrl)
+        player = AVPlayer(playerItem = playerItem)
 
-        val fileUrl = NSURL.fileURLWithPath(tempFilePath)
-
-        suspendCoroutine<Unit> { continuation ->
-            try {
-                val audioPlayer = AVAudioPlayer(fileUrl, null)
-                val audioDelegate = AudioPlayerDelegate {
-                    onCompletion()
-                }
-                audioPlayer.delegate = audioDelegate
-                this.player = audioPlayer
-                this.delegate = audioDelegate
-
-                audioPlayer.prepareToPlay()
-                val started = audioPlayer.play()
-                if (started) {
-                    continuation.resume(Unit)
-                } else {
-                    continuation.resumeWithException(Exception("Failed to start audio playback"))
-                }
-            } catch (e: Exception) {
-                continuation.resumeWithException(e)
+        suspendCancellableCoroutine<Unit> { continuation ->
+            observer = NSNotificationCenter.defaultCenter.addObserverForName(
+                name = AVPlayerItemDidPlayToEndTimeNotification,
+                `object` = playerItem,
+                queue = NSOperationQueue.mainQueue
+            ) {
+                onCompletion()
             }
+
+            player?.play()
+            continuation.resume(Unit)
         }
     }
 
     actual fun stop() {
-        player?.let {
-            if (it.isPlaying()) it.stop()
-        }
+        player?.pause()
         player = null
-        delegate = null
-    }
 
-    private class AudioPlayerDelegate(val onCompletion: () -> Unit) : NSObject(), AVAudioPlayerDelegateProtocol {
-        override fun audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully: Boolean) {
-            onCompletion()
+        observer?.let {
+            NSNotificationCenter.defaultCenter.removeObserver(it)
+            observer = null
         }
     }
 }

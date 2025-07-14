@@ -14,13 +14,23 @@ class PlayAudioUseCase(
     suspend fun playAudio(audioText: String) {
         stopAudio()
         _isPlaying.value = true
-        audioPlayer.play(audioText) {
+        try {
+            _isPlaying.value = true
+            audioPlayer.play(audioText) {
+                _isPlaying.value = false
+            }
+        } catch (e: Exception) {
             _isPlaying.value = false
+            println("Error playing audio: ${e.message}")
         }
     }
 
     fun stopAudio() {
-        audioPlayer.stop()
+        try {
+            audioPlayer.stop()
+        } catch (e: Exception) {
+            println("PlayAudioUseCase Error stopping audio: ${e}")
+        }
         _isPlaying.value = false
     }
 }
