@@ -1,7 +1,6 @@
 package org.example.hit.heal.evaluations.presentaion
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.data.model.evaluation.EvaluationAnswer
 import core.data.model.evaluation.EvaluationObject
-import core.data.model.evaluation.toRawString
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.slider_value_prefix
 import org.example.hit.heal.core.presentation.components.CustomMultilineTextField
@@ -94,27 +92,24 @@ fun EvaluationObjectContent(
             // Toggle Button
             5 -> {
                 if (obj.style == "toggle button") {
+                    val onLabel = obj.available_values?.getOrNull(0)?.available_value ?: "On"
+                    val offLabel = obj.available_values?.getOrNull(1)?.available_value ?: "Off"
+
                     Text(
                         text = obj.object_label,
                         fontSize = 20.sp,
                         modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start)
                     )
+
                     OnOffToggle(
-                        checked = (answers[obj.id] as? EvaluationAnswer.Toggle)?.value ?: false,
+                        checked = (answers[obj.id] as? EvaluationAnswer.Toggle)?.value,
                         onCheckedChange = { isChecked ->
                             onSaveAnswer(obj.id, EvaluationAnswer.Toggle(isChecked))
-                        }
+                        },
+                        onText = onLabel,
+                        offText = offLabel
                     )
                 }
-            }
-            // Dynamic / Instruction Box (like Blood pressure, Sugar report, Parkinson report)
-            11 -> {
-                InstructionBox(
-                    text = obj.object_label,
-                    modifier = Modifier
-                        .fillMaxWidth(0.8f)
-                        .align(Alignment.CenterHorizontally)
-                )
             }
             // Slider / Scale
             34 -> {
@@ -163,18 +158,14 @@ fun EvaluationObjectContent(
                 )
                 // Further implementation needed for drawing
             }
-            // Default case for any unhandled object types
-            else -> {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(obj.object_label, modifier = Modifier.align(Alignment.CenterVertically))
-                    Text(
-                        answers[obj.id]?.toRawString() ?: "",
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    ) // Display the saved answer
-                }
+            // Dynamic / Instruction Box (like Blood pressure, Sugar report, Parkinson report)
+            11 -> {
+                InstructionBox(
+                    text = obj.object_label,
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .align(Alignment.CenterHorizontally)
+                )
             }
         }
     }

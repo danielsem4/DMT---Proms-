@@ -17,12 +17,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun OnOffToggle(
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    checked: Boolean?,
+    onCheckedChange: (Boolean) -> Unit,
+    onText: String = stringResource(Resources.String.on),
+    offText: String = stringResource(Resources.String.off)
 ) {
     Row(
         modifier = Modifier
@@ -34,7 +38,7 @@ fun OnOffToggle(
             modifier = Modifier
                 .weight(1f)
                 .background(
-                    if (checked) primaryColor else Color.White,
+                    if (checked == true) primaryColor else Color.White,
                     shape = RoundedCornerShape(16.dp)
                 )
                 .border(2.dp, Color.Black, shape = RoundedCornerShape(16.dp))
@@ -43,20 +47,20 @@ fun OnOffToggle(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "On",
+                text = onText,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (checked) Color.White else primaryColor
+                color = if (checked == true) Color.White else primaryColor
             )
         }
 
-        Spacer(Modifier.weight(.1f))
+        Spacer(Modifier.weight(0.1f))
 
         Box(
             modifier = Modifier
                 .weight(1f)
                 .background(
-                    if (!checked) primaryColor else Color.White,
+                    if (checked == false) primaryColor else Color.White,
                     shape = RoundedCornerShape(16.dp)
                 )
                 .border(2.dp, Color.Black, shape = RoundedCornerShape(16.dp))
@@ -65,10 +69,10 @@ fun OnOffToggle(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Off",
+                text = offText,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                color = if (!checked) Color.White else primaryColor
+                color = if (checked == false) Color.White else primaryColor
             )
         }
     }

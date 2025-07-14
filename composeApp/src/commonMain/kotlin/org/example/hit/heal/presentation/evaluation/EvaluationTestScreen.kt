@@ -29,6 +29,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.evaluation.Evaluation
+import core.data.model.evaluation.toRawString
 import core.domain.onError
 import core.domain.onSuccess
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +54,8 @@ import rememberMessageBarState
 class EvaluationTestScreen(
     private val evaluation: Evaluation
 ) : Screen {
+
+    private val inputTypes = setOf(1, 2, 4, 5, 21, 34)
 
     @Composable
     override fun Content() {
@@ -107,7 +110,7 @@ class EvaluationTestScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .weight(1f) // Give column weight to push buttons to bottom
+                        .weight(1f)
                         .verticalScroll(rememberScrollState())
                         .padding(horizontal = 16.dp)
                 ) {
@@ -155,18 +158,28 @@ class EvaluationTestScreen(
 
                     val isLastPage = currentPageIndex == totalObjects - 1
 
+                    val currentAnswered = currentObject?.run {
+                        !isInputType(object_type) ||
+                                answers[id]?.toRawString()?.isNotBlank() == true
+                    } ?: false
+
                     val onClick: () -> Unit = {
                         if (!isLastPage) currentPageIndex++
                         else uploadResult()
                     }
+
                     RoundedButton(
                         text = if (isLastPage) stringResource(Resources.String.done)
                         else stringResource(Resources.String.next),
                         onClick = onClick,
+                        enabled = currentAnswered,
                         modifier = Modifier.weight(1f).padding(start = 8.dp)
                     )
                 }
             }
         }
     }
+
+    private fun isInputType(objectType: Int) = objectType in inputTypes
+
 }

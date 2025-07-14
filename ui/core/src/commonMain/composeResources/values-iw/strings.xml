@@ -57,7 +57,8 @@
     <string name="memory">זיכרון</string>
 
     <string name="pass">פס</string>
-
+    <string name="on">כן</string>
+    <string name="off">לא</string>
     <string name="hitber">התבר</string>
     <string name="done">סיום</string>
     <string name="back">חזור</string>
