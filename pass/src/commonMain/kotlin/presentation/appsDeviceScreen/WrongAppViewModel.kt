@@ -7,7 +7,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Resources.String.goingBackToAppsScreenPass
 import org.example.hit.heal.core.presentation.Resources.String.returnButtonOnTopLeftPass
@@ -15,10 +14,7 @@ import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDo
 import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
 import org.example.hit.heal.core.presentation.Resources.String.wrongAppSecondAssist
 import org.example.hit.heal.core.presentation.Resources.String.wrongAppThirdAssist
-import presentation.appsDeviceScreen.AppProgressCache.didNothing
-import presentation.appsDeviceScreen.AppProgressCache.didNothingSecondTime
-import presentation.appsDeviceScreen.AppProgressCache.isSecondTimeWrongApp
-import presentation.components.CountdownDialogHandler
+import utils.CountdownDialogHandler
 
 class WrongAppViewModel(
     private val countdownDialogHandler: CountdownDialogHandler,
@@ -35,6 +31,10 @@ class WrongAppViewModel(
 
     private var reminderJob: Job? = null
 
+    private var didNothing = 0
+    private var didNothingSecondTime = 0
+    private var isSecondTimeWrongApp = false
+
     val isPlaying = playAudioUseCase.isPlaying
 
     fun startCheckingIfUserDidSomething() {
@@ -47,6 +47,7 @@ class WrongAppViewModel(
             }
         }
     }
+
 
     private fun getReminderDidNothingText() {
         val didNothingCount = if (isSecondTimeWrongApp) ++didNothingSecondTime else ++didNothing
@@ -74,8 +75,9 @@ class WrongAppViewModel(
     }
 
     fun onPlayAudioRequested(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
-    }
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }    }
 
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
@@ -97,6 +99,12 @@ class WrongAppViewModel(
         countdownDialogHandler.hideDialog()
         reminderJob?.cancel()
         reminderJob = null
+    }
+
+    fun resetAppProgress() {
+        didNothing = 0
+        didNothingSecondTime = 0
+        isSecondTimeWrongApp = false
     }
 
 }

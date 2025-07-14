@@ -10,7 +10,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
 import core.utils.RegisterBackHandler
-import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Resources.Icon.likeIcon
 import org.example.hit.heal.core.presentation.Resources.String.deviceAppsTitle
 import org.example.hit.heal.core.presentation.Resources.String.no
@@ -24,16 +23,17 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.appsDeviceScreen.AppDeviceProgressCache.resetAppDeviceProgress
 import presentation.components.InstructionsDialog
 import presentation.components.AppData
 import presentation.components.circleWithPicture
+import presentation.contatcts.ContactsScreen
 
 class AppDeviceScreen : Screen {
 
     @Composable
     override fun Content() {
         val viewModel: AppDeviceViewModel = koinViewModel()
+        val wrongAppViewModel: WrongAppViewModel = koinViewModel()
         val navigator = LocalNavigator.current
 
         val items: List<AppData> = viewModel.items.map { item ->
@@ -84,6 +84,10 @@ class AppDeviceScreen : Screen {
         LaunchedEffect(nextScreen) {
             if (isNextScreen) {
                 nextScreen?.let { screen ->
+                    if(nextScreen == ContactsScreen()){
+                        viewModel.resetAppDeviceProgress()
+                        wrongAppViewModel.resetAppProgress()
+                    }
                     navigator?.push (screen)
                     viewModel.clearNextScreen()
                 }
@@ -135,6 +139,10 @@ class AppDeviceScreen : Screen {
                         viewModel.hideReminderDialog()
 
                         nextScreen?.let { screen ->
+                            if(nextScreen == ContactsScreen()){
+                                viewModel.resetAppDeviceProgress()
+                                wrongAppViewModel.resetAppProgress()
+                            }
                             navigator?.push (screen)
                             viewModel.clearNextScreen()
                         }
@@ -144,7 +152,8 @@ class AppDeviceScreen : Screen {
         }
 
         RegisterBackHandler(this) {
-            resetAppDeviceProgress()
+            viewModel.resetAppDeviceProgress()
+            wrongAppViewModel.resetAppProgress()
             navigator?.popUntilRoot()
         }
     }

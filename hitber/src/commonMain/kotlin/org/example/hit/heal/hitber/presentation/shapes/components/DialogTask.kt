@@ -19,12 +19,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogIcon
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberUnderstand
+import org.example.hit.heal.core.presentation.Sizes.elevationLg
+import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.radiusLg
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
@@ -33,52 +41,52 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun DialogTask(icon: DrawableResource, title: String,text: String, onDismiss: () -> Unit) {
     Dialog(onDismissRequest =  onDismiss) {
-        Box(modifier = Modifier.fillMaxWidth().height(300.dp)) {
+        Box(modifier = Modifier.fillMaxWidth()) {
             Image(
                 painter = painterResource(icon),
                 contentDescription = stringResource(secondQuestionHitberDialogIcon),
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(iconSizeXl)
                     .align(Alignment.TopCenter)
                     .zIndex(1f)
             )
             Card(
-                shape = RoundedCornerShape(16.dp),
-                elevation = 8.dp,
+                shape = RoundedCornerShape(radiusLg),
+                elevation = elevationLg,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .padding(top = 25.dp)
+                    .padding(top = paddingLg)
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(20.dp)
+                        .padding(paddingMd)
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
                         text = title,
-                        fontSize = 35.sp,
+                        fontSize = EXTRA_LARGE,
                         fontWeight = FontWeight.Bold,
                         color = primaryColor,
                         textAlign = TextAlign.Center
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(paddingMd))
                     Text(
                         text = text,
-                        fontSize = 30.sp,
+                        fontSize = LARGE,
                         fontWeight = FontWeight.Bold,
                         color = primaryColor,
                         textAlign = TextAlign.Center,
                         lineHeight = 50.sp
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(paddingLg))
                     Button(
                         onClick =onDismiss,
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(radiusMd),
                         colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
 
                         ) {
-                        Text(stringResource(secondQuestionHitberUnderstand), color = Color.White, fontSize = 25.sp,)
+                        Text(stringResource(secondQuestionHitberUnderstand), color = Color.White, fontSize = EXTRA_MEDIUM)
                     }
                 }
             }

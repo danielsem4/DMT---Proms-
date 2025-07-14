@@ -17,9 +17,9 @@ class EntryViewModel(private val playAudioUseCase: PlayAudioUseCase) : ViewModel
 
     fun onPlayAudioRequested(audioText: String) {
         _isOverlayVisible.value = true
-        playAudioUseCase.playAudio(audioText)
 
         viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
             playAudioUseCase.isPlaying.collect { isPlaying ->
                 if (!isPlaying) {
                     _isOverlayVisible.value = false

@@ -8,10 +8,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.material.Text
-
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
 
 @Composable
 fun InstructionText(text: String) {
@@ -22,9 +21,9 @@ fun InstructionText(text: String) {
         Text(
             text = text,
             color = Color.Black,
-            fontSize = 20.sp,
+            fontSize = EXTRA_MEDIUM,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.align(Alignment.Center).padding(bottom = 30.dp)
+            modifier = Modifier.align(Alignment.Center).padding(bottom = paddingLg)
         )
     }
 }

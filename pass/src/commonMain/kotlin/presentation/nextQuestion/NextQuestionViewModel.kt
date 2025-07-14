@@ -20,7 +20,9 @@ class NextQuestionViewModel( private val playAudioUseCase: PlayAudioUseCase): Vi
     val isPlaying = playAudioUseCase.isPlaying
 
     fun onPlayAudioRequested(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }
     }
 
     private var countdownJob: Job? = null

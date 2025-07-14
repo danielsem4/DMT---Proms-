@@ -41,6 +41,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import org.example.hit.heal.core.presentation.Resources.String.clockTest
 
 class ActivityViewModel(
@@ -52,6 +53,9 @@ class ActivityViewModel(
 ) : ViewModel() {
 
     private var result: CogData = CogData()
+
+    private val _uploadStatus  = MutableStateFlow<Result<Unit>?>(null)
+    val uploadStatus: StateFlow<Result<Unit>?> = _uploadStatus
 
     private val _hitberTest = MutableStateFlow<Evaluation?>(null)
     val hitberTest: StateFlow<Evaluation?> = _hitberTest.asStateFlow()
@@ -227,8 +231,6 @@ class ActivityViewModel(
     }
 
     fun uploadImage(
-        onSuccess: (() -> Unit)? = null,
-        onFailure: ((message: Error) -> Unit)? = null,
         bitmap: ImageBitmap,
         date: String,
         currentQuestion: Int,
@@ -236,7 +238,6 @@ class ActivityViewModel(
     ) {
         if (bitmap.width <= 1 || bitmap.height <= 1) {
             println("❌ תמונה לא תקינה")
-            onFailure?.invoke(DataError.Local.EMPTY_FILE)
             return
         }
 
@@ -271,16 +272,10 @@ class ActivityViewModel(
                     result.onSuccess {
                         println("✅ העלאה הצליחה")
                         saveUploadedImageUrl(currentQuestion, imagePath, date)
-                        withContext(Dispatchers.Main) {
-                            onSuccess?.invoke()
-                        }
                         success = true
                     }.onError {
                         println("❌ שגיאה בהעלאה: $it")
                         if (attempt == maxRetries - 1) {
-                            withContext(Dispatchers.Main) {
-                                onFailure?.invoke(it)
-                            }
                         } else {
                             println("ניסיון מחדש אחרי שגיאה...")
                             delay(1000L * (attempt + 1))
@@ -289,10 +284,9 @@ class ActivityViewModel(
                 } catch (e: Exception) {
                     println("🚨 שגיאה חריגה: ${e.message}")
                     if (attempt == maxRetries - 1) {
-                        withContext(Dispatchers.Main) {
-                            onFailure?.invoke(DataError.Remote.UNKNOWN)
-                        }
-                    } else {
+                        println("🚨 העלאה נכשלה לאחר מספר ניסיונות")
+                    }
+                    else {
                         println("ניסיון מחדש אחרי שגיאה חריגה...")
                         delay(1000L * (attempt + 1))
                     }
@@ -301,7 +295,6 @@ class ActivityViewModel(
             }
         }
     }
-
 
 
     private fun saveUploadedImageUrl(currentQuestion: Int?, uploadedUrl: String, date: String) {
@@ -321,7 +314,8 @@ class ActivityViewModel(
     fun uploadEvaluationResults(
         onSuccess: (() -> Unit)? = null,
         onFailure: ((message: Error) -> Unit)? = null
-    ) {  println("results object: $result")
+    ) {
+        println("results object: $result")
         uploadScope.launch {
             try {
                 val userId = storage.get(PrefKeys.userId)!!.toInt()
@@ -339,18 +333,24 @@ class ActivityViewModel(
                 result.date = date
                 println("results object: $result")
 
+                val json = Json.encodeToString(CogData.serializer(), result)
+                println("JSON sent: $json")
+
                 val uploadResult = uploadTestResultsUseCase.execute(result, CogData.serializer())
 
                 uploadResult.onSuccess {
                     println("✅ העלאה של הכל הצליחה")
+                    _uploadStatus.value = Result.success(Unit)
                     onSuccess?.invoke()
                 }.onError { error ->
                     println("❌ שגיאה העלאה: $error")
+                    _uploadStatus.value = Result.failure(Exception(error.toString()))
                     onFailure?.invoke(error)
                 }
 
             } catch (e: Exception) {
                 println("🚨 שגיאה לא צפויה: ${e.message}")
+                _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
                 onFailure?.invoke(DataError.Remote.UNKNOWN)
             }
         }

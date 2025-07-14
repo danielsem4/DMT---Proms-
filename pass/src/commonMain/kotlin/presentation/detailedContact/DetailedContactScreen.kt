@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
@@ -31,6 +30,7 @@ import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.contact
 import org.example.hit.heal.core.presentation.Resources.String.defaultName
 import org.example.hit.heal.core.presentation.Resources.String.defaultPhone
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
@@ -42,16 +42,12 @@ import presentation.components.InstructionsDialog
 import presentation.components.circleWithPicture
 import presentation.detailedContact.components.ContactDetailsSection
 
-class DetailedContactScreen() : Screen {
+class DetailedContactScreen(private val correctContact: ContactData) : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
         val viewModel: DetailedContactViewModel = koinViewModel()
-        val correctContact = DetailedContactCache.lastContact ?: ContactData(
-            name = stringResource(defaultName),
-            phoneNumber = stringResource(defaultPhone)
-        )
 
         val contactChatData: List<AppData> = viewModel.items.map { item ->
             AppData(
@@ -76,7 +72,7 @@ class DetailedContactScreen() : Screen {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(16.dp),
+                        .padding(paddingMd),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {

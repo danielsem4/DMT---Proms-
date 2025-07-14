@@ -28,8 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.Resources.Icon.deleteNumberIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.whitePhone
 import org.example.hit.heal.core.presentation.Resources.String.deleteNumber
@@ -47,6 +47,7 @@ import org.example.hit.heal.core.presentation.Resources.String.key9
 import org.example.hit.heal.core.presentation.Resources.String.keyHash
 import org.example.hit.heal.core.presentation.Resources.String.keyStar
 import org.example.hit.heal.core.presentation.Resources.String.phone
+import org.example.hit.heal.core.presentation.Sizes.heightMd
 import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
@@ -78,7 +79,7 @@ fun DialDialog(
             ) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth().height(60.dp)
+                        .fillMaxWidth().height(heightMd)
                         .border(2.dp, Color.Black, RoundedCornerShape(radiusMd))
                         .padding(paddingSm)
                 ) {
@@ -96,7 +97,7 @@ fun DialDialog(
                         )
                         Text(
                             text = enteredNumber,
-                            fontSize = 25.sp,
+                            fontSize = EXTRA_MEDIUM,
                             color = Color.Gray,
                         )
                     }
@@ -151,7 +152,7 @@ fun DialDialog(
                         ) {
                             Text(
                                 text = stringResource(dial),
-                                fontSize = 25.sp,
+                                fontSize = EXTRA_MEDIUM,
                                 color = Color.White
                             )
                             Spacer(modifier = Modifier.width(paddingSm))

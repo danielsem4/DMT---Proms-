@@ -31,22 +31,22 @@ import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.appsDeviceScreen.AppProgressCache.resetAppProgress
+import presentation.components.AppData
 import presentation.components.InstructionsDialog
 
-class WrongAppScreen : Screen {
+class WrongAppScreen(private val app: AppData) : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
         val viewModel: WrongAppViewModel = koinViewModel()
+        val appDeviceViewModel : AppDeviceViewModel = koinViewModel()
         val showDialog by viewModel.showDialog.collectAsState()
         val dialogAudioText by viewModel.dialogAudioText.collectAsState()
         val isPlaying by viewModel.isPlaying.collectAsState()
         val countdown by viewModel.countdown.collectAsState()
         val backToApps by viewModel.backToApps.collectAsState()
         val isCountdownActive by viewModel.isCountdownActive.collectAsState()
-        val appLabel = WrongAppCache.lastWrongApp?.let { stringResource(it.label) } ?: ""
 
         BaseScreen(
             title = stringResource(deviceAppTitle),
@@ -69,7 +69,7 @@ class WrongAppScreen : Screen {
                         text = buildAnnotatedString {
                             append(stringResource(wrongAppTitle))
                             withStyle(style = SpanStyle(color = primaryColor)) {
-                                append(appLabel)                            }
+                                append(stringResource(app.label))                        }
                         },
                         modifier = Modifier.align(Alignment.Center), fontSize = LARGE
                     )
@@ -113,7 +113,8 @@ class WrongAppScreen : Screen {
         }
 
         RegisterBackHandler(this) {
-            resetAppProgress()
+            viewModel.resetAppProgress()
+            appDeviceViewModel.resetAppDeviceProgress()
             navigator?.popUntilRoot()
         }
     }

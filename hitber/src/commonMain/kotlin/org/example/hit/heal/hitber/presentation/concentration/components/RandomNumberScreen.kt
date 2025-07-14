@@ -23,13 +23,17 @@ import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.primaryColor
 
 @Composable
-fun RandomNumberScreen(number: Int, isClickable: Boolean, onNumberClicked: (Int) -> Unit) {
+fun RandomNumberScreen(
+    number: Int,
+    isClickable: Boolean,
+    onNumberClicked: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     var isClicked by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth().fillMaxHeight(0.85f)
+        modifier = modifier
             .background(if (isClicked) primaryColor else Color.White)
             .clickable(enabled = isClickable) {
                 isClicked = true

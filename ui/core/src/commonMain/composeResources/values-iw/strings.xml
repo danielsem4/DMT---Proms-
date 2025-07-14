@@ -56,11 +56,10 @@
     <string name="chat">צ׳אט</string>
     <string name="memory">זיכרון</string>
 
-    <string name="hitber">Hitber</string>
-    <string name="pass">Pass</string>
+    <string name="pass">פס</string>
 
     <string name="hitber">התבר</string>
-    <string name="done">Done</string>
+    <string name="done">סיום</string>
     <string name="back">חזור</string>
 
     <string name="no_evaluation_object_to_display">אין אובייקט הערכה להצגה.</string>

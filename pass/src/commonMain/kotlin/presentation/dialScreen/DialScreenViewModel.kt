@@ -7,6 +7,7 @@ import core.domain.use_case.PlayAudioUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Resources.String.callToDentist
 import org.example.hit.heal.core.presentation.Resources.String.callToDetistPass
 import org.example.hit.heal.core.presentation.Resources.String.dentistNumberShowenCallHimPass
@@ -31,9 +32,8 @@ import org.example.hit.heal.core.presentation.Resources.String.secondPartOfTestI
 import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
 import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
 import org.example.hit.heal.core.presentation.Resources.String.wrongNumberDialedPleaseTryAgainPass
-import presentation.appsDeviceScreen.AppDeviceProgressCache.didNothing
-import presentation.components.CountdownDialogHandler
-import presentation.dialScreen.components.StartCheckingIfUserDidSomethingUseCase
+import utils.CountdownDialogHandler
+import utils.StartCheckingIfUserDidSomethingUseCase
 import presentation.endScreen.EndScreen
 
 class DialScreenViewModel(
@@ -108,7 +108,9 @@ class DialScreenViewModel(
     }
 
     fun onPlayAudioRequested(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }
     }
 
     fun onUnderstandingConfirmed() {

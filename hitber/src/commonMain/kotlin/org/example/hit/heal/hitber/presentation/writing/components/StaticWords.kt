@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.writing.EightQuestionViewModel
 import org.example.hit.heal.hitber.presentation.writing.model.DraggableWordState
@@ -64,7 +64,7 @@ fun StaticWord(wordState: DraggableWordState, screenSize: IntSize, density: Dens
         Text(
             text = stringResource(wordState.word),
             color = Color.White,
-            fontSize = 20.sp,
+            fontSize = EXTRA_MEDIUM,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.align(Alignment.Center)
         )

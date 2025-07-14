@@ -33,6 +33,7 @@ import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHit
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskRetryInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTitle
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -68,9 +69,9 @@ class ActionShapesScreen(private val question: Int) : Screen {
                 InstructionText(stringResource(secondQuestionHitberTaskInstructions))
 
                 Box(
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
+                    modifier = Modifier.fillMaxWidth().weight(1f)
                         .background(Color.White, shape = RoundedCornerShape(4))
-                        .padding(16.dp)
+                        .padding(paddingMd)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -107,10 +108,9 @@ class ActionShapesScreen(private val question: Int) : Screen {
                         }
                     }
                 }
-                Box(modifier = Modifier.fillMaxSize()) {
                     RoundedButton(
                         text = stringResource(`continue`),
-                        modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                        modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
                         onClick = {
                             secondQuestionViewModel.calculateCorrectShapesCount()
                             secondQuestionViewModel.updateTask()
@@ -137,7 +137,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                             }
                         }
                     )
-                }
+
             })
 
         RegisterBackHandler(this) {

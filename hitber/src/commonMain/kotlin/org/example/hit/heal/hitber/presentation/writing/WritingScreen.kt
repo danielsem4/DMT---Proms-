@@ -2,6 +2,7 @@ package org.example.hit.heal.hitber.presentation.writing
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,17 +57,26 @@ class WritingScreen : Screen {
                 config = ScreenConfig.TabletConfig,
                 topRightText = "8/10",
                 content = {
-                    InstructionText(stringResource(eighthQuestionHitberInstructions))
-                    Box(
-                        modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        StaticWords(draggableWordsList, eightQuestionViewModel, density)
-                        WordSlots(slots, eightQuestionViewModel, density)
-                    }
-                    Box(modifier = Modifier.fillMaxSize()) {
+                        InstructionText(stringResource(eighthQuestionHitberInstructions))
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                        ) {
+                            StaticWords(draggableWordsList, eightQuestionViewModel, density)
+                            WordSlots(slots, eightQuestionViewModel, density)
+                        }
+
                         RoundedButton(
                             text = stringResource(`continue`),
-                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .width(200.dp),
                             buttonColor = if (!allFinished) Color.Gray else primaryColor,
                             onClick = {
                                 if (allFinished) {
@@ -80,7 +90,8 @@ class WritingScreen : Screen {
                             }
                         )
                     }
-                })
+                }
+            )
 
             RegisterBackHandler(this) {
                 navigator?.pop()

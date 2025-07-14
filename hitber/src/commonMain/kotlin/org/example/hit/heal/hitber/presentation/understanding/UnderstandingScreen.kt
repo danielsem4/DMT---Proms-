@@ -2,9 +2,11 @@ package org.example.hit.heal.hitber.presentation.understanding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -15,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +43,10 @@ import org.example.hit.heal.hitber.presentation.understanding.model.fridgeItems
 import core.utils.CapturableWrapper
 import core.utils.ObserveLifecycle
 import org.example.hit.heal.hitber.presentation.components.InstructionText
-import core.utils.PlatformCapturable
 import core.utils.RegisterBackHandler
+import core.utils.platformCapturable
+import kotlinx.coroutines.launch
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -63,7 +68,7 @@ class UnderstandingScreen : Screen {
         val itemLastPositions by sixthQuestionViewModel.itemLastPositions.collectAsState()
         var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
         val audioUrl = audioResourceId?.let { stringResource(it) }
-        var isAudioClicked by remember { mutableStateOf(false) }
+        val coroutineScope = rememberCoroutineScope()
 
         var fridgeSize by remember { mutableStateOf(0f to 0f) }
         var tableSize by remember { mutableStateOf(0f to 0f) }
@@ -81,8 +86,8 @@ class UnderstandingScreen : Screen {
 
         val itemWidthPx = fridgeSize.second * 0.1f
         val itemHeightPx = fridgeSize.second * 0.1f
-        val napkinWidthPx = tableSize.second * 0.1f
-        val napkinHeightPx = tableSize.second * 0.1f
+        val napkinWidthPx = tableSize.second * 0.18f
+        val napkinHeightPx = tableSize.second * 0.18f
 
         var isFridgeOpen by remember { mutableStateOf(false) }
 
@@ -93,102 +98,93 @@ class UnderstandingScreen : Screen {
                 config = ScreenConfig.TabletConfig,
                 topRightText = "6/10",
                 content = {
-                    InstructionText(stringResource(sixthQuestionHitberInstructions))
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        InstructionText(stringResource(sixthQuestionHitberInstructions))
 
-                    AudioButton(
-                        onClick = {
-                            sixthQuestionViewModel.setRandomAudio()
-                            isAudioClicked = true
-                        },
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
+                        AudioButton(
+                            onClick = {
+                                audioUrl?.let { url ->
+                                    coroutineScope.launch {
+                                        sixthQuestionViewModel.onPlayAudio(url)
+                                    }
+                                }
+                            },
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
 
-                    capturable = PlatformCapturable(
-                        onCaptured = { imageBitmap ->
-                            println("📸 Captured image size: ${imageBitmap.width}x${imageBitmap.height}")
-
-                            val timestamp = getCurrentFormattedDateTime()
-
-                            viewModel.uploadImage(
-                                bitmap = imageBitmap,
-                                date = timestamp,
-                                currentQuestion = 6,
-                                onSuccess = {},
-                                onFailure = {}
-                            )
-
-                            sixthQuestionViewModel.evaluateAnswer(
-                                napkinResourceId,
-                                napkinPosition,
-                                napkinWidthPx to napkinHeightPx,
-                                itemWidthPx to itemHeightPx,
-                                itemLastPositions
-                            )
-
-                            viewModel.setSixthQuestion(
-                                sixthQuestionViewModel.isFridgeOpened,
-                                sixthQuestionViewModel.isItemMovedCorrectly,
-                                sixthQuestionViewModel.isNapkinPlacedCorrectly,
-                                date = timestamp
-                            )
-
-                            navigator?.replace(DragAndDropScreen())
-                        }
-                    )
-                    {
-                        Box(
-                            modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
-                                .background(color = Color.White, shape = RoundedCornerShape(4))
+                        capturable = platformCapturable(
+                            onCaptured = { imageBitmap ->
+                                val timestamp = getCurrentFormattedDateTime()
+                                viewModel.uploadImage(imageBitmap, timestamp, 6)
+                                sixthQuestionViewModel.evaluateAnswer(
+                                    napkinResourceId,
+                                    napkinPosition,
+                                    napkinWidthPx to napkinHeightPx,
+                                    itemWidthPx to itemHeightPx,
+                                    itemLastPositions
+                                )
+                                viewModel.setSixthQuestion(
+                                    sixthQuestionViewModel.isFridgeOpened,
+                                    sixthQuestionViewModel.isItemMovedCorrectly,
+                                    sixthQuestionViewModel.isNapkinPlacedCorrectly,
+                                    date = timestamp
+                                )
+                                navigator?.replace(DragAndDropScreen())
+                            },
+                            modifier = Modifier.weight(1f)
                         ) {
-                            FridgeWithItemsBox(
-                                isFridgeOpen = isFridgeOpen,
-                                onFridgeToggle = { isFridgeOpen = !isFridgeOpen },
-                                onFridgeSizeChanged = { fridgeSize = it },
-                                itemPositions = itemPositions,
-                                itemWidthPx = itemWidthPx,
-                                itemHeightPx = itemHeightPx,
-                                itemResourceId = itemResourceId,
-                                density = density,
-                                viewModel = sixthQuestionViewModel,
-                                modifier = Modifier.align(Alignment.CenterStart)
-                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.White, shape = RoundedCornerShape(4))
+                            ) {
+                                FridgeWithItemsBox(
+                                    isFridgeOpen = isFridgeOpen,
+                                    onFridgeToggle = { isFridgeOpen = !isFridgeOpen },
+                                    onFridgeSizeChanged = { fridgeSize = it },
+                                    itemPositions = itemPositions,
+                                    itemWidthPx = itemWidthPx,
+                                    itemHeightPx = itemHeightPx,
+                                    itemResourceId = itemResourceId,
+                                    density = density,
+                                    viewModel = sixthQuestionViewModel,
+                                    modifier = Modifier.align(Alignment.CenterStart)
+                                )
 
-                            TableWithNapkinsBox(
-                                tableSize = tableSize,
-                                onTableSizeChanged = { tableSize = it },
-                                napkinWidthPx = napkinWidthPx,
-                                napkinHeightPx = napkinHeightPx,
-                                napkinResourceId = napkinResourceId,
-                                onNapkinPositionCalculated = { napkinPosition = it },
-                                density = density,
-                                modifier = Modifier.align(Alignment.BottomEnd)
-                            )
+                                TableWithNapkinsBox(
+                                    tableSize = tableSize,
+                                    onTableSizeChanged = { tableSize = it },
+                                    napkinWidthPx = napkinWidthPx,
+                                    napkinHeightPx = napkinHeightPx,
+                                    napkinResourceId = napkinResourceId,
+                                    onNapkinPositionCalculated = { napkinPosition = it },
+                                    density = density,
+                                    modifier = Modifier.align(Alignment.BottomEnd)
+                                )
+                            }
                         }
-                    }
 
-                    Box(modifier = Modifier.fillMaxSize()) {
                         RoundedButton(
                             text = stringResource(`continue`),
-                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .width(200.dp)
+                                .padding(vertical = paddingMd),
                             onClick = {
-                                capturable?.capture?.let { it() }
+                                capturable?.capture?.invoke()
                             }
                         )
                     }
+
                 }
             )
-            LaunchedEffect(isAudioClicked) {
-                if (isAudioClicked) {
-                    audioUrl?.let {
-                        sixthQuestionViewModel.onPlayAudio(it)
-                        isAudioClicked = false
-                    }
-                }
-            }
+
             ObserveLifecycle(
                 onStop = {
                     sixthQuestionViewModel.stopAudio()
-                    isAudioClicked = false
                 },
                 onStart = {}
             )

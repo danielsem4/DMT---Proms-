@@ -53,7 +53,7 @@ class ShapeScreen : Screen {
             topRightText = "2/10",
             content = {
                 Row(
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.9f)
+                    modifier = Modifier.fillMaxWidth().weight(1f)
                     .background(color = Color.White),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly,
@@ -67,15 +67,14 @@ class ShapeScreen : Screen {
                             modifier = Modifier.size(150.dp)
                         )
                     }}
-                    Box(modifier = Modifier.fillMaxSize()) {
+
                         RoundedButton(
                             text = stringResource(`continue`),
-                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
                             onClick = {
                                 navigator?.replace(ActionShapesScreen(2))
                             }
                         )
-                }
 
             })
 

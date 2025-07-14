@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import org.example.hit.heal.core.presentation.Sizes.radiusXl
 import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnimation
 
 
@@ -24,7 +25,7 @@ fun AudioPlayingDialog() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp)
-                .background(Color.White, RoundedCornerShape(20.dp))
+                .background(Color.White, RoundedCornerShape(radiusXl))
         ) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 AudioPlayingAnimation(

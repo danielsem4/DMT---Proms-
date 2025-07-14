@@ -1,7 +1,9 @@
 package org.example.hit.heal.hitber.presentation.dragAndDrop
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,8 +29,9 @@ import org.example.hit.heal.hitber.presentation.dragAndDrop.model.circlesPositio
 import org.example.hit.heal.hitber.presentation.writing.WritingScreen
 import core.utils.CapturableWrapper
 import org.example.hit.heal.hitber.presentation.components.InstructionText
-import core.utils.PlatformCapturable
 import core.utils.RegisterBackHandler
+import core.utils.platformCapturable
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -67,62 +70,63 @@ class DragAndDropScreen : Screen {
             config = ScreenConfig.TabletConfig,
             topRightText = "7/10",
             content = {
-                if (instructions != null) {
-                    InstructionText(instructions)
-                }
-
-                capturable = PlatformCapturable(
-                    onCaptured = {  imageBitmap ->
-                        val timestamp = getCurrentFormattedDateTime()
-
-                        viewModel.uploadImage(
-                            bitmap = imageBitmap,
-                            date = timestamp,
-                            currentQuestion = 7,
-                            onSuccess = { },
-                            onFailure = { }
-                        )
-
-                        targetColor?.let {
-                            seventhQuestionViewModel.evaluateAnswer(
-                                circlePositions = circleOffsets,
-                                circleColors = circleColors,
-                                targetColor = it,
-                                targetBoxXRange = targetBoxXRange,
-                                targetBoxYRange = targetBoxYRange,
-                                radiusPx = radiusPx
-                            )
-                            viewModel.setSeventhQuestion(
-                                seventhQuestionViewModel.answer,
-                                timestamp
-                            )
-                        }
-
-                        navigator?.replace(WritingScreen())
+                Column(modifier = Modifier.fillMaxSize()) {
+                    if (instructions != null) {
+                        InstructionText(instructions)
                     }
-                )
-                {
-                    DraggableCanvas(
-                        circleOffsets = circleOffsets,
-                        circleColors = circleColors,
-                        radiusPx = radiusPx,
-                        onScreenSizeChanged = { screenSize = it },
-                        onTargetBoxRangeCalculated = { xRange, yRange ->
-                            targetBoxXRange = xRange
-                            targetBoxYRange = yRange
+
+                    capturable = platformCapturable(
+                        modifier = Modifier.weight(1f),
+                        onCaptured = { imageBitmap ->
+                            val timestamp = getCurrentFormattedDateTime()
+
+                            viewModel.uploadImage(imageBitmap, timestamp, 7)
+
+                            targetColor?.let {
+                                seventhQuestionViewModel.evaluateAnswer(
+                                    circlePositions = circleOffsets,
+                                    circleColors = circleColors,
+                                    targetColor = it,
+                                    targetBoxXRange = targetBoxXRange,
+                                    targetBoxYRange = targetBoxYRange,
+                                    radiusPx = radiusPx
+                                )
+                                viewModel.setSeventhQuestion(
+                                    seventhQuestionViewModel.answer,
+                                    timestamp
+                                )
+                            }
+
+                            navigator?.replace(WritingScreen())
                         }
-                    )
-                }
-                Box(modifier = Modifier.fillMaxSize()) {
+                    ) {
+                        Box(modifier = Modifier.weight(1f)) {
+                            DraggableCanvas(
+                                circleOffsets = circleOffsets,
+                                circleColors = circleColors,
+                                radiusPx = radiusPx,
+                                onScreenSizeChanged = { screenSize = it },
+                                onTargetBoxRangeCalculated = { xRange, yRange ->
+                                    targetBoxXRange = xRange
+                                    targetBoxYRange = yRange
+                                }
+                            )
+                        }
+                    }
+
                     RoundedButton(
                         text = stringResource(`continue`),
-                        modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .width(200.dp)
+                            .padding(vertical = paddingMd),
                         onClick = {
-                            capturable?.capture?.let { it() }
+                            capturable?.capture?.invoke()
                         }
                     )
                 }
-            })
+            }
+        )
 
         RegisterBackHandler(this) {
             navigator?.pop()
