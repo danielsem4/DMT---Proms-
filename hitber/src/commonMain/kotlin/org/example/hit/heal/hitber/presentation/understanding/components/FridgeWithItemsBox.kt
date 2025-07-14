@@ -66,7 +66,9 @@ fun FridgeWithItemsBox(
                 .fillMaxHeight()
                 .wrapContentWidth()
                 .onSizeChanged { size ->
-                    onFridgeSizeChanged(size.width.toFloat() to size.height.toFloat())
+                    if (isFridgeOpen) {
+                        onFridgeSizeChanged(size.width.toFloat() to size.height.toFloat())
+                    }
                 },
             contentScale = ContentScale.FillHeight
         )
