@@ -1,9 +1,10 @@
 package org.example.hit.heal.hitber.presentation.dragAndDrop.model
 
 val circlesPositions = listOf(
-    Pair(0.4f, 0.6f),
-    Pair(0.4f, 0.4f),
-    Pair(0.6f, 0.4f),
-    Pair(0.6f, 0.6f)
+    Pair(0.25f, 0.3f),
+    Pair(0.75f, 0.3f),
+    Pair(0.25f, 0.7f),
+    Pair(0.75f, 0.7f)
 )
+
 
