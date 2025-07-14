@@ -17,7 +17,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,12 +36,13 @@ import kotlinx.serialization.json.JsonNull.content
 import org.jetbrains.compose.resources.stringResource
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 class OriantationWelcomeScreen: Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-        val viewModel = remember { OrientationTestViewModel() }
+        val viewModel: OrientationTestViewModel = koinViewModel()
         TabletBaseScreen(
             title = (stringResource(string.entry_Oriantation_title)),
             question = 1,
@@ -94,4 +94,4 @@ class OriantationWelcomeScreen: Screen {
             }
         )
     }
-    }
+}

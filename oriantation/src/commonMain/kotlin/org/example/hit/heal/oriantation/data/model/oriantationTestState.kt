@@ -3,7 +3,6 @@ package org.example.hit.heal.oriantation.data.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable
 data class OrientationTestState(
     @SerialName("selectedNumber") var selectedNumber: Int = 0,
     @SerialName("selectedSeason") var selectedSeason: String = "",
