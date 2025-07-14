@@ -9,5 +9,5 @@ data class CDTRequestBody(
     @SerialName("patient_id") var patientId: String,
     @SerialName("date") var date: String,
     @SerialName("clinicId") var clinicId: Int,
-    @SerialName("test") var test: CDTResults = CDTResults(),
+    @SerialName("test") var test: CDTResults,
 )

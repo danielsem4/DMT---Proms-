@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +29,11 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.evaluation.Evaluation
+import core.domain.onError
+import core.domain.onSuccess
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.evaluationText
@@ -50,21 +57,47 @@ class EvaluationTestScreen(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-
+        val scope = rememberCoroutineScope()
         val viewModel: EvaluationTestViewModel = koinViewModel()
         val messageBarState = rememberMessageBarState()
         val answers by viewModel.answers.collectAsState()
+
+        val snackbarHostState = remember { SnackbarHostState() }
 
         // State for managing the current page index
         var currentPageIndex by remember { mutableStateOf(0) }
         val totalObjects = evaluation.measurement_objects.size
         val currentObject = evaluation.measurement_objects.getOrNull(currentPageIndex)
+        val message = stringResource(Resources.String.sentSuccessfully)
+        val errorMessage = stringResource(Resources.String.serverError)
+
+        val uploadResult = {
+            scope.launch {
+                viewModel.submitEvaluation(evaluation.id)
+                    .onSuccess {
+                        withContext(Dispatchers.Main) {
+                            println("Successfully uploaded test results")
+                            snackbarHostState.showSnackbar(message)
+                            navigator.pop()
+                        }
+                    }
+                    .onError {
+                        withContext(Dispatchers.Main) {
+                            println("Error uploading test results:\n$it")
+                            snackbarHostState.showSnackbar("$errorMessage: $it")
+                        }
+                    }
+            }
+        }
 
         ContentWithMessageBar(
             messageBarState = messageBarState,
             position = MessageBarPosition.BOTTOM
         ) {
-            BaseScreen(title = stringResource(evaluationText)) {
+            BaseScreen(
+                title = stringResource(evaluationText),
+                snackbarHostState = snackbarHostState
+            ) {
                 Text(
                     text = evaluation.measurement_name,
                     color = Green,
@@ -88,13 +121,11 @@ class EvaluationTestScreen(
                             modifier = Modifier.fillMaxWidth()
                                 .fillMaxHeight() // Fill available height for the current object content
                         )
-                    } ?: run {
-                        // Handle case where currentObject is null (e.g., empty evaluation or index out of bounds)
-                        Text(
-                            text = stringResource(Resources.String.no_evaluation_object_to_display),
-                            modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
-                        )
-                    }
+                    } ?: Text(
+                        text = stringResource(Resources.String.no_evaluation_object_to_display),
+                        modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
+                    )
+                    // Handle case where currentObject is null (e.g., empty evaluation or index out of bounds)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp)) // Spacer between content and buttons
@@ -123,19 +154,15 @@ class EvaluationTestScreen(
                     )
 
                     val isLastPage = currentPageIndex == totalObjects - 1
+
+                    val onClick: () -> Unit = {
+                        if (!isLastPage) currentPageIndex++
+                        else uploadResult()
+                    }
                     RoundedButton(
-                        text = if (isLastPage) stringResource(Resources.String.done) else stringResource(
-                            Resources.String.next
-                        ),
-                        onClick = {
-                            if (isLastPage) {
-                                viewModel.submitEvaluation(evaluation.id, answers)
-                                navigator.pop()
-                            } else {
-                                currentPageIndex++
-                            }
-                        },
-                        enabled = true, // Always enabled, but logic inside handles boundaries
+                        text = if (isLastPage) stringResource(Resources.String.done)
+                        else stringResource(Resources.String.next),
+                        onClick = onClick,
                         modifier = Modifier.weight(1f).padding(start = 8.dp)
                     )
                 }

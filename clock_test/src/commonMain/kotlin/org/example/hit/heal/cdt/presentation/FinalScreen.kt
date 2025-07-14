@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -94,18 +90,6 @@ class FinalScreen : Screen {
                     }
                     Spacer(modifier = Modifier.height(32.dp))
                 }
-            },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState) { data ->
-                    Snackbar(
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Text(
-                            text = data.message,
-                            fontSize = 32.sp
-                        )
-                    }
-                }
             }
         )
     }
@@ -117,15 +101,18 @@ class FinalScreen : Screen {
         successMessage: String
     ) {
         try {
-            viewModel.sendToServer(onSuccess = {
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(successMessage)
-                }
-            }, onFailure = { error ->
-                coroutineScope.launch {
-                    snackbarHostState.showSnackbar(error.toString())
-                }
-            })
+//            TODO return Result from sendToServer instead of using callback
+            coroutineScope.launch {
+                viewModel.sendToServer(onSuccess = {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(successMessage)
+                    }
+                }, onFailure = { error ->
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(error.toString())
+                    }
+                })
+            }
         } catch (error: Exception) {
             println(error.message)
             coroutineScope.launch {
