@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,14 +20,12 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
-import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions1
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions2
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberTitle
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
-import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXl
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
@@ -91,16 +87,7 @@ class SummaryScreen : Screen {
                     )
                 }
             },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState) { data ->
-                    Snackbar(modifier = Modifier.padding(paddingSm)) {
-                        Text(
-                            text = data.message,
-                            fontSize = LARGE
-                        )
-                    }
-                }
-            }
+            snackbarHostState = snackbarHostState
         )
 
         RegisterBackHandler(this) {
