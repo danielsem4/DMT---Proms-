@@ -34,13 +34,14 @@ import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class MemoryScreen : Screen {
 
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel: ViewModelMemoryTest = viewModel()
+        val viewModel: ViewModelMemoryTest = koinViewModel()
         BaseTabletScreen(title = stringResource(Resources.String.memory_title), page = 1, totalPages =6 ){
 
             Column(

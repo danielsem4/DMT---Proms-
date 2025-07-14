@@ -1,5 +1,4 @@
 package org.example.hit.heal.core.presentation
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.ChatBubble
@@ -341,6 +340,7 @@ import dmt_proms.ui.core.generated.resources.rate_your_feelings
 import dmt_proms.ui.core.generated.resources.rate_expected_success
 import dmt_proms.ui.core.generated.resources.rate
 import dmt_proms.ui.core.generated.resources.app
+import dmt_proms.ui.core.generated.resources.audioMemory
 import dmt_proms.ui.core.generated.resources.backpack
 import dmt_proms.ui.core.generated.resources.bedroom
 import dmt_proms.ui.core.generated.resources.bedroom_block
@@ -404,11 +404,11 @@ import dmt_proms.ui.core.generated.resources.notification_start_question
 import dmt_proms.ui.core.generated.resources.start_date
 import dmt_proms.ui.core.generated.resources.end_date
 import dmt_proms.ui.core.generated.resources.leave_end_date_empty
-
-
-
-
 import dmt_proms.ui.core.generated.resources.Res.string as rs
+
+
+
+
 import dmt_proms.ui.core.generated.resources.profile
 import dmt_proms.ui.core.generated.resources.psychiatrist_pass
 import dmt_proms.ui.core.generated.resources.purse
@@ -1089,6 +1089,7 @@ object Resources {
         val rate_your_feelings = rs.rate_your_feelings
         val rate_expected_success = rs.rate_expected_success
         val rate = rs.rate
+        val audioMemory = rs.audioMemory
 
 
     }

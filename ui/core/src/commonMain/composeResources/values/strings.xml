@@ -313,7 +313,7 @@
     <string name="incoming_call_title">Incoming Call</string>
     <string name="incoming_call_text">Incoming Call</string>
     <string name="call_from">Beit Rivka</string>
-    <string name="phone_number">052-538-1648</string>
+    <string name="phone_number_memory">052-538-1648</string>
     <string name="thank_you_title">Thank you</string>
     <string name="thank_you_description">The task is completed, thank you very much for your cooperation</string>
 
@@ -533,5 +533,6 @@
     <string name="witch_contact_are_we_looking_for_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwhat_contact_are_you_searching.mp3?alt=media&token=87e10d59-51f4-4373-a110-934472c61499]]></string>
     <string name="wrong_number_dialed_please_try_again_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwrong_number_dialed_try_again.mp3?alt=media&token=f3b84ffa-25c7-4101-8082-e2839f79ce86]]></string>
     <string name="first_mission_done_vocal_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fmission_done.mp3?alt=media&token=d6a19387-ea70-4be7-ae39-a846d13c13bc]]></string>
+    <string name="audioMemory"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fandroid_rington1.mp3?alt=media&token=a706f7ff-f315-40a6-aa91-6c09c3bdb3e3]]></string>
 
 </resources>

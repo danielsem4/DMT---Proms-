@@ -184,11 +184,11 @@ class MedicationViewModel
             return
         }
 
-        if (!isValidIso8601Format(timestamp)) {
-            println("❌ Invalid ISO 8601 format: $timestamp")
-        } else {
-            println("✅ Valid: $timestamp")
-        }
+        //if (!isValidIso8601Format(timestamp)) {
+        //    println(" Invalid format: $timestamp")
+        //} else {
+        //    println(" Valid: $timestamp")
+        //}
 
         val idMedication = medication.id.toString()
         val report = MedicationReport(
@@ -200,10 +200,10 @@ class MedicationViewModel
         val result = remoteDataSource.reportMedicationTook(report)
         result.onSuccess {
             errorMessage = null
-            println(" УУУУУУУУ Молодец какая !")
+           // println(" УУУУУУУУ Молодец какая !")
         }.onError{ error ->
             println("Error: $error")
-            println(" УУУУУУУУ Не  Молодец  !")
+          //  println(" УУУУУУУУ Не  Молодец  !")
         }
         isLoading.value = false
     }

@@ -53,6 +53,7 @@ import com.example.new_memory_test.presentation.screens.RoomScreen.components.Dr
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.zonePosition.getZoneForPosition
 import com.example.new_memory_test.presentation.screens.RoomScreen.data.DataItem
+import core.utils.CapturableWrapper
 
 
 import kotlinx.coroutines.delay
@@ -62,15 +63,14 @@ import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
-
-
+import org.koin.compose.viewmodel.koinViewModel
 
 
 class RoomsScreens(val pageNumber: Int) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel: ViewModelMemoryTest = viewModel()
+        val viewModel: ViewModelMemoryTest = koinViewModel()
         var selectedRoom by remember { mutableStateOf(Room.Bedroom) }
         val roomButtons = Room.values().toList()
         var showDialog by remember { mutableStateOf(false) }
@@ -78,6 +78,8 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         var timeLeft by remember { mutableStateOf(4 * 60) }
         var roomPosition by remember { mutableStateOf(Offset.Companion.Zero) }
         var roomSize by remember { mutableStateOf(IntSize.Companion.Zero) }
+        var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
+
         //val captureController = rememberCaptureController()
 
         var autoSwitchingRooms by remember { mutableStateOf(false) }

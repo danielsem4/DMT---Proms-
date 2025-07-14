@@ -11,8 +11,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.new_memory_test.data.model.MemoryData
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.data.DataItem
+import core.domain.use_case.PlayAudioUseCase
+import core.utils.AudioPlayer
 import core.utils.getCurrentFormattedDateTime
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.DrawableResource
@@ -20,7 +23,10 @@ import org.jetbrains.compose.resources.PluralStringResource
 import org.jetbrains.compose.resources.StringResource
 import kotlin.math.absoluteValue
 
-class ViewModelMemoryTest( ) : ViewModel() {
+class ViewModelMemoryTest(
+    private val playAudioUseCase: PlayAudioUseCase
+
+) : ViewModel() {
     var txtMemoryPage by mutableStateOf(1)
     private val _placedItems = mutableStateListOf<DataItem>()
     val placedItems: List<DataItem> get() = _placedItems.toList()
@@ -33,6 +39,18 @@ class ViewModelMemoryTest( ) : ViewModel() {
     fun getResult(): MemoryData {
         return result
     }
+
+//audio
+    fun onPlayAudio(audioText: String) {
+        playAudioUseCase.playAudio(audioText)
+    }
+    fun stopAudio() {
+        playAudioUseCase.stopAudio()
+    }
+
+
+
+
     fun setResult(result: MemoryData) {
         result.PhoneCallResult= emptyList()
         this.result = result
@@ -175,34 +193,34 @@ class ViewModelMemoryTest( ) : ViewModel() {
     }
 
 
-   // fun buildAndSendMemoryData() {
-   //     val memoryData = MemoryData(
-   //         measurement = 20,
-   //         patient_id = patientId,
-   //         date = getCurrentFormattedDateTime(), // например, с помощью kotlinx.datetime
-   //         clinicId = currentClinicId,
-   //         MemoryQuestionPart1 = firstRoundItems,
-   //         images1 = selectedImages1,
-   //         notificationsCount = notificationCounts,
-   //         successRateAfter = successRates,
-   //         PhoneCallResult = phoneCallResults,
-   //         MemoryQuestionPart2 = collectedPart2,
-   //         images2 = selectedImages2,
-   //         activitiesPlaced = plannedActivities,
-   //         imageUrl = uploadedImageUrls,
-   //         MemoryQuestionPart3 = collectedPart3,
-   //         images3 = selectedImages3
-   //     )
-//
-   //     viewModelScope.launch {
-   //         val result = remoteDataSource.sendResults(memoryData, MemoryData.serializer())
-   //         result.onSuccess {
-   //             println("✅ Успешно отправлено: $it")
-   //         }.onFailure {
-   //             println("❌ Ошибка при отправке: $it")
-   //         }
-   //     }
-   // }
+ //fun buildAndSendMemoryData() {
+ //    val memoryData = MemoryData(
+ //        measurement = 20,
+ //        patient_id = patientId,
+ //        date = getCurrentFormattedDateTime(), // например, с помощью kotlinx.datetime
+ //        clinicId = currentClinicId,
+ //        MemoryQuestionPart1 = firstRoundItems,
+ //        images1 = selectedImages1,
+ //        notificationsCount = notificationCounts,
+ //        successRateAfter = successRates,
+ //        PhoneCallResult = phoneCallResults,
+ //        MemoryQuestionPart2 = collectedPart2,
+ //        images2 = selectedImages2,
+ //        activitiesPlaced = plannedActivities,
+ //        imageUrl = uploadedImageUrls,
+ //        MemoryQuestionPart3 = collectedPart3,
+ //        images3 = selectedImages3
+ //    )
+
+ //    viewModelScope.launch {
+ //        val result = remoteDataSource.sendResults(memoryData, MemoryData.serializer())
+ //        result.onSuccess {
+ //            println("✅ Успешно отправлено: $it")
+ //        }.onFailure {
+ //            println("❌ Ошибка при отправке: $it")
+ //        }
+ //    }
+ //}
 
 
 

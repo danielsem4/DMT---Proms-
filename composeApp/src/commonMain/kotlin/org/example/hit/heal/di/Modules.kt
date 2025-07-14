@@ -2,6 +2,7 @@ package org.example.hit.heal.di
 
 
 import MedicationViewModel
+import com.example.new_memory_test.di.MemoryModule
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import core.di.AudioModule
 import core.di.clientRequestsModule
@@ -36,6 +37,7 @@ val sharedAppModules = module{
     includes(clientRequestsModule)
     includes(sessionModule)
     includes(AudioModule)
+
 }
 
 val sharedModules = module {
@@ -43,13 +45,14 @@ val sharedModules = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::SplashViewModel)
 
+    includes(MemoryModule)
     includes(Hitber_module)
     includes(Pass_module)
     viewModelOf(::EvaluationsViewModel)
     viewModelOf(::ActivitiesViewModel)
 
     viewModelOf(::MedicationViewModel)
-    viewModelOf(::ViewModelMemoryTest)
+
 
     includes(CDT_module)
 }

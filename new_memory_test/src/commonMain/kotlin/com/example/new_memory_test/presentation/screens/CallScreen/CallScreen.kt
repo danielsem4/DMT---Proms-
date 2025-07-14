@@ -17,6 +17,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,11 +40,14 @@ import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
 import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import com.example.new_memory_test.presentation.screens.InformScheduleScreen.effects.RipplePulseEffect
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
+import core.utils.AudioPlayer
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Resources.String.audioMemory
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
+import org.koin.compose.viewmodel.koinViewModel
 
 
 class CallScreen(val pageNumber: Int )  : Screen {
@@ -52,8 +57,19 @@ class CallScreen(val pageNumber: Int )  : Screen {
 
         val navigator = LocalNavigator.currentOrThrow
         var showAcceptDialog by remember { mutableStateOf(false) }
-        val viewModel: ViewModelMemoryTest = viewModel()
+        val viewModel: ViewModelMemoryTest = koinViewModel()
 
+        val audioUrl = stringResource(audioMemory)
+        var isAudioClicked by remember { mutableStateOf(true) }
+
+        LaunchedEffect(isAudioClicked) {
+            if (isAudioClicked) {
+                audioUrl.let {
+                    viewModel.onPlayAudio(it)
+                    isAudioClicked = false
+                }
+            }
+        }
 
         BaseTabletScreen(title = stringResource(Resources.String.incoming_call_title), page = pageNumber, totalPages = 6) {
 
@@ -122,7 +138,8 @@ class CallScreen(val pageNumber: Int )  : Screen {
                             imagePainter = painterResource(resource = Resources.Icon.callAccept),
                             color = primaryColor,
                             onClick = {
-
+                                viewModel.stopAudio()
+                                isAudioClicked = false
                                 viewModel.setAgree()
                                 showAcceptDialog = true
                             }
@@ -142,6 +159,8 @@ class CallScreen(val pageNumber: Int )  : Screen {
                             imagePainter = painterResource(resource = Resources.Icon.callDecline),
                             color = Color.Companion.Red,
                             onClick = {
+                                viewModel.stopAudio()
+                                isAudioClicked = false
                                 viewModel.setDisagree()
                                 showAcceptDialog = true
                             }

@@ -4,14 +4,14 @@ import core.utils.AudioPlayer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class PlayAudioUseCase(
+open class PlayAudioUseCase(
     private val audioPlayer: AudioPlayer
 ) {
 
     private val _isPlaying = MutableStateFlow(false)
     val isPlaying: StateFlow<Boolean> = _isPlaying
 
-    fun playAudio(audioText: String) {
+    open fun playAudio(audioText: String) {
         stopAudio()
         _isPlaying.value = true
         audioPlayer.play(audioText) {
@@ -19,7 +19,7 @@ class PlayAudioUseCase(
         }
     }
 
-    fun stopAudio() {
+    open fun stopAudio() {
         audioPlayer.stop()
         _isPlaying.value = false
     }

@@ -56,8 +56,6 @@ class MedicationScreen (private val isReport: Boolean) : Screen {
         val isLoading by viewModel.isLoading
 
         val userInf = remember { mutableStateOf<Pair<Int, Int>?>(null) }
-
-
         val medications: List<Medication> = viewModel.medications.value
 
         LaunchedEffect(Unit) {

@@ -43,13 +43,14 @@ import com.example.new_memory_test.primaryColor
 import org.example.hit.heal.core.presentation.Resources
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class InformScheduleScreen(val pageNumber: Int) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         var showAcceptDialog by remember { mutableStateOf(false) }
-        val viewModel: ViewModelMemoryTest = viewModel()
+        val viewModel: ViewModelMemoryTest = koinViewModel()
 
         showAcceptDialog = true
         BaseTabletScreen(title = stringResource(Resources.String.build_schedule), page = pageNumber, totalPages = 6) {

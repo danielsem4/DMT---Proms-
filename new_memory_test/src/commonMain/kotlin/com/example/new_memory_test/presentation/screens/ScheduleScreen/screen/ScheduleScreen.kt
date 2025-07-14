@@ -53,12 +53,13 @@ import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class ScheduleScreen(val pageNumber: Int ) : Screen {
     @Composable
     override fun Content() {
 
-        val viewModel: ViewModelMemoryTest = viewModel()
+        val viewModel: ViewModelMemoryTest = koinViewModel()
         val days = listOf(
             stringResource(Resources.String.day_sunday),
             stringResource(Resources.String.day_monday),
