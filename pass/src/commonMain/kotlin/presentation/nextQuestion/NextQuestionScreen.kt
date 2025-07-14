@@ -17,12 +17,14 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.contact
 import org.example.hit.heal.core.presentation.Resources.String.finishFirstMissionPass
 import org.example.hit.heal.core.presentation.Resources.String.firstMissionDoneVocalPass
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -43,6 +45,51 @@ class NextQuestionScreen : Screen {
         val audioString = stringResource(firstMissionDoneVocalPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
 
+        BaseScreen(
+            title = stringResource(contact),
+            config = ScreenConfig.TabletConfig,
+            content = {
+                AudioPlayingAnimation(isPlaying = isPlaying)
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.White)
+                        .border(
+                            width = 2.dp,
+                            color = Color.LightGray,
+                            shape = RoundedCornerShape(radiusMd)
+                        )
+                        .padding(paddingMd)
+                ) {
+                    Text(
+                        text = stringResource(finishFirstMissionPass),
+                        color = primaryColor,
+                        fontSize = LARGE,
+                        fontWeight = Bold,
+                        lineHeight = EXTRA_LARGE,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+
+                    Spacer(modifier = Modifier.padding(paddingSm))
+
+                    Text(
+                        text = time.toString(),
+                        color = primaryColor,
+                        fontSize = LARGE,
+                        fontWeight = Bold,
+                    )
+
+                }
+            }}
+        )
 
         LaunchedEffect(navigateToDialScreen) {
             if (navigateToDialScreen) {
@@ -60,50 +107,7 @@ class NextQuestionScreen : Screen {
             }
         )
 
-
-        BaseScreen(
-            title = stringResource(contact),
-            config = ScreenConfig.TabletConfig,
-            content = {
-                AudioPlayingAnimation(isPlaying = isPlaying,)
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.White, shape = RoundedCornerShape(radiusMd))
-                        .border(
-                            width = 2.dp,
-                            color = Color.LightGray,
-                            shape = RoundedCornerShape(radiusMd)
-                        )
-                        .padding(paddingMd)
-                ) {
-                    Text(
-                        text = stringResource(finishFirstMissionPass),
-                        color = primaryColor,
-                        fontSize = LARGE,
-                        fontWeight = Bold,
-                        lineHeight = EXTRA_LARGE,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
-
-                    Spacer(modifier = Modifier.padding(10.dp))
-
-                    Text(
-                        text = time.toString(),
-                        color = primaryColor,
-                        fontSize = LARGE,
-                        fontWeight = Bold,
-                    )
-
-                }
-            }}
-        )
+        RegisterBackHandler(this) {
+            navigator?.popUntilRoot()        }
     }
 }

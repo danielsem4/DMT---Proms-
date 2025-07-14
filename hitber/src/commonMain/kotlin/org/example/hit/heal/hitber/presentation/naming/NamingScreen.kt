@@ -1,7 +1,10 @@
 package org.example.hit.heal.hitber.presentation.naming
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -11,11 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import getImageName
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberTitle
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -41,18 +46,30 @@ class NamingScreen : Screen {
         val firstImageName = selectedCouple?.let { getImageName(it.first) } ?: ""
         val secondImageName = selectedCouple?.let { getImageName(it.second) } ?: ""
 
-        BaseScreen(title = stringResource(fourthQuestionHitberTitle),
+        BaseScreen(
+            title = stringResource(fourthQuestionHitberTitle),
             config = ScreenConfig.TabletConfig,
             topRightText = "4/10",
             content = {
-                InstructionText(stringResource(fourthQuestionHitberInstructions))
-                NamingTextFields(answer1, answer2, fourthQuestionViewModel)
-                NamingImages(selectedCouple)
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    InstructionText(stringResource(fourthQuestionHitberInstructions))
+                    NamingTextFields(answer1, answer2, fourthQuestionViewModel)
+                    NamingImages(
+                        selectedCouple,
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                    )
 
-                Box(modifier = Modifier.fillMaxSize()) {
                     RoundedButton(
                         text = stringResource(`continue`),
-                        modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .width(200.dp)
+                            .padding(vertical = paddingMd),
                         onClick = {
                             fourthQuestionViewModel.fourthQuestionAnswer(
                                 firstImageName,
@@ -66,7 +83,12 @@ class NamingScreen : Screen {
                         }
                     )
                 }
-            })
+            }
+        )
+
+        RegisterBackHandler(this) {
+            navigator?.pop()
+        }
     }
 }
 

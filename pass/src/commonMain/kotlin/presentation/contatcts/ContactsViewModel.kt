@@ -1,6 +1,5 @@
 package presentation.contatcts
 
-import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
@@ -10,7 +9,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Resources.String.contactsPageFirstAssist
 import org.example.hit.heal.core.presentation.Resources.String.contactsPageSecondAssist
@@ -21,8 +19,7 @@ import org.example.hit.heal.core.presentation.Resources.String.searchForHanaChoe
 import org.example.hit.heal.core.presentation.Resources.String.witchContactAreWeLookingForPass
 import org.jetbrains.compose.resources.getStringArray
 import presentation.components.ContactData
-import presentation.components.CountdownDialogHandler
-import presentation.detailedContact.DetailedContactCache
+import utils.CountdownDialogHandler
 import presentation.detailedContact.DetailedContactScreen
 
 class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandler,
@@ -47,7 +44,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     private val _isScrolled = MutableStateFlow(false)
     val isScrolled: StateFlow<Boolean> = _isScrolled
 
-    private val seconds = 15_000L
+    private var seconds = 15_000L
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
@@ -91,7 +88,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         reminderJob = viewModelScope.launch {
 
             if (didNothing + wrongContact <= 4) {
-                seconds >= if (_isScrolling.value) 25_000L else 15_000L
+                seconds = if (_isScrolling.value) 25_000L else 15_000L
                     delay(seconds)
                     didNothing++
                     getReminderText()
@@ -110,6 +107,8 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     }
 
     private fun getReminderText() {
+        reminderJob?.cancel()
+
         val count = didNothing + wrongContact
         return when (count) {
             1 -> countdownDialogHandler.showCountdownDialog(
@@ -136,12 +135,13 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
 
     private fun nextQuestion(){
         _isNextScreen.value = true
-        DetailedContactCache.lastContact = correctContact
-        _nextScreen.value = DetailedContactScreen()
+        _nextScreen.value = DetailedContactScreen(correctContact)
     }
 
     fun onPlayAudioRequested(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }
     }
 
     fun hideReminderDialog() {

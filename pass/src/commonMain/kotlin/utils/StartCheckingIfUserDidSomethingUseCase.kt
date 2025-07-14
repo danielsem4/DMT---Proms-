@@ -1,9 +1,8 @@
-package presentation.dialScreen.components
+package utils
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class StartCheckingIfUserDidSomethingUseCase(
@@ -20,10 +19,9 @@ class StartCheckingIfUserDidSomethingUseCase(
     ) {
         reminderJob?.cancel()
 
-
         reminderJob = coroutineScope.launch {
 
-            while (isActive && getDidNothingCount() <= maxAttempts) {
+            if (getDidNothingCount() <= maxAttempts) {
                 delay(15_000)
 
                     getReminderDidNotingText()

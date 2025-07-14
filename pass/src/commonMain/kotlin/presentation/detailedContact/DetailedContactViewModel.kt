@@ -21,7 +21,7 @@ import org.example.hit.heal.core.presentation.Resources.String.video
 import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
 import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
 import org.example.hit.heal.core.presentation.primaryColor
-import presentation.components.CountdownDialogHandler
+import utils.CountdownDialogHandler
 import presentation.nextQuestion.NextQuestionScreen
 
 class DetailedContactViewModel(
@@ -76,13 +76,11 @@ class DetailedContactViewModel(
 
                 didNothing++
                 getReminderText()
-
             }
         }
     }
 
     fun onUserClicked(item: StringResource) {
-
         if (item == phone) {
             nextQuestion()
             return
@@ -93,6 +91,8 @@ class DetailedContactViewModel(
     }
 
     private fun getReminderText() {
+        reminderJob?.cancel()
+
         val count = didNothing + wrongClick
         return when (count) {
             1 -> countdownDialogHandler.showCountdownDialog(
@@ -112,7 +112,9 @@ class DetailedContactViewModel(
     }
 
     fun onPlayAudioRequested(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }
     }
 
     fun hideReminderDialog() {

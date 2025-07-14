@@ -7,6 +7,7 @@ import core.domain.use_case.PlayAudioUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Resources.String.callToDentist
 import org.example.hit.heal.core.presentation.Resources.String.callToDetistPass
 import org.example.hit.heal.core.presentation.Resources.String.dentistNumberShowenCallHimPass
@@ -31,8 +32,8 @@ import org.example.hit.heal.core.presentation.Resources.String.secondPartOfTestI
 import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
 import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
 import org.example.hit.heal.core.presentation.Resources.String.wrongNumberDialedPleaseTryAgainPass
-import presentation.components.CountdownDialogHandler
-import presentation.dialScreen.components.StartCheckingIfUserDidSomethingUseCase
+import utils.CountdownDialogHandler
+import utils.StartCheckingIfUserDidSomethingUseCase
 import presentation.endScreen.EndScreen
 
 class DialScreenViewModel(
@@ -77,7 +78,7 @@ class DialScreenViewModel(
     val currentMissionPass: StateFlow<Int> = _currentMissionPass
 
     // --- Reminder and instruction tracking ---
-    private var didNothingFirstTime = 0
+    private var didNothingFirstTime = -1
     private var didNothingSecondTime = 0
     private var didNothingThirdTime = 0
     private var wrongNumberFirstTime = 0
@@ -90,12 +91,6 @@ class DialScreenViewModel(
     val showDialog = countdownDialogHandler.showDialog
     val countdown = countdownDialogHandler.countdown
     val isCountdownActive = countdownDialogHandler.isCountdownActive
-
-
-    // --- Initialization ---
-    init {
-        startDialogInstructions()
-    }
 
     // --- UI Actions ---
     fun onNumberClicked(number: String) {
@@ -113,23 +108,30 @@ class DialScreenViewModel(
     }
 
     fun onPlayAudioRequested(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }
     }
 
     fun onUnderstandingConfirmed() {
         _showUnderstandingDialog.value = false
+        startFirstCheck()
     }
 
     fun onUnderstandingDenied() {
         _showUnderstandingDialog.value = false
         isSecondInstructions = true
         didNothingFirstTime--
-        startDialogInstructions()
+        getReminderDidNotingTextFirstTime()
+        stopChecks()
+    }
+
+    private fun onUnderstandingDidNothing(){
+            _showUnderstandingDialog.value = false
     }
 
     fun onUserClickedDialButton() {
         _currentMissionPass.value = 2
-        _isCloseIconDialog.value = true
 
         stopChecks()
         countdownDialogHandler.showCountdownDialog(
@@ -153,6 +155,7 @@ class DialScreenViewModel(
     }
 
     private fun handleFirstPass() {
+        stopChecks()
         when (++wrongNumberFirstTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
@@ -171,6 +174,7 @@ class DialScreenViewModel(
     }
 
     private fun handleSecondPass() {
+        stopChecks()
         when (++wrongNumberSecondTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
@@ -197,12 +201,11 @@ class DialScreenViewModel(
 
     // --- Private helpers for reminders and instructions ---
 
-    private fun startDialogInstructions() {
-        getReminderDidNotingTextFirstTime()
+    private fun startUnderstandingDialog(){
+        _isCloseIconDialog.value = true
+
         if (!isSecondInstructions) {
             _showUnderstandingDialog.value = true
-        } else {
-            _isCloseIconDialog.value = true
         }
     }
 
@@ -213,6 +216,14 @@ class DialScreenViewModel(
     )
 
     fun startFirstCheck() {
+        if (didNothingFirstTime == -1) {
+            getReminderDidNotingTextFirstTime()
+            return
+        }
+        if (didNothingFirstTime == 0 && !_isCloseIconDialog.value) {
+            startUnderstandingDialog()
+        }
+
         useCase.start(
             getDidNothingCount = { didNothingFirstTime },
             maxAttempts = 3,
@@ -252,16 +263,17 @@ class DialScreenViewModel(
     }
 
     private fun getReminderDidNotingTextFirstTime() {
-        when (didNothingFirstTime++) {
+        when (++didNothingFirstTime) {
             0 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
                 audioText = callToDentist to secondPartOfTestInstructionsPass
             )
 
-            1 -> countdownDialogHandler.showCountdownDialog(
+            1 -> { onUnderstandingDidNothing()
+                countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
                 audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
-            )
+            )}
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,

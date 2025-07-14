@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
+import core.utils.RegisterBackHandler
 import org.jetbrains.compose.resources.painterResource
 import org.example.hit.heal.core.presentation.Resources.Icon.plusIcon
 import org.example.hit.heal.core.presentation.Resources.String.contacts
@@ -157,6 +158,9 @@ class ContactsScreen : Screen {
                 )
             }
         }
+
+        RegisterBackHandler(this) {
+            navigator?.popUntilRoot()        }
     }
 }
 

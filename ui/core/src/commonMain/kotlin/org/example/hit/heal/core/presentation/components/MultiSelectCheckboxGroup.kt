@@ -1,4 +1,4 @@
-package org.example.hit.heal.core.presentation.components.evaluation
+package org.example.hit.heal.core.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,20 +15,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
+import androidx.compose.ui.unit.sp
 import org.example.hit.heal.core.presentation.primaryColor
 
-/**
- * Simple component for a multi-select question.
- * This component allows users to select multiple options from a list.
- * The ui is for simple checkboxes.
- */
-
 @Composable
-fun MultiSelectQuestion(
+fun MultiSelectCheckboxGroup(
     options: List<String>,
     selectedValues: MutableList<String>,
     onSelectionChanged: (List<String>) -> Unit
@@ -46,7 +39,7 @@ fun MultiSelectQuestion(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        if (isSelected) primaryColor.copy(alpha = 0.1f) else Transparent,
+                        if (isSelected) primaryColor.copy(alpha = 0.1f) else Color.Transparent,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .clickable {
@@ -71,8 +64,8 @@ fun MultiSelectQuestion(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = option,
-                    fontSize = EXTRA_REGULAR,
-                    color = if (isSelected) primaryColor else Black
+                    fontSize = 16.sp,
+                    color = if (isSelected) primaryColor else Color.Black
                 )
             }
         }

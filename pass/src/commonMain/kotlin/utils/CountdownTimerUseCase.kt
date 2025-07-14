@@ -1,4 +1,4 @@
-package presentation.components
+package utils
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -30,7 +30,6 @@ class CountdownTimerUseCase(private val scope: CoroutineScope) {
                 delay(1000L)
                 remainingTime--
             }
-
             onCountdownFinished()
         }
     }

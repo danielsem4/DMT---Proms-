@@ -14,7 +14,11 @@
     <string name="send">שלח</string>
     <string name="how_do_you_feel">איך אתה מרגיש?</string>
     <string name="are_you_sure">האם את/ה בטוח/ה?</string>
+
     <string name="evaluation">הערכה</string>
+
+    <string name="back_confirmation_message">מעבר אחורה יחזור למסך הבית</string>
+
 
     <string name="exit">יציאה</string>
     <string name="continue">המשך</string>
@@ -51,8 +55,16 @@
     <string name="document_share">שיתוף מסמכים</string>
     <string name="chat">צ׳אט</string>
     <string name="memory">זיכרון</string>
-    <string name="hitber">Hitber</string>
-    <string name="pass">Pass</string>
+
+    <string name="pass">פס</string>
+
+    <string name="hitber">התבר</string>
+    <string name="done">סיום</string>
+    <string name="back">חזור</string>
+
+    <string name="no_evaluation_object_to_display">אין אובייקט הערכה להצגה.</string>
+    <string name="uploading">שולח</string>
+
 
     //Medications
     <string name="select_date">בחר תאריך</string>
@@ -250,7 +262,7 @@
     <string name="eighth_question_word_hitber_with">עם</string>
     <string name="eighth_question_word_hitber_grandma">סבתא</string>
     <string name="eighth_question_answer_hitber_version_1">סבתא עם ערב ארוחת אכלתי אתמול</string>
-    <string name="eighth_question_answer_hitber_version_2">ערב  ארוחת סבתא עם אכלתי אתמול</string>
+    <string name="eighth_question_answer_hitber_version_2">ערב ארוחת סבתא עם אכלתי אתמול</string>
     <string name="eighth_question_answer_hitber_version_3">אתמול ערב ארוחת סבתא עם אכלתי</string>
     <string name="eighth_question_answer_hitber_version_4">אתמול סבתא עם ערב ארוחת אכלתי</string>
 
@@ -424,7 +436,24 @@
         <item>יצחק דהן</item>
         <item>מיכל ברקוביץ</item>
     </string-array>
-    <string name="phone_number">1648–538–052</string>
+    <string name="phone_number">052–538–1648</string>
+
+    <string name="key_1">1</string>
+    <string name="key_2">2</string>
+    <string name="key_3">3</string>
+    <string name="key_4">4</string>
+    <string name="key_5">5</string>
+    <string name="key_6">6</string>
+    <string name="key_7">7</string>
+    <string name="key_8">8</string>
+    <string name="key_9">9</string>
+    <string name="key_0">0</string>
+    <string name="key_star">*</string>
+    <string name="key_hash">#</string>
+
+    <string name="default_name">לא ידוע</string>
+    <string name="default_phone">000-0000000</string>
+
 
     <string name="thanks_coffe">המשימה הסתיימה, תודה רבה על שיתוף הפעולה</string>
 
@@ -463,7 +492,7 @@
 
     <string name="dialer_page_second_assist">יש לחפש את המספר של מרפאת השיניים</string>
     <string name="diale_to_dentist">יש לחייג למרפאת השיניים</string>
-    <string name="dialer_page_thired_assist">יש ללחוץ על כפתור החיוג שנמצא בצד שמאל של המסך</string>
+    <string name="dialer_page_thired_assist">יש ללחוץ על כפתור החיוג שנמצא בצד התחתון של המסך</string>
 
     <string name="dialer_page_wrong_action_one">חיוג מספר לא נכון, יש לחייג שוב למספר של מרפאת השיניים</string>
     <string name="dialer_page_dentis_number_appeared">מוצג מספר הטלפון של מרפאת השיניים, יש לחייג למרפאה</string>

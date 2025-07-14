@@ -1,4 +1,6 @@
 package org.example.hit.heal.core.presentation
+
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.ChatBubble
@@ -16,16 +18,20 @@ import androidx.compose.material.icons.outlined.Snowshoeing
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.rounded.Timer
+
 import dmt_proms.ui.core.generated.resources.Res
 import dmt_proms.ui.core.generated.resources.activities
 import dmt_proms.ui.core.generated.resources.Understanding_dialog_text
 import dmt_proms.ui.core.generated.resources.Whatsapp
 import dmt_proms.ui.core.generated.resources.app_name
 import dmt_proms.ui.core.generated.resources.asterisk
+import dmt_proms.ui.core.generated.resources.back
 import dmt_proms.ui.core.generated.resources.balloon
 import dmt_proms.ui.core.generated.resources.bin
 import dmt_proms.ui.core.generated.resources.apps_page_second_assist
+import dmt_proms.ui.core.generated.resources.are_you_sure
 import dmt_proms.ui.core.generated.resources.arrow_up
+import dmt_proms.ui.core.generated.resources.back_confirmation_message
 import dmt_proms.ui.core.generated.resources.black_messages
 import dmt_proms.ui.core.generated.resources.black_phone
 import dmt_proms.ui.core.generated.resources.black_video
@@ -102,7 +108,6 @@ import dmt_proms.ui.core.generated.resources.entry_hitber_note
 import dmt_proms.ui.core.generated.resources.entry_hitber_title
 import dmt_proms.ui.core.generated.resources.error_icon
 import dmt_proms.ui.core.generated.resources.exclamation_mark
-import dmt_proms.ui.core.generated.resources.exit
 import dmt_proms.ui.core.generated.resources.family_doctor_pass
 import dmt_proms.ui.core.generated.resources.finish_first_mission_pass
 import dmt_proms.ui.core.generated.resources.first_instructions_pass
@@ -194,6 +199,8 @@ import dmt_proms.ui.core.generated.resources.hexagon
 import dmt_proms.ui.core.generated.resources.chat
 import dmt_proms.ui.core.generated.resources.circle_outlined
 import dmt_proms.ui.core.generated.resources.clock_test
+import dmt_proms.ui.core.generated.resources.default_name
+import dmt_proms.ui.core.generated.resources.default_phone
 import dmt_proms.ui.core.generated.resources.disk_full
 import dmt_proms.ui.core.generated.resources.day_monday
 import dmt_proms.ui.core.generated.resources.day_sunday
@@ -201,11 +208,13 @@ import dmt_proms.ui.core.generated.resources.day_thursday
 import dmt_proms.ui.core.generated.resources.day_tuesday
 import dmt_proms.ui.core.generated.resources.day_wednesday
 import dmt_proms.ui.core.generated.resources.document_share
+import dmt_proms.ui.core.generated.resources.done
 import dmt_proms.ui.core.generated.resources.dont_forget
 import dmt_proms.ui.core.generated.resources.elipsa_outlined
 import dmt_proms.ui.core.generated.resources.empty_pass
 import dmt_proms.ui.core.generated.resources.evaluation
 import dmt_proms.ui.core.generated.resources.exercise
+import dmt_proms.ui.core.generated.resources.exit
 import dmt_proms.ui.core.generated.resources.eye
 import dmt_proms.ui.core.generated.resources.file_upload
 import dmt_proms.ui.core.generated.resources.fill_fields
@@ -255,6 +264,18 @@ import dmt_proms.ui.core.generated.resources.start_button
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
 import dmt_proms.ui.core.generated.resources.invalid_email
 import dmt_proms.ui.core.generated.resources.jogging
+import dmt_proms.ui.core.generated.resources.key_0
+import dmt_proms.ui.core.generated.resources.key_1
+import dmt_proms.ui.core.generated.resources.key_2
+import dmt_proms.ui.core.generated.resources.key_3
+import dmt_proms.ui.core.generated.resources.key_4
+import dmt_proms.ui.core.generated.resources.key_5
+import dmt_proms.ui.core.generated.resources.key_6
+import dmt_proms.ui.core.generated.resources.key_7
+import dmt_proms.ui.core.generated.resources.key_8
+import dmt_proms.ui.core.generated.resources.key_9
+import dmt_proms.ui.core.generated.resources.key_hash
+import dmt_proms.ui.core.generated.resources.key_star
 import dmt_proms.ui.core.generated.resources.lemon
 import dmt_proms.ui.core.generated.resources.like
 import dmt_proms.ui.core.generated.resources.local_unknown
@@ -272,6 +293,7 @@ import dmt_proms.ui.core.generated.resources.my_files
 import dmt_proms.ui.core.generated.resources.neurologist_pass
 import dmt_proms.ui.core.generated.resources.napkin
 import dmt_proms.ui.core.generated.resources.next
+import dmt_proms.ui.core.generated.resources.no_evaluation_object_to_display
 import dmt_proms.ui.core.generated.resources.no_internet
 import dmt_proms.ui.core.generated.resources.open_bin
 import dmt_proms.ui.core.generated.resources.password
@@ -314,6 +336,7 @@ import dmt_proms.ui.core.generated.resources.triangle
 import dmt_proms.ui.core.generated.resources.triangle_90
 import dmt_proms.ui.core.generated.resources.talk_to_family
 import dmt_proms.ui.core.generated.resources.unexpected_error
+import dmt_proms.ui.core.generated.resources.uploading
 import dmt_proms.ui.core.generated.resources.vertical_stroke
 import dmt_proms.ui.core.generated.resources.warning
 import dmt_proms.ui.core.generated.resources.use_diary
@@ -578,7 +601,6 @@ object Resources {
         val dropUp = Res.drawable.drop_up
         val errorIcon = Res.drawable.error_icon
         val exclamationMark = Res.drawable.exclamation_mark
-        val exitIcon = Res.drawable.exit
         val grapes = Res.drawable.grapes
         val lemon = Res.drawable.lemon
         val likeIcon = Res.drawable.like
@@ -658,6 +680,7 @@ object Resources {
     }
 
     object String {
+        val uploading = rs.uploading
         val send = rs.send
         val measurements = rs.measurements
         val password = rs.password
@@ -684,10 +707,18 @@ object Resources {
         val next = rs.next
         val loginSuccess = rs.login_success
         val previous = rs.previous
+        val back = rs.back
         val graphs = rs.graphs
         val appName = rs.app_name
         val howDoYouFeel = rs.how_do_you_feel
         val evaluationText = rs.evaluation
+
+        val areYouSure = Res.string.are_you_sure
+        val backConfirmationMessage = Res.string.back_confirmation_message
+
+        val done = rs.done
+        val no_evaluation_object_to_display = rs.no_evaluation_object_to_display
+
 
         // Error messages
         val noInternet = rs.no_internet
@@ -886,6 +917,22 @@ object Resources {
         val thanksCoffe = Res.string.thanks_coffe
         val fmpt = Res.string.fmpt
         val fmptMeaning = Res.string.fmpt_meaning
+
+        val defaultName = Res.string.default_name
+        val defaultPhone = Res.string.default_phone
+
+        val key1 = Res.string.key_1
+        val key2 = Res.string.key_2
+        val key3 = Res.string.key_3
+        val key4 = Res.string.key_4
+        val key5 = Res.string.key_5
+        val key6 = Res.string.key_6
+        val key7 = Res.string.key_7
+        val key8 = Res.string.key_8
+        val key9 = Res.string.key_9
+        val key0 = Res.string.key_0
+        val keyHash = Res.string.key_hash
+        val keyStar = Res.string.key_star
 
         val dentistPass = Res.string.dentist_pass
         val familyDoctorPass = Res.string.family_doctor_pass

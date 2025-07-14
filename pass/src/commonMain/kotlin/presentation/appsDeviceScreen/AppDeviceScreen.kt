@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
-import kotlinx.coroutines.delay
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.Resources.Icon.likeIcon
 import org.example.hit.heal.core.presentation.Resources.String.deviceAppsTitle
 import org.example.hit.heal.core.presentation.Resources.String.no
@@ -26,12 +26,14 @@ import org.koin.compose.viewmodel.koinViewModel
 import presentation.components.InstructionsDialog
 import presentation.components.AppData
 import presentation.components.circleWithPicture
+import presentation.contatcts.ContactsScreen
 
 class AppDeviceScreen : Screen {
 
     @Composable
     override fun Content() {
         val viewModel: AppDeviceViewModel = koinViewModel()
+        val wrongAppViewModel: WrongAppViewModel = koinViewModel()
         val navigator = LocalNavigator.current
 
         val items: List<AppData> = viewModel.items.map { item ->
@@ -82,6 +84,10 @@ class AppDeviceScreen : Screen {
         LaunchedEffect(nextScreen) {
             if (isNextScreen) {
                 nextScreen?.let { screen ->
+                    if(nextScreen == ContactsScreen()){
+                        viewModel.resetAppDeviceProgress()
+                        wrongAppViewModel.resetAppProgress()
+                    }
                     navigator?.push (screen)
                     viewModel.clearNextScreen()
                 }
@@ -103,13 +109,8 @@ class AppDeviceScreen : Screen {
         }
 
         if (showUnderstandingDialog) {
-            LaunchedEffect(Unit) {
-                delay(25_000)
-                viewModel.onUnderstandingConfirmed()
-            }
-
             BaseYesNoDialog(
-                onDismissRequest = { viewModel.onUnderstandingConfirmed() },
+                onDismissRequest = {  },
                 title = stringResource(understandingDialogText),
                 icon = likeIcon,
                 message = "",
@@ -138,12 +139,22 @@ class AppDeviceScreen : Screen {
                         viewModel.hideReminderDialog()
 
                         nextScreen?.let { screen ->
+                            if(nextScreen == ContactsScreen()){
+                                viewModel.resetAppDeviceProgress()
+                                wrongAppViewModel.resetAppProgress()
+                            }
                             navigator?.push (screen)
                             viewModel.clearNextScreen()
                         }
                     }
                 )
             }
+        }
+
+        RegisterBackHandler(this) {
+            viewModel.resetAppDeviceProgress()
+            wrongAppViewModel.resetAppProgress()
+            navigator?.popUntilRoot()
         }
     }
 }

@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.Resources.Icon.errorIcon
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
@@ -32,6 +33,7 @@ import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHit
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskRetryInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTitle
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -52,7 +54,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
     override fun Content() {
 
         val secondQuestionViewModel: SecondQuestionViewModel = koinViewModel()
-        val viewModel : ActivityViewModel = koinViewModel()
+        val viewModel: ActivityViewModel = koinViewModel()
         val navigator = LocalNavigator.current
         val selectedShapes by secondQuestionViewModel.selectedShapes.collectAsState()
         val attempt by secondQuestionViewModel.attempt.collectAsState()
@@ -64,45 +66,51 @@ class ActionShapesScreen(private val question: Int) : Screen {
             config = ScreenConfig.TabletConfig,
             topRightText = "$question/10",
             content = {
-           InstructionText( stringResource(secondQuestionHitberTaskInstructions))
+                InstructionText(stringResource(secondQuestionHitberTaskInstructions))
 
-            Box(
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
-                    .background(Color.White, shape = RoundedCornerShape(4))
-                    .padding(16.dp)
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(40.dp)
+                Box(
+                    modifier = Modifier.fillMaxWidth().weight(1f)
+                        .background(Color.White, shape = RoundedCornerShape(4))
+                        .padding(paddingMd)
                 ) {
-                    val chunkedShapes = listShapes.chunked(5)
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(40.dp)
+                    ) {
+                        val chunkedShapes = listShapes.chunked(5)
 
-                    chunkedShapes.forEach { rowShapes ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth().weight(1f),
-                            horizontalArrangement = Arrangement.spacedBy(40.dp)
-                        ) {
-                            rowShapes.forEach { shapeRes ->
-                                val isSelected = selectedShapes.contains(shapeRes)
-                                val shapeColor = if (isSelected) primaryColor else Color.Transparent
+                        chunkedShapes.forEach { rowShapes ->
+                            Row(
+                                modifier = Modifier.fillMaxWidth().weight(1f),
+                                horizontalArrangement = Arrangement.spacedBy(40.dp)
+                            ) {
+                                rowShapes.forEach { shapeRes ->
+                                    val isSelected = selectedShapes.contains(shapeRes)
+                                    val shapeColor =
+                                        if (isSelected) primaryColor else Color.Transparent
 
-                                Icon(
-                                    painter = painterResource(shapeRes.drawable),
-                                    contentDescription = stringResource(secondQuestionHitberTitle),
-                                    modifier = Modifier
-                                        .background(shapeColor).weight(1f)
-                                        .clickable { secondQuestionViewModel.setSelectedShapes(shapeRes) },
-                                    tint = Color.Unspecified,
-                                )
+                                    Icon(
+                                        painter = painterResource(shapeRes.drawable),
+                                        contentDescription = stringResource(
+                                            secondQuestionHitberTitle
+                                        ),
+                                        modifier = Modifier
+                                            .background(shapeColor).weight(1f)
+                                            .clickable {
+                                                secondQuestionViewModel.setSelectedShapes(
+                                                    shapeRes
+                                                )
+                                            },
+                                        tint = Color.Unspecified,
+                                    )
+                                }
                             }
                         }
                     }
                 }
-            }
-                Box(modifier = Modifier.fillMaxSize()) {
                     RoundedButton(
                         text = stringResource(`continue`),
-                        modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                        modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
                         onClick = {
                             secondQuestionViewModel.calculateCorrectShapesCount()
                             secondQuestionViewModel.updateTask()
@@ -112,19 +120,31 @@ class ActionShapesScreen(private val question: Int) : Screen {
                                 showDialog = true
                             } else {
                                 secondQuestionViewModel.resetSelectedShapes()
-                                if(question == 2) {
-                                    viewModel.setSecondQuestion(secondQuestionViewModel.secondQuestionAnswersList, getCurrentFormattedDateTime())
+                                if (question == 2) {
+                                    viewModel.setSecondQuestion(
+                                        secondQuestionViewModel.secondQuestionAnswersList,
+                                        getCurrentFormattedDateTime()
+                                    )
                                     navigator?.replace(ConcentrationScreen())
-                                }
-
-                                else {viewModel.setNinthQuestion(secondQuestionViewModel.secondQuestionAnswersList, getCurrentFormattedDateTime())
+                                } else {
+                                    viewModel.setNinthQuestion(
+                                        secondQuestionViewModel.secondQuestionAnswersList,
+                                        getCurrentFormattedDateTime()
+                                    )
+                                    secondQuestionViewModel.resetAll()
                                     navigator?.replace(BuildShapeScreen())
                                 }
                             }
                         }
                     )
-                }
-        })
+
+            })
+
+        RegisterBackHandler(this) {
+            secondQuestionViewModel.resetAll()
+            navigator?.pop()
+        }
+
         if (showDialog) {
             DialogTask(
                 icon = errorIcon,

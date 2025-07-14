@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import cafe.adriel.voyager.core.screen.Screen
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import presentation.components.CountdownDialogHandler
+import utils.CountdownDialogHandler
 import presentation.components.AppData
 import core.domain.use_case.PlayAudioUseCase
 import org.example.hit.heal.core.presentation.Resources.Icon.calculatorIcon
@@ -52,11 +52,6 @@ import org.example.hit.heal.core.presentation.purseColor
 import org.example.hit.heal.core.presentation.settingsColor
 import org.example.hit.heal.core.presentation.storeColor
 import org.example.hit.heal.core.presentation.weatherColor
-import presentation.appsDeviceScreen.AppDeviceProgressCache.didNothing
-import presentation.appsDeviceScreen.AppDeviceProgressCache.isSecondInstructions
-import presentation.appsDeviceScreen.AppDeviceProgressCache.reset
-import presentation.appsDeviceScreen.AppDeviceProgressCache.wrongApp
-import presentation.appsDeviceScreen.AppProgressCache.resetAll
 import presentation.contatcts.ContactsScreen
 
 class AppDeviceViewModel(
@@ -135,7 +130,7 @@ class AppDeviceViewModel(
     private val _showUnderstandingDialog = MutableStateFlow(false)
     val showUnderstandingDialog: StateFlow<Boolean> = _showUnderstandingDialog
 
-    private val _isCloseIconDialog = MutableStateFlow(true)
+    private val _isCloseIconDialog = MutableStateFlow(false)
     val isCloseIconDialog: StateFlow<Boolean> = _isCloseIconDialog
 
     private val _isNextScreen = MutableStateFlow(true)
@@ -146,26 +141,30 @@ class AppDeviceViewModel(
 
     private var reminderJob: Job? = null
 
+    private var didNothing = -1
+    private var wrongApp = 0
+    private var isSecondInstructions = false
+
     val isPlaying = playAudioUseCase.isPlaying
 
-
-    init {
-        startDialogInstructions()
-    }
-
-    private fun startDialogInstructions() {
-        _isCloseIconDialog.value = false
-        getReminderDidNotingText()
+    private fun startDialogUnderstanding() {
+        _isCloseIconDialog.value = true
 
         if (!isSecondInstructions) {
             _showUnderstandingDialog.value = true
-        } else {
-            _isCloseIconDialog.value = true
         }
     }
 
-
     fun startCheckingIfUserDidSomething() {
+        if (didNothing == -1) {
+            getReminderDidNotingText()
+            return
+        }
+
+        if (didNothing == 0 && !_isCloseIconDialog.value) {
+            startDialogUnderstanding()
+        }
+
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
@@ -173,14 +172,14 @@ class AppDeviceViewModel(
 
                 delay(15_000)
                 getReminderDidNotingText()
-                _isCloseIconDialog.value = true
-
             }
         }
     }
 
     fun onPlayAudioRequested(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }
     }
 
     fun onUnderstandingConfirmed() {
@@ -192,42 +191,43 @@ class AppDeviceViewModel(
         _showUnderstandingDialog.value = false
         isSecondInstructions = true
         didNothing--
-        startDialogInstructions()
+        getReminderDidNotingText()
+        reminderJob?.cancel()
     }
 
+    private fun onUnderstandingDidNothing() {
+        _showUnderstandingDialog.value = false
+    }
 
     fun onAppClicked(app: AppData) {
         if (app.label == contacts) {
             _nextScreen.value = ContactsScreen()
-            resetAll()
-            reset()
             return
         }
         wrongApp++
 
         _nextScreen.value = if (wrongApp == 3) {
-            reset()
-            resetAll()
-
             ContactsScreen()
         } else {
-            WrongAppCache.lastWrongApp = app
-            WrongAppScreen()
+            WrongAppScreen(app)
         }
     }
 
 
     private fun getReminderDidNotingText() {
-        when (didNothing++) {
+        when (++didNothing) {
             0 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
                 audioText = callToHanaCohenInstructionPass to callHanaCohenPass
             )
 
-            1 -> countdownDialogHandler.showCountdownDialog(
-                isPlayingFlow = isPlaying,
-                audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
-            )
+            1 -> {
+                onUnderstandingDidNothing()
+                countdownDialogHandler.showCountdownDialog(
+                    isPlayingFlow = isPlaying,
+                    audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
+                )
+            }
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
@@ -241,8 +241,6 @@ class AppDeviceViewModel(
                 )
                 _isNextScreen.value = false
                 _nextScreen.value = ContactsScreen()
-                resetAll()
-                reset()
             }
         }
     }
@@ -265,4 +263,9 @@ class AppDeviceViewModel(
         reminderJob = null
     }
 
+    fun resetAppDeviceProgress() {
+        didNothing = -1
+        wrongApp = 0
+        isSecondInstructions = false
+    }
 }

@@ -11,6 +11,7 @@
     <string name="next">Next</string>
     <string name="send">Send</string>
     <string name="how_do_you_feel">How do you feel?</string>
+    <string name="hint_open_question">Type your answer...</string>
     <string name="dont_forget">• Don't forget to take your test.</string>
     <string name="take_pills">• Take 2 pills at 12:00</string>
     <string name="messages">Messages</string>
@@ -18,6 +19,8 @@
     <string name="evaluation">Evaluation</string>
 
     <string name="are_you_sure">Are you sure?</string>
+    <string name="back_confirmation_message">Going back will return to the home screen</string>
+
 
 
     <!--    Errors      -->
@@ -51,6 +54,11 @@
     <string name="hitber">HitBer</string>
     <string name="pass">Pass</string>
 
+    <string name="done">Done</string>
+    <string name="back">Back</string>
+    <string name="no_evaluation_object_to_display">No evaluation object to display.</string>
+
+    <string name="uploading">Uploading</string>
 
     //Medications
     <string name="select_date">Select a date</string>
@@ -429,6 +437,24 @@
     </string-array>
     <string name="phone_number">052–538–1648</string>
 
+    <string name="key_1">1</string>
+    <string name="key_2">2</string>
+    <string name="key_3">3</string>
+    <string name="key_4">4</string>
+    <string name="key_5">5</string>
+    <string name="key_6">6</string>
+    <string name="key_7">7</string>
+    <string name="key_8">8</string>
+    <string name="key_9">9</string>
+    <string name="key_0">0</string>
+    <string name="key_star">*</string>
+    <string name="key_hash">#</string>
+
+    <string name="default_name">Unknown</string>
+    <string name="default_phone">000-0000000</string>
+
+
+
     <string name="thanks_coffe">Thank you very much for your cooperation</string>
     <string name="fmpt" translatable="false">FMPT</string>
     <string name="fmpt_meaning" translatable="false">Functional Mobile Phone Test</string>
@@ -467,7 +493,7 @@
 
     <string name="dialer_page_second_assist">Look for the dental clinics phone number</string>
     <string name="diale_to_dentist">Dial the dental clinics number</string>
-    <string name="dialer_page_thired_assist">Press the dialer button shown on the left side of the screen.</string>
+    <string name="dialer_page_thired_assist">Press the dialer button shown on the bottom of the screen.</string>
 
     <string name="dialer_page_wrong_action_one">You dialed the wrong number, please dial the dental clinics number</string>
     <string name="dialer_page_dentis_number_appeared">The phone number of the dental clinic is displayed. Please call the clinic</string>

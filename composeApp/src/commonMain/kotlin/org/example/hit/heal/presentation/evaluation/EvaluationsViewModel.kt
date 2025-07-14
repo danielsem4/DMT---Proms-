@@ -25,8 +25,8 @@ class EvaluationsViewModel(
     private val api: AppApi
 ) : ViewModel(), KoinComponent {
 
-    private val _items = MutableStateFlow<List<Evaluation>>(emptyList())
-    val items: StateFlow<List<Evaluation>> = _items.asStateFlow()
+    private val _evalItems = MutableStateFlow<List<Evaluation>>(emptyList())
+    val evalItems: StateFlow<List<Evaluation>> = _evalItems.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -34,7 +34,18 @@ class EvaluationsViewModel(
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
 
-    suspend fun getAllEvaluationsSuspend() {
+    fun getAllEvaluations() {
+        viewModelScope.launch {
+            try {
+                getAllEvaluationsSuspend()
+            } catch (e: SocketTimeoutException) {
+                _evalItems.value = emptyList()
+                _errorMessage.value = "Request timed out"
+            }
+        }
+    }
+
+    private suspend fun getAllEvaluationsSuspend() {
         _isLoading.value = true
 
         val clinicId = storage.get(PrefKeys.clinicId) ?: return
@@ -43,10 +54,10 @@ class EvaluationsViewModel(
         val result = api.getPatientMeasureReport(clinicId, patientId)
 
         result.onSuccess { list ->
-            _items.value = list
+            _evalItems.value = list
             _errorMessage.value = null
         }.onError { error ->
-            _items.value = emptyList()
+            _evalItems.value = emptyList()
             _errorMessage.value = when (error) {
                 DataError.Remote.REQUEST_TIMEOUT -> "Request timed out"
                 DataError.Remote.NO_INTERNET -> "No internet connection"
@@ -54,17 +65,6 @@ class EvaluationsViewModel(
             }
         }
         _isLoading.value = false
-    }
-
-    fun getAllEvaluations() {
-        viewModelScope.launch {
-            try {
-                getAllEvaluationsSuspend()
-            } catch (e: SocketTimeoutException) {
-                _items.value = emptyList()
-                _errorMessage.value = "Request timed out"
-            }
-        }
     }
 
 }

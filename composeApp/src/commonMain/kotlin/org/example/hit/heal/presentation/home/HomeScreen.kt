@@ -258,6 +258,7 @@ class HomeScreen : Screen {
             "cdt" -> navigator.push(CDTLandingScreen())
             "measurements" -> navigator.push(AllEvaluationsScreen())
             "Activities" -> navigator.push(ActivitiesScreen())
+            "HitBer" -> navigator.push(HitberEntryScreen())
             "medications" -> navigator.push(AlarmReportMedicationScreen())
             "Memory" -> navigator.push(MemoryScreen())
             "HitBer" -> navigator.push(UnderstandingScreen())

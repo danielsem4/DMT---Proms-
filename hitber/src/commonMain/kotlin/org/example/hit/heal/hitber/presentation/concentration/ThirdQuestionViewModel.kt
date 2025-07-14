@@ -57,7 +57,7 @@ class ThirdQuestionViewModel: ViewModel() {
                 _isNumberClickable.value = true
             }
 
-            while (elapsedTime < 60) {
+            while (elapsedTime < 5) {
                 delay(2500)
 
                 val nowLoop = Clock.System.now().toEpochMilliseconds()

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.Resources.Icon.profileIcon
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogInstructions
@@ -34,6 +36,7 @@ import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.KoinApplication.Companion.init
 
 class ShapeScreen : Screen {
     @Composable
@@ -50,7 +53,7 @@ class ShapeScreen : Screen {
             topRightText = "2/10",
             content = {
                 Row(
-                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.9f)
+                    modifier = Modifier.fillMaxWidth().weight(1f)
                     .background(color = Color.White),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly,
@@ -64,17 +67,25 @@ class ShapeScreen : Screen {
                             modifier = Modifier.size(150.dp)
                         )
                     }}
-                    Box(modifier = Modifier.fillMaxSize()) {
+
                         RoundedButton(
                             text = stringResource(`continue`),
-                            modifier = Modifier.align(Alignment.BottomCenter).width(200.dp),
+                            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
                             onClick = {
                                 navigator?.replace(ActionShapesScreen(2))
                             }
                         )
-                }
 
             })
+
+        LaunchedEffect(Unit){
+            secondQuestionViewModel.setRandomShapeSet()
+        }
+
+        RegisterBackHandler(this) {
+            secondQuestionViewModel.resetAll()
+            navigator?.pop()
+        }
 
         if (showDialog) {
             DialogTask(

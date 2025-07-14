@@ -77,7 +77,7 @@ fun TableWithNapkinsBox(
                     painter = painterResource(item.image),
                     contentDescription = null,
                     tint = item.tint,
-                    modifier = Modifier.size(64.dp)
+                    modifier = Modifier.fillMaxSize()
                 )
 
             }

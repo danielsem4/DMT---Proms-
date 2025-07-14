@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -51,8 +52,10 @@ fun BaseScreen(
     topRightText: String? = null, // For tablet
     snackbarHost: @Composable (() -> Unit)? = null, // For tablet
     buttons: Array<TabletButton> = emptyArray(), // For tablet
+    modifier: Modifier = Modifier,
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
+    val scrollState = rememberScrollState()
     MaterialTheme {
         val statusBarValues = WindowInsets.safeDrawing.asPaddingValues()
 
@@ -101,7 +104,7 @@ fun BaseScreen(
 
             // Dynamic Content
             Column(
-                modifier = Modifier.padding(config.contentPadding.dp).weight(1f),
+                modifier = modifier.padding(config.contentPadding.dp).weight(1f),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -109,18 +112,25 @@ fun BaseScreen(
             }
 
             // Bottom Navigation Bar
-            if (config.showNavigationButtons && (onPrevClick != null || onNextClick != null)) {
+            if (config.showNavigationButtons &&
+                (onPrevClick != null || onNextClick != null)
+            ) {
                 Row(
                     modifier = Modifier.fillMaxWidth()
                         .padding(horizontal = paddingSm, vertical = paddingXs),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     onPrevClick?.let {
+                        RoundedButton(stringResource(Res.string.previous), onClick = it)
                         RoundedButton(prevButtonText, Modifier, it)
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     onNextClick?.let {
                         RoundedButton(nextButtonText, Modifier, it)
+                        RoundedButton(
+                            text = stringResource(Res.string.next),
+                            onClick = it
+                        )
                     }
                 }
             } else if (!config.showNavigationButtons && buttons.isNotEmpty()) {
@@ -131,7 +141,7 @@ fun BaseScreen(
                     ), horizontalArrangement = config.buttonArrangement
                 ) {
                     buttons.forEachIndexed { index, btn ->
-                        RoundedButton(btn.text, Modifier, btn.onClick)
+                        RoundedButton(btn.text, Modifier, onClick = btn.onClick)
                         if (index < buttons.size - 1) {
                             Spacer(modifier = Modifier.width(config.buttonSpacing.dp))
                         }
