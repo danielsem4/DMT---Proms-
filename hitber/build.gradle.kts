@@ -23,8 +23,12 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "uiCore"
+            baseName = "hitber"
             isStatic = true
+            export(compose.runtime)
+            export(compose.foundation)
+            export(compose.ui)
+            export(compose.material)
         }
     }
 
@@ -39,9 +43,12 @@ kotlin {
             implementation(libs.kmp.capturable.compose)
         }
         commonMain.dependencies {
+            implementation(projects.ui.core)
+            implementation(projects.core)
+
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.datetime)
-            implementation(compose.material3)
+            implementation(compose.material)
             implementation (libs.navigator)
             implementation (libs.navigator.tabs)
             implementation (libs.navigator.transitions)
@@ -52,13 +59,9 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-
-            implementation(projects.ui.core)
-            implementation(projects.core)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -69,11 +72,8 @@ kotlin {
 
 android {
     namespace = "org.example.hit.heal.hitber"
-    compileSdk = 35
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"

@@ -23,7 +23,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "pass"
             isStatic = true
         }
     }
@@ -67,7 +67,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.hit.heal.core"
+    namespace = "org.example.hit.heal.pass"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     packaging {
