@@ -1,11 +1,11 @@
 package org.example.hit.heal.cdt.presentation
 
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.EaseInCubic
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.EaseInCubic
-import androidx.compose.animation.core.AnimationSpec // Import AnimationSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,7 +22,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,7 +39,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dmt_proms.clock_test.generated.resources.Res
-import dmt_proms.clock_test.generated.resources.clock
 import dmt_proms.clock_test.generated.resources.clock_icon_description
 import dmt_proms.clock_test.generated.resources.clock_test_title
 import dmt_proms.clock_test.generated.resources.footer_text
@@ -77,8 +75,6 @@ fun CDTLandingScreenContent() {
     val navigator = LocalNavigator.currentOrThrow
     val viewModel = koinViewModel<ClockTestViewModel>()
 
-    val evaluation by viewModel.clockTest.collectAsState()
-
     // ── Auto-start animation after initial display ──────────────────────
     LaunchedEffect(Unit) {
         delay(500) // Show initial state for 0.5 seconds
@@ -110,10 +106,10 @@ fun CDTLandingScreenContent() {
         content = {
             if (state != ScreenState.ShowContent) {
                 // Initial animation sequence (without BaseScreen)
-                initialStep(state)
+                InitialStep(state)
             } else {
                 // Final content using TabletBaseScreen
-                secondState(navigator, buttonState, textState)
+                SecondState(navigator, buttonState, textState)
             }
         }
     )
@@ -121,7 +117,7 @@ fun CDTLandingScreenContent() {
 }
 
 @Composable
-private fun initialStep(state: ScreenState) {
+private fun InitialStep(state: ScreenState) {
     BoxWithConstraints(Modifier.fillMaxSize()) {
 
         val finalLogoSize = 150.dp
@@ -173,7 +169,7 @@ private fun initialStep(state: ScreenState) {
 }
 
 @Composable
-private fun secondState(navigator: Navigator, buttonState: ButtonState, textState: TextState) {
+private fun SecondState(navigator: Navigator, buttonState: ButtonState, textState: TextState) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally

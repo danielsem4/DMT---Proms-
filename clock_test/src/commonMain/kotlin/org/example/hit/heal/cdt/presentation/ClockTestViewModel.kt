@@ -47,6 +47,11 @@ class ClockTestViewModel(
     private val _isSecondStep: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private val _drawnPaths: MutableStateFlow<List<Path>> = MutableStateFlow(emptyList())
 
+    // New loading state for UI feedback
+    private val _isSendingData = MutableStateFlow(false)
+    val isSendingData: StateFlow<Boolean> = _isSendingData.asStateFlow()
+
+
     private var cdtResults = CDTResults()
     private var clockDrawing: ImageBitmap = ImageBitmap(1, 1)
     private var timeSpentDrawing: Long = 0
@@ -60,8 +65,10 @@ class ClockTestViewModel(
 
     fun loadEvaluation(evaluationName: String) {
         viewModelScope.launch {
-            val clinicId = storage.get(PrefKeys.clinicId) ?: return@launch
-            val patientId = storage.get(PrefKeys.userId)?.toIntOrNull() ?: return@launch
+            val clinicId: Int = storage.get(PrefKeys.clinicId)
+                ?: return@launch
+            val patientId: Int = storage.get(PrefKeys.userId)?.toIntOrNull()
+                ?: return@launch
 
             api.getSpecificEvaluation(clinicId, patientId, evaluationName)
                 .onSuccess { fetched ->
@@ -69,7 +76,7 @@ class ClockTestViewModel(
                     println("fetched evaluation: $fetched")
                 }
                 .onError { error ->
-                    // post an error to a MessageBarState here todo
+                    //TODO post an error to a MessageBarState here
                     println("Error fetching evaluation: $error")
                 }
         }
@@ -85,27 +92,28 @@ class ClockTestViewModel(
         val imageByteArray = clockDrawing.toByteArray()
 
         val version = 1
-        val measurement = 17
+        val measurement = clockTest.value?.id ?: 17
         val date = getCurrentFormattedDateTime()
         val imgName = "clock_image.png"
 
         uploadScope.launch {
-            println("Entering viewmodel scope - to upload results")
-            // this will run even if viewModelScope is gone
+            _isSendingData.value = true // Set loading to true when sending starts
             try {
                 val userId = storage.get(PrefKeys.userId)!!
                 val clinicId = storage.get(PrefKeys.clinicId)!!
 
-                val imagePath = "clinics/$clinicId/patients/$userId/measurements/$measurement/" +
-                        "$date/$version/$imgName"
+                val imagePath =
+                    "clinics/$clinicId" +
+                            "/patients/$userId" +
+                            "/measurements/$measurement" +
+                            "/$date/$version/$imgName"
 
+                // First, upload the image
                 uploadImageUseCase.execute(imagePath, imageByteArray, clinicId, userId)
                     .onSuccess {
                         println("Successfully uploaded Image")
                         cdtResults.imageUrl = MeasureObjectString(
-                            measureObject = 186,
-                            value = imagePath,
-                            dateTime = getCurrentFormattedDateTime()
+                            measureObject = 186, value = imagePath, dateTime = date
                         )
 
                         val body = CDTRequestBody(
@@ -116,24 +124,32 @@ class ClockTestViewModel(
                             test = cdtResults
                         )
 
+                        // If image upload succeeds, then upload CDT results
                         uploadCDTResultsUseCase.execute(body, CDTRequestBody.serializer())
                             .onSuccess {
-                                withContext(Dispatchers.Main) {
+                                println("Successfully uploaded CDT results")
+                                withContext(Dispatchers.Main) { // Ensure UI update on Main
                                     onSuccess?.invoke()
                                 }
-                            }
-                            .onError { error ->
-                                withContext(Dispatchers.Main) {
+                            }.onError { error ->
+                                println("Upload failed after sending CDT: $error")
+                                withContext(Dispatchers.Main) { // Ensure UI update on Main
                                     onFailure?.invoke(error)
                                 }
                             }
                     }.onError { error ->
                         println("Upload failed before sending CDT: $error")
-                        onFailure?.invoke(error)
+                        withContext(Dispatchers.Main) { // Ensure UI update on Main
+                            onFailure?.invoke(error)
+                        }
                     }
             } catch (e: Exception) {
-                println("🚨Unexpected error: ${e.message}")
-                onFailure?.invoke(DataError.Remote.UNKNOWN)
+                println("Unexpected error: ${e.message}")
+                withContext(Dispatchers.Main) { // Ensure UI update on Main
+                    onFailure?.invoke(DataError.Remote.UNKNOWN)
+                }
+            } finally {
+                _isSendingData.value = false // Reset loading state regardless of outcome
             }
         }
     }
