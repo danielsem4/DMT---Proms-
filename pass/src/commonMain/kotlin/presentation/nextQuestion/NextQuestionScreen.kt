@@ -24,6 +24,7 @@ import org.example.hit.heal.core.presentation.Resources.String.contact
 import org.example.hit.heal.core.presentation.Resources.String.finishFirstMissionPass
 import org.example.hit.heal.core.presentation.Resources.String.firstMissionDoneVocalPass
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -48,7 +49,8 @@ class NextQuestionScreen : Screen {
             title = stringResource(contact),
             config = ScreenConfig.TabletConfig,
             content = {
-                AudioPlayingAnimation(isPlaying = isPlaying,)
+                AudioPlayingAnimation(isPlaying = isPlaying)
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize(),
@@ -59,7 +61,7 @@ class NextQuestionScreen : Screen {
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color.White, shape = RoundedCornerShape(radiusMd))
+                        .background(Color.White)
                         .border(
                             width = 2.dp,
                             color = Color.LightGray,
@@ -76,7 +78,7 @@ class NextQuestionScreen : Screen {
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
 
-                    Spacer(modifier = Modifier.padding(10.dp))
+                    Spacer(modifier = Modifier.padding(paddingSm))
 
                     Text(
                         text = time.toString(),

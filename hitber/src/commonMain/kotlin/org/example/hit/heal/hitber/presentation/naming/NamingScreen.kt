@@ -20,6 +20,7 @@ import getImageName
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberTitle
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -68,7 +69,7 @@ class NamingScreen : Screen {
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .width(200.dp)
-                            .padding(vertical = 16.dp),
+                            .padding(vertical = paddingMd),
                         onClick = {
                             fourthQuestionViewModel.fourthQuestionAnswer(
                                 firstImageName,

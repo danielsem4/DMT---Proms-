@@ -7,6 +7,7 @@ import core.domain.use_case.PlayAudioUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Resources.String.callToDentist
 import org.example.hit.heal.core.presentation.Resources.String.callToDetistPass
 import org.example.hit.heal.core.presentation.Resources.String.dentistNumberShowenCallHimPass
@@ -107,7 +108,9 @@ class DialScreenViewModel(
     }
 
     fun onPlayAudioRequested(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }
     }
 
     fun onUnderstandingConfirmed() {

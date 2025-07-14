@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +45,8 @@ import core.utils.ObserveLifecycle
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import core.utils.RegisterBackHandler
 import core.utils.platformCapturable
+import kotlinx.coroutines.launch
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -65,7 +68,7 @@ class UnderstandingScreen : Screen {
         val itemLastPositions by sixthQuestionViewModel.itemLastPositions.collectAsState()
         var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
         val audioUrl = audioResourceId?.let { stringResource(it) }
-        var isAudioClicked by remember { mutableStateOf(false) }
+        val coroutineScope = rememberCoroutineScope()
 
         var fridgeSize by remember { mutableStateOf(0f to 0f) }
         var tableSize by remember { mutableStateOf(0f to 0f) }
@@ -103,8 +106,11 @@ class UnderstandingScreen : Screen {
 
                         AudioButton(
                             onClick = {
-                                sixthQuestionViewModel.setRandomAudio()
-                                isAudioClicked = true
+                                audioUrl?.let { url ->
+                                    coroutineScope.launch {
+                                        sixthQuestionViewModel.onPlayAudio(url)
+                                    }
+                                }
                             },
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
@@ -166,7 +172,7 @@ class UnderstandingScreen : Screen {
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .width(200.dp)
-                                .padding(vertical = 16.dp),
+                                .padding(vertical = paddingMd),
                             onClick = {
                                 capturable?.capture?.invoke()
                             }
@@ -176,18 +182,9 @@ class UnderstandingScreen : Screen {
                 }
             )
 
-            LaunchedEffect(isAudioClicked) {
-                if (isAudioClicked) {
-                    audioUrl?.let {
-                        sixthQuestionViewModel.onPlayAudio(it)
-                        isAudioClicked = false
-                    }
-                }
-            }
             ObserveLifecycle(
                 onStop = {
                     sixthQuestionViewModel.stopAudio()
-                    isAudioClicked = false
                 },
                 onStart = {}
             )

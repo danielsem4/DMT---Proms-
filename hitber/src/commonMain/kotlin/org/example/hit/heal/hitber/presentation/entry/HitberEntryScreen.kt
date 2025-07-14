@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberGoodLuck
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberInstructions1
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberInstructions2
@@ -59,24 +61,24 @@ class HitberEntryScreen() : Screen {
                             .weight(1f)
                             .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.Top,
-                        horizontalAlignment = Alignment.CenterHorizontally, // ברירת מחדל למרכז
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Text(
                             stringResource(entryHitberNote),
                             color = Color.Red,
-                            fontSize = 40.sp
+                            fontSize = EXTRA_LARGE
                         )
                         Column(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.Start,
                             verticalArrangement = Arrangement.spacedBy(30.dp)
                         ) {
-                            Text(stringResource(entryHitberInstructions1), fontSize = 30.sp)
-                            Text(stringResource(entryHitberInstructions2), fontSize = 30.sp)
-                            Text(stringResource(entryHitberInstructions3), fontSize = 30.sp)
-                            Text(stringResource(entryHitberInstructions4), fontSize = 30.sp)
-                            Text(stringResource(entryHitberInstructions5), fontSize = 30.sp)
-                            Text(stringResource(entryHitberInstructions6), fontSize = 30.sp)
+                            Text(stringResource(entryHitberInstructions1), fontSize = LARGE)
+                            Text(stringResource(entryHitberInstructions2), fontSize = LARGE)
+                            Text(stringResource(entryHitberInstructions3), fontSize = LARGE)
+                            Text(stringResource(entryHitberInstructions4), fontSize = LARGE)
+                            Text(stringResource(entryHitberInstructions5), fontSize = LARGE)
+                            Text(stringResource(entryHitberInstructions6), fontSize = LARGE)
                         }
 
                         Column(

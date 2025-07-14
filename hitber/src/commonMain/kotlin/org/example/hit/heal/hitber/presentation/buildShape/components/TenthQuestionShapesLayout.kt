@@ -14,7 +14,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.dp
+import org.example.hit.heal.core.presentation.Sizes.radiusSm
 import org.example.hit.heal.hitber.presentation.buildShape.model.BuildShapes
 
 @Composable
@@ -32,7 +32,7 @@ fun TenthQuestionShapesLayout(
 
     Box(
         modifier = modifier
-            .background(color = Color.White, shape = RoundedCornerShape(4.dp))
+            .background(color = Color.White, shape = RoundedCornerShape(radiusSm))
             .onSizeChanged { size ->
                 val sizePair = size.width.toFloat() to size.height.toFloat()
                 screenSize.value = sizePair
@@ -44,7 +44,7 @@ fun TenthQuestionShapesLayout(
                 .align(Alignment.CenterEnd)
                 .fillMaxWidth(0.7f)
                 .fillMaxHeight()
-                .background(color = Color(0xFFB2FFFF), shape = RoundedCornerShape(4.dp))
+                .background(color = Color(0xFFB2FFFF), shape = RoundedCornerShape(radiusSm))
         )
 
         TopRowLabels()

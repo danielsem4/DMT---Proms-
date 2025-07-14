@@ -139,7 +139,9 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     }
 
     fun onPlayAudioRequested(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }
     }
 
     fun hideReminderDialog() {

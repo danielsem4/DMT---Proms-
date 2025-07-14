@@ -23,6 +23,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +34,7 @@ import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.next
 import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe
 import org.example.hit.heal.core.presentation.Resources.String.thanksVocalPass
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
@@ -54,6 +56,58 @@ class EndScreen : Screen {
         val audioString = stringResource(thanksVocalPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
 
+        BaseScreen(
+            title = stringResource(end),
+            config = ScreenConfig.TabletConfig,
+            content = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(45.dp)
+                    ) {
+
+                        AudioPlayingAnimation(isPlaying = isPlaying)
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.White, shape = RoundedCornerShape(radiusMd))
+                                .border(
+                                    width = 2.dp,
+                                    color = Color.LightGray,
+                                    shape = RoundedCornerShape(radiusMd)
+                                )
+                        ) {
+                            Text(
+                                text = stringResource(thanksCoffe),
+                                color = primaryColor,
+                                fontSize = 35.sp,
+                                fontWeight = Bold,
+                                lineHeight = 40.sp,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                        }
+
+                        SuccessAnimation(modifier = Modifier.size(100.dp))
+                    }
+                    RoundedButton(
+                        text = stringResource(exit),
+                        modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
+                        onClick = {
+                            navigator?.popUntilRoot()
+                        }
+                    )
+                }
+            }
+        )
+
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAudio()
@@ -63,53 +117,6 @@ class EndScreen : Screen {
             }
         )
 
-        BaseScreen(
-            title = stringResource(end),
-            config = ScreenConfig.TabletConfig,
-            content = {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(45.dp)
-                ) {
-
-                    AudioPlayingAnimation(isPlaying = isPlaying)
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth().weight(1f)
-                            .background(Color.White, shape = RoundedCornerShape(radiusMd))
-                            .border(
-                                width = 2.dp,
-                                color = Color.LightGray,
-                                shape = RoundedCornerShape(radiusMd)
-                            )
-                    ) {
-                        Text(
-                            text = stringResource(thanksCoffe),
-                            color = primaryColor,
-                            fontSize = 35.sp,
-                            fontWeight = Bold,
-                            lineHeight = 40.sp,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                    }
-
-                    SuccessAnimation(modifier = Modifier.size(100.dp))
-
-                        RoundedButton(
-                            text = stringResource(exit),
-                            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
-                            onClick = {
-                                navigator?.popUntilRoot()
-                            }
-                        )
-
-                }
-            }
-        )
 
         if (isOverlayVisible) {
             Box(
@@ -125,7 +132,8 @@ class EndScreen : Screen {
             )
         }
 
-        RegisterBackHandler(this) {
+        RegisterBackHandler(this)
+        {
             navigator?.popUntilRoot()
         }
     }

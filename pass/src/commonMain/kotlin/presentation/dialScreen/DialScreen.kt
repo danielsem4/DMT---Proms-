@@ -22,6 +22,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import androidx.compose.ui.graphics.Color
 import core.utils.ObserveLifecycle
 import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.Icon.dialKeysIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.likeIcon
 import org.example.hit.heal.core.presentation.Resources.String.dentistPass
@@ -31,6 +32,10 @@ import org.example.hit.heal.core.presentation.Resources.String.dialer
 import org.example.hit.heal.core.presentation.Resources.String.no
 import org.example.hit.heal.core.presentation.Resources.String.understandingDialogText
 import org.example.hit.heal.core.presentation.Resources.String.yes
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -71,24 +76,24 @@ class DialScreen : Screen {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(24.dp)
+                            .padding(paddingLg)
                     ) {
                         if (currentMissionPass == 3) {
                             item {
                                 Text(
                                     text = correct,
-                                    fontSize = 35.sp,
+                                    fontSize = LARGE,
                                     color = Color.Black,
-                                    modifier = Modifier.padding(8.dp)
+                                    modifier = Modifier.padding(paddingSm)
                                 )
                             }
                         } else {
                             items(viewModel.contacts) { contactResId ->
                                 Text(
                                     text = stringResource(contactResId),
-                                    fontSize = 35.sp,
+                                    fontSize = LARGE,
                                     color = Color.Black,
-                                    modifier = Modifier.padding(8.dp)
+                                    modifier = Modifier.padding(paddingSm)
                                 )
                             }
                         }
@@ -96,10 +101,10 @@ class DialScreen : Screen {
 
                     Button(
                         modifier = Modifier
-                            .padding(16.dp)
+                            .padding(paddingMd)
                             .align(Alignment.BottomEnd)
                             .size(80.dp)
-                            .background(primaryColor, shape = RoundedCornerShape(10.dp)),
+                            .background(primaryColor, shape = RoundedCornerShape(radiusMd)),
                         colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                         onClick = { viewModel.onUserClickedDialButton() }
                     ) {

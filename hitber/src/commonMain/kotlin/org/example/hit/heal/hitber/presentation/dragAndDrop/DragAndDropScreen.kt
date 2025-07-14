@@ -31,6 +31,7 @@ import core.utils.CapturableWrapper
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import core.utils.RegisterBackHandler
 import core.utils.platformCapturable
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -118,7 +119,7 @@ class DragAndDropScreen : Screen {
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .width(200.dp)
-                            .padding(vertical = 16.dp),
+                            .padding(vertical = paddingMd),
                         onClick = {
                             capturable?.capture?.invoke()
                         }

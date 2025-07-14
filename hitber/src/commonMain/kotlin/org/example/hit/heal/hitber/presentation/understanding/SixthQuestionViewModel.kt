@@ -3,16 +3,18 @@ package org.example.hit.heal.hitber.presentation.understanding
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import core.domain.use_case.PlayAudioUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.example.hit.heal.hitber.presentation.understanding.model.audioList
 import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 
-class SixthQuestionViewModel(private val playAudioUseCase: PlayAudioUseCase): ViewModel() {
+class SixthQuestionViewModel(private val playAudioUseCase: PlayAudioUseCase) : ViewModel() {
 
     private val _audioResourceId = MutableStateFlow<StringResource?>(null)
     val audioResourceId: StateFlow<StringResource?> get() = _audioResourceId.asStateFlow()
@@ -25,17 +27,17 @@ class SixthQuestionViewModel(private val playAudioUseCase: PlayAudioUseCase): Vi
     private val _selectedNapkin = MutableStateFlow<Color?>(null)
     val selectedNapkin: StateFlow<Color?> get() = _selectedNapkin.asStateFlow()
 
-    fun setRandomAudio() {
-        if (_audioResourceId.value == null) {
-            val randomAudio = audioList.random()
-            _audioResourceId.value = randomAudio.audioResId
-            _selectedItem.value = randomAudio.itemResId
-            _selectedNapkin.value = randomAudio.napkinTint
-        }
+    init {
+        val randomAudio = audioList.random()
+        _audioResourceId.value = randomAudio.audioResId
+        _selectedItem.value = randomAudio.itemResId
+        _selectedNapkin.value = randomAudio.napkinTint
     }
 
     fun onPlayAudio(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }
     }
 
     fun stopAudio() {

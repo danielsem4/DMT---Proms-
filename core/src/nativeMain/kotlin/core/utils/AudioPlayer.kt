@@ -5,31 +5,48 @@ import kotlinx.coroutines.*
 import platform.AVFAudio.*
 import platform.Foundation.*
 import platform.darwin.NSObject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
+@OptIn(ExperimentalForeignApi::class)
 actual class AudioPlayer {
     private var player: AVAudioPlayer? = null
     private var delegate: AudioPlayerDelegate? = null
-    private val scope = MainScope()
 
-    @OptIn(ExperimentalForeignApi::class)
-    actual fun play(url: String, onCompletion: () -> Unit) {
+    actual suspend fun play(url: String, onCompletion: () -> Unit) {
+        stop()
+
         val nsUrl = NSURL(string = url)
+        val data = withContext(Dispatchers.Default) {
+            NSData.dataWithContentsOfURL(nsUrl)
+        } ?: throw Exception("Failed to load audio data")
 
-        scope.launch {
-            val data = withContext(Dispatchers.Default) {
-                NSData.dataWithContentsOfURL(nsUrl)
-            } ?: return@launch
+        val tempFilePath = NSTemporaryDirectory() + "temp_audio.mp3"
+        val success = data.writeToFile(tempFilePath, atomically = true)
+        if (!success) throw Exception("Failed to write temp audio file")
 
-            val tempFilePath = NSTemporaryDirectory() + "temp_audio.mp3"
-            val success = data.writeToFile(tempFilePath, atomically = true)
-            if (!success) return@launch
+        val fileUrl = NSURL.fileURLWithPath(tempFilePath)
 
-            val fileUrl = NSURL.fileURLWithPath(tempFilePath)
-            player = AVAudioPlayer(fileUrl, null).apply {
-                delegate = AudioPlayerDelegate(onCompletion)
-                this.delegate = delegate
-                prepareToPlay()
-                play()
+        suspendCoroutine<Unit> { continuation ->
+            try {
+                val audioPlayer = AVAudioPlayer(fileUrl, null)
+                val audioDelegate = AudioPlayerDelegate {
+                    onCompletion()
+                }
+                audioPlayer.delegate = audioDelegate
+                this.player = audioPlayer
+                this.delegate = audioDelegate
+
+                audioPlayer.prepareToPlay()
+                val started = audioPlayer.play()
+                if (started) {
+                    continuation.resume(Unit)
+                } else {
+                    continuation.resumeWithException(Exception("Failed to start audio playback"))
+                }
+            } catch (e: Exception) {
+                continuation.resumeWithException(e)
             }
         }
     }

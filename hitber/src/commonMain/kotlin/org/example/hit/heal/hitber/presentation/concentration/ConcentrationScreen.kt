@@ -18,16 +18,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.start
 import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberFinishTask
 import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.thirdQuestionHitberTitle
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -57,7 +59,7 @@ class ConcentrationScreen : Screen {
             topRightText = "3/10",
             content = {
                 Column(
-                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    modifier = Modifier.fillMaxSize().padding(paddingMd),
                     verticalArrangement = Arrangement.SpaceBetween,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -68,7 +70,7 @@ class ConcentrationScreen : Screen {
                     if (buttonVisible) {
                         RoundedButton(
                             text = stringResource(start),
-                            modifier = Modifier.width(200.dp).padding(bottom = 10.dp),
+                            modifier = Modifier.width(200.dp).padding(bottom = paddingSm),
                             onClick = {
                                 thirdQuestionViewModel.startButtonSetVisible(false)
                                 thirdQuestionViewModel.startRandomNumberGeneration()
@@ -92,7 +94,7 @@ class ConcentrationScreen : Screen {
                                 Text(
                                     stringResource(thirdQuestionHitberFinishTask),
                                     color = primaryColor,
-                                    fontSize = 30.sp,
+                                    fontSize = LARGE,
                                     fontWeight = FontWeight.Bold
                                 )
                             }

@@ -11,7 +11,7 @@ class PlayAudioUseCase(
     private val _isPlaying = MutableStateFlow(false)
     val isPlaying: StateFlow<Boolean> = _isPlaying
 
-    fun playAudio(audioText: String) {
+    suspend fun playAudio(audioText: String) {
         stopAudio()
         _isPlaying.value = true
         audioPlayer.play(audioText) {

@@ -10,9 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberPic1
 import org.example.hit.heal.core.presentation.Resources.String.fourthQuestionHitberPic2
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -31,7 +31,7 @@ fun NamingImages(selectedCouple: Pair<DrawableResource, DrawableResource>?, modi
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .padding(20.dp)
+                    .padding(paddingMd)
                     .background(color = Color.White)
             )
             Image(
@@ -40,7 +40,7 @@ fun NamingImages(selectedCouple: Pair<DrawableResource, DrawableResource>?, modi
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
-                    .padding(20.dp)
+                    .padding(paddingMd)
                     .background(color = Color.White)
             )
         }

@@ -156,12 +156,12 @@ class AppDeviceViewModel(
     }
 
     fun startCheckingIfUserDidSomething() {
-        if(didNothing == -1){
+        if (didNothing == -1) {
             getReminderDidNotingText()
             return
         }
 
-        if(didNothing == 0 &&  !_isCloseIconDialog.value){
+        if (didNothing == 0 && !_isCloseIconDialog.value) {
             startDialogUnderstanding()
         }
 
@@ -177,7 +177,9 @@ class AppDeviceViewModel(
     }
 
     fun onPlayAudioRequested(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }
     }
 
     fun onUnderstandingConfirmed() {
@@ -193,7 +195,7 @@ class AppDeviceViewModel(
         reminderJob?.cancel()
     }
 
-    private fun onUnderstandingDidNothing(){
+    private fun onUnderstandingDidNothing() {
         _showUnderstandingDialog.value = false
     }
 
@@ -219,11 +221,13 @@ class AppDeviceViewModel(
                 audioText = callToHanaCohenInstructionPass to callHanaCohenPass
             )
 
-            1 -> {onUnderstandingDidNothing()
+            1 -> {
+                onUnderstandingDidNothing()
                 countdownDialogHandler.showCountdownDialog(
-                isPlayingFlow = isPlaying,
-                audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
-            )}
+                    isPlayingFlow = isPlaying,
+                    audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
+                )
+            }
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,

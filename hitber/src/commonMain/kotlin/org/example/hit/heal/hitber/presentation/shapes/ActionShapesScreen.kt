@@ -33,6 +33,7 @@ import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHit
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskRetryInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTitle
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -70,7 +71,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                 Box(
                     modifier = Modifier.fillMaxWidth().weight(1f)
                         .background(Color.White, shape = RoundedCornerShape(4))
-                        .padding(16.dp)
+                        .padding(paddingMd)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(),

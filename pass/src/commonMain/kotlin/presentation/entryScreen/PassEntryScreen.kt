@@ -37,8 +37,13 @@ import org.example.hit.heal.core.presentation.Resources.String.fmptMeaning
 import org.example.hit.heal.core.presentation.Resources.String.next
 import org.example.hit.heal.core.presentation.Resources.String.thePassTest
 import org.example.hit.heal.core.presentation.Resources.String.welcomePass
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.paddingXl
+import org.example.hit.heal.core.presentation.Sizes.paddingXs
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.Sizes.spacingLg
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -59,27 +64,18 @@ class PassEntryScreen : Screen {
         val audioString = stringResource(firstInstructionsPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
 
-        ObserveLifecycle(
-            onStop = {
-                viewModel.stopAudio()
-            },
-            onStart = {
-                viewModel.onPlayAudioRequested(audioString)
-            }
-        )
-
         BaseScreen(
             title = stringResource(welcomePass),
             config = ScreenConfig.TabletConfig,
             content = {
                 AudioPlayingAnimation(isPlaying = isPlaying)
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(paddingLg))
 
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 30.dp),
+                        .padding(horizontal = paddingSm),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -87,7 +83,7 @@ class PassEntryScreen : Screen {
                         modifier = Modifier
                             .weight(1f)
                             .verticalScroll(rememberScrollState()),
-                        verticalArrangement = Arrangement.spacedBy(24.dp),
+                        verticalArrangement = Arrangement.spacedBy(spacingLg),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -96,7 +92,8 @@ class PassEntryScreen : Screen {
                             fontSize = EXTRA_LARGE,
                             fontWeight = Bold
                         )
-                        Spacer(modifier = Modifier.padding(10.dp))
+                        Spacer(modifier = Modifier.padding(paddingSm))
+
                         Text(
                             stringResource(fmptMeaning),
                             color = primaryColor,
@@ -128,7 +125,7 @@ class PassEntryScreen : Screen {
                         Box(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
-                                .padding(paddingMd)
+                                .padding(paddingXs)
                         ) {
                             Text(
                                 stringResource(thePassTest),
@@ -147,6 +144,16 @@ class PassEntryScreen : Screen {
                 }
             }
         )
+
+        ObserveLifecycle(
+            onStop = {
+                viewModel.stopAudio()
+            },
+            onStart = {
+                viewModel.onPlayAudioRequested(audioString)
+            }
+        )
+
 
         if (isOverlayVisible) {
             Box(

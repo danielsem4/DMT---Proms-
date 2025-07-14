@@ -75,8 +75,9 @@ class WrongAppViewModel(
     }
 
     fun onPlayAudioRequested(audioText: String) {
-        playAudioUseCase.playAudio(audioText)
-    }
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }    }
 
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
