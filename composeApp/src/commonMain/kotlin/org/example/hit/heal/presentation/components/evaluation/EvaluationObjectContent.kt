@@ -21,10 +21,10 @@ import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.slider_value_prefix
 import org.example.hit.heal.core.presentation.components.CustomMultilineTextField
 import org.example.hit.heal.core.presentation.components.InstructionBox
-import org.example.hit.heal.core.presentation.components.MultiSelectCheckboxGroup
 import org.example.hit.heal.core.presentation.components.OnOffToggle
+import org.example.hit.heal.core.presentation.components.PillSelectionGroup
 import org.example.hit.heal.core.presentation.components.RoundedFilledSlider
-import org.example.hit.heal.core.presentation.components.SimpleRadioButtonGroup
+import org.example.hit.heal.core.presentation.components.SelectionMode
 import org.example.hit.heal.core.presentation.formatLabel
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
@@ -62,11 +62,15 @@ fun EvaluationObjectContent(
             // Radio Button
             2 -> {
                 if (obj.style == "radio styled" || obj.style == "none") {
-                    SimpleRadioButtonGroup(
+                    PillSelectionGroup(
+                        selectionMode = SelectionMode.SINGLE,
                         options = obj.available_values?.map { it.available_value } ?: emptyList(),
-                        selectedOption = (answers[obj.id] as? EvaluationAnswer.Text)?.value ?: "",
-                        onOptionSelected = { selectedOption ->
-                            onSaveAnswer(obj.id, EvaluationAnswer.Text(selectedOption))
+                        selectedValues = listOf(
+                            (answers[obj.id] as? EvaluationAnswer.Text)?.value ?: ""
+                        ),
+                        onSelectionChanged = { selectedOption ->
+                            val value = selectedOption.firstOrNull() ?: return@PillSelectionGroup
+                            onSaveAnswer(obj.id, EvaluationAnswer.Text(value))
                         },
                         modifier = Modifier.align(Alignment.Start)
                     )
@@ -78,7 +82,7 @@ fun EvaluationObjectContent(
                     val selectedValues =
                         (answers[obj.id] as? EvaluationAnswer.MultiChoice)?.values?.toMutableList()
                             ?: mutableListOf()
-                    MultiSelectCheckboxGroup(
+                    PillSelectionGroup(
                         options = obj.available_values?.map { it.available_value } ?: emptyList(),
                         selectedValues = selectedValues,
                         onSelectionChanged = { updatedValues ->
