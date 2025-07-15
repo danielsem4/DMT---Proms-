@@ -1,11 +1,9 @@
 package org.example.hit.heal.presentation.components.evaluation
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -18,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.data.model.evaluation.EvaluationAnswer
 import core.data.model.evaluation.EvaluationObject
+import core.data.model.evaluation.toRawString
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.slider_value_prefix
 import org.example.hit.heal.core.presentation.components.CustomMultilineTextField
@@ -38,9 +37,16 @@ fun EvaluationObjectContent(
     onDrawingControllerReady: ((DrawingCanvasController) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.padding(horizontal = 16.dp)) {
-        Spacer(Modifier.height(16.dp))
-
+    Column(
+        modifier = modifier.padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (obj.object_type != 11)
+            Text(
+                text = obj.object_label,
+                fontSize = 28.sp,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
         when (obj.object_type) {
             // Open question / Text Input
             1 -> {
@@ -56,29 +62,19 @@ fun EvaluationObjectContent(
             // Radio Button
             2 -> {
                 if (obj.style == "radio styled" || obj.style == "none") {
-                    Text(
-                        text = obj.object_label,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start)
-                    )
                     SimpleRadioButtonGroup(
                         options = obj.available_values?.map { it.available_value } ?: emptyList(),
                         selectedOption = (answers[obj.id] as? EvaluationAnswer.Text)?.value ?: "",
                         onOptionSelected = { selectedOption ->
                             onSaveAnswer(obj.id, EvaluationAnswer.Text(selectedOption))
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.align(Alignment.Start)
                     )
                 }
             }
             // Checkbox / Multi-select
             4 -> {
                 if (obj.style == "checkbox styled" || obj.style == "none") {
-                    Text(
-                        text = obj.object_label,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start)
-                    )
                     val selectedValues =
                         (answers[obj.id] as? EvaluationAnswer.MultiChoice)?.values?.toMutableList()
                             ?: mutableListOf()
@@ -97,12 +93,6 @@ fun EvaluationObjectContent(
                     val onLabel = obj.available_values?.getOrNull(0)?.available_value ?: "On"
                     val offLabel = obj.available_values?.getOrNull(1)?.available_value ?: "Off"
 
-                    Text(
-                        text = obj.object_label,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start)
-                    )
-
                     OnOffToggle(
                         checked = (answers[obj.id] as? EvaluationAnswer.Toggle)?.value,
                         onCheckedChange = { isChecked ->
@@ -116,11 +106,6 @@ fun EvaluationObjectContent(
             // Slider / Scale
             34 -> {
                 if (obj.style == "scale" || obj.style == "slider") {
-                    Text(
-                        text = obj.object_label,
-                        fontSize = 20.sp,
-                        modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start)
-                    )
                     val currentValue = (answers[obj.id] as? EvaluationAnswer.Number)?.value
                         ?: (obj.available_values?.firstOrNull()?.available_value?.toFloatOrNull()
                             ?: 0f)
@@ -151,17 +136,10 @@ fun EvaluationObjectContent(
                     )
                 }
             }
-            // Drawing (Placeholder)
+            // Drawing
             21 -> {
-                Text(
-                    text = obj.object_label,
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start)
-                )
-
                 val controller = drawingCanvasWithControls(modifier = Modifier.fillMaxSize())
                 onDrawingControllerReady?.invoke(controller)
-
             }
             // Dynamic / Instruction Box (like Blood pressure, Sugar report, Parkinson report)
             11 -> {
@@ -171,6 +149,13 @@ fun EvaluationObjectContent(
                         .fillMaxWidth(0.8f)
                         .align(Alignment.CenterHorizontally)
                 )
+            }
+            // Default case for any unhandled object types
+            else -> {
+                println("Unhandled object type: ${obj.object_type}")
+                answers[obj.id]?.toRawString()?.let {
+                    Text(it, fontSize = 24.sp)
+                }
             }
         }
     }

@@ -9,7 +9,8 @@ import org.example.hit.heal.presentation.splash.SplashScreen
 @Composable
 fun App() {
     MaterialTheme {
-        Navigator(SplashScreen()) { navigator ->
+        val screen = SplashScreen()
+        Navigator(screen) { navigator ->
             SlideTransition(navigator)
         }
     }

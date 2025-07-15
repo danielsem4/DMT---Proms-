@@ -71,13 +71,14 @@ class EvaluationTestScreen(
 
         val uploadResult = {
             scope.launch {
-                viewModel.submitEvaluation(evaluation.id).onSuccess {
+                viewModel.submitEvaluation(evaluation.id)
+                    .onSuccess {
                         withContext(Dispatchers.Main) {
                             println("Successfully uploaded test results")
                             snackbarHostState.showSnackbar(message)
                             navigator.pop()
                         }
-                }.onError {
+                    }.onError {
                         withContext(Dispatchers.Main) {
                             println("Error uploading test results:\n$it")
                             snackbarHostState.showSnackbar("$errorMessage: $it")
@@ -100,7 +101,7 @@ class EvaluationTestScreen(
                         onSaveAnswer = { id, answer ->
                             viewModel.saveAnswer(id, answer)
                         },
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier.fillMaxWidth(0.8f).weight(1f),
                         onDrawingControllerReady = { controller ->
                             drawingController = controller
                         })
@@ -147,9 +148,8 @@ class EvaluationTestScreen(
                             if (currentObject?.object_type == 21) {
                                 drawingController?.let { controller ->
                                     val bitmap = controller.getBitmap()
-                                    viewModel.saveAnswer(
-                                        currentObject.id, EvaluationAnswer.Image(bitmap)
-                                    )
+                                    val answer = EvaluationAnswer.Image(bitmap)
+                                    viewModel.saveAnswer(currentObject.id, answer)
                                 }
                             }
                             currentPageIndex++
