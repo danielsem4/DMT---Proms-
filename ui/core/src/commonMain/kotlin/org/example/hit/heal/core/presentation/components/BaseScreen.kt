@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -39,6 +41,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 /**
  * BaseScreen is a reusable composable that provides a standard layout
  * for screens in the application.
+ * all items are within a Column
  */
 
 @Composable
@@ -58,8 +61,11 @@ fun BaseScreen(
         val statusBarValues = WindowInsets.safeDrawing.asPaddingValues()
 
         Column(
-            modifier = Modifier.fillMaxSize().background(backgroundColor)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor)
                 .padding(bottom = statusBarValues.calculateBottomPadding())
+                .verticalScroll(rememberScrollState())
         ) {
             // Top Bar
             Box(

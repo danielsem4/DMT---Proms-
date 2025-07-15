@@ -1,8 +1,9 @@
-package org.example.hit.heal.evaluations.presentaion
+package org.example.hit.heal.presentation.components.evaluation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -34,9 +35,10 @@ fun EvaluationObjectContent(
     obj: EvaluationObject,
     answers: Map<Int, EvaluationAnswer>,
     onSaveAnswer: (Int, EvaluationAnswer) -> Unit,
+    onDrawingControllerReady: ((DrawingCanvasController) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.padding(horizontal = 16.dp)) {
         Spacer(Modifier.height(16.dp))
 
         when (obj.object_type) {
@@ -152,11 +154,14 @@ fun EvaluationObjectContent(
             // Drawing (Placeholder)
             21 -> {
                 Text(
-                    text = "${obj.object_label}: Drawing component placeholder",
-                    fontSize = 18.sp,
-                    modifier = Modifier.fillMaxWidth().align(Alignment.Start)
+                    text = obj.object_label,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start)
                 )
-                // Further implementation needed for drawing
+
+                val controller = drawingCanvasWithControls(modifier = Modifier.fillMaxSize())
+                onDrawingControllerReady?.invoke(controller)
+
             }
             // Dynamic / Instruction Box (like Blood pressure, Sugar report, Parkinson report)
             11 -> {

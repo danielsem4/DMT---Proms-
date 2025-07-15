@@ -1,4 +1,4 @@
-package org.example.hit.heal.evaluations.data
+package core.data.model.evaluation
 
 import core.data.model.MeasureObjectString
 import kotlinx.serialization.SerialName

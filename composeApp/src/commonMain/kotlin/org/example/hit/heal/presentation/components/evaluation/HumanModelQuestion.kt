@@ -1,4 +1,4 @@
-package org.example.hit.heal.evaluations.presentaion
+package org.example.hit.heal.presentation.components.evaluation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
