@@ -15,7 +15,7 @@ import presentation.entryScreen.PassEntryScreen
 @Composable
 fun App() {
     MaterialTheme {
-        Navigator(DragAndDropScreen()) { navigator ->
+        Navigator(SplashScreen()) { navigator ->
             SlideTransition(navigator)
         }
     }
