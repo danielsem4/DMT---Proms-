@@ -27,9 +27,6 @@ class EvaluationTestViewModel(
     private val storage: Storage,
 ) : ViewModel() {
 
-    private val _drawingPaths = mutableMapOf<Int, List<List<Offset>>>()
-    val drawingPaths = _drawingPaths
-
     private val _answers = MutableStateFlow<MutableMap<Int, EvaluationAnswer>>(mutableMapOf())
     val answers: StateFlow<Map<Int, EvaluationAnswer>> = _answers.asStateFlow()
 
