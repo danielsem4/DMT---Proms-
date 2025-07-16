@@ -137,7 +137,7 @@ class NumberSelectScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "המספר שנבחר כרגע הוא: $selectedNumber",
+                            text = "the number is :$selectedNumber",
                             color = Color(0xFF4EC3AF),
                             fontSize = 22.sp
                         )

@@ -90,7 +90,6 @@ class OriantationWelcomeScreen: Screen {
                         }
                     }
                 }
-                // No button here! The button is handled by TabletBaseScreen's onNextClick
             }
         )
     }

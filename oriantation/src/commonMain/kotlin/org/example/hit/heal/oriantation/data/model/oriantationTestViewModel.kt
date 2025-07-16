@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
-import core.data.model.MeasureObjectString
 import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.Error
@@ -28,7 +27,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class OrientationResults(
     val drawnShapeUrl: String = "",
-    val selectedNumber: Int = 0,
+    val selectedNumber: String = "",
     val selectedSeason: String = "",
     val shapeResizeValue: Boolean = false,
     val shapesDragResult: Boolean = false,
@@ -38,7 +37,7 @@ data class OrientationResults(
 @Serializable
 data class OrientationRequestBody(
     val measurement: Int,
-    val patientId: String,
+    val patient_id: String,
     val date: String,
     val clinicId: Int,
     val test: OrientationResults
@@ -112,7 +111,7 @@ class OrientationTestViewModel(
 
                         val results = OrientationResults(
                             drawnShapeUrl = imagePath,
-                            selectedNumber = trialData.response.selectedNumber.value.toIntOrNull() ?: 0,
+                            selectedNumber = trialData.response.selectedNumber.value ,
                             selectedSeason = trialData.response.selectedSeasons.value.firstOrNull() ?: "",
                             shapeResizeValue = trialData.response.isTriangleSizeChanged.value,
                             shapesDragResult = trialData.response.isTriangleDragged.value,
@@ -121,7 +120,7 @@ class OrientationTestViewModel(
 
                         val body = OrientationRequestBody(
                             measurement = measurement,
-                            patientId = userId,
+                            patient_id = userId,
                             date = date,
                             clinicId = clinicId,
                             test = results
