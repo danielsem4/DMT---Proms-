@@ -119,12 +119,12 @@ class ActionShapesScreen(private val question: Int) : Screen {
                             if (attempt < 3) {
                                 showDialog = true
                             } else {
-                                secondQuestionViewModel.resetSelectedShapes()
                                 if (question == 2) {
                                     viewModel.setSecondQuestion(
                                         secondQuestionViewModel.secondQuestionAnswersList,
                                         getCurrentFormattedDateTime()
                                     )
+                                    secondQuestionViewModel.resetSelectedShapes()
                                     navigator?.replace(ConcentrationScreen())
                                 } else {
                                     viewModel.setNinthQuestion(

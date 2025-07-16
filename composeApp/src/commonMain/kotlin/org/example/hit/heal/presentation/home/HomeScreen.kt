@@ -67,8 +67,11 @@ import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
+import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
 import org.example.hit.heal.hitber.presentation.entry.HitberEntryScreen
 import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScreen
+import org.example.hit.heal.hitber.presentation.writing.WritingScreen
 import org.example.hit.heal.presentation.activities.ActivitiesScreen
 import org.example.hit.heal.presentation.evaluation.AllEvaluationsScreen
 import org.example.hit.heal.presentation.login.LoginScreen

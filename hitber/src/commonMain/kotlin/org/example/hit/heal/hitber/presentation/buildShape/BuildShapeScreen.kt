@@ -87,12 +87,6 @@ class BuildShapeScreen : Screen {
                             onCaptured = { imageBitmap ->
                                 val timestamp = getCurrentFormattedDateTime()
 
-                                viewModel.uploadImage(
-                                    bitmap = imageBitmap,
-                                    date = timestamp,
-                                    currentQuestion = 10
-                                )
-
                                 tenthQuestionViewModel.uploadTenthQuestionImageAnswer(
                                     itemPositions,
                                     draggableShapesItem,
@@ -106,7 +100,11 @@ class BuildShapeScreen : Screen {
                                     timestamp
                                 )
 
-                                viewModel.uploadEvaluationResults()
+                                viewModel.uploadImage(
+                                    bitmap = imageBitmap,
+                                    date = timestamp,
+                                    currentQuestion = 10
+                                )
 
                                 navigator?.replace(SummaryScreen())
                             }

@@ -15,10 +15,10 @@ data class CogData(
     @SerialName("thirdQuestion") var thirdQuestion: ArrayList<ThirdQuestionItem> = arrayListOf(),
     @SerialName("fourthQuestion") var fourthQuestion: ArrayList<MeasureObjectString> = arrayListOf(),
     @SerialName("fifthQuestion") var fifthQuestion: ArrayList<MeasureObjectString> = arrayListOf(),
-    @SerialName("sixthQuestion") var sixthQuestion: ArrayList<SixthQuestionType> = arrayListOf(),
-    @SerialName("seventhQuestion") var seventhQuestion: ArrayList<SeventhQuestionType> = arrayListOf(),
+    @SerialName("sixthQuestion") var sixthQuestion: ArrayList<SixthQuestionItem> = arrayListOf(),
+    @SerialName("seventhQuestion") var seventhQuestion: ArrayList<SeventhQuestionItem> = arrayListOf(),
     @SerialName("eighthQuestion") var eighthQuestion: ArrayList<EighthQuestionItem> = arrayListOf(),
     @SerialName("ninthQuestion") var ninthQuestion: ArrayList<SecondQuestionItem> = arrayListOf(),
-    @SerialName("tenthQuestion") var tenthQuestion: ArrayList<TenthQuestionType> = arrayListOf()
+    @SerialName("tenthQuestion") var tenthQuestion: ArrayList<TenthQuestionItem> = arrayListOf()
 )
 

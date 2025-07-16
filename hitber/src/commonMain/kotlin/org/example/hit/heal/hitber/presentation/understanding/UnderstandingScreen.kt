@@ -119,6 +119,7 @@ class UnderstandingScreen : Screen {
                             onCaptured = { imageBitmap ->
                                 val timestamp = getCurrentFormattedDateTime()
                                 viewModel.uploadImage(imageBitmap, timestamp, 6)
+
                                 sixthQuestionViewModel.evaluateAnswer(
                                     napkinResourceId,
                                     napkinPosition,
@@ -132,6 +133,7 @@ class UnderstandingScreen : Screen {
                                     sixthQuestionViewModel.isNapkinPlacedCorrectly,
                                     date = timestamp
                                 )
+
                                 navigator?.replace(DragAndDropScreen())
                             },
                             modifier = Modifier.weight(1f)

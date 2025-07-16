@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
@@ -30,6 +31,8 @@ import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.contact
 import org.example.hit.heal.core.presentation.Resources.String.defaultName
 import org.example.hit.heal.core.presentation.Resources.String.defaultPhone
+import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -74,11 +77,11 @@ class DetailedContactScreen(private val correctContact: ContactData) : Screen {
                         .fillMaxSize()
                         .padding(paddingMd),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
+                    verticalArrangement = Arrangement.spacedBy(paddingLg)
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(80.dp)
+                            .size(90.dp)
                             .border(
                                 width = 6.dp,
                                 color = primaryColor,
@@ -89,12 +92,12 @@ class DetailedContactScreen(private val correctContact: ContactData) : Screen {
                         Text(
                             text = correctContact.name.first().toString(),
                             fontWeight = FontWeight.Bold,
-                            fontSize = EXTRA_LARGE
+                            fontSize = 50.sp
                         )
                     }
                     Text(
                         text = correctContact.name,
-                        fontSize = LARGE,
+                        fontSize = 50.sp,
                         fontWeight = FontWeight.Bold,
                     )
 
@@ -107,7 +110,7 @@ class DetailedContactScreen(private val correctContact: ContactData) : Screen {
                             circleWithPicture(item) { viewModel.onUserClicked(item.label) }
                         }
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(paddingMd))
 
                     ContactDetailsSection(correctContact, viewModel)
                 }

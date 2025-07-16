@@ -51,11 +51,10 @@ class SummaryScreen : Screen {
 
         LaunchedEffect(uploadStatus) {
             uploadStatus?.let { result ->
-                if (result.isSuccess) {
+                result.onSuccess {
                     snackbarHostState.showSnackbar(successMessage)
-                } else if (result.isFailure) {
-                    val error = result.exceptionOrNull()
-                    snackbarHostState.showSnackbar(error?.message ?: "העלאה נכשלה")
+                }.onFailure { error ->
+                    snackbarHostState.showSnackbar(error.message ?: "העלאה נכשלה")
                 }
             }
         }

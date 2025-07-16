@@ -110,8 +110,7 @@ class HitberEntryScreen() : Screen {
         navigator?.pop()
     }
 
-    LaunchedEffect(Unit)
-    {
+    LaunchedEffect(Unit) {
         viewModel.loadEvaluation("HitBer")
     }
 }
