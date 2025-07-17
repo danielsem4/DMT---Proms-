@@ -12,6 +12,7 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+
     }
 }
 
@@ -25,9 +26,12 @@ dependencyResolutionManagement {
             }
         }
         mavenCentral()
+        maven("https://jitpack.io")
+        gradlePluginPortal()
+
+
     }
 }
-
 include(":composeApp")
 include(":hitber")
 include(":ui:core")
@@ -36,3 +40,4 @@ include(":pass")
 
 
 include(":clock_test")
+include(":new_memory_test")

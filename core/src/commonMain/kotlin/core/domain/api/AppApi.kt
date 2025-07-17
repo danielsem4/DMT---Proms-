@@ -44,7 +44,7 @@ interface AppApi {
     ): Result<Unit, DataError.Remote>
 
     suspend fun setMedicationNotifications(
-        results: Request
+        results: Medication
     ): Result<Unit, DataError.Remote>
 
     suspend fun getPatientMeasureReport(

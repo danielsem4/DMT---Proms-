@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -47,7 +48,12 @@ import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingXl
 import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
+
 import org.example.hit.heal.core.presentation.components.SimpleInputText
+
+
+import org.example.hit.heal.presentaion.screens.BaseScreen
 import org.example.hit.heal.presentation.home.HomeScreen
 import org.example.hit.heal.presentation.login.LoginViewModel
 import org.jetbrains.compose.resources.StringResource

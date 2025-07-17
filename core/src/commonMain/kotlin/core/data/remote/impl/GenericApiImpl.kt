@@ -140,7 +140,7 @@ class KtorAppRemoteDataSource(
 
 
     override suspend fun setMedicationNotifications(
-        results: Request
+        results: Medication
     ): Result<Unit, DataError.Remote> =
         httpClient.postWithAuth<Unit>(
             url = "${baseUrl}patientNotificationData/",
