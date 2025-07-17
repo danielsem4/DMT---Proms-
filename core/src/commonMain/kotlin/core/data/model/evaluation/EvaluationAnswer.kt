@@ -13,12 +13,27 @@ sealed class EvaluationAnswer {
         val bitmap: ImageBitmap? = null,
         var url: String = "" // initially empty, filled after upload
     ) : EvaluationAnswer()
-    data class Toggle(val value: Boolean) : EvaluationAnswer()
+    data class Toggle(val value: Boolean?) : EvaluationAnswer()
+
     data class HumanModelPoints(
         val front: Set<Offset>, val back: Set<Offset>
     ) : EvaluationAnswer()
 
     data object Unanswered : EvaluationAnswer()
+    data object Answered : EvaluationAnswer()
+
+    val EvaluationAnswer.isAnswered: Boolean
+        get() = when (this) {
+            is Text -> value.isNotBlank()
+            is Number -> true
+            is MultiChoice -> values.isNotEmpty()
+            is Image -> url.isNotBlank() || bitmap != null
+            is Toggle -> value != null
+            is HumanModelPoints -> true//front.isNotEmpty() || back.isNotEmpty()
+            Answered -> true
+            Unanswered -> false
+        }
+
 }
 
 // Extension function moved here to be accessible
@@ -33,6 +48,6 @@ fun EvaluationAnswer.toRawString(): String = when (this) {
         val joinedBack = back.joinToString(";") { "${it.x},${it.y}" }
         "front=$joinedFront|back=$joinedBack"
     }
-
     EvaluationAnswer.Unanswered -> ""
+    EvaluationAnswer.Answered -> "Answered"
 }

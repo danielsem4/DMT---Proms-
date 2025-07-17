@@ -3,10 +3,11 @@ package org.example.hit.heal.presentation.evaluation
 import ContentWithMessageBar
 import MessageBarPosition
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
@@ -24,8 +25,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.evaluation.Evaluation
-import core.data.model.evaluation.EvaluationAnswer
-import core.data.model.evaluation.toRawString
+import core.data.model.evaluation.EvaluationAnswer.Unanswered.isAnswered
 import core.domain.onError
 import core.domain.onSuccess
 import kotlinx.coroutines.Dispatchers
@@ -40,16 +40,9 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import rememberMessageBarState
 
-/**
- * EvaluationScreen is a screen that will be used to display evaluation-related content.
- * Questions, measurements, and other evaluation-related information will be displayed here.
- */
-
 class EvaluationTestScreen(
     private val evaluation: Evaluation
 ) : Screen {
-
-    private val inputTypes = setOf(1, 2, 4, 5, 21, 34)
 
     @Composable
     override fun Content() {
@@ -61,12 +54,17 @@ class EvaluationTestScreen(
 
         val snackbarHostState = remember { SnackbarHostState() }
 
-        // State for managing the current page index
-        var currentPageIndex by remember { mutableStateOf(0) }
-        val totalObjects = evaluation.measurement_objects.size
-        val currentObject = evaluation.measurement_objects.getOrNull(currentPageIndex)
+        val allObjects = remember(evaluation) {
+            evaluation.measurement_objects.groupBy { it.measurement_screen }
+        }
+
+        var currentScreen by remember { mutableStateOf(1) }
+        val objectsOnCurrentScreen = allObjects[currentScreen].orEmpty()
+        val totalScreens = allObjects.keys.maxOrNull() ?: 1
+
         val message = stringResource(Resources.String.sentSuccessfully)
         val errorMessage = stringResource(Resources.String.serverError)
+
         var drawingController by remember { mutableStateOf<DrawingCanvasController?>(null) }
 
         val uploadResult = {
@@ -94,81 +92,89 @@ class EvaluationTestScreen(
                 title = evaluation.measurement_name,
                 snackbarHostState = snackbarHostState,
             ) {
-                currentObject?.let { obj ->
-                    EvaluationObjectContent(
-                        obj = obj,
-                        answers = answers,
-                        onSaveAnswer = { id, answer ->
-                            viewModel.saveAnswer(id, answer)
-                        },
-                        modifier = Modifier.fillMaxWidth(0.8f).weight(1f),
-                        onDrawingControllerReady = { controller ->
-                            drawingController = controller
-                        })
-                }
-                // Handle case where currentObject is null (e.g., empty evaluation or index out of bounds)
-                    ?: Text(
-                        text = stringResource(Resources.String.no_evaluation_object_to_display),
-                        modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
-                    )
-
-                Spacer(modifier = Modifier.height(16.dp)) // Spacer between content and buttons
-
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
                 ) {
-                    val isFirstPage = currentPageIndex == 0
-                    RoundedButton(
-                        text = if (isFirstPage) stringResource(Resources.String.back) // Change text to "Back" on first page
-                        else stringResource(Resources.String.previous), onClick = {
-                            if (isFirstPage) {
-                                navigator.pop() // Navigate back
-                            } else {
-                                currentPageIndex--
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 80.dp) // leave space for nav buttons
+                    ) {
+                        if (objectsOnCurrentScreen.isNotEmpty()) {
+                            objectsOnCurrentScreen.forEach { obj ->
+                                EvaluationObjectContent(
+                                    obj = obj,
+                                    answers = answers,
+                                    onSaveAnswer = { id, answer ->
+                                        viewModel.saveAnswer(id, answer)
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 8.dp),
+                                    onDrawingControllerReady = { controller ->
+                                        drawingController = controller
+                                    }
+                                )
                             }
-                        }, enabled = true, // Always enabled, logic inside handles navigation
-                        modifier = Modifier.weight(1f).padding(end = 8.dp)
-                    )
-
-                    val isLastPage = currentPageIndex == totalObjects - 1
-
-                    val currentAnswered = currentObject?.run {
-                        if (object_type == 21) {
-                            drawingController?.hasPaths?.invoke() == true
                         } else {
-                            !isInputType(object_type) || answers[id]?.toRawString()
-                                ?.isNotBlank() == true
+                            Text(
+                                text = stringResource(Resources.String.no_evaluation_object_to_display),
+                                modifier = Modifier.align(Alignment.CenterHorizontally)
+                            )
                         }
-                    } ?: false
-
-                    val onClick: () -> Unit = {
-                        if (!isLastPage) {
-                            if (currentObject?.object_type == 21) {
-                                drawingController?.let { controller ->
-                                    val bitmap = controller.getBitmap()
-                                    val answer = EvaluationAnswer.Image(bitmap)
-                                    viewModel.saveAnswer(currentObject.id, answer)
-                                }
-                            }
-                            currentPageIndex++
-
-                        } else uploadResult()
                     }
 
-                    RoundedButton(
-                        text = if (isLastPage) stringResource(Resources.String.done)
-                        else stringResource(Resources.String.next),
-                        onClick = onClick,
-                        enabled = currentAnswered,
-                        modifier = Modifier.weight(1f).padding(start = 8.dp)
-                    )
+                    val isFirstScreen = currentScreen == 1
+                    val isLastScreen = currentScreen == totalScreens
+
+                    val allAnswered = objectsOnCurrentScreen.all { obj ->
+                        if (obj.object_type == 21) {
+                            drawingController?.hasPaths?.invoke() == true
+                        } else {
+                            answers[obj.id]?.isAnswered == true
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RoundedButton(
+                            text = if (isFirstScreen) stringResource(Resources.String.back)
+                            else stringResource(Resources.String.previous),
+                            onClick = {
+                                if (isFirstScreen) {
+                                    navigator.pop()
+                                } else {
+                                    currentScreen--
+                                }
+                            },
+                            enabled = true,
+                            modifier = Modifier.weight(1f).padding(end = 8.dp)
+                        )
+
+                        RoundedButton(
+                            text = if (isLastScreen) stringResource(Resources.String.done)
+                            else stringResource(Resources.String.next),
+                            onClick = {
+                                if (!isLastScreen) {
+                                    currentScreen++
+                                } else {
+                                    uploadResult()
+                                }
+                            },
+                            enabled = allAnswered,
+                            modifier = Modifier.weight(1f).padding(start = 8.dp)
+                        )
+                    }
                 }
             }
         }
     }
-
-    private fun isInputType(objectType: Int) = objectType in inputTypes
-
 }

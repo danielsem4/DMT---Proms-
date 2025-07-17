@@ -30,6 +30,7 @@ import org.example.hit.heal.core.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.OnOffToggle
 import org.example.hit.heal.core.presentation.components.OptionStyle
 import org.example.hit.heal.core.presentation.components.PillSelectionGroup
+import org.example.hit.heal.core.presentation.components.ReportInputBox
 import org.example.hit.heal.core.presentation.components.RoundedFilledSlider
 import org.example.hit.heal.core.presentation.components.SelectionMode
 import org.example.hit.heal.core.presentation.formatLabel
@@ -139,13 +140,23 @@ fun EvaluationObjectContent(
                 }
             }
 
-            EvaluationObjectType.INSTRUCTION,
-            EvaluationObjectType.REPORT -> {
+            EvaluationObjectType.INSTRUCTION -> {
                 InstructionBox(
                     text = obj.object_label,
                     modifier = Modifier
                         .fillMaxWidth(0.8f)
                         .align(Alignment.CenterHorizontally)
+                )
+                onSaveAnswer(obj.id, EvaluationAnswer.Answered)
+            }
+
+            EvaluationObjectType.REPORT -> {
+                ReportInputBox(
+                    value = (answers[obj.id] as? EvaluationAnswer.Text)?.value ?: "",
+                    placeholder = obj.object_label,
+                    onValueChange = { newValue ->
+                        onSaveAnswer(obj.id, EvaluationAnswer.Text(newValue))
+                    }
                 )
             }
 
@@ -205,6 +216,10 @@ fun EvaluationObjectContent(
                     onSelectionChanged = { updatedFront, updatedBack ->
                         frontPoints.value = updatedFront
                         backPoints.value = updatedBack
+                        onSaveAnswer(
+                            obj.id,
+                            EvaluationAnswer.HumanModelPoints(updatedFront, updatedBack)
+                        )
                     },
                     onToggleView = {
                         isFrontView.value = !isFrontView.value
