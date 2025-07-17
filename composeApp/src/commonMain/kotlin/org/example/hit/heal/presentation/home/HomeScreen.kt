@@ -100,7 +100,11 @@ class HomeScreen : Screen {
             ModulesResponse(module_name = "Pass", active = true)
         )
 
-        val allFeatures = (features + staticFeatures).filter { it.active }
+        val allFeatures = if (features.isNotEmpty()) {
+            (features + staticFeatures).filter { it.active }
+        } else {
+            emptyList()
+        }
 
         LaunchedEffect(Unit) {
             viewModel.loadFeatures()
@@ -265,7 +269,7 @@ class HomeScreen : Screen {
             "Activities" -> navigator.push(ActivitiesScreen())
             "HitBer" -> navigator.push(HitberEntryScreen())
             "Pass" -> navigator.push(PassEntryScreen())
-            else -> {  }
+            else -> {}
         }
     }
 
