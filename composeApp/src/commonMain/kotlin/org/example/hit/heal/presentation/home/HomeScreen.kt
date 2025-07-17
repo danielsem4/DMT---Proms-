@@ -53,6 +53,9 @@ import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Red
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.logout
+import org.example.hit.heal.core.presentation.Resources.String.logoutConfirmation
+import org.example.hit.heal.core.presentation.Resources.String.no
+import org.example.hit.heal.core.presentation.Resources.String.yes
 import org.example.hit.heal.core.presentation.Sizes.elevationMd
 import org.example.hit.heal.core.presentation.Sizes.elevationSm
 import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
@@ -93,14 +96,15 @@ class HomeScreen : Screen {
         var showDialog by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
 
+        val staticFeatures = listOf(
+            ModulesResponse(module_name = "Pass", active = true)
+        )
+
+        val allFeatures = (features + staticFeatures).filter { it.active }
+
         LaunchedEffect(Unit) {
             viewModel.loadFeatures()
         }
-
-        LaunchedEffect(features) {
-            println("All features: ${features.toString().replace(",","\n")}")
-        }
-
 
         BaseScreen(
             title = stringResource(Resources.String.home),
@@ -145,7 +149,7 @@ class HomeScreen : Screen {
                             .fillMaxWidth()
                             .weight(1f)
                     ) {
-                        items(features.filter { it.active }) { feature ->
+                        items(allFeatures) { feature ->
                             FeatureTile(
                                 feature = feature,
                                 fontSize = REGULAR,
@@ -164,8 +168,8 @@ class HomeScreen : Screen {
                 onDismissRequest = { showDialog = false },
                 title = stringResource(logout),
                 icon = Resources.Icon.logoutIcon,
-                message = "Are you sure you want to logout?",
-                confirmButtonText = "Yes",
+                message = stringResource(logoutConfirmation),
+                confirmButtonText = stringResource(yes),
                 confirmButtonColor = Green,
                 onConfirm = {
 
@@ -175,7 +179,7 @@ class HomeScreen : Screen {
                         navigator.replace(LoginScreen())
                     }
                 },
-                dismissButtonText = "No",
+                dismissButtonText = stringResource(no),
                 dismissButtonColor = Red,
                 onDismissButtonClick = { showDialog = false }
             )
@@ -260,6 +264,7 @@ class HomeScreen : Screen {
             "measurements" -> navigator.push(AllEvaluationsScreen())
             "Activities" -> navigator.push(ActivitiesScreen())
             "HitBer" -> navigator.push(HitberEntryScreen())
+            "Pass" -> navigator.push(PassEntryScreen())
             else -> {  }
         }
     }
@@ -276,6 +281,7 @@ class HomeScreen : Screen {
         "HitBer" -> Resources.Icon.hitbearModuleIcon
         "cdt" -> Resources.Icon.clockIcon
         "Orientation" -> Resources.Icon.memoryModuleIcon
+        "Pass" -> Resources.Icon.hitbearModuleIcon
         else -> Resources.Icon.binIcon
     }
 
@@ -290,6 +296,7 @@ class HomeScreen : Screen {
         "HitBer" -> stringResource(Resources.String.hitber)
         "cdt" -> stringResource(Resources.String.clockTest)
         "Orientation" -> "Orientation"
+        "Pass" -> stringResource(Resources.String.pass)
         else -> "Unknown"
     }
 }

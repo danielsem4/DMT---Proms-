@@ -20,6 +20,7 @@
     <string name="evaluation">Evaluation</string>
 
     <string name="are_you_sure">Are you sure?</string>
+    <string name="logout_confirmation">Are you sure you want to logout?</string>
     <string name="back_confirmation_message">Going back will return to the home screen</string>
 
 

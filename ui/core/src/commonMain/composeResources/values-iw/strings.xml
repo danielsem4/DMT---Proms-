@@ -16,7 +16,7 @@
     <string name="are_you_sure">האם את/ה בטוח/ה?</string>
 
     <string name="evaluation">הערכה</string>
-
+    <string name="logout_confirmation">האם אתה בטוח שאתה רוצה להתנתק?</string>
     <string name="back_confirmation_message">מעבר אחורה יחזור למסך הבית</string>
 
 
