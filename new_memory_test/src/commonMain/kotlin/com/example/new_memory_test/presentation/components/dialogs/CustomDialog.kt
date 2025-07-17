@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
+import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.primaryColor
 
 @Composable
 fun CustomDialog(
@@ -65,7 +67,7 @@ fun CustomDialog(
                         text = title,
                         fontWeight = FontWeight.Bold,
                         fontSize = 22.sp,
-                        color = Color(0xFF4DD0A6),
+                        color = primaryColor,
                         textAlign = TextAlign.Center
                     )
 
@@ -74,7 +76,7 @@ fun CustomDialog(
                     Text(
                         text = description,
                         textAlign = TextAlign.Center,
-                        color = Color(0xFF4DD0A6),
+                        color = primaryColor,
                         fontSize = 16.sp
                     )
 
@@ -90,7 +92,7 @@ fun CustomDialog(
                             Button(
                                 onClick = action,
                                 colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = Color(0xFF4DD0A6),
+                                    backgroundColor = primaryColor,
                                     contentColor = Color.White
                                 ),
                                 shape = RoundedCornerShape(12.dp),
@@ -109,7 +111,7 @@ fun CustomDialog(
                     .size(80.dp)
                     .zIndex(1f)
                     .clip(CircleShape)
-                    .background(Color(0xFF4DD0A6)),
+                    .background(primaryColor),
                 contentAlignment = Alignment.Center
             ) {
                 icon()

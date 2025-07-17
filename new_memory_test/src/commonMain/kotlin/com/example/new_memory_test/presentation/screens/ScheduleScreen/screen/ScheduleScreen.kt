@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -21,6 +23,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -31,8 +34,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,6 +54,12 @@ import com.example.new_memory_test.presentation.screens.ScheduleScreen.data.Drag
 
 import com.mohamedrejeb.compose.dnd.DragAndDropContainer
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
+import core.utils.CapturableWrapper
+import core.utils.RegisterBackHandler
+import core.utils.getCurrentFormattedDateTime
+import core.utils.platformCapturable
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
@@ -58,7 +69,7 @@ import org.koin.compose.viewmodel.koinViewModel
 class ScheduleScreen(val pageNumber: Int ) : Screen {
     @Composable
     override fun Content() {
-
+        val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = koinViewModel()
         val days = listOf(
             stringResource(Resources.String.day_sunday),
@@ -78,7 +89,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
             stringResource(Resources.String.hour_15_00),
             stringResource(Resources.String.hour_16_00)
         )
-        val circles = stringResource(Resources.String.book_circle )
+
 
 
         val droppedState = remember {
@@ -122,34 +133,56 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
             stringResource(Resources.String.stethoscope_circle) to stringResource(Resources.String.stethoscope_circle_text)
         )
         val dragAndDropState = rememberDragAndDropState<DraggableCircle>()
-        val navigator = LocalNavigator.currentOrThrow
+        var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
         val usedCircleIds = remember { mutableStateListOf<String>() }
 
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
 
-        BaseTabletScreen(  "Text ", page = pageNumber, totalPages = 6) {
+        BaseTabletScreen( stringResource(Resources.String.build_schedule), page = pageNumber, totalPages = 6) {
+
             DragAndDropContainer(state = dragAndDropState) {
+            capturable = platformCapturable(
+
+
+                onCaptured = { imageBitmap ->
+                    val timestamp = getCurrentFormattedDateTime()
+
+                    viewModel.uploadImage(
+                        bitmap = imageBitmap,
+                        date = timestamp,
+                        currentQuestion = pageNumber
+                    )
+
+                }
+            )
+            {
+
+
+
                 Column {
+
                     Row(
                         modifier = Modifier
-                            .weight(0.07f)
+                            .weight(0.08f)
                             .padding(horizontal = 5.dp)
                             .background(Color.Transparent),
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Row(
                             modifier = Modifier
-                                .weight(0.6f)
+                                .weight(0.7f)
                                 .clip(RoundedCornerShape(8.dp))
                                 .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
                                 .background(Color.White),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(5.dp)
                         ) {
                             days.reversed().forEach { day ->
                                 Box(
                                     modifier = Modifier
-                                        .weight(0.7f)
-                                        .padding(5.dp)
-                                        .clip(RoundedCornerShape(30.dp))
+                                        .weight(0.6f)
+                                        .padding(3.dp)
+                                        .fillMaxHeight()
+                                        .clip(RoundedCornerShape(15.dp))
                                         .background(Color.Gray),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -158,7 +191,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                         color = Color.White,
                                         textAlign = TextAlign.Center,
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = 36.sp
+                                        fontSize = EXTRA_MEDIUM
                                     )
                                 }
                             }
@@ -172,7 +205,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
 
                         Column(
                             modifier = Modifier
-                                .weight(0.6f)
+                                .weight(0.7f)
                                 .padding(horizontal = 5.dp, vertical = 5.dp)
                                 .clip(RoundedCornerShape(12.dp))
                                 .background(Color.Transparent)
@@ -185,7 +218,16 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                     .padding(vertical = 15.dp)
                             ) {
                                 Column {
-                                    for (hour in listOf("09", "10", "11", "12", "13", "14", "15", "16")) {
+                                    for (hour in listOf(
+                                        "09",
+                                        "10",
+                                        "11",
+                                        "12",
+                                        "13",
+                                        "14",
+                                        "15",
+                                        "16"
+                                    )) {
                                         Row(
                                             modifier = Modifier
                                                 .fillMaxWidth()
@@ -211,7 +253,6 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                         }
                         Spacer(modifier = Modifier.size(7.dp))
 
-                        // Часы сбоку
                         Column(
                             modifier = Modifier
                                 .weight(0.1f)
@@ -240,7 +281,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                             text = hour,
                                             color = primaryColor,
                                             textAlign = TextAlign.Center,
-                                            fontSize = 32.sp,
+                                            fontSize = LARGE,
                                             fontWeight = FontWeight.Bold
                                         )
                                     }
@@ -248,31 +289,70 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                             }
                             Spacer(modifier = Modifier.size(5.dp))
                         }
+
                         Column(
                             modifier = Modifier
                                 .weight(0.3f)
 
                                 .padding(10.dp)
                         ) {
-                            Text(
-                                text = "Text",
-                                fontSize = 25.sp,
-                                textAlign = TextAlign.Right,
-                                fontWeight = FontWeight.Bold,
-                                color = primaryColor,
-                                modifier = Modifier.padding(bottom = 16.dp)
-                            )
+
+                            Box(
+                                modifier = Modifier
+
+                                    .background(Color.White, RoundedCornerShape(8.dp))
+                                    .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
+                                    .padding(vertical = 7.dp, horizontal = 7.dp)
+                            ) {
+
+                                Text(
+                                    text = stringResource(Resources.String.place_instructions_in_calendar_memory),
+                                    fontSize = 25.sp,
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Bold,
+                                    color = primaryColor,
+                                    modifier = Modifier.padding(bottom = 16.dp)
+                                )
+                            }
                             val selectedItemText = remember { mutableStateOf<String?>(null) }
                             LaunchedEffect(dragAndDropState.draggedItem) {
                                 val item = dragAndDropState.draggedItem?.data
                                 selectedItemText.value = item?.let { idToTextMap[it.id] }
                             }
-                            // Первый ряд
+
+                            Spacer(modifier = Modifier.height(20.dp))
+                            Box(
+                                modifier = Modifier
+                                    .background(
+                                        if (selectedItemText.value.isNullOrBlank()) Color.Transparent else Color.White,
+                                        RoundedCornerShape(8.dp)
+                                    )
+                                    .border(
+                                        1.dp,
+                                        if (selectedItemText.value.isNullOrBlank()) Color.Transparent else Color.Black,
+                                        RoundedCornerShape(8.dp)
+                                    )
+                                    .padding(vertical = 7.dp, horizontal = 7.dp)
+                                    .fillMaxWidth()
+                                    .height(110.dp)
+                            ) {
+                                if (!selectedItemText.value.isNullOrBlank()) {
+                                    Text(
+                                        text = selectedItemText.value!!,
+                                        fontSize = EXTRA_MEDIUM,
+                                        color = primaryColor,
+                                        fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                                    )
+                                }
+                            }
+
                             Row(
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
                                     .fillMaxWidth()
-                                    .padding(bottom = 10.dp),
+                                    .padding(bottom = 10.dp, top = 10.dp),
                                 horizontalArrangement = Arrangement.spacedBy(25.dp)
                             ) {
                                 DraggableCirclesPalet(
@@ -283,7 +363,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                     }
                                 )
                             }
-                            // Второй ряд
+
                             Row(
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
@@ -299,20 +379,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                     }
                                 )
                             }
-                            Spacer(modifier = Modifier.height(20.dp))
-                            selectedItemText.value?.let { text ->
-                                Text(
-                                    text = text,
-                                    fontSize = 25.sp,
-                                    color = primaryColor,
-                                    fontWeight = FontWeight.Bold,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(bottom = 12.dp),
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(20.dp))
+
                             var showAcceptDialog by remember { mutableStateOf(false) }
                             Column(
                                 modifier = Modifier
@@ -323,28 +390,34 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                             ) {
                                 Button(
                                     onClick = {
-                                        val allCircleIds = (circlesPalletFirst + circlesPalletSecond).map { it.id }
+                                        val allCircleIds =
+                                            (circlesPalletFirst + circlesPalletSecond).map { it.id }
                                         val unused = allCircleIds.filterNot { it in usedCircleIds }
                                         if (unused.isNotEmpty()) {
                                             showAcceptDialog = true
                                         } else {
-                                            val agenda = droppedState.value.mapValues { it.value.id }
+
+                                            capturable?.capture?.invoke()
+                                            val agenda =
+                                                droppedState.value.mapValues { it.value.id }
                                             viewModel.agendaMap.value = agenda
                                             viewModel.setPage(viewModel.txtMemoryPage + 1)
                                             navigator.push(RoomsScreens(pageNumber = 6))
                                         }
                                     },
                                     colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                                    shape = RoundedCornerShape(50),
+                                    shape = RoundedCornerShape(30),
                                     modifier = Modifier
                                         .fillMaxWidth(0.7f)
+                                        .defaultMinSize(minWidth = 100.dp)
+                                        .width(250.dp)
                                         .height(50.dp)
                                 ) {
                                     Text(
                                         text = stringResource(Resources.String.next),
-                                        fontSize = 24.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color.White
+                                        fontSize = EXTRA_MEDIUM,
+                                        fontWeight = FontWeight.Companion.Bold,
+                                        color = Color.Companion.White
                                     )
                                 }
                             }
@@ -359,8 +432,8 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                             modifier = Modifier.size(40.dp)
                                         )
                                     },
-                                    title =stringResource(Resources.String.build_schedule) ,
-                                    description = stringResource(Resources.String.build_schedule),
+                                    title = stringResource(Resources.String.build_schedule),
+                                    description = stringResource(Resources.String.please_place_all_activities_memory),
                                     buttons = listOf(
                                         stringResource(Resources.String.next) to {
                                             showAcceptDialog = false
@@ -368,10 +441,18 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                     )
                                 )
                             }
+
+
                         }
                     }
                 }
+                    }
+                }
             }
+        }
+        RegisterBackHandler(this)
+        {
+            navigator.popUntilRoot()
         }
     }
 }

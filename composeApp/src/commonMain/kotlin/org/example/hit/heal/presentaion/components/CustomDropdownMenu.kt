@@ -30,7 +30,8 @@ import com.example.new_memory_test.primaryColor
     selectedOption: String,
     options: List<String>,
     onOptionSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -50,7 +51,6 @@ import com.example.new_memory_test.primaryColor
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             modifier = Modifier
                 .fillMaxWidth(),
-
             shape = RoundedCornerShape(10.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = primaryColor,

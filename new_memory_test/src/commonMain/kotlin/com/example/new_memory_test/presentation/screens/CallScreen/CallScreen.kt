@@ -17,8 +17,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,11 +26,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -38,9 +39,9 @@ import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.components.CircleWithPipeImage
 import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
 import com.example.new_memory_test.presentation.screens.BaseTabletScreen
-import com.example.new_memory_test.presentation.screens.InformScheduleScreen.effects.RipplePulseEffect
+import com.example.new_memory_test.presentation.screens.CallScreen.effects.RipplePulseEffect
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
-import core.utils.AudioPlayer
+import core.utils.RegisterBackHandler
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.example.hit.heal.core.presentation.Resources
@@ -70,7 +71,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
                 }
             }
         }
-
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
         BaseTabletScreen(title = stringResource(Resources.String.incoming_call_title), page = pageNumber, totalPages = 6) {
 
             Column(
@@ -140,7 +141,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
                             onClick = {
                                 viewModel.stopAudio()
                                 isAudioClicked = false
-                                viewModel.setAgree()
+                                viewModel.setPhoneResult(true)
                                 showAcceptDialog = true
                             }
                         )
@@ -154,14 +155,13 @@ class CallScreen(val pageNumber: Int )  : Screen {
                             modifier = Modifier.Companion.fillMaxSize(),
                             color = Color.Companion.Red
                         )
-
                         CircleWithPipeImage(
                             imagePainter = painterResource(resource = Resources.Icon.callDecline),
                             color = Color.Companion.Red,
                             onClick = {
                                 viewModel.stopAudio()
                                 isAudioClicked = false
-                                viewModel.setDisagree()
+                                viewModel.setPhoneResult(false)
                                 showAcceptDialog = true
                             }
                         )
@@ -192,6 +192,10 @@ class CallScreen(val pageNumber: Int )  : Screen {
                 )
             )
         }
+        RegisterBackHandler(this)
+        {
+            navigator.popUntilRoot()
+        }
     }
-
+    }
 }

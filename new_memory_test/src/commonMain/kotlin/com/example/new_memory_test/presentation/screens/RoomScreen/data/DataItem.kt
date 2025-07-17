@@ -2,6 +2,7 @@ package com.example.new_memory_test.presentation.screens.RoomScreen.data
 
 import androidx.compose.ui.geometry.Offset
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
+import core.data.model.MeasureObjectString
 import org.jetbrains.compose.resources.DrawableResource
 
 data class DataItem(

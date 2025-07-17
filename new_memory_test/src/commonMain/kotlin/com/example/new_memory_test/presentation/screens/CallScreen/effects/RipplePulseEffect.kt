@@ -1,4 +1,4 @@
-package com.example.new_memory_test.presentation.screens.InformScheduleScreen.effects
+package com.example.new_memory_test.presentation.screens.CallScreen.effects
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

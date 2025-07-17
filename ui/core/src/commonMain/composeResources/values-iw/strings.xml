@@ -60,7 +60,7 @@
 
     <string name="hitber">התבר</string>
     <string name="done">סיום</string>
-    <string name="back">חזור</string>
+
 
     <string name="no_evaluation_object_to_display">אין אובייקט הערכה להצגה.</string>
     <string name="uploading">שולח</string>
@@ -286,6 +286,8 @@
     <string name="build_schedule_continuation">בניית סדר יום המשך</string>
     <string name="instruction_text_agenda_continuation">עליך להכניס למערכת השעות את הפגישות לפי ההוראות. לחיצה על הפגישה תציג את הזמן.</string>
     <string name="place_activities">יש למקם את כל הפעילויות ביומן לפני שממשיכים</string>
+    <string name="the_activities_memory">לפניך מספר פעילויות שעליך לשבץ במערכת שעות. להתחלת המשימה לחץ על "המשך"</string>
+
 
     <string name="day_sunday">ראשון</string>
     <string name="day_monday">שני</string>
@@ -315,6 +317,9 @@
     <string name="lecturer_circle_text">לשמוע הרצאה ביום חמישי בשעה 15:00 במשך שעה</string>
     <string name="coffee_circle_text">מפגש חברתי בבית הקפה בימי שלישי בשעה 11:00 למשך שעתיים</string>
     <string name="stethoscope_circle_text">תור לרופא עיניים לפני יום שלישי בין השעות 12:00–9:00 במשך שעה</string>
+    <string name="place_instructions_in_calendar_memory">עליך להכניס למערכת השעות את הפגישות לפי ההוראות, לחיצה על הפגישה תציג את הזמן</string>
+    <string name="please_place_all_activities_memory">יש למקם את כל הפעילויות ביומן לפני שממשיכים</string>
+
 
     <!--Call Screen Memory Module -->
     <string name="incoming_call_title">שיחה נכנסת</string>
@@ -337,11 +342,20 @@
     <string name="press_start_to_begin">לתחילת המשימה לחץ על התחל</string>
 
     <!--Room Screen Memory Module -->
+    <string name="time_ended">נגמר הזמן</string>
+    <string name="time_ended_for_this_question_memory">נגמר הזמן עבור השאלה הזאת, תודה על שיתוף הפעולה. יש להמשיך לשאלה הבאה.</string>
+    <string name="first_one_minute_end_body_memory">מקם רק את החפצים שמיקמת קודם.</string>
+    <string name="second_one_minute_end_body_memory">האם מיקמת את כל החפצים בחדרים?</string>
+
+
+    <string name="instructions_text_memory_question_trial">בשאלה הקרובה תצטרך למקם חפצים בחדרים שונים, בפניך התנסות קצרה בה תראה כיצד ניתן להחליף חדר ע"י לחיצה על הכפתורים של החדרים.</string>
+
     <string name="room_title">מסך החדר</string>
     <string name="bedroom">חדר שינה</string>
     <string name="living_room">סלון</string>
     <string name="kitchen">מטבח</string>
     <string name="drag_and_place_instruction">גרור ומקם את שבעת החפצים בכל שלושת החדרים, כפי שהיית ממקם בביתך. עליך לזכור את מיקום החפצים. בסיום לחץ על המשך</string>
+    <string name="instructions_text_memory_question_1">לפניך מספר חפצים, גרור רק את החפצים שהופיעו קודם ומקם אותם בדיוק כמו שמיקמת קודם בסיום, לחץ על "המשך"</string>
 
     <!--Dialogs Memory Module-->
     <string name="remember_all">אזכור הכל</string>
@@ -349,9 +363,15 @@
     <string name="use_diary">אשתמש ביומן</string>
     <string name="what_will_you_do">מה תעשה ?</string>
     <string name="memory_instruction">לפניך מערכת שעות של פעילויות. מה עליך לעשות כדי לזכור את כל הפעילויות המפורטות?</string>
-    <string name="rate_your_feelings">יש לדרג את תחושתיך</string>
-    <string name="rate_expected_success">כמה טוב אתה חושב שתצליח במטלה לפניך</string>
+
+
+
+    <string name="place_rate_memory">יש לדרג את תחושותיך</string>
     <string name="rate">דרג</string>
+    <string name="the_rate_is">הדירוג הוא:</string>
+    <string name="how_well_do_you_think_you_will_do_memory">כמה טוב אתה חושב שתצליח במטלה לפנייך</string>
+    <string name="how_well_do_you_feel_memory">כמה אתה מרגיש שהצלחת במטלה</string>
+
 
     <!--All Memory Module -->
     <string name="delete">מחק</string>

@@ -3,7 +3,7 @@ package org.example.hit.heal.di
 
 
 
-import MedicationViewModel
+import org.example.hit.heal.presentaion.screens.MedicationViewModel.MedicationViewModel
 
 
 import org.koin.compose.viewmodel.dsl.viewModel

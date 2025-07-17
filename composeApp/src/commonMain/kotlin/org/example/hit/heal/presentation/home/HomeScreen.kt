@@ -1,6 +1,5 @@
 package org.example.hit.heal.presentation.home
- import MedicationScreen
-import androidx.compose.foundation.background
+ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,18 +65,17 @@ import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.TextWhite
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
-import org.example.hit.heal.core.presentation.primaryColor
-import org.example.hit.heal.hitber.presentation.entry.HitberEntryScreen
-import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScreen
-import org.example.hit.heal.presentation.activities.ActivitiesScreen
+ import org.example.hit.heal.core.presentation.primaryColor
+
+ import org.example.hit.heal.hitber.presentation.entry.HitberEntryScreen
+ import org.example.hit.heal.presentation.activities.ActivitiesScreen
 import org.example.hit.heal.presentation.evaluation.AllEvaluationsScreen
 import org.example.hit.heal.presentation.login.LoginScreen
 import org.example.hit.heal.presentaion.screens.BaseScreen
-import org.example.hit.heal.presentaion.screens.alarmReport.AlarmReportMedicationScreen
+import org.example.hit.heal.presentaion.screens.mainMedication.MainMedicationScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.entryScreen.PassEntryScreen
 
 /**
  *
@@ -259,9 +257,8 @@ class HomeScreen : Screen {
             "measurements" -> navigator.push(AllEvaluationsScreen())
             "Activities" -> navigator.push(ActivitiesScreen())
             "HitBer" -> navigator.push(HitberEntryScreen())
-            "medications" -> navigator.push(AlarmReportMedicationScreen())
+            "medications" -> navigator.push(MainMedicationScreen())
             "Memory" -> navigator.push(MemoryScreen())
-            "HitBer" -> navigator.push(UnderstandingScreen())
             else -> {  }
         }
     }

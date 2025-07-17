@@ -359,8 +359,7 @@ import dmt_proms.ui.core.generated.resources.living_room
 import dmt_proms.ui.core.generated.resources.kitchen
 import dmt_proms.ui.core.generated.resources.drag_and_place_instruction
 import dmt_proms.ui.core.generated.resources.delete
-import dmt_proms.ui.core.generated.resources.rate_your_feelings
-import dmt_proms.ui.core.generated.resources.rate_expected_success
+
 import dmt_proms.ui.core.generated.resources.rate
 import dmt_proms.ui.core.generated.resources.app
 import dmt_proms.ui.core.generated.resources.audioMemory
@@ -426,9 +425,10 @@ import dmt_proms.ui.core.generated.resources.start_time
 import dmt_proms.ui.core.generated.resources.notification_start_question
 import dmt_proms.ui.core.generated.resources.start_date
 import dmt_proms.ui.core.generated.resources.end_date
+import dmt_proms.ui.core.generated.resources.first_one_minute_end_body_memory
 import dmt_proms.ui.core.generated.resources.leave_end_date_empty
 import dmt_proms.ui.core.generated.resources.Res.string as rs
-
+import dmt_proms.ui.core.generated.resources.place_instructions_in_calendar_memory
 
 
 
@@ -520,7 +520,18 @@ import dmt_proms.ui.core.generated.resources.wrong_app_title
 import dmt_proms.ui.core.generated.resources.wrong_number_dialed_please_try_again_pass
 import dmt_proms.ui.core.generated.resources.yes
 import dmt_proms.ui.core.generated.resources.yogurt
-
+import dmt_proms.ui.core.generated.resources.how_well_do_you_feel_memory
+import dmt_proms.ui.core.generated.resources.old_phone_ring
+import dmt_proms.ui.core.generated.resources.place_rate_memory
+import dmt_proms.ui.core.generated.resources.the_rate_is
+import dmt_proms.ui.core.generated.resources.how_well_do_you_think_you_will_do_memory
+import dmt_proms.ui.core.generated.resources.instructions_text_memory_question_trial
+import dmt_proms.ui.core.generated.resources.the_activities_memory
+import dmt_proms.ui.core.generated.resources.instructions_text_memory_question_1
+import dmt_proms.ui.core.generated.resources. second_one_minute_end_body_memory
+import dmt_proms.ui.core.generated.resources.time_ended
+import dmt_proms.ui.core.generated.resources.time_ended_for_this_question_memory
+import dmt_proms.ui.core.generated.resources.please_place_all_activities_memory
 
 /**
  * Resources used in the application.
@@ -707,7 +718,7 @@ object Resources {
         val next = rs.next
         val loginSuccess = rs.login_success
         val previous = rs.previous
-        val back = rs.back
+
         val graphs = rs.graphs
         val appName = rs.app_name
         val howDoYouFeel = rs.how_do_you_feel
@@ -1133,11 +1144,24 @@ object Resources {
         val kitchen = rs.kitchen
         val drag_and_place_instruction = rs.drag_and_place_instruction
         val delete = rs.delete
-        val rate_your_feelings = rs.rate_your_feelings
-        val rate_expected_success = rs.rate_expected_success
+        val instructions_text_memory_question_trial = rs.instructions_text_memory_question_trial
         val rate = rs.rate
         val audioMemory = rs.audioMemory
+        val old_phone_ring = rs.old_phone_ring
+        val place_rate_memory = rs.place_rate_memory
+        val the_rate_is = rs.the_rate_is
+        val how_well_do_you_think_you_will_do_memory = rs.how_well_do_you_think_you_will_do_memory
+        val how_well_do_you_feel_memory = rs.how_well_do_you_feel_memory
+        val the_activities_memory = rs.the_activities_memory
+        val instructions_text_memory_question_1 = rs.instructions_text_memory_question_1
+        val place_instructions_in_calendar_memory =rs.place_instructions_in_calendar_memory
 
+        val time_ended_for_this_question_memory = rs.time_ended_for_this_question_memory
+        val time_ended= rs.time_ended
+
+        val second_one_minute_end_body_memory = rs.second_one_minute_end_body_memory
+        val first_one_minute_end_body_memory = rs.first_one_minute_end_body_memory
+        val please_place_all_activities_memory =rs.please_place_all_activities_memory
 
     }
 

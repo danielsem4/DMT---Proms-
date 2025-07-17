@@ -1,7 +1,7 @@
 package org.example.hit.heal.di
 
 
-import MedicationViewModel
+import org.example.hit.heal.presentaion.screens.MedicationViewModel.MedicationViewModel
 import com.example.new_memory_test.di.MemoryModule
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import core.di.AudioModule

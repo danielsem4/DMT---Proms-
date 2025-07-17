@@ -1,7 +1,7 @@
-package org.example.hit.heal.presentaion.components
+package org.example.hit.heal.presentaion.screens.medicationListScreen.components
 
 
-import MedicationViewModel
+import org.example.hit.heal.presentaion.screens.MedicationViewModel.MedicationViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -56,7 +56,7 @@ fun ReportMedicationDialog(
     onDismiss: () -> Unit,
     viewModel: MedicationViewModel = koinViewModel()
 ) {
-
+    var showDialog by remember { mutableStateOf(true) }
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
 
@@ -101,7 +101,8 @@ fun ReportMedicationDialog(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = { viewModel.validateAndSave(medication) },
+                    onClick = { viewModel.validateAndSave(medication, medication.id)
+                        onDismiss() },
                     colors = ButtonDefaults.buttonColors(primaryColor),
                     shape = RoundedCornerShape(50)
                 ) {
@@ -142,84 +143,8 @@ fun ReportMedicationDialog(
 
 
 
-fun normalizeDateString(dateString: String): String {
-    return if (dateString.contains("-")) {
-        val parts = dateString.split("-")
-        if (parts.size == 3) {
-
-            val (year, month, day) = parts
-            "${day.toInt()}/${month.toInt()}/${year.toInt()}"
-        } else {
-            dateString
-        }
-    } else {
-        dateString
-    }
-}
 
 
-@Composable
-fun DatePicker(onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
-    WheelDatePickerView(
-        modifier = Modifier.padding(10.dp),
-        title = stringResource(Resources.String.selectDate),
-        showDatePicker = true,
-        height = 200.dp,
-        titleStyle = TextStyle(
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF333333),
-        ),
-        doneLabelStyle = TextStyle(
-            fontSize = 16.sp,
-            fontWeight = FontWeight(600),
-           color = Color(0xFF007AFF),
-        ),
-        dateTextColor = Color(0xff007AFF),
-        selectorProperties = WheelPickerDefaults.selectorProperties(
-            borderColor = Color.LightGray,
-        ),
-        shape = RoundedCornerShape(18.dp),
-        dateTimePickerView = DateTimePickerView.DIALOG_VIEW,
-        rowCount = 3,
-        showShortMonths = false,
-        onDoneClick = { selectedDate ->
-            onDateSelected(normalizeDateString(selectedDate.toString()))
 
-            onDismiss()
-        },
-        onDismiss = { onDismiss() }
-    )
-}
 
-@Composable
-fun TimePicker(onTimeSelected: (String) -> Unit, onDismiss: () -> Unit) {
-    WheelTimePickerView(
-        modifier = Modifier.padding(10.dp),
-        title =stringResource(Resources.String.selectTimeLabel),
-        showTimePicker = true,
-        height = 200.dp,
-        titleStyle = TextStyle(
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF333333),
-        ),
-        doneLabelStyle = TextStyle(
-            fontSize = 16.sp,
-            fontWeight = FontWeight(600),
-            color = Color(0xFF007AFF),
-        ),
-        textColor = Color(0xff007AFF),
-        selectorProperties = WheelPickerDefaults.selectorProperties(
-            borderColor = Color.LightGray,
-        ),
-        shape = RoundedCornerShape(18.dp),
-        dateTimePickerView = DateTimePickerView.DIALOG_VIEW,
-        rowCount = 3,
-        onDoneClick = { selectedTime ->
-            onTimeSelected(selectedTime.toString())
-            onDismiss()
-        },
-        onDismiss = { onDismiss() }
-    )
-}
+

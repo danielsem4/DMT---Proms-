@@ -78,7 +78,7 @@ kotlin {
                 implementation(libs.koin.compose.viewmodel)
                 implementation(libs.compose.dnd)
                 implementation(libs.compose.dnd)
-                //implementation(libs.kmp.capturable.compose)
+                implementation(libs.kmp.capturable.compose)
                 //drag and drop dependencies
 
 
@@ -98,6 +98,7 @@ kotlin {
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
             implementation(libs.kmp.capturable.compose)
+
         }
 
     }

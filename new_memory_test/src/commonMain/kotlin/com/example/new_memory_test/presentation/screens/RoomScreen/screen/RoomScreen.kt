@@ -15,58 +15,85 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
 
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
+import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
 import com.example.new_memory_test.presentation.components.dialogs.RatingDialog
 import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import org.jetbrains.compose.resources.painterResource
 import com.example.new_memory_test.presentation.screens.CallScreen.CallScreen
-import com.example.new_memory_test.presentation.screens.InformScheduleScreen.screen.InformScheduleScreen
+import com.example.new_memory_test.presentation.screens.FinalScreenMemoryTest
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.DraggableItem
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.zonePosition.getZoneForPosition
 import com.example.new_memory_test.presentation.screens.RoomScreen.data.DataItem
+import com.example.new_memory_test.presentation.screens.ScheduleInformationScreen.ScheduleInformationScreen
+import com.example.new_memory_test.presentation.screens.ScheduleScreen.screen.ScheduleScreen
+import core.data.model.MeasureObjectString
 import core.utils.CapturableWrapper
+import core.utils.RegisterBackHandler
+import core.utils.getCurrentFormattedDateTime
+import core.utils.platformCapturable
+import io.github.suwasto.capturablecompose.Capturable
+import io.github.suwasto.capturablecompose.rememberCaptureController
 
 
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Resources.Icon
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.time.Clock.System
+import kotlin.time.Clock.System.now
+
+import kotlin.time.ExperimentalTime
 
 
 class RoomsScreens(val pageNumber: Int) : Screen {
+    @OptIn(ExperimentalTime::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -74,16 +101,15 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         var selectedRoom by remember { mutableStateOf(Room.Bedroom) }
         val roomButtons = Room.values().toList()
         var showDialog by remember { mutableStateOf(false) }
+        var showDialogEndTime by remember { mutableStateOf(false) }
         var rating by remember { mutableStateOf(0f) }
-        var timeLeft by remember { mutableStateOf(4 * 60) }
+
+        var timeNotifications by remember { mutableStateOf(60) }
         var roomPosition by remember { mutableStateOf(Offset.Companion.Zero) }
         var roomSize by remember { mutableStateOf(IntSize.Companion.Zero) }
         var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
-
-        //val captureController = rememberCaptureController()
-
-        var autoSwitchingRooms by remember { mutableStateOf(false) }
-
+        var autoSwitchingRooms by remember { mutableStateOf(false) } //switch rooms
+        var inactivityDialogShown by remember { mutableStateOf(false) }
         //autoSwitchingRooms = false
         val allItems : List<Pair<Int, DrawableResource>> = listOf(
             Resources.Icon.glassesImage,
@@ -99,30 +125,89 @@ class RoomsScreens(val pageNumber: Int) : Screen {
             Resources.Icon.recordsIcon,
             Resources.Icon.bottleImage
         ).mapIndexed { index, res -> index to res }
+        var lastInteractionTime by remember { mutableStateOf(Clock.System.now()) }
+        var showInactivityDialog by remember { mutableStateOf(false) }
+        var inactivityCount by remember { mutableStateOf(0) }
+        var timeLeft by remember { mutableStateOf(4 * 60) }
 
+        val coroutineScope = rememberCoroutineScope()
         //Doing random schake of items
         val itemsToShowWithIds = viewModel.getItemsForPage(pageNumber, allItems)
-
         LaunchedEffect(Unit) {
-            while (timeLeft > 0) {
+            while (timeLeft > 0 && inactivityCount < 3) {
                 delay(1000L)
                 timeLeft -= 1
+
+                val nowMillis = Clock.System.now().toEpochMilliseconds()
+                val lastMillis = lastInteractionTime.toEpochMilliseconds()
+                val secondsSinceLastInteraction = (nowMillis - lastMillis) / 1000
+
+                val delayButton =false
+                if (!showInactivityDialog && secondsSinceLastInteraction >= 60) {
+                    showInactivityDialog = true
+                }
             }
-            if (timeLeft == 0) {
-                if (pageNumber == 2) {
-                    navigator.push(CallScreen(pageNumber = 3))
-                }
-                if (pageNumber == 4) {
-                    navigator.push(InformScheduleScreen(pageNumber = 5))
-                }
-                if (pageNumber == 6) {
-                    viewModel.checkFinalScore()
-                    showDialog = true
-                }
+
+            if (timeLeft == 0 && inactivityCount < 3 ) {
+                showInactivityDialog = true
             }
         }
 
-        // Инициализация ID один раз
+        if (showDialogEndTime) {
+            CustomDialog(
+                onDismiss = { },
+                icon = { Icon(Icons.Default.Timer, contentDescription = null, tint = Color.White) },
+                title = stringResource(Resources.String.time_ended),
+                description = stringResource(Resources.String.time_ended_for_this_question_memory),
+                buttons = listOf(stringResource(Resources.String.next) to {
+                    showDialogEndTime = false
+
+                    when (pageNumber) {
+                        2 -> navigator.push(CallScreen(pageNumber = 3))
+                        4 -> navigator.push(ScheduleScreen(pageNumber = 5))
+                        6 -> {
+                           // viewModel.resultRoom ()
+                            showDialog = true
+                        }
+                    }
+                })
+            )
+        }
+
+        if (showInactivityDialog) {
+            CustomDialog(
+                onDismiss = { },
+                icon = {
+                    Icon(Icons.Default.Timer, contentDescription = null, tint = Color.White)
+                },
+                 title = "",
+                description = if (inactivityCount <2 ){stringResource(Resources.String.first_one_minute_end_body_memory)}
+                else{stringResource(Resources.String.second_one_minute_end_body_memory)},
+                buttons = listOf(
+                    stringResource(Resources.String.continue_button) to {
+                        showInactivityDialog = false
+                        lastInteractionTime = Clock.System.now()
+                        inactivityCount++
+                        viewModel.recordInactivity()
+                        if (inactivityCount < 3) {
+                            timeLeft = 4 * 60
+                        } else {
+
+                            when (pageNumber) {
+                                2 -> navigator.push(CallScreen(pageNumber = 3))
+                                4 -> navigator.push(ScheduleScreen(pageNumber = 5))
+                                6 -> {
+                                   // viewModel.resultRoom ()
+                                    showDialog = true
+                                }
+                            }
+                        }
+                    }
+                )
+            )
+        }
+
+
         LaunchedEffect(Unit) {
             viewModel.initializeItemIdsIfNeeded(allItems.indices.toList())
         }
@@ -136,18 +221,29 @@ class RoomsScreens(val pageNumber: Int) : Screen {
             val secondsPart = (seconds % 60).toString().padStart(2, '0')
             return "$minutesPart:$secondsPart"
         }
+
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
         BaseTabletScreen(
-            title = "Continue",
+            title =stringResource(Resources.String.room_title),
             page = pageNumber,
             totalPages = 6,
-            modifier = Modifier.Companion.fillMaxSize().background(color = backgroundColor)
+            modifier = Modifier.Companion.fillMaxSize().background(color = backgroundColor).pointerInput(Unit) {
+                while (true) {
+                    awaitPointerEventScope {
+                        awaitPointerEvent()
+                        lastInteractionTime = Clock.System.now()
+                    }
+                }
+
+            }
         ) {
 
             Row(
                 modifier = Modifier.Companion
                     .fillMaxSize()
                     .background(color = backgroundColor)
-                    .padding(16.dp)
+
+
             ) {
                 Column(
                     modifier = Modifier.Companion
@@ -156,17 +252,25 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                         .background(color = backgroundColor)
                         .padding(16.dp)
                 ) {
-                    Text(
-                        text = stringResource(Resources.String.drag_and_place_instruction),
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Companion.Right,
-                        fontWeight = FontWeight.Companion.Bold,
-                        color = primaryColor,
-                        modifier = Modifier.Companion.padding(bottom = 16.dp)
-                    )
+                    Box(
+                        modifier = Modifier
+
+                            .background(Color.White, RoundedCornerShape(8.dp))
+                            .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
+                            .padding(vertical = 7.dp, horizontal = 7.dp)
+                    ) {
+                        Text(
+                            text = if(pageNumber==2){stringResource(Resources.String.drag_and_place_instruction)}else{stringResource(Resources.String.instructions_text_memory_question_1)},
+                            fontSize = 18.sp,
+                            textAlign = TextAlign.Companion.Center,
+                            fontWeight = FontWeight.Companion.Bold,
+                            color = primaryColor,
+                            modifier = Modifier.Companion.padding(bottom = 16.dp)
+                        )
+                    }
 
                     Row(
-                        modifier = Modifier.Companion.fillMaxWidth(),
+                        modifier = Modifier.Companion.fillMaxWidth().padding(top = 16.dp),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         roomButtons.forEach { room ->
@@ -176,11 +280,11 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                 colors = ButtonDefaults.buttonColors(
                                     backgroundColor = if (isSelected) Color.Companion.Gray else primaryColor
                                 ),
-                                shape = RoundedCornerShape(50),
-                                modifier = Modifier.Companion.height(36.dp)
+                                shape = androidx.compose.foundation.shape.RoundedCornerShape(30),
+                                modifier = Modifier.Companion.height(50.dp).width(150.dp)
                             ) {
                                 Text(
-                                    text =  stringResource(room.displayName),
+                                    text = stringResource(room.displayName),
                                     color = Color.Companion.White,
                                     fontSize = 16.sp
                                 )
@@ -250,6 +354,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                                                 newItem,
                                                                 pageNumber
                                                             )
+
                                                         } else {
                                                             viewModel.removeItem(id)
                                                         }
@@ -266,27 +371,27 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                             }
                         }
                     }
-                    Text(
-                        text = "Размещенные предметы: (Количество: ${viewModel.placedItems.size})",
-                        fontSize = 16.sp,
-                        color = primaryColor,
-                        fontWeight = FontWeight.Companion.Bold
-                    )
-                    if (viewModel.placedItems.isEmpty()) {
-                        Text(
-                            text = "Нет размещенных предметов",
-                            fontSize = 14.sp,
-                            color = Color.Companion.Gray
-                        )
-                    } else {
-                        viewModel.placedItems.forEach { item ->
-                           // Text(
-                           //     text = "Предмет ID: ${item.id}, Зона: ${item.zone?.displayName ?: "Неизвестно"}, Комната: ${item.room?.displayName ?: "Нет"}",
-                           //     fontSize = 14.sp,
-                           //     color = Color.Companion.Black
-                           // )
-                        }
-                    }
+                    // Text(
+                    //     text = "Размещенные предметы: (Количество: ${viewModel.placedItems.size})",
+                    //     fontSize = 16.sp,
+                    //     color = primaryColor,
+                    //     fontWeight = FontWeight.Companion.Bold
+                    // )
+                    // if (viewModel.placedItems.isEmpty()) {
+                    //     Text(
+                    //         text = "Нет размещенных предметов",
+                    //         fontSize = 14.sp,
+                    //         color = Color.Companion.Gray
+                    //     )
+                    // } else {
+                    //     viewModel.placedItems.forEach { item ->
+                    //         Text(
+                    //             text = "Предмет ID: ${item.id}, Зона: ${item.zone?.displayName ?: "Неизвестно"}, Комната: ${item.room?.displayName ?: "Нет"}",
+                    //             fontSize = 14.sp,
+                    //             color = Color.Companion.Black
+                    //         )
+                    //     }
+                    // }
 
                     Spacer(modifier = Modifier.Companion.height(12.dp))
                     Row(
@@ -300,22 +405,34 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                             color = primaryColor,
                             fontWeight = FontWeight.Companion.Bold
                         )
-                        Button(
-                            onClick = {
-                                autoSwitchingRooms = true
-                            },
-                            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                            shape = androidx.compose.foundation.shape.RoundedCornerShape(50),
-                            modifier = Modifier.Companion
-                                .defaultMinSize(minWidth = 100.dp)
-                                .height(50.dp)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp),
+                            contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                text = stringResource(Resources.String.next),
-                                fontSize = 32.sp,
-                                fontWeight = FontWeight.Companion.Bold,
-                                color = Color.Companion.White
-                            )
+                            Button(
+                                onClick = {
+                                    coroutineScope.launch {
+                                        delay(1000)  // חכה שנייה
+
+                                    }
+                                    autoSwitchingRooms = true
+                                },
+                                colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
+                                shape = RoundedCornerShape(30),
+                                modifier = Modifier
+                                    .defaultMinSize(minWidth = 100.dp)
+                                    .width(250.dp)
+                                    .height(50.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(Resources.String.next),
+                                    fontSize = EXTRA_MEDIUM,
+                                    fontWeight = FontWeight.Companion.Bold,
+                                    color = Color.Companion.White
+                                )
+                            }
                         }
                         var showRatingDialog by remember { mutableStateOf(true) }
                         var currentRating by remember { mutableStateOf(0f) }
@@ -326,9 +443,11 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                 onRatingChanged = { newRating -> rating = newRating },
                                 onDismiss = { showDialog = false },
                                 onSubmit = {
-                                    viewModel.userRating.value = currentRating
+
+                                    viewModel.setSuccessRateAfter(rating.toString())
                                     showRatingDialog = false
-                                    //navigator.push(FinalScreen)
+                                    showDialog = false
+                                    navigator.push(FinalScreenMemoryTest())
                                 }
                             )
                         }
@@ -340,101 +459,109 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                         .fillMaxHeight()
                 ) {
                     //Area of screenshot of the picture
-                    //  Capturable(
-                    // captureController = captureController,
-                    // onCaptured = { imageBitmap ->
-                    //check where we need to save screen
-                    //        if (imageBitmap != null) {
-                    //           if (pageNumber == 2){
-                    //               viewModel.saveRoomScreenshotFirst(selectedRoom,imageBitmap)
-                    //           }
-                    //            if (pageNumber == 4){
-                    //               viewModel.saveRoomScreenshotSecond(selectedRoom,imageBitmap)
-                    //            }
-                    //            if (pageNumber == 6) {
-                    //                viewModel.saveRoomScreenshotThird(selectedRoom, imageBitmap)
-                    //            }
-                    //        }
-                    //        val byteArray = imageBitmap.toByteArray(compressionFormat = CompressionFormat.PNG, quality = 100)
-                    //        viewModel.saveScreenshot(byteArray)
-                    //    }
-                    // )
-                    //{
-                    Box(
-                        modifier = Modifier.Companion
-                            .weight(0.6f)
-                            .fillMaxHeight()
-                            .onGloballyPositioned { coordinates ->
-                                roomPosition = coordinates.localToWindow(Offset.Companion.Zero)
-                                roomSize = coordinates.size
-                            }
-                    ) {
-                        Image(
-                            painter = painterResource(selectedRoom.imageRes),
-                            contentDescription = null,
-                            modifier = Modifier.Companion
-                                .fillMaxSize()
-                                .zIndex(0f),
-                            contentScale = ContentScale.Companion.Crop
-                        )
-                        viewModel.placedItems.filter { it.room == selectedRoom }.forEach { item ->
-                            DraggableItem(
-                                id = item.id,
-                                imageRes = item.resId,
-                                onDrop = { id, globalOffset ->
-                                    val relativeOffset = globalOffset - roomPosition
-                                    if (isWithinRoom(globalOffset, roomPosition, roomSize)) {
-                                        val newZone = getZoneForPosition(
-                                            globalOffset,
-                                            roomPosition,
-                                            roomSize,
-                                            selectedRoom
-                                        )
-                                        val updatedItem = item.copy(
-                                            position = relativeOffset,
-                                            room = selectedRoom,
-                                            zone = newZone
-                                        )
-                                        viewModel.saveItemForRound(updatedItem, pageNumber)
-                                    } else {
-                                        viewModel.removeItem(id)
-                                    }
-                                },
-                                selectedRoom = selectedRoom,
-                                placedItems = viewModel.placedItems,
-                                isOnRoom = true,
-                                roomPosition = roomPosition // ← теперь передаём положение всей комнаты
-                            )
-                        }
-                    }
-                }
-                LaunchedEffect(autoSwitchingRooms) {
-                    if (autoSwitchingRooms) {
-                        val delayBetween = 400L
-                        val switchOrder = listOf(Room.Bedroom, Room.LivingRoom, Room.Kitchen)
+                    capturable = platformCapturable(
+                        modifier = Modifier.weight(1f),
+                        onCaptured = { imageBitmap ->
+                            val timestamp = getCurrentFormattedDateTime()
 
-                        for (room in switchOrder) {
-                            selectedRoom = room
-                            delay(delayBetween)
-                            //We do a screenshoot of the rooms
-                            // captureController.capture()
-                            delay(100L)//need to check if we need a delay after
+                            viewModel.uploadImage(
+                                bitmap = imageBitmap,
+                                date = timestamp,
+                                currentQuestion = pageNumber
+                            )
+
                         }
-                        autoSwitchingRooms = false
-                        if (pageNumber == 2) {
-                            viewModel.setPage(viewModel.txtMemoryPage + 1)
-                            navigator.push(CallScreen(pageNumber = 3))
-                        } else if (pageNumber == 4) {
-                            viewModel.setPage(viewModel.txtMemoryPage + 1)
-                            navigator.push(InformScheduleScreen(pageNumber = 5))
-                        } else if (pageNumber == 6) {
-                            viewModel.checkFinalScore()
-                            showDialog = true
+                    )
+                    {
+                        Box(
+                            modifier = Modifier.Companion
+                                .weight(0.6f)
+                                .fillMaxHeight()
+                                .onGloballyPositioned { coordinates ->
+                                    roomPosition = coordinates.localToWindow(Offset.Companion.Zero)
+                                    roomSize = coordinates.size
+                                }
+                        ) {
+                            Image(
+                                painter = painterResource(selectedRoom.imageRes),
+                                contentDescription = null,
+                                modifier = Modifier.Companion
+                                    .fillMaxSize()
+                                    .zIndex(0f),
+                                contentScale = ContentScale.Companion.Crop
+                            )
+                            viewModel.placedItems.filter { it.room == selectedRoom }
+                                .forEach { item ->
+                                    DraggableItem(
+                                        id = item.id,
+                                        imageRes = item.resId,
+                                        onDrop = { id, globalOffset ->
+                                            val relativeOffset = globalOffset - roomPosition
+                                            if (isWithinRoom(
+                                                    globalOffset,
+                                                    roomPosition,
+                                                    roomSize
+                                                )
+                                            ) {
+                                                val newZone = getZoneForPosition(
+                                                    globalOffset,
+                                                    roomPosition,
+                                                    roomSize,
+                                                    selectedRoom
+                                                )
+                                                val updatedItem = item.copy(
+                                                    position = relativeOffset,
+                                                    room = selectedRoom,
+                                                    zone = newZone
+                                                )
+                                                viewModel.saveItemForRound(updatedItem, pageNumber)
+                                            } else {
+                                                viewModel.removeItem(id)
+                                            }
+                                        },
+                                        selectedRoom = selectedRoom,
+                                        placedItems = viewModel.placedItems,
+                                        isOnRoom = true,
+                                        roomPosition = roomPosition
+                                    )
+                                }
+                        }
+                    }
+                    }
+                    LaunchedEffect(autoSwitchingRooms) {
+                        if (autoSwitchingRooms) {
+                            val delayBetween = 500L
+                            val switchOrder = listOf(Room.Bedroom, Room.LivingRoom, Room.Kitchen)
+
+                            for (room in switchOrder) {
+                                selectedRoom = room
+                                delay(delayBetween)
+                                delay(100L)//need to check if we need a delay after
+                            }
+                            autoSwitchingRooms = false
+                            capturable?.capture?.invoke()
+                            if (pageNumber == 2) {
+                                viewModel.setPage(viewModel.txtMemoryPage + 1)
+                                navigator.push(CallScreen(pageNumber = 3))
+                            } else if (pageNumber == 4) {
+
+                                viewModel.setPage(viewModel.txtMemoryPage + 1)
+                                navigator.push(ScheduleInformationScreen(pageNumber = 5))
+                            } else if (pageNumber == 6) {
+
+                                //viewModel.resultRoom ()
+                                showDialog = true
+                            }
+
                         }
                     }
                 }
-                //  }
             }
+        }
+
+        RegisterBackHandler(this)
+        {
+            navigator.popUntilRoot()
         }
     }
     private fun isWithinRoom(position: Offset, roomPosition: Offset, roomSize: IntSize): Boolean {

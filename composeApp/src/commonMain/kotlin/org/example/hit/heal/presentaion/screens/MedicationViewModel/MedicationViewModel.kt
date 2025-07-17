@@ -1,10 +1,11 @@
+package org.example.hit.heal.presentaion.screens.MedicationViewModel
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.data.model.Medications.Medication
-
 import core.data.model.Medications.MedicationReport
 import core.data.storage.Storage
 import core.domain.DataError
@@ -24,9 +25,8 @@ import kotlinx.datetime.atTime
 import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.json.Json
 import kotlin.math.abs
-import kotlin.onFailure
-
 
 class MedicationViewModel
     (private val remoteDataSource: AppApi,
@@ -37,6 +37,7 @@ class MedicationViewModel
     private var patientId: Int? = null
 
     private val _medication = MutableStateFlow<Medication?>(null)
+    var medicationId by mutableStateOf<Int?>(null)
 
     private val _medicationName = MutableStateFlow("")
     val medicationName: StateFlow<String> = _medicationName
@@ -102,14 +103,14 @@ class MedicationViewModel
     }
 
     var selectedDate by mutableStateOf(
-        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).run {
+        Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault()).run {
             "$dayOfMonth/$monthNumber/$year"
         }
     )
         private set
 
     var selectedTime by mutableStateOf(
-        Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).run {
+        Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault()).run {
             "$hour:$minute"
         }
     )
@@ -148,7 +149,7 @@ class MedicationViewModel
         }
     }
 
-    fun validateAndSave(medication: Medication?) {
+    fun validateAndSave(medication: Medication? , medicationId: Int? ) {
         val date = selectedDate
         val time = selectedTime
 
@@ -165,18 +166,13 @@ class MedicationViewModel
         val timestamp = convertToIso8601(date,time)
 
         viewModelScope.launch {
-            reportMedication(medication, timestamp)
+            reportMedication(medication, timestamp, medicationId)
         }
     }
 
-    fun isValidIso8601Format(value: String): Boolean {
-        val isoRegex = Regex(
-            """^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,6})?)?([Z]|([+-]\d{2}:\d{2}))$"""
-        )
-        return isoRegex.matches(value)
-    }
 
-    suspend fun reportMedication(medication: Medication, timestamp: String) {
+
+    suspend fun reportMedication(medication: Medication, timestamp: String, medicationId: Int?) {
         isLoading.value = true
         if (!initUserIds()) {
             errorMessage = "We couldn't get userId/clinicId"
@@ -184,24 +180,27 @@ class MedicationViewModel
             return
         }
 
+
         //if (!isValidIso8601Format(timestamp)) {
         //    println(" Invalid format: $timestamp")
         //} else {
         //    println(" Valid: $timestamp")
         //}
 
-        val idMedication = medication.id.toString()
+
         val report = MedicationReport(
-            clinic_id = clinicId!!,
-            patient_id = patientId!!,
-            medication_id = idMedication,
-            timestamp = "2024-12-12 12:12:12"
+            clinicId = clinicId!!,
+            patientId = patientId!!,
+            medicationId = medicationId!! ,
+            timestamp = timestamp
         )
         val result = remoteDataSource.reportMedicationTook(report)
+        val jsonString = Json.encodeToString(report)
+        println(jsonString)
         result.onSuccess {
             errorMessage = null
            // println(" УУУУУУУУ Молодец какая !")
-        }.onError{ error ->
+        }.onError { error ->
             println("Error: $error")
           //  println(" УУУУУУУУ Не  Молодец  !")
         }
@@ -229,7 +228,7 @@ class MedicationViewModel
             second
         )
 
-        val timeZone = if (useUtc) TimeZone.UTC else TimeZone.currentSystemDefault()
+        val timeZone = if (useUtc) TimeZone.Companion.UTC else TimeZone.Companion.currentSystemDefault()
         val instant = localDateTime.toInstant(timeZone)
 
         // Для UTC возвращаем с "Z"
@@ -268,7 +267,7 @@ class MedicationViewModel
                 return@launch
             }
 
-            remoteDataSource.getAllPatientMedicines(clinicId!!, patientId!!)
+            remoteDataSource.getAllPatientMedicines(3, 243)
                 .onSuccess {
                     medications.value = it
                     errorMessage = "We could load medications"
@@ -302,42 +301,48 @@ class MedicationViewModel
             isLoading.value = false
         }
     }
+
     fun buildAndSendMedication(
-        medication: Medication?,
+        medication: Medication?, // null если создаём новое
         medicationName: String
     ) {
-        val newMedication = Medication(
-            id = medication?.id ?: 0, // если редактируется — возьми ID, иначе 0
-            patient_id = patientId!!,
-            medicine_id = clinicId.toString(),
-            name = medicationName,
-            form = "tablet",
-            unit = "mg",
-            frequency = selectedFrequency.value,
-            frequency_data = if (selectedFrequency.value == "Weekly")
-                selectedDays.value.joinToString(",") else selectedTimeBetweenDoses.value,
-            start_date = selectedStartDate.value,
-            end_date = selectedEndDate.value.takeIf { it.isNotBlank() },
-            dosage = "1"
-        )
+        viewModelScope.launch {
+            if (!initUserIds()) {
+                errorMessage = "Ошибка: нет данных пациента или клиники"
+                return@launch
+            }
 
-       //viewModelScope.launch {
-       //    val result = remoteDataSource.setMedicationNotifications(newMedication)
-       //    result
-       //        .onSuccess {
-       //            println("Medication saved successfully.")
-       //        }
-       //        .onError { error ->
-       //            println("Error saving medication: $error")
-       //        }
-       //}
+            val newMedication = Medication(
+                id = medication?.id ?: 0,
+                patient = patientId!!,
+                medicine = clinicId.toString(),
+                name = medicationName,
+                form = "tablet",
+                unit = "mg",
+                frequency = selectedFrequency.value,
+                frequencyData = if (selectedFrequency.value == "Weekly")
+                    selectedDays.value.joinToString(",") else selectedTimeBetweenDoses.value,
+                startDate = selectedStartDate.value,
+                endDate = selectedEndDate.value.takeIf { it.isNotBlank() },
+                dosage = "1" // или из ввода
+            )
+
+            val result = remoteDataSource.setMedicationNotifications(newMedication)
+
+            result.onSuccess {
+                errorMessage = null
+                println("Medication notification saved!")
+            }.onError { error ->
+                errorMessage = "Ошибка при сохранении: $error"
+                println("Ошибка сохранения медикамента: $error")
+            }
+        }
     }
-
     fun sentMedication(medication: Medication){
 
     }
     private fun isValidDateTime(date: String, time: String): Boolean {
-        val currentDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val currentDateTime = Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault())
 
         return try {
             val (day, month, year) = date.split("/").map { it.toInt() }
@@ -355,12 +360,12 @@ class MedicationViewModel
 
 
     fun getCurrentDate(): String {
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault())
         return "${now.dayOfMonth}/${now.monthNumber}/${now.year}"
     }
 
     fun getCurrentTime(): String {
-        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault())
         return "${now.hour}:${now.minute}"
     }
 

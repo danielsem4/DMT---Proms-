@@ -1,4 +1,4 @@
-package com.example.new_memory_test.presentation.screens.InformScheduleScreen.components
+package com.example.new_memory_test.presentation.screens.ScheduleInformationScreen.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -37,9 +37,9 @@ fun ActivityItem(text: String, icon: Painter) {
             textAlign = TextAlign.Right,
             fontSize = EXTRA_REGULAR ,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(spacingSm)
+            modifier = Modifier.padding(5.dp)
         )
-        Spacer(modifier = Modifier.size(10.dp))
+        Spacer(modifier = Modifier.size(3.dp))
         Icon(
             painter = icon,
             contentDescription = null,

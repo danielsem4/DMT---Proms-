@@ -55,7 +55,7 @@
     <string name="pass">Pass</string>
 
     <string name="done">Done</string>
-    <string name="back">Back</string>
+
     <string name="no_evaluation_object_to_display">No evaluation object to display.</string>
 
     <string name="uploading">Uploading</string>
@@ -288,6 +288,8 @@
     <string name="instruction_text_agenda_continuation">You need to enter the meetings into the schedule according to the instructions. Tapping on a meeting will show the time.</string>
     <string name="place_activities">All activities must be placed in the calendar before continuing</string>
 
+    <string name="the_activities_memory">You have several activities that you need to schedule in a timetable. To start the task, click Continue</string>
+
     <string name="day_sunday">Sunday</string>
     <string name="day_monday">Monday</string>
     <string name="day_tuesday">Tuesday</string>
@@ -316,6 +318,7 @@
     <string name="lecturer_circle_text">Attend a lecture on Thursday at 15:00 for one hour</string>
     <string name="coffee_circle_text">Social meeting at the cafe on Tuesdays at 11:00 for two hours</string>
     <string name="stethoscope_circle_text">Eye doctor appointment before Tuesday between 09:00–12:00 for one hour</string>
+    <string name="please_place_all_activities_memory">please place all activities</string>
 
     <!--Call Screen Memory Module -->
     <string name="incoming_call_title">Incoming Call</string>
@@ -336,8 +339,16 @@
     <string name="quiet_room_tip">It is recommended to perform the task in a quiet room</string>
     <string name="good_luck">Good luck!</string>
     <string name="press_start_to_begin">To start the task, press Start</string>
+    <string name="place_instructions_in_calendar_memory">You must enter the appointments in the scheduling system according to the instructions</string>
 
     <!--Room Screen Memory Module -->
+
+    <string name="time_ended">Time ended</string>
+    <string name="time_ended_for_this_question_memory">The time for this question is over, Thanks for the cooperation move on to the next question</string>
+
+    <string name="first_one_minute_end_body_memory">Do you have all you need?</string>
+    <string name="second_one_minute_end_body_memory">Do you have all you need?</string>
+
     <string name="room_title">Room Screen</string>
     <string name="bedroom">Bedroom</string>
     <string name="living_room">Living Room</string>
@@ -350,9 +361,15 @@
     <string name="use_diary">Use the diary</string>
     <string name="what_will_you_do">What will you do?</string>
     <string name="memory_instruction">Here is a schedule of activities. What should you do to remember all the listed activities?</string>
-    <string name="rate_your_feelings">Rate your feelings</string>
-    <string name="rate_expected_success">How well do you think you will do in the upcoming task?</string>
-    <string name="rate">Rate</string>
+
+    <string name="instructions_text_memory_question_trial">In the upcoming question, you will need to place objects in different rooms. You are now presented with a short trial that shows how to switch rooms by clicking on the room buttons.</string>
+
+    <string name="place_rate_memory">please rate</string>
+    <string name="rate">rate</string>
+    <string name="the_rate_is">The rate is:</string>
+    <string name="how_well_do_you_think_you_will_do_memory">How well do you think you will do in the task before you?</string>
+    <string name="how_well_do_you_feel_memory">How well do you feel you did in the assignment?</string>
+
 
     <!--All Memory Module -->
     <string name="delete">Delete</string>

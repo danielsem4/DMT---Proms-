@@ -1,5 +1,6 @@
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,11 +13,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -25,12 +30,13 @@ import core.data.model.Medications.Medication
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
-import org.example.hit.heal.presentaion.components.ReportMedicationDialog
+import org.example.hit.heal.presentaion.screens.medicationListScreen.components.ReportMedicationDialog
 
 import org.example.hit.heal.presentaion.components.SearchBar
+import org.example.hit.heal.presentaion.screens.MedicationViewModel.MedicationViewModel
 
 
-import org.example.hit.heal.presentaion.screens.medicationReport.MedicationAlarmDetailsScreenContent
+import org.example.hit.heal.presentaion.screens.medicationAlarm.MedicationAlarmScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -38,7 +44,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 
 
-class MedicationScreen (private val isReport: Boolean) : Screen {
+class MedicationListScreen (private val isReport: Boolean) : Screen {
     @OptIn(KoinExperimentalAPI::class)
     @Composable
     override fun Content() {
@@ -73,8 +79,6 @@ class MedicationScreen (private val isReport: Boolean) : Screen {
 
        BaseScreen(
             title = stringResource(Resources.String.medications),
-            onPrevClick = { navigator.pop() },
-            prevButtonText = stringResource(Resources.String.back),
             config = ScreenConfig.PhoneConfig,
             ) {
             Column(
@@ -92,10 +96,10 @@ class MedicationScreen (private val isReport: Boolean) : Screen {
                         .fillMaxWidth()
 
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(25.dp))
 
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    verticalArrangement = Arrangement.spacedBy(40.dp)
                 ) {
                     items(filteredMedications) { medication ->
                         Card(
@@ -107,25 +111,31 @@ class MedicationScreen (private val isReport: Boolean) : Screen {
                                         selectedMedication = medication
                                         showDialog = true
                                         viewModel.setMedicationName(medication.name)
-
                                     } else {
-
-                                        navigator.push(
-                                            MedicationAlarmDetailsScreenContent()
-                                        )
+                                        navigator.push(MedicationAlarmScreen())
                                     }
                                 }
-                                .clip(RoundedCornerShape(10.dp)),
+                                .clip(RoundedCornerShape(15.dp))
+                                .height(70.dp),
                             backgroundColor = Color.White,
                             elevation = 0.dp
-
                         ) {
-                            Text(
-                                text = medication.name,
-                                modifier = Modifier.padding(16.dp),
-
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(start = 16.dp), // отступ слева
+                                contentAlignment = Alignment.CenterStart // по центру вертикали и слева по горизонтали
+                            ) {
+                                Text(
+                                    text = medication.name,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 18.sp,
+                                    textAlign = TextAlign.Start
                                 )
+                            }
                         }
+
+
                     }
                 }
             }

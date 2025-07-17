@@ -1,9 +1,8 @@
-package org.example.hit.heal.presentaion.screens.alarmReport
+package org.example.hit.heal.presentaion.screens.mainMedication
 
-import MedicationScreen
-import MedicationViewModel
+import MedicationListScreen
+import org.example.hit.heal.presentaion.screens.MedicationViewModel.MedicationViewModel
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,11 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -42,7 +36,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 
-class AlarmReportMedicationScreen : Screen {
+class MainMedicationScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
@@ -51,8 +45,6 @@ class AlarmReportMedicationScreen : Screen {
         BaseScreen(
             title = stringResource(Resources.String.medications),
             config = ScreenConfig.PhoneConfig,
-            onPrevClick = { navigator.pop()},
-            prevButtonText = stringResource(Resources.String.back),
 
         ) {
             Column(
@@ -61,17 +53,17 @@ class AlarmReportMedicationScreen : Screen {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(55.dp))
 
                 Button(
                     onClick = {   viewModel.setReport(true)
-                        navigator.push(MedicationScreen(isReport = true))},
+                        navigator.push(MedicationListScreen(isReport = true))},
                     colors = ButtonDefaults.buttonColors(Color.White),
                     shape = RoundedCornerShape(20),
                     modifier = Modifier
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth(0.9f)
                         .padding(16.dp)
-                        .height(50.dp),
+                        .height(65.dp),
 
 
                 ){
@@ -91,13 +83,13 @@ class AlarmReportMedicationScreen : Screen {
 
                 Button(
                     onClick = {   viewModel.setReport(false)
-                        navigator.push(MedicationScreen(isReport = false))},
+                        navigator.push(MedicationListScreen(isReport = false))},
                     colors = ButtonDefaults.buttonColors(Color.White),
                     shape = RoundedCornerShape(20),
                     modifier = Modifier
-                        .fillMaxWidth(0.8f)
+                        .fillMaxWidth(0.9f)
                         .padding(16.dp)
-                        .height(50.dp),
+                        .height(65.dp),
 
 
                     ){

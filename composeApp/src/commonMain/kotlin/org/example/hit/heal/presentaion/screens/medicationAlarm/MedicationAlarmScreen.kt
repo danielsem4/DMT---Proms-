@@ -1,7 +1,7 @@
-package org.example.hit.heal.presentaion.screens.medicationReport
+package org.example.hit.heal.presentaion.screens.medicationAlarm
 
 
-import MedicationViewModel
+import org.example.hit.heal.presentaion.screens.MedicationViewModel.MedicationViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -22,14 +23,16 @@ import org.example.hit.heal.presentaion.components.CustomDatePickerBox
 import org.example.hit.heal.presentaion.components.CustomDropdownMenu
 
 import org.example.hit.heal.presentaion.components.CustomWeeklySelector
+import org.example.hit.heal.presentaion.screens.medicationAlarm.components.generateTimeSlots
 
 
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import kotlin.String
 
 
-class MedicationAlarmDetailsScreenContent () : Screen {
+class MedicationAlarmScreen () : Screen {
     @OptIn(KoinExperimentalAPI::class)
     @Composable
     override fun Content() {
@@ -79,17 +82,10 @@ class MedicationAlarmDetailsScreenContent () : Screen {
         BaseScreen(
             title = medicationName,
             config = ScreenConfig.PhoneConfig,
-            onPrevClick =
-            { navigator.pop() },
-            onNextClick =
-            {
-                if (validateInput()) {
-                    navigator.pop()
-                }
-            },
+            onPrevClick = { navigator.pop() },
+            onNextClick= { validateInput() },
             prevButtonText = stringResource(Resources.String.back),
-            nextButtonText = stringResource(Resources.String.save),
-
+            nextButtonText= stringResource(Resources.String.save),
         )
         {
             Column(

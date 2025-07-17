@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MemoryData(
-    var measurement: Int = 20,
+    var measurement: Int= 0 ,
     var patient_id: Int = 0,
     var date: String = "2030-12-12 12:12:12.6",
     var clinicId: Int = 0,

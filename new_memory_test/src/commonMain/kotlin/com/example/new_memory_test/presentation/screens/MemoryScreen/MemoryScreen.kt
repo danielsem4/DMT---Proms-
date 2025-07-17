@@ -12,10 +12,14 @@ import androidx.compose.material.ButtonDefaults
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,8 +30,10 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.components.BulletPointText
 import com.example.new_memory_test.presentation.screens.BaseTabletScreen
+import com.example.new_memory_test.presentation.screens.RoomInsructionsScreen.RoomInstructionsScreen
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
+import core.utils.RegisterBackHandler
 
 
 import org.example.hit.heal.core.presentation.Resources
@@ -42,6 +48,13 @@ class MemoryScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = koinViewModel()
+
+        //create at evaluetion memory
+        LaunchedEffect(Unit){
+            viewModel.loadEvaluation("Memory")
+        }
+
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
         BaseTabletScreen(title = stringResource(Resources.String.memory_title), page = 1, totalPages =6 ){
 
             Column(
@@ -85,18 +98,24 @@ class MemoryScreen : Screen {
                 Button(
                     onClick = {
                         viewModel.setPage(viewModel.txtMemoryPage + 1)
-                        navigator.push(RoomsScreens(pageNumber = 2))
+                        navigator.push(RoomInstructionsScreen(pageNumber = 1))
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                    shape = RoundedCornerShape(50),
+                    shape = RoundedCornerShape(30),
                     modifier = Modifier
                         .fillMaxWidth(0.2f)
                         .height(50.dp)
                 ) {
-                    Text( stringResource(Resources.String.next), fontSize = 24.sp,  color = Color.White)
+                    Text( stringResource(Resources.String.start), fontSize = 24.sp,  color = Color.White)
                 }
                 Spacer(modifier = Modifier.height(40.dp))
             }
+            }
+        }
+        RegisterBackHandler(this)
+        {
+            navigator.popUntilRoot()
         }
     }
+
 }

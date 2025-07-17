@@ -100,16 +100,16 @@ fun BaseScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     onPrevClick?.let {
-                         RoundedButton(prevButtonText, Modifier, it)
+                        // RoundedButton(prevButtonText, Modifier, it)
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     onNextClick?.let {
-                        RoundedButton(nextButtonText, Modifier, it)
-                         RoundedButton("previous", Modifier, it)
+                       // RoundedButton(nextButtonText, Modifier, it)
+                      //   RoundedButton("previous", Modifier, it)
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     onNextClick?.let {
-                        RoundedButton("next", Modifier, it)
+                        //RoundedButton("next", Modifier, it)
                      }
                 }
             }

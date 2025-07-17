@@ -20,7 +20,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarHalf
 import androidx.compose.material.icons.rounded.StarHalf
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,7 +33,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RatingDialog(
@@ -98,13 +103,13 @@ fun RatingDialog(
                         .padding(horizontal = 16.dp)
                 ) {
                     Text(
-                        text = "יש לדרג את תחושתיך",
-                        fontSize = 18.sp,
+                        text = stringResource(Resources.String.place_rate_memory),
+                        fontSize = EXTRA_MEDIUM,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "כמה טוב אתה חושב שתצליח במטלה לפניך",
-                        fontSize = 14.sp,
+                        text = stringResource(Resources.String.how_well_do_you_feel_memory),
+                        fontSize = EXTRA_MEDIUM ,
                         color = Color.Gray
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -112,7 +117,7 @@ fun RatingDialog(
                         for (i in 1..5) {
                             val icon = when {
                                 rating >= i -> Icons.Filled.Star
-                                rating >= i - 0.5f -> Icons.Rounded.StarHalf
+                                rating >= i - 0.5f -> Icons.Filled.StarHalf
                                 else -> Icons.Outlined.Star
                             }
                             Icon(
@@ -138,8 +143,8 @@ fun RatingDialog(
                             .height(40.dp)
                     ) {
                         Text(
-                            text = "דרג",
-                            fontSize = 12.sp,
+                            text = stringResource(Resources.String.rate),
+                            fontSize = EXTRA_MEDIUM,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
