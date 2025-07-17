@@ -293,11 +293,10 @@ class ActivityViewModel(
                         println("✅ העלאה הצליחה")
                         saveUploadedImageUrl(currentQuestion, imagePath, date)
                     }.onError {error ->
-                        _uploadStatus.value = Result.failure(Exception(error.toString()))
+                        uploadEvaluationResults()
                         println("❌ שגיאה בהעלאה: ")
                     }
                 } catch (e: Exception) {
-                    _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
                     println("🚨 שגיאה חריגה: ${e.message}")
                 }
         }
@@ -354,7 +353,7 @@ class ActivityViewModel(
     }
 
 
-    private fun uploadEvaluationResults() {
+     fun uploadEvaluationResults() {
         uploadScope.launch {
             try {
                 result.patientId = storage.get(userId)!!.toInt()

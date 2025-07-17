@@ -9,7 +9,7 @@ data class SixthQuestionItem(
     val fridgeOpened: MeasureObjectBoolean = MeasureObjectBoolean(),
     val correctProductDragged: MeasureObjectBoolean = MeasureObjectBoolean(),
     val placedOnCorrectNap: MeasureObjectBoolean = MeasureObjectBoolean(),
-    val imageUrl: MeasureObjectString = MeasureObjectString()
+    val imageUrl: MeasureObjectString? = null
 
 )
 

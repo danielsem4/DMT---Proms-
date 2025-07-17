@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SeventhQuestionItem(
     val isCorrect: MeasureObjectBoolean = MeasureObjectBoolean(),
-    val imageUrl: MeasureObjectString = MeasureObjectString()
+    val imageUrl: MeasureObjectString? = null
 )
 
 
