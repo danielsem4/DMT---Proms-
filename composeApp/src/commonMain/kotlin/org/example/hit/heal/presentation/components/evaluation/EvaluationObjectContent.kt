@@ -52,9 +52,9 @@ fun EvaluationObjectContent(
         val availableValues: List<EvaluationValue> = obj.available_values.orEmpty()
 
         val options = availableValues.map { it.available_value }
-        when (obj.object_type) {
-            // Open question / Text Input
-            1 -> {
+
+        when (EvaluationObjectType.fromInt(obj.object_type)) {
+            EvaluationObjectType.OPEN_QUESTION -> {
                 CustomMultilineTextField(
                     value = (answers[obj.id] as? EvaluationAnswer.Text)?.value ?: "",
                     onValueChange = { newValue ->
@@ -64,8 +64,8 @@ fun EvaluationObjectContent(
                     modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f)
                 )
             }
-            // Radio Button
-            2 -> {
+
+            EvaluationObjectType.RADIO -> {
                 val selectedValues = listOf(
                     (answers[obj.id] as? EvaluationAnswer.Text)?.value ?: ""
                 )
@@ -75,8 +75,10 @@ fun EvaluationObjectContent(
                         onSaveAnswer(obj.id, EvaluationAnswer.Text(value))
                     }
                 }
+
                 val style =
                     if (obj.style == "radio styled") OptionStyle.STYLED else OptionStyle.PLAIN
+
                 PillSelectionGroup(
                     style = style,
                     selectionMode = SelectionMode.SINGLE,
@@ -85,11 +87,9 @@ fun EvaluationObjectContent(
                     onSelectionChanged = onSelectionChanged,
                     modifier = Modifier.align(Alignment.Start)
                 )
-
             }
-            //Dropdown
-            3 -> {
 
+            EvaluationObjectType.DROPDOWN -> {
                 val onItemClicked: (DropDownItem) -> Unit = {
                     onSaveAnswer(obj.id, EvaluationAnswer.Text(it.text))
                 }
@@ -101,8 +101,8 @@ fun EvaluationObjectContent(
                     onItemClick = onItemClicked
                 )
             }
-            // Checkbox / Multi-select
-            4 -> {
+
+            EvaluationObjectType.CHECKBOX -> {
                 val selectedValues =
                     (answers[obj.id] as? EvaluationAnswer.MultiChoice)?.values?.toList()
                         ?: emptyList()
@@ -113,6 +113,7 @@ fun EvaluationObjectContent(
                 val onSelectionChanged: (List<String>) -> Unit = {
                     onSaveAnswer(obj.id, EvaluationAnswer.MultiChoice(it))
                 }
+
                 PillSelectionGroup(
                     style = style,
                     options = options,
@@ -121,8 +122,8 @@ fun EvaluationObjectContent(
                     onSelectionChanged = onSelectionChanged
                 )
             }
-            // Toggle Button
-            5 -> {
+
+            EvaluationObjectType.TOGGLE -> {
                 if (obj.style == "toggle button") {
                     val onLabel = availableValues.getOrNull(0)?.available_value ?: "On"
                     val offLabel = availableValues.getOrNull(1)?.available_value ?: "Off"
@@ -137,8 +138,9 @@ fun EvaluationObjectContent(
                     )
                 }
             }
-            // Dynamic / Instruction Box (like Blood pressure, Sugar report, Parkinson report)
-            10, 11 -> {
+
+            EvaluationObjectType.INSTRUCTION,
+            EvaluationObjectType.REPORT -> {
                 InstructionBox(
                     text = obj.object_label,
                     modifier = Modifier
@@ -146,13 +148,13 @@ fun EvaluationObjectContent(
                         .align(Alignment.CenterHorizontally)
                 )
             }
-            // Drawing
-            21 -> {
+
+            EvaluationObjectType.DRAWING -> {
                 val controller = drawingCanvasWithControls(modifier = Modifier.fillMaxSize())
                 onDrawingControllerReady?.invoke(controller)
             }
-            // Slider / Scale
-            34 -> {
+
+            EvaluationObjectType.SLIDER -> {
                 if (obj.style == "scale" || obj.style == "slider") {
                     val currentValue = (answers[obj.id] as? EvaluationAnswer.Number)?.value
                         ?: availableValues.firstOrNull()?.available_value?.toFloatOrNull()
@@ -162,7 +164,7 @@ fun EvaluationObjectContent(
                         .mapNotNull { it.available_value.toFloatOrNull() }
 
                     val startValue = numericValues.minOrNull() ?: 0f
-                    val endValue = numericValues.maxOrNull() ?: 5f // Default to 5 if no max
+                    val endValue = numericValues.maxOrNull() ?: 5f
 
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -191,7 +193,7 @@ fun EvaluationObjectContent(
                 }
             }
 
-            35 -> {
+            EvaluationObjectType.HUMAN_BODY -> {
                 val frontPoints = remember { mutableStateOf(setOf<Offset>()) }
                 val backPoints = remember { mutableStateOf(setOf<Offset>()) }
                 val isFrontView = remember { mutableStateOf(true) }
@@ -209,8 +211,8 @@ fun EvaluationObjectContent(
                     }
                 )
             }
-            // Default case for any unhandled object types
-            else -> {
+
+            null -> {
                 println("Unhandled object type: ${obj.object_type}")
                 answers[obj.id]?.toRawString()?.let {
                     Text(it, fontSize = 24.sp)
