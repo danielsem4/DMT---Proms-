@@ -55,6 +55,8 @@ class EvaluationsViewModel(
 
         result.onSuccess { list ->
             _evalItems.value = list
+            println("Eval items")
+            println(list.flatMap { it.measurement_objects }.joinToString(separator = "\n"))
             _errorMessage.value = null
         }.onError { error ->
             _evalItems.value = emptyList()
