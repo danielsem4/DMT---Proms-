@@ -2,7 +2,6 @@ package org.example.hit.heal.hitber.presentation.entry
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -40,7 +39,7 @@ import org.example.hit.heal.hitber.presentation.timeAndPlace.TimeAndPlace
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-class HitberEntryScreen() : Screen {
+class HitBerEntryScreen() : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
@@ -106,12 +105,12 @@ class HitberEntryScreen() : Screen {
 
 
         RegisterBackHandler(this)
-    {
-        navigator?.pop()
-    }
+        {
+            navigator?.pop()
+        }
 
-    LaunchedEffect(Unit) {
-        viewModel.loadEvaluation("HitBer")
+        LaunchedEffect(Unit) {
+            viewModel.loadEvaluation("HitBer")
+        }
     }
-}
 }

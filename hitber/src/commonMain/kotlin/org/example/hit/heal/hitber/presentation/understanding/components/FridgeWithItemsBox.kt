@@ -49,12 +49,14 @@ fun FridgeWithItemsBox(
             .wrapContentWidth()
             .fillMaxHeight()
             .clickable {
+                // Toggle fridge open/close state on click and update user opened fridge
                 onFridgeToggle()
                 if (!viewModel.isFridgeOpened) {
                     viewModel.setFridgeOpened()
                 }
             }
     ) {
+        // Display different fridge images depending on open/close state
         Image(
             painter = if (isFridgeOpen) painterResource(openFridge)
             else painterResource(closeFridge),
@@ -73,6 +75,7 @@ fun FridgeWithItemsBox(
             contentScale = ContentScale.FillHeight
         )
 
+        // Show draggable items only when fridge is open
         if (isFridgeOpen) {
             fridgeItems.forEachIndexed { index, item ->
                 val itemWidthDp = with(density) { itemWidthPx.toDp() }
@@ -87,10 +90,12 @@ fun FridgeWithItemsBox(
                         )
                         .size(itemWidthDp, itemHeightDp)
                         .pointerInput(Unit) {
+                            // Handle drag gestures to update the position of fridge items
                             detectDragGestures { change, dragAmount ->
                                 change.consume()
                                 itemPositions[index] += dragAmount
 
+                                // Notify if the dragged item is the selected one
                                 if (item.image == itemResourceId && !viewModel.isItemMovedCorrectly) {
                                     viewModel.setItemMovedCorrectly()
                                 }

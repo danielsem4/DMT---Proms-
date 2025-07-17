@@ -42,7 +42,6 @@ import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
 import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
-import org.example.hit.heal.hitber.presentation.shapes.components.getShapeName
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -60,7 +59,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
         val attempt by secondQuestionViewModel.attempt.collectAsState()
         var showDialog by remember { mutableStateOf(false) }
         val listShapes by secondQuestionViewModel.listShapes.collectAsState()
-        val shapeNames = selectedShapes.map { getShapeName(it.type) }
+        val shapeNames = selectedShapes.map { it.type.name }
 
         BaseScreen(title = stringResource(secondQuestionHitberTitle),
             config = ScreenConfig.TabletConfig,
@@ -77,8 +76,8 @@ class ActionShapesScreen(private val question: Int) : Screen {
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(40.dp)
                     ) {
+                        // Display shapes in rows of 5
                         val chunkedShapes = listShapes.chunked(5)
-
                         chunkedShapes.forEach { rowShapes ->
                             Row(
                                 modifier = Modifier.fillMaxWidth().weight(1f),
@@ -97,6 +96,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                                         modifier = Modifier
                                             .background(shapeColor).weight(1f)
                                             .clickable {
+                                                // Update selected shapes on click
                                                 secondQuestionViewModel.setSelectedShapes(
                                                     shapeRes
                                                 )
@@ -112,10 +112,12 @@ class ActionShapesScreen(private val question: Int) : Screen {
                         text = stringResource(`continue`),
                         modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
                         onClick = {
+                            // Calculate and update attempt based on selected shapes
                             secondQuestionViewModel.calculateCorrectShapesCount()
                             secondQuestionViewModel.updateTask()
                             secondQuestionViewModel.secondQuestionAnswer(question, shapeNames)
 
+                            // Show retry dialog if attempts remain, otherwise navigate forward
                             if (attempt < 3) {
                                 showDialog = true
                             } else {
@@ -145,6 +147,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
             navigator?.pop()
         }
 
+        // Retry dialog shown when user needs to retry the task
         if (showDialog) {
             DialogTask(
                 icon = errorIcon,

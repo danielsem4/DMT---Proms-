@@ -25,12 +25,17 @@ class SecondQuestionViewModel: ViewModel() {
     private var correctShapesCount = 0
     private var distractorToRemove = 0
 
+    //Load a random shape set for the task
+    init {
+        setRandomShapeSet()
+    }
 
-    fun setRandomShapeSet() {
+    private fun setRandomShapeSet() {
         val selectedTypes = shapeSets.random()
         _selectedSet.value = shapeList.filter { it.type in selectedTypes }
     }
 
+    // Manage user shape selection, max 5 selections allowed
     fun setSelectedShapes(shape: Shape) {
         if (_selectedShapes.value.size >= 5) {
             if (_selectedShapes.value.contains(shape)) {
@@ -45,10 +50,12 @@ class SecondQuestionViewModel: ViewModel() {
         }
     }
 
+    // Counts how many of the currently selected shapes are part of the correct set
     fun calculateCorrectShapesCount() {
         correctShapesCount = selectedShapes.value.count { it in selectedSet.value }
     }
 
+    // Update task state based on number of correct shapes selected
     fun updateTask() {
         when (correctShapesCount) {
             5 -> _attempt.value = 3
@@ -85,6 +92,7 @@ class SecondQuestionViewModel: ViewModel() {
         }
     }
 
+    // Remove distractor shapes from the full list to assist the user based on how many correct shapes they selected
     private fun removeDistractors(count: Int) {
         val distractors = _listShapes.value.filter { shape ->
             selectedSet.value.none { it.drawable == shape.drawable }
@@ -110,7 +118,7 @@ class SecondQuestionViewModel: ViewModel() {
         correctShapesCount = 0
     }
 
-
+    // Reset currently selected shapes and related data for the first attempt
     fun resetSelectedShapes() {
         _selectedShapes.value = emptyList()
         correctShapesCount = 0
@@ -119,6 +127,7 @@ class SecondQuestionViewModel: ViewModel() {
         _listShapes.value = shapeList
     }
 
+    // Reset all data including selected sets
     fun resetAll(){
         resetSelectedShapes()
         _selectedSet.value = emptyList()

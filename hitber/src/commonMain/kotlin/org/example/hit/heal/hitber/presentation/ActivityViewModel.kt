@@ -8,7 +8,6 @@ import core.data.model.MeasureObjectDouble
 import core.data.model.MeasureObjectInt
 import core.data.model.MeasureObjectString
 import core.data.model.evaluation.Evaluation
-import core.data.model.evaluation.EvaluationObject
 import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.api.AppApi
@@ -26,14 +25,12 @@ import org.example.hit.heal.hitber.data.model.SelectedShapesStringList
 import org.example.hit.heal.hitber.data.model.ThirdQuestionItem
 import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
-import core.util.PrefKeys
 import core.util.PrefKeys.clinicId
 import core.util.PrefKeys.userId
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -55,15 +52,8 @@ class ActivityViewModel(
     private val _uploadStatus = MutableStateFlow<Result<Unit>?>(null)
     val uploadStatus: StateFlow<Result<Unit>?> = _uploadStatus
 
-    private val _hitberTest = MutableStateFlow<Evaluation?>(null)
-    val hitberTest: StateFlow<Evaluation?> = _hitberTest.asStateFlow()
-
-
-    private fun Evaluation.getObjectsByScreen(screen: Int): List<EvaluationObject> {
-        return measurement_objects
-            .filter { it.measurement_screen == screen }
-            .sortedBy { it.measurement_order }
-    }
+    private val _hitBerTest = MutableStateFlow<Evaluation?>(null)
+    val hitBerTest: StateFlow<Evaluation?> = _hitBerTest.asStateFlow()
 
 
     fun setFirstQuestion(firstQuestion: FirstQuestion) {
@@ -78,16 +68,14 @@ class ActivityViewModel(
         val secondQuestionList = answers.map { (map, correctShapesCount) ->
             val shapesList = map.values.toList()
 
-            val secondQuestionObjects = _hitberTest.value?.getObjectsByScreen(2)
-
             SecondQuestionItem(
                 selectedShapes = SelectedShapesStringList(
-                    measureObject = secondQuestionObjects?.getOrNull(0)?.id ?: 110,
+                    measureObject = 110,
                     value = shapesList,
                     dateTime = date
                 ),
                 wrongShapes = MeasureObjectInt(
-                    measureObject = secondQuestionObjects?.getOrNull(1)?.id ?: 182,
+                    measureObject = 182,
                     value = 5 - correctShapesCount,
                     dateTime = date
                 )
@@ -99,22 +87,21 @@ class ActivityViewModel(
     }
 
     fun setThirdQuestion(thirdQuestionAnswers: MutableList<Pair<Int, Int>>, date: String) {
-        val thirdQuestionObjects = _hitberTest.value?.getObjectsByScreen(3)
 
         val thirdQuestionList = thirdQuestionAnswers.map { (answer, reactionTime) ->
             ThirdQuestionItem(
                 number = MeasureObjectInt(
-                    measureObject = thirdQuestionObjects?.getOrNull(0)?.id ?: 111,
+                    measureObject = 111,
                     value = answer,
                     dateTime = date
                 ),
                 time = MeasureObjectInt(
-                    measureObject = thirdQuestionObjects?.getOrNull(1)?.id ?: 112,
+                    measureObject = 112,
                     value = reactionTime,
                     dateTime = date
                 ),
                 isPressed = MeasureObjectBoolean(
-                    measureObject = thirdQuestionObjects?.getOrNull(2)?.id ?: 113,
+                    measureObject = 113,
                     value = true,
                     dateTime = date
                 )
@@ -126,11 +113,10 @@ class ActivityViewModel(
     }
 
     fun setFourthQuestion(answers: List<String>, date: String) {
-        val fourthQuestionObjects = _hitberTest.value?.getObjectsByScreen(4) ?: emptyList()
 
         val measureObjects = answers.mapIndexed { index, answer ->
             MeasureObjectString(
-                measureObject = fourthQuestionObjects.getOrNull(index)?.id ?: (132 + index),
+                measureObject =  (132 + index),
                 value = answer,
                 dateTime = date
             )
@@ -146,21 +132,19 @@ class ActivityViewModel(
         napkinPlacedCorrectly: Boolean,
         date: String
     ) {
-        val sixthQuestionObjects = _hitberTest.value?.getObjectsByScreen(6)
-
         val sixthQuestionItem = SixthQuestionItem(
             fridgeOpened = MeasureObjectBoolean(
-                measureObject = sixthQuestionObjects?.getOrNull(0)?.id ?: 138,
+                measureObject = 138,
                 value = fridgeOpened,
                 dateTime = date
             ),
             correctProductDragged = MeasureObjectBoolean(
-                measureObject = sixthQuestionObjects?.getOrNull(1)?.id ?: 139,
+                measureObject = 139,
                 value = itemMovedCorrectly,
                 dateTime = date
             ),
             placedOnCorrectNap = MeasureObjectBoolean(
-                measureObject = sixthQuestionObjects?.getOrNull(2)?.id ?: 140,
+                measureObject = 140,
                 value = napkinPlacedCorrectly,
                 dateTime = date
             )
@@ -171,11 +155,10 @@ class ActivityViewModel(
     }
 
     fun setSeventhQuestion(answer: Boolean, date: String) {
-        val seventhQuestionObject = _hitberTest.value?.getObjectsByScreen(7)
 
         val seventhQuestionItem = SeventhQuestionItem(
             isCorrect = MeasureObjectBoolean(
-                measureObject = seventhQuestionObject?.getOrNull(0)?.id ?: 141,
+                measureObject = 141,
                 value = answer,
                 dateTime = date
             )
@@ -189,11 +172,10 @@ class ActivityViewModel(
         answer: Boolean,
         date: String
     ) {
-        val eighthQuestionObject = _hitberTest.value?.getObjectsByScreen(8)
 
         val eighthQuestionItem = EighthQuestionItem(
             writtenSentence = MeasureObjectBoolean(
-                measureObject = eighthQuestionObject?.getOrNull(0)?.id ?: 142,
+                measureObject = 142,
                 value = answer,
                 dateTime = date
             )
@@ -207,18 +189,17 @@ class ActivityViewModel(
         answers: List<Pair<Map<Int, String>, Int>>,
         date: String
     ) {
-        val ninthQuestionObjects = _hitberTest.value?.getObjectsByScreen(9)
 
         val ninthQuestionList = answers.map { (map, correctShapesCount) ->
             val shapesList = map.values.toList()
             SecondQuestionItem(
                 selectedShapes = SelectedShapesStringList(
-                    measureObject = ninthQuestionObjects?.getOrNull(0)?.id ?: 143,
+                    measureObject = 143,
                     value = shapesList,
                     dateTime = date
                 ),
                 wrongShapes = MeasureObjectInt(
-                    measureObject = ninthQuestionObjects?.getOrNull(1)?.id ?: 183,
+                    measureObject = 183,
                     value = 5 - correctShapesCount,
                     dateTime = date
                 )
@@ -234,18 +215,17 @@ class ActivityViewModel(
         answer: ArrayList<Map<String, Double>>,
         date: String
     ) {
-        val tenthQuestionObjects = _hitberTest.value?.getObjectsByScreen(10)
 
         val tenthQuestionList = answer.map { mapEntry ->
             val (shape, grade) = mapEntry.entries.first()
             TenthQuestionItem(
                 shape = MeasureObjectString(
-                    measureObject = tenthQuestionObjects?.getOrNull(0)?.id ?: 144,
+                    measureObject = 144,
                     value = shape,
                     dateTime = date
                 ),
                 grade = MeasureObjectDouble(
-                    measureObject = tenthQuestionObjects?.getOrNull(1)?.id ?: 145,
+                    measureObject = 145,
                     value = grade,
                     dateTime = date
                 ),
@@ -267,7 +247,7 @@ class ActivityViewModel(
 
             api.getSpecificEvaluation(clinicId, patientId, evaluationName)
                 .onSuccess { fetched ->
-                    _hitberTest.value = fetched
+                    _hitBerTest.value = fetched
                     println("fetched evaluation: $fetched")
                 }
                 .onError { error ->
@@ -293,7 +273,7 @@ class ActivityViewModel(
                 try {
                     val userId = storage.get(userId)!!
                     val clinicId = storage.get(clinicId)!!
-                    val measurement = hitberTest.value?.id ?: 19
+                    val measurement = hitBerTest.value?.id ?: 19
 
                     val imagePath = bitmapToUploadUseCase.buildPath(
                         clinicId = clinicId,
@@ -324,66 +304,62 @@ class ActivityViewModel(
     }
 
     private fun saveUploadedImageUrl(currentQuestion: Int?, uploadedUrl: String, date: String) {
-        val screenObjects =
-            _hitberTest.value?.getObjectsByScreen(currentQuestion ?: -1) ?: emptyList()
-
-        val defaultIds = mapOf(
+        val imageIds = mapOf(
             6 to 200,
             7 to 202,
             10 to 204
         )
 
-        val imageObjectId = screenObjects.firstOrNull { it.object_label == "imageUrl" }?.id
-            ?: defaultIds[currentQuestion] ?: 0
-
         val image = MeasureObjectString(
-            measureObject = imageObjectId,
+            measureObject = imageIds[currentQuestion] ?: 0,
             value = uploadedUrl,
             dateTime = date
         )
 
         when (currentQuestion) {
-            6 -> {
-                if (result.sixthQuestion.isEmpty()) {
-                    result.sixthQuestion.add(SixthQuestionItem(imageUrl = image))
-                } else {
-                    val oldItem = result.sixthQuestion[0]
-                    val newItem = oldItem.copy(imageUrl = image)
-                    result.sixthQuestion[0] = newItem
-                }
-            }
+            6 -> updateImageInQuestionList(
+                list = result.sixthQuestion,
+                createItem = { SixthQuestionItem(imageUrl = image) },
+                updateItem = { it.copy(imageUrl = image) }
+            )
 
-            7 -> {
-                if (result.seventhQuestion.isEmpty()) {
-                    result.seventhQuestion.add(SeventhQuestionItem(imageUrl = image))
-                } else {
-                    val oldItem = result.seventhQuestion[0]
-                    val newItem = oldItem.copy(imageUrl = image)
-                    result.seventhQuestion[0] = newItem
-                }
-            }
+            7 -> updateImageInQuestionList(
+                list = result.seventhQuestion,
+                createItem = { SeventhQuestionItem(imageUrl = image) },
+                updateItem = { it.copy(imageUrl = image) }
+            )
 
             10 -> {
-                if (result.tenthQuestion.isEmpty()) {
-                    result.tenthQuestion.add(TenthQuestionItem(imageUrl = image))
-                } else {
-                    val lastIndex = result.tenthQuestion.lastIndex
-                    val oldItem = result.tenthQuestion[lastIndex]
-                    val newItem = oldItem.copy(imageUrl = image)
-                    result.tenthQuestion[lastIndex] = newItem
-                }
-
+                updateImageInQuestionList(
+                    list = result.tenthQuestion,
+                    createItem = { TenthQuestionItem(imageUrl = image) },
+                    updateItem = { it.copy(imageUrl = image) },
+                )
                 uploadEvaluationResults()
             }
         }
     }
+
+    private fun <T> updateImageInQuestionList(
+        list: MutableList<T>,
+        createItem: () -> T,
+        updateItem: (T) -> T,
+    ) {
+        if (list.isEmpty()) {
+            list.add(createItem())
+        } else {
+            val index =  list.lastIndex
+            list[index] = updateItem(list[index])
+        }
+    }
+
 
     private fun uploadEvaluationResults() {
         uploadScope.launch {
             try {
                 result.patientId = storage.get(userId)!!.toInt()
                 result.clinicId = storage.get(clinicId)!!
-                result.measurement = hitberTest.value?.id ?: 19
+                result.measurement = hitBerTest.value?.id ?: 19
                 result.date = getCurrentFormattedDateTime()
 
                 val json = Json.encodeToString(CogData.serializer(), result)

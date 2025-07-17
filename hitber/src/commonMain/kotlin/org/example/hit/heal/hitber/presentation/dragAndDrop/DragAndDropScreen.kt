@@ -74,7 +74,7 @@ class DragAndDropScreen : Screen {
                     if (instructions != null) {
                         InstructionText(instructions)
                     }
-
+                    // Screenshot capture wrapper that captures the draggable circles layout below
                     capturable = platformCapturable(
                         modifier = Modifier.weight(1f),
                         onCaptured = { imageBitmap ->
@@ -101,6 +101,8 @@ class DragAndDropScreen : Screen {
                         }
                     ) {
                         Box(modifier = Modifier.weight(1f)) {
+
+                            // Canvas area displaying draggable circles with dynamic positions and colors
                             DraggableCanvas(
                                 circleOffsets = circleOffsets,
                                 circleColors = circleColors,

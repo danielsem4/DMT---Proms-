@@ -20,6 +20,8 @@ data class BuildShapes(
     val toleranceY: Float = 0f
 )
 
+// List of static shapes with predefined target positions and tolerances.
+// These represent the correct positions where the draggable shapes should be placed.
 val staticShapesItem = listOf(
     BuildShapes(triangleIcon, 0.05f, 0.4f, 0.4f, 0.4f, "triangle"),
     BuildShapes(rotateStar, 0.5f, -0.25f, 0.5f, 0.5f,"star",25f, 30f),
@@ -30,6 +32,8 @@ val staticShapesItem = listOf(
     BuildShapes(horizontalStrokeIcon, 0.2f, 0.12f, 0.5f, 0.8f, "horizontal line", 35f, 40f)
 )
 
+// List of draggable shapes initialized at starting positions.
+// These shapes can be moved by the user to match the static target shapes.
 val draggableShapesItem = listOf(
     BuildShapes(triangleIcon, 0.8f, 0.05f, 0.8f, 1f, "triangle"),
     BuildShapes(rotateStar, 0.87f, 0.7f, 0.5f, 0.5f, "star"),

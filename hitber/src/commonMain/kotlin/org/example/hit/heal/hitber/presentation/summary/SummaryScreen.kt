@@ -23,11 +23,12 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.LARGE
-import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.exit
+import org.example.hit.heal.core.presentation.Resources.String.sentSuccessfully
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions1
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions2
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberTitle
+import org.example.hit.heal.core.presentation.Resources.String.unexpectedError
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXl
@@ -47,14 +48,15 @@ class SummaryScreen : Screen {
         val uploadStatus by viewModel.uploadStatus.collectAsState()
         val snackbarHostState = remember { SnackbarHostState() }
         val isUploadFinished = uploadStatus != null
-        val successMessage = stringResource(Resources.String.sentSuccessfully)
+        val successMessage = stringResource(sentSuccessfully)
+        val unexpectedErrorMessage = stringResource(unexpectedError)
 
         LaunchedEffect(uploadStatus) {
             uploadStatus?.let { result ->
                 result.onSuccess {
                     snackbarHostState.showSnackbar(successMessage)
                 }.onFailure { error ->
-                    snackbarHostState.showSnackbar(error.message ?: "העלאה נכשלה")
+                    snackbarHostState.showSnackbar(error.message ?: unexpectedErrorMessage)
                 }
             }
         }

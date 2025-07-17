@@ -68,7 +68,9 @@ class WritingScreen : Screen {
                                 .fillMaxWidth()
                                 .weight(1f)
                         ) {
+                            // Display draggable static words for user to drag onto slots
                             StaticWords(draggableWordsList, eightQuestionViewModel, density)
+                            // Composable showing drop targets for the words
                             WordSlots(slots, eightQuestionViewModel, density)
                         }
 

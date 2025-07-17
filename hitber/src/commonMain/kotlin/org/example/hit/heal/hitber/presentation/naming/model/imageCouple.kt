@@ -7,6 +7,8 @@ import org.example.hit.heal.core.presentation.Resources.Icon.pencilIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.rulerIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.table
 
+// Defines image pairs displayed
+
 val imageCouples = listOf(
     Pair(pencilIcon, rulerIcon),
     Pair(table, ballIcon),

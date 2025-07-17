@@ -1,6 +1,5 @@
 package org.example.hit.heal.hitber.presentation.buildShape
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
@@ -49,7 +48,6 @@ class BuildShapeScreen : Screen {
         val tenthQuestionViewModel: TenthQuestionViewModel = koinViewModel()
         val viewModel: ActivityViewModel = koinViewModel()
         var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
-
         var screenSize by remember { mutableStateOf(0f to 0f) }
 
         val itemPositions = remember(screenSize) {
@@ -62,6 +60,7 @@ class BuildShapeScreen : Screen {
             }
         }
 
+        // Dynamically calculate triangle dimensions based on screen size
         val triangleWidth by remember(screenSize) {
             derivedStateOf { 0.4f * screenSize.second }
         }
@@ -82,11 +81,13 @@ class BuildShapeScreen : Screen {
                     ) {
                         InstructionText(stringResource(tenthQuestionHitberInstructions))
 
+                        // Screenshot capture wrapper that captures the shape layout below
                         capturable = platformCapturable(
                             modifier = Modifier.weight(1f),
                             onCaptured = { imageBitmap ->
                                 val timestamp = getCurrentFormattedDateTime()
 
+                                // Checks if the shapes are positioned correctly based on their current offsets and reference static shapes
                                 tenthQuestionViewModel.uploadTenthQuestionImageAnswer(
                                     itemPositions,
                                     draggableShapesItem,
@@ -109,6 +110,7 @@ class BuildShapeScreen : Screen {
                                 navigator?.replace(SummaryScreen())
                             }
                         ) {
+                            // Layout for draggable + static shapes
                             TenthQuestionShapesLayout(
                                 staticShapesItem = staticShapesItem,
                                 draggableShapesItem = draggableShapesItem,
