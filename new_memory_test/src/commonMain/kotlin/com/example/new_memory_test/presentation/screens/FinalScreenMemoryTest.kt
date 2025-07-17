@@ -109,11 +109,11 @@ class FinalScreenMemoryTest() : Screen {
 
                             viewModel.uploadEvaluationResults(
                                 onSuccess = {
-                                    println("✅ Success")
+                                    println(" Success")
                                     navigator?.popUntilRoot() // Переход ТОЛЬКО после успешной отправки
                                 },
                                 onFailure = { error ->
-                                    println("❌ Error: $error")
+                                    println(" Error: $error")
 
                                 }
                             )
