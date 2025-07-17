@@ -163,6 +163,10 @@ fun EvaluationObjectContent(
             EvaluationObjectType.DRAWING -> {
                 val controller = drawingCanvasWithControls(modifier = Modifier.fillMaxSize())
                 onDrawingControllerReady?.invoke(controller)
+                if (controller.hasPaths())
+                    onSaveAnswer(obj.id, EvaluationAnswer.Image(controller.getBitmap()))
+                else
+                    onSaveAnswer(obj.id, EvaluationAnswer.Unanswered)
             }
 
             EvaluationObjectType.SLIDER -> {

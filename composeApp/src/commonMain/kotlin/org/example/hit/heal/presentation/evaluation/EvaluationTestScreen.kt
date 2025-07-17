@@ -129,13 +129,8 @@ class EvaluationTestScreen(
                     val isFirstScreen = currentScreen == 1
                     val isLastScreen = currentScreen == totalScreens
 
-                    val allAnswered = objectsOnCurrentScreen.all { obj ->
-                        if (obj.object_type == 21) {
-                            drawingController?.hasPaths?.invoke() == true
-                        } else {
-                            answers[obj.id]?.isAnswered == true
-                        }
-                    }
+                    val allAnswered =
+                        objectsOnCurrentScreen.all { answers[it.id]?.isAnswered ?: false }
 
                     Row(
                         modifier = Modifier
