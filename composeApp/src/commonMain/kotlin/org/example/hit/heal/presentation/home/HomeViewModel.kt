@@ -1,5 +1,6 @@
 package org.example.hit.heal.presentation.home
 
+import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.data.model.ModulesResponse
@@ -38,6 +39,9 @@ class HomeViewModel(
             _isLoading.value = true
             api.getModules(clinicId)
                 .onSuccess { result ->
+                    result.forEach {
+                        it.module_name = it.module_name.lowercase()
+                    }
                     _features.value = result
                     println("Features fetched: $result")
                 }
