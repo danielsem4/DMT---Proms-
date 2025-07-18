@@ -12,6 +12,7 @@
     <string name="next">Next</string>
     <string name="send">Send</string>
     <string name="how_do_you_feel">How do you feel?</string>
+    <string name="hint_open_question">Type your answer...</string>
     <string name="dont_forget">• Don't forget to take your test.</string>
     <string name="take_pills">• Take 2 pills at 12:00</string>
     <string name="messages">Messages</string>
