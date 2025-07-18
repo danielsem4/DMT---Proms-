@@ -1,5 +1,6 @@
 package org.example.hit.heal.presentation.home
 
+import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.data.model.ModulesResponse
@@ -25,6 +26,9 @@ class HomeViewModel(
     private val _features = MutableStateFlow<List<ModulesResponse>>(emptyList())
     val features: StateFlow<List<ModulesResponse>> = _features
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     fun loadFeatures() {
         viewModelScope.launch {
             val clinicId = storage.get(PrefKeys.clinicId)
@@ -32,29 +36,20 @@ class HomeViewModel(
                 println("clinicId is null")
                 return@launch
             }
+            _isLoading.value = true
             api.getModules(clinicId)
                 .onSuccess { result ->
-                    val updated = result + ModulesResponse("Clock", 16, true)
-                    _features.value = updated
-                    println("Features fetched: $updated")
+                    result.forEach {
+                        it.module_name = it.module_name.lowercase()
+                    }
+                    _features.value = result
+                    println("Features fetched: $result")
                 }
                 .onError {
                     _features.value = emptyList()
                     println("Error getting features: $it")
                 }
-            storage.get(PrefKeys.clinicId)?.let { id ->
-                api.getModules(clinicId = id)
-                    .onSuccess {
-                        _features.value = it
-                        println("Features fetched:\n ${it.map { m -> m.toString() + "\n" }}")
-                    }.onError {
-                        _features.value = emptyList()
-                        println("Error getting features: $it")
-                    }
-            } ?: run {
-                _features.value = emptyList()
-                println("Error getting clinicId")
-            }
+            _isLoading.value = false
         }
     }
 

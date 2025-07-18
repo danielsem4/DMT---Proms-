@@ -32,7 +32,7 @@ data class User(
 
 @Serializable
 data class ModulesResponse(
-    val module_name: String = "",
+    var module_name: String = "",
     val module_id: Int = 0,
     val active:Boolean = false
 )

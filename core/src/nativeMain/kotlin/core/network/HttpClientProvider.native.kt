@@ -5,4 +5,4 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.darwin.Darwin
 
 actual fun createPlatformHttpClient(storage: Storage): HttpClient =
-    HttpClientFactory.create(Darwin.create(), storage)
+    HttpClientFactory.create(Darwin.create())

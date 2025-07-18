@@ -4,6 +4,13 @@ import core.di.clientRequestsModule
 import core.di.sessionModule
 import org.example.hit.heal.cdt.di.CDT_module
 import org.example.hit.heal.oriantation.di.ORIENTATION_module
+
+import org.example.hit.heal.hitber.di.HitBer_module
+
+import org.example.hit.heal.presentation.activities.ActivitiesViewModel
+import org.example.hit.heal.presentation.evaluation.EvaluationTestViewModel
+import org.example.hit.heal.presentation.evaluation.EvaluationsViewModel
+
 import org.example.hit.heal.presentation.home.HomeViewModel
 import org.example.hit.heal.presentation.login.LoginViewModel
 import org.example.hit.heal.presentation.splash.SplashViewModel
@@ -30,14 +37,21 @@ expect val platformModule: Module
 val sharedAppModules = module{
     includes(clientRequestsModule)
     includes(sessionModule)
+    includes(AudioModule)
 }
 
 val sharedModules = module {
     viewModelOf(::LoginViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::SplashViewModel)
+
+
+    includes(HitBer_module)
+    includes(Pass_module)
     viewModelOf(::EvaluationsViewModel)
     viewModelOf(::ActivitiesViewModel)
+    viewModelOf(::EvaluationsViewModel)
+    viewModelOf(::EvaluationTestViewModel)
     includes(CDT_module)
     includes(ORIENTATION_module)
 }

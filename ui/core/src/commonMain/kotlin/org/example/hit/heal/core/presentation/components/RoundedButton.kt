@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Colors
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,11 +16,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
 import org.example.hit.heal.core.presentation.Sizes.paddingNone
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.spacingSm
-import org.example.hit.heal.core.presentation.Sizes.iconSizeMd
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
@@ -30,13 +33,13 @@ import org.jetbrains.compose.resources.stringResource
 fun RoundedButton(
     text: Any,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
     fontSize: TextUnit = LARGE,
     icon: DrawableResource? = null,
     enabled: Boolean = true,
     buttonColor: Color = primaryColor,
     contentColor: Color = Color.White,
-    iconColor: Color = Color.White
+    iconColor: Color = Color.White,
+    onClick: () -> Unit
 ) {
     val buttonText = when (text) {
         is StringResource -> stringResource(text)
@@ -72,4 +75,18 @@ fun RoundedButton(
             )
         }
     }
+    @Composable
+fun RoundedButton(text: String, modifier: Modifier, onclick: () -> Unit) {
+        Button(
+            onClick = onclick, colors = ButtonDefaults.buttonColors(primaryColor),
+            shape = RoundedCornerShape(50),
+            modifier = modifier,
+        ) {
+            Text(text, color = Color.White, fontSize = 32.sp, modifier = Modifier.padding(horizontal = 8.dp))
+        }
 }
+
+@Composable
+fun RoundedButton(stringResource: StringResource, modifier: Modifier, onclick: () -> Unit) {
+    RoundedButton(stringResource(stringResource), modifier, onclick)
+}}

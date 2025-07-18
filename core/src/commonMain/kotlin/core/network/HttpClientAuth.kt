@@ -23,10 +23,22 @@ suspend inline fun <reified T> HttpClient.getWithAuth(
     get(url) {
         storage.get(PrefKeys.token)
             ?.takeIf { it.isNotBlank() }
-            ?.let { header(HttpHeaders.Authorization, "token $it") }
+            ?.let {
+                header(HttpHeaders.Authorization, "token $it")
+                println("🔐 Using token: $it")
+            }
+
         block()
+    }.also { response ->
+        println("📤 Sent GET request to: $url")
+        println("📥 Response status: ${response.status}")
+        println("📦 Response headers:")
+        response.headers.forEach { name, values ->
+            println("   ▶ $name: ${values.joinToString()}")
+        }
     }
 }
+
 
 
 suspend inline fun <reified T> HttpClient.postWithAuth(

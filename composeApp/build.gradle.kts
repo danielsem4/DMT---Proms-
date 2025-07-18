@@ -35,6 +35,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.koin.compose)
+            implementation(libs.kmp.capturable.compose)
 
             // Koin dependencies
             implementation(libs.koin.android)
@@ -44,10 +46,18 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
+            implementation(projects.hitber)
             implementation(projects.ui.core)
             implementation(projects.core)
             implementation(projects.oriantation)
             implementation(projects.clockTest)
+            implementation(projects.pass)
+
+            implementation(libs.kotlinx.coroutines.core)
+
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.datetime)
+            implementation(compose.material3)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -65,10 +75,17 @@ kotlin {
             implementation(libs.voyager.tabNavigator)
             // Basic Navigation
 
+            implementation (libs.navigator)
+            implementation (libs.navigator.tabs)
+            implementation (libs.navigator.transitions)
+
             // Koin dependencies
             api(libs.koin.core)
             implementation(libs.bundles.koin.compose)
             implementation(libs.lifecycle.viewmodel)
+            implementation(libs.kotlinx.serialization)
+            implementation(compose.materialIconsExtended)
+            implementation(libs.font.awesome)
             implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization) // for data serialization
             implementation(compose.materialIconsExtended)
@@ -83,12 +100,14 @@ kotlin {
 
             implementation(libs.coil.compose)
 
-            implementation(libs.messagebar.kmp)
 
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.kmp.capturable.compose)
+
         }
+
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
@@ -100,7 +119,7 @@ kotlin {
 
 android {
     namespace = "org.example.hit.heal"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "org.example.hit.heal"
