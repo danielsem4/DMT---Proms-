@@ -34,9 +34,8 @@ class HomeViewModel(
             }
             api.getModules(clinicId)
                 .onSuccess { result ->
-                    val updated = result + ModulesResponse("Clock", 16, true)
-                    _features.value = updated
-                    println("Features fetched: $updated")
+                    _features.value = result
+                    println("Features fetched: $result")
                 }
                 .onError {
                     _features.value = emptyList()
