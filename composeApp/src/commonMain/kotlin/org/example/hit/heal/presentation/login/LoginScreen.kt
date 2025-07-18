@@ -1,6 +1,5 @@
 package org.example.hit.heal.presentation.login
 
-import ContentWithMessageBar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -59,7 +58,6 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import rememberMessageBarState
 
 /**
  * LoginScreen is a composable function that represents the login screen of the application.
