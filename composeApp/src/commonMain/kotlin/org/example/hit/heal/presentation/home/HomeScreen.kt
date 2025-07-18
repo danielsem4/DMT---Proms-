@@ -1,5 +1,10 @@
 package org.example.hit.heal.presentation.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +13,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +21,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -25,6 +32,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,6 +54,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.ModulesResponse
 import kotlinx.coroutines.launch
 import org.example.hit.heal.cdt.presentation.CDTLandingScreen
+import org.example.hit.heal.core.presentation.FontSize
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.MEDIUM
 import org.example.hit.heal.core.presentation.Green
@@ -87,6 +96,8 @@ class HomeScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
         var showDialog by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
+        val isLoading by viewModel.isLoading.collectAsState()
+
 
         LaunchedEffect(Unit) {
             viewModel.loadFeatures()
@@ -135,22 +146,43 @@ class HomeScreen : Screen {
                         )
                     }
 
-                    LazyVerticalGrid(
-                        columns = GridCells.FixedSize(200.dp),
-                        contentPadding = PaddingValues(vertical = paddingMd),
-                        horizontalArrangement = Arrangement.spacedBy(paddingMd),
-                        verticalArrangement = Arrangement.spacedBy(paddingMd),
-                        modifier = Modifier.padding(horizontal = paddingLg)
-                    ) {
-                        items(features.filter { it.active }) { feature ->
-                            FeatureTile(
-                                feature = feature,
-                                onClick = {
-                                    navigateTo(feature.module_name, navigator)
-                                }
+                    if (isLoading) {
+                        Row(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = stringResource(Resources.String.loading),
+                                fontSize = FontSize.EXTRA_LARGE,
+                                color = primaryColor
+                            )
+                            Spacer(modifier = Modifier.width(spacingMd))
+                            CircularProgressIndicator(
+                                strokeWidth = 2.dp,
+                                color = primaryColor,
+                                modifier = Modifier.size(32.dp)
                             )
                         }
+                    } else {
+                        LazyVerticalGrid(
+                            columns = GridCells.FixedSize(200.dp),
+                            contentPadding = PaddingValues(vertical = paddingMd),
+                            horizontalArrangement = Arrangement.spacedBy(paddingMd),
+                            verticalArrangement = Arrangement.spacedBy(paddingMd),
+                            modifier = Modifier.padding(horizontal = paddingLg)
+                        ) {
+                            items(features.filter { it.active }) { feature ->
+                                AnimatedFeatureTile(
+                                    feature = feature,
+                                    onClick = {
+                                        navigateTo(feature.module_name, navigator)
+                                    }
+                                )
+                            }
+                        }
                     }
+
                 }
             }
         }
@@ -257,6 +289,27 @@ class HomeScreen : Screen {
             }
         }
     }
+
+    @Composable
+    fun AnimatedFeatureTile(
+        feature: ModulesResponse,
+        onClick: () -> Unit
+    ) {
+        var visible by remember { mutableStateOf(false) }
+
+        LaunchedEffect(Unit) {
+            visible = true
+        }
+
+        AnimatedVisibility(
+            visible = visible,
+            enter = fadeIn() + scaleIn(),
+            exit = fadeOut() + scaleOut()
+        ) {
+            FeatureTile(feature, onClick)
+        }
+    }
+
 
     private fun navigateTo(moduleName: String, navigator: Navigator) {
         when (moduleName.lowercase()) {
