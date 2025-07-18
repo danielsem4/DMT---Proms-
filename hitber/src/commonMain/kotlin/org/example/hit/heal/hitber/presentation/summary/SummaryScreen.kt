@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -31,12 +32,14 @@ import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInst
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions2
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberTitle
 import org.example.hit.heal.core.presentation.Resources.String.unexpectedError
+import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXl
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.core.presentation.utils.animations.SuccessAnimation
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -48,13 +51,14 @@ class SummaryScreen : Screen {
         val navigator = LocalNavigator.current
         val viewModel: ActivityViewModel = koinViewModel()
         val uploadStatus by viewModel.uploadStatus.collectAsState()
-        val snackbarHostState = remember { SnackbarHostState() }
         val isUploadFinished = uploadStatus != null
+        val snackbarHostState = remember { SnackbarHostState() }
         val successMessage = stringResource(sentSuccessfully)
         val unexpectedErrorMessage = stringResource(unexpectedError)
         val capturedBitmap1 by viewModel.capturedBitmap1.collectAsState()
         val capturedBitmap2 by viewModel.capturedBitmap2.collectAsState()
         val capturedBitmap3 by viewModel.capturedBitmap3.collectAsState()
+        val isLoading by viewModel.isLoading.collectAsState()
         val currentDate = getCurrentFormattedDateTime()
 
         BaseScreen(
@@ -76,6 +80,13 @@ class SummaryScreen : Screen {
                         Text(stringResource(summaryHitberInstructions1), fontSize = 25.sp)
                         Text(stringResource(summaryHitberInstructions2), fontSize = 25.sp)
                         SuccessAnimation(modifier = Modifier.size(100.dp))
+
+                        if(isLoading){
+                            CircularProgressIndicator(
+                                modifier = Modifier.padding(paddingXl).size(iconSizeXl),
+                                color = primaryColor
+                            )
+                        }
                     }
 
                     RoundedButton(

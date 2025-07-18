@@ -68,6 +68,9 @@ class ActivityViewModel(
     private val _capturedBitmap3 = MutableStateFlow<ImageBitmap?>(null)
     val capturedBitmap3: StateFlow<ImageBitmap?> = _capturedBitmap3.asStateFlow()
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     fun saveBitmap1(bitmap: ImageBitmap) {
         _capturedBitmap1.value = bitmap
     }
@@ -141,7 +144,7 @@ class ActivityViewModel(
 
         val measureObjects = answers.mapIndexed { index, answer ->
             MeasureObjectString(
-                measureObject =  (132 + index),
+                measureObject = (132 + index),
                 value = answer,
                 dateTime = date
             )
@@ -295,36 +298,37 @@ class ActivityViewModel(
         println("📤 התחלת העלאה, image size: ${imageByteArray.size}")
 
         uploadScope.launch {
-                try {
-                    val userId = storage.get(userId)!!
-                    val clinicId = storage.get(clinicId)!!
-                    val measurement = hitBerTest.value?.id ?: 19
+            _isLoading.value = true
+            try {
+                val userId = storage.get(userId)!!
+                val clinicId = storage.get(clinicId)!!
+                val measurement = hitBerTest.value?.id ?: 19
 
-                    val imagePath = bitmapToUploadUseCase.buildPath(
-                        clinicId = clinicId,
-                        patientId = userId,
-                        measurementId = measurement,
-                        pathDate = date
-                    )
+                val imagePath = bitmapToUploadUseCase.buildPath(
+                    clinicId = clinicId,
+                    patientId = userId,
+                    measurementId = measurement,
+                    pathDate = date
+                )
 
-                    val result = uploadImageUseCase.execute(
-                        imagePath = imagePath,
-                        bytes = imageByteArray,
-                        clinicId = clinicId,
-                        userId = userId
-                    )
+                val result = uploadImageUseCase.execute(
+                    imagePath = imagePath,
+                    bytes = imageByteArray,
+                    clinicId = clinicId,
+                    userId = userId
+                )
 
-                    result.onSuccess {
-                        println("✅ העלאה הצליחה")
-                        saveUploadedImageUrl(currentQuestion, imagePath, date)
-                    }.onError {error ->
-                        _uploadStatus.value = Result.failure(Exception(error.toString()))
-                        println("❌ שגיאה בהעלאה: ")
-                    }
-                } catch (e: Exception) {
-                    _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
-                    println("🚨 שגיאה חריגה: ${e.message}")
+                result.onSuccess {
+                    println("✅ העלאה הצליחה")
+                    saveUploadedImageUrl(currentQuestion, imagePath, date)
+                }.onError { error ->
+                    _uploadStatus.value = Result.failure(Exception(error.toString()))
+                    println("❌ שגיאה בהעלאה: ")
                 }
+            } catch (e: Exception) {
+                _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
+                println("🚨 שגיאה חריגה: ${e.message}")
+            }
         }
     }
 
@@ -373,13 +377,13 @@ class ActivityViewModel(
         if (list.isEmpty()) {
             list.add(createItem())
         } else {
-            val index =  list.lastIndex
+            val index = list.lastIndex
             list[index] = updateItem(list[index])
         }
     }
 
 
-     private fun uploadEvaluationResults() {
+    private fun uploadEvaluationResults() {
         uploadScope.launch {
             try {
                 result.patientId = storage.get(userId)!!.toInt()
@@ -404,8 +408,9 @@ class ActivityViewModel(
             } catch (e: Exception) {
                 println("🚨 שגיאה לא צפויה: ${e.message}")
                 _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
+            } finally {
+                _isLoading.value = false
             }
-
         }
     }
 }
