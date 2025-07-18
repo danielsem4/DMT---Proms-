@@ -34,6 +34,10 @@ import dmt_proms.oriantation.generated.resources.close
 import dmt_proms.oriantation.generated.resources.hash_tag
 import dmt_proms.oriantation.generated.resources.rhomb_outline
 import dmt_proms.oriantation.generated.resources.star
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
+import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.example.hit.heal.oriantation.feature.presentation.components.DraggableShape
 import org.example.hit.heal.oriantation.feature.presentation.components.DraggableShapeIcon
@@ -47,12 +51,12 @@ class ShapesDragScreen(
         // Initial positions for shapes in a column on the right
         val initialOffsets = remember {
             listOf(
-                Offset(2000f, 100f),  // triangle
-                Offset(2000f, 250f),  // diamond
-                Offset(2000f, 400f),  // star
-                Offset(2000f, 550f),  // hash
-                Offset(2000f, 700f),  // X
-                Offset(2000f, 850f)   // check
+                Offset(1500f, 300f),  // triangle
+                Offset(1500f, 500f),  // diamond
+                Offset(1500f, 700f),  // star
+                Offset(2000f, 300f),  // hash
+                Offset(2000f, 500f),  // X
+                Offset(2000f, 700f)   // check
             )
         }
 
@@ -71,7 +75,7 @@ class ShapesDragScreen(
         }
 
         // Red square position and size
-        val redSquareSize = 300.dp
+        val redSquareSize = 500.dp
         val redSquarePx = with(LocalDensity.current) { redSquareSize.toPx() }
 
         TabletBaseScreen(
@@ -84,6 +88,7 @@ class ShapesDragScreen(
                     text = "בפניך מספר צורות, עליך לגרור את המשולש לתוך הריבוע האדום משמאל",
                     color = Color(0xFF4EC3AF),
                     textAlign = TextAlign.Center,
+                    fontSize = LARGE,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -95,7 +100,7 @@ class ShapesDragScreen(
                         modifier = Modifier
                             .size(redSquareSize)
                             .border(3.dp, Color.Red)
-                            .background(Color(0xFFE0F7F1))
+                            .background(backgroundColor)
                             .align(Alignment.CenterStart)
                             .padding(start = 16.dp),
                         contentAlignment = Alignment.Center
@@ -126,12 +131,13 @@ class ShapesDragScreen(
                                     val dropY = offset.y
                                     // Check if dropped inside the red square
                                     if (dropX in 0f..redSquarePx && dropY in 0f..redSquarePx) {
-                                        shapes = shapes.map {
-                                            if (it.id == shape.id) it.copy(isDroppedInSquare = true) else it
-                                        }
+//                                        shapes = shapes.map{
+//                                            if (it.id == shape.id) it.copy(isDroppedInSquare = true) else it
+//                                        }
                                         // If the dropped shape is the triangle (id = 0), update the viewModel
                                         if (shape.id == 0) {
                                             viewModel.updateShapesDrag(true)
+                                            println("triangle dropped")
                                         }
                                     }
                                 }
