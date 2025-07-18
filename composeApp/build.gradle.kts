@@ -102,7 +102,6 @@ kotlin {
 
             implementation(libs.coil.compose)
 
-            implementation(libs.messagebar.kmp)
 
         }
         nativeMain.dependencies {
