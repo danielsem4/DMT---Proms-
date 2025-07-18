@@ -22,8 +22,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.material.DrawerDefaults.shape
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
@@ -91,57 +93,59 @@ class ShapesDragScreen(
                     fontSize = LARGE,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                 )
-                Spacer(modifier = Modifier.height(16.dp))
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    // Red square (drop target)
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    Spacer(modifier = Modifier.height(16.dp))
                     Box(
-                        modifier = Modifier
-                            .size(redSquareSize)
-                            .border(3.dp, Color.Red)
-                            .background(backgroundColor)
-                            .align(Alignment.CenterStart)
-                            .padding(start = 16.dp),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        // Show shapes that were dropped in the red square
-                        shapes.filter { it.isDroppedInSquare }.forEach { shape ->
-                            Image(
-                                painter = painterResource(shape.drawableRes),
-                                contentDescription = null,
-                                modifier = Modifier.size(80.dp)
-                            )
+                        // Red square (drop target)
+                        Box(
+                            modifier = Modifier
+                                .size(redSquareSize)
+                                .border(3.dp, Color.Red)
+                                .background(backgroundColor)
+                                .align(Alignment.CenterStart)
+                                .padding(start = 16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            // Show shapes that were dropped in the red square
+                            shapes.filter { it.isDroppedInSquare }.forEach { shape ->
+                                Image(
+                                    painter = painterResource(shape.drawableRes),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(80.dp)
+                                )
+                            }
                         }
-                    }
 
-                    // Draggable shapes
-                    shapes.forEach { shape ->
-                        if (!shape.isDroppedInSquare) {
-                            DraggableShapeIcon(
-                                drawableRes = shape.drawableRes,
-                                offset = shape.offset,
-                                onOffsetChange = { newOffset ->
-                                    shapes = shapes.map {
-                                        if (it.id == shape.id) it.copy(offset = newOffset) else it
-                                    }
-                                },
-                                onDrop = { offset ->
-                                    val dropX = offset.x
-                                    val dropY = offset.y
-                                    // Check if dropped inside the red square
-                                    if (dropX in 0f..redSquarePx && dropY in 0f..redSquarePx) {
+                        // Draggable shapes
+                        shapes.forEach { shape ->
+                            if (!shape.isDroppedInSquare) {
+                                DraggableShapeIcon(
+                                    drawableRes = shape.drawableRes,
+                                    offset = shape.offset,
+                                    onOffsetChange = { newOffset ->
+                                        shapes = shapes.map {
+                                            if (it.id == shape.id) it.copy(offset = newOffset) else it
+                                        }
+                                    },
+                                    onDrop = { offset ->
+                                        val dropX = offset.x
+                                        val dropY = offset.y
+                                        // Check if dropped inside the red square
+                                        if (dropX in 0f..redSquarePx && dropY in 0f..redSquarePx) {
 //                                        shapes = shapes.map{
 //                                            if (it.id == shape.id) it.copy(isDroppedInSquare = true) else it
 //                                        }
-                                        // If the dropped shape is the triangle (id = 0), update the viewModel
-                                        if (shape.id == 0) {
-                                            viewModel.updateShapesDrag(true)
-                                            println("triangle dropped")
+                                            // If the dropped shape is the triangle (id = 0), update the viewModel
+                                            if (shape.id == 0) {
+                                                viewModel.updateShapesDrag(true)
+                                                println("triangle dropped")
+                                            }
                                         }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     }
                 }
