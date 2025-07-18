@@ -25,14 +25,12 @@ import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
-import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.Questions
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-
 
 class TimeAndPlace : Screen {
     @Composable

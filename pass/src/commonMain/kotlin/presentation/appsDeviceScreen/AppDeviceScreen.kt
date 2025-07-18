@@ -80,7 +80,7 @@ class AppDeviceScreen : Screen {
             }
         )
 
-
+        // Navigate to the next screen when the user didn't do anything 3 times for 15 seconds or clicked 3 times wrong app
         LaunchedEffect(nextScreen) {
             if (isNextScreen) {
                 nextScreen?.let { screen ->
@@ -94,6 +94,7 @@ class AppDeviceScreen : Screen {
             }
         }
 
+        /// Lifecycle observers to stop/play internal timers or checks
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()
@@ -108,6 +109,7 @@ class AppDeviceScreen : Screen {
             }
         }
 
+        // Show a dialog asking if user didn't understand instructions
         if (showUnderstandingDialog) {
             BaseYesNoDialog(
                 onDismissRequest = {  },
@@ -123,8 +125,7 @@ class AppDeviceScreen : Screen {
             )
         }
 
-
-
+        // Show dialog with instructions or the helpers dialog
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->
                 val audioString = stringResource(audio)

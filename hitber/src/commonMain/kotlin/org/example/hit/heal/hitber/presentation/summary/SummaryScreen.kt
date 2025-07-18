@@ -117,6 +117,7 @@ class SummaryScreen : Screen {
                     )
                 }
             },
+            // Snackbar host to show messages about upload success or failure
             snackbarHost = {
                 SnackbarHost(hostState = snackbarHostState) { data ->
                     Snackbar(modifier = Modifier.padding(paddingSm)) {
@@ -129,6 +130,7 @@ class SummaryScreen : Screen {
             }
         )
 
+        // Show snackbar messages when upload status changes
         LaunchedEffect(uploadStatus) {
             uploadStatus?.let { result ->
                 result.onSuccess {
@@ -139,6 +141,7 @@ class SummaryScreen : Screen {
             }
         }
 
+        // Upload captured bitmaps
         LaunchedEffect(Unit) {
             listOf(
                 Pair(capturedBitmap1, 6),

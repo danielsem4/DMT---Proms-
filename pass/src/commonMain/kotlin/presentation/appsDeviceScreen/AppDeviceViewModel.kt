@@ -59,6 +59,7 @@ class AppDeviceViewModel(
     private val playAudioUseCase: PlayAudioUseCase
 ) : ViewModel() {
 
+    // Static list of app icons shown on screen
     val items = listOf(
         AppData(
             imageRes = calculatorIcon,
@@ -147,6 +148,8 @@ class AppDeviceViewModel(
 
     val isPlaying = playAudioUseCase.isPlaying
 
+
+    // Start the understanding dialog asking the user to confirm understanding
     private fun startDialogUnderstanding() {
         _isCloseIconDialog.value = true
 
@@ -155,6 +158,7 @@ class AppDeviceViewModel(
         }
     }
 
+    // Shows instruction dialogs and a reminder if the user is inactive for 15 seconds each time.
     fun startCheckingIfUserDidSomething() {
         if (didNothing == -1) {
             getReminderDidNotingText()
@@ -199,6 +203,7 @@ class AppDeviceViewModel(
         _showUnderstandingDialog.value = false
     }
 
+    // Called when the user clicks on an app
     fun onAppClicked(app: AppData) {
         if (app.label == contacts || app.label == phone) {
             _nextScreen.value = ContactsScreen()
@@ -213,7 +218,7 @@ class AppDeviceViewModel(
         }
     }
 
-
+    // Display the dialogs with the correct message and audio
     private fun getReminderDidNotingText() {
         when (++didNothing) {
             0 -> countdownDialogHandler.showCountdownDialog(

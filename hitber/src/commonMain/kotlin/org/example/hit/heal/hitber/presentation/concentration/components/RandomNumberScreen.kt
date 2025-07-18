@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.primaryColor
 
 // Displays a number that changes color momentarily on click and sends the selected number.
-
 @Composable
 fun RandomNumberScreen(
     number: Int,
