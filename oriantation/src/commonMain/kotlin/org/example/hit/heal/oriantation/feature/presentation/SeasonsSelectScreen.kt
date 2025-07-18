@@ -66,7 +66,9 @@ class SeasonsSelectScreen(
         TabletBaseScreen(
             title = (stringResource(string.oriantation_season_title)),
             question = 3,
-            onNextClick = { navigator?.push(ShapesDragScreen(viewModel)) },
+            onNextClick = {
+                viewModel.updateSeason(selectedSeason.toString())
+                navigator?.push(ShapesDragScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
 

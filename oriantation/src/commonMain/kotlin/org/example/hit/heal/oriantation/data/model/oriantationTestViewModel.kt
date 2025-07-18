@@ -16,6 +16,7 @@ import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.util.PrefKeys
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
+import dmt_proms.oriantation.generated.resources.Res
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -26,12 +27,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class OrientationResults(
-    val drawnShapeUrl: String = "",
-    val selectedNumber: String = "",
-    val selectedSeason: String = "",
-    val shapeResizeValue: Boolean = false,
-    val shapesDragResult: Boolean = false,
-    val feelingRate: Int = 0
+    val xDrawing: String = "",
+    val selected_number: String = "",
+    val selected_seasons: String = "",
+    val isTriangleSizeChanged: Boolean = false,
+    val isTriangleDragged: Boolean = false,
+    val healthLevel: String = ""
 )
 
 @Serializable
@@ -110,12 +111,12 @@ class OrientationTestViewModel(
                         println("Successfully uploaded Image")
 
                         val results = OrientationResults(
-                            drawnShapeUrl = imagePath,
-                            selectedNumber = trialData.response.selectedNumber.value ,
-                            selectedSeason = trialData.response.selectedSeasons.value.firstOrNull() ?: "",
-                            shapeResizeValue = trialData.response.isTriangleSizeChanged.value,
-                            shapesDragResult = trialData.response.isTriangleDragged.value,
-                            feelingRate = trialData.response.healthLevel.value.toIntOrNull() ?: 0
+                            xDrawing = imagePath,
+                            selected_number = trialData.response.selectedNumber.value ,
+                            selected_seasons = trialData.response.selectedSeasons.value.firstOrNull() ?: "",
+                            isTriangleSizeChanged = trialData.response.isTriangleSizeChanged.value,
+                            isTriangleDragged = trialData.response.isTriangleDragged.value,
+                            healthLevel = trialData.response.healthLevel.value
                         )
 
                         val body = OrientationRequestBody(
