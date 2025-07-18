@@ -80,7 +80,7 @@ class DragAndDropScreen : Screen {
                         onCaptured = { imageBitmap ->
                             val timestamp = getCurrentFormattedDateTime()
 
-                            viewModel.uploadImage(imageBitmap, timestamp, 7)
+                            viewModel.saveBitmap2(imageBitmap)
 
                             targetColor?.let {
                                 seventhQuestionViewModel.evaluateAnswer(

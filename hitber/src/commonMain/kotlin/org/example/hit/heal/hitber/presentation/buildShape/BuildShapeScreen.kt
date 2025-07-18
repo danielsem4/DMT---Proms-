@@ -101,11 +101,7 @@ class BuildShapeScreen : Screen {
                                     timestamp
                                 )
 
-                                viewModel.uploadImage(
-                                    bitmap = imageBitmap,
-                                    date = timestamp,
-                                    currentQuestion = 10
-                                )
+                                viewModel.saveBitmap3(imageBitmap)
 
                                 navigator?.replace(SummaryScreen())
                             }

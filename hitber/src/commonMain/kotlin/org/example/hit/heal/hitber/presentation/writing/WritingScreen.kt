@@ -79,17 +79,15 @@ class WritingScreen : Screen {
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .width(200.dp),
-                            buttonColor = if (!allFinished) Color.Gray else primaryColor,
                             onClick = {
-                                if (allFinished) {
                                     eightQuestionViewModel.eighthQuestionAnswer(sentences)
                                     viewModel.setEighthQuestion(
                                         eightQuestionViewModel.answer,
                                         getCurrentFormattedDateTime()
                                     )
                                     navigator?.replace(ActionShapesScreen(9))
-                                }
-                            }
+                            },
+                            enabled = allFinished
                         )
                     }
                 }

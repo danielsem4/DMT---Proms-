@@ -1,5 +1,8 @@
 package org.example.hit.heal.hitber.presentation
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -54,6 +57,28 @@ class ActivityViewModel(
 
     private val _hitBerTest = MutableStateFlow<Evaluation?>(null)
     val hitBerTest: StateFlow<Evaluation?> = _hitBerTest.asStateFlow()
+
+
+    private val _capturedBitmap1 = MutableStateFlow<ImageBitmap?>(null)
+    val capturedBitmap1: StateFlow<ImageBitmap?> = _capturedBitmap1.asStateFlow()
+
+    private val _capturedBitmap2 = MutableStateFlow<ImageBitmap?>(null)
+    val capturedBitmap2: StateFlow<ImageBitmap?> = _capturedBitmap2.asStateFlow()
+
+    private val _capturedBitmap3 = MutableStateFlow<ImageBitmap?>(null)
+    val capturedBitmap3: StateFlow<ImageBitmap?> = _capturedBitmap3.asStateFlow()
+
+    fun saveBitmap1(bitmap: ImageBitmap) {
+        _capturedBitmap1.value = bitmap
+    }
+
+    fun saveBitmap2(bitmap: ImageBitmap) {
+        _capturedBitmap2.value = bitmap
+    }
+
+    fun saveBitmap3(bitmap: ImageBitmap) {
+        _capturedBitmap3.value = bitmap
+    }
 
 
     fun setFirstQuestion(firstQuestion: FirstQuestion) {
@@ -293,10 +318,11 @@ class ActivityViewModel(
                         println("✅ העלאה הצליחה")
                         saveUploadedImageUrl(currentQuestion, imagePath, date)
                     }.onError {error ->
-                        uploadEvaluationResults()
+                        _uploadStatus.value = Result.failure(Exception(error.toString()))
                         println("❌ שגיאה בהעלאה: ")
                     }
                 } catch (e: Exception) {
+                    _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
                     println("🚨 שגיאה חריגה: ${e.message}")
                 }
         }
@@ -353,7 +379,7 @@ class ActivityViewModel(
     }
 
 
-     fun uploadEvaluationResults() {
+     private fun uploadEvaluationResults() {
         uploadScope.launch {
             try {
                 result.patientId = storage.get(userId)!!.toInt()

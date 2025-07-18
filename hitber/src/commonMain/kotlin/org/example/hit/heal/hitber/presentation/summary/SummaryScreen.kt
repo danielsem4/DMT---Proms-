@@ -17,11 +17,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key.Companion.L
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
+import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.sentSuccessfully
@@ -50,16 +52,10 @@ class SummaryScreen : Screen {
         val isUploadFinished = uploadStatus != null
         val successMessage = stringResource(sentSuccessfully)
         val unexpectedErrorMessage = stringResource(unexpectedError)
-
-        LaunchedEffect(uploadStatus) {
-            uploadStatus?.let { result ->
-                result.onSuccess {
-                    snackbarHostState.showSnackbar(successMessage)
-                }.onFailure { error ->
-                    snackbarHostState.showSnackbar(error.message ?: unexpectedErrorMessage)
-                }
-            }
-        }
+        val capturedBitmap1 by viewModel.capturedBitmap1.collectAsState()
+        val capturedBitmap2 by viewModel.capturedBitmap2.collectAsState()
+        val capturedBitmap3 by viewModel.capturedBitmap3.collectAsState()
+        val currentDate = getCurrentFormattedDateTime()
 
         BaseScreen(
             title = stringResource(summaryHitberTitle),
@@ -103,6 +99,28 @@ class SummaryScreen : Screen {
                 }
             }
         )
+
+        LaunchedEffect(uploadStatus) {
+            uploadStatus?.let { result ->
+                result.onSuccess {
+                    snackbarHostState.showSnackbar(successMessage)
+                }.onFailure { error ->
+                    snackbarHostState.showSnackbar(error.message ?: unexpectedErrorMessage)
+                }
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            listOf(
+                Pair(capturedBitmap1, 6),
+                Pair(capturedBitmap2, 7),
+                Pair(capturedBitmap3, 10)
+            ).forEach { (bitmap, questionId) ->
+                bitmap?.let {
+                    viewModel.uploadImage(it, currentDate, questionId)
+                }
+            }
+        }
 
         RegisterBackHandler(this) {
             navigator?.pop()

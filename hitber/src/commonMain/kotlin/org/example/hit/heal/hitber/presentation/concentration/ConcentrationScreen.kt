@@ -117,15 +117,12 @@ class ConcentrationScreen : Screen {
                     RoundedButton(
                         text = stringResource(`continue`),
                         modifier = Modifier.width(200.dp),
-                        buttonColor = if (isFinished) primaryColor else Color.Gray,
                         onClick = {
-                            if (isFinished) {
                                 viewModel.setThirdQuestion(
                                     thirdQuestionViewModel.thirdQuestionAnswers,
                                     getCurrentFormattedDateTime()
                                 )
                                 navigator?.replace(NamingScreen())
-                            }
                         },
                         enabled = isFinished
                     )

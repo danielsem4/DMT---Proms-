@@ -117,7 +117,7 @@ class UnderstandingScreen : Screen {
                         capturable = platformCapturable(
                             onCaptured = { imageBitmap ->
                                 val timestamp = getCurrentFormattedDateTime()
-                                viewModel.uploadImage(imageBitmap, timestamp, 6)
+                                viewModel.saveBitmap1(imageBitmap)
 
                                 sixthQuestionViewModel.evaluateAnswer(
                                     napkinResourceId,
