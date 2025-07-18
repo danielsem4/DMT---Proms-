@@ -61,6 +61,9 @@ import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Red
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.logout
+import org.example.hit.heal.core.presentation.Resources.String.logoutConfirmation
+import org.example.hit.heal.core.presentation.Resources.String.no
+import org.example.hit.heal.core.presentation.Resources.String.yes
 import org.example.hit.heal.core.presentation.Sizes.elevationMd
 import org.example.hit.heal.core.presentation.Sizes.elevationSm
 import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
@@ -83,6 +86,7 @@ import org.example.hit.heal.presentation.login.LoginScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import presentation.entryScreen.PassEntryScreen
 
 /**
  *
@@ -99,14 +103,19 @@ class HomeScreen : Screen {
         val isLoading by viewModel.isLoading.collectAsState()
 
 
+        val staticFeatures = listOf(
+            ModulesResponse(module_name = "pass", active = true)
+        )
+
+        val allFeatures = if (features.isNotEmpty()) {
+            (features + staticFeatures).filter { it.active }
+        } else {
+            emptyList()
+        }
+
         LaunchedEffect(Unit) {
             viewModel.loadFeatures()
         }
-
-        LaunchedEffect(features) {
-            println("All features: ${features.toString().replace(",","\n")}")
-        }
-
 
         BaseScreen(
             title = stringResource(Resources.String.home),
@@ -172,7 +181,7 @@ class HomeScreen : Screen {
                             verticalArrangement = Arrangement.spacedBy(paddingMd),
                             modifier = Modifier.padding(horizontal = paddingLg)
                         ) {
-                            items(features.filter { it.active }) { feature ->
+                            items(allFeatures) { feature ->
                                 AnimatedFeatureTile(
                                     feature = feature,
                                     onClick = {
@@ -192,8 +201,8 @@ class HomeScreen : Screen {
                 onDismissRequest = { showDialog = false },
                 title = stringResource(logout),
                 icon = Resources.Icon.logoutIcon,
-                message = "Are you sure you want to logout?",
-                confirmButtonText = "Yes",
+                message = stringResource(logoutConfirmation),
+                confirmButtonText = stringResource(yes),
                 confirmButtonColor = Green,
                 onConfirm = {
 
@@ -203,7 +212,7 @@ class HomeScreen : Screen {
                         navigator.replace(LoginScreen())
                     }
                 },
-                dismissButtonText = "No",
+                dismissButtonText = stringResource(no),
                 dismissButtonColor = Red,
                 onDismissButtonClick = { showDialog = false }
             )
@@ -317,6 +326,7 @@ class HomeScreen : Screen {
             "measurements" -> navigator.push(AllEvaluationsScreen())
             "activities" -> navigator.push(ActivitiesScreen())
             "hitber" -> navigator.push(HitBerEntryScreen())
+            "pass" -> navigator.push(PassEntryScreen())
             else -> {  }
         }
     }
@@ -333,6 +343,7 @@ class HomeScreen : Screen {
         "hitber" -> Resources.Icon.hitbearModuleIcon
         "cdt" -> Resources.Icon.clockIcon
         "orientation" -> Resources.Icon.memoryModuleIcon
+        "pass" -> Resources.Icon.hitbearModuleIcon
         else -> Resources.Icon.binIcon
     }
 
@@ -347,6 +358,7 @@ class HomeScreen : Screen {
         "hitber" -> stringResource(Resources.String.hitber)
         "cdt" -> stringResource(Resources.String.clockTest)
         "orientation" -> "Orientation"
+        "pass" -> stringResource(Resources.String.pass)
         else -> moduleName
     }
 }

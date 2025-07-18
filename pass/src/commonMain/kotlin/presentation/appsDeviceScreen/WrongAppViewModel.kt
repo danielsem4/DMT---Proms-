@@ -93,8 +93,6 @@ class WrongAppViewModel(
     }
 
     fun stopAll() {
-        println("didNothing: $didNothing")
-        println("didNothingSecondTime: $didNothingSecondTime")
         playAudioUseCase.stopAudio()
         countdownDialogHandler.hideDialog()
         reminderJob?.cancel()

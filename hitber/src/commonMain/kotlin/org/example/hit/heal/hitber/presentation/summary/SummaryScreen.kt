@@ -2,6 +2,8 @@ package org.example.hit.heal.hitber.presentation.summary
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -25,7 +27,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
+import org.example.hit.heal.core.presentation.FontSize
 import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.sentSuccessfully
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions1
@@ -36,6 +40,7 @@ import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXl
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -81,11 +86,24 @@ class SummaryScreen : Screen {
                         Text(stringResource(summaryHitberInstructions2), fontSize = 25.sp)
                         SuccessAnimation(modifier = Modifier.size(100.dp))
 
-                        if(isLoading){
-                            CircularProgressIndicator(
-                                modifier = Modifier.padding(paddingXl).size(iconSizeXl),
-                                color = primaryColor
-                            )
+                        if (isLoading) {
+                            Row(
+                                modifier = Modifier.padding(paddingXl),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = stringResource(Resources.String.loading),
+                                    fontSize = FontSize.EXTRA_LARGE,
+                                    color = primaryColor
+                                )
+                                Spacer(modifier = Modifier.width(spacingMd))
+                                CircularProgressIndicator(
+                                    strokeWidth = 2.dp,
+                                    color = primaryColor,
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            }
                         }
                     }
 

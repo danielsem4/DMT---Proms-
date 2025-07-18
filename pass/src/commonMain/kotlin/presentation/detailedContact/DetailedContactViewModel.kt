@@ -133,8 +133,6 @@ class DetailedContactViewModel(
     }
 
     fun stopAll() {
-        println("didNothing: $didNothing")
-        println("wrongClick: $wrongClick")
         playAudioUseCase.stopAudio()
         hideReminderDialog()
         reminderJob?.cancel()

@@ -255,8 +255,6 @@ class AppDeviceViewModel(
     }
 
     fun stopAll() {
-        println("didNothing: $didNothing")
-        println("wrongApp: $wrongApp")
         playAudioUseCase.stopAudio()
         countdownDialogHandler.hideDialog()
         reminderJob?.cancel()

@@ -81,7 +81,6 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         }
     }
 
-
     fun startCheckingIfUserDidSomething() {
         reminderJob?.cancel()
 
@@ -164,8 +163,6 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     }
 
     fun stopAll() {
-        println("didNothing: $didNothing")
-        println("wrongContact: $wrongContact")
         playAudioUseCase.stopAudio()
         hideReminderDialog()
         reminderJob?.cancel()
