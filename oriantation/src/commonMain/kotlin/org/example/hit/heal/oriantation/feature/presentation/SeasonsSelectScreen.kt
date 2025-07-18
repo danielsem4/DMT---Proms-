@@ -31,14 +31,19 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.oriantation.generated.resources.Res
+import dmt_proms.oriantation.generated.resources.Res.string
 import dmt_proms.oriantation.generated.resources.autumn
+import dmt_proms.oriantation.generated.resources.entry_Oriantation_welcome_note
+import dmt_proms.oriantation.generated.resources.oriantation_season_title
+import dmt_proms.oriantation.generated.resources.seasons_instructions_app_trial
+
 import dmt_proms.oriantation.generated.resources.spring
 import dmt_proms.oriantation.generated.resources.summer
 import dmt_proms.oriantation.generated.resources.winter
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.painterResource
-
+import org.jetbrains.compose.resources.stringResource
 
 
 enum class Season(val displayName: String) {
@@ -54,62 +59,60 @@ class SeasonsSelectScreen(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
-        var selectedSeason by remember { mutableStateOf(Season.SUMMER) }
+        var selectedSeason by remember { mutableStateOf(Season.WINTER) }
 
 
 
         TabletBaseScreen(
-            title = "עונות",
+            title = (stringResource(string.oriantation_season_title)),
             question = 3,
             onNextClick = { navigator?.push(ShapesDragScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Season Selector
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Season.values().forEach { season ->
-                        Button(
-
-                            onClick = { selectedSeason = season },
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = if (selectedSeason == season) Color(0xFF4EC3AF) else Color(0xFFB0B0B0)
-                            ),
-                            shape = RoundedCornerShape(50),
-                            modifier = Modifier
-                                .weight(1f)
-                                .padding(horizontal = 4.dp)
-                        ) {
-                            Text(
-                                text = season.displayName,
-                                color = Color.White,
-                                fontSize = 20.sp
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Main content: Image on the left, cards on the right
+                // Main content: Season buttons above the image, cards on the right
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Season Image
-                    Box(
+                    // Left side: Column with buttons on top, image below
+                    Column(
                         modifier = Modifier
                             .weight(1.2f)
-                            .height(250.dp)
+                            .height(400.dp) // Even bigger image
                             .padding(end = 16.dp),
-                        contentAlignment = Alignment.Center
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Top
                     ) {
+                        // Season Selector (at the very top)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            Season.values().forEach { season ->
+                                Button(
+                                    onClick = { selectedSeason = season },
+                                    colors = ButtonDefaults.buttonColors(
+                                        backgroundColor = if (selectedSeason == season) Color(0xFF4EC3AF) else Color(0xFFB0B0B0)
+                                    ),
+                                    shape = RoundedCornerShape(50),
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(horizontal = 4.dp)
+                                ) {
+                                    Text(
+                                        text = season.displayName,
+                                        color = Color.White,
+                                        fontSize = 22.sp // Bigger button text
+                                    )
+                                }
+                            }
+                        }
+                        // Season Image (bigger)
                         Image(
                             painter = painterResource(
                                 when (selectedSeason) {
@@ -119,12 +122,14 @@ class SeasonsSelectScreen(
                                     Season.AUTUMN -> Res.drawable.autumn
                                 }
                             ),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize()
+                            contentDescription = "selectedSeason",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
                         )
                     }
 
-                    // Text Cards
+                    // Right side: Text Cards
                     Column(
                         modifier = Modifier
                             .weight(1f)
@@ -146,9 +151,9 @@ class SeasonsSelectScreen(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text ="ץ יש לשנות את העונה ל קי",
+                                    text = (stringResource(string.seasons_instructions_app_trial)),
                                     color = Color(0xFF4EC3AF),
-                                    fontSize = 20.sp
+                                    fontSize = 24.sp // Bigger card text
                                 )
                             }
                         }
@@ -158,9 +163,8 @@ class SeasonsSelectScreen(
                             elevation = 4.dp,
                             backgroundColor = Color.White,
                             border = BorderStroke(1.dp, Color(0xFF4EC3AF))
-                        )
-
-                        {Spacer(modifier = Modifier.height(16.dp))
+                        ) {
+                            Spacer(modifier = Modifier.height(16.dp))
                             Box(
                                 modifier = Modifier.padding(16.dp),
                                 contentAlignment = Alignment.Center
@@ -168,7 +172,7 @@ class SeasonsSelectScreen(
                                 Text(
                                     text = "כרגע נמצאים בעונת ${selectedSeason.displayName}",
                                     color = Color(0xFF4EC3AF),
-                                    fontSize = 20.sp
+                                    fontSize = 24.sp // Bigger card text
                                 )
                             }
                         }
