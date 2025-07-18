@@ -25,6 +25,9 @@ class HomeViewModel(
     private val _features = MutableStateFlow<List<ModulesResponse>>(emptyList())
     val features: StateFlow<List<ModulesResponse>> = _features
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     fun loadFeatures() {
         viewModelScope.launch {
             val clinicId = storage.get(PrefKeys.clinicId)
@@ -32,16 +35,17 @@ class HomeViewModel(
                 println("clinicId is null")
                 return@launch
             }
+            _isLoading.value = true
             api.getModules(clinicId)
                 .onSuccess { result ->
-                    val updated = result + ModulesResponse("Clock", 16, true)
-                    _features.value = updated
-                    println("Features fetched: $updated")
+                    _features.value = result
+                    println("Features fetched: $result")
                 }
                 .onError {
                     _features.value = emptyList()
                     println("Error getting features: $it")
                 }
+            _isLoading.value = false
         }
     }
 
