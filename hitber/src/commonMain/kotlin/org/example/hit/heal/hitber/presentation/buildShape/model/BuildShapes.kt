@@ -35,11 +35,11 @@ val staticShapesItem = listOf(
 // List of draggable shapes initialized at starting positions.
 // These shapes can be moved by the user to match the static target shapes.
 val draggableShapesItem = listOf(
-    BuildShapes(triangleIcon, 0.8f, 0.05f, 0.8f, 1f, "triangle"),
-    BuildShapes(rotateStar, 0.87f, 0.7f, 0.5f, 0.5f, "star"),
-    BuildShapes(arrowUpIcon, 0.7f, 0.1f, 0.8f, 0.5f, "arrow key"),
-    BuildShapes(outlineCircleIcon, 0.95f, 0.55f, 0.21f, 0.21f, "circle"),
-    BuildShapes(filledCircleIcon, 0.88f, 0.55f, 0.2f, 0.2f, "black circle"),
-    BuildShapes(verticalStrokeIcon, 0.75f, 0.55f, 0.7f, 0.8f, "vertical line"),
-    BuildShapes(horizontalStrokeIcon, 0.65f, 0.4f, 0.5f, 0.8f, "horizontal line")
+    BuildShapes(triangleIcon, 0.8f, 0.08f, 0.8f, 1f, "triangle"),
+    BuildShapes(rotateStar, 0.87f, 0.73f, 0.5f, 0.5f, "star"),
+    BuildShapes(arrowUpIcon, 0.7f, 0.13f, 0.8f, 0.5f, "arrow key"),
+    BuildShapes(outlineCircleIcon, 0.95f, 0.58f, 0.21f, 0.21f, "circle"),
+    BuildShapes(filledCircleIcon, 0.88f, 0.58f, 0.2f, 0.2f, "black circle"),
+    BuildShapes(verticalStrokeIcon, 0.75f, 0.58f, 0.7f, 0.8f, "vertical line"),
+    BuildShapes(horizontalStrokeIcon, 0.65f, 0.43f, 0.5f, 0.8f, "horizontal line")
 )
