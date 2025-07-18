@@ -17,10 +17,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import org.example.hit.heal.core.presentation.Resources.Icon.table
-import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberNapkin
 import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberTable
 import org.example.hit.heal.hitber.presentation.understanding.model.napkins
 import org.jetbrains.compose.resources.painterResource
@@ -46,14 +44,18 @@ fun TableWithNapkinsBox(
                 onTableSizeChanged(size.width.toFloat() to size.height.toFloat())
             }
     ) {
+        // Draw table image
         Image(
             painter = painterResource(table),
             contentDescription = stringResource(sixthQuestionHitberTable),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds
         )
-
+        // Draw napkins positioned based on predefined ratios relative to table size
         napkins.forEachIndexed { _, item ->
+
+            // Convert pixel sizes and positions to dp units for Compose layout
+
             val xPx = tableSize.first * item.xRatio
             val yPx = tableSize.second * item.yRatio
 
@@ -73,6 +75,7 @@ fun TableWithNapkinsBox(
                     .size(napkinWidthDp, napkinHeightDp)
                     .zIndex(1f)
             ) {
+                // Draw napkin icon tinted with its specific color
                 Icon(
                     painter = painterResource(item.image),
                     contentDescription = null,

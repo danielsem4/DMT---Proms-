@@ -200,7 +200,7 @@ class AppDeviceViewModel(
     }
 
     fun onAppClicked(app: AppData) {
-        if (app.label == contacts) {
+        if (app.label == contacts || app.label == phone) {
             _nextScreen.value = ContactsScreen()
             return
         }

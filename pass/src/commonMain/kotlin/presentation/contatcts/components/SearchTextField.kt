@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,6 +22,7 @@ import org.example.hit.heal.core.presentation.Resources.String.search
 import org.example.hit.heal.core.presentation.Sizes.heightMd
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.radiusLg
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -50,9 +52,9 @@ fun SearchTextField(
             }
         },
         modifier = modifier
-            .width(200.dp)
+            .fillMaxWidth(0.9f)
             .height(heightMd),
-        shape = RoundedCornerShape(radiusMd),
+        shape = RoundedCornerShape(radiusLg),
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = Color.Black,
             unfocusedBorderColor = Color.Black,

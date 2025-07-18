@@ -76,7 +76,7 @@ import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.primaryColor
-import org.example.hit.heal.hitber.presentation.entry.HitberEntryScreen
+import org.example.hit.heal.hitber.presentation.entry.HitBerEntryScreen
 import org.example.hit.heal.presentation.activities.ActivitiesScreen
 import org.example.hit.heal.presentation.evaluation.AllEvaluationsScreen
 import org.example.hit.heal.presentation.login.LoginScreen
@@ -316,7 +316,7 @@ class HomeScreen : Screen {
             "cdt" -> navigator.push(CDTLandingScreen())
             "measurements" -> navigator.push(AllEvaluationsScreen())
             "activities" -> navigator.push(ActivitiesScreen())
-            "hitBer" -> navigator.push(HitberEntryScreen())
+            "hitber" -> navigator.push(HitBerEntryScreen())
             else -> {  }
         }
     }
@@ -330,7 +330,7 @@ class HomeScreen : Screen {
         "medications" -> Resources.Icon.medIcon
         "activities" -> Resources.Icon.exerciseIcon
         "memory" -> Resources.Icon.memoryModuleIcon
-        "hitBer" -> Resources.Icon.hitbearModuleIcon
+        "hitber" -> Resources.Icon.hitbearModuleIcon
         "cdt" -> Resources.Icon.clockIcon
         "orientation" -> Resources.Icon.memoryModuleIcon
         else -> Resources.Icon.binIcon
@@ -344,7 +344,7 @@ class HomeScreen : Screen {
         "medications" -> stringResource(Resources.String.medications)
         "activities" -> stringResource(Resources.String.activities)
         "memory" -> stringResource(Resources.String.memory)
-        "hitBer" -> stringResource(Resources.String.hitber)
+        "hitber" -> stringResource(Resources.String.hitber)
         "cdt" -> stringResource(Resources.String.clockTest)
         "orientation" -> "Orientation"
         else -> moduleName

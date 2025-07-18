@@ -16,7 +16,7 @@
     <string name="are_you_sure">האם את/ה בטוח/ה?</string>
 
     <string name="evaluation">הערכה</string>
-
+    <string name="logout_confirmation">האם אתה בטוח שאתה רוצה להתנתק?</string>
     <string name="back_confirmation_message">מעבר אחורה יחזור למסך הבית</string>
 
 
@@ -320,7 +320,7 @@
         <item>יצחק דהן</item>
         <item>מיכל ברקוביץ</item>
     </string-array>
-    <string name="phone_number">052–538–1648</string>
+    <string name="phone_number">1648–538–052</string>
 
     <string name="key_1">1</string>
     <string name="key_2">2</string>
@@ -336,7 +336,7 @@
     <string name="key_hash">#</string>
 
     <string name="default_name">לא ידוע</string>
-    <string name="default_phone">000-0000000</string>
+    <string name="default_phone">0000000-000</string>
 
 
     <string name="thanks_coffe">המשימה הסתיימה, תודה רבה על שיתוף הפעולה</string>

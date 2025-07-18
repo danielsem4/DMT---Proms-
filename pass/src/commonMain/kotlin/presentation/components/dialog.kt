@@ -72,7 +72,7 @@ fun InstructionsDialog(
             onDismiss()
         }
     }) {
-        Box(modifier = Modifier.fillMaxWidth().height(320.dp)) {
+        Box(modifier = Modifier.fillMaxWidth().height(330.dp)) {
 
             Image(
                 painter = painterResource(exclamationMark),

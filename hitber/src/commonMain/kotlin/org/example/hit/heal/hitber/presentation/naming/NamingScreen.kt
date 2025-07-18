@@ -1,6 +1,5 @@
 package org.example.hit.heal.hitber.presentation.naming
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,7 +55,10 @@ class NamingScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     InstructionText(stringResource(fourthQuestionHitberInstructions))
+                    // Input fields for user to enter names
                     NamingTextFields(answer1, answer2, fourthQuestionViewModel)
+
+                    // Displays the selected image pair
                     NamingImages(
                         selectedCouple,
                         modifier = Modifier

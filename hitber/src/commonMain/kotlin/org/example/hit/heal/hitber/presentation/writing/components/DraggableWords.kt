@@ -44,6 +44,7 @@ fun DraggableWords(
     density: Density
 ) {
     Box(modifier = Modifier.fillMaxSize().zIndex(1f)) {
+        // Render each draggable word on the screen
         copiedWords.forEach { wordState ->
             DraggableWord(wordState, screenSize, eightQuestionViewModel, density)
         }
@@ -66,9 +67,6 @@ fun DraggableWord(
     val widthPx = (screenSize.width * 0.1f)
     val heightPx = (screenSize.height * 0.15f)
 
-    LaunchedEffect(wordState.offset) {
-        wordOffset.snapTo(wordState.offset)
-    }
 
     Box(
         modifier = Modifier
@@ -89,11 +87,13 @@ fun DraggableWord(
                             wordOffset.snapTo(Offset(newX, newY))
                         }
 
+                        // Check if dragged word is currently over a valid slot
                         isOnSlot = eightQuestionViewModel.isWordOnSlot(
                             wordOffset.value,
                             screenSize,
                             density
                         )
+                        // Change color alpha to indicate valid drop target
                         wordColor =
                             if (isOnSlot != null) primaryColor.copy(alpha = 0.5f) else primaryColor
 
@@ -102,13 +102,16 @@ fun DraggableWord(
                     onDragEnd = {
                         wordColor = primaryColor
                         if (isOnSlot == null) {
+                            // Animate word back to its initial position if not dropped on any slot
                             coroutineScope.launch {
                                 wordOffset.animateTo(wordState.initialOffset)
                             }
                         } else {
+                            // Snap word to initial position after successful drop
                             coroutineScope.launch {
                                 wordOffset.snapTo(wordState.initialOffset)
                             }
+                            // Notify that word was dropped on a valid slot
                             eightQuestionViewModel.updateWordInSlot(word, isOnSlot!!)
                         }
                     }
@@ -127,6 +130,11 @@ fun DraggableWord(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.align(Alignment.Center)
         )
+    }
+
+    // Update animated position instantly when the source offset changes
+    LaunchedEffect(wordState.offset) {
+        wordOffset.snapTo(wordState.offset)
     }
 }
 

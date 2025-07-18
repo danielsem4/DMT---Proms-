@@ -68,7 +68,9 @@ class WritingScreen : Screen {
                                 .fillMaxWidth()
                                 .weight(1f)
                         ) {
+                            // Display draggable static words for user to drag onto slots
                             StaticWords(draggableWordsList, eightQuestionViewModel, density)
+                            // Composable showing drop targets for the words
                             WordSlots(slots, eightQuestionViewModel, density)
                         }
 
@@ -77,17 +79,15 @@ class WritingScreen : Screen {
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
                                 .width(200.dp),
-                            buttonColor = if (!allFinished) Color.Gray else primaryColor,
                             onClick = {
-                                if (allFinished) {
                                     eightQuestionViewModel.eighthQuestionAnswer(sentences)
                                     viewModel.setEighthQuestion(
                                         eightQuestionViewModel.answer,
                                         getCurrentFormattedDateTime()
                                     )
                                     navigator?.replace(ActionShapesScreen(9))
-                                }
-                            }
+                            },
+                            enabled = allFinished
                         )
                     }
                 }

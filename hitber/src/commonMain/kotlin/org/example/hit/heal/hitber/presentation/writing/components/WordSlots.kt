@@ -71,12 +71,15 @@ fun WordSlot(
     val activeSlotIndex by eightQuestionViewModel.activeSlotIndex.collectAsState()
     val widthPx = (screenSize.width * 0.1f)
     val heightPx = (screenSize.width * 0.1f)
+
+    // When activeSlotIndex changes, trigger to update slot colors accordingly
     LaunchedEffect(activeSlotIndex) {
         eightQuestionViewModel.updateSlotColor(activeSlotIndex ?: -1)
     }
 
     Box(
         modifier = Modifier.offset {
+            // Position slot based on its initialOffset and current screen size
             IntOffset(
                 (slot.initialOffset.x * screenSize.width).toInt(),
                 (slot.initialOffset.y * screenSize.height).toInt()
@@ -89,6 +92,7 @@ fun WordSlot(
             .zIndex(-1f)
     ) {
         slot.word?.let {
+            // Show a clickable close icon to clear the word in the slot
             Image(painter = painterResource(closeIcon),
                 contentDescription = stringResource(eighthQuestionHitberCloseIcon),
                 modifier = Modifier.size(20.dp).align(Alignment.TopStart).padding(5.dp)
