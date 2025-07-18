@@ -69,7 +69,7 @@ fun DraggableShapeIcon(
         Image(
             painter = painterResource(drawableRes),
             contentDescription = null,
-            modifier = Modifier.size(80.dp)
+            modifier = Modifier.size(100.dp)
         )
     }
 }

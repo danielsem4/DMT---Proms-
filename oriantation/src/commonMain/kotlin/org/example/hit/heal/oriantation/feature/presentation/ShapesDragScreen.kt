@@ -57,12 +57,12 @@ class ShapesDragScreen(
         // Initial positions for shapes in a column on the right
         val initialOffsets = remember {
             listOf(
-                Offset(1500f, 300f),  // triangle
+                Offset(1500f, 200f),  // triangle
                 Offset(1500f, 500f),  // diamond
-                Offset(1500f, 700f),  // star
-                Offset(2000f, 300f),  // hash
+                Offset(1500f, 800f),  // star
+                Offset(2000f, 200f),  // hash
                 Offset(2000f, 500f),  // X
-                Offset(2000f, 700f)   // check
+                Offset(2000f, 800f)   // check
             )
         }
 

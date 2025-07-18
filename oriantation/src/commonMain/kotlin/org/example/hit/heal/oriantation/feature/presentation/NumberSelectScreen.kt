@@ -44,7 +44,7 @@ class NumberSelectScreen(
         val numbers = (0..20).toList()
 
         TabletBaseScreen(
-            title = (stringResource(string.dropdown_instructions_app_trial)),
+            title = (stringResource(string.sec_question_title)),
             question = 2, // For "2/8"
             onNextClick = { navigator?.push(SeasonsSelectScreen(viewModel)) },
             content = {
