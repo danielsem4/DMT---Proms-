@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.oriantation.generated.resources.Res.string
+import dmt_proms.oriantation.generated.resources.dropdown_instructions_app_trial
 import dmt_proms.oriantation.generated.resources.sec_question_instraction
 import dmt_proms.oriantation.generated.resources.sec_question_title
 import org.example.hit.heal.core.presentation.TabletBaseScreen
@@ -43,7 +44,7 @@ class NumberSelectScreen(
         val numbers = (0..20).toList()
 
         TabletBaseScreen(
-            title = (stringResource(string.sec_question_title)),
+            title = (stringResource(string.dropdown_instructions_app_trial)),
             question = 2, // For "2/8"
             onNextClick = { navigator?.push(SeasonsSelectScreen(viewModel)) },
             content = {

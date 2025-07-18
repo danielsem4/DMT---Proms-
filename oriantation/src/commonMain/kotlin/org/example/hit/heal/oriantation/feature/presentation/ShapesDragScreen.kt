@@ -36,6 +36,7 @@ import dmt_proms.oriantation.generated.resources.close
 import dmt_proms.oriantation.generated.resources.hash_tag
 import dmt_proms.oriantation.generated.resources.rhomb_outline
 import dmt_proms.oriantation.generated.resources.star
+import dmt_proms.oriantation.generated.resources.trial_drag_instructions
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.backgroundColor
@@ -44,6 +45,9 @@ import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.example.hit.heal.oriantation.feature.presentation.components.DraggableShape
 import org.example.hit.heal.oriantation.feature.presentation.components.DraggableShapeIcon
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
+
 class ShapesDragScreen(
     private val viewModel: OrientationTestViewModel
 ) : Screen {
@@ -81,13 +85,13 @@ class ShapesDragScreen(
         val redSquarePx = with(LocalDensity.current) { redSquareSize.toPx() }
 
         TabletBaseScreen(
-            title = "גרירה",
+            title = (stringResource(Res.string.trial_drag_instructions)),
             question = 4,
             onNextClick = { navigator?.push(ShapeResizeScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "בפניך מספר צורות, עליך לגרור את המשולש לתוך הריבוע האדום משמאל",
+                    text = stringResource(Res.string.trial_drag_instructions),
                     color = Color(0xFF4EC3AF),
                     textAlign = TextAlign.Center,
                     fontSize = LARGE,

@@ -38,6 +38,7 @@ import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.jetbrains.compose.resources.stringResource
 import dmt_proms.oriantation.generated.resources.Res.string
 import dmt_proms.oriantation.generated.resources.trial_drag_instructions
+import dmt_proms.oriantation.generated.resources.trial_draw_title
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 
@@ -82,7 +83,7 @@ class DrawScreen(
             return bitmap
         }
         TabletBaseScreen(
-            title = "שימוש בעת",
+            title = stringResource(string.trial_draw_title),
             question = 7,
             onNextClick = {
                 val bitmap = drawPathsToBitmap()
@@ -159,9 +160,6 @@ class DrawScreen(
             }
         )
 
-
-
-
     }
 
-    }
+}
