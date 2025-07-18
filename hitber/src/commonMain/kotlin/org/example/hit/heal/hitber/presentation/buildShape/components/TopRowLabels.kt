@@ -15,6 +15,8 @@ import org.example.hit.heal.core.presentation.Resources.String.tenthQuestionHitb
 import org.example.hit.heal.core.presentation.Sizes.paddingXl
 import org.jetbrains.compose.resources.stringResource
 
+// Row displaying header labels for shape model and draggable shapes
+
 @Composable
 fun TopRowLabels() {
     Row(

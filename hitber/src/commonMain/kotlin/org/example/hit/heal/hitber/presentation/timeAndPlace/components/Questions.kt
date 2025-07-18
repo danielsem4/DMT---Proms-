@@ -71,6 +71,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun Questions(viewModel: FirstQuestionViewModel) {
 
+    // List of question data with their keys and localized answers from resources
     val questionsData = listOf(
         QuestionData(
             question = stringResource(firstQuestionHitberQuestion1),
@@ -171,7 +172,7 @@ fun Questions(viewModel: FirstQuestionViewModel) {
         )
     )
 
-
+    // For each question, display a dropdown menu with the possible answers
     questionsData.forEach { questionData ->
         DropDownQuestionField(
             question = questionData.question,
@@ -183,4 +184,5 @@ fun Questions(viewModel: FirstQuestionViewModel) {
     }
 }
 
+// Data class representing a question with its text, a key for storing the answer, and a list of possible answers
 data class QuestionData(val question: String, val questionKey: String, val answers: List<String>)

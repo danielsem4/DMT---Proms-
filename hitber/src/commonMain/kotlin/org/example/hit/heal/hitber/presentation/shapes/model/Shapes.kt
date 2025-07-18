@@ -17,6 +17,7 @@ import org.example.hit.heal.core.presentation.Resources.Icon.triangleIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.xIcon
 import org.jetbrains.compose.resources.DrawableResource
 
+// Predefined shape sets used for random selection
 val shapeSets = listOf(
     listOf(ShapeType.Triangle, ShapeType.Check, ShapeType.Cone, ShapeType.Pentagon, ShapeType.Star),
     listOf(ShapeType.Trapezoid, ShapeType.Plus, ShapeType.Hexagon, ShapeType.RightTriangle, ShapeType.Hashtag),
@@ -25,6 +26,7 @@ val shapeSets = listOf(
     listOf(ShapeType.Rectangle, ShapeType.Plus, ShapeType.Ellipse, ShapeType.RightTriangle, ShapeType.Star)
 )
 
+//Represents the different types of shape
 enum class ShapeType {
     Ellipse,
     Rectangle,
@@ -43,8 +45,10 @@ enum class ShapeType {
     Close
 }
 
+// Data class representing a shape with a type and an icon
 data class Shape(val type: ShapeType, val drawable: DrawableResource)
 
+// List of all available shapes, each paired with its visual icon
 val shapeList = listOf(
     Shape(ShapeType.Ellipse, elipsaIcon),
     Shape(ShapeType.Rectangle, rectangleIcon),

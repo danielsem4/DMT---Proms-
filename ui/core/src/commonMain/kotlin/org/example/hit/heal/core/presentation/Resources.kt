@@ -244,6 +244,7 @@ import dmt_proms.ui.core.generated.resources.lock
 import dmt_proms.ui.core.generated.resources.login
 import dmt_proms.ui.core.generated.resources.login_success
 import dmt_proms.ui.core.generated.resources.logout
+import dmt_proms.ui.core.generated.resources.logout_confirmation
 import dmt_proms.ui.core.generated.resources.measurements
 import dmt_proms.ui.core.generated.resources.med_icon
 import dmt_proms.ui.core.generated.resources.medications
@@ -420,9 +421,10 @@ object Resources {
         val warningIcon = Res.drawable.warning
         val joggingIcon = Res.drawable.jogging
 
-//        val lemonIcon = Res.drawable.lemon
+        //        val lemonIcon = Res.drawable.lemon
         val napkinIcon = Res.drawable.napkin
-//        val tableIcon = Res.drawable.table
+
+        //        val tableIcon = Res.drawable.table
         val rulerIcon = Res.drawable.ruler
 
         val plusIcon = Res.drawable.plus
@@ -544,6 +546,7 @@ object Resources {
         val howDoYouFeel = rs.how_do_you_feel
         val evaluationText = rs.evaluation
 
+        val logoutConfirmation = rs.logout_confirmation
         val areYouSure = Res.string.are_you_sure
         val backConfirmationMessage = Res.string.back_confirmation_message
 
@@ -584,7 +587,8 @@ object Resources {
 
         val firstQuestionHitberTitle = Res.string.first_question_hitber_title
         val firstQuestionHitberInstructions = Res.string.first_question_hitber_instructions
-        val firstQuestionHitberDropDownDropUpIcon = Res.string.first_question_hitber_Drop_down_drop_up_Icon
+        val firstQuestionHitberDropDownDropUpIcon =
+            Res.string.first_question_hitber_Drop_down_drop_up_Icon
 
         val firstQuestionHitberQuestion1 = Res.string.first_question_hitber_question1
         val firstQuestionHitberAnswer1_1 = Res.string.first_question_hitber_answer1_1
@@ -657,10 +661,13 @@ object Resources {
 
         val secondQuestionHitberTitle = Res.string.second_question_hitber_title
         val secondQuestionHitberTask = Res.string.second_question_hitber_task
-        val secondQuestionHitberDialogInstructions = Res.string.second_question_hitber_dialog_instructions
+        val secondQuestionHitberDialogInstructions =
+            Res.string.second_question_hitber_dialog_instructions
         val secondQuestionHitberDialogTitle = Res.string.second_question_hitber_dialog_title
-        val secondQuestionHitberTaskInstructions = Res.string.second_question_hitber_task_instructions
-        val secondQuestionHitberTaskRetryInstructions = Res.string.second_question_hitber_task_retry_instructions
+        val secondQuestionHitberTaskInstructions =
+            Res.string.second_question_hitber_task_instructions
+        val secondQuestionHitberTaskRetryInstructions =
+            Res.string.second_question_hitber_task_retry_instructions
         val secondQuestionHitberDialogIcon = Res.string.second_question_hitber_dialog_icon
         val secondQuestionHitberUnderstand = Res.string.second_question_hitber_dialog_understand
         val secondQuestionHitberEllipse = Res.string.second_question_hitber_ellipse
@@ -705,10 +712,14 @@ object Resources {
         val sixthQuestionHitberItem = Res.string.sixth_question_hitber_item
         val sixthQuestionHitberNapkin = Res.string.sixth_question_hitber_napkin
 
-        val sixthQuestionDefaultMilkToRedNapkinHitber = Res.string.sixth_question_default_milk_to_red_napkin_hitber
-        val sixthQuestionGrapesToBlueNapkinHitber = Res.string.sixth_question_grapes_to_blue_napkin_hitber
-        val sixthQuestionChickenToGreenNapkinHitber = Res.string.sixth_question_chicken_to_green_napkin_hitber
-        val sixthQuestionCanToYellowNapkinHitber = Res.string.sixth_question_can_to_yellow_napkin_hitber
+        val sixthQuestionDefaultMilkToRedNapkinHitber =
+            Res.string.sixth_question_default_milk_to_red_napkin_hitber
+        val sixthQuestionGrapesToBlueNapkinHitber =
+            Res.string.sixth_question_grapes_to_blue_napkin_hitber
+        val sixthQuestionChickenToGreenNapkinHitber =
+            Res.string.sixth_question_chicken_to_green_napkin_hitber
+        val sixthQuestionCanToYellowNapkinHitber =
+            Res.string.sixth_question_can_to_yellow_napkin_hitber
 
         val seventhQuestionHitberTitle = Res.string.seventh_question_hitber_title
         val seventhQuestionHitberGreenCircle = Res.string.seventh_question_hitber_green_circle
@@ -849,16 +860,19 @@ object Resources {
         val dentistNumberShowenCallHimPass = Res.string.dentist_number_showen_call_him_pass
         val dialerOpenedPass = Res.string.dialer_opened_pass
         val goingBackToAppsScreenPass = Res.string.going_back_to_apss_screen_pass
-        val pressTheDialButtonThatShowenDownPass = Res.string.press_the_dial_button_that_showen_down_pass
+        val pressTheDialButtonThatShowenDownPass =
+            Res.string.press_the_dial_button_that_showen_down_pass
         val pressTheNumberOrTheDialButtonPass = Res.string.press_the_number_or_the_dial_button_pass
         val searchAtLatterHPass = Res.string.search_at_latter_h_pass
         val searchDentistNumberPass = Res.string.search_dentist_number_pass
         val searchForHanaChoenInContactsPass = Res.string.search_for_hana_choen_in_contacts_pass
         val searchContactsListInThePhonePass = Res.string.search_contacts_list_in_the_phone_pass
-        val nowTheContactsListWillBeOpenedPass = Res.string.now_the_contacts_list_will_be_opened_pass
+        val nowTheContactsListWillBeOpenedPass =
+            Res.string.now_the_contacts_list_will_be_opened_pass
         val returnButtonOnTopLeftPass = Res.string.return_button_on_top_left_pass
         val witchContactAreWeLookingForPass = Res.string.witch_contact_are_we_looking_for_pass
-        val wrongNumberDialedPleaseTryAgainPass = Res.string.wrong_number_dialed_please_try_again_pass
+        val wrongNumberDialedPleaseTryAgainPass =
+            Res.string.wrong_number_dialed_please_try_again_pass
         val firstMissionDoneVocalPass = Res.string.first_mission_done_vocal_pass
 
     }

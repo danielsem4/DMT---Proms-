@@ -29,6 +29,7 @@ class TenthQuestionViewModel : ViewModel() {
         }
     }
 
+    // Checks which shapes are correctly placed within tolerance thresholds compared to their expected positions
     private fun getCorrectlyPlacedShapes(
         itemPositions: List<Offset>,
         draggableShapes: List<BuildShapes>,

@@ -3,15 +3,12 @@ package org.example.hit.heal.hitber.presentation.understanding
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -73,6 +70,7 @@ class UnderstandingScreen : Screen {
         var fridgeSize by remember { mutableStateOf(0f to 0f) }
         var tableSize by remember { mutableStateOf(0f to 0f) }
         var napkinPosition by remember { mutableStateOf(Offset.Zero) }
+        var isFridgeOpen by remember { mutableStateOf(false) }
 
         val itemPositions = remember(fridgeSize) {
             mutableStateListOf<Offset>().apply {
@@ -84,12 +82,12 @@ class UnderstandingScreen : Screen {
             }
         }
 
+        // Calculate size for fridge items and napkin relative to fridge/table height
         val itemWidthPx = fridgeSize.second * 0.1f
         val itemHeightPx = fridgeSize.second * 0.1f
         val napkinWidthPx = tableSize.second * 0.18f
         val napkinHeightPx = tableSize.second * 0.18f
 
-        var isFridgeOpen by remember { mutableStateOf(false) }
 
         val isRtl = false
         CompositionLocalProvider(LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr) {
@@ -103,7 +101,7 @@ class UnderstandingScreen : Screen {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         InstructionText(stringResource(sixthQuestionHitberInstructions))
-
+                        // Button to play the audio instruction
                         AudioButton(
                             onClick = {
                                 audioUrl?.let { url ->
@@ -115,10 +113,12 @@ class UnderstandingScreen : Screen {
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
 
+                        // Screenshot capture wrapper that captures the layout below
                         capturable = platformCapturable(
                             onCaptured = { imageBitmap ->
                                 val timestamp = getCurrentFormattedDateTime()
-                                viewModel.uploadImage(imageBitmap, timestamp, 6)
+                                viewModel.saveBitmap1(imageBitmap)
+
                                 sixthQuestionViewModel.evaluateAnswer(
                                     napkinResourceId,
                                     napkinPosition,
@@ -132,6 +132,7 @@ class UnderstandingScreen : Screen {
                                     sixthQuestionViewModel.isNapkinPlacedCorrectly,
                                     date = timestamp
                                 )
+
                                 navigator?.replace(DragAndDropScreen())
                             },
                             modifier = Modifier.weight(1f)
@@ -141,6 +142,7 @@ class UnderstandingScreen : Screen {
                                     .fillMaxSize()
                                     .background(Color.White, shape = RoundedCornerShape(4))
                             ) {
+                                // Fridge with draggable items
                                 FridgeWithItemsBox(
                                     isFridgeOpen = isFridgeOpen,
                                     onFridgeToggle = { isFridgeOpen = !isFridgeOpen },
@@ -154,6 +156,7 @@ class UnderstandingScreen : Screen {
                                     modifier = Modifier.align(Alignment.CenterStart)
                                 )
 
+                                // Table with napkin positioning
                                 TableWithNapkinsBox(
                                     tableSize = tableSize,
                                     onTableSizeChanged = { tableSize = it },
@@ -182,6 +185,7 @@ class UnderstandingScreen : Screen {
                 }
             )
 
+            // Observe lifecycle to stop audio playback when screen is stopped
             ObserveLifecycle(
                 onStop = {
                     sixthQuestionViewModel.stopAudio()
@@ -193,6 +197,7 @@ class UnderstandingScreen : Screen {
                 navigator?.pop()
             }
 
+            // Show dialog while audio is playing
             if (isPlaying) {
                 AudioPlayingDialog()
             }

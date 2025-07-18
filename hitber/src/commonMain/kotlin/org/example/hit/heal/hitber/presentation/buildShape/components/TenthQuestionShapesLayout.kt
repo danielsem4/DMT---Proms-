@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.Density
 import org.example.hit.heal.core.presentation.Sizes.radiusSm
 import org.example.hit.heal.hitber.presentation.buildShape.model.BuildShapes
 
+// Composable layout that displays draggable and static shapes within a styled container.
+
 @Composable
 fun TenthQuestionShapesLayout(
     staticShapesItem: List<BuildShapes>,

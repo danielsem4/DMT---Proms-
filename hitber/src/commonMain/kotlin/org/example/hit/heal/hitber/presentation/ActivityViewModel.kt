@@ -1,5 +1,8 @@
 package org.example.hit.heal.hitber.presentation
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +13,6 @@ import core.data.model.MeasureObjectString
 import core.data.model.evaluation.Evaluation
 import core.data.storage.Storage
 import core.domain.DataError
-import core.domain.Error
 import core.domain.api.AppApi
 import core.domain.onError
 import core.domain.onSuccess
@@ -23,26 +25,22 @@ import org.example.hit.heal.hitber.data.model.EighthQuestionItem
 import org.example.hit.heal.hitber.data.model.FirstQuestion
 import org.example.hit.heal.hitber.data.model.SecondQuestionItem
 import org.example.hit.heal.hitber.data.model.SelectedShapesStringList
-import org.example.hit.heal.hitber.data.model.SeventhQuestionType
-import org.example.hit.heal.hitber.data.model.SixthQuestionType
-import org.example.hit.heal.hitber.data.model.TenthQuestionType
 import org.example.hit.heal.hitber.data.model.ThirdQuestionItem
 import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
-import core.util.PrefKeys
 import core.util.PrefKeys.clinicId
 import core.util.PrefKeys.userId
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
-import org.example.hit.heal.core.presentation.Resources.String.clockTest
+import org.example.hit.heal.hitber.data.model.SeventhQuestionItem
+import org.example.hit.heal.hitber.data.model.SixthQuestionItem
+import org.example.hit.heal.hitber.data.model.TenthQuestionItem
 
 class ActivityViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
@@ -54,11 +52,37 @@ class ActivityViewModel(
 
     private var result: CogData = CogData()
 
-    private val _uploadStatus  = MutableStateFlow<Result<Unit>?>(null)
+    private val _uploadStatus = MutableStateFlow<Result<Unit>?>(null)
     val uploadStatus: StateFlow<Result<Unit>?> = _uploadStatus
 
-    private val _hitberTest = MutableStateFlow<Evaluation?>(null)
-    val hitberTest: StateFlow<Evaluation?> = _hitberTest.asStateFlow()
+    private val _hitBerTest = MutableStateFlow<Evaluation?>(null)
+    val hitBerTest: StateFlow<Evaluation?> = _hitBerTest.asStateFlow()
+
+
+    private val _capturedBitmap1 = MutableStateFlow<ImageBitmap?>(null)
+    val capturedBitmap1: StateFlow<ImageBitmap?> = _capturedBitmap1.asStateFlow()
+
+    private val _capturedBitmap2 = MutableStateFlow<ImageBitmap?>(null)
+    val capturedBitmap2: StateFlow<ImageBitmap?> = _capturedBitmap2.asStateFlow()
+
+    private val _capturedBitmap3 = MutableStateFlow<ImageBitmap?>(null)
+    val capturedBitmap3: StateFlow<ImageBitmap?> = _capturedBitmap3.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    fun saveBitmap1(bitmap: ImageBitmap) {
+        _capturedBitmap1.value = bitmap
+    }
+
+    fun saveBitmap2(bitmap: ImageBitmap) {
+        _capturedBitmap2.value = bitmap
+    }
+
+    fun saveBitmap3(bitmap: ImageBitmap) {
+        _capturedBitmap3.value = bitmap
+    }
+
 
     fun setFirstQuestion(firstQuestion: FirstQuestion) {
         result.firstQuestion = firstQuestion
@@ -66,17 +90,20 @@ class ActivityViewModel(
     }
 
     fun setSecondQuestion(
-        answers:  List<Pair<Map<Int, String>, Int>>,
+        answers: List<Pair<Map<Int, String>, Int>>,
         date: String
     ) {
         val secondQuestionList = answers.map { (map, correctShapesCount) ->
             val shapesList = map.values.toList()
+
             SecondQuestionItem(
                 selectedShapes = SelectedShapesStringList(
+                    measureObject = 110,
                     value = shapesList,
                     dateTime = date
                 ),
                 wrongShapes = MeasureObjectInt(
+                    measureObject = 182,
                     value = 5 - correctShapesCount,
                     dateTime = date
                 )
@@ -88,17 +115,21 @@ class ActivityViewModel(
     }
 
     fun setThirdQuestion(thirdQuestionAnswers: MutableList<Pair<Int, Int>>, date: String) {
+
         val thirdQuestionList = thirdQuestionAnswers.map { (answer, reactionTime) ->
             ThirdQuestionItem(
                 number = MeasureObjectInt(
+                    measureObject = 111,
                     value = answer,
                     dateTime = date
                 ),
                 time = MeasureObjectInt(
+                    measureObject = 112,
                     value = reactionTime,
                     dateTime = date
                 ),
                 isPressed = MeasureObjectBoolean(
+                    measureObject = 113,
                     value = true,
                     dateTime = date
                 )
@@ -110,14 +141,17 @@ class ActivityViewModel(
     }
 
     fun setFourthQuestion(answers: List<String>, date: String) {
-        val measureObjects = answers.map { answer ->
+
+        val measureObjects = answers.mapIndexed { index, answer ->
             MeasureObjectString(
+                measureObject = (132 + index),
                 value = answer,
                 dateTime = date
             )
         }
+
         result.fourthQuestion = ArrayList(measureObjects)
-        println("FirstQuestion answer: (${result.fourthQuestion})")
+        println("FourthQuestion answer: (${result.fourthQuestion})")
     }
 
     fun setSixthQuestion(
@@ -126,13 +160,19 @@ class ActivityViewModel(
         napkinPlacedCorrectly: Boolean,
         date: String
     ) {
-        val sixthQuestionItem = SixthQuestionType.SixthQuestionItem(
-            fridgeOpened = MeasureObjectBoolean(value = fridgeOpened, dateTime = date),
+        val sixthQuestionItem = SixthQuestionItem(
+            fridgeOpened = MeasureObjectBoolean(
+                measureObject = 138,
+                value = fridgeOpened,
+                dateTime = date
+            ),
             correctProductDragged = MeasureObjectBoolean(
+                measureObject = 139,
                 value = itemMovedCorrectly,
                 dateTime = date
             ),
             placedOnCorrectNap = MeasureObjectBoolean(
+                measureObject = 140,
                 value = napkinPlacedCorrectly,
                 dateTime = date
             )
@@ -143,8 +183,13 @@ class ActivityViewModel(
     }
 
     fun setSeventhQuestion(answer: Boolean, date: String) {
-        val seventhQuestionItem = SeventhQuestionType.SeventhQuestionItem(
-            isCorrect = MeasureObjectBoolean(value = answer, dateTime = date)
+
+        val seventhQuestionItem = SeventhQuestionItem(
+            isCorrect = MeasureObjectBoolean(
+                measureObject = 141,
+                value = answer,
+                dateTime = date
+            )
         )
 
         result.seventhQuestion = arrayListOf(seventhQuestionItem)
@@ -155,8 +200,10 @@ class ActivityViewModel(
         answer: Boolean,
         date: String
     ) {
+
         val eighthQuestionItem = EighthQuestionItem(
             writtenSentence = MeasureObjectBoolean(
+                measureObject = 142,
                 value = answer,
                 dateTime = date
             )
@@ -167,17 +214,20 @@ class ActivityViewModel(
     }
 
     fun setNinthQuestion(
-        answers:  List<Pair<Map<Int, String>, Int>>,
+        answers: List<Pair<Map<Int, String>, Int>>,
         date: String
     ) {
+
         val ninthQuestionList = answers.map { (map, correctShapesCount) ->
             val shapesList = map.values.toList()
             SecondQuestionItem(
                 selectedShapes = SelectedShapesStringList(
+                    measureObject = 143,
                     value = shapesList,
                     dateTime = date
                 ),
                 wrongShapes = MeasureObjectInt(
+                    measureObject = 183,
                     value = 5 - correctShapesCount,
                     dateTime = date
                 )
@@ -193,17 +243,21 @@ class ActivityViewModel(
         answer: ArrayList<Map<String, Double>>,
         date: String
     ) {
+
         val tenthQuestionList = answer.map { mapEntry ->
             val (shape, grade) = mapEntry.entries.first()
-            TenthQuestionType.TenthQuestionItem(
+            TenthQuestionItem(
                 shape = MeasureObjectString(
+                    measureObject = 144,
                     value = shape,
                     dateTime = date
                 ),
                 grade = MeasureObjectDouble(
+                    measureObject = 145,
                     value = grade,
                     dateTime = date
-                )
+                ),
+                imageUrl = null
             )
         }
 
@@ -211,16 +265,17 @@ class ActivityViewModel(
         println("FirstQuestion answer: (${result.tenthQuestion})")
     }
 
+
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     fun loadEvaluation(evaluationName: String) {
         viewModelScope.launch {
-            val clinicId = storage.get(PrefKeys.clinicId) ?: return@launch
-            val patientId = storage.get(PrefKeys.userId)?.toIntOrNull() ?: return@launch
+            val clinicId = storage.get(clinicId) ?: return@launch
+            val patientId = storage.get(userId)?.toIntOrNull() ?: return@launch
 
             api.getSpecificEvaluation(clinicId, patientId, evaluationName)
                 .onSuccess { fetched ->
-                    _hitberTest.value = fetched
+                    _hitBerTest.value = fetched
                     println("fetched evaluation: $fetched")
                 }
                 .onError { error ->
@@ -234,10 +289,8 @@ class ActivityViewModel(
         bitmap: ImageBitmap,
         date: String,
         currentQuestion: Int,
-        maxRetries: Int = 3
     ) {
         if (bitmap.width <= 1 || bitmap.height <= 1) {
-            println("❌ תמונה לא תקינה")
             return
         }
 
@@ -245,93 +298,98 @@ class ActivityViewModel(
         println("📤 התחלת העלאה, image size: ${imageByteArray.size}")
 
         uploadScope.launch {
-            var attempt = 0
-            var success = false
-            while (attempt < maxRetries && !success) {
-                try {
-                    val userId = storage.get(PrefKeys.userId)!!
-                    val clinicId = storage.get(PrefKeys.clinicId)!!
-                    val measurement = hitberTest.value?.id ?: 19
+            _isLoading.value = true
+            try {
+                val userId = storage.get(userId)!!
+                val clinicId = storage.get(clinicId)!!
+                val measurement = hitBerTest.value?.id ?: 19
 
-                    val imagePath = bitmapToUploadUseCase.buildPath(
-                        clinicId = clinicId,
-                        patientId = userId,
-                        measurementId = measurement,
-                        pathDate = date
-                    )
+                val imagePath = bitmapToUploadUseCase.buildPath(
+                    clinicId = clinicId,
+                    patientId = userId,
+                    measurementId = measurement,
+                    pathDate = date
+                )
 
-                    println("📁 Path: $imagePath")
+                val result = uploadImageUseCase.execute(
+                    imagePath = imagePath,
+                    bytes = imageByteArray,
+                    clinicId = clinicId,
+                    userId = userId
+                )
 
-                    val result = uploadImageUseCase.execute(
-                        imagePath = imagePath,
-                        bytes = imageByteArray,
-                        clinicId = clinicId,
-                        userId = userId
-                    )
-
-                    result.onSuccess {
-                        println("✅ העלאה הצליחה")
-                        saveUploadedImageUrl(currentQuestion, imagePath, date)
-                        success = true
-                    }.onError {
-                        println("❌ שגיאה בהעלאה: $it")
-                        if (attempt == maxRetries - 1) {
-                        } else {
-                            println("ניסיון מחדש אחרי שגיאה...")
-                            delay(1000L * (attempt + 1))
-                        }
-                    }
-                } catch (e: Exception) {
-                    println("🚨 שגיאה חריגה: ${e.message}")
-                    if (attempt == maxRetries - 1) {
-                        println("🚨 העלאה נכשלה לאחר מספר ניסיונות")
-                    }
-                    else {
-                        println("ניסיון מחדש אחרי שגיאה חריגה...")
-                        delay(1000L * (attempt + 1))
-                    }
+                result.onSuccess {
+                    println("✅ העלאה הצליחה")
+                    saveUploadedImageUrl(currentQuestion, imagePath, date)
+                }.onError { error ->
+                    _uploadStatus.value = Result.failure(Exception(error.toString()))
+                    println("❌ שגיאה בהעלאה: ")
                 }
-                attempt++
+            } catch (e: Exception) {
+                _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
+                println("🚨 שגיאה חריגה: ${e.message}")
             }
         }
     }
 
-
     private fun saveUploadedImageUrl(currentQuestion: Int?, uploadedUrl: String, date: String) {
+        val imageIds = mapOf(
+            6 to 200,
+            7 to 202,
+            10 to 204
+        )
+
         val image = MeasureObjectString(
+            measureObject = imageIds[currentQuestion] ?: 0,
             value = uploadedUrl,
             dateTime = date
         )
 
         when (currentQuestion) {
-            6 -> result.sixthQuestion.add(SixthQuestionType.SixthQuestionImage(image))
-            7 -> result.seventhQuestion.add(SeventhQuestionType.SeventhQuestionImage(image))
-            10 -> result.tenthQuestion.add(TenthQuestionType.TenthQuestionImage(image))
+            6 -> updateImageInQuestionList(
+                list = result.sixthQuestion,
+                createItem = { SixthQuestionItem(imageUrl = image) },
+                updateItem = { it.copy(imageUrl = image) }
+            )
+
+            7 -> updateImageInQuestionList(
+                list = result.seventhQuestion,
+                createItem = { SeventhQuestionItem(imageUrl = image) },
+                updateItem = { it.copy(imageUrl = image) }
+            )
+
+            10 -> {
+                updateImageInQuestionList(
+                    list = result.tenthQuestion,
+                    createItem = { TenthQuestionItem(imageUrl = image) },
+                    updateItem = { it.copy(imageUrl = image) },
+                )
+                uploadEvaluationResults()
+            }
+        }
+    }
+
+    private fun <T> updateImageInQuestionList(
+        list: MutableList<T>,
+        createItem: () -> T,
+        updateItem: (T) -> T,
+    ) {
+        if (list.isEmpty()) {
+            list.add(createItem())
+        } else {
+            val index = list.lastIndex
+            list[index] = updateItem(list[index])
         }
     }
 
 
-    fun uploadEvaluationResults(
-        onSuccess: (() -> Unit)? = null,
-        onFailure: ((message: Error) -> Unit)? = null
-    ) {
-        println("results object: $result")
+    private fun uploadEvaluationResults() {
         uploadScope.launch {
             try {
-                val userId = storage.get(PrefKeys.userId)!!.toInt()
-                val clinicId = storage.get(PrefKeys.clinicId)!!
-                val measurement = hitberTest.value?.id ?: 19
-                val date = getCurrentFormattedDateTime()
-
-                if (result.fifthQuestion.isEmpty()) {
-                    result.fifthQuestion = arrayListOf()
-                }
-
-                result.patientId = userId
-                result.clinicId = clinicId
-                result.measurement = measurement
-                result.date = date
-                println("results object: $result")
+                result.patientId = storage.get(userId)!!.toInt()
+                result.clinicId = storage.get(clinicId)!!
+                result.measurement = hitBerTest.value?.id ?: 19
+                result.date = getCurrentFormattedDateTime()
 
                 val json = Json.encodeToString(CogData.serializer(), result)
                 println("JSON sent: $json")
@@ -341,17 +399,17 @@ class ActivityViewModel(
                 uploadResult.onSuccess {
                     println("✅ העלאה של הכל הצליחה")
                     _uploadStatus.value = Result.success(Unit)
-                    onSuccess?.invoke()
+
                 }.onError { error ->
                     println("❌ שגיאה העלאה: $error")
                     _uploadStatus.value = Result.failure(Exception(error.toString()))
-                    onFailure?.invoke(error)
                 }
 
             } catch (e: Exception) {
                 println("🚨 שגיאה לא צפויה: ${e.message}")
                 _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
-                onFailure?.invoke(DataError.Remote.UNKNOWN)
+            } finally {
+                _isLoading.value = false
             }
         }
     }
