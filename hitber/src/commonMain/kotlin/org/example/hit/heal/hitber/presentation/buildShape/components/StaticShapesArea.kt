@@ -18,7 +18,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 // Displays a static triangle with additional shapes positioned inside it based on their relative size and position ratios to the triangle
-
 @Composable
 fun StaticShapesArea(
     screenSize: Pair<Float, Float>,

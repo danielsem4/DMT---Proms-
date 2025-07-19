@@ -68,6 +68,8 @@ class PassEntryScreen : Screen {
             title = stringResource(welcomePass),
             config = ScreenConfig.TabletConfig,
             content = {
+
+                // Animated visualization when audio is playing
                 AudioPlayingAnimation(isPlaying = isPlaying)
 
                 Spacer(modifier = Modifier.height(paddingLg))
@@ -145,6 +147,7 @@ class PassEntryScreen : Screen {
             }
         )
 
+        // Lifecycle observers to stop/play internal timers or checks
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAudio()
@@ -154,7 +157,7 @@ class PassEntryScreen : Screen {
             }
         )
 
-
+        // Shows a subtle dark overlay when audio is playing
         if (isOverlayVisible) {
             Box(
                 modifier = Modifier
@@ -170,7 +173,7 @@ class PassEntryScreen : Screen {
         }
 
         RegisterBackHandler(this) {
-            navigator?.popUntilRoot()
+            navigator?.pop()
         }
     }
 }

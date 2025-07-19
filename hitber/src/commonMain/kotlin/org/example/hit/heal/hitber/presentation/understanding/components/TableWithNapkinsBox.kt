@@ -55,7 +55,6 @@ fun TableWithNapkinsBox(
         napkins.forEachIndexed { _, item ->
 
             // Convert pixel sizes and positions to dp units for Compose layout
-
             val xPx = tableSize.first * item.xRatio
             val yPx = tableSize.second * item.yRatio
 

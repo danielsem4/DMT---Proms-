@@ -18,7 +18,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 // Displays two items side by side with styling and spacing.
-
 @Composable
 fun NamingImages(selectedCouple: Pair<DrawableResource, DrawableResource>?, modifier: Modifier = Modifier) {
     Row(

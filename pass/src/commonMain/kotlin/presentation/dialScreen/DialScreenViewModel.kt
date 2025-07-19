@@ -32,6 +32,7 @@ import org.example.hit.heal.core.presentation.Resources.String.secondPartOfTestI
 import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDoPass
 import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
 import org.example.hit.heal.core.presentation.Resources.String.wrongNumberDialedPleaseTryAgainPass
+import presentation.dialScreen.components.MissionStage
 import utils.CountdownDialogHandler
 import utils.StartCheckingIfUserDidSomethingUseCase
 import presentation.endScreen.EndScreen
@@ -41,7 +42,6 @@ class DialScreenViewModel(
     private val playAudioUseCase: PlayAudioUseCase
 ) : ViewModel() {
 
-    // --- Contacts list ---
     val contacts = listOf(
         dentistPass,
         familyDoctorPass,
@@ -53,7 +53,6 @@ class DialScreenViewModel(
         psychiatristPass
     )
 
-    // --- StateFlows for UI state ---
     private val _isDialogVisible = MutableStateFlow(false)
     val isDialogVisible: StateFlow<Boolean> = _isDialogVisible
 
@@ -74,10 +73,10 @@ class DialScreenViewModel(
     private val _nextScreen = MutableStateFlow<Screen?>(null)
     val nextScreen = _nextScreen.asStateFlow()
 
-    private val _currentMissionPass = MutableStateFlow(1)
-    val currentMissionPass: StateFlow<Int> = _currentMissionPass
+    private val _currentMissionPass = MutableStateFlow(MissionStage.DialerNotOpened)
+    val currentMissionPass: StateFlow<MissionStage> = _currentMissionPass
 
-    // --- Reminder and instruction tracking ---
+    // Reminder and instruction tracking
     private var didNothingFirstTime = -1
     private var didNothingSecondTime = 0
     private var didNothingThirdTime = 0
@@ -85,18 +84,18 @@ class DialScreenViewModel(
     private var wrongNumberSecondTime = 0
     private var isSecondInstructions = false
 
-    // --- Countdown dialog and audio handler ---
 
     val dialogAudioText = countdownDialogHandler.dialogAudioText
     val showDialog = countdownDialogHandler.showDialog
     val countdown = countdownDialogHandler.countdown
     val isCountdownActive = countdownDialogHandler.isCountdownActive
 
-    // --- UI Actions ---
+    // Adds a digit to the current entered number
     fun onNumberClicked(number: String) {
         _enteredNumber.value += number
     }
 
+    // Removes the last digit from the entered number
     fun deleteLastDigit() {
         if (_enteredNumber.value.isNotEmpty()) {
             _enteredNumber.value = _enteredNumber.value.dropLast(1)
@@ -113,25 +112,31 @@ class DialScreenViewModel(
         }
     }
 
+    // Called when the user confirms they understood the instructions,
+    // starts the first level when the dialer is not yet opened
     fun onUnderstandingConfirmed() {
         _showUnderstandingDialog.value = false
         startFirstCheck()
     }
 
+    // Called when the user denies understanding the instructions,
+    // it resets the dialog step and shows the reminder again
     fun onUnderstandingDenied() {
         _showUnderstandingDialog.value = false
         isSecondInstructions = true
         didNothingFirstTime--
-        getReminderDidNotingTextFirstTime()
+        showReminderDidNothingDialerNotOpened()
         stopChecks()
     }
 
-    private fun onUnderstandingDidNothing(){
-            _showUnderstandingDialog.value = false
+    private fun onUnderstandingDidNothing() {
+        _showUnderstandingDialog.value = false
     }
 
+    // Called when the user presses the dial button,
+    // shows confirmation and updates state
     fun onUserClickedDialButton() {
-        _currentMissionPass.value = 2
+        _currentMissionPass.value = MissionStage.DialerOpened
 
         stopChecks()
         countdownDialogHandler.showCountdownDialog(
@@ -140,6 +145,7 @@ class DialScreenViewModel(
         )
     }
 
+    // Checks if the number entered matches the correct one
     fun checkCorrectNumber(correctNumber: String) {
         val enteredNumberTrimmed = _enteredNumber.value.trim()
 
@@ -148,13 +154,18 @@ class DialScreenViewModel(
             return
         }
 
+        // If number is incorrect, show the appropriate reminder based on current stage
         when (_currentMissionPass.value) {
-            2 -> handleFirstPass()
-            3 -> handleSecondPass()
+            MissionStage.DialerOpened -> showReminderWrongNumberDialerOpened()
+            MissionStage.CorrectContactOnly -> showReminderWrongNumberCorrectContact()
+            else -> {}
         }
+
     }
 
-    private fun handleFirstPass() {
+    // Display the dialogs with the correct message and audio
+    // when user dialed wrong number and the dialer has opened
+    private fun showReminderWrongNumberDialerOpened() {
         stopChecks()
         when (++wrongNumberFirstTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
@@ -167,13 +178,15 @@ class DialScreenViewModel(
                     isPlayingFlow = isPlaying,
                     audioText = dialerPageDentistNumberAppeared to dentistNumberShowenCallHimPass
                 )
-                _currentMissionPass.value = 3
+                _currentMissionPass.value = MissionStage.CorrectContactOnly
                 stopChecks()
             }
         }
     }
 
-    private fun handleSecondPass() {
+    // Display the dialogs with the correct message and audio when user dialed wrong number
+    // and reached the step of seeing only the correct phone number to call
+    private fun showReminderWrongNumberCorrectContact() {
         stopChecks()
         when (++wrongNumberSecondTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
@@ -189,19 +202,20 @@ class DialScreenViewModel(
         _nextScreen.value = null
     }
 
+    // close dialog and restarts the 15-second timer based on the current stage
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
 
         when (_currentMissionPass.value) {
-            1 -> startFirstCheck()
-            2 -> startSecondCheck()
-            3 -> startThirdCheck()
+            MissionStage.DialerNotOpened -> startFirstCheck()
+            MissionStage.DialerOpened -> startSecondCheck()
+            MissionStage.CorrectContactOnly -> startThirdCheck()
         }
     }
 
-    // --- Private helpers for reminders and instructions ---
 
-    private fun startUnderstandingDialog(){
+    // Start the understanding dialog asking the user to confirm understanding
+    private fun startUnderstandingDialog() {
         _isCloseIconDialog.value = true
 
         if (!isSecondInstructions) {
@@ -209,15 +223,16 @@ class DialScreenViewModel(
         }
     }
 
+    // Phase 1: Dialer hasn't opened yet - starts an inactivity timer – triggers a reminder after 15 seconds of no user interaction.
     private val useCase = StartCheckingIfUserDidSomethingUseCase(
         coroutineScope = viewModelScope,
-        getReminderDidNotingText = { getReminderDidNotingTextFirstTime() },
+        getReminderDidNotingText = { showReminderDidNothingDialerNotOpened() },
         updateCloseIconDialog = { show -> _isCloseIconDialog.value = show }
     )
 
     fun startFirstCheck() {
         if (didNothingFirstTime == -1) {
-            getReminderDidNotingTextFirstTime()
+            showReminderDidNothingDialerNotOpened()
             return
         }
         if (didNothingFirstTime == 0 && !_isCloseIconDialog.value) {
@@ -230,9 +245,10 @@ class DialScreenViewModel(
         )
     }
 
+    // // Phase 2: Dialer is open - starts an inactivity timer – triggers a reminder after 15 seconds of no user interaction.
     private val useCaseSecond = StartCheckingIfUserDidSomethingUseCase(
         coroutineScope = viewModelScope,
-        getReminderDidNotingText = { getReminderDidNotingTextSecondTime() },
+        getReminderDidNotingText = { showReminderDidNothingDialerOpened() },
         updateCloseIconDialog = { show -> _isCloseIconDialog.value = show }
     )
 
@@ -243,9 +259,10 @@ class DialScreenViewModel(
         )
     }
 
+    // Phase 3: Only the correct contact is visible - starts an inactivity timer – triggers a reminder after 15 seconds of no user interaction.
     private val useCaseThird = StartCheckingIfUserDidSomethingUseCase(
         coroutineScope = viewModelScope,
-        getReminderDidNotingText = { getReminderDidNotingTextThirdTime() },
+        getReminderDidNotingText = { showReminderDidNothingCorrectContact() },
         updateCloseIconDialog = { show -> _isCloseIconDialog.value = show }
     )
 
@@ -262,18 +279,23 @@ class DialScreenViewModel(
         useCaseThird.stop()
     }
 
-    private fun getReminderDidNotingTextFirstTime() {
+    // Display the dialogs with the correct message and audio
+    // This is triggered when the user hasn't done anything for 15 seconds
+    // and dialer has not yet opened
+    private fun showReminderDidNothingDialerNotOpened() {
         when (++didNothingFirstTime) {
             0 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
                 audioText = callToDentist to secondPartOfTestInstructionsPass
             )
 
-            1 -> { onUnderstandingDidNothing()
+            1 -> {
+                onUnderstandingDidNothing()
                 countdownDialogHandler.showCountdownDialog(
-                isPlayingFlow = isPlaying,
-                audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
-            )}
+                    isPlayingFlow = isPlaying,
+                    audioText = whatYouNeedToDo to whatDoYouNeedToDoPass
+                )
+            }
 
             2 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
@@ -286,12 +308,16 @@ class DialScreenViewModel(
                     audioText = dialerOpened to dialerOpenedPass
                 )
                 stopChecks()
-                _currentMissionPass.value = 2
+                _currentMissionPass.value = MissionStage.DialerOpened
+
             }
         }
     }
 
-    private fun getReminderDidNotingTextSecondTime() {
+    // Display the dialogs with the correct message and audio
+    // This is triggered when the user hasn't done anything for 15 seconds
+    // and the dialer has opened
+    private fun showReminderDidNothingDialerOpened() {
         when (++didNothingSecondTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
@@ -309,12 +335,15 @@ class DialScreenViewModel(
                     audioText = dialerPageDentistNumberAppeared to dentistNumberShowenCallHimPass
                 )
                 stopChecks()
-                _currentMissionPass.value = 3
+                _currentMissionPass.value = MissionStage.CorrectContactOnly
             }
         }
     }
 
-    private fun getReminderDidNotingTextThirdTime() {
+    // Display the dialogs with the correct message and audio
+    // This is triggered when the user hasn't done anything for 15 seconds
+    // and the user has reached the step of seeing only the correct phone number to call
+    private fun showReminderDidNothingCorrectContact() {
         when (++didNothingThirdTime) {
             1 -> countdownDialogHandler.showCountdownDialog(
                 isPlayingFlow = isPlaying,
@@ -338,11 +367,6 @@ class DialScreenViewModel(
     }
 
     fun stopAll() {
-        println("didNothingFirstTime: $didNothingFirstTime")
-        println("didNothingSecondTime: $didNothingSecondTime")
-        println("didNothingThirdTime: $didNothingThirdTime")
-        println("wrongNumberFirstTime: $wrongNumberFirstTime")
-        println("wrongNumberSecondTime: $wrongNumberSecondTime")
         playAudioUseCase.stopAudio()
         countdownDialogHandler.hideDialog()
         stopChecks()

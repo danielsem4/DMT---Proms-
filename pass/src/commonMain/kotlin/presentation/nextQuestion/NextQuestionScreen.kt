@@ -49,6 +49,8 @@ class NextQuestionScreen : Screen {
             title = stringResource(contact),
             config = ScreenConfig.TabletConfig,
             content = {
+
+                // Animated visualization when audio is playing
                 AudioPlayingAnimation(isPlaying = isPlaying)
 
                 Box(
@@ -56,39 +58,41 @@ class NextQuestionScreen : Screen {
                         .fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color.White)
-                        .border(
-                            width = 2.dp,
-                            color = Color.LightGray,
-                            shape = RoundedCornerShape(radiusMd)
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.White)
+                            .border(
+                                width = 2.dp,
+                                color = Color.LightGray,
+                                shape = RoundedCornerShape(radiusMd)
+                            )
+                            .padding(paddingMd)
+                    ) {
+                        Text(
+                            text = stringResource(finishFirstMissionPass),
+                            color = primaryColor,
+                            fontSize = LARGE,
+                            fontWeight = Bold,
+                            lineHeight = EXTRA_LARGE,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
-                        .padding(paddingMd)
-                ) {
-                    Text(
-                        text = stringResource(finishFirstMissionPass),
-                        color = primaryColor,
-                        fontSize = LARGE,
-                        fontWeight = Bold,
-                        lineHeight = EXTRA_LARGE,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
 
-                    Spacer(modifier = Modifier.padding(paddingSm))
+                        Spacer(modifier = Modifier.padding(paddingSm))
 
-                    Text(
-                        text = time.toString(),
-                        color = primaryColor,
-                        fontSize = LARGE,
-                        fontWeight = Bold,
-                    )
+                        // Display the current countdown timer value
+                        Text(
+                            text = time.toString(),
+                            color = primaryColor,
+                            fontSize = LARGE,
+                            fontWeight = Bold,
+                        )
 
+                    }
                 }
-            }}
+            }
         )
 
         LaunchedEffect(navigateToDialScreen) {
@@ -97,17 +101,18 @@ class NextQuestionScreen : Screen {
             }
         }
 
+        // Lifecycle observers to stop/play audio
         ObserveLifecycle(
             onStop = {
-                viewModel.stopAll()
+                viewModel.stopAudio()
             },
             onStart = {
                 viewModel.onPlayAudioRequested(audioString)
-                viewModel.startCountdown()
             }
         )
 
         RegisterBackHandler(this) {
-            navigator?.popUntilRoot()        }
+            navigator?.pop()
+        }
     }
 }

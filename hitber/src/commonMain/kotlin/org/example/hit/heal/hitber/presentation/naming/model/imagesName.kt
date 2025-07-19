@@ -16,7 +16,6 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
 
 // Returns the localized name string for a given image resource
-
 @Composable
 fun getImageName(imageId: DrawableResource): String {
     return when (imageId) {

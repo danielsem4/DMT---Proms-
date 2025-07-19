@@ -65,8 +65,8 @@ class DetailedContactViewModel(
     private val _isNextScreen = MutableStateFlow(false)
     val isNextScreen: StateFlow<Boolean> = _isNextScreen
 
+    // Starts an inactivity timer – triggers a reminder after 15 seconds of no user interaction.
     fun startCheckingIfUserDidSomething() {
-
         reminderJob?.cancel()
 
         reminderJob = viewModelScope.launch {
@@ -75,11 +75,12 @@ class DetailedContactViewModel(
                 delay(15_000)
 
                 didNothing++
-                getReminderText()
+                showReminderText()
             }
         }
     }
 
+    // Checks if clicked correct item, proceeds if correct, otherwise shows helper dialog
     fun onUserClicked(item: StringResource) {
         if (item == phone) {
             nextQuestion()
@@ -87,10 +88,11 @@ class DetailedContactViewModel(
         }
 
         wrongClick++
-        getReminderText()
+        showReminderText()
     }
 
-    private fun getReminderText() {
+    // Display the dialogs with the correct message and audio
+    private fun showReminderText() {
         reminderJob?.cancel()
 
         val count = didNothing + wrongClick
@@ -117,11 +119,11 @@ class DetailedContactViewModel(
         }
     }
 
+    // close dialog and restarts the 15-second timer
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
         startCheckingIfUserDidSomething()
     }
-
 
     fun clearNextScreen() {
         _nextScreen.value = null
@@ -133,8 +135,6 @@ class DetailedContactViewModel(
     }
 
     fun stopAll() {
-        println("didNothing: $didNothing")
-        println("wrongClick: $wrongClick")
         playAudioUseCase.stopAudio()
         hideReminderDialog()
         reminderJob?.cancel()

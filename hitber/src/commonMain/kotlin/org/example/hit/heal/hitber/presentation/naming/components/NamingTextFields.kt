@@ -15,7 +15,6 @@ import org.example.hit.heal.hitber.presentation.naming.FourthQuestionViewModel
 import org.jetbrains.compose.resources.stringResource
 
 // Two text input fields for entering answers.
-
 @Composable
 fun NamingTextFields(
     answer1: String,

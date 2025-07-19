@@ -2,10 +2,7 @@ package org.example.hit.heal.hitber.presentation.shapes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,6 +33,7 @@ import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.KoinApplication.Companion.init
 
 class ShapeScreen : Screen {
     @Composable
@@ -53,7 +51,7 @@ class ShapeScreen : Screen {
             content = {
                 Row(
                     modifier = Modifier.fillMaxWidth().weight(1f)
-                    .background(color = Color.White),
+                        .background(color = Color.White),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 )
@@ -66,17 +64,23 @@ class ShapeScreen : Screen {
                             tint = Color.Unspecified,
                             modifier = Modifier.size(150.dp)
                         )
-                    }}
+                    }
+                }
 
-                        RoundedButton(
-                            text = stringResource(`continue`),
-                            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
-                            onClick = {
-                                navigator?.replace(ActionShapesScreen(2))
-                            }
-                        )
+                RoundedButton(
+                    text = stringResource(`continue`),
+                    modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
+                    onClick = {
+                        navigator?.replace(ActionShapesScreen(2))
+                    }
+                )
 
             })
+
+        //Load a random shape set for the task
+        LaunchedEffect(Unit) {
+            secondQuestionViewModel.setRandomShapeSet()
+        }
 
         RegisterBackHandler(this) {
             secondQuestionViewModel.resetAll()

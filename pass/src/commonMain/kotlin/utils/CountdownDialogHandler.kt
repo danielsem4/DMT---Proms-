@@ -4,6 +4,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.jetbrains.compose.resources.StringResource
 
+/**
+ * CountdownDialogHandler manages the state and UI visibility for a countdown dialog,
+ * including the audio, text and countdown progress.
+ * It uses CountdownTimerUseCase internally to handle the timing.
+ */
+
 class CountdownDialogHandler(
     private val countdownTimerUseCase: CountdownTimerUseCase
 ) {

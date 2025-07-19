@@ -26,12 +26,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
 import core.utils.RegisterBackHandler
-import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
-import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.contact
-import org.example.hit.heal.core.presentation.Resources.String.defaultName
-import org.example.hit.heal.core.presentation.Resources.String.defaultPhone
-import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
@@ -41,7 +36,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.components.AppData
 import presentation.components.ContactData
-import presentation.components.InstructionsDialog
+import presentation.components.MessageDialog
 import presentation.components.circleWithPicture
 import presentation.detailedContact.components.ContactDetailsSection
 
@@ -127,6 +122,7 @@ class DetailedContactScreen(private val correctContact: ContactData) : Screen {
             }
         }
 
+        // Lifecycle observers to stop/play internal timers or checks
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()
@@ -136,11 +132,11 @@ class DetailedContactScreen(private val correctContact: ContactData) : Screen {
             }
         )
 
-
+        // Show dialog with instructions or the helpers dialog
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->
                 val audioString = stringResource(audio)
-                InstructionsDialog(
+                MessageDialog(
                     text = stringResource(text),
                     secondsLeft = countdown,
                     isPlaying = isPlaying,
@@ -155,7 +151,8 @@ class DetailedContactScreen(private val correctContact: ContactData) : Screen {
         }
 
         RegisterBackHandler(this) {
-            navigator?.popUntilRoot()        }
+            navigator?.pop()
+        }
     }
 }
 

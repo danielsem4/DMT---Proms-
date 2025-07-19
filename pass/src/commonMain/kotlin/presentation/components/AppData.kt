@@ -22,6 +22,10 @@ import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+/**
+ * Displays a circular colored background with a centered image and a label below.
+ * The entire circle is clickable and triggers the provided onClick callback.
+*/
 data class AppData(
     val imageRes: DrawableResource,
     val circleColor: Color,
