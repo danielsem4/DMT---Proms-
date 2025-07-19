@@ -1,4 +1,4 @@
-package org.example.hit.heal.evaluations.presentaion
+package org.example.hit.heal.presentation.components.evaluation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +18,8 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +35,7 @@ import dmt_proms.composeapp.generated.resources.flip_button_label
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun HumanBodyModelSelector(
@@ -46,14 +49,16 @@ fun HumanBodyModelSelector(
         Offset(0.45f, 0.08f),  // Head
         Offset(0.45f, 0.26f),  // Chest
         Offset(0.45f, 0.4f),  // Belly
-        Offset(0.24f, 0.45f),  // Left Palm
-        Offset(0.7f, 0.45f),  // Right Palm
-        Offset(0.38f, 0.68f),  // Left Knee
-        Offset(0.5f, 0.68f)   // Right Knee
+        Offset(0.095f, 0.51f),  // Left Palm
+        Offset(0.78f, 0.51f),  // Right Palm
+        Offset(0.30f, 0.68f),  // Left Knee
+        Offset(0.6f, 0.68f)   // Right Knee
     )
     val selectedPoints = if (isFrontView) frontPoints else backPoints
     val imagePainter =
         painterResource(if (isFrontView) Res.drawable.body_front else Res.drawable.body_back)
+
+    val aspectRatio = imagePainter.intrinsicSize.width / imagePainter.intrinsicSize.height
 
     Column(
         modifier = Modifier
@@ -69,8 +74,24 @@ fun HumanBodyModelSelector(
                 .background(Color.White)
                 .weight(.9f)
         ) {
-            val imageWidth = constraints.maxWidth.toFloat()
-            val imageHeight = constraints.maxHeight.toFloat()
+            val containerWidth = constraints.maxWidth.toFloat()
+            val containerHeight = constraints.maxHeight.toFloat()
+
+            val imageWidth: Float
+            val imageHeight: Float
+
+            if (containerWidth / containerHeight > aspectRatio) {
+                // Container is wider → fit by height
+                imageHeight = containerHeight
+                imageWidth = imageHeight * aspectRatio
+            } else {
+                // Container is taller → fit by width
+                imageWidth = containerWidth
+                imageHeight = imageWidth / aspectRatio
+            }
+
+            val offsetX = (containerWidth - imageWidth) / 2f
+            val offsetY = (containerHeight - imageHeight) / 2f
 
             Image(
                 painter = imagePainter,
@@ -80,8 +101,8 @@ fun HumanBodyModelSelector(
             )
 
             points.forEach { offset ->
-                val x = offset.x * imageWidth
-                val y = offset.y * imageHeight
+                val x = offset.x * imageWidth + offsetX
+                val y = offset.y * imageHeight + offsetY
 
                 Box(
                     modifier = Modifier
@@ -125,4 +146,25 @@ fun HumanBodyModelSelector(
 
         }
     }
+}
+
+@Preview
+@Composable
+fun Preview_HumanBodyModelSelector() {
+    val frontPoints = remember { mutableStateOf(setOf<Offset>()) }
+    val backPoints = remember { mutableStateOf(setOf<Offset>()) }
+    val isFrontView = remember { mutableStateOf(true) }
+
+    HumanBodyModelSelector(
+        frontPoints = frontPoints.value,
+        backPoints = backPoints.value,
+        isFrontView = isFrontView.value,
+        onSelectionChanged = { front, back ->
+            frontPoints.value = front
+            backPoints.value = back
+        },
+        onToggleView = {
+            isFrontView.value = !isFrontView.value
+        }
+    )
 }

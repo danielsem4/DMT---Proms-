@@ -52,6 +52,7 @@ atomicfu = "0.23.2"
 
 nav3Core = "1.0.0-alpha02"
 nav3Lifecycle = "1.0.0-alpha01"
+uiTooling = "1.8.3"
 
 
 [libraries]
@@ -142,6 +143,7 @@ voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.
 
 voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

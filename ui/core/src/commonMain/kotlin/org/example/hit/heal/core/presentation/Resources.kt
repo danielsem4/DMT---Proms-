@@ -259,6 +259,8 @@ import dmt_proms.ui.core.generated.resources.no
 import dmt_proms.ui.core.generated.resources.no_evaluation_object_to_display
 import dmt_proms.ui.core.generated.resources.no_internet
 import dmt_proms.ui.core.generated.resources.now_the_contacts_list_will_be_opened_pass
+import dmt_proms.ui.core.generated.resources.off
+import dmt_proms.ui.core.generated.resources.on
 import dmt_proms.ui.core.generated.resources.open_bin
 import dmt_proms.ui.core.generated.resources.open_fridge
 import dmt_proms.ui.core.generated.resources.ophthalmologist_pass
@@ -512,7 +514,9 @@ object Resources {
     }
 
     object String {
-            val loading = rs.loading
+        val loading = rs.loading
+        val on = Res.string.on
+        val off = Res.string.off
         val uploading = rs.uploading
         val send = rs.send
         val measurements = rs.measurements

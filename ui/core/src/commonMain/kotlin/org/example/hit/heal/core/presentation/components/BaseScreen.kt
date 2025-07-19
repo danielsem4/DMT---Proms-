@@ -15,7 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -38,6 +41,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 /**
  * BaseScreen is a reusable composable that provides a standard layout
  * for screens in the application.
+ * all items are within a Column
  */
 
 @Composable
@@ -48,18 +52,20 @@ fun BaseScreen(
     onNextClick: (() -> Unit)? = null,
     navigationIcon: @Composable (() -> Unit)? = null,
     topRightText: String? = null, // For tablet
-    snackbarHost: @Composable (() -> Unit)? = null, // For tablet
+    snackbarHostState: SnackbarHostState = SnackbarHostState(), // For tablet
     buttons: Array<TabletButton> = emptyArray(), // For tablet
     modifier: Modifier = Modifier,
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
-    val scrollState = rememberScrollState()
     MaterialTheme {
         val statusBarValues = WindowInsets.safeDrawing.asPaddingValues()
 
         Column(
-            modifier = Modifier.fillMaxSize().background(backgroundColor)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor)
                 .padding(bottom = statusBarValues.calculateBottomPadding())
+                .verticalScroll(rememberScrollState())
         ) {
             // Top Bar
             Box(
@@ -144,8 +150,10 @@ fun BaseScreen(
                     }
                 }
             }
-
-            snackbarHost?.invoke()
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         }
     }
 }
