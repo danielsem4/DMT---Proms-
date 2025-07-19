@@ -51,10 +51,17 @@ fun EvaluationObjectContent(
     ) {
 
         val availableValues: List<EvaluationValue> = obj.available_values.orEmpty()
-
         val options = availableValues.map { it.available_value }
+        val type = EvaluationObjectType.fromInt(obj.object_type)
 
-        when (EvaluationObjectType.fromInt(obj.object_type)) {
+        if (type != EvaluationObjectType.INSTRUCTION)
+            Text(
+                text = obj.object_label,
+                fontSize = 20.sp,
+                modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start)
+            )
+
+        when (type) {
             EvaluationObjectType.OPEN_QUESTION -> {
                 CustomMultilineTextField(
                     value = (answers[obj.id] as? EvaluationAnswer.Text)?.value ?: "",
