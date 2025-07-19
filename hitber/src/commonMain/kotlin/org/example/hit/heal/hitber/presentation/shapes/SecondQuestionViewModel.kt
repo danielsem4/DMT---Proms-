@@ -25,6 +25,12 @@ class SecondQuestionViewModel: ViewModel() {
     private var correctShapesCount = 0
     private var distractorToRemove = 0
 
+    //Load a random shape set for the task
+    init {
+        setRandomShapeSet()
+    }
+
+
     fun setRandomShapeSet() {
         val selectedTypes = shapeSets.random()
         _selectedSet.value = shapeList.filter { it.type in selectedTypes }
@@ -120,5 +126,11 @@ class SecondQuestionViewModel: ViewModel() {
         distractorToRemove = 0
         _attempt.value = 1
         _listShapes.value = shapeList
+    }
+
+    // Reset all data including selected sets
+    fun resetAll(){
+        resetSelectedShapes()
+        _selectedSet.value = emptyList()
     }
 }
