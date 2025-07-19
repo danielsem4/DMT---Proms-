@@ -41,9 +41,13 @@ kotlin {
         }
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
-            implementation (libs.navigator)
-            implementation (libs.navigator.tabs)
-            implementation (libs.navigator.transitions)
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.screenModel)
+            implementation(libs.voyager.transitions)
+            implementation(libs.voyager.tabNavigator)
+//            implementation (libs.navigator)
+//            implementation (libs.navigator.tabs)
+//            implementation (libs.navigator.transitions)
             implementation(projects.core)
             implementation(projects.ui.core)
             implementation(compose.runtime)

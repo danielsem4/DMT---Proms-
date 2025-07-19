@@ -49,12 +49,13 @@ kotlin {
             implementation(projects.hitber)
             implementation(projects.ui.core)
             implementation(projects.core)
+            implementation(projects.oriantation)
             implementation(projects.clockTest)
             implementation(projects.pass)
 
             implementation(libs.kotlinx.coroutines.core)
 
-            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.serialization)
             implementation(libs.kotlinx.datetime)
             implementation(compose.material3)
 
@@ -71,13 +72,12 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.transitions)
-
+            implementation(libs.voyager.tabNavigator)
             // Basic Navigation
-            implementation(libs.navigation.compose)
 
-            implementation (libs.navigator)
-            implementation (libs.navigator.tabs)
-            implementation (libs.navigator.transitions)
+//            implementation (libs.navigator)
+//            implementation (libs.navigator.tabs)
+//            implementation (libs.navigator.transitions)
 
             // Koin dependencies
             api(libs.koin.core)
@@ -88,17 +88,15 @@ kotlin {
             implementation(libs.font.awesome)
             implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization) // for data serialization
-
+            implementation(compose.materialIconsExtended)
+            implementation(libs.font.awesome)
             implementation(libs.datastore.preferences)
             implementation(libs.datastore)
-
-            implementation(libs.voyager.navigator)
-            implementation(libs.voyager.tabNavigator)
-            implementation(libs.voyager.transitions)
 
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+
 
             implementation(libs.coil.compose)
 

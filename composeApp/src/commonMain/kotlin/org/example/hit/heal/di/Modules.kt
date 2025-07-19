@@ -5,6 +5,7 @@ import core.di.clientRequestsModule
 import core.di.sessionModule
 import di.Pass_module
 import org.example.hit.heal.cdt.di.CDT_module
+import org.example.hit.heal.oriantation.di.ORIENTATION_module
 
 import org.example.hit.heal.hitber.di.HitBer_module
 
@@ -15,6 +16,7 @@ import org.example.hit.heal.presentation.evaluation.EvaluationsViewModel
 import org.example.hit.heal.presentation.home.HomeViewModel
 import org.example.hit.heal.presentation.login.LoginViewModel
 import org.example.hit.heal.presentation.splash.SplashViewModel
+
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf
@@ -27,7 +29,7 @@ fun initKoin(config: KoinAppDeclaration? = null) =
         modules(
             sharedModules,
             sharedAppModules,
-            platformModule
+            platformModule,
         )
     }
 
@@ -48,9 +50,9 @@ val sharedModules = module {
     includes(HitBer_module)
     includes(Pass_module)
     viewModelOf(::EvaluationsViewModel)
-
     viewModelOf(::ActivitiesViewModel)
     viewModelOf(::EvaluationsViewModel)
     viewModelOf(::EvaluationTestViewModel)
     includes(CDT_module)
+    includes(ORIENTATION_module)
 }
