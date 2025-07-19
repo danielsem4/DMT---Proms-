@@ -1,5 +1,6 @@
 package org.example.hit.heal.presentation.login
 
+import ToastMessage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,9 +52,7 @@ import org.example.hit.heal.core.presentation.Sizes.spacingXl
 import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.SimpleInputText
-import org.example.hit.heal.core.presentation.custom_ui.ToastMessage
 import org.example.hit.heal.presentation.home.HomeScreen
-import org.example.hit.heal.presentation.login.LoginViewModel
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource

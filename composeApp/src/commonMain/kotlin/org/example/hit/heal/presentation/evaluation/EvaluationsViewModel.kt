@@ -48,13 +48,15 @@ class EvaluationsViewModel(
     private suspend fun getAllEvaluationsSuspend() {
         _isLoading.value = true
 
-        val clinicId = storage.get(PrefKeys.clinicId) ?: return
-        val patientId = storage.get(PrefKeys.userId)?.toIntOrNull() ?: return
+        val clinicId = storage.get(PrefKeys.clinicId)!!
+        val patientId = storage.get(PrefKeys.userId)!!.toInt()
 
         val result = api.getPatientMeasureReport(clinicId, patientId)
 
         result.onSuccess { list ->
             _evalItems.value = list
+            println("Eval items")
+            println(list.flatMap { it.measurement_objects }.joinToString(separator = "\n"))
             _errorMessage.value = null
         }.onError { error ->
             _evalItems.value = emptyList()

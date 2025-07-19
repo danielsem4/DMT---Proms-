@@ -8,7 +8,6 @@ import core.data.model.ModulesResponse
 import core.data.model.SuccessfulLoginResponse
 import core.data.model.evaluation.Evaluation
 import core.domain.DataError
-import core.domain.EmptyResult
 import core.domain.Result
 import io.ktor.http.cio.Request
 import kotlinx.serialization.KSerializer

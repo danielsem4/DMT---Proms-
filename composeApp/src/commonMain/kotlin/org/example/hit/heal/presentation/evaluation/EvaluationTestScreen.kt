@@ -1,10 +1,10 @@
 package org.example.hit.heal.presentation.evaluation
 
+import ToastMessage
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,15 +16,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.evaluation.Evaluation
+import core.data.model.evaluation.EvaluationAnswer.Unanswered.isAnswered
+import core.domain.onError
+import core.domain.onSuccess
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Resources
@@ -35,15 +41,10 @@ import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
-import org.example.hit.heal.core.presentation.custom_ui.ToastMessage
-import org.example.hit.heal.evaluations.presentaion.EvaluationObjectContent
+import org.example.hit.heal.presentation.components.evaluation.DrawingCanvasController
+import org.example.hit.heal.presentation.components.evaluation.EvaluationObjectContent
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-
-/**
- * EvaluationScreen is a screen that will be used to display evaluation-related content.
- * Questions, measurements, and other evaluation-related information will be displayed here.
- */
 
 class EvaluationTestScreen(
     private val evaluation: Evaluation
@@ -52,16 +53,48 @@ class EvaluationTestScreen(
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
+        val scope = rememberCoroutineScope()
         val viewModel: EvaluationTestViewModel = koinViewModel()
         val answers by viewModel.answers.collectAsState()
 
-        var toastMessage by remember { mutableStateOf<String?>(null) }
-        var toastType by remember { mutableStateOf(ToastType.Success) }
+        var sentSuccessfully by remember { mutableStateOf(false) }
 
-        // State for managing the current page index
-        var currentPageIndex by remember { mutableStateOf(0) }
-        val totalObjects = evaluation.measurement_objects.size
-        val currentObject = evaluation.measurement_objects.getOrNull(currentPageIndex)
+        var toastMessage by remember { mutableStateOf<String?>(null) }
+        val toastType by mutableStateOf(
+            if (sentSuccessfully) ToastType.Success else ToastType.Error
+        )
+
+        val allObjects = remember(evaluation) {
+            evaluation.measurement_objects.groupBy { it.measurement_screen }
+        }
+
+        var currentScreen by remember { mutableStateOf(1) }
+        val objectsOnCurrentScreen = allObjects[currentScreen].orEmpty()
+        val totalScreens = allObjects.keys.maxOrNull() ?: 1
+
+        val message = stringResource(Resources.String.sentSuccessfully)
+        val errorMessage = stringResource(Resources.String.serverError)
+
+        var drawingController by remember { mutableStateOf<DrawingCanvasController?>(null) }
+
+        val uploadResult = {
+            scope.launch {
+                viewModel.submitEvaluation(evaluation.id)
+                    .onSuccess {
+                        withContext(Dispatchers.Main) {
+                            println("Successfully uploaded test results")
+                            toastMessage = message
+                            sentSuccessfully = true
+                        }
+                    }.onError {
+                        withContext(Dispatchers.Main) {
+                            println("Error uploading test results:\n$it")
+                            toastMessage = errorMessage
+                            sentSuccessfully = false
+                        }
+                    }
+            }
+        }
 
 
         BaseScreen(title = stringResource(evaluationText)) {
@@ -69,8 +102,11 @@ class EvaluationTestScreen(
                 ToastMessage(
                     message = it,
                     type = toastType,
-                    alignUp = true,
-                    onDismiss = { toastMessage = null }
+                    onDismiss = {
+                        if (sentSuccessfully)
+                            navigator.pop() // pop when toast is dismissed
+                        toastMessage = null
+                    }
                 )
             }
             Text(
@@ -86,25 +122,36 @@ class EvaluationTestScreen(
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = paddingMd)
             ) {
-                currentObject?.let { obj ->
-                    EvaluationObjectContent(
-                        obj = obj,
-                        answers = answers,
-                        onSaveAnswer = { id, answer ->
-                            viewModel.saveAnswer(id, answer)
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                            .fillMaxHeight()
-                    )
-                } ?: run {
+                if (objectsOnCurrentScreen.isNotEmpty()) {
+                    objectsOnCurrentScreen.forEach { obj ->
+                        EvaluationObjectContent(
+                            obj = obj,
+                            answers = answers,
+                            onSaveAnswer = { id, answer ->
+                                viewModel.saveAnswer(id, answer)
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            onDrawingControllerReady = { controller ->
+                                drawingController = controller
+                            }
+                        )
+                    }
+                } else {
                     Text(
                         text = stringResource(Resources.String.no_evaluation_object_to_display),
-                        modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            val isFirstScreen = currentScreen == 1
+            val isLastScreen = currentScreen == totalScreens
+
+            val allAnswered =
+                objectsOnCurrentScreen.all { answers[it.id]?.isAnswered ?: false }
+            Spacer(modifier = Modifier.height(paddingMd))
 
             Row(
                 modifier = Modifier
@@ -113,33 +160,28 @@ class EvaluationTestScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val isFirstPage = currentPageIndex == 0
                 RoundedButton(
-                    text = if (isFirstPage) stringResource(Resources.String.back) else stringResource(
-                        Resources.String.previous
-                    ),
+                    text = if (isFirstScreen) stringResource(Resources.String.back)
+                    else stringResource(Resources.String.previous),
                     onClick = {
-                        if (isFirstPage) {
+                        if (isFirstScreen) {
                             navigator.pop()
                         } else {
-                            currentPageIndex--
+                            currentScreen--
                         }
                     },
                     enabled = true,
-                    modifier = Modifier.weight(1f).padding(end = paddingSm)
+                    modifier = Modifier.weight(1f).padding(end = 8.dp)
                 )
 
-                val isLastPage = currentPageIndex == totalObjects - 1
                 RoundedButton(
-                    text = if (isLastPage) stringResource(Resources.String.done) else stringResource(
-                        Resources.String.next
-                    ),
+                    text = if (isLastScreen) stringResource(Resources.String.done)
+                    else stringResource(Resources.String.next),
                     onClick = {
-                        if (isLastPage) {
-                            viewModel.submitEvaluation(evaluation.id, answers)
-                            navigator.pop()
+                        if (!isLastScreen) {
+                            currentScreen++
                         } else {
-                            currentPageIndex++
+                            uploadResult()
                         }
                     },
                     enabled = true,

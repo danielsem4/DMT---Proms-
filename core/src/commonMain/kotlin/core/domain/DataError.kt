@@ -9,7 +9,8 @@ sealed interface DataError : Error {
         SERVER,
         FORBIDDEN,
         SERIALIZATION,
-        UNKNOWN
+        UNKNOWN,
+        NOT_FOUND
     }
 
     enum class Local : DataError {

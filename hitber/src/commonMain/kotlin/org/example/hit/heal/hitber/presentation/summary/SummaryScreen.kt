@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,14 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.Key.Companion.L
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
-import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.sentSuccessfully
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions1
@@ -34,7 +30,6 @@ import org.example.hit.heal.core.presentation.Resources.String.summaryHitberTitl
 import org.example.hit.heal.core.presentation.Resources.String.unexpectedError
 import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
-import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXl
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
@@ -99,16 +94,7 @@ class SummaryScreen : Screen {
                     )
                 }
             },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState) { data ->
-                    Snackbar(modifier = Modifier.padding(paddingSm)) {
-                        Text(
-                            text = data.message,
-                            fontSize = LARGE
-                        )
-                    }
-                }
-            }
+            snackbarHostState = snackbarHostState
         )
 
         LaunchedEffect(uploadStatus) {
