@@ -126,6 +126,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                             secondQuestionViewModel.secondQuestionAnswer(question, shapeNames)
 
                             if (attempt <= 3) {
+                                secondQuestionViewModel.setNewAttempt()
                                 showDialog = true
                             } else {
                                 if (question == 2) {

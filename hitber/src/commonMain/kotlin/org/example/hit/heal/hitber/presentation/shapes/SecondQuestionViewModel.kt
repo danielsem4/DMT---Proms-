@@ -100,10 +100,13 @@ class SecondQuestionViewModel : ViewModel() {
         when (questionNumber) {
             2, 9 -> secondQuestionAnswersList.add(Pair(map, correctShapesCount))
         }
+    }
 
+    fun setNewAttempt(){
         _selectedShapes.value = emptyList()
         correctShapesCount = 0
         removeDistractors(distractorToRemove)
+        distractorToRemove = 0
     }
 
     // Reset currently selected shapes and related data for the first attempt
