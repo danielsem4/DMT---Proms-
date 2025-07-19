@@ -264,7 +264,6 @@ class ActivityViewModel(
                     _hitBerTest.value = fetched
                 }
                 .onError { error ->
-                    // post an error to a MessageBarState here todo
                     println("Error fetching evaluation: $error")
                 }
         }
