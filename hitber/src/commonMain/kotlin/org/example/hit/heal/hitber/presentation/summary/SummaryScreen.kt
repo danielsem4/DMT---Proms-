@@ -99,16 +99,16 @@ class SummaryScreen : Screen {
                     )
                 }
             },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState) { data ->
-                    Snackbar(modifier = Modifier.padding(paddingSm)) {
-                        Text(
-                            text = data.message,
-                            fontSize = LARGE
-                        )
-                    }
-                }
-            }
+//            snackbarHost = {
+//                SnackbarHost(hostState = snackbarHostState) { data ->
+//                    Snackbar(modifier = Modifier.padding(paddingSm)) {
+//                        Text(
+//                            text = data.message,
+//                            fontSize = LARGE
+//                        )
+//                    }
+//                }
+//            }
         )
 
         LaunchedEffect(uploadStatus) {

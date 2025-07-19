@@ -10,12 +10,10 @@ import core.data.model.SuccessfulLoginResponse
 import core.data.model.evaluation.Evaluation
 import core.data.storage.Storage
 import core.domain.DataError
-import core.domain.EmptyResult
 import core.domain.Result
 import core.domain.api.AppApi
 import core.domain.map
 import core.network.AppConfig.BASE_URL
-import core.network.AppConfig.BASE_URL_DEV
 import core.network.getWithAuth
 import core.network.postWithAuth
 import core.network.safeCall
@@ -60,15 +58,20 @@ class KtorAppRemoteDataSource(
         results: T,
         serializer: KSerializer<T>
     ): Result<String, DataError.Remote> {
+        val json = Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+            prettyPrint = true
+            encodeDefaults = true
+        }
         val url = "${baseUrl}patientMeasureResponse/"
-        val body = Json.encodeToString(serializer, results)
+        val body = json.encodeToString(serializer, results)
         println("the body is: $body")
 
         return httpClient.postWithAuth<String>(
             url = url,
             storage = storage
         ) {
-            contentType(ContentType.Application.Json)
             setBody(body)
         }
     }

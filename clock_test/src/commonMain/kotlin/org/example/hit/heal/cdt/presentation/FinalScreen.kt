@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +22,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -119,18 +116,6 @@ class FinalScreen : Screen {
                     }
                     Spacer(modifier = Modifier.height(32.dp))
                 }
-            },
-            snackbarHost = {
-                SnackbarHost(hostState = snackBarHostState) { data ->
-                    Snackbar(
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Text(
-                            text = data.message,
-                            fontSize = 32.sp
-                        )
-                    }
-                }
             }
         )
     }
@@ -142,7 +127,9 @@ class FinalScreen : Screen {
         successMessage: String
     ) {
         try {
-            viewModel.sendToServer(
+//            TODO return Result from sendToServer instead of using callback
+            coroutineScope.launch {
+                viewModel.sendToServer(
                 onSuccess = {
                     coroutineScope.launch {
                         snackbarHostState.showSnackbar(successMessage)
@@ -152,6 +139,7 @@ class FinalScreen : Screen {
                         snackbarHostState.showSnackbar(error.toString())
                     }
                 })
+            }
         } catch (error: Exception) {
             println(error.message)
             coroutineScope.launch {
