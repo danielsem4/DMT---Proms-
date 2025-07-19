@@ -9,6 +9,7 @@ import org.example.hit.heal.core.presentation.Resources.String.eighthQuestionHit
 import org.example.hit.heal.core.presentation.Resources.String.eighthQuestionHitberWordYesterday
 import org.jetbrains.compose.resources.StringResource
 
+// Holds each word’s text and its initial position on screen for drag-and-drop placement
 data class DraggableWordState(
     val word: StringResource,
     val initialOffset: Offset,

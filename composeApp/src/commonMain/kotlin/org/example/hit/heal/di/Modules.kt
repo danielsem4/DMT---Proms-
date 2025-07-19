@@ -6,7 +6,7 @@ import core.di.sessionModule
 import di.Pass_module
 import org.example.hit.heal.cdt.di.CDT_module
 
-import org.example.hit.heal.hitber.di.Hitber_module
+import org.example.hit.heal.hitber.di.HitBer_module
 
 import org.example.hit.heal.presentation.activities.ActivitiesViewModel
 import org.example.hit.heal.presentation.evaluation.EvaluationTestViewModel
@@ -45,7 +45,7 @@ val sharedModules = module {
     viewModelOf(::SplashViewModel)
 
 
-    includes(Hitber_module)
+    includes(HitBer_module)
     includes(Pass_module)
     viewModelOf(::EvaluationsViewModel)
 

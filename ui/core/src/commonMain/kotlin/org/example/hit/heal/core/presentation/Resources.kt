@@ -238,11 +238,13 @@ import dmt_proms.ui.core.generated.resources.key_hash
 import dmt_proms.ui.core.generated.resources.key_star
 import dmt_proms.ui.core.generated.resources.lemon
 import dmt_proms.ui.core.generated.resources.like
+import dmt_proms.ui.core.generated.resources.loading
 import dmt_proms.ui.core.generated.resources.local_unknown
 import dmt_proms.ui.core.generated.resources.lock
 import dmt_proms.ui.core.generated.resources.login
 import dmt_proms.ui.core.generated.resources.login_success
 import dmt_proms.ui.core.generated.resources.logout
+import dmt_proms.ui.core.generated.resources.logout_confirmation
 import dmt_proms.ui.core.generated.resources.measurements
 import dmt_proms.ui.core.generated.resources.med_icon
 import dmt_proms.ui.core.generated.resources.medications
@@ -514,6 +516,7 @@ object Resources {
     object String {
         val on = rs.on
         val off = rs.off
+        val loading = rs.loading
         val uploading = rs.uploading
         val send = rs.send
         val measurements = rs.measurements
@@ -547,6 +550,7 @@ object Resources {
         val howDoYouFeel = rs.how_do_you_feel
         val evaluationText = rs.evaluation
 
+        val logoutConfirmation = rs.logout_confirmation
         val areYouSure = Res.string.are_you_sure
         val backConfirmationMessage = Res.string.back_confirmation_message
 

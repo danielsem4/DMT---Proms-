@@ -74,7 +74,7 @@ fun DialDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth().fillMaxHeight(0.5f)
-                    .background(Color(0xFFD3D3D3)).align(Alignment.BottomCenter),
+                    .background(Color(0xFFE8E8E8)).align(Alignment.BottomCenter),
                 verticalArrangement = Arrangement.spacedBy(paddingMd)
             ) {
                 Box(
@@ -98,7 +98,7 @@ fun DialDialog(
                         Text(
                             text = enteredNumber,
                             fontSize = EXTRA_MEDIUM,
-                            color = Color.Gray,
+                            color = Color(0xFF333333),
                         )
                     }
                 }

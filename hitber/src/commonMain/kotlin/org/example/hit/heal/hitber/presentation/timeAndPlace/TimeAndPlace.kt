@@ -63,13 +63,11 @@ class TimeAndPlace : Screen {
                     RoundedButton(
                         text = stringResource(`continue`),
                         modifier = Modifier.width(200.dp).align(Alignment.CenterHorizontally),
-                        buttonColor = if (allAnswersFinished) primaryColor else Color.Gray,
                         onClick = {
-                            if (allAnswersFinished) {
                                 viewModel.setFirstQuestion(firstQuestionViewModel.firstQuestion.value)
                                 navigator?.replace(ShapeScreen())
-                            }
-                        }
+                        },
+                        enabled = allAnswersFinished
                     )
 
             })

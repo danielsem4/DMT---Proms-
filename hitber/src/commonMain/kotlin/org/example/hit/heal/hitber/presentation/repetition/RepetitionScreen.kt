@@ -23,6 +23,7 @@ import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScreen
 import org.jetbrains.compose.resources.stringResource
 
@@ -53,7 +54,7 @@ class RepetitionScreen : Screen {
                     )
 
                     Button(onClick = {}, modifier = Modifier.padding(bottom = 30.dp),
-                        colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
+                        colors = ButtonDefaults.buttonColors(primaryColor),
                         shape = RoundedCornerShape(50)){
                         Text(
                             "הקשב", color = Color.White, fontSize = 20.sp,
@@ -62,7 +63,7 @@ class RepetitionScreen : Screen {
                     }
 
                     Button(onClick = {},
-                        colors = ButtonDefaults.buttonColors(Color(0xFF6FCF97)),
+                        colors = ButtonDefaults.buttonColors(primaryColor),
                         shape = RoundedCornerShape(50)){
                         Text(
                             "דבר", color = Color.White, fontSize = 20.sp,

@@ -67,15 +67,18 @@ class ConcentrationScreen : Screen {
                         stringResource(thirdQuestionHitberInstructions),
                     )
 
+                    // Show start button if the task hasn't started
                     if (buttonVisible) {
                         RoundedButton(
                             text = stringResource(start),
                             modifier = Modifier.width(200.dp).padding(bottom = paddingSm),
                             onClick = {
+                                // Hide start button and start generating random numbers
                                 thirdQuestionViewModel.startButtonSetVisible(false)
                                 thirdQuestionViewModel.startRandomNumberGeneration()
                             }
                         )
+                        // Empty white box to fill space when button is visible
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -83,6 +86,7 @@ class ConcentrationScreen : Screen {
                                 .background(color = Color.White)
                         )
                     } else {
+                        // When task is finished, show completion message centered
                         if (isFinished) {
                             Box(
                                 modifier = Modifier
@@ -99,6 +103,7 @@ class ConcentrationScreen : Screen {
                                 )
                             }
                         } else {
+                            // While running, show numbers for user to click
                             RandomNumberScreen(
                                 number = number,
                                 isClickable = isNumberClickable,
@@ -108,18 +113,16 @@ class ConcentrationScreen : Screen {
                         }
                     }
 
+                    // Continue button enabled only after finishing the task
                     RoundedButton(
                         text = stringResource(`continue`),
                         modifier = Modifier.width(200.dp),
-                        buttonColor = if (isFinished) primaryColor else Color.Gray,
                         onClick = {
-                            if (isFinished) {
                                 viewModel.setThirdQuestion(
                                     thirdQuestionViewModel.thirdQuestionAnswers,
                                     getCurrentFormattedDateTime()
                                 )
                                 navigator?.replace(NamingScreen())
-                            }
                         },
                         enabled = isFinished
                     )

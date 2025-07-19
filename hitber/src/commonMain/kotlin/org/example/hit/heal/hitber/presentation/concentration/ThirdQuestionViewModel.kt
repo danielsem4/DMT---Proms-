@@ -46,7 +46,7 @@ class ThirdQuestionViewModel: ViewModel() {
         }
     }
 
-
+    // Starts the number generation loop, shows new number every 2.5 seconds for 60 seconds total
     fun startRandomNumberGeneration() {
         viewModelScope.launch {
             val now = Clock.System.now().toEpochMilliseconds()
@@ -57,7 +57,7 @@ class ThirdQuestionViewModel: ViewModel() {
                 _isNumberClickable.value = true
             }
 
-            while (elapsedTime < 5) {
+            while (elapsedTime < 60) {
                 delay(2500)
 
                 val nowLoop = Clock.System.now().toEpochMilliseconds()

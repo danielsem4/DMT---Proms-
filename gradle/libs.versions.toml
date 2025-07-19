@@ -52,7 +52,6 @@ atomicfu = "0.23.2"
 
 nav3Core = "1.0.0-alpha02"
 nav3Lifecycle = "1.0.0-alpha01"
-messagebar = "1.0.7"
 uiTooling = "1.8.3"
 
 
@@ -139,9 +138,6 @@ androidx-runner = { group = "androidx.test", name = "runner", version.ref = "run
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
-
-messagebar-kmp = { module = "com.stevdza-san:messagebarkmp", version.ref = "messagebar" }
-
 
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 
