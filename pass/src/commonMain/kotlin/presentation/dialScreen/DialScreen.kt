@@ -16,7 +16,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import androidx.compose.ui.graphics.Color
@@ -43,8 +42,9 @@ import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.components.InstructionsDialog
+import presentation.components.MessageDialog
 import presentation.dialScreen.components.DialDialog
+import presentation.dialScreen.components.MissionStage
 
 class DialScreen : Screen {
 
@@ -78,7 +78,8 @@ class DialScreen : Screen {
                             .fillMaxSize()
                             .padding(paddingLg)
                     ) {
-                        if (currentMissionPass == 3) {
+                        // If user reached the third stage without dialing correctly, show only the correct contact
+                        if (currentMissionPass == MissionStage.CorrectContactOnly) {
                             item {
                                 Text(
                                     text = correct,
@@ -88,6 +89,7 @@ class DialScreen : Screen {
                                 )
                             }
                         } else {
+                            // Otherwise show full contacts list
                             items(viewModel.contacts) { contactResId ->
                                 Text(
                                     text = stringResource(contactResId),
@@ -119,11 +121,13 @@ class DialScreen : Screen {
             }
         )
 
+        // Show the dial dialog when the user clicks the dial button or after 30 seconds of inactivity
         if (isDialogVisible) {
             DialDialog(
                 enteredNumber = enteredNumber,
                 onNumberClicked = {
-                    viewModel.onNumberClicked(it) },
+                    viewModel.onNumberClicked(it)
+                },
                 onDial = { viewModel.checkCorrectNumber(correctNumber) },
                 onDeleteClicked = { viewModel.deleteLastDigit() }
             )
@@ -138,12 +142,14 @@ class DialScreen : Screen {
             }
         }
 
+        // Indicates that the dial dialog should open when the mission stage changes to DialerOpened
         LaunchedEffect(currentMissionPass) {
-            if (currentMissionPass == 2) {
+            if (currentMissionPass == MissionStage.DialerOpened) {
                 viewModel.toggleDialog()
             }
         }
 
+        // Lifecycle observers to stop/play internal timers or checks
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()
@@ -153,6 +159,7 @@ class DialScreen : Screen {
             }
         )
 
+        // Show a dialog asking if user understand instructions
         if (showUnderstandingDialog) {
             BaseYesNoDialog(
                 onDismissRequest = { },
@@ -168,10 +175,11 @@ class DialScreen : Screen {
             )
         }
 
+        // Show dialog with instructions or the helpers dialog
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->
                 val audioString = stringResource(audio)
-                InstructionsDialog(
+                MessageDialog(
                     text = stringResource(text),
                     secondsLeft = countdown,
                     isPlaying = isPlaying,
@@ -192,6 +200,7 @@ class DialScreen : Screen {
         }
 
         RegisterBackHandler(this) {
-            navigator?.popUntilRoot()        }
+            navigator?.pop()
+        }
     }
 }

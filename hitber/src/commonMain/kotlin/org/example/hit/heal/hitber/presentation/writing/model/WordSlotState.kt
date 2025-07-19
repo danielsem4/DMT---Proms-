@@ -3,7 +3,12 @@ package org.example.hit.heal.hitber.presentation.writing.model
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 
-// Represents each slot where a word can be dropped, with its position, current word, and display color
+/**
+ * Represents a drop slot for draggable words.
+ * Holds the slot's position on screen, the current word assigned to it,
+ * and the color used to display the slot.
+ */
+
 data class WordSlotState(
     val id: Int,
     val initialOffset: Offset = Offset.Zero,

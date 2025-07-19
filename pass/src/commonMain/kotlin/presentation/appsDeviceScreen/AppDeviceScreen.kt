@@ -23,17 +23,15 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.components.InstructionsDialog
+import presentation.components.MessageDialog
 import presentation.components.AppData
 import presentation.components.circleWithPicture
-import presentation.contatcts.ContactsScreen
 
 class AppDeviceScreen : Screen {
 
     @Composable
     override fun Content() {
         val viewModel: AppDeviceViewModel = koinViewModel()
-        val wrongAppViewModel: WrongAppViewModel = koinViewModel()
         val navigator = LocalNavigator.current
 
         val items: List<AppData> = viewModel.items.map { item ->
@@ -84,11 +82,7 @@ class AppDeviceScreen : Screen {
         LaunchedEffect(nextScreen) {
             if (isNextScreen) {
                 nextScreen?.let { screen ->
-                    if(nextScreen == ContactsScreen()){
-                        viewModel.resetAppDeviceProgress()
-                        wrongAppViewModel.resetAppProgress()
-                    }
-                    navigator?.push (screen)
+                    navigator?.replace(screen)
                     viewModel.clearNextScreen()
                 }
             }
@@ -103,11 +97,6 @@ class AppDeviceScreen : Screen {
                 viewModel.startCheckingIfUserDidSomething()
             }
         )
-        DisposableEffect(Unit) {
-            onDispose {
-                viewModel.stopAll()
-            }
-        }
 
         // Show a dialog asking if user didn't understand instructions
         if (showUnderstandingDialog) {
@@ -129,7 +118,7 @@ class AppDeviceScreen : Screen {
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->
                 val audioString = stringResource(audio)
-                InstructionsDialog(
+                MessageDialog(
                     text = stringResource(text),
                     secondsLeft = countdown,
                     isPlaying = isPlaying,
@@ -140,11 +129,7 @@ class AppDeviceScreen : Screen {
                         viewModel.hideReminderDialog()
 
                         nextScreen?.let { screen ->
-                            if(nextScreen == ContactsScreen()){
-                                viewModel.resetAppDeviceProgress()
-                                wrongAppViewModel.resetAppProgress()
-                            }
-                            navigator?.push (screen)
+                            navigator?.replace(screen)
                             viewModel.clearNextScreen()
                         }
                     }
@@ -153,9 +138,8 @@ class AppDeviceScreen : Screen {
         }
 
         RegisterBackHandler(this) {
-            viewModel.resetAppDeviceProgress()
-            wrongAppViewModel.resetAppProgress()
-            navigator?.popUntilRoot()
+            viewModel.resetAll()
+            navigator?.pop()
         }
     }
 }

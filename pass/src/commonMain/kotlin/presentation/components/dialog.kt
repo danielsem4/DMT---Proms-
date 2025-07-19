@@ -44,8 +44,13 @@ import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnima
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+/**
+ * Shows an instructions dialog with a countdown timer, audio playback, and optional close icon.
+ * The dialog auto-dismisses when the countdown reaches zero.
+ */
+
 @Composable
-fun InstructionsDialog(
+fun MessageDialog(
     text: String,
     secondsLeft: Int,
     isPlaying: Boolean,
@@ -56,16 +61,6 @@ fun InstructionsDialog(
 ) {
 
     val canDismiss = isCountdownActive && secondsLeft == 0
-
-    LaunchedEffect(isCountdownActive, secondsLeft) {
-        if (isCountdownActive && secondsLeft == 0) {
-            onDismiss()
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        onPlayAudio()
-    }
 
     Dialog(onDismissRequest = {
         if (canDismiss) {
@@ -107,14 +102,14 @@ fun InstructionsDialog(
                             modifier = Modifier.weight(1f)
                         ) {
                             if (isCountdownActive && shouldShowCloseIcon) {
-                            Image(
-                                painter = painterResource(closeIcon),
-                                contentDescription = stringResource(dialogClose),
-                                modifier = Modifier
-                                    .size(iconSizeMd)
-                                    .clickable { onDismiss() }
-                            )
-                        }
+                                Image(
+                                    painter = painterResource(closeIcon),
+                                    contentDescription = stringResource(dialogClose),
+                                    modifier = Modifier
+                                        .size(iconSizeMd)
+                                        .clickable { onDismiss() }
+                                )
+                            }
 
                             Spacer(modifier = Modifier.width(paddingSm))
 
@@ -163,5 +158,16 @@ fun InstructionsDialog(
             }
         }
     }
+
+    LaunchedEffect(isCountdownActive, secondsLeft) {
+        if (isCountdownActive && secondsLeft == 0) {
+            onDismiss()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        onPlayAudio()
+    }
+
 }
 

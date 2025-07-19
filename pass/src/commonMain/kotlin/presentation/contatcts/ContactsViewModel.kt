@@ -60,6 +60,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
     private val _isNextScreen = MutableStateFlow(false)
     val isNextScreen: StateFlow<Boolean> = _isNextScreen
 
+    // Loads contacts and initializes the contacts
     suspend fun loadContacts(phoneNumber: String) {
         val names = getStringArray(personNames).toList()
         allContacts = names
@@ -68,7 +69,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         _contactsList.value = allContacts
     }
 
-
+    // Updates the search query and filters the contacts list accordingly
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
 
@@ -81,6 +82,8 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         }
     }
 
+    // Starts an inactivity timer – triggers a reminder after 15 seconds of no user interaction.
+    // If user is scrolling, increase the delay time to 25 seconds
     fun startCheckingIfUserDidSomething() {
         reminderJob?.cancel()
 
@@ -90,22 +93,24 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
                 seconds = if (_isScrolling.value) 25_000L else 15_000L
                     delay(seconds)
                     didNothing++
-                    getReminderText()
+                    showReminderText()
                     _isScrolling.value = false
             }
         }
     }
 
+    // Checks if clicked correct contact, proceeds if correct, otherwise shows helper dialog
     fun onContactClicked(contact: ContactData) {
         if (contact.name == correctContact.name) {
             nextQuestion()
             return
         }
         wrongContact++
-        getReminderText()
+        showReminderText()
     }
 
-    private fun getReminderText() {
+    // Display the dialogs with the correct message and audio
+    private fun showReminderText() {
         reminderJob?.cancel()
 
         val count = didNothing + wrongContact
@@ -143,6 +148,7 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         }
     }
 
+    // close dialog and restarts the 15 or 25 second timer
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
         startCheckingIfUserDidSomething()
@@ -152,10 +158,12 @@ class ContactsViewModel(private val countdownDialogHandler: CountdownDialogHandl
         _nextScreen.value = null
     }
 
+    // Sets the contact that the user is expected to find
     fun setCorrectContact(name: String, phoneNumber: String) {
         correctContact = ContactData(name = name, phoneNumber = phoneNumber)
     }
 
+    // Marks scrolling as occurred once and restarts the inactivity timer with a 25 second.
     fun startScrolling(){
         _isScrolling.value = true
         _isScrolled.value = true

@@ -36,7 +36,6 @@ import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInst
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions2
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberTitle
 import org.example.hit.heal.core.presentation.Resources.String.unexpectedError
-import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXl

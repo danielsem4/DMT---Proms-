@@ -36,6 +36,7 @@ import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.KoinApplication.Companion.init
 
 class ShapeScreen : Screen {
     @Composable
@@ -53,7 +54,7 @@ class ShapeScreen : Screen {
             content = {
                 Row(
                     modifier = Modifier.fillMaxWidth().weight(1f)
-                    .background(color = Color.White),
+                        .background(color = Color.White),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 )
@@ -66,20 +67,26 @@ class ShapeScreen : Screen {
                             tint = Color.Unspecified,
                             modifier = Modifier.size(150.dp)
                         )
-                    }}
+                    }
+                }
 
-                        RoundedButton(
-                            text = stringResource(`continue`),
-                            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
-                            onClick = {
-                                navigator?.replace(ActionShapesScreen(2))
-                            }
-                        )
+                RoundedButton(
+                    text = stringResource(`continue`),
+                    modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
+                    onClick = {
+                        navigator?.replace(ActionShapesScreen(2))
+                    }
+                )
 
             })
 
+        //Load a random shape set for the task
+        LaunchedEffect(Unit) {
+            secondQuestionViewModel.setRandomShapeSet()
+        }
+
         RegisterBackHandler(this) {
-            secondQuestionViewModel.resetAll()
+            secondQuestionViewModel.resetSelectedShapes()
             navigator?.pop()
         }
 

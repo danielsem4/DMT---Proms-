@@ -120,20 +120,20 @@ class ActionShapesScreen(private val question: Int) : Screen {
                             // Show retry dialog if attempts remain, otherwise navigate forward
                             if (attempt < 3) {
                                 showDialog = true
-                            } else {
+                            }
+                            else {
+                                secondQuestionViewModel.resetSelectedShapes()
                                 if (question == 2) {
                                     viewModel.setSecondQuestion(
                                         secondQuestionViewModel.secondQuestionAnswersList,
                                         getCurrentFormattedDateTime()
                                     )
-                                    secondQuestionViewModel.resetSelectedShapes()
                                     navigator?.replace(ConcentrationScreen())
                                 } else {
                                     viewModel.setNinthQuestion(
                                         secondQuestionViewModel.secondQuestionAnswersList,
                                         getCurrentFormattedDateTime()
                                     )
-                                    secondQuestionViewModel.resetAll()
                                     navigator?.replace(BuildShapeScreen())
                                 }
                             }
@@ -143,7 +143,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
             })
 
         RegisterBackHandler(this) {
-            secondQuestionViewModel.resetAll()
+            secondQuestionViewModel.resetSelectedShapes()
             navigator?.pop()
         }
 

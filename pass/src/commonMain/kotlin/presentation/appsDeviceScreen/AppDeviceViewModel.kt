@@ -52,6 +52,11 @@ import org.example.hit.heal.core.presentation.purseColor
 import org.example.hit.heal.core.presentation.settingsColor
 import org.example.hit.heal.core.presentation.storeColor
 import org.example.hit.heal.core.presentation.weatherColor
+import presentation.appsDeviceScreen.AppDeviceProgressCache.didNothing
+import presentation.appsDeviceScreen.AppDeviceProgressCache.isSecondInstructions
+import presentation.appsDeviceScreen.AppDeviceProgressCache.resetAppDevice
+import presentation.appsDeviceScreen.AppDeviceProgressCache.wrongApp
+import presentation.appsDeviceScreen.AppProgressCache.resetWrongApp
 import presentation.contatcts.ContactsScreen
 
 class AppDeviceViewModel(
@@ -59,7 +64,6 @@ class AppDeviceViewModel(
     private val playAudioUseCase: PlayAudioUseCase
 ) : ViewModel() {
 
-    // Static list of app icons shown on screen
     val items = listOf(
         AppData(
             imageRes = calculatorIcon,
@@ -142,12 +146,7 @@ class AppDeviceViewModel(
 
     private var reminderJob: Job? = null
 
-    private var didNothing = -1
-    private var wrongApp = 0
-    private var isSecondInstructions = false
-
     val isPlaying = playAudioUseCase.isPlaying
-
 
     // Start the understanding dialog asking the user to confirm understanding
     private fun startDialogUnderstanding() {
@@ -186,11 +185,15 @@ class AppDeviceViewModel(
         }
     }
 
+    // Called when the user confirms they understood the instructions,
+    // starts the 15 seconds timer
     fun onUnderstandingConfirmed() {
         _showUnderstandingDialog.value = false
         startCheckingIfUserDidSomething()
     }
 
+    // Called when the user denies understanding the instructions,
+    // it resets the dialog step and shows the reminder again
     fun onUnderstandingDenied() {
         _showUnderstandingDialog.value = false
         isSecondInstructions = true
@@ -206,12 +209,14 @@ class AppDeviceViewModel(
     // Called when the user clicks on an app
     fun onAppClicked(app: AppData) {
         if (app.label == contacts || app.label == phone) {
+            resetAll()
             _nextScreen.value = ContactsScreen()
             return
         }
         wrongApp++
 
         _nextScreen.value = if (wrongApp == 3) {
+            resetAll()
             ContactsScreen()
         } else {
             WrongAppScreen(app)
@@ -244,6 +249,7 @@ class AppDeviceViewModel(
                     isPlayingFlow = isPlaying,
                     audioText = herePersonsNumber to nowTheContactsListWillBeOpenedPass
                 )
+                resetAll()
                 _isNextScreen.value = false
                 _nextScreen.value = ContactsScreen()
             }
@@ -254,6 +260,7 @@ class AppDeviceViewModel(
         _nextScreen.value = null
     }
 
+    // close dialog and restarts the 15-second timer
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
         startCheckingIfUserDidSomething()
@@ -266,9 +273,8 @@ class AppDeviceViewModel(
         reminderJob = null
     }
 
-    fun resetAppDeviceProgress() {
-        didNothing = -1
-        wrongApp = 0
-        isSecondInstructions = false
+    fun resetAll(){
+        resetAppDevice()
+        resetWrongApp()
     }
 }
