@@ -34,17 +34,18 @@ fun getZoneForPosition(
         }
         Room.Kitchen -> {
             val roomZones = listOf(
-                RoomArea(RoomZoneKitchen.Counter, Rect(0f, 0f, width * 0.30f, height * 0.40f)),
-                RoomArea(RoomZoneKitchen.Sink, Rect(width * 0.30f, 0f, width * 0.50f, height * 0.40f)),
-                RoomArea(RoomZoneKitchen.Table, Rect(width * 0.50f, height * 0.40f, width * 1.0f, height * 1.0f))
+                RoomArea(RoomZoneKitchen.Counter, Rect(0f, 0f, width * 0.30f, height * 0.50f)),
+                RoomArea(RoomZoneKitchen.Counter, Rect(width * 0.70f, 0f, width * 1.0f, height * 0.20f)),
+                RoomArea(RoomZoneKitchen.Sink, Rect(width * 0.10f, 0f, width * 0.80f, height * 0.40f)),
+                RoomArea(RoomZoneKitchen.Table, Rect(width * 0.30f, height * 0.40f, width * 0.70f, height * 1.0f))
             )
             roomZones.firstOrNull { it.rect.contains(Offset(localX, localY)) }?.zone ?: RoomZoneKitchen.Other
         }
         Room.LivingRoom -> {
             val roomZones = listOf(
-                RoomArea(RoomZoneLivingRoom.Sofa, Rect(0f, height * 0.50f, width * 0.40f, height * 1.0f)),
-                RoomArea(RoomZoneLivingRoom.Table, Rect(width * 0.40f, height * 0.50f, width * 0.70f, height * 1.0f)),
-                RoomArea(RoomZoneLivingRoom.Shelf, Rect(width * 0.70f, 0f, width * 1.0f, height * 0.50f))
+                RoomArea(RoomZoneLivingRoom.Sofa, Rect(0f, height * 0.40f, width * 0.40f, height * 1.0f)),
+                RoomArea(RoomZoneLivingRoom.Table, Rect(width * 0.20f, height * 0.50f, width * 0.70f, height * 0.90f)),
+                RoomArea(RoomZoneLivingRoom.Shelf, Rect(width * 0.40f, 0f, width * 1.0f, height * 0.40f))
             )
             roomZones.firstOrNull { it.rect.contains(Offset(localX, localY)) }?.zone ?: RoomZoneLivingRoom.Other
         }

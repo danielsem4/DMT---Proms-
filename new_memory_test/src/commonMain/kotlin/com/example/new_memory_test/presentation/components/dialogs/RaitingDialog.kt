@@ -25,19 +25,26 @@ import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarHalf
 import androidx.compose.material.icons.rounded.StarHalf
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
-
+import org.koin.compose.viewmodel.koinViewModel
+import kotlinx.coroutines.delay
 @Composable
 fun RatingDialog(
     rating: Float,
@@ -45,6 +52,8 @@ fun RatingDialog(
     onDismiss: () -> Unit,
     onSubmit: () -> Unit
 ) {
+
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
     Dialog(onDismissRequest = onDismiss) {
         Box(
             modifier = Modifier
@@ -109,7 +118,7 @@ fun RatingDialog(
                     )
                     Text(
                         text = stringResource(Resources.String.how_well_do_you_feel_memory),
-                        fontSize = EXTRA_MEDIUM ,
+                        fontSize = EXTRA_MEDIUM,
                         color = Color.Gray
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -126,7 +135,8 @@ fun RatingDialog(
                                 modifier = Modifier
                                     .size(32.dp)
                                     .clickable {
-                                        val newRating = if (rating == i.toFloat()) i - 0.5f else i.toFloat()
+                                        val newRating =
+                                            if (rating == i.toFloat()) i - 0.5f else i.toFloat()
                                         onRatingChanged(newRating.coerceIn(0f, 5f))
                                     },
                                 tint = if (rating >= i - 0.5f) primaryColor else Color.LightGray
@@ -135,7 +145,9 @@ fun RatingDialog(
                     }
                     Spacer(modifier = Modifier.height(24.dp))
                     Button(
-                        onClick = onSubmit,
+                        onClick = {
+                            onSubmit()
+                        },
                         shape = RoundedCornerShape(50),
                         colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                         modifier = Modifier
@@ -149,9 +161,12 @@ fun RatingDialog(
                             color = Color.White
                         )
                     }
+
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
+        }
+
         }
     }
 }

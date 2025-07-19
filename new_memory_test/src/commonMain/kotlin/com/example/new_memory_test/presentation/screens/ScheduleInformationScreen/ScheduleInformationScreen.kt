@@ -1,22 +1,17 @@
 package com.example.new_memory_test.presentation.screens.ScheduleInformationScreen
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -24,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,7 +31,6 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import com.example.new_memory_test.presentation.screens.ScheduleInformationScreen.components.ActivityItem
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.screen.ScheduleScreen
-import dmt_proms.new_memory_test.generated.resources.Res
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.primaryColor
@@ -48,8 +41,6 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-
-
 
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
         BaseTabletScreen(title = stringResource(Resources.String.build_schedule), page = pageNumber, totalPages = 6) {
@@ -118,8 +109,6 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
                         .width(250.dp)
                         .height(50.dp)
                 ) {
-
-
                     Text(
                         stringResource(Resources.String.start),
                         fontSize = EXTRA_MEDIUM,

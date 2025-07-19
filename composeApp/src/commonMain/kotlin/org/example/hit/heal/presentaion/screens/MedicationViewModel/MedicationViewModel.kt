@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.data.model.Medications.Medication
 import core.data.model.Medications.MedicationReport
+import core.data.model.evaluation.Evaluation
 import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.api.AppApi
@@ -25,12 +26,14 @@ import kotlinx.datetime.atTime
 import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import kotlinx.serialization.json.Json
 import kotlin.math.abs
 
 class MedicationViewModel
     (private val remoteDataSource: AppApi,
-     private val storage: Storage
+     private val storage: Storage,
+
+
+
 ) : ViewModel() {
 
     private var clinicId: Int? = null
@@ -60,6 +63,7 @@ class MedicationViewModel
     private val _selectedEndDate = MutableStateFlow("")
     val selectedEndDate: StateFlow<String> = _selectedEndDate
 
+    private val _medicationEvaluation = MutableStateFlow<Evaluation?>(null)
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
@@ -102,6 +106,7 @@ class MedicationViewModel
         return _medication.value
     }
 
+
     var selectedDate by mutableStateOf(
         Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault()).run {
             "$dayOfMonth/$monthNumber/$year"
@@ -116,7 +121,20 @@ class MedicationViewModel
     )
         private set
 
-
+    fun loadEvaluation(evaluationName: String) {
+        viewModelScope.launch {
+            val clinicId = storage.get(PrefKeys.clinicId) ?: return@launch
+            val patientId = storage.get(PrefKeys.userId)?.toIntOrNull() ?: return@launch
+            remoteDataSource.getSpecificEvaluation(clinicId, patientId, evaluationName)
+                .onSuccess {
+                    _medicationEvaluation.value = it
+                    println("fetched evaluation: $it")
+                }
+                .onError { error ->
+                    println("Error fetching evaluation: $error")
+                }
+        }
+    }
 
     fun setReport(report: Boolean){
         _isReport = report
@@ -163,15 +181,12 @@ class MedicationViewModel
             return
         }
 
-        val timestamp = convertToIso8601(date,time)
+       val timestamp = convertToIso8601(date,time)
 
         viewModelScope.launch {
             reportMedication(medication, timestamp, medicationId)
         }
     }
-
-
-
     suspend fun reportMedication(medication: Medication, timestamp: String, medicationId: Int?) {
         isLoading.value = true
         if (!initUserIds()) {
@@ -181,28 +196,18 @@ class MedicationViewModel
         }
 
 
-        //if (!isValidIso8601Format(timestamp)) {
-        //    println(" Invalid format: $timestamp")
-        //} else {
-        //    println(" Valid: $timestamp")
-        //}
-
-
         val report = MedicationReport(
-            clinicId = clinicId!!,
-            patientId = patientId!!,
-            medicationId = medicationId!! ,
-            timestamp = timestamp
+            clinicId = 3,
+            patientId = 243,
+            medicationId = 1000000809,
+            timestamp = "2025-01-01 09:05:00"
         )
         val result = remoteDataSource.reportMedicationTook(report)
-        val jsonString = Json.encodeToString(report)
-        println(jsonString)
+
         result.onSuccess {
             errorMessage = null
-           // println(" УУУУУУУУ Молодец какая !")
         }.onError { error ->
             println("Error: $error")
-          //  println(" УУУУУУУУ Не  Молодец  !")
         }
         isLoading.value = false
     }
@@ -303,7 +308,7 @@ class MedicationViewModel
     }
 
     fun buildAndSendMedication(
-        medication: Medication?, // null если создаём новое
+        medication: Medication?,
         medicationName: String
     ) {
         viewModelScope.launch {
@@ -315,16 +320,16 @@ class MedicationViewModel
             val newMedication = Medication(
                 id = medication?.id ?: 0,
                 patient = patientId!!,
-                medicine = clinicId.toString(),
+                medicine = medication?.medicine ?: "" ,
                 name = medicationName,
-                form = "tablet",
-                unit = "mg",
+                form = medication?.form ?: "",
+                unit = medication?.unit ?: "",
                 frequency = selectedFrequency.value,
                 frequencyData = if (selectedFrequency.value == "Weekly")
                     selectedDays.value.joinToString(",") else selectedTimeBetweenDoses.value,
                 startDate = selectedStartDate.value,
                 endDate = selectedEndDate.value.takeIf { it.isNotBlank() },
-                dosage = "1" // или из ввода
+                dosage = medication?.dosage ?: "" // или из ввода
             )
 
             val result = remoteDataSource.setMedicationNotifications(newMedication)
@@ -338,9 +343,7 @@ class MedicationViewModel
             }
         }
     }
-    fun sentMedication(medication: Medication){
 
-    }
     private fun isValidDateTime(date: String, time: String): Boolean {
         val currentDateTime = Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault())
 

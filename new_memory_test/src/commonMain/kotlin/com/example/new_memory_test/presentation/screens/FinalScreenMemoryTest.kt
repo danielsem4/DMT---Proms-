@@ -23,10 +23,13 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,12 +43,16 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import core.utils.ObserveLifecycle
 import core.utils.RegisterBackHandler
-import dmt_proms.new_memory_test.generated.resources.Res
+
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.end
 import org.example.hit.heal.core.presentation.Resources.String.exit
+import org.example.hit.heal.core.presentation.Resources.String.sentSuccessfully
 import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe
 import org.example.hit.heal.core.presentation.Resources.String.thanksVocalPass
+import org.example.hit.heal.core.presentation.Resources.String.unexpectedError
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.InstructionBox
@@ -57,11 +64,32 @@ import org.example.hit.heal.core.presentation.utils.animations.SuccessAnimation
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-class FinalScreenMemoryTest() : Screen {
+class FinalScreenMemoryTest : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
         val viewModel: ViewModelMemoryTest = koinViewModel()
+        val snackbarHostState = remember { SnackbarHostState() }
+        val uploadStatus by viewModel.uploadStatus.collectAsState()
+
+        val successMessage = stringResource(sentSuccessfully)
+        val unexpectedErrorMessage = stringResource(unexpectedError)
+
+
+
+        LaunchedEffect(uploadStatus) {
+            uploadStatus?.let { result ->
+                result.onSuccess {
+                    snackbarHostState.showSnackbar(successMessage)
+                }.onFailure { error ->
+                    snackbarHostState.showSnackbar(error.message ?: unexpectedErrorMessage)
+                }
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            viewModel.uploadAllImages()
+        }
 
         BaseScreen(
             title = stringResource(end),
@@ -106,19 +134,22 @@ class FinalScreenMemoryTest() : Screen {
                         text = stringResource(exit),
                         modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
                         onClick = {
-
-                            viewModel.uploadEvaluationResults(
-                                onSuccess = {
-                                    println(" Success")
-                                    navigator?.popUntilRoot() // Переход ТОЛЬКО после успешной отправки
-                                },
-                                onFailure = { error ->
-                                    println(" Error: $error")
-
-                                }
-                            )
+                            navigator?.popUntilRoot()
+                            viewModel.reset()
                         }
+                        , enabled = uploadStatus != null
                     )
+
+                }
+            },
+            snackbarHost = {
+                SnackbarHost(hostState = snackbarHostState) { data ->
+                    Snackbar(modifier = Modifier.padding(paddingSm)) {
+                        Text(
+                            text = data.message,
+                            fontSize = LARGE
+                        )
+                    }
                 }
             }
         )

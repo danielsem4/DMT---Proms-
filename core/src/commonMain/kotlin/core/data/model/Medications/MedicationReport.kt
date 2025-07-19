@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MedicationReport(
-    @SerialName("clinic_id") val clinicId: Int,
-    @SerialName("patient_id") val patientId: Int,
-    @SerialName("medication_id") val medicationId: Int,
-    val timestamp: String
+     val clinicId: Int,
+     @SerialName("patient_id")val patientId: Int,
+     @SerialName("medication_id")val medicationId: Int,
+      val timestamp: String
 )

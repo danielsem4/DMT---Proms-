@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -48,9 +49,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+
 
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
@@ -65,30 +68,21 @@ import com.example.new_memory_test.presentation.screens.RoomScreen.components.zo
 import com.example.new_memory_test.presentation.screens.RoomScreen.data.DataItem
 import com.example.new_memory_test.presentation.screens.ScheduleInformationScreen.ScheduleInformationScreen
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.screen.ScheduleScreen
-import core.data.model.MeasureObjectString
 import core.utils.CapturableWrapper
 import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import core.utils.platformCapturable
-import io.github.suwasto.capturablecompose.Capturable
-import io.github.suwasto.capturablecompose.rememberCaptureController
-
-
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.Resources
-import org.example.hit.heal.core.presentation.Resources.Icon
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import kotlin.time.Clock.System
-import kotlin.time.Clock.System.now
-
 import kotlin.time.ExperimentalTime
 
 
@@ -109,7 +103,9 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         var roomSize by remember { mutableStateOf(IntSize.Companion.Zero) }
         var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
         var autoSwitchingRooms by remember { mutableStateOf(false) } //switch rooms
-        var inactivityDialogShown by remember { mutableStateOf(false) }
+        val coroutineScope = rememberCoroutineScope()
+
+
         //autoSwitchingRooms = false
         val allItems : List<Pair<Int, DrawableResource>> = listOf(
             Resources.Icon.glassesImage,
@@ -130,9 +126,11 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         var inactivityCount by remember { mutableStateOf(0) }
         var timeLeft by remember { mutableStateOf(4 * 60) }
 
-        val coroutineScope = rememberCoroutineScope()
+
+        var allItemsPlaced =false
         //Doing random schake of items
         val itemsToShowWithIds = viewModel.getItemsForPage(pageNumber, allItems)
+
         LaunchedEffect(Unit) {
             while (timeLeft > 0 && inactivityCount < 3) {
                 delay(1000L)
@@ -142,12 +140,11 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                 val lastMillis = lastInteractionTime.toEpochMilliseconds()
                 val secondsSinceLastInteraction = (nowMillis - lastMillis) / 1000
 
-                val delayButton =false
+
                 if (!showInactivityDialog && secondsSinceLastInteraction >= 60) {
                     showInactivityDialog = true
                 }
             }
-
             if (timeLeft == 0 && inactivityCount < 3 ) {
                 showInactivityDialog = true
             }
@@ -168,11 +165,13 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                         6 -> {
                            // viewModel.resultRoom ()
                             showDialog = true
+
                         }
                     }
                 })
             )
         }
+
 
         if (showInactivityDialog) {
             CustomDialog(
@@ -197,6 +196,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                 2 -> navigator.push(CallScreen(pageNumber = 3))
                                 4 -> navigator.push(ScheduleScreen(pageNumber = 5))
                                 6 -> {
+
                                    // viewModel.resultRoom ()
                                     showDialog = true
                                 }
@@ -204,6 +204,22 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                         }
                     }
                 )
+            )
+        }
+
+
+        if (showDialog) {
+            RatingDialog(
+                rating = rating,
+                onRatingChanged = { newRating -> rating = newRating },
+                onDismiss = { showDialog = false },
+                onSubmit = {
+                    showDialog = false
+                    coroutineScope.launch {
+                        viewModel.rawUserRating = rating
+                        navigator.replace(FinalScreenMemoryTest())
+                    }
+                }
             )
         }
 
@@ -371,27 +387,35 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                             }
                         }
                     }
-                    // Text(
-                    //     text = "Размещенные предметы: (Количество: ${viewModel.placedItems.size})",
-                    //     fontSize = 16.sp,
-                    //     color = primaryColor,
-                    //     fontWeight = FontWeight.Companion.Bold
-                    // )
-                    // if (viewModel.placedItems.isEmpty()) {
-                    //     Text(
-                    //         text = "Нет размещенных предметов",
-                    //         fontSize = 14.sp,
-                    //         color = Color.Companion.Gray
-                    //     )
-                    // } else {
-                    //     viewModel.placedItems.forEach { item ->
-                    //         Text(
-                    //             text = "Предмет ID: ${item.id}, Зона: ${item.zone?.displayName ?: "Неизвестно"}, Комната: ${item.room?.displayName ?: "Нет"}",
-                    //             fontSize = 14.sp,
-                    //             color = Color.Companion.Black
-                    //         )
-                    //     }
-                    // }
+                      Text(
+                          text = "Размещенные предметы: (Количество: ${viewModel.placedItems.size})",
+                          fontSize = 16.sp,
+                          color = primaryColor,
+                          fontWeight = FontWeight.Companion.Bold
+                      )
+                      if (viewModel.placedItems.isEmpty()) {
+                          Text(
+                              text = "Нет размещенных предметов",
+                              fontSize = 14.sp,
+                              color = Color.Companion.Gray
+                          )
+                      } else {
+                          viewModel.placedItems.forEach { item ->
+                              Text(
+                                  text = "Предмет ID: ${item.id}, Зона: ${item.zone?.displayName ?: "Неизвестно"}, Комната: ${item.room?.displayName ?: "Нет"}",
+                                  fontSize = 14.sp,
+                                  color = Color.Companion.Black
+                              )
+                          }
+                      }
+                    if (pageNumber == 2 ){
+                        if( viewModel.placedItems.size == 8) {
+                            allItemsPlaced = true
+                        }
+                    }
+                    else{
+                        allItemsPlaced = true
+                    }
 
                     Spacer(modifier = Modifier.Companion.height(12.dp))
                     Row(
@@ -413,10 +437,6 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                         ) {
                             Button(
                                 onClick = {
-                                    coroutineScope.launch {
-                                        delay(1000)  // חכה שנייה
-
-                                    }
                                     autoSwitchingRooms = true
                                 },
                                 colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
@@ -424,7 +444,9 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 100.dp)
                                     .width(250.dp)
-                                    .height(50.dp)
+                                    .height(50.dp) ,
+                                enabled = allItemsPlaced,
+
                             ) {
                                 Text(
                                     text = stringResource(Resources.String.next),
@@ -434,23 +456,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                 )
                             }
                         }
-                        var showRatingDialog by remember { mutableStateOf(true) }
-                        var currentRating by remember { mutableStateOf(0f) }
 
-                        if (showDialog) {
-                            RatingDialog(
-                                rating = rating,
-                                onRatingChanged = { newRating -> rating = newRating },
-                                onDismiss = { showDialog = false },
-                                onSubmit = {
-
-                                    viewModel.setSuccessRateAfter(rating.toString())
-                                    showRatingDialog = false
-                                    showDialog = false
-                                    navigator.push(FinalScreenMemoryTest())
-                                }
-                            )
-                        }
                     }
                 }
                 Column(
@@ -463,13 +469,27 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                         modifier = Modifier.weight(1f),
                         onCaptured = { imageBitmap ->
                             val timestamp = getCurrentFormattedDateTime()
+                            when (pageNumber) {
+                                2 -> {
+                                    viewModel.image1.value = viewModel.image1.value.plus(imageBitmap)
+                                    viewModel.timeForImage1.value = timestamp
+                                    viewModel.pageNumForImage1.value =  2
+                                    println("Image captured: $imageBitmap")
+                                    println("Image captured: $timestamp")
+                                }
+                                4 -> {
+                                    viewModel.image2.value = viewModel.image2.value.plus(imageBitmap)
+                                    viewModel.timeForImage2.value = timestamp
+                                    viewModel.pageNumForImage2.value =  4
+                                    println("Image captured: $imageBitmap")
+                                }
+                                6 -> {
+                                    viewModel.image3.value = viewModel.image3.value.plus(imageBitmap)
+                                    viewModel.timeForImage3.value = timestamp
+                                    viewModel.pageNumForImage3.value =  6
 
-                            viewModel.uploadImage(
-                                bitmap = imageBitmap,
-                                date = timestamp,
-                                currentQuestion = pageNumber
-                            )
-
+                                }
+                            }
                         }
                     )
                     {
@@ -535,22 +555,27 @@ class RoomsScreens(val pageNumber: Int) : Screen {
 
                             for (room in switchOrder) {
                                 selectedRoom = room
+
                                 delay(delayBetween)
-                                delay(100L)//need to check if we need a delay after
+                                //need to check if we need a delay after
+                                capturable?.capture?.invoke()
+                                delay(30L)
                             }
+
                             autoSwitchingRooms = false
-                            capturable?.capture?.invoke()
+
                             if (pageNumber == 2) {
                                 viewModel.setPage(viewModel.txtMemoryPage + 1)
                                 navigator.push(CallScreen(pageNumber = 3))
                             } else if (pageNumber == 4) {
-
                                 viewModel.setPage(viewModel.txtMemoryPage + 1)
                                 navigator.push(ScheduleInformationScreen(pageNumber = 5))
                             } else if (pageNumber == 6) {
 
-                                //viewModel.resultRoom ()
                                 showDialog = true
+
+
+
                             }
 
                         }

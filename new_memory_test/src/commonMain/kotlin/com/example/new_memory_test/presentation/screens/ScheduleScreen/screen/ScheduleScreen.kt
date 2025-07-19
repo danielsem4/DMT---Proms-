@@ -47,6 +47,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
 import com.example.new_memory_test.presentation.screens.BaseTabletScreen
+import com.example.new_memory_test.presentation.screens.FinalScreenMemoryTest
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.DraggableCirclesPalet
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.TimeSlotBox
@@ -89,8 +90,6 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
             stringResource(Resources.String.hour_15_00),
             stringResource(Resources.String.hour_16_00)
         )
-
-
 
         val droppedState = remember {
             mutableStateOf<Map<String, DraggableCircle>>(emptyMap())
@@ -146,18 +145,12 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
 
                 onCaptured = { imageBitmap ->
                     val timestamp = getCurrentFormattedDateTime()
-
-                    viewModel.uploadImage(
-                        bitmap = imageBitmap,
-                        date = timestamp,
-                        currentQuestion = pageNumber
-                    )
-
+                    viewModel.imageUrl.value = viewModel.imageUrl.value.plus(imageBitmap)
+                    viewModel.timeUrl.value = timestamp
+                    viewModel.pageNumForUrl.value =pageNumber
                 }
             )
             {
-
-
 
                 Column {
 

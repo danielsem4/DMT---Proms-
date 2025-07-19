@@ -16,6 +16,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,7 +42,9 @@ class MainMedicationScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinViewModel<MedicationViewModel>()
-
+        LaunchedEffect(Unit){
+            viewModel.loadEvaluation("medications")
+        }
         BaseScreen(
             title = stringResource(Resources.String.medications),
             config = ScreenConfig.PhoneConfig,
