@@ -23,6 +23,7 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import presentation.appsDeviceScreen.AppDeviceProgressCache.isCloseIconDialog
 import presentation.components.MessageDialog
 import presentation.components.AppData
 import presentation.components.circleWithPicture
@@ -44,7 +45,6 @@ class AppDeviceScreen : Screen {
 
         val isPlaying by viewModel.isPlaying.collectAsState()
         val isNextScreen by viewModel.isNextScreen.collectAsState()
-        val isCloseIconDialog by viewModel.isCloseIconDialog.collectAsState()
         val showUnderstandingDialog by viewModel.showUnderstandingDialog.collectAsState()
         val countdown by viewModel.countdown.collectAsState()
         val showDialog by viewModel.showDialog.collectAsState()
@@ -97,6 +97,7 @@ class AppDeviceScreen : Screen {
                 viewModel.startCheckingIfUserDidSomething()
             }
         )
+
 
         // Show a dialog asking if user didn't understand instructions
         if (showUnderstandingDialog) {

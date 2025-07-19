@@ -53,6 +53,7 @@ import org.example.hit.heal.core.presentation.settingsColor
 import org.example.hit.heal.core.presentation.storeColor
 import org.example.hit.heal.core.presentation.weatherColor
 import presentation.appsDeviceScreen.AppDeviceProgressCache.didNothing
+import presentation.appsDeviceScreen.AppDeviceProgressCache.isCloseIconDialog
 import presentation.appsDeviceScreen.AppDeviceProgressCache.isSecondInstructions
 import presentation.appsDeviceScreen.AppDeviceProgressCache.resetAppDevice
 import presentation.appsDeviceScreen.AppDeviceProgressCache.wrongApp
@@ -135,9 +136,6 @@ class AppDeviceViewModel(
     private val _showUnderstandingDialog = MutableStateFlow(false)
     val showUnderstandingDialog: StateFlow<Boolean> = _showUnderstandingDialog
 
-    private val _isCloseIconDialog = MutableStateFlow(false)
-    val isCloseIconDialog: StateFlow<Boolean> = _isCloseIconDialog
-
     private val _isNextScreen = MutableStateFlow(true)
     val isNextScreen: StateFlow<Boolean> = _isNextScreen
 
@@ -150,7 +148,7 @@ class AppDeviceViewModel(
 
     // Start the understanding dialog asking the user to confirm understanding
     private fun startDialogUnderstanding() {
-        _isCloseIconDialog.value = true
+        isCloseIconDialog = true
 
         if (!isSecondInstructions) {
             _showUnderstandingDialog.value = true
@@ -164,7 +162,7 @@ class AppDeviceViewModel(
             return
         }
 
-        if (didNothing == 0 && !_isCloseIconDialog.value) {
+        if (didNothing == 0 && !isCloseIconDialog) {
             startDialogUnderstanding()
         }
 
