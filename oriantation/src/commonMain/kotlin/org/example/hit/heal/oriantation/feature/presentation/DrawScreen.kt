@@ -56,6 +56,7 @@ class DrawScreen(
         var currentPathPoints by remember { mutableStateOf<List<Offset>>(emptyList()) }
         var isEraseMode by remember { mutableStateOf(false) }
         var isDrawing by remember { mutableStateOf(false) }
+
         fun drawPathsToBitmap(): ImageBitmap {
             val bitmap = ImageBitmap(canvasSize.width.toInt(), canvasSize.height.toInt())
             val canvas = Canvas(bitmap)
@@ -114,19 +115,28 @@ class DrawScreen(
                             detectDragGestures(
                                 onDragStart = { offset ->
                                     isDrawing = true
-                                    currentPath = Path().apply { moveTo(offset.x, offset.y) }
                                     currentPathPoints = listOf(offset)
+                                    currentPath = Path().apply { moveTo(offset.x, offset.y) }
                                 },
-                                onDrag = { change, dragAmount ->
+                                onDrag = { change, _ ->
                                     if (isDrawing) {
-                                        val newOffset = change.position
-                                        currentPath = currentPath?.apply { lineTo(newOffset.x, newOffset.y) }
-                                        currentPathPoints = currentPathPoints + newOffset
+                                        currentPathPoints = currentPathPoints + change.position
+                                        currentPath = Path().apply {
+                                            moveTo(currentPathPoints.first().x, currentPathPoints.first().y)
+                                            currentPathPoints.drop(1).forEach { point ->
+                                                lineTo(point.x, point.y)
+                                            }
+                                        }
                                     }
                                 },
                                 onDragEnd = {
                                     isDrawing = false
                                     currentPath?.let { paths.add(it) }
+                                    currentPath = null
+                                    currentPathPoints = emptyList()
+                                },
+                                onDragCancel = {
+                                    isDrawing = false
                                     currentPath = null
                                     currentPathPoints = emptyList()
                                 }
