@@ -34,6 +34,8 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import presentation.appsDeviceScreen.AppDeviceProgressCache.resetAppDevice
+import presentation.appsDeviceScreen.AppProgressCache.resetWrongApp
 import presentation.components.MessageDialog
 import presentation.contatcts.components.ContactItem
 import presentation.contatcts.components.SearchTextField
@@ -142,6 +144,8 @@ class ContactsScreen : Screen {
                 viewModel.stopAll()
             },
             onStart = {
+                resetAppDevice()
+                resetWrongApp()
                 viewModel.startCheckingIfUserDidSomething()
             }
         )

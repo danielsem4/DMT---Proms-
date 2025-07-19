@@ -207,14 +207,12 @@ class AppDeviceViewModel(
     // Called when the user clicks on an app
     fun onAppClicked(app: AppData) {
         if (app.label == contacts || app.label == phone) {
-            resetAll()
             _nextScreen.value = ContactsScreen()
             return
         }
         wrongApp++
 
         _nextScreen.value = if (wrongApp == 3) {
-            resetAll()
             ContactsScreen()
         } else {
             WrongAppScreen(app)
@@ -247,7 +245,6 @@ class AppDeviceViewModel(
                     isPlayingFlow = isPlaying,
                     audioText = herePersonsNumber to nowTheContactsListWillBeOpenedPass
                 )
-                resetAll()
                 _isNextScreen.value = false
                 _nextScreen.value = ContactsScreen()
             }
@@ -271,7 +268,7 @@ class AppDeviceViewModel(
         reminderJob = null
     }
 
-    fun resetAll(){
+    fun resetAll() {
         resetAppDevice()
         resetWrongApp()
     }
