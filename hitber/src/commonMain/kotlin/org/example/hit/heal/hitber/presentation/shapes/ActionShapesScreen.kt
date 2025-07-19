@@ -27,6 +27,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Resources.Icon.errorIcon
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogTitle
@@ -108,17 +112,20 @@ class ActionShapesScreen(private val question: Int) : Screen {
                         }
                     }
                 }
-                    RoundedButton(
-                        text = stringResource(`continue`),
-                        modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
-                        onClick = {
+                RoundedButton(
+                    text = stringResource(`continue`),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .width(200.dp),
+                    onClick = {
+                        CoroutineScope(Dispatchers.Main).launch {
                             // Calculate and update attempt based on selected shapes
                             secondQuestionViewModel.calculateCorrectShapesCount()
                             secondQuestionViewModel.updateTask()
+                            delay(300)
                             secondQuestionViewModel.secondQuestionAnswer(question, shapeNames)
 
-                            // Show retry dialog if attempts remain, otherwise navigate forward
-                            if (attempt < 3) {
+                            if (attempt <= 3) {
                                 showDialog = true
                             } else {
                                 if (question == 2) {
@@ -138,12 +145,14 @@ class ActionShapesScreen(private val question: Int) : Screen {
                                 }
                             }
                         }
-                    )
+                    }
+                )
+
 
             })
 
         RegisterBackHandler(this) {
-            secondQuestionViewModel.resetSelectedShapes()
+            secondQuestionViewModel.resetAll()
             navigator?.pop()
         }
 

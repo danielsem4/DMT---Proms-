@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,7 @@ import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.KoinApplication.Companion.init
 
 class ShapeScreen : Screen {
     @Composable
@@ -75,8 +77,13 @@ class ShapeScreen : Screen {
 
             })
 
+        //Load a random shape set for the task
+        LaunchedEffect(Unit) {
+            secondQuestionViewModel.setRandomShapeSet()
+        }
+
         RegisterBackHandler(this) {
-            secondQuestionViewModel.resetSelectedShapes()
+            secondQuestionViewModel.resetAll()
             navigator?.pop()
         }
 

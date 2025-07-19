@@ -8,7 +8,7 @@ import org.example.hit.heal.hitber.presentation.shapes.model.Shape
 import org.example.hit.heal.hitber.presentation.shapes.model.shapeList
 import org.example.hit.heal.hitber.presentation.shapes.model.shapeSets
 
-class SecondQuestionViewModel: ViewModel() {
+class SecondQuestionViewModel : ViewModel() {
     private val _listShapes = MutableStateFlow(shapeList)
     val listShapes: StateFlow<List<Shape>> = _listShapes.asStateFlow()
 
@@ -24,12 +24,6 @@ class SecondQuestionViewModel: ViewModel() {
     var secondQuestionAnswersList: ArrayList<Pair<Map<Int, String>, Int>> = arrayListOf()
     private var correctShapesCount = 0
     private var distractorToRemove = 0
-
-    //Load a random shape set for the task
-    init {
-        setRandomShapeSet()
-    }
-
 
     fun setRandomShapeSet() {
         val selectedTypes = shapeSets.random()
@@ -59,20 +53,14 @@ class SecondQuestionViewModel: ViewModel() {
     // Update task state based on number of correct shapes selected
     fun updateTask() {
         when (correctShapesCount) {
-            5 -> _attempt.value = 3
-
-            4 -> {
-                when (attempt.value) {
-                    1, 2 -> _attempt.value++
-                }
-            }
+            5 -> _attempt.value = 4
+            4 -> _attempt.value++
 
             3 -> {
                 when (_attempt.value++) {
                     1 -> distractorToRemove = 1
                     2 -> distractorToRemove = 2
                 }
-                removeDistractors(distractorToRemove)
             }
 
             2 -> {
@@ -80,7 +68,6 @@ class SecondQuestionViewModel: ViewModel() {
                     1 -> distractorToRemove = 2
                     2 -> distractorToRemove = 2
                 }
-                removeDistractors(distractorToRemove)
             }
 
             1, 0 -> {
@@ -88,7 +75,6 @@ class SecondQuestionViewModel: ViewModel() {
                     1 -> distractorToRemove = 3
                     2 -> distractorToRemove = 2
                 }
-                removeDistractors(distractorToRemove)
             }
         }
     }
@@ -117,6 +103,7 @@ class SecondQuestionViewModel: ViewModel() {
 
         _selectedShapes.value = emptyList()
         correctShapesCount = 0
+        removeDistractors(distractorToRemove)
     }
 
     // Reset currently selected shapes and related data for the first attempt
@@ -129,7 +116,7 @@ class SecondQuestionViewModel: ViewModel() {
     }
 
     // Reset all data including selected sets
-    fun resetAll(){
+    fun resetAll() {
         resetSelectedShapes()
         _selectedSet.value = emptyList()
     }
