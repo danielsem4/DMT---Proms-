@@ -319,6 +319,7 @@ import dmt_proms.ui.core.generated.resources.second_question_hitber_task_retry_i
 import dmt_proms.ui.core.generated.resources.second_question_hitber_title
 import dmt_proms.ui.core.generated.resources.second_question_hitber_trapezoid
 import dmt_proms.ui.core.generated.resources.second_question_hitber_triangle
+import dmt_proms.ui.core.generated.resources.selected_point
 import dmt_proms.ui.core.generated.resources.send
 import dmt_proms.ui.core.generated.resources.sent_successfully
 import dmt_proms.ui.core.generated.resources.serialization_error
@@ -514,6 +515,7 @@ object Resources {
     }
 
     object String {
+        val selected_point = rs.selected_point
         val loading = rs.loading
         val on = Res.string.on
         val off = Res.string.off

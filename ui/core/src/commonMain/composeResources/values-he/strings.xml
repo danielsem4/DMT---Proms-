@@ -66,6 +66,7 @@
     <string name="no_evaluation_object_to_display">אין אובייקט הערכה להצגה.</string>
     <string name="uploading">שולח</string>
     <string name="loading">עולה</string>
+    <string name="selected_point">הנקודה שבחרת</string>
 
 
     <!--    CDT Module  -->

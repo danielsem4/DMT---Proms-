@@ -222,6 +222,7 @@ fun EvaluationObjectContent(
                             EvaluationAnswer.HumanModelPoints(updatedFront, updatedBack)
                         )
                     },
+                    availableValues = availableValues,
                     onToggleView = {
                         isFrontView.value = !isFrontView.value
                     }
