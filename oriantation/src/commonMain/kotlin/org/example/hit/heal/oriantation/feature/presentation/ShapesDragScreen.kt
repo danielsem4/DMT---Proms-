@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import core.utils.RegisterBackHandler
 import org.jetbrains.compose.resources.painterResource
 import dmt_proms.oriantation.generated.resources.Res
 import dmt_proms.oriantation.generated.resources.bleach
@@ -158,5 +159,9 @@ class ShapesDragScreen(
                 }
             }
         )
+        RegisterBackHandler(this)
+        {
+            navigator?.pop()
+        }
     }
 }

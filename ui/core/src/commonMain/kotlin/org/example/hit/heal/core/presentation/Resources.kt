@@ -272,6 +272,8 @@ import dmt_proms.ui.core.generated.resources.no
 import dmt_proms.ui.core.generated.resources.no_evaluation_object_to_display
 import dmt_proms.ui.core.generated.resources.no_internet
 import dmt_proms.ui.core.generated.resources.now_the_contacts_list_will_be_opened_pass
+import dmt_proms.ui.core.generated.resources.off
+import dmt_proms.ui.core.generated.resources.on
 import dmt_proms.ui.core.generated.resources.open_bin
 import dmt_proms.ui.core.generated.resources.open_fridge
 import dmt_proms.ui.core.generated.resources.ophthalmologist_pass
@@ -409,6 +411,7 @@ import dmt_proms.ui.core.generated.resources.whatsapp
 import dmt_proms.ui.core.generated.resources.white_messages
 import dmt_proms.ui.core.generated.resources.white_phone
 import dmt_proms.ui.core.generated.resources.white_video
+import dmt_proms.ui.core.generated.resources.winter
 import dmt_proms.ui.core.generated.resources.witch_contact_are_we_looking_for_pass
 import dmt_proms.ui.core.generated.resources.wrong_app_second_assist
 import dmt_proms.ui.core.generated.resources.wrong_app_thired_assist
@@ -545,7 +548,9 @@ object Resources {
     }
 
     object String {
-            val loading = rs.loading
+        val loading = rs.loading
+        val on = Res.string.on
+        val off = Res.string.off
         val uploading = rs.uploading
         val send = rs.send
         val measurements = rs.measurements
@@ -918,7 +923,7 @@ object Resources {
         val secQuestionTitle = Res.string.sec_question_title
         val secQuestionInstruction = Res.string.sec_question_instraction
         val secQuestionNumber = Res.string.sec_question_number
-
+        val Winter = Res.string.winter
         val entryInstructionsAppTrial = Res.string.entry_instructions_app_trial
         val dropdownInstructionsAppTrial = Res.string.dropdown_instructions_app_trial
         val seasonsInstructionsAppTrial = Res.string.seasons_instructions_app_trial

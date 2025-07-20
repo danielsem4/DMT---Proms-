@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
+import core.utils.RegisterBackHandler
 import dmt_proms.oriantation.generated.resources.Res
 import dmt_proms.oriantation.generated.resources.Res.string
 import dmt_proms.oriantation.generated.resources.entry_Oriantation_instructions
@@ -95,5 +96,9 @@ class OriantationWelcomeScreen: Screen {
                 }
             }
         )
+        RegisterBackHandler(this)
+        {
+            navigator?.pop()
+        }
     }
 }

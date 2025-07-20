@@ -26,12 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import core.utils.RegisterBackHandler
 import dmt_proms.oriantation.generated.resources.Res.string
 import dmt_proms.oriantation.generated.resources.dropdown_instructions_app_trial
 import dmt_proms.oriantation.generated.resources.sec_question_instraction
 import dmt_proms.oriantation.generated.resources.sec_question_title
 import org.example.hit.heal.core.presentation.Resources.String.dropdownInstructionsAppTrial
 import org.example.hit.heal.core.presentation.Resources.String.secQuestionInstruction
+import org.example.hit.heal.core.presentation.Resources.String.secQuestionNumber
 import org.example.hit.heal.core.presentation.Resources.String.secQuestionTitle
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
@@ -142,7 +144,8 @@ class NumberSelectScreen(
                     ) {
                         Text(
 //
-                            text = stringResource(dropdownInstructionsAppTrial , selectedNumber),
+
+                            text = "${stringResource(secQuestionNumber)}, $selectedNumber",
                             color = Color(0xFF4EC3AF),
                             fontSize = 22.sp
                         )
@@ -150,5 +153,9 @@ class NumberSelectScreen(
                 }
             }
         )
+    RegisterBackHandler(this)
+    {
+        navigator?.pop()
+    }
     }
 }

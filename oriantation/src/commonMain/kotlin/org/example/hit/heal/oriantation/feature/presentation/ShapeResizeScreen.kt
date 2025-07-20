@@ -25,13 +25,17 @@ import cafe.adriel.voyager.core.screen.Screen
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.jetbrains.compose.resources.DrawableResource
 import androidx.compose.material.Text
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import core.utils.RegisterBackHandler
 import dmt_proms.oriantation.generated.resources.Res
 import dmt_proms.oriantation.generated.resources.trial_pinch_instructions
 import dmt_proms.oriantation.generated.resources.trial_pinch_title
@@ -70,7 +74,7 @@ class ShapeResizeScreen(
         )
 
         // Red square size
-        val redSquareSize = 400.dp
+        val redSquareSize = 500.dp
 
         TabletBaseScreen(
             title = stringResource(trialPinchTitle),
@@ -90,6 +94,8 @@ class ShapeResizeScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
                 )
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+
                 Spacer(modifier = Modifier.height(16.dp))
                 Box(
                     modifier = Modifier
@@ -137,7 +143,12 @@ class ShapeResizeScreen(
                         }
                     }
                 }
+                }
             }
         )
+        RegisterBackHandler(this)
+        {
+            navigator?.pop()
+        }
     }
 }

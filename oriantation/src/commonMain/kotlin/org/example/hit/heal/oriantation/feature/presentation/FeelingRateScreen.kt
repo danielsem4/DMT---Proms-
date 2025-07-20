@@ -118,6 +118,7 @@ class FeedbackScreen(
                 )
             },
             content = {
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -277,6 +278,7 @@ class FeedbackScreen(
 
                     Spacer(modifier = Modifier.height(32.dp))
                 }
+
             },
             snackbarHost = {
                 SnackbarHost(hostState = snackbarHostState) { data ->
