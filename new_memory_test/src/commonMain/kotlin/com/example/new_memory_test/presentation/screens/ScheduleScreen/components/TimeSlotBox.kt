@@ -21,6 +21,7 @@ import com.mohamedrejeb.compose.dnd.DragAndDropState
 import com.mohamedrejeb.compose.dnd.drop.dropTarget
 import kotlin.collections.plus
 
+//Boxes for schedules
 @Composable
 fun TimeSlotBox(
     slotId: String,
@@ -39,25 +40,25 @@ fun TimeSlotBox(
             .clip(RoundedCornerShape(12.dp))
             .background(backgroundColor)
             .clickable {
-                droppedState.value = droppedState.value - slotId
+                droppedState.value = droppedState.value - slotId //remove from dropped
             }
             .dropTarget(
                 key = slotId,
                 state = dragAndDropState,
                 onDrop = { draggedItemState ->
-                    droppedState.value = droppedState.value + (slotId to draggedItemState.data)
+                    droppedState.value = droppedState.value + (slotId to draggedItemState.data) //save new boxes
                     val id = draggedItemState.data.id
-                    if (id !in usedCircleIds) usedCircleIds.add(id)
+                    if (id !in usedCircleIds) usedCircleIds.add(id)// add circle that used (for check in ScheduleScreen -> button next)
                 }
             )
     ) {
         currentItem?.let {
-            Image(
+            Image( // Image of circle
                 painter = it.painter,
                 contentDescription = null,
                 modifier = Modifier.size(40.dp)
             )
-            DeleteIcon(
+            DeleteIcon( //Image of delete - small X
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(4.dp),

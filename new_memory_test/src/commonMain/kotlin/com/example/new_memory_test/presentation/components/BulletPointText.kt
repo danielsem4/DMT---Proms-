@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
+//Text in the start of modules (MemoryScreen)
 @Composable
 fun BulletPointText(
     text: String,
@@ -42,6 +43,7 @@ fun BulletPointText(
                 .weight(1f)
                 .wrapContentHeight()
         )
+        //Only for bullet point
         Text(
             text = "•",
             fontSize = fontSize,

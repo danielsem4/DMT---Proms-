@@ -71,9 +71,10 @@ import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
  import org.example.hit.heal.presentation.activities.ActivitiesScreen
 import org.example.hit.heal.presentation.evaluation.AllEvaluationsScreen
 import org.example.hit.heal.presentation.login.LoginScreen
-import org.example.hit.heal.presentaion.screens.BaseScreen
-import org.example.hit.heal.presentaion.screens.mainMedication.MainMedicationScreen
-import org.jetbrains.compose.resources.painterResource
+import org.example.hit.heal.presentation.medication.BaseScreen
+ import org.example.hit.heal.presentation.medication.presentaion.screens.mainMedication.MainMedicationScreen
+
+ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 

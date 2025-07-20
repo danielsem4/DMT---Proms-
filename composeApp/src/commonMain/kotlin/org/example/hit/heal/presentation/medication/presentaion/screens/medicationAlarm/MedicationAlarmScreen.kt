@@ -1,7 +1,4 @@
-package org.example.hit.heal.presentaion.screens.medicationAlarm
-
-
-import org.example.hit.heal.presentaion.screens.MedicationViewModel.MedicationViewModel
+package org.example.hit.heal.presentation.medication.presentaion.screens.medicationAlarm
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -15,31 +12,29 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-
+import core.data.model.Medications.Medication
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
-import org.example.hit.heal.presentaion.components.CustomDatePickerBox
-import org.example.hit.heal.presentaion.components.CustomDropdownMenu
-
-import org.example.hit.heal.presentaion.components.CustomWeeklySelector
-import org.example.hit.heal.presentaion.screens.medicationAlarm.components.generateTimeSlots
-
-
+import org.example.hit.heal.presentation.medication.presentaion.components.CustomDatePickerBox
+import org.example.hit.heal.presentation.medication.presentaion.components.CustomDropdownMenu
+import org.example.hit.heal.presentation.medication.presentaion.components.CustomWeeklySelector
+import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
+import org.example.hit.heal.presentation.medication.presentaion.screens.mainMedication.MainMedicationScreen
+import org.example.hit.heal.presentation.medication.presentaion.screens.medicationAlarm.components.generateTimeSlots
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import kotlin.String
 
 
-class MedicationAlarmScreen () : Screen {
+class MedicationAlarmScreen (private val medication: Medication) : Screen {
     @OptIn(KoinExperimentalAPI::class)
     @Composable
     override fun Content() {
 
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinViewModel<MedicationViewModel>()
-
         val medicationName = viewModel.medicationName.collectAsState().value
         val medicationchoose = viewModel.getMedication()
         val selectedFrequency by viewModel.selectedFrequency.collectAsState()
@@ -48,35 +43,36 @@ class MedicationAlarmScreen () : Screen {
         val selectedDays by viewModel.selectedDays.collectAsState()
         val selectedStartDate by viewModel.selectedStartDate.collectAsState()
         val selectedEndDate by viewModel.selectedEndDate.collectAsState()
-
         var isError by remember { mutableStateOf(false) }
         var errorMessage by remember { mutableStateOf("") }
-
         val frequencyOptions = listOf(stringResource(Resources.String.daily), stringResource(Resources.String.weekly))
+
         val timeBetweenDosesOptions = listOf("1", "2", "4", "6")
+        var frequency = (stringResource(Resources.String.daily))
+        viewModel.setFrequency(frequency)
+        val startDateError = stringResource(Resources.String.error_start_date_empty)
+        val endDateError = stringResource(Resources.String.error_end_before_start)
 
 
-        fun validateInput(): Boolean{
+
+        fun validateInput( ): Boolean {
             if (selectedStartDate.isBlank()) {
-                errorMessage = "Start date cannot be empty"
+                errorMessage =  "Start date cannot be empty"
                 isError = true
-
             }
-            else if (selectedEndDate.isNotBlank() && selectedEndDate < selectedStartDate) {
+            if (selectedEndDate.isNotBlank() && selectedEndDate < selectedStartDate) {
                 errorMessage = "End date cannot be earlier than start date"
                 isError = true
-
             }
-            else {
-                isError =false
-                errorMessage =""
-                viewModel.buildAndSendMedication(medicationchoose, medicationName)
-                navigator.pop()
-                return true
+                else {
+                    isError =false
+                    errorMessage =""
+                    viewModel.buildAndSendMedication(medicationchoose, medicationName)
+                    navigator.pop()
+                    return true
+                }
+                return false
             }
-            return false
-
-        }
 
 
         BaseScreen(
@@ -85,7 +81,7 @@ class MedicationAlarmScreen () : Screen {
             onPrevClick = { navigator.pop() },
             onNextClick= { validateInput() },
             prevButtonText = stringResource(Resources.String.back),
-            nextButtonText= stringResource(Resources.String.save),
+            nextButtonText = stringResource(Resources.String.save),
         )
         {
             Column(

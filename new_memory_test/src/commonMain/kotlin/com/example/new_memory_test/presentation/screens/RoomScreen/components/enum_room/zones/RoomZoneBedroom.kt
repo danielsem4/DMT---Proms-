@@ -8,6 +8,5 @@ enum class RoomZoneBedroom (override val displayName: String) : RoomZone {
     Wardrobe("Wardrobe"),
     Bed("Bed"),
     BedsideTable("BedsideTable"),
-    ChestUnderFrames("ChestUnderFrames"),
     Other("Other")
 }

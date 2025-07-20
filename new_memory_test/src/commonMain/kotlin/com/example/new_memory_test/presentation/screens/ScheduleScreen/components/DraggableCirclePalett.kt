@@ -25,6 +25,7 @@ fun DraggableCirclesPalet(
         horizontalArrangement = Arrangement.SpaceAround,
         modifier = Modifier.fillMaxWidth()
     ) {
+        //circle that need to dragable
         circles.forEach { circle ->
             DraggableItem(
                 state = dragAndDropState,

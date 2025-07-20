@@ -48,12 +48,14 @@ class MemoryScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = koinViewModel()
+        viewModel.reset()
 
         //create at evaluetion memory
         LaunchedEffect(Unit){
             viewModel.loadEvaluation("Memory")
         }
 
+        //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
         BaseTabletScreen(title = stringResource(Resources.String.memory_title), page = 1, totalPages =6 ){
 

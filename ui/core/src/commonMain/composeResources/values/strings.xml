@@ -55,11 +55,12 @@
     <string name="pass">Pass</string>
 
     <string name="done">Done</string>
-
+    <string name="error_start_date_empty">Start date cannot be empty</string>
+    <string name="error_end_before_start">End date cannot be earlier than start date</string>
     <string name="no_evaluation_object_to_display">No evaluation object to display.</string>
 
     <string name="uploading">Uploading</string>
-
+    "\n"
     //Medications
     <string name="select_date">Select a date</string>
     <string name="empty_string"> </string>
@@ -79,6 +80,10 @@
     <string name="select_date_label">Select Date</string>
     <string name="select_time_label">Select Time</string>
     <string name="search_hint">search...</string>
+    <string name="took">I took </string>
+    <string name="dateMedications">Date: </string>
+    <string name="timeMedications">Time: </string>
+
 
     <string name="report_medication">Report medication</string>
     <string name="set_medication_alarm">Set medication alarm</string>

@@ -532,6 +532,11 @@ import dmt_proms.ui.core.generated.resources. second_one_minute_end_body_memory
 import dmt_proms.ui.core.generated.resources.time_ended
 import dmt_proms.ui.core.generated.resources.time_ended_for_this_question_memory
 import dmt_proms.ui.core.generated.resources.please_place_all_activities_memory
+import dmt_proms.ui.core.generated.resources.dateMedications
+import dmt_proms.ui.core.generated.resources.took
+import dmt_proms.ui.core.generated.resources.timeMedications
+import dmt_proms.ui.core.generated.resources.error_start_date_empty
+import dmt_proms.ui.core.generated.resources.error_end_before_start
 
 /**
  * Resources used in the application.
@@ -724,6 +729,10 @@ object Resources {
         val howDoYouFeel = rs.how_do_you_feel
         val evaluationText = rs.evaluation
 
+        val took =rs.took
+        val dateMedications = rs.dateMedications
+        val timeMedications = rs.timeMedications
+
         val areYouSure = Res.string.are_you_sure
         val backConfirmationMessage = Res.string.back_confirmation_message
 
@@ -741,7 +750,8 @@ object Resources {
         val serializationError = rs.serialization_error
         val remoteUnknown = rs.remote_unknown
         val unexpectedError = rs.unexpected_error
-
+        val error_start_date_empty =rs.error_start_date_empty
+        val error_end_before_start =rs.error_end_before_start
 
         val exit = Res.string.exit
         val `continue` = Res.string.`continue`

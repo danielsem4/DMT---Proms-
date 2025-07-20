@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentaion.components
+package org.example.hit.heal.presentation.medication.presentaion.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -21,7 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.new_memory_test.primaryColor
+import org.example.hit.heal.core.presentation.primaryColor
 
 
 @OptIn(ExperimentalMaterialApi::class)

@@ -1,23 +1,15 @@
 package com.example.new_memory_test.presentation.screens
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -26,10 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,27 +28,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
-import core.utils.ObserveLifecycle
 import core.utils.RegisterBackHandler
-
 import org.example.hit.heal.core.presentation.FontSize.LARGE
-import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.end
 import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.sentSuccessfully
 import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe
-import org.example.hit.heal.core.presentation.Resources.String.thanksVocalPass
 import org.example.hit.heal.core.presentation.Resources.String.unexpectedError
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
-import org.example.hit.heal.core.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
-import org.example.hit.heal.core.presentation.utils.animations.AudioPlayingAnimation
 import org.example.hit.heal.core.presentation.utils.animations.SuccessAnimation
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -75,8 +57,7 @@ class FinalScreenMemoryTest : Screen {
         val successMessage = stringResource(sentSuccessfully)
         val unexpectedErrorMessage = stringResource(unexpectedError)
 
-
-
+        //Check if upload is done
         LaunchedEffect(uploadStatus) {
             uploadStatus?.let { result ->
                 result.onSuccess {
@@ -87,6 +68,7 @@ class FinalScreenMemoryTest : Screen {
             }
         }
 
+        //Upload all Images
         LaunchedEffect(Unit) {
             viewModel.uploadAllImages()
         }
@@ -142,6 +124,7 @@ class FinalScreenMemoryTest : Screen {
 
                 }
             },
+            //For  result in the end
             snackbarHost = {
                 SnackbarHost(hostState = snackbarHostState) { data ->
                     Snackbar(modifier = Modifier.padding(paddingSm)) {

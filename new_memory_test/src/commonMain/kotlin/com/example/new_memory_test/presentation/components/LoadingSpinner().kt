@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+//Loading spinner(  for loading to server in finaleScreen or RoomScreen)
 @Composable
 fun LoadingSpinner() {
     Box(

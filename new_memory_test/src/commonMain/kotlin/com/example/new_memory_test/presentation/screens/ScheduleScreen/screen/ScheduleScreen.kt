@@ -72,6 +72,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = koinViewModel()
+        //Schedule
         val days = listOf(
             stringResource(Resources.String.day_sunday),
             stringResource(Resources.String.day_monday),
@@ -79,7 +80,6 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
             stringResource(Resources.String.day_wednesday),
             stringResource(Resources.String.day_thursday)
         )
-
         val hours = listOf(
             stringResource(Resources.String.hour_09_00),
             stringResource(Resources.String.hour_10_00),
@@ -91,10 +91,10 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
             stringResource(Resources.String.hour_16_00)
         )
 
+        val dragAndDropState = rememberDragAndDropState<DraggableCircle>()
         val droppedState = remember {
             mutableStateOf<Map<String, DraggableCircle>>(emptyMap())
         }
-
         val circlesPalletFirst = listOf(
             DraggableCircle(
                 stringResource(Resources.String.book_circle),
@@ -130,19 +130,47 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
             stringResource(Resources.String.lecturer_circle) to stringResource(Resources.String.lecturer_circle_text),
             stringResource(Resources.String.coffee_circle)  to stringResource(Resources.String.coffee_circle_text),
             stringResource(Resources.String.stethoscope_circle) to stringResource(Resources.String.stethoscope_circle_text)
-        )
-        val dragAndDropState = rememberDragAndDropState<DraggableCircle>()
-        var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
+        ) // information depend of witch circle use
         val usedCircleIds = remember { mutableStateListOf<String>() }
+        val selectedItemText = remember { mutableStateOf<String?>(null) }
+
+        //Create Image
+        var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
+
+        //Update selected item if used
+        LaunchedEffect(dragAndDropState.draggedItem) {
+            val item = dragAndDropState.draggedItem?.data
+            selectedItemText.value = item?.let { idToTextMap[it.id] }
+        }
+
+        //Dialog of place all Items
+        var showAcceptDialog by remember { mutableStateOf(false) }
+        if (showAcceptDialog) {
+            CustomDialog(
+                onDismiss = { showAcceptDialog = false },
+                icon = {
+                    Icon(
+                        Icons.Default.ThumbUp,
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(40.dp)
+                    )
+                },
+                title = stringResource(Resources.String.build_schedule),
+                description = stringResource(Resources.String.please_place_all_activities_memory),
+                buttons = listOf(
+                    stringResource(Resources.String.next) to {
+                        showAcceptDialog = false
+                    }
+                )
+            )
+        }
 
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
-
         BaseTabletScreen( stringResource(Resources.String.build_schedule), page = pageNumber, totalPages = 6) {
-
             DragAndDropContainer(state = dragAndDropState) {
             capturable = platformCapturable(
-
-
+                //Save Screen like Image
                 onCaptured = { imageBitmap ->
                     val timestamp = getCurrentFormattedDateTime()
                     viewModel.imageUrl.value = viewModel.imageUrl.value.plus(imageBitmap)
@@ -154,6 +182,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
 
                 Column {
 
+                    //-------------------Days in the Top
                     Row(
                         modifier = Modifier
                             .weight(0.08f)
@@ -169,6 +198,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                 .background(Color.White),
                             horizontalArrangement = Arrangement.spacedBy(5.dp)
                         ) {
+
                             days.reversed().forEach { day ->
                                 Box(
                                     modifier = Modifier
@@ -191,6 +221,8 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                         }
                         Spacer(modifier = Modifier.weight(0.4f))
                     }
+
+                    //-------------------Schedule box with 40 Items
                     Row(
                         modifier = Modifier
                             .weight(0.7f)
@@ -211,15 +243,16 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                     .padding(vertical = 15.dp)
                             ) {
                                 Column {
+                                    //Create Id for box , that depends on day and hour (for 40 boxes)
                                     for (hour in listOf(
-                                        "09",
-                                        "10",
-                                        "11",
-                                        "12",
-                                        "13",
-                                        "14",
-                                        "15",
-                                        "16"
+                                        stringResource(Resources.String.hour_09_00),
+                                        stringResource(Resources.String.hour_10_00),
+                                        stringResource(Resources.String.hour_11_00),
+                                        stringResource(Resources.String.hour_12_00),
+                                        stringResource(Resources.String.hour_13_00),
+                                        stringResource(Resources.String.hour_14_00),
+                                        stringResource(Resources.String.hour_15_00),
+                                        stringResource(Resources.String.hour_16_00),
                                     )) {
                                         Row(
                                             modifier = Modifier
@@ -246,6 +279,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                         }
                         Spacer(modifier = Modifier.size(7.dp))
 
+                        //--------------------- Instructions of exam
                         Column(
                             modifier = Modifier
                                 .weight(0.1f)
@@ -282,7 +316,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                             }
                             Spacer(modifier = Modifier.size(5.dp))
                         }
-
+                        //
                         Column(
                             modifier = Modifier
                                 .weight(0.3f)
@@ -307,12 +341,8 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                     modifier = Modifier.padding(bottom = 16.dp)
                                 )
                             }
-                            val selectedItemText = remember { mutableStateOf<String?>(null) }
-                            LaunchedEffect(dragAndDropState.draggedItem) {
-                                val item = dragAndDropState.draggedItem?.data
-                                selectedItemText.value = item?.let { idToTextMap[it.id] }
-                            }
 
+                            //-----------------Instructions only for item
                             Spacer(modifier = Modifier.height(20.dp))
                             Box(
                                 modifier = Modifier
@@ -341,6 +371,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                 }
                             }
 
+                            //-----------------Two rows of draggable circle (palet)
                             Row(
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
@@ -373,7 +404,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                 )
                             }
 
-                            var showAcceptDialog by remember { mutableStateOf(false) }
+                            //-----------------Button next
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
@@ -386,10 +417,10 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                         val allCircleIds =
                                             (circlesPalletFirst + circlesPalletSecond).map { it.id }
                                         val unused = allCircleIds.filterNot { it in usedCircleIds }
-                                        if (unused.isNotEmpty()) {
+                                        if (unused.isNotEmpty()) { //if there is unused circles
                                             showAcceptDialog = true
                                         } else {
-
+                                            //Screenshot and save in view model
                                             capturable?.capture?.invoke()
                                             val agenda =
                                                 droppedState.value.mapValues { it.value.id }
@@ -414,34 +445,13 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                     )
                                 }
                             }
-                            if (showAcceptDialog) {
-                                CustomDialog(
-                                    onDismiss = { showAcceptDialog = false },
-                                    icon = {
-                                        Icon(
-                                            Icons.Default.ThumbUp,
-                                            contentDescription = null,
-                                            tint = Color.White,
-                                            modifier = Modifier.size(40.dp)
-                                        )
-                                    },
-                                    title = stringResource(Resources.String.build_schedule),
-                                    description = stringResource(Resources.String.please_place_all_activities_memory),
-                                    buttons = listOf(
-                                        stringResource(Resources.String.next) to {
-                                            showAcceptDialog = false
-                                        }
-                                    )
-                                )
-                            }
-
 
                         }
                     }
                 }
-                    }
-                }
             }
+            }
+        }
         }
         RegisterBackHandler(this)
         {

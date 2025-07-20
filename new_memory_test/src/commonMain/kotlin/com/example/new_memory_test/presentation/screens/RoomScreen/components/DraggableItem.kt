@@ -1,5 +1,4 @@
 package com.example.new_memory_test.presentation.screens.RoomScreen.components
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -38,13 +37,15 @@ fun DraggableItem(
     isOnRoom: Boolean = false,
     roomPosition: Offset = Offset.Zero
 ) {
-    var offset by remember { mutableStateOf(Offset.Zero) }
+    var offset by remember { mutableStateOf(Offset.Zero) }// drag in position 0
     var dragging by remember { mutableStateOf(false) }
     var itemPosition by remember { mutableStateOf(Offset.Zero) }
 
+    //If the item is not on the room, but already placed, do not place it again
     if (!isOnRoom && placedItems.any { it.id == id }) return
 
-    // если предмет размещён, его смещение = сохранённая позиция
+
+    //if item in room - it need a position
     if (isOnRoom) {
         val placedItem = placedItems.find { it.id == id }
         if (placedItem != null) {
@@ -54,16 +55,17 @@ fun DraggableItem(
 
     Box(
         modifier = Modifier
-            .onGloballyPositioned { coordinates ->
+            .onGloballyPositioned { coordinates -> //box has a logic of dragging
                 itemPosition = coordinates.localToWindow(Offset.Zero)
             }
             .offset { IntOffset(offset.x.roundToInt(), offset.y.roundToInt()) }
             .size(80.dp)
             .pointerInput(Unit) {
-                detectDragGestures(
+                detectDragGestures( //understand what is drag (and that i am dragging )
                     onDragStart = { dragging = true },
                     onDragEnd = {
                         dragging = false
+                        //Change a "location of item
                         val globalOffset = Offset(
                             itemPosition.x + offset.x,
                             itemPosition.y + offset.y
@@ -76,7 +78,7 @@ fun DraggableItem(
                     }
                 )
             }
-            .zIndex(if (isOnRoom) 2f else 1f)
+            .zIndex(if (isOnRoom) 2f else 1f) // Need that  sometimies items will be invisible (in changing room  - for this 2f)
     ) {
         Image(
             painter = painterResource(imageRes),

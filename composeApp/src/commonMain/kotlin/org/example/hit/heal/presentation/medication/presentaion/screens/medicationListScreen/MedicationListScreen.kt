@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -26,17 +25,13 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.Medications.Medication
-
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
-import org.example.hit.heal.presentaion.screens.medicationListScreen.components.ReportMedicationDialog
-
-import org.example.hit.heal.presentaion.components.SearchBar
-import org.example.hit.heal.presentaion.screens.MedicationViewModel.MedicationViewModel
-
-
-import org.example.hit.heal.presentaion.screens.medicationAlarm.MedicationAlarmScreen
+import org.example.hit.heal.presentation.medication.presentaion.components.SearchBar
+import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
+import org.example.hit.heal.presentation.medication.presentaion.screens.medicationAlarm.MedicationAlarmScreen
+import org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.components.ReportMedicationDialog
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -59,7 +54,7 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
 
         val keyboardController = LocalSoftwareKeyboardController.current
         var searchQuery by remember { mutableStateOf("") }
-        val isLoading by viewModel.isLoading
+
 
         val userInf = remember { mutableStateOf<Pair<Int, Int>?>(null) }
         val medications: List<Medication> = viewModel.medications.value
@@ -112,7 +107,7 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
                                         showDialog = true
                                         viewModel.setMedicationName(medication.name)
                                     } else {
-                                        navigator.push(MedicationAlarmScreen())
+                                        navigator.push(MedicationAlarmScreen(medication))
                                     }
                                 }
                                 .clip(RoundedCornerShape(15.dp))
@@ -123,8 +118,8 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(start = 16.dp), // отступ слева
-                                contentAlignment = Alignment.CenterStart // по центру вертикали и слева по горизонтали
+                                    .padding(start = 16.dp),
+                                contentAlignment = Alignment.CenterStart
                             ) {
                                 Text(
                                     text = medication.name,

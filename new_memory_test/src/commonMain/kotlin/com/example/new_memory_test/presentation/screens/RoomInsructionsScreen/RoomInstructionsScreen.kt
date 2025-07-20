@@ -1,5 +1,4 @@
 package com.example.new_memory_test.presentation.screens.RoomInsructionsScreen
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -43,7 +42,6 @@ import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import core.utils.RegisterBackHandler
-import org.example.hit.heal.core.presentation.FontSize
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.White
@@ -60,7 +58,7 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
         var selectedRoom by remember { mutableStateOf(Room.Bedroom) }
         val roomButtons = Room.values().toList()
 
-
+       //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             BaseTabletScreen(
                 title = stringResource(Resources.String.room_title),
@@ -108,6 +106,7 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
                                 .weight(0.4f),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
+                            //can change images with buttons
                             roomButtons.forEach { room ->
                                 val isSelected = selectedRoom == room
                                 Button(

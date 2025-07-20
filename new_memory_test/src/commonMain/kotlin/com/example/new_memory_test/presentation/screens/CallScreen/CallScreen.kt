@@ -46,6 +46,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.audioMemory
+import org.example.hit.heal.core.presentation.Resources.String.old_phone_ring
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
 import org.koin.compose.viewmodel.koinViewModel
@@ -60,9 +61,10 @@ class CallScreen(val pageNumber: Int )  : Screen {
         var showAcceptDialog by remember { mutableStateOf(false) }
         val viewModel: ViewModelMemoryTest = koinViewModel()
 
-        val audioUrl = stringResource(audioMemory)
+        val audioUrl = stringResource(old_phone_ring)
         var isAudioClicked by remember { mutableStateOf(true) }
 
+        //Use audio (check resourses) - must started after open and stop in button
         LaunchedEffect(isAudioClicked) {
             if (isAudioClicked) {
                 audioUrl.let {
@@ -71,6 +73,8 @@ class CallScreen(val pageNumber: Int )  : Screen {
                 }
             }
         }
+
+        //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
         BaseTabletScreen(title = stringResource(Resources.String.incoming_call_title), page = pageNumber, totalPages = 6) {
 
@@ -130,11 +134,12 @@ class CallScreen(val pageNumber: Int )  : Screen {
                         modifier = Modifier.Companion.size(120.dp),
                         contentAlignment = Alignment.Companion.Center
                     ) {
+
+                        //Create animation for accept
                         RipplePulseEffect(
                             modifier = Modifier.Companion.fillMaxSize(),
                             color = primaryColor
                         )
-
                         CircleWithPipeImage(
                             imagePainter = painterResource(resource = Resources.Icon.callAccept),
                             color = primaryColor,
@@ -151,6 +156,8 @@ class CallScreen(val pageNumber: Int )  : Screen {
                         modifier = Modifier.Companion.size(120.dp),
                         contentAlignment = Alignment.Companion.Center
                     ) {
+
+                        //Create animation for decline
                         RipplePulseEffect(
                             modifier = Modifier.Companion.fillMaxSize(),
                             color = Color.Companion.Red
@@ -170,6 +177,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
             }
         }
 
+            //Dialog after accept
         if (showAcceptDialog) {
             CustomDialog(
                 onDismiss = { showAcceptDialog = false },

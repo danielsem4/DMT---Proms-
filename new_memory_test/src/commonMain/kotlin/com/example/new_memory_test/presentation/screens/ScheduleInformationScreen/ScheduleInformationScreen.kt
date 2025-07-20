@@ -31,17 +31,20 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import com.example.new_memory_test.presentation.screens.ScheduleInformationScreen.components.ActivityItem
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.screen.ScheduleScreen
+import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+
 class ScheduleInformationScreen(val pageNumber: Int) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
+        //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
         BaseTabletScreen(title = stringResource(Resources.String.build_schedule), page = pageNumber, totalPages = 6) {
             Column(
@@ -61,7 +64,7 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-
+                //Only text + image (instruction)
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(16.dp))
@@ -118,7 +121,10 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
                 }
             }
         }
-
+            RegisterBackHandler(this)
+            {
+                navigator.popUntilRoot()
+            }
 
 
         }

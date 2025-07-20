@@ -1,12 +1,9 @@
-package org.example.hit.heal.presentaion.screens.medicationListScreen.components
+package org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.components
 
-
-import org.example.hit.heal.presentaion.screens.MedicationViewModel.MedicationViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,22 +24,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.data.model.Medications.Medication
-
-
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.pills
-import network.chaintech.kmp_date_time_picker.ui.datepicker.WheelDatePickerView
-import network.chaintech.kmp_date_time_picker.ui.timepicker.WheelTimePickerView
-import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
-import network.chaintech.kmp_date_time_picker.utils.WheelPickerDefaults
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -56,9 +47,10 @@ fun ReportMedicationDialog(
     onDismiss: () -> Unit,
     viewModel: MedicationViewModel = koinViewModel()
 ) {
-    var showDialog by remember { mutableStateOf(true) }
+
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
+
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -88,7 +80,12 @@ fun ReportMedicationDialog(
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "I took $medicationName on:\nDate: ${viewModel.selectedDate}\nTime :${viewModel.selectedTime}",
+                    buildString {
+                        appendLine(stringResource(Resources.String.took))
+                        appendLine(medicationName)
+                        appendLine("${stringResource(Resources.String.dateMedications)} ${viewModel.selectedDate}")
+                        append("${stringResource(Resources.String.timeMedications)} ${viewModel.selectedTime}")
+                    },
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
                     color = Color.Black
@@ -125,6 +122,7 @@ fun ReportMedicationDialog(
             }
         }
     )
+
 
     if (showDatePicker) {
         DatePicker(

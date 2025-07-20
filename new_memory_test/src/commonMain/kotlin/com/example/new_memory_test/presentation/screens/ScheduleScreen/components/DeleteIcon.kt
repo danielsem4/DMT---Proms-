@@ -10,6 +10,8 @@ import org.example.hit.heal.core.presentation.Resources
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+
+
 @Composable
 fun DeleteIcon(
     onClick: () -> Unit,

@@ -1,5 +1,4 @@
 package com.example.new_memory_test.presentation.components.dialogs
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,11 +21,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarHalf
 import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material.icons.outlined.StarHalf
-import androidx.compose.material.icons.rounded.StarHalf
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,13 +34,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
-import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources
-import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
-import kotlinx.coroutines.delay
+
+
+
+
 @Composable
 fun RatingDialog(
     rating: Float,
@@ -53,6 +49,7 @@ fun RatingDialog(
     onSubmit: () -> Unit
 ) {
 
+    // Set the layout direction to RTL (Right-to-Left)
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
     Dialog(onDismissRequest = onDismiss) {
         Box(
@@ -122,6 +119,8 @@ fun RatingDialog(
                         color = Color.Gray
                     )
                     Spacer(modifier = Modifier.height(16.dp))
+
+                    //Icons of starts
                     Row(horizontalArrangement = Arrangement.Center) {
                         for (i in 1..5) {
                             val icon = when {

@@ -101,7 +101,11 @@
     <string name="start_date">תאריך התחלה</string>
     <string name="end_date">תאריך סיום</string>
     <string name="leave_end_date_empty">השאר ריק אם אינך רוצה תאריך סיום</string>
-
+    <string name="took">  לקחתי</string>
+    <string name="dateMedications">תאריך: </string>
+    <string name="timeMedications">שעה: </string>
+    <string name="error_start_date_empty">תאריך התחלה לא יכול להיות ריק</string>
+    <string name="error_end_before_start">תאריך סיום לא יכול להיות לפני תאריך ההתחלה</string>
     <!--    CDT Module  -->
 
 

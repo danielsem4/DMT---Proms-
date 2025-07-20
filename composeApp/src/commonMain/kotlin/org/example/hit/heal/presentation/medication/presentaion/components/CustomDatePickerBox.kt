@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentaion.components
+package org.example.hit.heal.presentation.medication.presentaion.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,13 +22,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-import com.example.new_memory_test.primaryColor
 import kotlinx.datetime.LocalDate
 import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
 import network.chaintech.kmp_date_time_picker.utils.now
-import org.example.hit.heal.core.presentation.Resources
-import org.jetbrains.compose.resources.stringResource
+import org.example.hit.heal.core.presentation.primaryColor
 import network.chaintech.kmp_date_time_picker.ui.datepicker.WheelDatePickerView as WheelDatePickerView
 
 @Composable

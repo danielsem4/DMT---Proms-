@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentaion.screens.medicationAlarm.components
+package org.example.hit.heal.presentation.medication.presentaion.screens.medicationAlarm.components
 
 fun generateTimeSlots(): List<String> {
     val timeSlots = mutableListOf<String>()

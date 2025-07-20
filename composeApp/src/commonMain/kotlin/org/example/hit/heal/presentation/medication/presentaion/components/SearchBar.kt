@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentaion.components
+package org.example.hit.heal.presentation.medication.presentaion.components
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,8 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.new_memory_test.primaryColor
+
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 
 

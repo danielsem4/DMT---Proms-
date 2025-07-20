@@ -1,7 +1,5 @@
-package org.example.hit.heal.presentaion.screens.mainMedication
-
+package org.example.hit.heal.presentation.medication.presentaion.screens.mainMedication
 import MedicationListScreen
-import org.example.hit.heal.presentaion.screens.MedicationViewModel.MedicationViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,6 +30,7 @@ import dmt_proms.composeapp.generated.resources.pills
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -42,9 +41,9 @@ class MainMedicationScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinViewModel<MedicationViewModel>()
-        LaunchedEffect(Unit){
-            viewModel.loadEvaluation("medications")
-        }
+            //  LaunchedEffect(Unit){
+      //      viewModel.loadEvaluation("medications")
+                //  }
         BaseScreen(
             title = stringResource(Resources.String.medications),
             config = ScreenConfig.PhoneConfig,

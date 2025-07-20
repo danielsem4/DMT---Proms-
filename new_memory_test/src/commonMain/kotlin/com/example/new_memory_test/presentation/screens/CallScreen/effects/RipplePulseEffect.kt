@@ -20,13 +20,16 @@ import androidx.compose.ui.graphics.graphicsLayer
 fun RipplePulseEffect(
     modifier: Modifier = Modifier,
     color: Color = Color.Red,
-    pulseCount: Int = 2 // количество волн
+    pulseCount: Int = 2  //2 Ripples (2 waves)
 ) {
+
+    //function that craete animation infinity?!
     val infiniteTransition = rememberInfiniteTransition()
 
 
+    //for rippeeling buttons in CallScreen
     val animations = List(pulseCount) { index ->
-        val delayMillis = index * 600 // сдвиг между волнами
+        val delayMillis = index * 600 //delay between ripples
         infiniteTransition.animateFloat(
             initialValue = 0f,
             targetValue = 1f,
@@ -40,8 +43,8 @@ fun RipplePulseEffect(
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         animations.forEach { anim ->
             val progress = anim.value
-            val scale = 1f + progress * 1.5f
-            val alpha = 1f - progress
+            val scale = 1f + progress * 1.5f// Do bigger
+            val alpha = 1f - progress //do more transperent
 
             Box(
                 modifier = Modifier

@@ -16,6 +16,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 
+
+// Big buttons for Call Screen
 @Composable
 fun CircleWithPipeImage(
     modifier: Modifier = Modifier.size(150.dp),

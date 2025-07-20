@@ -1,7 +1,7 @@
 package org.example.hit.heal.di
 
 
-import org.example.hit.heal.presentaion.screens.MedicationViewModel.MedicationViewModel
+
 import com.example.new_memory_test.di.MemoryModule
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import core.di.AudioModule
@@ -18,6 +18,7 @@ import org.example.hit.heal.presentation.evaluation.EvaluationsViewModel
 
 import org.example.hit.heal.presentation.home.HomeViewModel
 import org.example.hit.heal.presentation.login.LoginViewModel
+import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
 import org.example.hit.heal.presentation.splash.SplashViewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
