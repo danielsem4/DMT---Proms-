@@ -37,3 +37,4 @@ include(":pass")
 
 include(":clock_test")
 include(":oriantation")
+include(":new_memory_test")
