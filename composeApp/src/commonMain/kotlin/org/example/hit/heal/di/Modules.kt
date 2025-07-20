@@ -12,6 +12,7 @@ import org.example.hit.heal.presentation.activities.ActivitiesViewModel
 import org.example.hit.heal.presentation.evaluation.EvaluationTestViewModel
 import org.example.hit.heal.presentation.evaluation.EvaluationsViewModel
 
+import org.example.hit.heal.oriantation.di.ORIENTATION_module
 import org.example.hit.heal.presentation.home.HomeViewModel
 import org.example.hit.heal.presentation.login.LoginViewModel
 import org.example.hit.heal.presentation.splash.SplashViewModel
@@ -53,4 +54,5 @@ val sharedModules = module {
     viewModelOf(::EvaluationsViewModel)
     viewModelOf(::EvaluationTestViewModel)
     includes(CDT_module)
+    includes(ORIENTATION_module)
 }

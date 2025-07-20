@@ -36,3 +36,4 @@ include(":pass")
 
 
 include(":clock_test")
+include(":oriantation")

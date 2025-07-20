@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+
+    <string name="entry_Oriantation_title">Orientation</string>
+    <string name="entry_Oriantation_welcome_note">Welcome</string>
+    <string name="entry_Oriantation_instructions">You have a short experience using the tablet. Try to follow the instructions and perform</string>
+    <string name="entry_Oriantation_button_text">Next</string>
+
+    <string name="sec_question_title">Dropdown Menu</string>
+    <string name="sec_question_instraction">Now please select the number 4 and then press the Next button</string>
+    <string name="sec_question_number">The number currently selected is</string>
+
+    <string name="entry_instructions_app_trial">You have a short experience using the tablet. Try to follow the instructions and perform</string>
+    <string name="dropdown_instructions_app_trial">Now, please select the number 4 and then press the "Next" button</string>
+    <string name="season_winter">winter</string>
+    <string name="season_summer">summer</string>
+    <string name="season_spring">spring</string>
+    <string name="season_autumn">autumn</string>
+    <string name="seasons_instructions_app_trial">There are 4 buttons showing the seasons. We are on Autumn, please change the season to Summer</string>
+    <string name="trial_drag_instructions">There are several shapes. You need to drag the triangle into the red square on the left</string>
+
+    <string name="trial_pinch_instructions">Now, you need to enlarge the triangle by spreading two fingers on the shape</string>
+
+    <string name="seasons_instructions_app_trial2">Now, change the season to Winter</string>
+    <string name="trial_draw_instructions">Please draw an X shape</string>
+    <string name="trial_end_test_instructions">The trial is over. Thank you very much for your cooperation</string>
+    <string name="edit_text_dialog_instruction">Please write in the box below what you think about the task. To close the keyboard, press the keyboard image. When finished, press the X button</string>
+
+    <string name="you_in_the_summer">You are currently in the Summer season</string>
+    <string name="you_in_the_winter">You are currently in the Winter season</string>
+    <string name="you_in_the_spring">You are currently in the Spring season</string>
+    <string name="you_in_the_autumn">You are currently in the Autumn season</string>
+    <string name="vocal_instructions">Voice Instructions</string>
+
+    <string name="dropdown_selected_number">The number currently selected is:</string>
+
+    <string name="set_health_rate"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fvocal_instruction_trial.mp3?alt=media&token=ede5447f-bd0b-4411-9bfb-09f6bbdf2e27]]></string>
+
+
+</resources>

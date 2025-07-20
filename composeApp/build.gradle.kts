@@ -49,6 +49,7 @@ kotlin {
             implementation(projects.hitber)
             implementation(projects.ui.core)
             implementation(projects.core)
+            implementation(projects.oriantation)
             implementation(projects.clockTest)
             implementation(projects.pass)
 
@@ -71,9 +72,8 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.transitions)
-
+            implementation(libs.voyager.tabNavigator)
             // Basic Navigation
-            implementation(libs.navigation.compose)
 
             implementation (libs.navigator)
             implementation (libs.navigator.tabs)
@@ -88,17 +88,15 @@ kotlin {
             implementation(libs.font.awesome)
             implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization) // for data serialization
-
+            implementation(compose.materialIconsExtended)
+            implementation(libs.font.awesome)
             implementation(libs.datastore.preferences)
             implementation(libs.datastore)
-
-            implementation(libs.voyager.navigator)
-            implementation(libs.voyager.tabNavigator)
-            implementation(libs.voyager.transitions)
 
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+
 
             implementation(libs.coil.compose)
 

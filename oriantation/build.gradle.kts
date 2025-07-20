@@ -1,5 +1,5 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -8,21 +8,20 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
 }
-
 kotlin {
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
-    }
 
+    }
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "orientation"
             isStatic = true
         }
     }
@@ -31,20 +30,9 @@ kotlin {
 
     sourceSets {
         val desktopMain by getting
-
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
-
-            implementation(libs.koin.android)
-            implementation(libs.koin.androidx.compose)
-            implementation(libs.kmp.capturable.compose)
-
-            implementation(libs.ktor.client.okhttp)
-        }
         commonMain.dependencies {
             implementation(projects.ui.core)
-
+            implementation(projects.core)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -56,10 +44,6 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
 
-            implementation (libs.navigator)
-            implementation (libs.navigator.tabs)
-            implementation (libs.navigator.transitions)
-
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -67,34 +51,31 @@ kotlin {
 
             implementation(libs.navigation.compose)
 
-            implementation(libs.coil.compose)
-            implementation(libs.atomicfu)
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.tabNavigator)
+            implementation(libs.voyager.transitions)
+        }
+        androidMain.dependencies {
+            implementation(compose.preview)
+            implementation(libs.androidx.activity.compose)
 
-            implementation(libs.datastore.preferences)
-            implementation(libs.datastore)
-            // DateTime
-            implementation(libs.kotlinx.datetime)
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
 
+            implementation(libs.ktor.client.okhttp)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
-            implementation(libs.compose.ui.graphics)
-            implementation(libs.kmp.capturable.compose)
         }
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
-            implementation(compose.desktop.common)
-            implementation(libs.ktor.client.okhttp)
         }
-    }
 }
-
 android {
-    namespace = "org.example.hit.heal.core"
+    namespace = "org.example.hit.heal.oriantation"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
+
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
+
     }
     packaging {
         resources {
@@ -111,21 +92,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
-
 dependencies {
-    implementation(libs.androidx.runtime.livedata)
-    implementation(libs.play.services.cast.framework)
-    debugImplementation(compose.uiTooling)
-}
-
-compose.desktop {
-    application {
-        mainClass = "org.example.hit.heal.MainKt"
-
-        nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.hit.heal"
-            packageVersion = "1.0.0"
-        }
-    }
+    implementation(libs.ui.graphics.android)
 }
