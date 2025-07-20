@@ -33,6 +33,9 @@ import dmt_proms.oriantation.generated.resources.entry_Oriantation_instructions
 import dmt_proms.oriantation.generated.resources.entry_Oriantation_title
 import dmt_proms.oriantation.generated.resources.entry_Oriantation_welcome_note
 import kotlinx.serialization.json.JsonNull.content
+import org.example.hit.heal.core.presentation.Resources.String.entryOrientationInstructions
+import org.example.hit.heal.core.presentation.Resources.String.entryOrientationTitle
+import org.example.hit.heal.core.presentation.Resources.String.entryOrientationWelcomeNote
 import org.jetbrains.compose.resources.stringResource
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
@@ -44,7 +47,7 @@ class OriantationWelcomeScreen: Screen {
         val navigator = LocalNavigator.current
         val viewModel: OrientationTestViewModel = koinViewModel()
         TabletBaseScreen(
-            title = (stringResource(string.entry_Oriantation_title)),
+            title =stringResource(entryOrientationTitle) ,
             question = 1,
             onNextClick = { navigator?.push(NumberSelectScreen(viewModel)) },
             content = {
@@ -59,7 +62,7 @@ class OriantationWelcomeScreen: Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = (stringResource(string.entry_Oriantation_welcome_note)),
+                        text = (stringResource(entryOrientationWelcomeNote)),
                         style = MaterialTheme.typography.h4.copy(fontSize = 32.sp),
                         color = Color(0xFF4EC3AF) // Use your primary color
                     )
@@ -82,7 +85,7 @@ class OriantationWelcomeScreen: Screen {
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = (stringResource(string.entry_Oriantation_instructions)),
+                                text = (stringResource(entryOrientationInstructions)),
                                 color = Color(0xFF4EC3AF), // Green text
                                 textAlign = TextAlign.Center,
                                 style = MaterialTheme.typography.body1.copy(fontSize = 24.sp)

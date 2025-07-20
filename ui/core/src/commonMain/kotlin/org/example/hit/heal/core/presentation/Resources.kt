@@ -89,6 +89,9 @@ import dmt_proms.ui.core.generated.resources.done
 import dmt_proms.ui.core.generated.resources.dont_forget
 import dmt_proms.ui.core.generated.resources.drop_down
 import dmt_proms.ui.core.generated.resources.drop_up
+import dmt_proms.ui.core.generated.resources.dropdown_instructions_app_trial
+import dmt_proms.ui.core.generated.resources.dropdown_selected_number
+import dmt_proms.ui.core.generated.resources.edit_text_dialog_instruction
 import dmt_proms.ui.core.generated.resources.eighth_question_answer_hitber_version_1
 import dmt_proms.ui.core.generated.resources.eighth_question_answer_hitber_version_2
 import dmt_proms.ui.core.generated.resources.eighth_question_answer_hitber_version_3
@@ -106,6 +109,10 @@ import dmt_proms.ui.core.generated.resources.elipsa_outlined
 import dmt_proms.ui.core.generated.resources.email
 import dmt_proms.ui.core.generated.resources.empty_pass
 import dmt_proms.ui.core.generated.resources.end
+import dmt_proms.ui.core.generated.resources.entry_Oriantation_button_text
+import dmt_proms.ui.core.generated.resources.entry_Oriantation_instructions
+import dmt_proms.ui.core.generated.resources.entry_Oriantation_title
+import dmt_proms.ui.core.generated.resources.entry_Oriantation_welcome_note
 import dmt_proms.ui.core.generated.resources.entry_hitber_good_luck
 import dmt_proms.ui.core.generated.resources.entry_hitber_instructions1
 import dmt_proms.ui.core.generated.resources.entry_hitber_instructions2
@@ -116,6 +123,7 @@ import dmt_proms.ui.core.generated.resources.entry_hitber_instructions6
 import dmt_proms.ui.core.generated.resources.entry_hitber_instructions7
 import dmt_proms.ui.core.generated.resources.entry_hitber_note
 import dmt_proms.ui.core.generated.resources.entry_hitber_title
+import dmt_proms.ui.core.generated.resources.entry_instructions_app_trial
 import dmt_proms.ui.core.generated.resources.error_icon
 import dmt_proms.ui.core.generated.resources.evaluation
 import dmt_proms.ui.core.generated.resources.exclamation_mark
@@ -123,6 +131,9 @@ import dmt_proms.ui.core.generated.resources.exercise
 import dmt_proms.ui.core.generated.resources.exit
 import dmt_proms.ui.core.generated.resources.eye
 import dmt_proms.ui.core.generated.resources.family_doctor_pass
+import dmt_proms.ui.core.generated.resources.feeling_rate_mid
+import dmt_proms.ui.core.generated.resources.feeling_rate_no_pain
+import dmt_proms.ui.core.generated.resources.feeling_rate_pain
 import dmt_proms.ui.core.generated.resources.file_upload
 import dmt_proms.ui.core.generated.resources.fill_fields
 import dmt_proms.ui.core.generated.resources.filled_circle
@@ -238,6 +249,7 @@ import dmt_proms.ui.core.generated.resources.key_hash
 import dmt_proms.ui.core.generated.resources.key_star
 import dmt_proms.ui.core.generated.resources.lemon
 import dmt_proms.ui.core.generated.resources.like
+import dmt_proms.ui.core.generated.resources.listening
 import dmt_proms.ui.core.generated.resources.loading
 import dmt_proms.ui.core.generated.resources.local_unknown
 import dmt_proms.ui.core.generated.resources.lock
@@ -255,6 +267,7 @@ import dmt_proms.ui.core.generated.resources.my_files
 import dmt_proms.ui.core.generated.resources.napkin
 import dmt_proms.ui.core.generated.resources.neurologist_pass
 import dmt_proms.ui.core.generated.resources.next
+import dmt_proms.ui.core.generated.resources.next_text
 import dmt_proms.ui.core.generated.resources.no
 import dmt_proms.ui.core.generated.resources.no_evaluation_object_to_display
 import dmt_proms.ui.core.generated.resources.no_internet
@@ -263,6 +276,7 @@ import dmt_proms.ui.core.generated.resources.open_bin
 import dmt_proms.ui.core.generated.resources.open_fridge
 import dmt_proms.ui.core.generated.resources.ophthalmologist_pass
 import dmt_proms.ui.core.generated.resources.orange_juice
+import dmt_proms.ui.core.generated.resources.oriantation_season_title
 import dmt_proms.ui.core.generated.resources.orthopedist_pass
 import dmt_proms.ui.core.generated.resources.paint_clinic_pass
 import dmt_proms.ui.core.generated.resources.pass
@@ -293,6 +307,11 @@ import dmt_proms.ui.core.generated.resources.search_at_latter_h_pass
 import dmt_proms.ui.core.generated.resources.search_contacts_list_in_the_phone_pass
 import dmt_proms.ui.core.generated.resources.search_dentist_number_pass
 import dmt_proms.ui.core.generated.resources.search_for_hana_choen_in_contacts_pass
+import dmt_proms.ui.core.generated.resources.seasons_instructions_app_trial
+import dmt_proms.ui.core.generated.resources.seasons_instructions_app_trial2
+import dmt_proms.ui.core.generated.resources.sec_question_instraction
+import dmt_proms.ui.core.generated.resources.sec_question_number
+import dmt_proms.ui.core.generated.resources.sec_question_title
 import dmt_proms.ui.core.generated.resources.second_part_of_test_instructions_pass
 import dmt_proms.ui.core.generated.resources.second_question_hitber_asterisk
 import dmt_proms.ui.core.generated.resources.second_question_hitber_check
@@ -321,6 +340,7 @@ import dmt_proms.ui.core.generated.resources.send
 import dmt_proms.ui.core.generated.resources.sent_successfully
 import dmt_proms.ui.core.generated.resources.serialization_error
 import dmt_proms.ui.core.generated.resources.server_error
+import dmt_proms.ui.core.generated.resources.set_health_rate
 import dmt_proms.ui.core.generated.resources.settings
 import dmt_proms.ui.core.generated.resources.seventh_question_hitber_black_circle
 import dmt_proms.ui.core.generated.resources.seventh_question_hitber_blue_circle
@@ -365,12 +385,20 @@ import dmt_proms.ui.core.generated.resources.third_question_hitber_instructions
 import dmt_proms.ui.core.generated.resources.third_question_hitber_title
 import dmt_proms.ui.core.generated.resources.too_many_requests
 import dmt_proms.ui.core.generated.resources.trapeze
+import dmt_proms.ui.core.generated.resources.trial_drag_instructions
+import dmt_proms.ui.core.generated.resources.trial_drag_title
+import dmt_proms.ui.core.generated.resources.trial_draw_instructions
+import dmt_proms.ui.core.generated.resources.trial_draw_title
+import dmt_proms.ui.core.generated.resources.trial_end_test_instructions
+import dmt_proms.ui.core.generated.resources.trial_pinch_instructions
+import dmt_proms.ui.core.generated.resources.trial_pinch_title
 import dmt_proms.ui.core.generated.resources.triangle
 import dmt_proms.ui.core.generated.resources.triangle_90
 import dmt_proms.ui.core.generated.resources.unexpected_error
 import dmt_proms.ui.core.generated.resources.uploading
 import dmt_proms.ui.core.generated.resources.vertical_stroke
 import dmt_proms.ui.core.generated.resources.video
+import dmt_proms.ui.core.generated.resources.vocal_instructions
 import dmt_proms.ui.core.generated.resources.warning
 import dmt_proms.ui.core.generated.resources.weather
 import dmt_proms.ui.core.generated.resources.welcome
@@ -390,6 +418,10 @@ import dmt_proms.ui.core.generated.resources.x
 import dmt_proms.ui.core.generated.resources.yes
 import dmt_proms.ui.core.generated.resources.yoga
 import dmt_proms.ui.core.generated.resources.yogurt
+import dmt_proms.ui.core.generated.resources.you_in_the_autumn
+import dmt_proms.ui.core.generated.resources.you_in_the_spring
+import dmt_proms.ui.core.generated.resources.you_in_the_summer
+import dmt_proms.ui.core.generated.resources.you_in_the_winter
 import dmt_proms.ui.core.generated.resources.Res.string as rs
 
 /**
@@ -874,6 +906,48 @@ object Resources {
         val wrongNumberDialedPleaseTryAgainPass =
             Res.string.wrong_number_dialed_please_try_again_pass
         val firstMissionDoneVocalPass = Res.string.first_mission_done_vocal_pass
+
+// orientation string
+    val entryOrientationTitle = Res.string.entry_Oriantation_title
+        val entryOrientationWelcomeNote = Res.string.entry_Oriantation_welcome_note
+        val entryOrientationInstructions = Res.string.entry_Oriantation_instructions
+        val NextText = Res.string.next_text
+        val trialDragInstructions = Res.string.trial_drag_instructions
+        val trialDragTitle = Res.string.trial_drag_title
+        val secQuestionTitle = Res.string.sec_question_title
+        val secQuestionInstruction = Res.string.sec_question_instraction
+        val secQuestionNumber = Res.string.sec_question_number
+
+        val entryInstructionsAppTrial = Res.string.entry_instructions_app_trial
+        val dropdownInstructionsAppTrial = Res.string.dropdown_instructions_app_trial
+        val seasonsInstructionsAppTrial = Res.string.seasons_instructions_app_trial
+        val orientationSeasonTitle = Res.string.oriantation_season_title
+
+
+        val trialPinchTitle = Res.string.trial_pinch_title
+        val trialPinchInstructions = Res.string.trial_pinch_instructions
+
+        val seasonsInstructionsAppTrial2 = Res.string.seasons_instructions_app_trial2
+        val trialDrawInstructions = Res.string.trial_draw_instructions
+        val trialEndTestInstructions = Res.string.trial_end_test_instructions
+        val editTextDialogInstruction = Res.string.edit_text_dialog_instruction
+
+        val youInTheSummer = Res.string.you_in_the_summer
+        val youInTheWinter = Res.string.you_in_the_winter
+        val youInTheSpring = Res.string.you_in_the_spring
+        val youInTheAutumn = Res.string.you_in_the_autumn
+
+        val vocalInstructions = Res.string.vocal_instructions
+        val listening = Res.string.listening
+        val feelingRatePain = Res.string.feeling_rate_pain
+        val feelingRateMid = Res.string.feeling_rate_mid
+        val feelingRateNoPain = Res.string.feeling_rate_no_pain
+        val dropdownSelectedNumber = Res.string.dropdown_selected_number
+
+        val trialDrawTitle = Res.string.trial_draw_title
+
+        val setHealthRate = Res.string.set_health_rate
+
 
     }
 

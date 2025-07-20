@@ -37,6 +37,8 @@ import dmt_proms.oriantation.generated.resources.trial_pinch_instructions
 import dmt_proms.oriantation.generated.resources.trial_pinch_title
 import kotlinx.serialization.json.JsonNull.content
 import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.Resources.String.trialPinchInstructions
+import org.example.hit.heal.core.presentation.Resources.String.trialPinchTitle
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -71,16 +73,16 @@ class ShapeResizeScreen(
         val redSquareSize = 400.dp
 
         TabletBaseScreen(
-            title = stringResource(Res.string.trial_pinch_title),
+            title = stringResource(trialPinchTitle),
             question = 5,
             onNextClick = {
-                if (scale > 1.5f) {
+                if (scale > 1f) {
                     viewModel.updateShapeResize(true)}
                 navigator?.push(DrawScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = stringResource(Res.string.trial_pinch_instructions),
+                    text = stringResource(trialPinchInstructions),
                     color = Color(0xFF4EC3AF),
                     textAlign = TextAlign.Center,
                     fontSize = LARGE,

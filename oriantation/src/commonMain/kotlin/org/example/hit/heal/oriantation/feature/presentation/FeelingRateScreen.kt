@@ -62,6 +62,12 @@ import dmt_proms.oriantation.generated.resources.winter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Resources.String.NextText
+import org.example.hit.heal.core.presentation.Resources.String.feelingRateMid
+import org.example.hit.heal.core.presentation.Resources.String.feelingRateNoPain
+import org.example.hit.heal.core.presentation.Resources.String.feelingRatePain
+import org.example.hit.heal.core.presentation.Resources.String.listening
+import org.example.hit.heal.core.presentation.Resources.String.vocalInstructions
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -94,7 +100,7 @@ class FeedbackScreen(
         
         BaseScreen(
             config = ScreenConfig.TabletConfig,
-            title = "הוראות קוליות",
+            title = stringResource(vocalInstructions),
             onNextClick = {
                 if (!isButtonEnabled) return@BaseScreen
                 isButtonEnabled = false
@@ -122,7 +128,7 @@ class FeedbackScreen(
 
                     // Listen button
                     RoundedButton(
-                        text = "הקשב",
+                        text = stringResource(listening),
                         modifier = Modifier
                             .width(180.dp)
                             .height(56.dp),
@@ -196,9 +202,9 @@ class FeedbackScreen(
                     ) {
                         Text(
                             text = when {
-                                progress <= 3f -> "מצב בריאותי לא טוב"
-                                progress <= 6f -> "מצב בריאותי בינוני"
-                                else -> "מצב בריאותי טוב"
+                                progress <= 3f -> stringResource(feelingRatePain)
+                                progress <= 6f -> stringResource(feelingRateMid)
+                                else -> stringResource(feelingRateNoPain)
                             },
                             fontSize = 22.sp,
                             fontWeight = FontWeight.Bold,
@@ -246,7 +252,7 @@ class FeedbackScreen(
                         horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly
                     ) {
                         RoundedButton(
-                            text = "הבא",
+                            text = stringResource(NextText),
                             modifier = Modifier
                                 .width(200.dp)
                                 .height(50.dp),

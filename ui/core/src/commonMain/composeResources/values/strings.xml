@@ -244,6 +244,44 @@
     <string name="summary_hitber_instructions1">You have completed the test.</string>
     <string name="summary_hitber_instructions2">Please contact your therapist for further details.</string>
     <!--    Orientation Module  -->
+    <string name="entry_Oriantation_title">Orientation</string>
+    <string name="entry_Oriantation_welcome_note">Welcome</string>
+    <string name="entry_Oriantation_instructions">You are about to try a short exercise using the tablet. Try to follow the instructions and complete the task.</string>
+    <string name="next_text">Next</string>
+
+    <string name="sec_question_title">Dropdown Menu</string>
+    <string name="sec_question_instraction">Now please select the number 4 and then press the Next button.</string>
+    <string name="sec_question_number">The currently selected number is</string>
+
+    <string name="entry_instructions_app_trial">You are about to try a short exercise using the tablet. Try to follow the instructions and complete the task.</string>
+    <string name="dropdown_instructions_app_trial">Now, please select the number 4 and then press the "Next" button.</string>
+    <string name="seasons_instructions_app_trial">Here are 4 buttons representing the seasons. Please change the season to summer.</string>
+    <string name="trial_drag_instructions">You have several shapes in front of you. You need to drag the triangle into the red square on the left.</string>
+    <string name= "trial_drag_title">drag and drop</string>
+    <string name="trial_pinch_title">Resize</string>
+    <string name="trial_pinch_instructions">Now, you need to enlarge the triangle by spreading two fingers apart on the shape.</string>
+
+    <string name="seasons_instructions_app_trial2">Now, please change the season to winter.</string>
+    <string name="trial_draw_instructions">Please draw an X shape.</string>
+    <string name="trial_end_test_instructions">The test has ended. Thank you very much for your cooperation.</string>
+    <string name="edit_text_dialog_instruction">Please write your opinion about the task in the box below. To close the keyboard, press the keyboard icon. When finished, press the X button.</string>
+
+    <string name="oriantation_season_title">Seasons</string>
+    <string name="you_in_the_summer">You are currently in the summer season.</string>
+    <string name="you_in_the_winter">You are currently in the winter season.</string>
+    <string name="you_in_the_spring">You are currently in the spring season.</string>
+    <string name="you_in_the_autumn">You are currently in the autumn season.</string>
+    <string name="vocal_instructions">Voice Instructions</string>
+    <string name="listening">listening</string>
+    <string name="feeling_rate_pain">feeling rate bad</string>
+    <string name="feeling_rate_mid">feeling rate mid</string>
+    <string name="feeling_rate_no_pain">feeling rate good</string>
+
+    <string name="dropdown_selected_number">The currently selected number is:</string>
+
+    <string name="trial_draw_title">Use the Pen</string>
+
+    <string name="set_health_rate"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fvocal_instruction_trial.mp3?alt=media&token=ede5447f-bd0b-4411-9bfb-09f6bbdf2e27]]></string>
 
 
     <!--    Memory Module  -->
