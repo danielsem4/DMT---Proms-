@@ -514,9 +514,9 @@ object Resources {
     }
 
     object String {
-        val on = rs.on
-        val off = rs.off
         val loading = rs.loading
+        val on = Res.string.on
+        val off = Res.string.off
         val uploading = rs.uploading
         val send = rs.send
         val measurements = rs.measurements
