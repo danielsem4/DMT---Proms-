@@ -267,6 +267,8 @@
     <string name="edit_text_dialog_instruction">Please write your opinion about the task in the box below. To close the keyboard, press the keyboard icon. When finished, press the X button.</string>
 
     <string name="oriantation_season_title">Seasons</string>
+    <string name="you_in_the_season">You are currently in the</string>
+
     <string name="you_in_the_summer">You are currently in the summer season.</string>
     <string name="you_in_the_winter">You are currently in the winter season.</string>
     <string name="you_in_the_spring">You are currently in the spring season.</string>

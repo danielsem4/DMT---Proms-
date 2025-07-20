@@ -419,6 +419,7 @@ import dmt_proms.ui.core.generated.resources.yes
 import dmt_proms.ui.core.generated.resources.yoga
 import dmt_proms.ui.core.generated.resources.yogurt
 import dmt_proms.ui.core.generated.resources.you_in_the_autumn
+import dmt_proms.ui.core.generated.resources.you_in_the_season
 import dmt_proms.ui.core.generated.resources.you_in_the_spring
 import dmt_proms.ui.core.generated.resources.you_in_the_summer
 import dmt_proms.ui.core.generated.resources.you_in_the_winter
@@ -922,7 +923,7 @@ object Resources {
         val dropdownInstructionsAppTrial = Res.string.dropdown_instructions_app_trial
         val seasonsInstructionsAppTrial = Res.string.seasons_instructions_app_trial
         val orientationSeasonTitle = Res.string.oriantation_season_title
-
+        val YouInTheSeasons = Res.string.you_in_the_season
 
         val trialPinchTitle = Res.string.trial_pinch_title
         val trialPinchInstructions = Res.string.trial_pinch_instructions

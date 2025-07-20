@@ -30,6 +30,7 @@ import dmt_proms.oriantation.generated.resources.Res.string
 import dmt_proms.oriantation.generated.resources.dropdown_instructions_app_trial
 import dmt_proms.oriantation.generated.resources.sec_question_instraction
 import dmt_proms.oriantation.generated.resources.sec_question_title
+import org.example.hit.heal.core.presentation.Resources.String.dropdownInstructionsAppTrial
 import org.example.hit.heal.core.presentation.Resources.String.secQuestionInstruction
 import org.example.hit.heal.core.presentation.Resources.String.secQuestionTitle
 import org.example.hit.heal.core.presentation.TabletBaseScreen
@@ -140,7 +141,8 @@ class NumberSelectScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "המספר שבחרת הוא :$selectedNumber",
+//
+                            text = stringResource(dropdownInstructionsAppTrial , selectedNumber),
                             color = Color(0xFF4EC3AF),
                             fontSize = 22.sp
                         )
