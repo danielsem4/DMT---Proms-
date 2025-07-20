@@ -32,8 +32,14 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import dmt_proms.oriantation.generated.resources.Res
+import dmt_proms.oriantation.generated.resources.trial_pinch_instructions
+import dmt_proms.oriantation.generated.resources.trial_pinch_title
 import kotlinx.serialization.json.JsonNull.content
+import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
+import org.jetbrains.compose.resources.stringResource
 
 data class Item(
     val id: Int,
@@ -65,7 +71,7 @@ class ShapeResizeScreen(
         val redSquareSize = 400.dp
 
         TabletBaseScreen(
-            title = "שינוי גודל",
+            title = stringResource(Res.string.trial_pinch_title),
             question = 5,
             onNextClick = {
                 if (scale > 1.5f) {
@@ -74,9 +80,10 @@ class ShapeResizeScreen(
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "כעת, עליך להגדיל את המשולש באמצעות הרחקה של 2 אצבעות על הצורה",
+                    text = stringResource(Res.string.trial_pinch_instructions),
                     color = Color(0xFF4EC3AF),
                     textAlign = TextAlign.Center,
+                    fontSize = LARGE,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
@@ -91,7 +98,7 @@ class ShapeResizeScreen(
                         modifier = Modifier
                             .size(redSquareSize)
                             .border(3.dp, Color.Red)
-                            .background(Color(0xFFE0F7F1))
+                            .background(backgroundColor)
                             .align(Alignment.CenterStart)
                             .padding(start = 16.dp)
                             .pointerInput(Unit) {

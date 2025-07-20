@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import dmt_proms.oriantation.generated.resources.Res.string
+import dmt_proms.oriantation.generated.resources.dropdown_instructions_app_trial
 import dmt_proms.oriantation.generated.resources.sec_question_instraction
 import dmt_proms.oriantation.generated.resources.sec_question_title
 import org.example.hit.heal.core.presentation.TabletBaseScreen

@@ -22,8 +22,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import androidx.compose.foundation.Image
 import androidx.compose.material.DrawerDefaults.shape
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import org.jetbrains.compose.resources.painterResource
@@ -34,10 +36,18 @@ import dmt_proms.oriantation.generated.resources.close
 import dmt_proms.oriantation.generated.resources.hash_tag
 import dmt_proms.oriantation.generated.resources.rhomb_outline
 import dmt_proms.oriantation.generated.resources.star
+import dmt_proms.oriantation.generated.resources.trial_drag_instructions
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
+import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.example.hit.heal.oriantation.feature.presentation.components.DraggableShape
 import org.example.hit.heal.oriantation.feature.presentation.components.DraggableShapeIcon
 import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
+
 class ShapesDragScreen(
     private val viewModel: OrientationTestViewModel
 ) : Screen {
@@ -47,12 +57,12 @@ class ShapesDragScreen(
         // Initial positions for shapes in a column on the right
         val initialOffsets = remember {
             listOf(
-                Offset(2000f, 100f),  // triangle
-                Offset(2000f, 250f),  // diamond
-                Offset(2000f, 400f),  // star
-                Offset(2000f, 550f),  // hash
-                Offset(2000f, 700f),  // X
-                Offset(2000f, 850f)   // check
+                Offset(1500f, 200f),  // triangle
+                Offset(1500f, 500f),  // diamond
+                Offset(1500f, 800f),  // star
+                Offset(2000f, 200f),  // hash
+                Offset(2000f, 500f),  // X
+                Offset(2000f, 800f)   // check
             )
         }
 
@@ -71,71 +81,75 @@ class ShapesDragScreen(
         }
 
         // Red square position and size
-        val redSquareSize = 300.dp
+        val redSquareSize = 500.dp
         val redSquarePx = with(LocalDensity.current) { redSquareSize.toPx() }
 
         TabletBaseScreen(
-            title = "גרירה",
+            title = (stringResource(Res.string.trial_drag_instructions)),
             question = 4,
             onNextClick = { navigator?.push(ShapeResizeScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "בפניך מספר צורות, עליך לגרור את המשולש לתוך הריבוע האדום משמאל",
+                    text = stringResource(Res.string.trial_drag_instructions),
                     color = Color(0xFF4EC3AF),
                     textAlign = TextAlign.Center,
+                    fontSize = LARGE,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                 )
-                Spacer(modifier = Modifier.height(16.dp))
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    // Red square (drop target)
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    Spacer(modifier = Modifier.height(16.dp))
                     Box(
-                        modifier = Modifier
-                            .size(redSquareSize)
-                            .border(3.dp, Color.Red)
-                            .background(Color(0xFFE0F7F1))
-                            .align(Alignment.CenterStart)
-                            .padding(start = 16.dp),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        // Show shapes that were dropped in the red square
-                        shapes.filter { it.isDroppedInSquare }.forEach { shape ->
-                            Image(
-                                painter = painterResource(shape.drawableRes),
-                                contentDescription = null,
-                                modifier = Modifier.size(80.dp)
-                            )
+                        // Red square (drop target)
+                        Box(
+                            modifier = Modifier
+                                .size(redSquareSize)
+                                .border(3.dp, Color.Red)
+                                .background(backgroundColor)
+                                .align(Alignment.CenterStart)
+                                .padding(start = 16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            // Show shapes that were dropped in the red square
+                            shapes.filter { it.isDroppedInSquare }.forEach { shape ->
+                                Image(
+                                    painter = painterResource(shape.drawableRes),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(80.dp)
+                                )
+                            }
                         }
-                    }
 
-                    // Draggable shapes
-                    shapes.forEach { shape ->
-                        if (!shape.isDroppedInSquare) {
-                            DraggableShapeIcon(
-                                drawableRes = shape.drawableRes,
-                                offset = shape.offset,
-                                onOffsetChange = { newOffset ->
-                                    shapes = shapes.map {
-                                        if (it.id == shape.id) it.copy(offset = newOffset) else it
-                                    }
-                                },
-                                onDrop = { offset ->
-                                    val dropX = offset.x
-                                    val dropY = offset.y
-                                    // Check if dropped inside the red square
-                                    if (dropX in 0f..redSquarePx && dropY in 0f..redSquarePx) {
+                        // Draggable shapes
+                        shapes.forEach { shape ->
+                            if (!shape.isDroppedInSquare) {
+                                DraggableShapeIcon(
+                                    drawableRes = shape.drawableRes,
+                                    offset = shape.offset,
+                                    onOffsetChange = { newOffset ->
                                         shapes = shapes.map {
-                                            if (it.id == shape.id) it.copy(isDroppedInSquare = true) else it
+                                            if (it.id == shape.id) it.copy(offset = newOffset) else it
                                         }
-                                        // If the dropped shape is the triangle (id = 0), update the viewModel
-                                        if (shape.id == 0) {
-                                            viewModel.updateShapesDrag(true)
+                                    },
+                                    onDrop = { offset ->
+                                        val dropX = offset.x
+                                        val dropY = offset.y
+                                        // Check if dropped inside the red square
+                                        if (dropX in 0f..redSquarePx && dropY in 0f..redSquarePx) {
+//                                        shapes = shapes.map{
+//                                            if (it.id == shape.id) it.copy(isDroppedInSquare = true) else it
+//                                        }
+                                            // If the dropped shape is the triangle (id = 0), update the viewModel
+                                            if (shape.id == 0) {
+                                                viewModel.updateShapesDrag(true)
+                                                println("triangle dropped")
+                                            }
                                         }
                                     }
-                                }
-                            )
+                                )
+                            }
                         }
                     }
                 }

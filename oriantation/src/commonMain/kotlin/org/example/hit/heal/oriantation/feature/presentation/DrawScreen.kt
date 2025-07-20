@@ -38,6 +38,7 @@ import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.jetbrains.compose.resources.stringResource
 import dmt_proms.oriantation.generated.resources.Res.string
 import dmt_proms.oriantation.generated.resources.trial_drag_instructions
+import dmt_proms.oriantation.generated.resources.trial_draw_title
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 
@@ -55,6 +56,7 @@ class DrawScreen(
         var currentPathPoints by remember { mutableStateOf<List<Offset>>(emptyList()) }
         var isEraseMode by remember { mutableStateOf(false) }
         var isDrawing by remember { mutableStateOf(false) }
+
         fun drawPathsToBitmap(): ImageBitmap {
             val bitmap = ImageBitmap(canvasSize.width.toInt(), canvasSize.height.toInt())
             val canvas = Canvas(bitmap)
@@ -82,7 +84,7 @@ class DrawScreen(
             return bitmap
         }
         TabletBaseScreen(
-            title = "שימוש בעת",
+            title = stringResource(string.trial_draw_title),
             question = 7,
             onNextClick = {
                 val bitmap = drawPathsToBitmap()
@@ -113,19 +115,28 @@ class DrawScreen(
                             detectDragGestures(
                                 onDragStart = { offset ->
                                     isDrawing = true
-                                    currentPath = Path().apply { moveTo(offset.x, offset.y) }
                                     currentPathPoints = listOf(offset)
+                                    currentPath = Path().apply { moveTo(offset.x, offset.y) }
                                 },
-                                onDrag = { change, dragAmount ->
+                                onDrag = { change, _ ->
                                     if (isDrawing) {
-                                        val newOffset = change.position
-                                        currentPath = currentPath?.apply { lineTo(newOffset.x, newOffset.y) }
-                                        currentPathPoints = currentPathPoints + newOffset
+                                        currentPathPoints = currentPathPoints + change.position
+                                        currentPath = Path().apply {
+                                            moveTo(currentPathPoints.first().x, currentPathPoints.first().y)
+                                            currentPathPoints.drop(1).forEach { point ->
+                                                lineTo(point.x, point.y)
+                                            }
+                                        }
                                     }
                                 },
                                 onDragEnd = {
                                     isDrawing = false
                                     currentPath?.let { paths.add(it) }
+                                    currentPath = null
+                                    currentPathPoints = emptyList()
+                                },
+                                onDragCancel = {
+                                    isDrawing = false
                                     currentPath = null
                                     currentPathPoints = emptyList()
                                 }
@@ -159,9 +170,6 @@ class DrawScreen(
             }
         )
 
-
-
-
     }
 
-    }
+}

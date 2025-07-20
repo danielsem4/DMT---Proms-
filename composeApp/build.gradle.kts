@@ -55,7 +55,7 @@ kotlin {
 
             implementation(libs.kotlinx.coroutines.core)
 
-            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.serialization)
             implementation(libs.kotlinx.datetime)
             implementation(compose.material3)
 
@@ -75,9 +75,9 @@ kotlin {
             implementation(libs.voyager.tabNavigator)
             // Basic Navigation
 
-            implementation (libs.navigator)
-            implementation (libs.navigator.tabs)
-            implementation (libs.navigator.transitions)
+//            implementation (libs.navigator)
+//            implementation (libs.navigator.tabs)
+//            implementation (libs.navigator.transitions)
 
             // Koin dependencies
             api(libs.koin.core)
