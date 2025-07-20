@@ -123,6 +123,7 @@ class EvaluationTestScreen(
                     .padding(horizontal = paddingMd)
             ) {
                 if (objectsOnCurrentScreen.isNotEmpty()) {
+                    val showLabel = objectsOnCurrentScreen.size <= 1
                     objectsOnCurrentScreen.forEach { obj ->
                         EvaluationObjectContent(
                             obj = obj,
@@ -130,6 +131,7 @@ class EvaluationTestScreen(
                             onSaveAnswer = { id, answer ->
                                 viewModel.saveAnswer(id, answer)
                             },
+                            showLabel = showLabel,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 8.dp),

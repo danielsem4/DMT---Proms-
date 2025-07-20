@@ -30,7 +30,6 @@ import org.example.hit.heal.core.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.OnOffToggle
 import org.example.hit.heal.core.presentation.components.OptionStyle
 import org.example.hit.heal.core.presentation.components.PillSelectionGroup
-import org.example.hit.heal.core.presentation.components.ReportInputBox
 import org.example.hit.heal.core.presentation.components.RoundedFilledSlider
 import org.example.hit.heal.core.presentation.components.SelectionMode
 import org.example.hit.heal.core.presentation.formatLabel
@@ -41,9 +40,10 @@ import org.jetbrains.compose.resources.stringResource
 fun EvaluationObjectContent(
     obj: EvaluationObject,
     answers: Map<Int, EvaluationAnswer>,
+    showLabel: Boolean,
+    modifier: Modifier = Modifier,
     onSaveAnswer: (Int, EvaluationAnswer) -> Unit,
-    onDrawingControllerReady: ((DrawingCanvasController) -> Unit)? = null,
-    modifier: Modifier = Modifier
+    onDrawingControllerReady: ((DrawingCanvasController) -> Unit)? = null
 ) {
     Column(
         modifier = modifier.padding(horizontal = 16.dp),
@@ -54,7 +54,7 @@ fun EvaluationObjectContent(
         val options = availableValues.map { it.available_value }
         val type = EvaluationObjectType.fromInt(obj.object_type)
 
-        if (type != EvaluationObjectType.INSTRUCTION)
+        if (showLabel && obj.object_label.isNotEmpty() && type != EvaluationObjectType.INSTRUCTION)
             Text(
                 text = obj.object_label,
                 fontSize = 20.sp,
@@ -147,7 +147,7 @@ fun EvaluationObjectContent(
                 }
             }
 
-            EvaluationObjectType.INSTRUCTION -> {
+            EvaluationObjectType.INSTRUCTION, EvaluationObjectType.REPORT -> {
                 InstructionBox(
                     text = obj.object_label,
                     modifier = Modifier
@@ -155,16 +155,6 @@ fun EvaluationObjectContent(
                         .align(Alignment.CenterHorizontally)
                 )
                 onSaveAnswer(obj.id, EvaluationAnswer.Answered)
-            }
-
-            EvaluationObjectType.REPORT -> {
-                ReportInputBox(
-                    value = (answers[obj.id] as? EvaluationAnswer.Text)?.value ?: "",
-                    placeholder = obj.object_label,
-                    onValueChange = { newValue ->
-                        onSaveAnswer(obj.id, EvaluationAnswer.Text(newValue))
-                    }
-                )
             }
 
             EvaluationObjectType.DRAWING -> {
