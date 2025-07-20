@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,24 +25,21 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.evaluation.Evaluation
-import core.data.model.evaluation.EvaluationAnswer.Unanswered.isAnswered
+import core.data.model.evaluation.EvaluationValue
 import core.domain.onError
 import core.domain.onSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.example.hit.heal.core.presentation.FontSize.LARGE
-import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Resources
-import org.example.hit.heal.core.presentation.Resources.String.evaluationText
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
-import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.presentation.components.evaluation.DrawingCanvasController
 import org.example.hit.heal.presentation.components.evaluation.EvaluationObjectContent
+import org.example.hit.heal.presentation.components.evaluation.EvaluationObjectType
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -58,7 +55,6 @@ class EvaluationTestScreen(
         val answers by viewModel.answers.collectAsState()
 
         var sentSuccessfully by remember { mutableStateOf(false) }
-
         var toastMessage by remember { mutableStateOf<String?>(null) }
         val toastType by mutableStateOf(
             if (sentSuccessfully) ToastType.Success else ToastType.Error
@@ -70,8 +66,11 @@ class EvaluationTestScreen(
 
         var currentScreen by remember { mutableStateOf(1) }
         val objectsOnCurrentScreen = allObjects[currentScreen].orEmpty()
-        val totalScreens = allObjects.keys.maxOrNull() ?: 1
+        val togglesGrouped = objectsOnCurrentScreen
+            .filter { EvaluationObjectType.fromInt(it.object_type) == EvaluationObjectType.TOGGLE }
+            .groupBy { it.measurement_order }
 
+        val totalScreens = allObjects.keys.maxOrNull() ?: 1
         val message = stringResource(Resources.String.sentSuccessfully)
         val errorMessage = stringResource(Resources.String.serverError)
 
@@ -82,13 +81,11 @@ class EvaluationTestScreen(
                 viewModel.submitEvaluation(evaluation.id)
                     .onSuccess {
                         withContext(Dispatchers.Main) {
-                            println("Successfully uploaded test results")
                             toastMessage = message
                             sentSuccessfully = true
                         }
                     }.onError {
                         withContext(Dispatchers.Main) {
-                            println("Error uploading test results:\n$it")
                             toastMessage = errorMessage
                             sentSuccessfully = false
                         }
@@ -96,25 +93,63 @@ class EvaluationTestScreen(
             }
         }
 
+        val displayObjects = remember(objectsOnCurrentScreen) {
+            buildList {
+                val handledIds = mutableSetOf<Int>()
+                objectsOnCurrentScreen.forEach { obj ->
+                    val type = EvaluationObjectType.fromInt(obj.object_type)
 
-        BaseScreen(title = stringResource(evaluationText)) {
+                    if (type == EvaluationObjectType.TOGGLE && !handledIds.contains(obj.id)) {
+                        val group = togglesGrouped[obj.measurement_order].orEmpty()
+                        handledIds.addAll(group.map { it.id })
+
+                        if (group.size >= 2) {
+                            val baseObj = group[0]
+                            val onObj = group[0]
+                            val offObj = group[1]
+
+                            add(
+                                baseObj.copy(
+                                    object_type = EvaluationObjectType.TOGGLE.type,
+                                    available_values = listOf(
+                                        EvaluationValue(
+                                            id = onObj.id,
+                                            available_value = onObj.object_label,
+                                            default_value = false,
+                                            object_address = "",
+                                            measurementObject_id = baseObj.id
+                                        ),
+                                        EvaluationValue(
+                                            id = offObj.id,
+                                            available_value = offObj.object_label,
+                                            default_value = false,
+                                            object_address = "",
+                                            measurementObject_id = baseObj.id
+                                        )
+                                    ),
+                                    style = "toggle button"
+                                )
+                            )
+                        }
+                    } else if (!handledIds.contains(obj.id)) {
+                        add(obj)
+                    }
+                }
+            }
+        }
+
+        BaseScreen(title = evaluation.measurement_name) {
             toastMessage?.let {
                 ToastMessage(
                     message = it,
                     type = toastType,
                     onDismiss = {
-                        if (sentSuccessfully)
-                            navigator.pop() // pop when toast is dismissed
+                        if (sentSuccessfully) navigator.pop()
                         toastMessage = null
                     }
                 )
             }
-            Text(
-                text = evaluation.measurement_name,
-                color = Green,
-                fontSize = LARGE,
-                modifier = Modifier.padding(spacingMd)
-            )
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -122,15 +157,13 @@ class EvaluationTestScreen(
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = paddingMd)
             ) {
-                if (objectsOnCurrentScreen.isNotEmpty()) {
-                    val showLabel = objectsOnCurrentScreen.size <= 1
-                    objectsOnCurrentScreen.forEach { obj ->
+                if (displayObjects.isNotEmpty()) {
+                    val showLabel = displayObjects.size <= 1
+                    displayObjects.forEach { obj ->
                         EvaluationObjectContent(
                             obj = obj,
                             answers = answers,
-                            onSaveAnswer = { id, answer ->
-                                viewModel.saveAnswer(id, answer)
-                            },
+                            onSaveAnswer = { id, answer -> viewModel.saveAnswer(id, answer) },
                             showLabel = showLabel,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -151,8 +184,6 @@ class EvaluationTestScreen(
             val isFirstScreen = currentScreen == 1
             val isLastScreen = currentScreen == totalScreens
 
-            val allAnswered =
-                objectsOnCurrentScreen.all { answers[it.id]?.isAnswered ?: false }
             Spacer(modifier = Modifier.height(paddingMd))
 
             Row(
@@ -166,11 +197,8 @@ class EvaluationTestScreen(
                     text = if (isFirstScreen) stringResource(Resources.String.back)
                     else stringResource(Resources.String.previous),
                     onClick = {
-                        if (isFirstScreen) {
-                            navigator.pop()
-                        } else {
-                            currentScreen--
-                        }
+                        if (isFirstScreen) navigator.pop()
+                        else currentScreen--
                     },
                     enabled = true,
                     modifier = Modifier.weight(1f).padding(end = 8.dp)
@@ -180,11 +208,8 @@ class EvaluationTestScreen(
                     text = if (isLastScreen) stringResource(Resources.String.done)
                     else stringResource(Resources.String.next),
                     onClick = {
-                        if (!isLastScreen) {
-                            currentScreen++
-                        } else {
-                            uploadResult()
-                        }
+                        if (!isLastScreen) currentScreen++
+                        else uploadResult()
                     },
                     enabled = true,
                     modifier = Modifier.weight(1f).padding(start = paddingSm)

@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -193,7 +193,7 @@ fun EvaluationObjectContent(
 
                         Text(
                             text = stringResource(Res.string.slider_value_prefix) + currentValue.formatLabel(),
-                            style = MaterialTheme.typography.h6,
+                            style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
                             color = primaryColor,
                             textAlign = TextAlign.Center,
