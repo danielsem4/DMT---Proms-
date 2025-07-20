@@ -6,7 +6,6 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import org.example.hit.heal.presentation.splash.SplashScreen
 
-
 @Composable
 fun App() {
     MaterialTheme {
