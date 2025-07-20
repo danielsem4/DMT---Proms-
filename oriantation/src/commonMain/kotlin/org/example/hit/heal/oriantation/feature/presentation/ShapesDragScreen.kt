@@ -39,6 +39,8 @@ import dmt_proms.oriantation.generated.resources.star
 import dmt_proms.oriantation.generated.resources.trial_drag_instructions
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
 import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.Resources.String.trialDragInstructions
+import org.example.hit.heal.core.presentation.Resources.String.trialDragTitle
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
@@ -85,13 +87,14 @@ class ShapesDragScreen(
         val redSquarePx = with(LocalDensity.current) { redSquareSize.toPx() }
 
         TabletBaseScreen(
-            title = (stringResource(Res.string.trial_drag_instructions)),
+
+            title = (stringResource(trialDragTitle)),
             question = 4,
             onNextClick = { navigator?.push(ShapeResizeScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = stringResource(Res.string.trial_drag_instructions),
+                    text = stringResource(trialDragInstructions),
                     color = Color(0xFF4EC3AF),
                     textAlign = TextAlign.Center,
                     fontSize = LARGE,

@@ -40,6 +40,8 @@ import dmt_proms.oriantation.generated.resources.seasons_instructions_app_trial
 import dmt_proms.oriantation.generated.resources.spring
 import dmt_proms.oriantation.generated.resources.summer
 import dmt_proms.oriantation.generated.resources.winter
+import org.example.hit.heal.core.presentation.Resources.String.orientationSeasonTitle
+import org.example.hit.heal.core.presentation.Resources.String.seasonsInstructionsAppTrial
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -64,7 +66,7 @@ class SeasonsSelectScreen(
 
 
         TabletBaseScreen(
-            title = (stringResource(string.oriantation_season_title)),
+            title = (stringResource(orientationSeasonTitle)),
             question = 3,
             onNextClick = {
                 viewModel.updateSeason(selectedSeason.toString())
@@ -153,9 +155,9 @@ class SeasonsSelectScreen(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = (stringResource(string.seasons_instructions_app_trial)),
+                                    text = (stringResource(seasonsInstructionsAppTrial)),
                                     color = Color(0xFF4EC3AF),
-                                    fontSize = 24.sp // Bigger card text
+                                    fontSize = 24.sp
                                 )
                             }
                         }

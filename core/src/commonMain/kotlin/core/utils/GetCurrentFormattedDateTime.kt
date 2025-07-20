@@ -21,10 +21,6 @@ fun getCurrentFormattedDateTime( now:LocalDateTime = Clock.System.now().toLocalD
     val minute = now.minute.toString().padStart(2, '0')
     val second = now.second.toString().padStart(2, '0')
 
-
-
-
-
     // yyyy-MM-dd HH-mm-ss
     // "2030-12-12-12-12-12"
     return "$year-$month-$day $hour:$minute:$second"

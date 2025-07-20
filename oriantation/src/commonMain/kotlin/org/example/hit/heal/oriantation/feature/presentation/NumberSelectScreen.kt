@@ -30,6 +30,8 @@ import dmt_proms.oriantation.generated.resources.Res.string
 import dmt_proms.oriantation.generated.resources.dropdown_instructions_app_trial
 import dmt_proms.oriantation.generated.resources.sec_question_instraction
 import dmt_proms.oriantation.generated.resources.sec_question_title
+import org.example.hit.heal.core.presentation.Resources.String.secQuestionInstruction
+import org.example.hit.heal.core.presentation.Resources.String.secQuestionTitle
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -44,7 +46,7 @@ class NumberSelectScreen(
         val numbers = (0..20).toList()
 
         TabletBaseScreen(
-            title = (stringResource(string.sec_question_title)),
+            title = (stringResource(secQuestionTitle)),
             question = 2, // For "2/8"
             onNextClick = { navigator?.push(SeasonsSelectScreen(viewModel)) },
             content = {
@@ -67,7 +69,7 @@ class NumberSelectScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = stringResource(string.sec_question_instraction),
+                            text = stringResource(secQuestionInstruction),
                             color = Color(0xFF4EC3AF),
                             fontSize = 22.sp
                         )
@@ -138,7 +140,7 @@ class NumberSelectScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "the number is :$selectedNumber",
+                            text = "המספר שבחרת הוא :$selectedNumber",
                             color = Color(0xFF4EC3AF),
                             fontSize = 22.sp
                         )

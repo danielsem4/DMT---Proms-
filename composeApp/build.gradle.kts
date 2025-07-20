@@ -94,7 +94,7 @@ kotlin {
             implementation(libs.font.awesome)
             implementation(libs.datastore.preferences)
             implementation(libs.datastore)
-
+            implementation(libs.kmp.date.time.picker)
             implementation(libs.voyager.tabNavigator)
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
