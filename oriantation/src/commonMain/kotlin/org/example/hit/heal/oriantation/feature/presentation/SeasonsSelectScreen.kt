@@ -37,9 +37,11 @@ import dmt_proms.oriantation.generated.resources.autumn
 import dmt_proms.oriantation.generated.resources.spring
 import dmt_proms.oriantation.generated.resources.summer
 import dmt_proms.oriantation.generated.resources.winter
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.orientationSeasonTitle
 import org.example.hit.heal.core.presentation.Resources.String.seasonsInstructionsAppTrial
 import org.example.hit.heal.core.presentation.TabletBaseScreen
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -83,11 +85,11 @@ class SeasonsSelectScreen(
                     // Left side: Column with buttons on top, image below
                     Column(
                         modifier = Modifier
-                            .weight(1.2f)
-                            .height(400.dp) // Even bigger image
+                            .weight(1f)
+                            .height(800.dp) // Even bigger image
                             .padding(end = 16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Top
+                        verticalArrangement = Arrangement.SpaceBetween
                     ) {
                         // Season Selector (at the very top)
                         Row(
@@ -100,17 +102,18 @@ class SeasonsSelectScreen(
                                 Button(
                                     onClick = { selectedSeason = season },
                                     colors = ButtonDefaults.buttonColors(
-                                        backgroundColor = if (selectedSeason == season) Color(0xFF4EC3AF) else Color(0xFFB0B0B0)
+                                        backgroundColor = if (selectedSeason == season)
+                                            primaryColor else Color(0xFFB0B0B0)
                                     ),
-                                    shape = RoundedCornerShape(50),
+//                                    shape = RoundedCornerShape(50),
                                     modifier = Modifier
-                                        .weight(1f)
+                                        .weight(1.5f)
                                         .padding(horizontal = 4.dp)
                                 ) {
                                     Text(
                                         text = season.displayName,
                                         color = Color.White,
-                                        fontSize = 22.sp // Bigger button text
+                                        fontSize = LARGE
                                     )
                                 }
                             }
@@ -135,7 +138,7 @@ class SeasonsSelectScreen(
                     // Right side: Text Cards
                     Column(
                         modifier = Modifier
-                            .weight(1f)
+                            .weight(0.6f)
                             .fillMaxHeight(),
                         horizontalAlignment = Alignment.End,
                         verticalArrangement = Arrangement.Center
@@ -175,7 +178,7 @@ class SeasonsSelectScreen(
                                 Text(
                                     text = "כרגע נמצאים בעונת ${selectedSeason.displayName}",
                                     color = Color(0xFF4EC3AF),
-                                    fontSize = 24.sp // Bigger card text
+                                    fontSize =  LARGE  // Bigger card text
                                 )
                             }
                         }
