@@ -38,6 +38,7 @@ import dmt_proms.oriantation.generated.resources.spring
 import dmt_proms.oriantation.generated.resources.summer
 import dmt_proms.oriantation.generated.resources.winter
 import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.Resources.String.YouInTheSeasons
 import org.example.hit.heal.core.presentation.Resources.String.orientationSeasonTitle
 import org.example.hit.heal.core.presentation.Resources.String.seasonsInstructionsAppTrial
 import org.example.hit.heal.core.presentation.TabletBaseScreen
@@ -86,7 +87,8 @@ class SeasonsSelectScreen(
                     Column(
                         modifier = Modifier
                             .weight(1f)
-                            .height(800.dp) // Even bigger image
+//                            .height(800.dp) // Even bigger image
+                            .fillMaxHeight()
                             .padding(end = 16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.SpaceBetween
@@ -176,7 +178,7 @@ class SeasonsSelectScreen(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "כרגע נמצאים בעונת ${selectedSeason.displayName}",
+                                    text = "${stringResource(YouInTheSeasons)} ,${selectedSeason.displayName}",
                                     color = Color(0xFF4EC3AF),
                                     fontSize =  LARGE  // Bigger card text
                                 )
