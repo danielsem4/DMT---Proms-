@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,8 +34,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -104,120 +107,124 @@ class FeedbackScreen(
 //                )
             },
             content = {
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    // Listen button
-                    RoundedButton(
-                        text = stringResource(listening),
-                        modifier = Modifier
-                            .width(180.dp)
-                            .height(56.dp),
-                        onClick = { // Play the audio when button is clicked
-                            coroutineScope.launch {
-                                playAudioUseCase.playAudio(audioUrl)
-                            }
-                        },
-                        enabled = !isPlaying
-                    )
-                    Text(if (isPlaying) "מנגן..." else "נגן")
-
-
-                    // This will be called when audio playback completes
-                    println("Audio playback completed")
-
-
-
-                    Spacer(modifier = Modifier.height(100.dp))
-
-                    // Progress bar with numbers, and make it interactive
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 24.dp)
-                    ) {
-                        Text(
-                            text = "0",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                        )
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .height(48.dp)
-                                .padding(horizontal = 8.dp)
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(Color.White)
-                                .border(1.dp, Color.White, RoundedCornerShape(16.dp))
-                                .pointerInput(Unit) {
-                                    detectTapGestures { offset: Offset ->
-                                        val value = (offset.x / barWidth * 10f)
-                                            .coerceIn(0f, 10f)
-                                        progress = value
-                                    }
-                                }
-                                .onSizeChanged { barWidth = it.width.toFloat() }
-                        ) {
-                            if (progress > 0f) {
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .fillMaxWidth(fraction = progress / 10f)
-                                        .clip(RoundedCornerShape(16.dp))
-                                        .background(
-                                            Brush.horizontalGradient(
-                                                colors = listOf(Color(0xFFB6F055), Color(0xFFFFA726))
-                                            )
-                                        )
-                                )
-                            }
-                        }
-                        Text(
-                            text = "10",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                        )
-                    }
-
-                    // Show value and label if progress > 0
-                    Spacer(modifier = Modifier.height(15.dp))
                     Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = when {
-                                progress <= 3f -> stringResource(feelingRatePain)
-                                progress <= 6f -> stringResource(feelingRateMid)
-                                else -> stringResource(feelingRateNoPain)
+                        Spacer(modifier = Modifier.height(32.dp))
+
+                        // Listen button
+                        RoundedButton(
+                            text = stringResource(listening),
+                            modifier = Modifier
+                                .width(180.dp)
+                                .height(56.dp),
+                            onClick = { // Play the audio when button is clicked
+                                coroutineScope.launch {
+                                    playAudioUseCase.playAudio(audioUrl)
+                                }
                             },
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
+                            enabled = !isPlaying
                         )
-                        Text(
-                            text = progress.toInt().toString(),
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
+                        Text(if (isPlaying) "מנגן..." else "נגן")
 
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                        // This will be called when audio playback completes
+                        println("Audio playback completed")
+
+
+
+                        Spacer(modifier = Modifier.height(100.dp))
+
+                        // Progress bar with numbers, and make it interactive
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp)
+                        ) {
+                            Text(
+                                text = "0",
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(48.dp)
+                                    .padding(horizontal = 8.dp)
+                                    .clip(RoundedCornerShape(16.dp))
+                                    .background(Color.White)
+                                    .border(1.dp, Color.White, RoundedCornerShape(16.dp))
+                                    .pointerInput(Unit) {
+                                        detectTapGestures { offset: Offset ->
+                                            val value = (offset.x / barWidth * 10f)
+                                                .coerceIn(0f, 10f)
+                                            progress = value
+                                        }
+                                    }
+                                    .onSizeChanged { barWidth = it.width.toFloat() }
+                            ) {
+                                if (progress > 0f) {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .fillMaxWidth(fraction = progress / 10f)
+                                            .clip(RoundedCornerShape(16.dp))
+                                            .background(
+                                                Brush.horizontalGradient(
+                                                    colors = listOf(
+                                                        Color(0xFFB6F055),
+                                                        Color(0xFFFFA726)
+                                                    )
+                                                )
+                                            )
+                                    )
+                                }
+                            }
+                            Text(
+                                text = "10",
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black
+                            )
+                        }
+
+                        // Show value and label if progress > 0
+                        Spacer(modifier = Modifier.height(15.dp))
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = when {
+                                    progress <= 3f -> stringResource(feelingRatePain)
+                                    progress <= 6f -> stringResource(feelingRateMid)
+                                    else -> stringResource(feelingRateNoPain)
+                                },
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Text(
+                                text = progress.toInt().toString(),
+                                fontSize = 22.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+
+                        Spacer(modifier = Modifier.height(16.dp))
 
 //                         Dynamic icon based on progress value
                         Image(
@@ -239,40 +246,40 @@ class FeedbackScreen(
 
                         )
 
-                    Spacer(modifier = Modifier.weight(1f))
-                    // Navigation buttons
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly
-                    ) {
-                        RoundedButton(
-                            text = stringResource(NextText),
-                            modifier = Modifier
-                                .width(200.dp)
-                                .height(50.dp),
-                            onClick = {
-                                if (!isButtonEnabled) return@RoundedButton
-                                isButtonEnabled = false
-                                
-                                // Update the feeling rate in the view model
-                                viewModel.updateFeelingRate(progress.toInt())
-                                
-                                // Send data to server and navigate back to home
-                                sendToServerAndNavigate(
-                                    viewModel = viewModel,
-                                    snackbarHostState = snackbarHostState,
-                                    coroutineScope = coroutineScope,
-                                    successMessage = successMessage,
-                                    navigator = navigator
-                                )
-                            }
-                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        // Navigation buttons
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly
+                        ) {
+                            RoundedButton(
+                                text = stringResource(NextText),
+                                modifier = Modifier
+                                    .width(200.dp)
+                                    .height(50.dp),
+                                onClick = {
+                                    if (!isButtonEnabled) return@RoundedButton
+                                    isButtonEnabled = false
+
+                                    // Update the feeling rate in the view model
+                                    viewModel.updateFeelingRate(progress.toInt())
+
+                                    // Send data to server and navigate back to home
+                                    sendToServerAndNavigate(
+                                        viewModel = viewModel,
+                                        snackbarHostState = snackbarHostState,
+                                        coroutineScope = coroutineScope,
+                                        successMessage = successMessage,
+                                        navigator = navigator
+                                    )
+                                }
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(32.dp))
                     }
 
-                    Spacer(modifier = Modifier.height(32.dp))
                 }
-
-            },
 //            snackbarHost = {
 //                SnackbarHost(hostState = snackbarHostState) { data ->
 //                    Snackbar(
@@ -285,7 +292,7 @@ class FeedbackScreen(
 //                    }
 //                }
 //            }
-        )
+            })
     }
 
     private fun sendToServerAndNavigate(
