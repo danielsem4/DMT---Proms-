@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <resources>
     <!--    app common strings-->
 
@@ -24,7 +23,6 @@
     <string name="back_confirmation_message">Going back will return to the home screen</string>
 
 
-
     <!--    Errors      -->
     <string name="fill_fields">Please fill in all fields</string>
     <string name="invalid_email">Invalid email format</string>
@@ -34,8 +32,6 @@
     <string name="disk_full">Your device is out of storage</string>
     <string name="local_unknown">An unknown local error occurred</string>
     <string name="request_timeout">The request timed out</string>
-    <string name="too_many_requests">Too many requests sent. Please try again later</string>
-    <string name="server_error">A server error occurred</string>
     <string name="serialization_error">There was a problem processing the server response</string>
     <string name="remote_unknown">An unknown server error occurred</string>
     <string name="unexpected_error">An unexpected error occurred</string>
@@ -59,11 +55,51 @@
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="done">Done</string>
-    <string name="back">Back</string>
+    <string name="error_start_date_empty">Start date cannot be empty</string>
+    <string name="error_end_before_start">End date cannot be earlier than start date</string>
     <string name="no_evaluation_object_to_display">No evaluation object to display.</string>
 
     <string name="uploading">Uploading</string>
     <string name="loading">loading</string>
+
+    <string name="select_date">Select a date</string>
+    <string name="empty_string"> </string>
+    <string name="week_day_s">S</string>
+    <string name="week_day_m">M</string>
+    <string name="week_day_tu">T</string>
+    <string name="week_day_w">W</string>
+    <string name="week_day_th">T</string>
+    <string name="week_day_f">F</string>
+    <string name="week_day_sa">S</string>
+    <string name="report_medication_taken">Report Medication taken</string>
+    <string name="report_message">I took %1$s on:\nDate: %2$s\nTime: %3$s</string>
+    <string name="save">Save</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="dash">-</string>
+    <string name="select_date_label">Select Date</string>
+    <string name="select_time_label">Select Time</string>
+    <string name="search_hint">search...</string>
+    <string name="took">I took </string>
+    <string name="dateMedications">Date: </string>
+    <string name="timeMedications">Time: </string>
+
+
+    <string name="report_medication">Report medication</string>
+    <string name="set_medication_alarm">Set medication alarm</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="start_date_empty">Start date cannot be empty</string>
+    <string name="end_before_start">End date cannot be earlier than start date</string>
+    <string name="back">Back</string>
+    <string name="when_notification">When do you want to get notification</string>
+    <string name="how_many_times_per_day">How many times per day</string>
+    <string name="select_week_days">Select week days</string>
+    <string name="start_time">Start time</string>
+    <string name="notification_start_question">What date you want the notification will work?</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="leave_end_date_empty">Leave empty to not set end date</string>
 
 
 
@@ -249,10 +285,146 @@
     <string name="summary_hitber_instructions1">You have completed the test.</string>
     <string name="summary_hitber_instructions2">Please contact your therapist for further details.</string>
     <!--    Orientation Module  -->
+    <string name="entry_Oriantation_title">Orientation</string>
+    <string name="entry_Oriantation_welcome_note">Welcome</string>
+    <string name="entry_Oriantation_instructions">You are about to try a short exercise using the tablet. Try to follow the instructions and complete the task.</string>
+    <string name="next_text">Next</string>
+
+    <string name="sec_question_title">Dropdown Menu</string>
+    <string name="sec_question_instraction">Now please select the number 4 and then press the Next button.</string>
+    <string name="sec_question_number">The currently selected number is</string>
+
+    <string name="entry_instructions_app_trial">You are about to try a short exercise using the tablet. Try to follow the instructions and complete the task.</string>
+    <string name="dropdown_instructions_app_trial">Now, please select the number 4 and then press the "Next" button.</string>
+    <string name="seasons_instructions_app_trial">Here are 4 buttons representing the seasons. Please change the season to summer.</string>
+    <string name="trial_drag_instructions">You have several shapes in front of you. You need to drag the triangle into the red square on the left.</string>
+    <string name= "trial_drag_title">drag and drop</string>
+    <string name="trial_pinch_title">Resize</string>
+    <string name="trial_pinch_instructions">Now, you need to enlarge the triangle by spreading two fingers apart on the shape.</string>
+
+    <string name="seasons_instructions_app_trial2">Now, please change the season to winter.</string>
+    <string name="trial_draw_instructions">Please draw an X shape.</string>
+    <string name="trial_end_test_instructions">The test has ended. Thank you very much for your cooperation.</string>
+    <string name="edit_text_dialog_instruction">Please write your opinion about the task in the box below. To close the keyboard, press the keyboard icon. When finished, press the X button.</string>
+    <string name="season_winter">winter</string>
+    <string name="season_summer">summer</string>
+    <string name="season_spring">spring</string>
+    <string name="season_autumn">autumn</string>
+
+    <string name="oriantation_season_title">Seasons</string>
+    <string name="you_in_the_summer">You are currently in the summer season.</string>
+    <string name="you_in_the_winter">You are currently in the winter season.</string>
+    <string name="you_in_the_spring">You are currently in the spring season.</string>
+    <string name="you_in_the_autumn">You are currently in the autumn season.</string>
+    <string name="vocal_instructions">Voice Instructions</string>
+    <string name="listening">listening</string>
+    <string name="feeling_rate_pain">feeling rate bad</string>
+    <string name="feeling_rate_mid">feeling rate mid</string>
+    <string name="feeling_rate_no_pain">feeling rate good</string>
+
+    <string name="dropdown_selected_number">The currently selected number is:</string>
+
+    <string name="trial_draw_title">Use the Pen</string>
+
+    <string name="set_health_rate"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fvocal_instruction_trial.mp3?alt=media&token=ede5447f-bd0b-4411-9bfb-09f6bbdf2e27]]></string>
 
 
     <!--    Memory Module  -->
+    <string name="build_schedule">Building the daily schedule</string>
+    <string name="build_schedule_continuation">Building the continuation of the daily schedule</string>
+    <string name="instruction_text_agenda_continuation">You need to enter the meetings into the schedule according to the instructions. Tapping on a meeting will show the time.</string>
+    <string name="place_activities">All activities must be placed in the calendar before continuing</string>
 
+    <string name="the_activities_memory">You have several activities that you need to schedule in a timetable. To start the task, click Continue</string>
+
+    <string name="day_sunday">Sunday</string>
+    <string name="day_monday">Monday</string>
+    <string name="day_tuesday">Tuesday</string>
+    <string name="day_wednesday">Wednesday</string>
+    <string name="day_thursday">Thursday</string>
+
+    <string name="hour_09_00">09:00</string>
+    <string name="hour_10_00">10:00</string>
+    <string name="hour_11_00">11:00</string>
+    <string name="hour_12_00">12:00</string>
+    <string name="hour_13_00">13:00</string>
+    <string name="hour_14_00">14:00</string>
+    <string name="hour_15_00">15:00</string>
+    <string name="hour_16_00">16:00</string>
+
+    <string name="book_circle">Book</string>
+    <string name="dumbbell_circle">Dumbbell</string>
+    <string name="move_circle">Move</string>
+    <string name="lecturer_circle">Lecture</string>
+    <string name="coffee_circle">Coffee</string>
+    <string name="stethoscope_circle">Doctor</string>
+
+    <string name="book_circle_text">Take the grandchildren to a story hour at the library on Wednesday at 16:00</string>
+    <string name="dumbbell_circle_text">Exercise class at the community center on Sundays at 11:00 for one hour</string>
+    <string name="move_circle_text">Go for a morning walk twice a week for at least one hour</string>
+    <string name="lecturer_circle_text">Attend a lecture on Thursday at 15:00 for one hour</string>
+    <string name="coffee_circle_text">Social meeting at the cafe on Tuesdays at 11:00 for two hours</string>
+    <string name="stethoscope_circle_text">Eye doctor appointment before Tuesday between 09:00–12:00 for one hour</string>
+    <string name="please_place_all_activities_memory">please place all activities</string>
+
+    <!--Call Screen Memory Module -->
+    <string name="incoming_call_title">Incoming Call</string>
+    <string name="incoming_call_text">Incoming Call</string>
+    <string name="call_from">Beit Rivka</string>
+    <string name="phone_number_memory">052-538-1648</string>
+    <string name="thank_you_title">Thank you</string>
+    <string name="thank_you_description">The task is completed, thank you very much for your cooperation</string>
+
+    <!--MemoryScreen Memory Module-->
+    <string name="memory_title">Memory Test</string>
+    <string name="task_duration">The task takes about 20 minutes</string>
+    <string name="instructions">Instructions</string>
+    <string name="task_continuity">You must complete the task without interruptions</string>
+    <string name="read_instructions">Read the instructions to the end</string>
+    <string name="complete_all_tasks">All tasks must be completed</string>
+    <string name="listen_instruction_tip">To hear the instructions, press Listen</string>
+    <string name="quiet_room_tip">It is recommended to perform the task in a quiet room</string>
+    <string name="good_luck">Good luck!</string>
+    <string name="press_start_to_begin">To start the task, press Start</string>
+    <string name="place_instructions_in_calendar_memory">You must enter the appointments in the scheduling system according to the instructions</string>
+
+    <!--Room Screen Memory Module -->
+
+    <string name="time_ended">Time ended</string>
+    <string name="time_ended_for_this_question_memory">The time for this question is over, Thanks for the cooperation move on to the next question</string>
+
+    <string name="first_one_minute_end_body_memory">Do you have all you need?</string>
+    <string name="second_one_minute_end_body_memory">Do you have all you need?</string>
+
+    <string name="room_title">Room Screen</string>
+    <string name="bedroom">Bedroom</string>
+    <string name="living_room">Living Room</string>
+    <string name="kitchen">Kitchen</string>
+    <string name="drag_and_place_instruction">Drag and place the seven objects in the three rooms as you would place them in your home. You must remember the location of the objects. When finished, press Continue.</string>
+
+    <!--Dialogs Memory Module-->
+    <string name="remember_all">I will remember everything</string>
+    <string name="talk_to_family">Talk to the family</string>
+    <string name="use_diary">Use the diary</string>
+    <string name="what_will_you_do">What will you do?</string>
+    <string name="memory_instruction">Here is a schedule of activities. What should you do to remember all the listed activities?</string>
+
+    <string name="instructions_text_memory_question_trial">In the upcoming question, you will need to place objects in different rooms. You are now presented with a short trial that shows how to switch rooms by clicking on the room buttons.</string>
+
+    <string name="place_rate_memory">please rate</string>
+    <string name="rate">rate</string>
+    <string name="the_rate_is">The rate is:</string>
+    <string name="how_well_do_you_think_you_will_do_memory">How well do you think you will do in the task before you?</string>
+    <string name="how_well_do_you_feel_memory">How well do you feel you did in the assignment?</string>
+
+
+    <!--All Memory Module -->
+    <string name="delete">Delete</string>
+    <string name="continue_button">Continue</string>
+    <string name="start_button">Start</string>
+    <!-- recordings -->
+    <string name="galaxy_phone_ring_2019"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fandroid_rington1.mp3?alt=media&token=a706f7ff-f315-40a6-aa91-6c09c3bdb3e3]]></string>
+    <string name="old_phone_ring"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Ftelephone_rington.mp3?alt=media&token=f5e87a64-6915-4c05-b9a4-3df7467153af]]></string>
 
     <!--    Pass Module  -->
     <string name="hana_cohen">Hana Cohen</string>
@@ -451,5 +623,6 @@
     <string name="witch_contact_are_we_looking_for_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwhat_contact_are_you_searching.mp3?alt=media&token=87e10d59-51f4-4373-a110-934472c61499]]></string>
     <string name="wrong_number_dialed_please_try_again_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwrong_number_dialed_try_again.mp3?alt=media&token=f3b84ffa-25c7-4101-8082-e2839f79ce86]]></string>
     <string name="first_mission_done_vocal_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fmission_done.mp3?alt=media&token=d6a19387-ea70-4be7-ae39-a846d13c13bc]]></string>
+    <string name="audioMemory"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fandroid_rington1.mp3?alt=media&token=a706f7ff-f315-40a6-aa91-6c09c3bdb3e3]]></string>
 
 </resources>

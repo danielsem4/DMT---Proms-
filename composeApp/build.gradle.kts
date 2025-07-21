@@ -37,26 +37,29 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.compose)
             implementation(libs.kmp.capturable.compose)
-
             // Koin dependencies
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
 
             // Ktor dependencies
             implementation(libs.ktor.client.okhttp)
+
         }
         commonMain.dependencies {
             implementation(projects.hitber)
             implementation(projects.ui.core)
             implementation(projects.core)
+            implementation(projects.oriantation)
             implementation(projects.clockTest)
             implementation(projects.pass)
+            implementation(projects.newMemoryTest)
 
             implementation(libs.kotlinx.coroutines.core)
 
-            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.serialization)
             implementation(libs.kotlinx.datetime)
             implementation(compose.material3)
+
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -71,36 +74,45 @@ kotlin {
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.transitions)
-
+            implementation(libs.voyager.tabNavigator)
             // Basic Navigation
-            implementation(libs.navigation.compose)
 
-            implementation (libs.navigator)
-            implementation (libs.navigator.tabs)
-            implementation (libs.navigator.transitions)
+//            implementation (libs.navigator)
+//            implementation (libs.navigator.tabs)
+//            implementation (libs.navigator.transitions)
 
             // Koin dependencies
             api(libs.koin.core)
             implementation(libs.bundles.koin.compose)
             implementation(libs.lifecycle.viewmodel)
-            implementation(libs.kotlinx.serialization)
+
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
             implementation(libs.navigation.compose)
             implementation(libs.kotlinx.serialization) // for data serialization
-
+            implementation(compose.materialIconsExtended)
+            implementation(libs.font.awesome)
             implementation(libs.datastore.preferences)
             implementation(libs.datastore)
-
-            implementation(libs.voyager.navigator)
+            implementation(libs.kmp.date.time.picker)
             implementation(libs.voyager.tabNavigator)
-            implementation(libs.voyager.transitions)
-
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
+
             implementation(libs.coil.compose)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+           // implementation(libs.voyager.navigator.v110beta02)
+            //implementation(libs.voyager.transitions.v110beta02)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.serialization)
+
+            //implementation("io.github.moonggae:kmedia:0.0.3")
+
 
 
         }
@@ -150,6 +162,8 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.play.services.cast.framework)
     debugImplementation(compose.uiTooling)
+
+
 }
 
 compose.desktop {
