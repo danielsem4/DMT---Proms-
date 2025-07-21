@@ -35,6 +35,7 @@ import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXs
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
+
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -50,6 +51,8 @@ fun BaseScreen(
     config: ScreenConfig = ScreenConfig.PhoneConfig, // Use ScreenConfig to define layout
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
+    prevButtonText: String = stringResource(Res.string.previous),
+    nextButtonText: String = stringResource(Res.string.next),
     navigationIcon: @Composable (() -> Unit)? = null,
     topRightText: String? = null, // For tablet
     snackbarHostState: SnackbarHostState = SnackbarHostState(), // For tablet
@@ -125,14 +128,16 @@ fun BaseScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     onPrevClick?.let {
-                        RoundedButton(stringResource(Res.string.previous), onClick = it)
+                       // RoundedButton(stringResource(Res.string.previous), onClick = it)
+                        RoundedButton(text = prevButtonText, onClick = onPrevClick)
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     onNextClick?.let {
-                        RoundedButton(
-                            text = stringResource(Res.string.next),
-                            onClick = it
-                        )
+                        RoundedButton(text = nextButtonText, onClick = onNextClick)
+                       //RoundedButton(
+                       //    text = stringResource(Res.string.next),
+                       //    onClick = it
+                       //)
                     }
                 }
             } else if (!config.showNavigationButtons && buttons.isNotEmpty()) {
