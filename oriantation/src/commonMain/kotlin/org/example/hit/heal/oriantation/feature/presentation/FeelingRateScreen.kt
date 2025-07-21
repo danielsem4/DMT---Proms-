@@ -57,6 +57,7 @@ import org.example.hit.heal.core.presentation.Resources.String.feelingRateNoPain
 import org.example.hit.heal.core.presentation.Resources.String.feelingRatePain
 import org.example.hit.heal.core.presentation.Resources.String.listening
 import org.example.hit.heal.core.presentation.Resources.String.vocalInstructions
+import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -127,8 +128,9 @@ class FeedbackScreen(
                     )
                     Text(if (isPlaying) "מנגן..." else "נגן")
 
-                                // This will be called when audio playback completes
-                                println("Audio playback completed")
+
+                    // This will be called when audio playback completes
+                    println("Audio playback completed")
 
 
 

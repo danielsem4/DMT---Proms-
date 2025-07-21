@@ -1,6 +1,8 @@
 package org.example.hit.heal.oriantation.feature.presentation
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.DrawerDefaults.shape
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.OutlinedButton
@@ -27,10 +32,12 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.Black
 import org.example.hit.heal.core.presentation.Resources.String.secQuestionInstruction
 import org.example.hit.heal.core.presentation.Resources.String.secQuestionNumber
 import org.example.hit.heal.core.presentation.Resources.String.secQuestionTitle
 import org.example.hit.heal.core.presentation.TabletBaseScreen
+import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.stringResource
 
@@ -62,8 +69,8 @@ class NumberSelectScreen(
                 ) {
                     Box(
                         modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth(),
+                            .padding(16.dp),
+//                            .fillMaxWidth(),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -81,14 +88,20 @@ class NumberSelectScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
+                        .background(Black)
+
                 ) {
                     OutlinedButton(
+
                         onClick = { expanded = true },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),
+
                         border = BorderStroke(1.dp, Color(0xFF4EC3AF)),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            backgroundColor = backgroundColor)
                     ) {
                         Text(
                             text = selectedNumber.toString(),
@@ -119,7 +132,7 @@ class NumberSelectScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(150.dp))
 
                 // Selected Number Card
                 Card(
@@ -133,9 +146,10 @@ class NumberSelectScreen(
                 ) {
                     Box(
                         modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth(),
-                        contentAlignment = Alignment.Center
+                            .padding(16.dp),
+//                            .fillMaxWidth(),
+//                            .height(20.dp),
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
 //

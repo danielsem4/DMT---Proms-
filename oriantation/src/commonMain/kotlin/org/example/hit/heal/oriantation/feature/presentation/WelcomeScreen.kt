@@ -1,9 +1,11 @@
 package org.example.hit.heal.oriantation.feature.presentation
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -22,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.entryOrientationInstructions
 import org.example.hit.heal.core.presentation.Resources.String.entryOrientationTitle
 import org.example.hit.heal.core.presentation.Resources.String.entryOrientationWelcomeNote
@@ -41,17 +44,18 @@ class OriantationWelcomeScreen: Screen {
             onNextClick = { navigator?.push(NumberSelectScreen(viewModel)) },
             content = {
 
-                Spacer(modifier = Modifier.height(48.dp))
 
                 // Main greeting + card
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxSize()
                         .padding(horizontal = 24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Text(
                         text = (stringResource(entryOrientationWelcomeNote)),
+                        fontSize = LARGE,
                         style = MaterialTheme.typography.h4.copy(fontSize = 32.sp),
                         color = Color(0xFF4EC3AF) // Use your primary color
                     )
