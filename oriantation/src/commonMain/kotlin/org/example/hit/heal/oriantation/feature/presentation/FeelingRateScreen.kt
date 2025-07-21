@@ -263,18 +263,18 @@ class FeedbackScreen(
                 }
 
             },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState) { data ->
-                    Snackbar(
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Text(
-                            text = data.message,
-                            fontSize = 32.sp
-                        )
-                    }
-                }
-            }
+//            snackbarHost = {
+//                SnackbarHost(hostState = snackbarHostState) { data ->
+//                    Snackbar(
+//                        modifier = Modifier.padding(8.dp)
+//                    ) {
+//                        Text(
+//                            text = data.message,
+//                            fontSize = 32.sp
+//                        )
+//                    }
+//                }
+//            }
         )
     }
 

@@ -9,11 +9,11 @@ import org.example.hit.heal.oriantation.feature.presentation.NumberSelectScreen
 import org.example.hit.heal.oriantation.feature.presentation.OriantationWelcomeScreen
 import org.example.hit.heal.presentation.splash.SplashScreen
 
-
 @Composable
 fun App() {
     MaterialTheme {
-        Navigator(SplashScreen()) { navigator ->
+        val screen = SplashScreen()
+        Navigator(screen) { navigator ->
             SlideTransition(navigator)
         }
     }

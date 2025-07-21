@@ -15,7 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -32,12 +35,14 @@ import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXs
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
+
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * BaseScreen is a reusable composable that provides a standard layout
  * for screens in the application.
+ * all items are within a Column
  */
 
 @Composable
@@ -46,20 +51,24 @@ fun BaseScreen(
     config: ScreenConfig = ScreenConfig.PhoneConfig, // Use ScreenConfig to define layout
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
+    prevButtonText: String = stringResource(Res.string.previous),
+    nextButtonText: String = stringResource(Res.string.next),
     navigationIcon: @Composable (() -> Unit)? = null,
     topRightText: String? = null, // For tablet
-    snackbarHost: @Composable (() -> Unit)? = null, // For tablet
+    snackbarHostState: SnackbarHostState = SnackbarHostState(), // For tablet
     buttons: Array<TabletButton> = emptyArray(), // For tablet
     modifier: Modifier = Modifier,
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
-    val scrollState = rememberScrollState()
     MaterialTheme {
         val statusBarValues = WindowInsets.safeDrawing.asPaddingValues()
 
         Column(
-            modifier = Modifier.fillMaxSize().background(backgroundColor)
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor)
                 .padding(bottom = statusBarValues.calculateBottomPadding())
+                .verticalScroll(rememberScrollState())
         ) {
             // Top Bar
             Box(
@@ -119,14 +128,16 @@ fun BaseScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     onPrevClick?.let {
-                        RoundedButton(stringResource(Res.string.previous), onClick = it)
+                       // RoundedButton(stringResource(Res.string.previous), onClick = it)
+                        RoundedButton(text = prevButtonText, onClick = onPrevClick)
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     onNextClick?.let {
-                        RoundedButton(
-                            text = stringResource(Res.string.next),
-                            onClick = it
-                        )
+                        RoundedButton(text = nextButtonText, onClick = onNextClick)
+                       //RoundedButton(
+                       //    text = stringResource(Res.string.next),
+                       //    onClick = it
+                       //)
                     }
                 }
             } else if (!config.showNavigationButtons && buttons.isNotEmpty()) {
@@ -144,8 +155,10 @@ fun BaseScreen(
                     }
                 }
             }
-
-            snackbarHost?.invoke()
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         }
     }
 }

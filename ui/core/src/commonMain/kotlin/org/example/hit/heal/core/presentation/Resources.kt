@@ -227,11 +227,71 @@ import dmt_proms.ui.core.generated.resources.hana_cohen
 import dmt_proms.ui.core.generated.resources.hash
 import dmt_proms.ui.core.generated.resources.here_persons_number
 import dmt_proms.ui.core.generated.resources.hexagon
+import dmt_proms.ui.core.generated.resources.chat
+import dmt_proms.ui.core.generated.resources.circle_outlined
+import dmt_proms.ui.core.generated.resources.clock_test
+import dmt_proms.ui.core.generated.resources.default_name
+import dmt_proms.ui.core.generated.resources.default_phone
+import dmt_proms.ui.core.generated.resources.disk_full
+import dmt_proms.ui.core.generated.resources.day_monday
+import dmt_proms.ui.core.generated.resources.day_sunday
+import dmt_proms.ui.core.generated.resources.day_thursday
+import dmt_proms.ui.core.generated.resources.day_tuesday
+import dmt_proms.ui.core.generated.resources.day_wednesday
+import dmt_proms.ui.core.generated.resources.document_share
+import dmt_proms.ui.core.generated.resources.done
+import dmt_proms.ui.core.generated.resources.dont_forget
+import dmt_proms.ui.core.generated.resources.elipsa_outlined
+import dmt_proms.ui.core.generated.resources.empty_pass
+import dmt_proms.ui.core.generated.resources.evaluation
+import dmt_proms.ui.core.generated.resources.exercise
+import dmt_proms.ui.core.generated.resources.exit
+import dmt_proms.ui.core.generated.resources.eye
+import dmt_proms.ui.core.generated.resources.file_upload
+import dmt_proms.ui.core.generated.resources.fill_fields
+import dmt_proms.ui.core.generated.resources.filled_circle
+import dmt_proms.ui.core.generated.resources.football
+import dmt_proms.ui.core.generated.resources.graphs
+import dmt_proms.ui.core.generated.resources.hash
 import dmt_proms.ui.core.generated.resources.hide_eye
 import dmt_proms.ui.core.generated.resources.hitbear
 import dmt_proms.ui.core.generated.resources.hitber
 import dmt_proms.ui.core.generated.resources.home
 import dmt_proms.ui.core.generated.resources.horizontal_stroke
+import dmt_proms.ui.core.generated.resources.hour_09_00
+import dmt_proms.ui.core.generated.resources.hour_10_00
+import dmt_proms.ui.core.generated.resources.hour_11_00
+import dmt_proms.ui.core.generated.resources.hour_12_00
+import dmt_proms.ui.core.generated.resources.hour_13_00
+import dmt_proms.ui.core.generated.resources.hour_14_00
+import dmt_proms.ui.core.generated.resources.hour_15_00
+import dmt_proms.ui.core.generated.resources.hour_16_00
+import dmt_proms.ui.core.generated.resources.book_circle
+import dmt_proms.ui.core.generated.resources.dumbbell_circle
+import dmt_proms.ui.core.generated.resources.move_circle
+import dmt_proms.ui.core.generated.resources.lecturer_circle
+import dmt_proms.ui.core.generated.resources.coffee_circle
+import dmt_proms.ui.core.generated.resources.stethoscope_circle
+import dmt_proms.ui.core.generated.resources.book_circle_text
+import dmt_proms.ui.core.generated.resources.dumbbell_circle_text
+import dmt_proms.ui.core.generated.resources.move_circle_text
+import dmt_proms.ui.core.generated.resources.lecturer_circle_text
+import dmt_proms.ui.core.generated.resources.coffee_circle_text
+import dmt_proms.ui.core.generated.resources.stethoscope_circle_text
+import dmt_proms.ui.core.generated.resources.build_schedule_continuation
+import dmt_proms.ui.core.generated.resources.instruction_text_agenda_continuation
+import dmt_proms.ui.core.generated.resources.continue_button
+import dmt_proms.ui.core.generated.resources.build_schedule
+import dmt_proms.ui.core.generated.resources.place_activities
+import dmt_proms.ui.core.generated.resources.room_title
+import dmt_proms.ui.core.generated.resources.incoming_call_title
+import dmt_proms.ui.core.generated.resources.incoming_call_text
+import dmt_proms.ui.core.generated.resources.call_from
+import dmt_proms.ui.core.generated.resources.phone_number
+import dmt_proms.ui.core.generated.resources.thank_you_title
+import dmt_proms.ui.core.generated.resources.thank_you_description
+import dmt_proms.ui.core.generated.resources.memory_instruction
+import dmt_proms.ui.core.generated.resources.start_button
 import dmt_proms.ui.core.generated.resources.how_do_you_feel
 import dmt_proms.ui.core.generated.resources.invalid_email
 import dmt_proms.ui.core.generated.resources.jogging
@@ -304,6 +364,121 @@ import dmt_proms.ui.core.generated.resources.return_button_on_top_left_pass
 import dmt_proms.ui.core.generated.resources.rhombus
 import dmt_proms.ui.core.generated.resources.rotate_star
 import dmt_proms.ui.core.generated.resources.ruler
+import dmt_proms.ui.core.generated.resources.remember_all
+import dmt_proms.ui.core.generated.resources.send
+import dmt_proms.ui.core.generated.resources.sent_successfully
+import dmt_proms.ui.core.generated.resources.serialization_error
+import dmt_proms.ui.core.generated.resources.server_error
+import dmt_proms.ui.core.generated.resources.spin_360
+import dmt_proms.ui.core.generated.resources.stand_from_chair
+import dmt_proms.ui.core.generated.resources.star_outlined
+import dmt_proms.ui.core.generated.resources.take_pills
+import dmt_proms.ui.core.generated.resources.too_many_requests
+import dmt_proms.ui.core.generated.resources.trapeze
+import dmt_proms.ui.core.generated.resources.triangle
+import dmt_proms.ui.core.generated.resources.triangle_90
+import dmt_proms.ui.core.generated.resources.talk_to_family
+import dmt_proms.ui.core.generated.resources.unexpected_error
+import dmt_proms.ui.core.generated.resources.uploading
+import dmt_proms.ui.core.generated.resources.vertical_stroke
+import dmt_proms.ui.core.generated.resources.warning
+import dmt_proms.ui.core.generated.resources.use_diary
+import dmt_proms.ui.core.generated.resources.welcome
+import dmt_proms.ui.core.generated.resources.x
+import dmt_proms.ui.core.generated.resources.yoga
+import dmt_proms.ui.core.generated.resources.what_will_you_do
+import dmt_proms.ui.core.generated.resources.good_luck
+import dmt_proms.ui.core.generated.resources.press_start_to_begin
+import dmt_proms.ui.core.generated.resources.memory_title
+import dmt_proms.ui.core.generated.resources.task_duration
+import dmt_proms.ui.core.generated.resources.task_continuity
+import dmt_proms.ui.core.generated.resources.read_instructions
+import dmt_proms.ui.core.generated.resources.complete_all_tasks
+import dmt_proms.ui.core.generated.resources.listen_instruction_tip
+import dmt_proms.ui.core.generated.resources.quiet_room_tip
+import dmt_proms.ui.core.generated.resources.instructions
+import dmt_proms.ui.core.generated.resources.bedroom
+import dmt_proms.ui.core.generated.resources.living_room
+import dmt_proms.ui.core.generated.resources.kitchen
+import dmt_proms.ui.core.generated.resources.drag_and_place_instruction
+import dmt_proms.ui.core.generated.resources.delete
+
+import dmt_proms.ui.core.generated.resources.rate
+import dmt_proms.ui.core.generated.resources.app
+import dmt_proms.ui.core.generated.resources.audioMemory
+import dmt_proms.ui.core.generated.resources.backpack
+import dmt_proms.ui.core.generated.resources.bedroom
+import dmt_proms.ui.core.generated.resources.bedroom_block
+import dmt_proms.ui.core.generated.resources.book_icon
+import dmt_proms.ui.core.generated.resources.book
+import dmt_proms.ui.core.generated.resources.book_agenda
+import dmt_proms.ui.core.generated.resources.bottle
+import dmt_proms.ui.core.generated.resources.call_accept
+import dmt_proms.ui.core.generated.resources.call_remove
+import dmt_proms.ui.core.generated.resources.coffee
+import dmt_proms.ui.core.generated.resources.coffee_agenda
+import dmt_proms.ui.core.generated.resources.coffeee_icon
+import dmt_proms.ui.core.generated.resources.delete_icon
+import dmt_proms.ui.core.generated.resources.dress
+import dmt_proms.ui.core.generated.resources.dumbbell_agenda
+import dmt_proms.ui.core.generated.resources.dumbbell_icon
+import dmt_proms.ui.core.generated.resources.glasses
+import dmt_proms.ui.core.generated.resources.keys
+import dmt_proms.ui.core.generated.resources.kitchen_block
+import dmt_proms.ui.core.generated.resources.move_agenda
+import dmt_proms.ui.core.generated.resources.move_icon
+import dmt_proms.ui.core.generated.resources.phone
+import dmt_proms.ui.core.generated.resources.records
+import dmt_proms.ui.core.generated.resources.salon_block
+import dmt_proms.ui.core.generated.resources.shoes
+import dmt_proms.ui.core.generated.resources.stethoscope_icon
+import dmt_proms.ui.core.generated.resources.stethoscope_agenda
+import dmt_proms.ui.core.generated.resources.teach_agenda
+import dmt_proms.ui.core.generated.resources.teach_icon
+import dmt_proms.ui.core.generated.resources.wallet
+import dmt_proms.ui.core.generated.resources.select_date
+import dmt_proms.ui.core.generated.resources.empty_string
+import dmt_proms.ui.core.generated.resources.week_day_s
+import dmt_proms.ui.core.generated.resources.week_day_m
+import dmt_proms.ui.core.generated.resources.week_day_tu
+import dmt_proms.ui.core.generated.resources.week_day_w
+import dmt_proms.ui.core.generated.resources.week_day_th
+import dmt_proms.ui.core.generated.resources.week_day_f
+import dmt_proms.ui.core.generated.resources.week_day_sa
+import dmt_proms.ui.core.generated.resources.report_medication_taken
+import dmt_proms.ui.core.generated.resources.report_message
+import dmt_proms.ui.core.generated.resources.save
+import dmt_proms.ui.core.generated.resources.date
+import dmt_proms.ui.core.generated.resources.time
+import dmt_proms.ui.core.generated.resources.dash
+import dmt_proms.ui.core.generated.resources.select_date_label
+import dmt_proms.ui.core.generated.resources.select_time_label
+import dmt_proms.ui.core.generated.resources.search_hint
+import dmt_proms.ui.core.generated.resources.report_medication
+import dmt_proms.ui.core.generated.resources.set_medication_alarm
+import dmt_proms.ui.core.generated.resources.daily
+import dmt_proms.ui.core.generated.resources.weekly
+import dmt_proms.ui.core.generated.resources.start_date_empty
+import dmt_proms.ui.core.generated.resources.end_before_start
+import dmt_proms.ui.core.generated.resources.back
+import dmt_proms.ui.core.generated.resources.when_notification
+import dmt_proms.ui.core.generated.resources.how_many_times_per_day
+import dmt_proms.ui.core.generated.resources.select_week_days
+import dmt_proms.ui.core.generated.resources.start_time
+import dmt_proms.ui.core.generated.resources.notification_start_question
+import dmt_proms.ui.core.generated.resources.start_date
+import dmt_proms.ui.core.generated.resources.end_date
+import dmt_proms.ui.core.generated.resources.first_one_minute_end_body_memory
+import dmt_proms.ui.core.generated.resources.leave_end_date_empty
+import dmt_proms.ui.core.generated.resources.place_instructions_in_calendar_memory
+
+
+
+import dmt_proms.ui.core.generated.resources.profile
+import dmt_proms.ui.core.generated.resources.psychiatrist_pass
+import dmt_proms.ui.core.generated.resources.purse
+import dmt_proms.ui.core.generated.resources.return_button_on_top_left_pass
+import dmt_proms.ui.core.generated.resources.rotate_star
 import dmt_proms.ui.core.generated.resources.search
 import dmt_proms.ui.core.generated.resources.search_at_latter_h_pass
 import dmt_proms.ui.core.generated.resources.search_contacts_list_in_the_phone_pass
@@ -421,6 +596,23 @@ import dmt_proms.ui.core.generated.resources.x
 import dmt_proms.ui.core.generated.resources.yes
 import dmt_proms.ui.core.generated.resources.yoga
 import dmt_proms.ui.core.generated.resources.yogurt
+import dmt_proms.ui.core.generated.resources.how_well_do_you_feel_memory
+import dmt_proms.ui.core.generated.resources.old_phone_ring
+import dmt_proms.ui.core.generated.resources.place_rate_memory
+import dmt_proms.ui.core.generated.resources.the_rate_is
+import dmt_proms.ui.core.generated.resources.how_well_do_you_think_you_will_do_memory
+import dmt_proms.ui.core.generated.resources.instructions_text_memory_question_trial
+import dmt_proms.ui.core.generated.resources.the_activities_memory
+import dmt_proms.ui.core.generated.resources.instructions_text_memory_question_1
+import dmt_proms.ui.core.generated.resources. second_one_minute_end_body_memory
+import dmt_proms.ui.core.generated.resources.time_ended
+import dmt_proms.ui.core.generated.resources.time_ended_for_this_question_memory
+import dmt_proms.ui.core.generated.resources.please_place_all_activities_memory
+import dmt_proms.ui.core.generated.resources.dateMedications
+import dmt_proms.ui.core.generated.resources.took
+import dmt_proms.ui.core.generated.resources.timeMedications
+import dmt_proms.ui.core.generated.resources.error_start_date_empty
+import dmt_proms.ui.core.generated.resources.error_end_before_start
 import dmt_proms.ui.core.generated.resources.you_in_the_autumn
 import dmt_proms.ui.core.generated.resources.you_in_the_season
 import dmt_proms.ui.core.generated.resources.you_in_the_spring
@@ -545,6 +737,45 @@ object Resources {
         val measurements = Icons.Outlined.MonitorHeart
         val activities = Icons.Outlined.Snowshoeing
         val clock = Icons.Rounded.Timer
+
+
+
+
+
+        //MemoryTestModule
+        val appIcon = Res.drawable.app
+        val backpackIcon = Res.drawable.backpack
+        val bedroomBlockIcon = Res.drawable.bedroom_block
+        val bookIcon = Res.drawable.book_icon
+        val bookImage = Res.drawable.book
+        val bookScheduleIcon = Res.drawable.book_agenda
+        val bottleImage = Res.drawable.bottle
+        val callAccept= Res.drawable.call_accept
+        val callDecline = Res.drawable.call_remove
+        val coffeeImage = Res.drawable.coffee
+        val coffeeScheduleIcon = Res.drawable.coffee_agenda
+        val coffeIcon = Res.drawable.coffeee_icon
+        val deleteIcon = Res.drawable.delete_icon
+        val dressImage = Res.drawable.dress
+        val dumbbellScheduleIcon = Res.drawable.dumbbell_agenda
+        val dumblertIcon = Res.drawable.dumbbell_icon
+        val glassesImage = Res.drawable.glasses
+        val keysImage = Res.drawable.keys
+        val kitchenBlockIcon = Res.drawable.kitchen_block
+        val moveScheduleIcon = Res.drawable.move_agenda
+        val moveIcon = Res.drawable.move_icon
+        val phoneImage = Res.drawable.phone
+        val recordsIcon = Res.drawable.records
+        val salonBlockIcon = Res.drawable.salon_block
+        val shoesImages = Res.drawable.shoes
+        val stethoscopeImage = Res.drawable.stethoscope_icon
+        val stethascopeScheduleIcon = Res.drawable.stethoscope_agenda
+        val teachScheduleIcon = Res.drawable.teach_agenda
+        val teachIcon = Res.drawable.teach_icon
+        val walletImage = Res.drawable.wallet
+
+
+
     }
 
     object String {
@@ -578,11 +809,15 @@ object Resources {
         val next = rs.next
         val loginSuccess = rs.login_success
         val previous = rs.previous
-        val back = rs.back
+
         val graphs = rs.graphs
         val appName = rs.app_name
         val howDoYouFeel = rs.how_do_you_feel
         val evaluationText = rs.evaluation
+
+        val took =rs.took
+        val dateMedications = rs.dateMedications
+        val timeMedications = rs.timeMedications
 
         val logoutConfirmation = rs.logout_confirmation
         val areYouSure = Res.string.are_you_sure
@@ -602,7 +837,8 @@ object Resources {
         val serializationError = rs.serialization_error
         val remoteUnknown = rs.remote_unknown
         val unexpectedError = rs.unexpected_error
-
+        val error_start_date_empty =rs.error_start_date_empty
+        val error_end_before_start =rs.error_end_before_start
 
         val exit = Res.string.exit
         val `continue` = Res.string.`continue`
@@ -913,6 +1149,128 @@ object Resources {
             Res.string.wrong_number_dialed_please_try_again_pass
         val firstMissionDoneVocalPass = Res.string.first_mission_done_vocal_pass
 
+
+        //Medications
+        val selectDate = rs.select_date
+        val emptyString = rs.empty_string
+        val weekDayS = rs.week_day_s
+        val weekDayM = rs.week_day_m
+        val weekDayTu = rs.week_day_tu
+        val weekDayW = rs.week_day_w
+        val weekDayTh =rs.week_day_th
+        val weekDayF = rs.week_day_f
+        val weekDaySa = rs.week_day_sa
+        val reportMedicationTaken = rs.report_medication_taken
+        val reportMessage =rs.report_message
+        val save = rs.save
+        val date = rs.date
+        val time = rs.time
+        val dash = rs.dash
+        val selectDateLabel = rs.select_date_label
+        val selectTimeLabel = rs.select_time_label
+        val searchHint = rs.search_hint
+        val reportMedication = rs.report_medication
+        val setMedicationAlarm = rs.set_medication_alarm
+        val daily = rs.daily
+        val weekly = rs.weekly
+        val startDateEmpty = rs.start_date_empty
+        val endBeforeStart = rs.end_before_start
+        val back = rs.back
+        val whenNotification =rs.when_notification
+        val howManyTimesPerDay = rs.how_many_times_per_day
+        val selectWeekDays = rs.select_week_days
+        val startTime = rs.start_time
+        val notificationStartQuestion = rs.notification_start_question
+        val startDate = rs.start_date
+        val endDate = rs.end_date
+        val leaveEndDateEmpty = rs.leave_end_date_empty
+
+        //MemoryTestModule
+        val day_sunday = rs.day_sunday
+        val day_monday = rs.day_monday
+        val day_tuesday = rs.day_tuesday
+        val day_wednesday = rs.day_wednesday
+        val day_thursday = rs.day_thursday
+
+        val hour_09_00 = rs.hour_09_00
+        val hour_10_00 = rs.hour_10_00
+        val hour_11_00 = rs.hour_11_00
+        val hour_12_00 = rs.hour_12_00
+        val hour_13_00 = rs.hour_13_00
+        val hour_14_00 = rs.hour_14_00
+        val hour_15_00 = rs.hour_15_00
+        val hour_16_00 = rs.hour_16_00
+
+        val book_circle = rs.book_circle
+        val dumbbell_circle = rs.dumbbell_circle
+        val move_circle = rs.move_circle
+        val lecturer_circle = rs.lecturer_circle
+        val coffee_circle = rs.coffee_circle
+        val stethoscope_circle = rs.stethoscope_circle
+
+        val book_circle_text = rs.book_circle_text
+        val dumbbell_circle_text = rs.dumbbell_circle_text
+        val move_circle_text = rs.move_circle_text
+        val lecturer_circle_text = rs.lecturer_circle_text
+        val coffee_circle_text = rs.coffee_circle_text
+        val stethoscope_circle_text = rs.stethoscope_circle_text
+
+        val build_schedule_continuation = rs.build_schedule_continuation
+        val instruction_text_agenda_continuation = rs.instruction_text_agenda_continuation
+        val continue_button = rs.continue_button
+        val build_schedule = rs.build_schedule
+        val place_activities = rs.place_activities
+        val memory_instruction = rs.memory_instruction
+        val start_button =rs.start_button
+        val whatWillYouDo = rs.what_will_you_do
+
+        val remember_all = rs.remember_all
+        val talk_to_family = rs.talk_to_family
+        val use_diary = rs.use_diary
+
+        val room_title = rs.room_title
+        val incoming_call_title = rs.incoming_call_title
+        val incoming_call_text = rs.incoming_call_text
+
+        val call_from = rs.call_from
+        val phone_number = rs.phone_number
+        val thank_you_title = rs.thank_you_title
+        val thank_you_description = rs.thank_you_description
+
+        val memory_title = rs.memory_title
+        val task_duration = rs.task_duration
+        val task_continuity = rs.task_continuity
+        val read_instructions = rs.read_instructions
+        val complete_all_tasks = rs.complete_all_tasks
+        val listen_instruction_tip = rs.listen_instruction_tip
+        val quiet_room_tip = rs.quiet_room_tip
+        val good_luck = rs.good_luck
+        val press_start_to_begin = rs.press_start_to_begin
+        val instructions = rs.instructions
+        val bedroom = rs.bedroom
+        val living_room = rs.living_room
+        val kitchen = rs.kitchen
+        val drag_and_place_instruction = rs.drag_and_place_instruction
+        val delete = rs.delete
+        val instructions_text_memory_question_trial = rs.instructions_text_memory_question_trial
+        val rate = rs.rate
+        val audioMemory = rs.audioMemory
+        val old_phone_ring = rs.old_phone_ring
+        val place_rate_memory = rs.place_rate_memory
+        val the_rate_is = rs.the_rate_is
+        val how_well_do_you_think_you_will_do_memory = rs.how_well_do_you_think_you_will_do_memory
+        val how_well_do_you_feel_memory = rs.how_well_do_you_feel_memory
+        val the_activities_memory = rs.the_activities_memory
+        val instructions_text_memory_question_1 = rs.instructions_text_memory_question_1
+        val place_instructions_in_calendar_memory =rs.place_instructions_in_calendar_memory
+
+        val time_ended_for_this_question_memory = rs.time_ended_for_this_question_memory
+        val time_ended= rs.time_ended
+
+        val second_one_minute_end_body_memory = rs.second_one_minute_end_body_memory
+        val first_one_minute_end_body_memory = rs.first_one_minute_end_body_memory
+        val please_place_all_activities_memory =rs.please_place_all_activities_memory
+
 // orientation string
     val entryOrientationTitle = Res.string.entry_Oriantation_title
         val entryOrientationWelcomeNote = Res.string.entry_Oriantation_welcome_note
@@ -956,5 +1314,6 @@ object Resources {
 
 
     }
+
 
 }

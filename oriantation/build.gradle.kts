@@ -33,6 +33,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.ui.core)
             implementation(projects.core)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -43,7 +44,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
-
+            implementation(libs.jetbrains.kotlinx.datetime)
             implementation(libs.bundles.ktor)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)

@@ -26,4 +26,7 @@ actual class AudioPlayer {
         player?.delegate = delegate
         player?.play()
     }
+
+    actual fun stop() {
+    }
 }

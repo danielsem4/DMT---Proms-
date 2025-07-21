@@ -1,6 +1,7 @@
 package core.utils
 
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -10,8 +11,8 @@ import kotlinx.datetime.toLocalDateTime
  *
  * @return A string representing the current date and time in the specified format.
  */
-fun getCurrentFormattedDateTime(): String {
-    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+fun getCurrentFormattedDateTime( now:LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())): String {
+
 
     val day = now.dayOfMonth.toString().padStart(2, '0')
     val month = now.monthNumber.toString().padStart(2, '0')

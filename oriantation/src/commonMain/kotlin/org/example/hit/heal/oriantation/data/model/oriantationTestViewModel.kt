@@ -93,7 +93,7 @@ class OrientationTestViewModel(
         }
 
         val version = 1
-        val measurement = 20 // <-- use your measurement ID
+        val measurement = 20
         val date = getCurrentFormattedDateTime()
         val imgName = "orientation_shape.png"
 

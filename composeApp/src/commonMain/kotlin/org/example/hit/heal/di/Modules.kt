@@ -1,11 +1,14 @@
 package org.example.hit.heal.di
 
+
+
+import com.example.new_memory_test.di.MemoryModule
+import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import core.di.AudioModule
 import core.di.clientRequestsModule
 import core.di.sessionModule
 import di.Pass_module
 import org.example.hit.heal.cdt.di.CDT_module
-import org.example.hit.heal.oriantation.di.ORIENTATION_module
 
 import org.example.hit.heal.hitber.di.HitBer_module
 
@@ -13,10 +16,11 @@ import org.example.hit.heal.presentation.activities.ActivitiesViewModel
 import org.example.hit.heal.presentation.evaluation.EvaluationTestViewModel
 import org.example.hit.heal.presentation.evaluation.EvaluationsViewModel
 
+import org.example.hit.heal.oriantation.di.ORIENTATION_module
 import org.example.hit.heal.presentation.home.HomeViewModel
 import org.example.hit.heal.presentation.login.LoginViewModel
+import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
 import org.example.hit.heal.presentation.splash.SplashViewModel
-
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModelOf
@@ -29,7 +33,7 @@ fun initKoin(config: KoinAppDeclaration? = null) =
         modules(
             sharedModules,
             sharedAppModules,
-            platformModule,
+            platformModule
         )
     }
 
@@ -39,6 +43,7 @@ val sharedAppModules = module{
     includes(clientRequestsModule)
     includes(sessionModule)
     includes(AudioModule)
+
 }
 
 val sharedModules = module {
@@ -48,11 +53,17 @@ val sharedModules = module {
 
 
     includes(HitBer_module)
+    includes(MemoryModule)
     includes(Pass_module)
     viewModelOf(::EvaluationsViewModel)
+
     viewModelOf(::ActivitiesViewModel)
     viewModelOf(::EvaluationsViewModel)
     viewModelOf(::EvaluationTestViewModel)
+
+    viewModelOf(::MedicationViewModel)
+
+
     includes(CDT_module)
     includes(ORIENTATION_module)
 }
