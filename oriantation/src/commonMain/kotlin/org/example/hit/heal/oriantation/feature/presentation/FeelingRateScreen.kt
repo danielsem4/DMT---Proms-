@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +40,8 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import core.domain.use_case.PlayAudioUseCase
+import core.utils.AudioPlayer
 import dmt_proms.oriantation.generated.resources.Res
 import dmt_proms.oriantation.generated.resources.mid_pain_icon
 import dmt_proms.oriantation.generated.resources.no_pain_icon
@@ -57,7 +60,6 @@ import org.example.hit.heal.core.presentation.Resources.String.vocalInstructions
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
-import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -77,7 +79,9 @@ class FeedbackScreen(
         val successMessage = stringResource(Resources.String.sentSuccessfully)
 
         val audioPlayer = remember { AudioPlayer() }
+        val playAudioUseCase = remember { PlayAudioUseCase(audioPlayer) }
         val audioUrl = stringResource(SetHealthRate)
+        val isPlaying by playAudioUseCase.isPlaying.collectAsState()
         
         BaseScreen(
             config = ScreenConfig.TabletConfig,
@@ -90,13 +94,13 @@ class FeedbackScreen(
                 viewModel.updateFeelingRate(progress.toInt())
                 
                 // Send data to server and navigate back to home
-                sendToServerAndNavigate(
-                    viewModel = viewModel,
-                    snackbarHostState = snackbarHostState,
-                    coroutineScope = coroutineScope,
-                    successMessage = successMessage,
-                    navigator = navigator
-                )
+//                sendToServerAndNavigate(
+//                    viewModel = viewModel,
+//                    snackbarHostState = snackbarHostState,
+//                    coroutineScope = coroutineScope,
+//                    successMessage = successMessage,
+//                    navigator = navigator
+//                )
             },
             content = {
 
@@ -115,12 +119,18 @@ class FeedbackScreen(
                             .width(180.dp)
                             .height(56.dp),
                         onClick = { // Play the audio when button is clicked
-                            audioPlayer.play(audioUrl) {
+                            coroutineScope.launch {
+                                playAudioUseCase.playAudio(audioUrl)
+                            }
+                        },
+                        enabled = !isPlaying
+                    )
+                    Text(if (isPlaying) "מנגן..." else "נגן")
+
                                 // This will be called when audio playback completes
                                 println("Audio playback completed")
-                            }
-                        }
-                    )
+
+
 
                     Spacer(modifier = Modifier.height(100.dp))
 
