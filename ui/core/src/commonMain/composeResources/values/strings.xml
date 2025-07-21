@@ -35,6 +35,7 @@
     <string name="serialization_error">There was a problem processing the server response</string>
     <string name="remote_unknown">An unknown server error occurred</string>
     <string name="unexpected_error">An unexpected error occurred</string>
+    <string name="server_error">A server error occurred</string>
 
 
     <string name="login_success">Logged in successfully</string>
