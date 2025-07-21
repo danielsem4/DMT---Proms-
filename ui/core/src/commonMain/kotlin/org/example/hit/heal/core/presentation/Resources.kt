@@ -1271,8 +1271,8 @@ object Resources {
         val first_one_minute_end_body_memory = rs.first_one_minute_end_body_memory
         val please_place_all_activities_memory =rs.please_place_all_activities_memory
 
-// orientation string
-    val entryOrientationTitle = Res.string.entry_Oriantation_title
+        // orientation string
+        val entryOrientationTitle = Res.string.entry_Oriantation_title
         val entryOrientationWelcomeNote = Res.string.entry_Oriantation_welcome_note
         val entryOrientationInstructions = Res.string.entry_Oriantation_instructions
         val NextText = Res.string.next_text
@@ -1309,8 +1309,7 @@ object Resources {
         val dropdownSelectedNumber = Res.string.dropdown_selected_number
 
         val trialDrawTitle = Res.string.trial_draw_title
-
-        val setHealthRate = Res.string.set_health_rate
+        val SetHealthRate = Res.string.set_health_rate
 
 
     }

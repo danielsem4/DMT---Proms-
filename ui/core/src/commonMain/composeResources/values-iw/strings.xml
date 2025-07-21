@@ -243,6 +243,50 @@
     <string name="summary_hitber_instructions2">נא ליצור קשר עם המטפל/ת לפרטים נוספים.</string>
 
     <!--    Orientation Module  -->
+    <string name="entry_Oriantation_title">אוריינטציה</string>
+    <string name="entry_Oriantation_welcome_note">ברוך הבא</string>
+    <string name="entry_Oriantation_instructions">אתה עומד לנסות תרגיל קצר באמצעות הטאבלט. נסה לעקוב אחרי ההנחיות ולבצע את המשימה.</string>
+    <string name="next_text">הבא</string>
+
+    <string name="sec_question_title">תפריט נפתח</string>
+    <string name="sec_question_instraction">כעת אנא בחר את המספר 4 ולאחר מכן לחץ על כפתור הבא.</string>
+    <string name="sec_question_number">המספר שנבחר כעת הוא</string>
+
+    <string name="entry_instructions_app_trial">אתה עומד לנסות תרגיל קצר באמצעות הטאבלט. נסה לעקוב אחרי ההנחיות ולבצע את המשימה.</string>
+    <string name="dropdown_instructions_app_trial">כעת, אנא בחר את המספר 4 ולאחר מכן לחץ על כפתור "הבא".</string>
+    <string name="seasons_instructions_app_trial">כאן ישנם 4 כפתורים המייצגים את עונות השנה. אנא שנה את העונה לקיץ.</string>
+    <string name="trial_drag_instructions">יש לפניך מספר צורות. עליך לגרור את המשולש אל תוך הריבוע האדום שמשמאל.</string>
+    <string name="trial_drag_title">גרור ושחרר</string>
+    <string name="trial_pinch_title">שינוי גודל</string>
+    <string name="trial_pinch_instructions">כעת, עליך להגדיל את המשולש על ידי הרחקת שתי האצבעות על הצורה.</string>
+
+    <string name="seasons_instructions_app_trial2">כעת, אנא שנה את העונה לחורף.</string>
+    <string name="trial_draw_instructions">אנא צייר צורת X.</string>
+    <string name="trial_end_test_instructions">המבחן הסתיים. תודה רבה על שיתוף הפעולה.</string>
+    <string name="edit_text_dialog_instruction">אנא כתוב את דעתך על המשימה בתיבה למטה. לסגירת המקלדת לחץ על אייקון המקלדת. בסיום לחץ על כפתור ה-X.</string>
+    <string name="season_winter">חורף</string>
+    <string name="season_summer">קיץ</string>
+    <string name="season_spring">אביב</string>
+    <string name="season_autumn">סתיו</string>
+
+    <string name="oriantation_season_title">עונות השנה</string>
+    <string name="you_in_the_season">כעת אתה בעונה</string>
+    <string name="winter">חורף</string>
+    <string name="you_in_the_summer">כעת אתה בעונת הקיץ.</string>
+    <string name="you_in_the_winter">כעת אתה בעונת החורף.</string>
+    <string name="you_in_the_spring">כעת אתה בעונת האביב.</string>
+    <string name="you_in_the_autumn">כעת אתה בעונת הסתיו.</string>
+    <string name="vocal_instructions">הנחיות קוליות</string>
+    <string name="listening">הקשב</string>
+    <string name="feeling_rate_pain">תחושה רעה</string>
+    <string name="feeling_rate_mid">תחושה בינונית</string>
+    <string name="feeling_rate_no_pain">תחושה טובה</string>
+
+    <string name="dropdown_selected_number">המספר שנבחר כעת הוא:</string>
+
+    <string name="trial_draw_title">השתמש בעט</string>
+
+    <string name="set_health_rate"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fvocal_instruction_trial.mp3?alt=media&token=ede5447f-bd0b-4411-9bfb-09f6bbdf2e27]]></string>
 
 
     <!--    Memory Module  -->

@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -45,12 +43,12 @@ import dmt_proms.oriantation.generated.resources.Res
 import dmt_proms.oriantation.generated.resources.mid_pain_icon
 import dmt_proms.oriantation.generated.resources.no_pain_icon
 import dmt_proms.oriantation.generated.resources.pain_icon
-import dmt_proms.oriantation.generated.resources.set_health_rate
 import dmt_proms.oriantation.generated.resources.small_pain_icon
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.NextText
+import org.example.hit.heal.core.presentation.Resources.String.SetHealthRate
 import org.example.hit.heal.core.presentation.Resources.String.feelingRateMid
 import org.example.hit.heal.core.presentation.Resources.String.feelingRateNoPain
 import org.example.hit.heal.core.presentation.Resources.String.feelingRatePain
@@ -79,7 +77,7 @@ class FeedbackScreen(
         val successMessage = stringResource(Resources.String.sentSuccessfully)
 
         val audioPlayer = remember { AudioPlayer() }
-        val audioUrl = stringResource(Res.string.set_health_rate)
+        val audioUrl = stringResource(SetHealthRate)
         
         BaseScreen(
             config = ScreenConfig.TabletConfig,
