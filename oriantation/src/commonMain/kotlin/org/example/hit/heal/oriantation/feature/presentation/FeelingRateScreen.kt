@@ -3,8 +3,6 @@ package org.example.hit.heal.oriantation.feature.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.content.MediaType
-import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,17 +16,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.DrawerDefaults.shape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Slider
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,15 +41,12 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-
 import dmt_proms.oriantation.generated.resources.Res
-import dmt_proms.oriantation.generated.resources.close
 import dmt_proms.oriantation.generated.resources.mid_pain_icon
 import dmt_proms.oriantation.generated.resources.no_pain_icon
 import dmt_proms.oriantation.generated.resources.pain_icon
 import dmt_proms.oriantation.generated.resources.set_health_rate
 import dmt_proms.oriantation.generated.resources.small_pain_icon
-import dmt_proms.oriantation.generated.resources.winter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Resources
@@ -73,13 +61,8 @@ import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayer
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
-import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.viewmodel.koinViewModel
-import kotlin.math.roundToInt
-
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 class FeedbackScreen(
     private val viewModel: OrientationTestViewModel

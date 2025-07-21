@@ -16,7 +16,6 @@ import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.util.PrefKeys
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
-import dmt_proms.oriantation.generated.resources.Res
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO

@@ -18,7 +18,6 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 
@@ -44,7 +44,6 @@ import dmt_proms.oriantation.generated.resources.seasons_instructions_app_trial
 import dmt_proms.oriantation.generated.resources.spring
 import dmt_proms.oriantation.generated.resources.summer
 import dmt_proms.oriantation.generated.resources.winter
-import org.example.hit.heal.core.presentation.Resources.String.Winter
 import org.example.hit.heal.core.presentation.Resources.String.orientationSeasonTitle
 import org.example.hit.heal.core.presentation.Resources.String.seasonsInstructionsAppTrial
 import org.example.hit.heal.core.presentation.TabletBaseScreen
