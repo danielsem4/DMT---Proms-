@@ -106,11 +106,6 @@ class HomeScreen : Screen {
             viewModel.loadFeatures()
         }
 
-        LaunchedEffect(features) {
-            println("All features: ${features.toString().replace(",","\n")}")
-        }
-
-
         BaseScreen(
             title = stringResource(Resources.String.home),
             navigationIcon = {
