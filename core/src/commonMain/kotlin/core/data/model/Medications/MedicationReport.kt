@@ -1,8 +1,12 @@
 package core.data.model.Medications
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class MedicationReport(
-    val clinic_id: Int,
-    val patient_id: Int,
-    val medication_id: String,
+    val clinicId: Int,
+    @SerialName("patient_id") val patientId: Int,
+    @SerialName("medication_id") val medicationId: String,
     val timestamp: String
 )

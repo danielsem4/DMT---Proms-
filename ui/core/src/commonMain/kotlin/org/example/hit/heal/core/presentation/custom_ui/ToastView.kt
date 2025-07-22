@@ -16,7 +16,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.MEDIUM
 import org.example.hit.heal.core.presentation.Resources.Icon.checkIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.warningIcon

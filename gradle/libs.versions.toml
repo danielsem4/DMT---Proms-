@@ -4,7 +4,7 @@ android-compileSdk = "36"
 android-minSdk = "26"
 android-targetSdk = "34"
 androidx-activityCompose = "1.10.1"
-androidx-appcompat = "1.7.0"
+androidx-appcompat = "1.7.1"
 androidx-constraintlayout = "2.2.1"
 androidx-core-ktx = "1.16.0"
 androidx-espresso-core = "3.6.1"
@@ -14,25 +14,29 @@ androidx-test-junit = "1.2.1"
 coreVersion = "1.0.0-beta7"
 gson = "2.10.1"
 compose-multiplatform = "1.7.3"
+composeDndVersion = "0.2.0"
+dialog = "0.4.0"
+draganddrop = "<0.8.0>"
 fontAwesome = "1.1.1"
 foundationLayout = "1.7.8"
 junit = "4.13.2"
 koin = "4.0.0"
 kotlinx-serialization = "1.8.0"
 koinComposeMultiplatform = "4.0.0"
+ktorSerializationKotlinxJson = "3.1.1"
 navigationCompose = "2.8.0-alpha10"
 lifecycleViewModel = "2.8.7"
 kmpCapturableCompose = "0.1.0"
 koinAndroid = "3.2.0"
+kmpDateTimePicker = "1.0.7"
 kotlin = "2.1.0"
 kotlinx-coroutines = "1.10.1"
-kotlinxSerializationJson = "1.6.3"
 lifecycleViewmodelCompose = "2.8.7"
 material3 = "1.3.1"
 navigatorVersion = "1.0.0-beta6"
 kotlinxDatetime = "0.6.2"
+resources = "1.4.0"
 uiGraphicsAndroid = "1.7.8"
-voyagerVersion = "1.0.0"
 foundationAndroid = "1.7.8"
 benchmarkMacro = "1.3.3"
 kotlinSerialization = "1.8.0"
@@ -47,13 +51,30 @@ ktor = "3.1.2"
 runtimeLivedata = "1.7.8"
 coil-compose = "3.0.0"
 playServicesCastFramework = "22.0.0"
+filekitCore = "0.8.8"
 datastore = "1.1.1"
 atomicfu = "0.23.2"
 
 nav3Core = "1.0.0-alpha02"
 nav3Lifecycle = "1.0.0-alpha01"
+uiTooling = "1.8.3"
+kotlinxDatetimeVersion = "0.6.2"
+kotlinxSerializationJson = "1.8.0"
+ktorClientCore = "3.1.1"
+material3Icons = "1.6.10"
+materialIconsCoreVersion = "1.8.1"
+material3Android = "1.3.2"
+navigation = "2.7.0-alpha07"
+viewmodel = "2.8.2"
+koinCompose = "1.1.5"
+composeDnd = "0.3.0"
+compose-runtime = "1.8.2"
+koinComposeViewModel = "1.2.0-Beta4"
+voyagerNavigator = "1.1.0-beta02"
+voyagerVersion = "1.1.0-beta02"
+xicon_pack_z = "1.1.1"
 
-
+uiGraphicsAndroidVersion = "1.7.8"
 [libraries]
 androidx-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundationAndroid" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
@@ -61,6 +82,20 @@ androidx-material3 = { module = "androidx.compose.material3:material3", version.
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 kmp-capturable-compose = { module = "io.github.suwasto:kmp-capturable-compose", version.ref = "kmpCapturableCompose" }
+draganddrop = { module = "io.github.mohamedrejeb.compose-drag-and-drop:draganddrop", version.ref = "draganddrop" }
+jetbrains-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetimeVersion" }
+filekit-compose = { module = "io.github.vinceglb:filekit-compose", version.ref = "filekitCore" }
+kmp-date-time-picker = { module = "network.chaintech:kmp-date-time-picker", version.ref = "kmpDateTimePicker" }
+ktor-serialization-kotlinx-json-v311 = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorSerializationKotlinxJson" }
+material-icons-core = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "materialIconsCoreVersion" }
+material-icons-extended = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "materialIconsCoreVersion" }
+material3-icons = { module = "org.jetbrains.compose.material3:material3-icons", version.ref = "material3Icons" }
+mohamedrejeb-compose-dnd = { module = "io.github.mohamedrejeb:compose-dnd", version.ref = "composeDndVersion" }
+resources = { module = "org.jetbrains.compose.resources:resources", version.ref = "resources" }
+viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
+compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose-runtime" }
+compose-dnd = { group = "com.mohamedrejeb.dnd", name = "compose-dnd", version.ref = "composeDnd" }
+ dialog = { module = "com.moriatsushi.compose-material3-dialog:dialog", version.ref = "dialog" }
 font-awesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "fontAwesome" }
 androidx-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "foundationLayout" }
 
@@ -82,6 +117,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+
 androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerVersion" }
@@ -129,6 +165,7 @@ coil-core = { module = "io.coil-kt.coil3:coil", version.ref = "coil-compose" }
 coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil-compose" }
 
 # Other Libraries
+kotlin-date-time = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlin-date-time" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 play-services-cast-framework = { group = "com.google.android.gms", name = "play-services-cast-framework", version.ref = "playServicesCastFramework" }
@@ -136,30 +173,49 @@ kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", versio
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
-voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
 
-voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+#Voyager
+
+voyager-navigator = {module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager"}
+voyager-navigator-v110beta02 = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerNavigator" }
+voyager-transitions = {module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager"}
 voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
-voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
+voyager-transitions-v110beta02 = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerVersion" }
+voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
+androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
+xicon_pack_z = { module = "br.com.devsrsouza.compose.icons:{ICON_PACK}", version.ref = "xicon_pack_z" }
 
+
+
+ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroidVersion" }
 [plugins]
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+androidKotlinMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 
 [bundles]
 kotlin = ["kotlinx-datetime", "coroutines-core", "kotlinx-serialization"]
-koin-compose = ["koin-compose", "koin-compose-viewmodel", "koin-compose-viewmodel-navigation"]
+voyager-common = [
+    "voyager-navigator",
+    "voyager-transitions"
+]
+koin-compose = [
+    "koin-compose",
+    "koin-compose-viewmodel",
+    "koin-compose-viewmodel-navigation"
+]
+
 ktor = [
     "ktor-client-core",
     "ktor-client-content-negotiation",
     "ktor-client-auth",
     "ktor-client-logging",
     "ktor-serialization-kotlinx-json",
-    "ktor-client-cio",
+    "ktor-client-cio"
 ]
