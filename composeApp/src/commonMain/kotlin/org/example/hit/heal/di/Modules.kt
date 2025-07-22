@@ -10,12 +10,13 @@ import core.di.sessionModule
 import di.Pass_module
 import org.example.hit.heal.cdt.di.CDT_module
 
-import org.example.hit.heal.hitber.di.Hitber_module
+import org.example.hit.heal.hitber.di.HitBer_module
 
 import org.example.hit.heal.presentation.activities.ActivitiesViewModel
 import org.example.hit.heal.presentation.evaluation.EvaluationTestViewModel
 import org.example.hit.heal.presentation.evaluation.EvaluationsViewModel
 
+import org.example.hit.heal.oriantation.di.ORIENTATION_module
 import org.example.hit.heal.presentation.home.HomeViewModel
 import org.example.hit.heal.presentation.login.LoginViewModel
 import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
@@ -51,8 +52,8 @@ val sharedModules = module {
     viewModelOf(::SplashViewModel)
 
 
+    includes(HitBer_module)
     includes(MemoryModule)
-    includes(Hitber_module)
     includes(Pass_module)
     viewModelOf(::EvaluationsViewModel)
 
@@ -64,4 +65,5 @@ val sharedModules = module {
 
 
     includes(CDT_module)
+    includes(ORIENTATION_module)
 }

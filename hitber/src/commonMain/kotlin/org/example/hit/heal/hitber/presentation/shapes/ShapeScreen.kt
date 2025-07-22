@@ -36,7 +36,6 @@ import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.KoinApplication.Companion.init
 
 class ShapeScreen : Screen {
     @Composable
@@ -59,6 +58,7 @@ class ShapeScreen : Screen {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                 )
                 {
+                    // Display each shape icon from the selected set
                     shapeSet.forEach { shapeRes ->
                         Icon(
                             painter = painterResource(shapeRes.drawable),
@@ -78,15 +78,12 @@ class ShapeScreen : Screen {
 
             })
 
-        LaunchedEffect(Unit){
-            secondQuestionViewModel.setRandomShapeSet()
-        }
-
         RegisterBackHandler(this) {
             secondQuestionViewModel.resetAll()
             navigator?.pop()
         }
 
+        // Show dialog with instructions initially
         if (showDialog) {
             DialogTask(
                 icon = profileIcon,

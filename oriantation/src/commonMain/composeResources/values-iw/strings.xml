@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+
+    <string name="entry_Oriantation_title">אורינטציה</string>
+    <string name="entry_Oriantation_welcome_note">ברוך הבא</string>
+    <string name="entry_Oriantation_instructions">לפניך התנסות קצרה בשימוש בטאבלט. נסה לעקוב אחר ההנחיות ולבצע</string>
+    <string name="next_text">הבא</string>
+
+    <string name="sec_question_title">תפריט נפתח</string>
+    <string name="sec_question_instraction">כעת נא לבחור בספרה 4 ואז ללחוץ על כפתור הבא</string>
+    <string name="sec_question_number">המספר שנבחר כרגע הוא</string>
+
+    <string name="entry_instructions_app_trial">לפניך התנסות קצרה בשימוש בטבלט. נסה לעקוב אחר ההנחיות ולבצע</string>
+    <string name="dropdown_instructions_app_trial">כעת, נא לבחור בספרה 4 ואז ללחוץ על כפתור "הבא"</string>
+    <string name="seasons_instructions_app_trial">לפניך 4 כפתורים שמציגים את עונות השנה, אנו נמצאים על הסתיו, נא לשנות את העונה לקיץ</string>
+    <string name="trial_drag_instructions">בפניך מספר צורות, עליך לגרור את המשולש לתוך הריבוע האדום משמאל</string>
+
+    <string name="trial_pinch_instructions">כעת, עליך להגדיל את המשולש באמצעות הרחקה של 2 אצבעות על הצורה.</string>
+
+    <string name="seasons_instructions_app_trial2">כעת, יש לשנות את העונה לחורף</string>
+    <string name="trial_draw_instructions">יש לצייר צורה של איקס</string>
+    <string name="trial_end_test_instructions">הניסיון הגיע לסיומו, תודה רבה על שיתוף הפעולה</string>
+    <string name="edit_text_dialog_instruction">יש לרשום בתיבה מתחת מה דעתך על המשימה,כדי לסגור את המקלדת יש ללחוץ על התמונה של המקלדת. בסיום לחץ על כפתור הX</string>
+
+
+    <string name="you_in_the_summer">כרגע נמצאים בעונת הקיץ</string>
+    <string name="you_in_the_winter">כרגע נמצאים בעונת החורף</string>
+    <string name="you_in_the_spring">כרגע נמצאים בעונת האביב</string>
+    <string name="you_in_the_autumn">כרגע נמצאים בעונת הסתיו</string>
+    <string name="vocal_instructions">הוראות קוליות</string>
+    <string name="feeling_rate_pain">מצב בריאותי לא טוב</string>
+    <string name="feeling_rate_mid">מצב בריאותי בינוני</string>
+    <string name="feeling_rate_no_pain">מצב בריאותי טוב</string>
+
+    <string name="dropdown_selected_number">המספר שנבחר כרגע הוא:</string>
+    <string name="listening">הקשב</string>
+    <string name="set_health_rate"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fvocal_instruction_trial.mp3?alt=media&token=ede5447f-bd0b-4411-9bfb-09f6bbdf2e27]]></string>
+
+
+
+
+
+</resources>

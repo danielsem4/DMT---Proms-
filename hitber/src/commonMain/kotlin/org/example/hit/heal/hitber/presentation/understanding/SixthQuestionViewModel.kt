@@ -27,6 +27,7 @@ class SixthQuestionViewModel(private val playAudioUseCase: PlayAudioUseCase) : V
     private val _selectedNapkin = MutableStateFlow<Color?>(null)
     val selectedNapkin: StateFlow<Color?> get() = _selectedNapkin.asStateFlow()
 
+    // Initialize with a random audio item and corresponding selected item and napkin tint
     init {
         val randomAudio = audioList.random()
         _audioResourceId.value = randomAudio.audioResId
@@ -53,6 +54,7 @@ class SixthQuestionViewModel(private val playAudioUseCase: PlayAudioUseCase) : V
         }
     }
 
+    // Flags to track user actions state
     var isFridgeOpened: Boolean = false
     var isItemMovedCorrectly: Boolean = false
     var isNapkinPlacedCorrectly: Boolean = false
@@ -74,13 +76,14 @@ class SixthQuestionViewModel(private val playAudioUseCase: PlayAudioUseCase) : V
     ) {
 
         if (napkinResourceId != null) {
+            // Check if any item overlaps sufficiently with the napkin
             val isItemInNapkin = itemLastPositions.values.any { itemPosition ->
                 isObjectInsideTargetArea(
                     targetPosition = napkinPosition,
                     draggablePosition = itemPosition,
                     targetSize = napkinSize,
                     draggableSize = itemSize,
-                    threshold = 80f,
+                    threshold = 65f,
                     isCircle = false
                 )
             }

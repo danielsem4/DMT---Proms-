@@ -1,87 +1,128 @@
 package org.example.hit.heal.presentation.evaluation
 
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import core.data.model.evaluation.Evaluation
+import core.data.model.MeasureObjectString
 import core.data.model.evaluation.EvaluationAnswer
-import core.data.model.evaluation.EvaluationObject
-import core.data.model.evaluation.EvaluationSettings
-import core.data.model.evaluation.EvaluationValue
+import core.data.model.evaluation.EvaluationRequestBody
+import core.data.model.evaluation.toRawString
 import core.data.storage.Storage
+import core.domain.DataError
+import core.domain.Result
+import core.domain.map
 import core.domain.onError
 import core.domain.onSuccess
 import core.domain.use_case.cdt.UploadFileUseCase
+import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.util.PrefKeys
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import kotlin.collections.listOf
 
-// ViewModel to Manage Evaluations
 class EvaluationTestViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
+    private val uploadTestResultsUseCase: UploadTestResultsUseCase,
     private val storage: Storage,
 ) : ViewModel() {
 
-    private val _drawingPaths = mutableMapOf<Int, List<List<Offset>>>()
-    val drawingPaths = _drawingPaths
-
-//    private val _evaluations = MutableStateFlow(E)
-//    val evaluations: StateFlow<List<Evaluation>> = _evaluations
-
-    // Change _answers to be a MutableStateFlow holding a Map
-    private val _answers = MutableStateFlow<Map<Int, EvaluationAnswer>>(emptyMap())
+    private val _answers = MutableStateFlow<MutableMap<Int, EvaluationAnswer>>(mutableMapOf())
     val answers: StateFlow<Map<Int, EvaluationAnswer>> = _answers.asStateFlow()
-
-    fun saveAnswer(objectId: Int, answer: EvaluationAnswer) {
-        _answers.value = _answers.value.toMutableMap().apply { this[objectId] = answer }
-    }
-
-    fun getDrawingPaths(objectId: Int): List<List<Offset>> {
-        return _drawingPaths[objectId] ?: emptyList()
-    }
-
-    fun saveDrawingPaths(objectId: Int, paths: List<List<Offset>>) {
-        _drawingPaths[objectId] = paths
-    }
 
     fun getAnswer(objectId: Int): EvaluationAnswer? {
         return _answers.value[objectId]
     }
 
-    fun uploadDrawingImage(image: ImageBitmap, id: Int) {
-        val imageByteArray = image.toByteArray()
-        val measurement = 17
+    fun saveAnswer(objectId: Int, answer: EvaluationAnswer) {
+        _answers.value = _answers.value.toMutableMap().apply {
+            this[objectId] = answer
+        }
+    }
+
+    suspend fun uploadDrawingImage(id: Int): Result<String, DataError> {
+        val currentAnswer = getAnswer(id) as? EvaluationAnswer.Image
+        val bitmap = currentAnswer?.bitmap
+
+        if (bitmap == null) {
+            println("No bitmap found for object id=$id")
+            return Result.Error(DataError.Local.EMPTY_FILE)
+        }
+
+        val imageByteArray = bitmap.toByteArray()
         val date = getCurrentFormattedDateTime()
         val version = 1
         val imgName = "evaluation_image.png"
 
-        viewModelScope.launch {
-            val userId = storage.get(PrefKeys.userId)!!
-            val clinicId = storage.get(PrefKeys.clinicId)!!
+        val userId = storage.get(PrefKeys.userId)!!
+        val clinicId = storage.get(PrefKeys.clinicId)!!
 
-            val imagePath = "clinics/$clinicId/patients/$userId/measurements/$measurement/" +
-                    "$date/$version/$imgName"
-            uploadImageUseCase.execute(imagePath, imageByteArray, clinicId, userId)
-                .onSuccess {
-                    println("Successfully uploaded Image")
-                    saveAnswer(id, EvaluationAnswer.Image(imagePath))
-                }
-                .onError {
-                    println("Error uploading image")
-                    println(it)
-                }
+        val imagePath = "clinics/$clinicId/" +
+                "patients/$userId/measurements/$id/" +
+                "$date/$version/$imgName"
+
+        val result = uploadImageUseCase.execute(imagePath, imageByteArray, clinicId, userId)
+
+        result.onSuccess {
+            println("Successfully uploaded Image - $it")
+
+            // Update the answer map so UI updates too
+            _answers.value = _answers.value.toMutableMap().apply {
+                this[id] = EvaluationAnswer.Image(
+                    bitmap = bitmap,
+                    url = imagePath
+                )
+            }
+        }.onError {
+            println("Error uploading image: $it")
         }
+
+        return result.map { imagePath }
     }
 
-    fun submitEvaluation(id: Int, answers: Map<Int, EvaluationAnswer>) {
+
+    suspend fun submitEvaluation(id: Int): Result<String, DataError> {
         println("Submit test: $id")
         println(answers)
-//        TODO send to server
+
+        val patientId = storage.get(PrefKeys.userId)!!.toInt()
+        val clinicId = storage.get(PrefKeys.clinicId)!!
+
+        // Upload drawings first
+        for ((objId, answer) in answers.value) {
+            if (answer is EvaluationAnswer.Image && answer.url.isEmpty()) {
+                when (val uploadResult = uploadDrawingImage(objId)) {
+                    is Result.Error -> {
+                        println("Failed to upload drawing for object $objId: ${uploadResult.error}")
+                        return uploadResult.map { "" } // map to the expected Result<String, DataError>
+                    }
+
+                    is Result.Success -> {
+                        println("Uploaded drawing for object $objId: ${uploadResult.data}")
+                    }
+                }
+            }
+        }
+
+        val results = answers.value.map { (objId, answer) ->
+            MeasureObjectString(
+                measureObject = objId,
+                value = answer.toRawString()
+            )
+        }
+
+        val body = EvaluationRequestBody(
+            measurement = id,
+            patientId = patientId,
+            date = getCurrentFormattedDateTime(),
+            clinicId = clinicId,
+            evaluationResults = results
+        )
+
+        println("EvaluationRequestBody")
+        println(body)
+
+        return uploadTestResultsUseCase.execute(body, EvaluationRequestBody.serializer())
     }
+
 }

@@ -19,8 +19,8 @@
     <string name="evaluation">Evaluation</string>
 
     <string name="are_you_sure">Are you sure?</string>
+    <string name="logout_confirmation">Are you sure you want to logout?</string>
     <string name="back_confirmation_message">Going back will return to the home screen</string>
-
 
 
     <!--    Errors      -->
@@ -32,8 +32,6 @@
     <string name="disk_full">Your device is out of storage</string>
     <string name="local_unknown">An unknown local error occurred</string>
     <string name="request_timeout">The request timed out</string>
-    <string name="too_many_requests">Too many requests sent. Please try again later</string>
-    <string name="server_error">A server error occurred</string>
     <string name="serialization_error">There was a problem processing the server response</string>
     <string name="remote_unknown">An unknown server error occurred</string>
     <string name="unexpected_error">An unexpected error occurred</string>
@@ -54,14 +52,16 @@
     <string name="hitber">HitBer</string>
     <string name="pass">Pass</string>
 
+    <string name="on">On</string>
+    <string name="off">Off</string>
     <string name="done">Done</string>
     <string name="error_start_date_empty">Start date cannot be empty</string>
     <string name="error_end_before_start">End date cannot be earlier than start date</string>
     <string name="no_evaluation_object_to_display">No evaluation object to display.</string>
 
     <string name="uploading">Uploading</string>
-    "\n"
-    //Medications
+    <string name="loading">loading</string>
+
     <string name="select_date">Select a date</string>
     <string name="empty_string"> </string>
     <string name="week_day_s">S</string>
@@ -285,6 +285,48 @@
     <string name="summary_hitber_instructions1">You have completed the test.</string>
     <string name="summary_hitber_instructions2">Please contact your therapist for further details.</string>
     <!--    Orientation Module  -->
+    <string name="entry_Oriantation_title">Orientation</string>
+    <string name="entry_Oriantation_welcome_note">Welcome</string>
+    <string name="entry_Oriantation_instructions">You are about to try a short exercise using the tablet. Try to follow the instructions and complete the task.</string>
+    <string name="next_text">Next</string>
+
+    <string name="sec_question_title">Dropdown Menu</string>
+    <string name="sec_question_instraction">Now please select the number 4 and then press the Next button.</string>
+    <string name="sec_question_number">The currently selected number is</string>
+
+    <string name="entry_instructions_app_trial">You are about to try a short exercise using the tablet. Try to follow the instructions and complete the task.</string>
+    <string name="dropdown_instructions_app_trial">Now, please select the number 4 and then press the "Next" button.</string>
+    <string name="seasons_instructions_app_trial">Here are 4 buttons representing the seasons. Please change the season to summer.</string>
+    <string name="trial_drag_instructions">You have several shapes in front of you. You need to drag the triangle into the red square on the left.</string>
+    <string name= "trial_drag_title">drag and drop</string>
+    <string name="trial_pinch_title">Resize</string>
+    <string name="trial_pinch_instructions">Now, you need to enlarge the triangle by spreading two fingers apart on the shape.</string>
+
+    <string name="seasons_instructions_app_trial2">Now, please change the season to winter.</string>
+    <string name="trial_draw_instructions">Please draw an X shape.</string>
+    <string name="trial_end_test_instructions">The test has ended. Thank you very much for your cooperation.</string>
+    <string name="edit_text_dialog_instruction">Please write your opinion about the task in the box below. To close the keyboard, press the keyboard icon. When finished, press the X button.</string>
+    <string name="season_winter">winter</string>
+    <string name="season_summer">summer</string>
+    <string name="season_spring">spring</string>
+    <string name="season_autumn">autumn</string>
+
+    <string name="oriantation_season_title">Seasons</string>
+    <string name="you_in_the_summer">You are currently in the summer season.</string>
+    <string name="you_in_the_winter">You are currently in the winter season.</string>
+    <string name="you_in_the_spring">You are currently in the spring season.</string>
+    <string name="you_in_the_autumn">You are currently in the autumn season.</string>
+    <string name="vocal_instructions">Voice Instructions</string>
+    <string name="listening">listening</string>
+    <string name="feeling_rate_pain">feeling rate bad</string>
+    <string name="feeling_rate_mid">feeling rate mid</string>
+    <string name="feeling_rate_no_pain">feeling rate good</string>
+
+    <string name="dropdown_selected_number">The currently selected number is:</string>
+
+    <string name="trial_draw_title">Use the Pen</string>
+
+    <string name="set_health_rate"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fvocal_instruction_trial.mp3?alt=media&token=ede5447f-bd0b-4411-9bfb-09f6bbdf2e27]]></string>
 
 
     <!--    Memory Module  -->

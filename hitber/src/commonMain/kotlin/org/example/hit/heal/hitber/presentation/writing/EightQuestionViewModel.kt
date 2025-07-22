@@ -18,6 +18,7 @@ import org.example.hit.heal.hitber.presentation.writing.model.slotsList
 
 class EightQuestionViewModel: ViewModel() {
 
+    // List of valid correct answer sentences as resource IDs
     private val sentencesResourceId = listOf(
         eighthQuestionAnswerHitberVersion1,
         eighthQuestionAnswerHitberVersion2,
@@ -39,13 +40,14 @@ class EightQuestionViewModel: ViewModel() {
 
     var answer: Boolean = false
 
+    // Checks if user's composed sentence matches any valid answer
     fun eighthQuestionAnswer(sentences: List<String>) {
         val userSentence = _sentence.value.joinToString(" ")
 
         answer = sentences.any { it.trim().equals(userSentence.trim(), ignoreCase = true) }
     }
 
-
+    // Determines if given word position overlaps any slot on the screen, returns slot index or null
     fun isWordOnSlot(
         wordState: Offset,
         screenSize: IntSize,
@@ -68,6 +70,7 @@ class EightQuestionViewModel: ViewModel() {
         return foundIndex
     }
 
+    // Assigns a word to a slot if the slot is empty, updates sentence and completion state
     fun updateWordInSlot(word: String, slotId: Int) {
         _slotsWords.value = _slotsWords.value.mapIndexed { index, slot ->
 
@@ -82,6 +85,7 @@ class EightQuestionViewModel: ViewModel() {
 
     }
 
+    // Resets the word in a given slot to null and sets slot color to gray
     fun resetSlot(slotIndex: Int) {
         _slotsWords.value = _slotsWords.value.mapIndexed { index, slot ->
             if (index == slotIndex) {
@@ -93,6 +97,7 @@ class EightQuestionViewModel: ViewModel() {
         updateSentence()
     }
 
+    // Updates the color of a slot based on whether it is active and empty or just empty
     fun updateSlotColor(slotId: Int) {
         _slotsWords.value = _slotsWords.value.map { slot ->
             if (slot.id == slotId && slot.word == null) {
@@ -105,12 +110,14 @@ class EightQuestionViewModel: ViewModel() {
         }
     }
 
+    // Reconstructs the current sentence based on the words placed in slots (sorted by slot ID)
     private fun updateSentence() {
         _sentence.value = _slotsWords.value
             .sortedBy { it.id }
             .mapNotNull { it.word }
     }
 
+    // Checks if all slots are filled with words
     private fun areAllSlotsFilled(): Boolean {
         return _slotsWords.value.all { it.word != null }
     }

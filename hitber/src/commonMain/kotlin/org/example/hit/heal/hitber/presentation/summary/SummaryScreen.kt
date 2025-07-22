@@ -6,8 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -22,18 +21,20 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
-import org.example.hit.heal.core.presentation.FontSize.LARGE
-import org.example.hit.heal.core.presentation.Resources
+import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.Resources.String.exit
+import org.example.hit.heal.core.presentation.Resources.String.sentSuccessfully
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions1
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions2
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberTitle
+import org.example.hit.heal.core.presentation.Resources.String.unexpectedError
+import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
-import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXl
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.core.presentation.utils.animations.SuccessAnimation
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -45,20 +46,15 @@ class SummaryScreen : Screen {
         val navigator = LocalNavigator.current
         val viewModel: ActivityViewModel = koinViewModel()
         val uploadStatus by viewModel.uploadStatus.collectAsState()
-        val snackbarHostState = remember { SnackbarHostState() }
         val isUploadFinished = uploadStatus != null
-        val successMessage = stringResource(Resources.String.sentSuccessfully)
-
-        LaunchedEffect(uploadStatus) {
-            uploadStatus?.let { result ->
-                if (result.isSuccess) {
-                    snackbarHostState.showSnackbar(successMessage)
-                } else if (result.isFailure) {
-                    val error = result.exceptionOrNull()
-                    snackbarHostState.showSnackbar(error?.message ?: "העלאה נכשלה")
-                }
-            }
-        }
+        val snackbarHostState = remember { SnackbarHostState() }
+        val successMessage = stringResource(sentSuccessfully)
+        val unexpectedErrorMessage = stringResource(unexpectedError)
+        val capturedBitmap1 by viewModel.capturedBitmap1.collectAsState()
+        val capturedBitmap2 by viewModel.capturedBitmap2.collectAsState()
+        val capturedBitmap3 by viewModel.capturedBitmap3.collectAsState()
+        val isLoading by viewModel.isLoading.collectAsState()
+        val currentDate = getCurrentFormattedDateTime()
 
         BaseScreen(
             title = stringResource(summaryHitberTitle),
@@ -79,6 +75,13 @@ class SummaryScreen : Screen {
                         Text(stringResource(summaryHitberInstructions1), fontSize = 25.sp)
                         Text(stringResource(summaryHitberInstructions2), fontSize = 25.sp)
                         SuccessAnimation(modifier = Modifier.size(100.dp))
+
+                        if(isLoading){
+                            CircularProgressIndicator(
+                                modifier = Modifier.padding(paddingXl).size(iconSizeXl),
+                                color = primaryColor
+                            )
+                        }
                     }
 
                     RoundedButton(
@@ -91,17 +94,30 @@ class SummaryScreen : Screen {
                     )
                 }
             },
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState) { data ->
-                    Snackbar(modifier = Modifier.padding(paddingSm)) {
-                        Text(
-                            text = data.message,
-                            fontSize = LARGE
-                        )
-                    }
+            snackbarHostState = snackbarHostState
+        )
+
+        LaunchedEffect(uploadStatus) {
+            uploadStatus?.let { result ->
+                result.onSuccess {
+                    snackbarHostState.showSnackbar(successMessage)
+                }.onFailure { error ->
+                    snackbarHostState.showSnackbar(error.message ?: unexpectedErrorMessage)
                 }
             }
-        )
+        }
+
+        LaunchedEffect(Unit) {
+            listOf(
+                Pair(capturedBitmap1, 6),
+                Pair(capturedBitmap2, 7),
+                Pair(capturedBitmap3, 10)
+            ).forEach { (bitmap, questionId) ->
+                bitmap?.let {
+                    viewModel.uploadImage(it, currentDate, questionId)
+                }
+            }
+        }
 
         RegisterBackHandler(this) {
             navigator?.pop()

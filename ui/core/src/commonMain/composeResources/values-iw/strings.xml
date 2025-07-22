@@ -16,7 +16,7 @@
     <string name="are_you_sure">האם את/ה בטוח/ה?</string>
 
     <string name="evaluation">הערכה</string>
-
+    <string name="logout_confirmation">האם אתה בטוח שאתה רוצה להתנתק?</string>
     <string name="back_confirmation_message">מעבר אחורה יחזור למסך הבית</string>
 
 
@@ -57,55 +57,17 @@
     <string name="memory">זיכרון</string>
 
     <string name="pass">פס</string>
-
+    <string name="on">כן</string>
+    <string name="off">לא</string>
     <string name="hitber">התבר</string>
     <string name="done">סיום</string>
-
+    <string name="back">חזור</string>
 
     <string name="no_evaluation_object_to_display">אין אובייקט הערכה להצגה.</string>
     <string name="uploading">שולח</string>
+    <string name="loading">עולה</string>
 
 
-    //Medications
-    <string name="select_date">בחר תאריך</string>
-    <string name="empty_string"></string>
-    <string name="week_day_s">א</string>
-    <string name="week_day_m">ב</string>
-    <string name="week_day_tu">ג</string>
-    <string name="week_day_w">ד</string>
-    <string name="week_day_th">ה</string>
-    <string name="week_day_f">ו</string>
-    <string name="week_day_sa">ש</string>
-    <string name="report_medication_taken">דיווח על נטילת תרופה</string>
-    <string name="report_message">נטלתי את %1$s:\nתאריך: %2$s\nשעה: %3$s</string>
-    <string name="save">שמור</string>
-    <string name="date">תאריך</string>
-    <string name="time">שעה</string>
-    <string name="dash">-</string>
-    <string name="select_date_label">בחר תאריך</string>
-    <string name="select_time_label">בחר שעה</string>
-    <string name="search_hint">חפש...</string>
-
-    <string name="report_medication">דווח על תרופה</string>
-    <string name="set_medication_alarm">קבע תזכורת לתרופה</string>
-    <string name="daily">יומי</string>
-    <string name="weekly">שבועי</string>
-    <string name="start_date_empty">יש להזין תאריך התחלה</string>
-    <string name="end_before_start">תאריך הסיום לא יכול להיות לפני תאריך ההתחלה</string>
-    <string name="back">חזור</string>
-    <string name="when_notification">מתי ברצונך לקבל התראה?</string>
-    <string name="how_many_times_per_day">כמה פעמים ביום</string>
-    <string name="select_week_days">בחר ימי שבוע</string>
-    <string name="start_time">שעת התחלה</string>
-    <string name="notification_start_question">מאיזה תאריך תתחיל ההתראה?</string>
-    <string name="start_date">תאריך התחלה</string>
-    <string name="end_date">תאריך סיום</string>
-    <string name="leave_end_date_empty">השאר ריק אם אינך רוצה תאריך סיום</string>
-    <string name="took">  לקחתי</string>
-    <string name="dateMedications">תאריך: </string>
-    <string name="timeMedications">שעה: </string>
-    <string name="error_start_date_empty">תאריך התחלה לא יכול להיות ריק</string>
-    <string name="error_end_before_start">תאריך סיום לא יכול להיות לפני תאריך ההתחלה</string>
     <!--    CDT Module  -->
 
 
@@ -285,107 +247,6 @@
 
     <!--    Memory Module  -->
 
-    <!--Information Schedule Memory Module -->
-    <string name="build_schedule">בניית סדר יום</string>
-    <string name="build_schedule_continuation">בניית סדר יום המשך</string>
-    <string name="instruction_text_agenda_continuation">עליך להכניס למערכת השעות את הפגישות לפי ההוראות. לחיצה על הפגישה תציג את הזמן.</string>
-    <string name="place_activities">יש למקם את כל הפעילויות ביומן לפני שממשיכים</string>
-    <string name="the_activities_memory">לפניך מספר פעילויות שעליך לשבץ במערכת שעות. להתחלת המשימה לחץ על "המשך"</string>
-
-
-    <string name="day_sunday">ראשון</string>
-    <string name="day_monday">שני</string>
-    <string name="day_tuesday">שלישי</string>
-    <string name="day_wednesday">רביעי</string>
-    <string name="day_thursday">חמישי</string>
-
-    <string name="hour_09_00">09:00</string>
-    <string name="hour_10_00">10:00</string>
-    <string name="hour_11_00">11:00</string>
-    <string name="hour_12_00">12:00</string>
-    <string name="hour_13_00">13:00</string>
-    <string name="hour_14_00">14:00</string>
-    <string name="hour_15_00">15:00</string>
-    <string name="hour_16_00">16:00</string>
-
-    <string name="book_circle">ספר</string>
-    <string name="dumbbell_circle">משקולת</string>
-    <string name="move_circle">תנועה</string>
-    <string name="lecturer_circle">הרצאה</string>
-    <string name="coffee_circle">קפה</string>
-    <string name="stethoscope_circle">רופא</string>
-
-    <string name="book_circle_text">לקחת את הנכדים לשעת סיפור בספרייה ביום רביעי בשעה 16:00</string>
-    <string name="dumbbell_circle_text">חוג התעמלות במתנ"ס בימי ראשון בשעה 11:00 למשך שעה</string>
-    <string name="move_circle_text">לצאת להליכת בוקר פעמיים בשבוע למשך שעה לפחות</string>
-    <string name="lecturer_circle_text">לשמוע הרצאה ביום חמישי בשעה 15:00 במשך שעה</string>
-    <string name="coffee_circle_text">מפגש חברתי בבית הקפה בימי שלישי בשעה 11:00 למשך שעתיים</string>
-    <string name="stethoscope_circle_text">תור לרופא עיניים לפני יום שלישי בין השעות 12:00–9:00 במשך שעה</string>
-    <string name="place_instructions_in_calendar_memory">עליך להכניס למערכת השעות את הפגישות לפי ההוראות, לחיצה על הפגישה תציג את הזמן</string>
-    <string name="please_place_all_activities_memory">יש למקם את כל הפעילויות ביומן לפני שממשיכים</string>
-
-
-    <!--Call Screen Memory Module -->
-    <string name="incoming_call_title">שיחה נכנסת</string>
-    <string name="incoming_call_text">שיחה נכנסת</string>
-    <string name="call_from">בית רבקה</string>
-    <string name="phone_number_memory">052-538-1648</string>
-    <string name="thank_you_title">תודה</string>
-    <string name="thank_you_description">המשימה הסתיימה, תודה רבה על שיתוף הפעולה</string>
-
-    <!--MemoryScreen Memory Module-->
-    <string name="memory_title">בדיקת זיכרון</string>
-    <string name="task_duration">המשימה אורכת כ-20 דקות</string>
-    <string name="instructions">הוראות</string>
-    <string name="task_continuity">יש להשלים את המשימה ברצף, ללא הפסקות</string>
-    <string name="read_instructions">יש לקרוא את ההנחיות עד הסוף</string>
-    <string name="complete_all_tasks">יש להשלים את כל המטלות</string>
-    <string name="listen_instruction_tip">לשמיעת ההוראות ניתן ללחוץ על הקשב</string>
-    <string name="quiet_room_tip">מומלץ לבצע את המשימה בחדר שקט</string>
-    <string name="good_luck">בהצלחה !</string>
-    <string name="press_start_to_begin">לתחילת המשימה לחץ על התחל</string>
-
-    <!--Room Screen Memory Module -->
-    <string name="time_ended">נגמר הזמן</string>
-    <string name="time_ended_for_this_question_memory">נגמר הזמן עבור השאלה הזאת, תודה על שיתוף הפעולה. יש להמשיך לשאלה הבאה.</string>
-    <string name="first_one_minute_end_body_memory">מקם רק את החפצים שמיקמת קודם.</string>
-    <string name="second_one_minute_end_body_memory">האם מיקמת את כל החפצים בחדרים?</string>
-
-
-    <string name="instructions_text_memory_question_trial">בשאלה הקרובה תצטרך למקם חפצים בחדרים שונים, בפניך התנסות קצרה בה תראה כיצד ניתן להחליף חדר ע"י לחיצה על הכפתורים של החדרים.</string>
-
-    <string name="room_title">מסך החדר</string>
-    <string name="bedroom">חדר שינה</string>
-    <string name="living_room">סלון</string>
-    <string name="kitchen">מטבח</string>
-    <string name="drag_and_place_instruction">גרור ומקם את שבעת החפצים בכל שלושת החדרים, כפי שהיית ממקם בביתך. עליך לזכור את מיקום החפצים. בסיום לחץ על המשך</string>
-    <string name="instructions_text_memory_question_1">לפניך מספר חפצים, גרור רק את החפצים שהופיעו קודם ומקם אותם בדיוק כמו שמיקמת קודם בסיום, לחץ על "המשך"</string>
-
-    <!--Dialogs Memory Module-->
-    <string name="remember_all">אזכור הכל</string>
-    <string name="talk_to_family">אדבר עם המשפחה</string>
-    <string name="use_diary">אשתמש ביומן</string>
-    <string name="what_will_you_do">מה תעשה ?</string>
-    <string name="memory_instruction">לפניך מערכת שעות של פעילויות. מה עליך לעשות כדי לזכור את כל הפעילויות המפורטות?</string>
-
-
-
-    <string name="place_rate_memory">יש לדרג את תחושותיך</string>
-    <string name="rate">דרג</string>
-    <string name="the_rate_is">הדירוג הוא:</string>
-    <string name="how_well_do_you_think_you_will_do_memory">כמה טוב אתה חושב שתצליח במטלה לפנייך</string>
-    <string name="how_well_do_you_feel_memory">כמה אתה מרגיש שהצלחת במטלה</string>
-
-
-    <!--All Memory Module -->
-    <string name="delete">מחק</string>
-    <string name="continue_button">המשך</string>
-    <string name="start_button">התחל</string>
-    <!-- recordings -->
-    <!--recordings-->
-    <string name="galaxy_phone_ring_2019"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fandroid_rington1.mp3?alt=media&token=a706f7ff-f315-40a6-aa91-6c09c3bdb3e3]]></string>
-    <string name="old_phone_ring"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Ftelephone_rington.mp3?alt=media&token=f5e87a64-6915-4c05-b9a4-3df7467153af]]></string>
-
 
     <!--    Pass Module  -->
     <string name="hana_cohen">חנה כהן</string>
@@ -460,7 +321,7 @@
         <item>יצחק דהן</item>
         <item>מיכל ברקוביץ</item>
     </string-array>
-    <string name="phone_number">052–538–1648</string>
+    <string name="phone_number">1648–538–052</string>
 
     <string name="key_1">1</string>
     <string name="key_2">2</string>
@@ -476,7 +337,7 @@
     <string name="key_hash">#</string>
 
     <string name="default_name">לא ידוע</string>
-    <string name="default_phone">000-0000000</string>
+    <string name="default_phone">0000000-000</string>
 
 
     <string name="thanks_coffe">המשימה הסתיימה, תודה רבה על שיתוף הפעולה</string>
@@ -582,7 +443,6 @@
     <string name="witch_contact_are_we_looking_for_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwhat_contact_are_you_searching.mp3?alt=media&token=87e10d59-51f4-4373-a110-934472c61499]]></string>
     <string name="wrong_number_dialed_please_try_again_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fwrong_number_dialed_try_again.mp3?alt=media&token=f3b84ffa-25c7-4101-8082-e2839f79ce86]]></string>
     <string name="first_mission_done_vocal_pass"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/COFFE%2Fmission_done.mp3?alt=media&token=d6a19387-ea70-4be7-ae39-a846d13c13bc]]></string>
-    <string name="audioMemory"><![CDATA[https://firebasestorage.googleapis.com/v0/b/generic-project-heal.appspot.com/o/hitbear%2Fandroid_rington1.mp3?alt=media&token=a706f7ff-f315-40a6-aa91-6c09c3bdb3e3]]></string>
 
 
 </resources>

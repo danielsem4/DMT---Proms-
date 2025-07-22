@@ -128,17 +128,6 @@ class FinalScreenMemoryTest : Screen {
 
                 }
             },
-            //For  result in the end
-            snackbarHost = {
-                SnackbarHost(hostState = snackbarHostState) { data ->
-                    Snackbar(modifier = Modifier.padding(paddingSm)) {
-                        Text(
-                            text = data.message,
-                            fontSize = LARGE
-                        )
-                    }
-                }
-            }
         )
 
         RegisterBackHandler(this)

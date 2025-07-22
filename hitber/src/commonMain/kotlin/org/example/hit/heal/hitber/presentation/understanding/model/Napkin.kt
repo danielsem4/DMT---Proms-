@@ -12,8 +12,8 @@ data class Napkin(
 )
 
 val napkins = listOf(
-    Napkin(xRatio = 0.2f,yRatio = 0.08f, tint =  Color.Red),
-    Napkin(xRatio = 0.4f, yRatio = 0.1f, tint = Color.Green),
-    Napkin(xRatio = 0.55f, yRatio = 0.05f, tint = Color.Yellow),
-    Napkin(xRatio = 0.75f, yRatio = 0.07f, tint= Color.Blue),
+    Napkin(xRatio = 0.2f,yRatio = 0.05f, tint =  Color.Red),
+    Napkin(xRatio = 0.4f, yRatio = 0.08f, tint = Color.Green),
+    Napkin(xRatio = 0.55f, yRatio = 0f, tint = Color.Yellow),
+    Napkin(xRatio = 0.75f, yRatio = 0.02f, tint= Color.Blue),
 )

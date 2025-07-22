@@ -40,11 +40,12 @@ kotlin {
 
         commonMain {
             dependencies {
+                implementation(projects.core)
+                implementation(projects.ui.core)
+
                 implementation(libs.kotlin.stdlib)
                 implementation(libs.kotlinx.serialization.json)
-                implementation(projects.core)
-                implementation(project(":ui:core"))
-                val voyagerVersion = "1.1.0-beta02"
+
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
@@ -105,7 +106,7 @@ kotlin {
 }
 android {
     namespace = "com.new_memory_test"
-    compileSdk = 35
+    compileSdk =  libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()

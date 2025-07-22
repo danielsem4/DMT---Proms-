@@ -17,6 +17,8 @@ import org.example.hit.heal.hitber.presentation.buildShape.model.BuildShapes
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+// Displays draggable shapes based on triangle size, updating their positions on drag
+
 @Composable
 fun DraggableShapesArea(
     triangleHeight: Float,

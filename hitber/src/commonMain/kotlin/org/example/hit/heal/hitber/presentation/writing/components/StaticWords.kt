@@ -39,7 +39,10 @@ fun StaticWords(
     Box(
         modifier = Modifier
             .fillMaxSize().onSizeChanged { newSize -> screenSize = newSize }) {
+        // Render the draggable words
         DraggableWords(words, screenSize, eightQuestionViewModel, density)
+
+        // Draw each static word in its initial position
         words.forEach { wordState ->
             StaticWord(wordState = wordState, screenSize = screenSize, density)
         }
@@ -48,10 +51,12 @@ fun StaticWords(
 
 @Composable
 fun StaticWord(wordState: DraggableWordState, screenSize: IntSize, density: Density) {
+    // Calculate width and height of each word box as percentage of screen size in pixels
     val widthPx = (screenSize.width * 0.1f)
     val heightPx = (screenSize.height * 0.15f)
     Box(
         modifier = Modifier.offset {
+            // Position each word by its initial offset scaled to current screen size
             IntOffset(
                 (wordState.initialOffset.x * screenSize.width).toInt(),
                 (wordState.initialOffset.y * screenSize.height).toInt()

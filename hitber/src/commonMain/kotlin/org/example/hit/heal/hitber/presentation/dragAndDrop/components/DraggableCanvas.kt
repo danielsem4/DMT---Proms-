@@ -16,6 +16,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 
+// A composable canvas that allows dragging colored circles within a defined target box.
+// Reports size and target box position updates to parent.
+
 @Composable
 fun DraggableCanvas(
     circleOffsets: SnapshotStateList<Offset>,
