@@ -101,14 +101,15 @@ class NextQuestionScreen : Screen {
             }
         }
 
+        LaunchedEffect(Unit) {
+            viewModel.onPlayAudioRequested(audioString)
+        }
+
         // Lifecycle observers to stop/play audio
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAudio()
             },
-            onStart = {
-                viewModel.onPlayAudioRequested(audioString)
-            }
         )
 
         RegisterBackHandler(this) {

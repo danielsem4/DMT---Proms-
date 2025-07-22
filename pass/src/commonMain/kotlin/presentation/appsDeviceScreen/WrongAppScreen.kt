@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -77,14 +78,15 @@ class WrongAppScreen(private val app: AppData) : Screen {
             }
         )
 
+        LaunchedEffect(Unit) {
+            viewModel.startCheckingIfUserDidSomething()
+        }
+
         // Lifecycle observers to stop/play internal timers or checks
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()
             },
-            onStart = {
-                viewModel.startCheckingIfUserDidSomething()
-            }
         )
 
         // Show dialog with instructions or the helpers dialog

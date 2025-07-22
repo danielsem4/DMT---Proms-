@@ -122,13 +122,14 @@ class DetailedContactScreen(private val correctContact: ContactData) : Screen {
             }
         }
 
+        LaunchedEffect(Unit) {
+            viewModel.startCheckingIfUserDidSomething()
+        }
+
         // Lifecycle observers to stop/play internal timers or checks
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()
-            },
-            onStart = {
-                viewModel.startCheckingIfUserDidSomething()
             }
         )
 

@@ -89,13 +89,14 @@ class AppDeviceScreen : Screen {
         }
 
         /// Lifecycle observers to stop/play internal timers or checks
+        LaunchedEffect(Unit) {
+            viewModel.startCheckingIfUserDidSomething()
+        }
+
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()
             },
-            onStart = {
-                viewModel.startCheckingIfUserDidSomething()
-            }
         )
 
 

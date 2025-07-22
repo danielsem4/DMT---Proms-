@@ -139,6 +139,11 @@ class ContactsScreen : Screen {
         }
 
         // Lifecycle observers to stop/play internal timers or checks
+        LaunchedEffect(Unit) {
+            resetAppDevice()
+            resetWrongApp()
+            viewModel.startCheckingIfUserDidSomething()
+        }
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()

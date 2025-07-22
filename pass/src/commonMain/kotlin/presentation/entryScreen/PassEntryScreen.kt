@@ -146,14 +146,9 @@ class PassEntryScreen : Screen {
         )
 
         // Lifecycle observers to stop/play internal timers or checks
-        ObserveLifecycle(
-            onStop = {
-                viewModel.stopAudio()
-            },
-            onStart = {
-                viewModel.onPlayAudioRequested(audioString)
-            }
-        )
+        LaunchedEffect(Unit) {
+            viewModel.onPlayAudioRequested(audioString)
+        }
 
         // Shows a subtle dark overlay when audio is playing
         if (isOverlayVisible) {

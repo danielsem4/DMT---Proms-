@@ -149,14 +149,15 @@ class DialScreen : Screen {
             }
         }
 
+        LaunchedEffect(Unit) {
+            viewModel.startFirstCheck()
+        }
+
         // Lifecycle observers to stop/play internal timers or checks
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()
             },
-            onStart = {
-                viewModel.startFirstCheck()
-            }
         )
 
         // Show a dialog asking if user understand instructions
