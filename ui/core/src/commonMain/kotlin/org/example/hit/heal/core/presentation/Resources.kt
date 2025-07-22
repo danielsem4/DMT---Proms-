@@ -612,6 +612,9 @@ import dmt_proms.ui.core.generated.resources.took
 import dmt_proms.ui.core.generated.resources.timeMedications
 import dmt_proms.ui.core.generated.resources.error_start_date_empty
 import dmt_proms.ui.core.generated.resources.error_end_before_start
+import dmt_proms.ui.core.generated.resources.fifth_question_hitber_instruction
+import dmt_proms.ui.core.generated.resources.fifth_question_hitber_speak_button
+import dmt_proms.ui.core.generated.resources.fifth_question_hitber_title
 import dmt_proms.ui.core.generated.resources.you_in_the_autumn
 import dmt_proms.ui.core.generated.resources.you_in_the_spring
 import dmt_proms.ui.core.generated.resources.you_in_the_summer
@@ -973,6 +976,10 @@ object Resources {
         val fourthQuestionHitberBall = Res.string.fourth_question_hitber_ball
         val fourthQuestionHitberBalloon = Res.string.fourth_question_hitber_balloon
         val fourthQuestionHitberLemon = Res.string.fourth_question_hitber_lemon
+
+        val fifthQuestionHitberTitle = Res.string.fifth_question_hitber_title
+        val fifthQuestionHitberSpeakButton = Res.string.fifth_question_hitber_speak_button
+        val fifthQuestionHitberInstructions = Res.string.fifth_question_hitber_instruction
 
         val sixthQuestionHitberTitle = Res.string.sixth_question_hitber_title
         val sixthQuestionHitberInstructions = Res.string.sixth_question_hitber_instructions

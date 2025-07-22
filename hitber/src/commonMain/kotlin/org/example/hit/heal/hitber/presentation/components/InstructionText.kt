@@ -9,22 +9,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.material.Text
-import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
+
+import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun InstructionText(text: String) {
     Box(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = paddingLg),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = text,
             color = Color.Black,
-            fontSize = EXTRA_MEDIUM,
+            fontSize = LARGE,
+            lineHeight = EXTRA_LARGE,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.align(Alignment.Center).padding(bottom = paddingLg)
+            textAlign = TextAlign.Center
         )
     }
 }
+
 

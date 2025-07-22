@@ -4,5 +4,5 @@ import androidx.compose.ui.graphics.painter.Painter
 
 data class DraggableCircle(
     val id: String,
-    val painter: Painter
+    val painter: Painter,
 )

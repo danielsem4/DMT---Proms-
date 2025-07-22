@@ -45,6 +45,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.ui.core)
             implementation(projects.core)
+            implementation(libs.compose.dnd)
 
             implementation(libs.kotlinx.serialization)
             implementation(libs.kotlinx.datetime)

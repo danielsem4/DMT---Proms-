@@ -22,7 +22,7 @@ import org.example.hit.heal.core.presentation.primaryColor
 // Displays a number that changes color momentarily on click and sends the selected number.
 @Composable
 fun RandomNumberScreen(
-    number: Int,
+    number: Int?,
     isClickable: Boolean,
     onNumberClicked: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -35,7 +35,9 @@ fun RandomNumberScreen(
             .background(if (isClicked) primaryColor else Color.White)
             .clickable(enabled = isClickable) {
                 isClicked = true
-                onNumberClicked(number)
+                if (number != null) {
+                    onNumberClicked(number)
+                }
                 coroutineScope.launch {
                     delay(100)
                     isClicked = false
@@ -44,7 +46,7 @@ fun RandomNumberScreen(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = number.toString(),
+            text = number?.toString() ?: "",
             fontSize = 50.sp,
             fontWeight = FontWeight.Bold,
             color = if (isClicked) Color.White else primaryColor

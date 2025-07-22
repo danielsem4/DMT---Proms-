@@ -1,4 +1,4 @@
-package org.example.hit.heal.hitber.utils
+package org.example.hit.heal.core.presentation.utils
 
 import androidx.compose.ui.geometry.Offset
 

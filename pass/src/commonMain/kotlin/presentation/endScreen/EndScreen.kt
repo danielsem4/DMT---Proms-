@@ -1,5 +1,6 @@
 package presentation.endScreen
 
+import ToastMessage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -23,19 +24,19 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.style.TextAlign
 import core.utils.ObserveLifecycle
 import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.Resources.String.end
 import org.example.hit.heal.core.presentation.Resources.String.exit
-import org.example.hit.heal.core.presentation.Resources.String.next
 import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe
 import org.example.hit.heal.core.presentation.Resources.String.thanksVocalPass
-import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -55,59 +56,87 @@ class EndScreen : Screen {
         val isOverlayVisible by viewModel.isOverlayVisible.collectAsState()
         val audioString = stringResource(thanksVocalPass)
         val isPlaying by viewModel.isPlaying.collectAsState()
+        var toastMessage by remember { mutableStateOf<String?>(null) }
+        var toastType by remember { mutableStateOf(ToastType.Normal) }
 
         BaseScreen(
             title = stringResource(end),
             config = ScreenConfig.TabletConfig,
             content = {
-                Column(
+                Box(
                     modifier = Modifier
                         .fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    contentAlignment = Alignment.BottomCenter
                 ) {
                     Column(
-                        modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(45.dp)
+                        verticalArrangement = Arrangement.spacedBy(80.dp),
+                        modifier = Modifier.align(Alignment.BottomCenter)
                     ) {
+                        RoundedButton(
+                            text = stringResource(exit),
+                            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
+                            onClick = {
+                                navigator?.popUntilRoot()
+                            }
+                        )
 
-                        // Animated visualization when audio is playing
-                        AudioPlayingAnimation(isPlaying = isPlaying)
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Color.White, shape = RoundedCornerShape(radiusMd))
-                                .border(
-                                    width = 2.dp,
-                                    color = Color.LightGray,
-                                    shape = RoundedCornerShape(radiusMd)
-                                )
-                        ) {
-                            Text(
-                                text = stringResource(thanksCoffe),
-                                color = primaryColor,
-                                fontSize = 35.sp,
-                                fontWeight = Bold,
-                                lineHeight = 40.sp,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth()
+                        toastMessage?.let { msg ->
+                            ToastMessage(
+                                message = msg,
+                                type = toastType,
+                                alignUp = false,
+                                onDismiss = { toastMessage = null }
                             )
+                        }
 
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Column(
+                                modifier = Modifier.weight(1f),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(45.dp)
+                            ) {
+
+                                // Animated visualization when audio is playing
+                                AudioPlayingAnimation(isPlaying = isPlaying)
+
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(
+                                            Color.White,
+                                            shape = RoundedCornerShape(radiusMd)
+                                        )
+                                        .border(
+                                            width = 2.dp,
+                                            color = Color.LightGray,
+                                            shape = RoundedCornerShape(radiusMd)
+                                        )
+                                ) {
+                                    Text(
+                                        text = stringResource(thanksCoffe),
+                                        color = primaryColor,
+                                        fontSize = 35.sp,
+                                        fontWeight = Bold,
+                                        lineHeight = 40.sp,
+                                        textAlign = TextAlign.Center,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+
+                                }
+                                // Success checkmark animation
+                                SuccessAnimation(modifier = Modifier.size(100.dp))
+                            }
                         }
-                        // Success checkmark animation
-                        SuccessAnimation(modifier = Modifier.size(100.dp))
                     }
-                    RoundedButton(
-                        text = stringResource(exit),
-                        modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
-                        onClick = {
-                            navigator?.popUntilRoot()
-                        }
-                    )
+
                 }
-            }
-        )
+            })
 
         // Lifecycle observers to stop/play internal timers or checks
         ObserveLifecycle(
@@ -139,6 +168,8 @@ class EndScreen : Screen {
         {
             navigator?.pop()
         }
+
     }
 }
+
 

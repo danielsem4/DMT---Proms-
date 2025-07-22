@@ -38,9 +38,7 @@ import org.example.hit.heal.core.presentation.Resources.String.next
 import org.example.hit.heal.core.presentation.Resources.String.thePassTest
 import org.example.hit.heal.core.presentation.Resources.String.welcomePass
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
-import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
-import org.example.hit.heal.core.presentation.Sizes.paddingXl
 import org.example.hit.heal.core.presentation.Sizes.paddingXs
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.example.hit.heal.core.presentation.Sizes.spacingLg

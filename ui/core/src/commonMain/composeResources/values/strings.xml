@@ -235,6 +235,11 @@
     <string name="fourth_question_hitber_balloon">Balloon</string>
     <string name="fourth_question_hitber_lemon">Lemon</string>
 
+    <string name="fifth_question_hitber_title">Sentence Repetition</string>
+    <string name="fifth_question_hitber_speak_button">Speak</string>
+    <string name="fifth_question_hitber_instruction">Press the Listen button and listen to the sentence, then press the Speak button and repeat the spoken sentence.</string>
+
+
     <string name="sixth_question_hitber_title">Instructions Understanding</string>
     <string name="sixth_question_hitber_instructions">In this part, you will be asked to perform a task. To listen to the task, press the listen button. When finished, press continue.</string>
     <string name="sixth_question_hitber_volume_icon">Volume Icon</string>

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.example.hit.heal.hitber.presentation.dragAndDrop.model.instructions
-import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
+import org.example.hit.heal.core.presentation.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.StringResource
 
 class SeventhQuestionViewModel : ViewModel() {
