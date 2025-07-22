@@ -60,6 +60,9 @@ import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Red
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.logout
+import org.example.hit.heal.core.presentation.Resources.String.logoutConfirmation
+import org.example.hit.heal.core.presentation.Resources.String.no
+import org.example.hit.heal.core.presentation.Resources.String.yes
 import org.example.hit.heal.core.presentation.Sizes.elevationMd
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
@@ -83,6 +86,7 @@ import org.example.hit.heal.presentation.medication.presentaion.screens.mainMedi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import presentation.entryScreen.PassEntryScreen
 
 /**
  *
@@ -97,7 +101,6 @@ class HomeScreen : Screen {
         var showDialog by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
         val isLoading by viewModel.isLoading.collectAsState()
-
 
         LaunchedEffect(Unit) {
             viewModel.loadFeatures()
@@ -192,8 +195,8 @@ class HomeScreen : Screen {
                 onDismissRequest = { showDialog = false },
                 title = stringResource(logout),
                 icon = Resources.Icon.logoutIcon,
-                message = "Are you sure you want to logout?",
-                confirmButtonText = "Yes",
+                message = stringResource(logoutConfirmation),
+                confirmButtonText = stringResource(yes),
                 confirmButtonColor = Green,
                 onConfirm = {
 
@@ -203,7 +206,7 @@ class HomeScreen : Screen {
                         navigator.replace(LoginScreen())
                     }
                 },
-                dismissButtonText = "No",
+                dismissButtonText = stringResource(no),
                 dismissButtonColor = Red,
                 onDismissButtonClick = { showDialog = false }
             )
@@ -292,6 +295,7 @@ class HomeScreen : Screen {
             "orientation" -> navigator.push(OriantationWelcomeScreen())
             "memory" -> navigator.push(MemoryScreen())
             "medications" -> navigator.push(MainMedicationScreen())
+            "pass" -> navigator.push(PassEntryScreen())
             else -> {  }
         }
     }
@@ -308,6 +312,7 @@ class HomeScreen : Screen {
         "hitber" -> Resources.Icon.hitbearModuleIcon
         "cdt" -> Resources.Icon.clockIcon
         "orientation" -> Resources.Icon.memoryModuleIcon
+        "pass" -> Resources.Icon.hitbearModuleIcon
         else -> Resources.Icon.binIcon
     }
 
@@ -322,6 +327,7 @@ class HomeScreen : Screen {
         "hitber" -> stringResource(Resources.String.hitber)
         "cdt" -> stringResource(Resources.String.clockTest)
         "orientation" -> "Orientation"
+        "pass" -> stringResource(Resources.String.pass)
         else -> moduleName
     }
 }

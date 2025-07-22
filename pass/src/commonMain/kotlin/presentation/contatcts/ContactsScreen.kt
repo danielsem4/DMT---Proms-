@@ -34,10 +34,11 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-import presentation.components.InstructionsDialog
+import presentation.appsDeviceScreen.AppDeviceProgressCache.resetAppDevice
+import presentation.appsDeviceScreen.AppProgressCache.resetWrongApp
+import presentation.components.MessageDialog
 import presentation.contatcts.components.ContactItem
 import presentation.contatcts.components.SearchTextField
-
 
 class ContactsScreen : Screen {
 
@@ -61,6 +62,7 @@ class ContactsScreen : Screen {
 
         val listState = rememberLazyListState()
 
+        // Detect scrolling to trigger related ViewModel logic only once when scrolling starts
         LaunchedEffect(listState.firstVisibleItemScrollOffset) {
             if (listState.isScrollInProgress && !isScrolled) {
                     viewModel.startScrolling()
@@ -78,6 +80,7 @@ class ContactsScreen : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
+                    // Display a searchable list of contacts
                     SearchTextField(
                         value = searchQuery,
                         onValueChange = { viewModel.onSearchQueryChanged(it) }
@@ -90,6 +93,7 @@ class ContactsScreen : Screen {
                             .fillMaxSize()
                             .padding(horizontal = paddingMd)
                     ) {
+                        // List of contacts displayed
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             state = listState,
@@ -119,6 +123,7 @@ class ContactsScreen : Screen {
                 }
             })
 
+        // Load contacts and set the correct contact
         LaunchedEffect(Unit) {
             viewModel.loadContacts(phoneNumber)
             viewModel.setCorrectContact(correctContact, phoneNumber)
@@ -133,19 +138,28 @@ class ContactsScreen : Screen {
             }
         }
 
+        // Lifecycle observers to stop/play internal timers or checks
+        LaunchedEffect(Unit) {
+            resetAppDevice()
+            resetWrongApp()
+            viewModel.startCheckingIfUserDidSomething()
+        }
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()
             },
             onStart = {
+                resetAppDevice()
+                resetWrongApp()
                 viewModel.startCheckingIfUserDidSomething()
             }
         )
 
+        // Show dialog with instructions or the helpers dialog
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->
                 val audioString = stringResource(audio)
-                InstructionsDialog(
+                MessageDialog(
                     text = stringResource(text),
                     secondsLeft = countdown,
                     isPlaying = isPlaying,
@@ -160,7 +174,8 @@ class ContactsScreen : Screen {
         }
 
         RegisterBackHandler(this) {
-            navigator?.popUntilRoot()        }
+            navigator?.pop()
+        }
     }
 }
 

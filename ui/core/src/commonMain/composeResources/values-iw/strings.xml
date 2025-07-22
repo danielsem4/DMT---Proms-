@@ -377,7 +377,7 @@
 
     <string name="dialer_page_second_assist">יש לחפש את המספר של מרפאת השיניים</string>
     <string name="diale_to_dentist">יש לחייג למרפאת השיניים</string>
-    <string name="dialer_page_thired_assist">יש ללחוץ על כפתור החיוג שנמצא בצד התחתון של המסך</string>
+    <string name="dialer_page_thired_assist">יש ללחוץ על כפתור החיוג שמוצג בצד התחתון של המסך</string>
 
     <string name="dialer_page_wrong_action_one">חיוג מספר לא נכון, יש לחייג שוב למספר של מרפאת השיניים</string>
     <string name="dialer_page_dentis_number_appeared">מוצג מספר הטלפון של מרפאת השיניים, יש לחייג למרפאה</string>

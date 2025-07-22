@@ -18,11 +18,12 @@ class SeventhQuestionViewModel : ViewModel() {
     private val _targetCircleColor = MutableStateFlow<Color?>(null)
     val targetCircleColor: StateFlow<Color?> get() = _targetCircleColor
 
-
+    // Initialize with a random instruction and target color
     init {
         setRandomInstructions()
     }
 
+    // Check if the draggable circle is fully inside the target area with threshold
     fun evaluateAnswer(
         circlePositions : List<Offset>,
         circleColors: List<Color>,

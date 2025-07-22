@@ -39,6 +39,9 @@ class HomeViewModel(
             _isLoading.value = true
             api.getModules(clinicId)
                 .onSuccess { result ->
+                    result.add(
+                        ModulesResponse(module_name = "pass", active = true)
+                    )
                     result.forEach {
                         it.module_name = it.module_name.lowercase()
                     }

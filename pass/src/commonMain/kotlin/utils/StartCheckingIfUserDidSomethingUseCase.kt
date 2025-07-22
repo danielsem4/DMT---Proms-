@@ -5,6 +5,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+/**
+ * UseCase used in DialScreen to monitor user inactivity.
+ * Triggers reminders after 15 seconds without interaction, up to a max number of attempts.
+ */
+
 class StartCheckingIfUserDidSomethingUseCase(
     private val coroutineScope: CoroutineScope,
     private val getReminderDidNotingText: () -> Unit,
