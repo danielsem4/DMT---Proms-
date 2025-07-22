@@ -92,7 +92,7 @@ fun RoundedFilledSlider(
                     valueRange = start..end,
                     steps = steps,
                     colors = SliderDefaults.colors(
-                        thumbColor = primaryColor,
+                        thumbColor = Color.Transparent, // Set thumbColor to Transparent
                         activeTrackColor = Color.Transparent,
                         inactiveTrackColor = Color.Transparent,
                         activeTickColor = Color.Transparent,
@@ -126,13 +126,16 @@ fun RoundedFilledSliderPreview() {
 
     val availableValues = listOf(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 10f)
 
-    RoundedFilledSlider(
-        start = 1f,
-        end = 10f,
-        value = sliderValue,
-        availableValues = availableValues,
-        startText = "לא כואב",
-        endText = "כואב מאוד",
-        onValueChanged = { sliderValue = it }
-    )
+    Box(modifier = Modifier.background(Color.White)) {
+
+        RoundedFilledSlider(
+            start = 1f,
+            end = 10f,
+            value = sliderValue,
+            availableValues = availableValues,
+            startText = "Great",
+            endText = "Terrible",
+            onValueChanged = { sliderValue = it }
+        )
+    }
 }
