@@ -69,7 +69,21 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
+import org.example.hit.heal.core.presentation.FontSize.MEDIUM
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes.buttonHeightMd
+import org.example.hit.heal.core.presentation.Sizes.elevationSm
+import org.example.hit.heal.core.presentation.Sizes.height7Xl
+import org.example.hit.heal.core.presentation.Sizes.heightMd
+import org.example.hit.heal.core.presentation.Sizes.heightXl
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.spacing6Xl
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.widthLg
+import org.example.hit.heal.core.presentation.Sizes.widthMd_Lg
+import org.example.hit.heal.core.presentation.Sizes.widthXl
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
@@ -292,30 +306,30 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                         .weight(0.4f)
                         .zIndex(1f)
                         .background(color = backgroundColor)
-                        .padding(16.dp)
+                        .padding(paddingMd)
                 ) {
 
                     //-------------------Text of instruction
                     Box(
                         modifier = Modifier
-                            .background(Color.White, RoundedCornerShape(8.dp))
-                            .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
-                            .padding(vertical = 7.dp, horizontal = 7.dp)
+                            .background(Color.White, RoundedCornerShape(paddingSm))
+                            .border(elevationSm, Color.Black, RoundedCornerShape(paddingSm))
+                            .padding(vertical =paddingSm, horizontal =paddingSm)
                     ) {
                         Text(
                             //Change  a text because it depend of number of page
                             text = if(pageNumber==2){stringResource(Resources.String.drag_and_place_instruction)}else{stringResource(Resources.String.drag_and_place_instruction)},
-                            fontSize = 18.sp,
+                            fontSize = MEDIUM,
                             textAlign = TextAlign.Companion.Center,
                             fontWeight = FontWeight.Companion.Bold,
                             color = primaryColor,
-                            modifier = Modifier.Companion.padding(bottom = 16.dp)
+                            modifier = Modifier.Companion.padding(bottom = paddingMd)
                         )
                     }
 
                     //--------------------Buttons of changing rooms
                     Row(
-                        modifier = Modifier.Companion.fillMaxWidth().padding(top = 16.dp),
+                        modifier = Modifier.Companion.fillMaxWidth().padding(top = paddingMd),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {//Change room and color of Button (if choose)
                         roomButtons.forEach { room ->
@@ -326,12 +340,12 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                     backgroundColor = if (isSelected) Color.Companion.Gray else primaryColor
                                 ),
                                 shape = androidx.compose.foundation.shape.RoundedCornerShape(30),
-                                modifier = Modifier.Companion.height(50.dp).width(150.dp)
+                                modifier = Modifier.Companion.height(buttonHeightMd).width(widthMd_Lg)
                             ) {
                                 Text(
                                     text = stringResource(room.displayName),
                                     color = Color.Companion.White,
-                                    fontSize = 16.sp
+                                    fontSize =EXTRA_REGULAR
                                 )
                             }
                         }
@@ -358,9 +372,9 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                             modifier = Modifier.Companion
                                 .background(Color.Companion.White)
                                 .zIndex(1f)
-                                .border(1.dp, Color.Companion.Black)
+                                .border(elevationSm, Color.Companion.Black)
                                 .fillMaxWidth()
-                                .height(300.dp)
+                                .height(height7Xl)
                         ) {
                             Column(
                                 modifier = Modifier.Companion
@@ -425,7 +439,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                                     placedItems = viewModel.placedItems
                                                 )
                                             } else {
-                                                Spacer(modifier = Modifier.Companion.size(80.dp))
+                                                Spacer(modifier = Modifier.Companion.size(spacing6Xl))
                                             }
                                         }
                                     }
@@ -433,7 +447,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                             }
                         }
                     }
-                    Spacer(modifier = Modifier.Companion.height(12.dp))
+                    Spacer(modifier = Modifier.Companion.height(spacingMd))
 
                     //--------------------Timer and button to next page
                     Row(
@@ -450,7 +464,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 16.dp),
+                                .padding(top = spacingMd),
                             contentAlignment = Alignment.Center
                         ) {
                             Button(
@@ -460,9 +474,9 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                 colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                                 shape = RoundedCornerShape(30),
                                 modifier = Modifier
-                                    .defaultMinSize(minWidth = 100.dp)
-                                    .width(250.dp)
-                                    .height(50.dp) ,
+                                    .defaultMinSize(minWidth = heightXl)
+                                    .width(widthXl)
+                                    .height(heightMd) ,
                                 enabled = allItemsPlaced, //if all items placed -> (we see a button) - only for page 2
 
                             ) {

@@ -19,6 +19,9 @@ import com.example.new_memory_test.presentation.screens.ScheduleScreen.data.Drag
 import org.example.hit.heal.core.presentation.primaryColor
 import com.mohamedrejeb.compose.dnd.DragAndDropState
 import com.mohamedrejeb.compose.dnd.drop.dropTarget
+import org.example.hit.heal.core.presentation.Sizes.paddingXs
+import org.example.hit.heal.core.presentation.Sizes.radiusMd2
+import org.example.hit.heal.core.presentation.Sizes.widthTiny
 import kotlin.collections.plus
 
 //Boxes for schedules
@@ -36,8 +39,8 @@ fun TimeSlotBox(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .padding(4.dp)
-            .clip(RoundedCornerShape(12.dp))
+            .padding(paddingXs)
+            .clip(RoundedCornerShape(radiusMd2))
             .background(backgroundColor)
             .clickable {
                 droppedState.value = droppedState.value - slotId //remove from dropped
@@ -56,12 +59,12 @@ fun TimeSlotBox(
             Image( // Image of circle
                 painter = it.painter,
                 contentDescription = null,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(widthTiny)
             )
             DeleteIcon( //Image of delete - small X
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(4.dp),
+                    .padding(paddingXs),
                 onClick = {
                     droppedState.value = droppedState.value - slotId
                 }

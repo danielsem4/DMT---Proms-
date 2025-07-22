@@ -30,14 +30,18 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.end
 import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.sentSuccessfully
 import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe
 import org.example.hit.heal.core.presentation.Resources.String.unexpectedError
+import org.example.hit.heal.core.presentation.Sizes.elevationSm
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.Sizes.spacing8Xl
+import org.example.hit.heal.core.presentation.Sizes.spacingXxl
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -85,7 +89,7 @@ class FinalScreenMemoryTest : Screen {
                     Column(
                         modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(45.dp)
+                        verticalArrangement = Arrangement.spacedBy(spacingXxl)
                     ) {
 
                         Box(
@@ -93,7 +97,7 @@ class FinalScreenMemoryTest : Screen {
                                 .fillMaxWidth()
                                 .background(Color.White, shape = RoundedCornerShape(radiusMd))
                                 .border(
-                                    width = 2.dp,
+                                    width = elevationSm,
                                     color = Color.LightGray,
                                     shape = RoundedCornerShape(radiusMd)
                                 )
@@ -101,16 +105,16 @@ class FinalScreenMemoryTest : Screen {
                             Text(
                                 text = stringResource(thanksCoffe),
                                 color = primaryColor,
-                                fontSize = 35.sp,
+                                fontSize = LARGE,
                                 fontWeight = Bold,
-                                lineHeight = 40.sp,
+                                lineHeight = EXTRA_LARGE,
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.fillMaxWidth()
                             )
 
                         }
 
-                        SuccessAnimation(modifier = Modifier.size(100.dp))
+                        SuccessAnimation(modifier = Modifier.size(spacing8Xl))
                     }
                     RoundedButton(
                         text = stringResource(exit),

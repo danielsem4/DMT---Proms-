@@ -27,7 +27,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
-import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
+import org.example.hit.heal.core.presentation.FontSize.REGULAR
+import org.example.hit.heal.core.presentation.Sizes.heightSm
+import org.example.hit.heal.core.presentation.Sizes.radiusMd2
+import org.example.hit.heal.core.presentation.Sizes.radiusXl
+import org.example.hit.heal.core.presentation.Sizes.spacing3Xl
+import org.example.hit.heal.core.presentation.Sizes.spacingLg
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
+import org.example.hit.heal.core.presentation.Sizes.spacingXl
+
+import org.example.hit.heal.core.presentation.Sizes.widthSm
 import org.example.hit.heal.core.presentation.primaryColor
 
 @Composable
@@ -42,49 +53,49 @@ fun CustomDialog(
         Box(
             contentAlignment = Alignment.TopCenter,
             modifier = Modifier
-                .padding(horizontal = 32.dp)
+                .padding(horizontal = spacingXl )
                 .wrapContentHeight()
         ) {
             // Card Body
             Box(
                 modifier = Modifier
-                    .padding(top = 40.dp)
+                    .padding(heightSm)
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(radiusXl))
                     .background(Color.White),
                 contentAlignment = Alignment.Center
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(
-                        top = 56.dp,
-                        start = 24.dp,
-                        end = 24.dp,
-                        bottom = 24.dp
+                        top = spacing3Xl,
+                        start = spacingLg,
+                        end = spacingLg,
+                        bottom = spacingLg
                     )
                 ) {
                     Text(
                         text = title,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 22.sp,
+                        fontSize = EXTRA_MEDIUM,
                         color = primaryColor,
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(spacingSm))
 
                     Text(
                         text = description,
                         textAlign = TextAlign.Center,
                         color = primaryColor,
-                        fontSize = 16.sp
+                        fontSize = EXTRA_REGULAR
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(spacingLg))
 
                     // Buttons
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(radiusMd2),
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -95,10 +106,10 @@ fun CustomDialog(
                                     backgroundColor = primaryColor,
                                     contentColor = Color.White
                                 ),
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(radiusMd2),
                                 modifier = Modifier.weight(1f)
                             ) {
-                                Text(text = text, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.White,textAlign = TextAlign.Center)
+                                Text(text = text, fontSize = REGULAR, fontWeight = FontWeight.Bold, color = Color.White,textAlign = TextAlign.Center)
                             }
                         }
                     }
@@ -108,7 +119,7 @@ fun CustomDialog(
             // Icon
             Box(
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(widthSm)
                     .zIndex(1f)
                     .clip(CircleShape)
                     .background(primaryColor),

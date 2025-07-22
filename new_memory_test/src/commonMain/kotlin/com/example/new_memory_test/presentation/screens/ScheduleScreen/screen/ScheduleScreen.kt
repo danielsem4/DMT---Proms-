@@ -60,8 +60,27 @@ import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import core.utils.platformCapturable
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes.elevationMd
+import org.example.hit.heal.core.presentation.Sizes.elevationSm
+import org.example.hit.heal.core.presentation.Sizes.heightLg
+import org.example.hit.heal.core.presentation.Sizes.heightMd
+import org.example.hit.heal.core.presentation.Sizes.heightXl
+import org.example.hit.heal.core.presentation.Sizes.iconSize3Xl
+import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.paddingXs
+import org.example.hit.heal.core.presentation.Sizes.radiusLg
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.Sizes.radiusMd2
+import org.example.hit.heal.core.presentation.Sizes.spacing8Xl
+import org.example.hit.heal.core.presentation.Sizes.spacingLg
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
+import org.example.hit.heal.core.presentation.Sizes.widthXl
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -153,7 +172,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                         Icons.Default.ThumbUp,
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.size(40.dp)
+                        modifier = Modifier.size(iconSizeXl)
                     )
                 },
                 title = stringResource(Resources.String.build_schedule),
@@ -186,26 +205,26 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                     Row(
                         modifier = Modifier
                             .weight(0.08f)
-                            .padding(horizontal = 5.dp)
+                            .padding(horizontal = paddingXs)
                             .background(Color.Transparent),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(paddingSm)
                     ) {
                         Row(
                             modifier = Modifier
                                 .weight(0.7f)
-                                .clip(RoundedCornerShape(8.dp))
-                                .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
+                                .clip(RoundedCornerShape(paddingSm))
+                                .border(elevationSm, Color.Black, RoundedCornerShape(paddingSm))
                                 .background(Color.White),
-                            horizontalArrangement = Arrangement.spacedBy(5.dp)
+                            horizontalArrangement = Arrangement.spacedBy(paddingXs)
                         ) {
 
                             days.reversed().forEach { day ->
                                 Box(
                                     modifier = Modifier
                                         .weight(0.6f)
-                                        .padding(3.dp)
+                                        .padding(paddingXs)
                                         .fillMaxHeight()
-                                        .clip(RoundedCornerShape(15.dp))
+                                        .clip(RoundedCornerShape(radiusLg))
                                         .background(Color.Gray),
                                     contentAlignment = Alignment.Center
                                 ) {
@@ -231,16 +250,16 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                         Column(
                             modifier = Modifier
                                 .weight(0.7f)
-                                .padding(horizontal = 5.dp, vertical = 5.dp)
-                                .clip(RoundedCornerShape(12.dp))
+                                .padding(horizontal = paddingXs, vertical = paddingXs)
+                                .clip(RoundedCornerShape(radiusMd2))
                                 .background(Color.Transparent)
                         ) {
                             Row(
                                 modifier = Modifier
-                                    .background(Color.White, RoundedCornerShape(8.dp))
-                                    .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
+                                    .background(Color.White, RoundedCornerShape(radiusMd))
+                                    .border(elevationSm, Color.Black, RoundedCornerShape(radiusMd))
                                     .fillMaxSize()
-                                    .padding(vertical = 15.dp)
+                                    .padding(vertical = paddingMd)
                             ) {
                                 Column {
                                     //Create Id for box , that depends on day and hour (for 40 boxes)
@@ -257,8 +276,8 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                         Row(
                                             modifier = Modifier
                                                 .fillMaxWidth()
-                                                .height(70.dp),
-                                            horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                                .height( 70.dp),
+                                            horizontalArrangement = Arrangement.spacedBy(elevationSm)
                                         ) {
                                             for (day in 1..5) {
                                                 TimeSlotBox(
@@ -277,30 +296,30 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
 
                             }
                         }
-                        Spacer(modifier = Modifier.size(7.dp))
+                        Spacer(modifier = Modifier.size(spacingSm))
 
                         //--------------------- Instructions of exam
                         Column(
                             modifier = Modifier
                                 .weight(0.1f)
                                 .fillMaxHeight()
-                                .background(Color.White, RoundedCornerShape(8.dp))
-                                .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
-                                .padding(horizontal = 5.dp, vertical = 5.dp)
+                                .background(Color.White, RoundedCornerShape(radiusMd))
+                                .border(elevationSm, Color.Black, RoundedCornerShape(radiusMd))
+                                .padding(horizontal = paddingXs, vertical = paddingXs)
                         ) {
                             hours.forEach { hour ->
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(70.dp)
-                                        .padding(vertical = 15.dp)
+                                        .height(heightLg)
+                                        .padding(vertical = paddingMd)
                                 ) {
                                     Box(
                                         modifier = Modifier
                                             .weight(1f)
-                                            .padding(vertical = 1.dp, horizontal = 3.dp)
+                                            .padding(vertical = elevationSm, horizontal = elevationMd)
                                             .fillMaxHeight()
-                                            .clip(RoundedCornerShape(8.dp))
+                                            .clip(RoundedCornerShape(radiusMd))
                                             .background(Color.White),
                                         contentAlignment = Alignment.Center
                                     ) {
@@ -314,50 +333,50 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                     }
                                 }
                             }
-                            Spacer(modifier = Modifier.size(5.dp))
+                            Spacer(modifier = Modifier.size(spacingSm))
                         }
                         //
                         Column(
                             modifier = Modifier
                                 .weight(0.3f)
 
-                                .padding(10.dp)
+                                .padding(spacingSm)
                         ) {
 
                             Box(
                                 modifier = Modifier
 
-                                    .background(Color.White, RoundedCornerShape(8.dp))
-                                    .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
-                                    .padding(vertical = 7.dp, horizontal = 7.dp)
+                                    .background(Color.White, RoundedCornerShape(radiusMd))
+                                    .border(elevationSm, Color.Black, RoundedCornerShape(radiusMd))
+                                    .padding(vertical = spacingSm, horizontal = spacingSm)
                             ) {
 
                                 Text(
                                     text = stringResource(Resources.String.place_instructions_in_calendar_memory),
-                                    fontSize = 25.sp,
+                                    fontSize = EXTRA_MEDIUM_LARGE,
                                     textAlign = TextAlign.Center,
                                     fontWeight = FontWeight.Bold,
                                     color = primaryColor,
-                                    modifier = Modifier.padding(bottom = 16.dp)
+                                    modifier = Modifier.padding(bottom = spacingMd)
                                 )
                             }
 
                             //-----------------Instructions only for item
-                            Spacer(modifier = Modifier.height(20.dp))
+                            Spacer(modifier = Modifier.height(spacingLg))
                             Box(
                                 modifier = Modifier
                                     .background(
                                         if (selectedItemText.value.isNullOrBlank()) Color.Transparent else Color.White,
-                                        RoundedCornerShape(8.dp)
+                                        RoundedCornerShape(radiusMd)
                                     )
                                     .border(
                                         1.dp,
                                         if (selectedItemText.value.isNullOrBlank()) Color.Transparent else Color.Black,
-                                        RoundedCornerShape(8.dp)
+                                        RoundedCornerShape(radiusMd)
                                     )
-                                    .padding(vertical = 7.dp, horizontal = 7.dp)
+                                    .padding(vertical =paddingSm, horizontal = paddingSm)
                                     .fillMaxWidth()
-                                    .height(110.dp)
+                                    .height(heightXl)///
                             ) {
                                 if (!selectedItemText.value.isNullOrBlank()) {
                                     Text(
@@ -376,8 +395,8 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
                                     .fillMaxWidth()
-                                    .padding(bottom = 10.dp, top = 10.dp),
-                                horizontalArrangement = Arrangement.spacedBy(25.dp)
+                                    .padding(bottom = paddingSm, top = paddingSm),
+                                horizontalArrangement = Arrangement.spacedBy(spacingLg)
                             ) {
                                 DraggableCirclesPalet(
                                     circles = circlesPalletFirst,
@@ -392,8 +411,8 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
                                     .fillMaxWidth()
-                                    .padding(bottom = 10.dp),
-                                horizontalArrangement = Arrangement.spacedBy(25.dp)
+                                    .padding(bottom = paddingSm),
+                                horizontalArrangement = Arrangement.spacedBy(spacingLg)
                             ) {
                                 DraggableCirclesPalet(
                                     circles = circlesPalletSecond,
@@ -408,7 +427,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(bottom = 16.dp),
+                                    .padding(bottom = paddingMd),
                                 verticalArrangement = Arrangement.Bottom,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
@@ -433,9 +452,9 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                     shape = RoundedCornerShape(30),
                                     modifier = Modifier
                                         .fillMaxWidth(0.7f)
-                                        .defaultMinSize(minWidth = 100.dp)
-                                        .width(250.dp)
-                                        .height(50.dp)
+                                        .defaultMinSize(minWidth = spacing8Xl)
+                                        .width(widthXl)
+                                        .height(heightMd)
                                 ) {
                                     Text(
                                         text = stringResource(Resources.String.next),
