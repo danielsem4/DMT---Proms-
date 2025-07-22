@@ -8,7 +8,6 @@ import org.example.hit.heal.core.presentation.Resources.String.seventhQuestionHi
 
 // Instruction labels paired with their colors for the drag-and-drop task.
 // Used randomly to assign colors during the task.
-
 val instructions = listOf(
     seventhQuestionHitberGreenCircle to Color.Green,
     seventhQuestionHitberBlackCircle to Color.Black,

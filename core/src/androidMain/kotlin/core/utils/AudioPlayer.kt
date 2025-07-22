@@ -9,7 +9,7 @@ actual class AudioPlayer {
     private var mediaPlayer: MediaPlayer? = null
 
     actual suspend fun play(url: String, onCompletion: () -> Unit) {
-        stop() // stop any existing playback
+        stop()
         suspendCancellableCoroutine<Unit> { continuation ->
             try {
                 val player = MediaPlayer().apply {

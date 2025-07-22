@@ -109,6 +109,7 @@ class HitBerEntryScreen() : Screen {
             navigator?.pop()
         }
 
+        // Load evaluation data when the composable enters composition
         LaunchedEffect(Unit) {
             viewModel.loadEvaluation("HitBer")
         }

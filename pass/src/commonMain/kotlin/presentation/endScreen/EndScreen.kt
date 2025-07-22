@@ -71,6 +71,7 @@ class EndScreen : Screen {
                         verticalArrangement = Arrangement.spacedBy(45.dp)
                     ) {
 
+                        // Animated visualization when audio is playing
                         AudioPlayingAnimation(isPlaying = isPlaying)
 
                         Box(
@@ -94,7 +95,7 @@ class EndScreen : Screen {
                             )
 
                         }
-
+                        // Success checkmark animation
                         SuccessAnimation(modifier = Modifier.size(100.dp))
                     }
                     RoundedButton(
@@ -108,6 +109,7 @@ class EndScreen : Screen {
             }
         )
 
+        // Lifecycle observers to stop/play internal timers or checks
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAudio()
@@ -118,6 +120,7 @@ class EndScreen : Screen {
         )
 
 
+        // Shows a subtle dark overlay when audio is playing
         if (isOverlayVisible) {
             Box(
                 modifier = Modifier
@@ -134,7 +137,7 @@ class EndScreen : Screen {
 
         RegisterBackHandler(this)
         {
-            navigator?.popUntilRoot()
+            navigator?.pop()
         }
     }
 }
