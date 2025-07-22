@@ -1,4 +1,7 @@
 package org.example.hit.heal.core.presentation
+
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
 /**
@@ -35,7 +38,7 @@ val TextWhite = White
 val TextBrand = primaryColor
 
 val ButtonPrimary = primaryColor
-val ButtonRed= Red
+val ButtonRed = Red
 val ButtonDisabled = GrayDarker
 
 val IconPrimary = primaryColor
@@ -54,3 +57,43 @@ val purseColor = Color(0xFFBA68C8)
 val weatherColor = Color(0xFFFFF176)
 val documentsColor = Color(0xFFFFF59D)
 val phoneColor = primaryColor
+
+val cardColor = LightWhite
+
+val LightColors = lightColorScheme(
+    primary = primaryColor,
+    onPrimary = TextWhite,
+    primaryContainer = SurfaceBrand,
+    onPrimaryContainer = TextWhite,
+
+    secondary = TextSecondary,
+    onSecondary = TextWhite,
+    secondaryContainer = Surface,
+
+    background = backgroundColor,
+    onBackground = TextPrimary,
+
+    surface = Surface,
+    onSurface = TextPrimary,
+
+    error = SurfaceError,
+    onError = TextWhite,
+
+    // optional—if you want more control:
+    outline = GrayDarker,
+    surfaceVariant = SurfaceLighter,
+    onSurfaceVariant = TextSecondary,
+)
+
+val DarkColors = darkColorScheme(
+    primary = primaryColor,
+    onPrimary = TextWhite,
+    secondary = TextWhite,
+    onSecondary = TextPrimary,
+    background = Black,
+    onBackground = TextWhite,
+    surface = GrayDarker,
+    onSurface = TextWhite,
+    error = SurfaceError,
+    onError = TextWhite
+)
