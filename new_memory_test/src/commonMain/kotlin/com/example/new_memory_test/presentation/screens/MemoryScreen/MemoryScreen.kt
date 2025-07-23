@@ -45,6 +45,8 @@ import org.example.hit.heal.core.presentation.Sizes.heightSm
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingXl
 import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -56,6 +58,8 @@ class MemoryScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = koinViewModel()
         viewModel.reset()
+        viewModel.txtMemoryPage =1
+
 
         //create at evaluetion memory
         LaunchedEffect(Unit){
@@ -64,7 +68,8 @@ class MemoryScreen : Screen {
 
         //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
-        BaseTabletScreen(title = stringResource(Resources.String.memory_title), page = 1, totalPages =6 ){
+        BaseScreen(title = stringResource(Resources.String.memory_title),  config = ScreenConfig.TabletConfig, topRightText ="1/6" ,content ={
+
 
             Column(
                 modifier = Modifier
@@ -119,7 +124,7 @@ class MemoryScreen : Screen {
                 }
                 Spacer(modifier = Modifier.height(heightSm))
             }
-            }
+            })
         }
         RegisterBackHandler(this)
         {

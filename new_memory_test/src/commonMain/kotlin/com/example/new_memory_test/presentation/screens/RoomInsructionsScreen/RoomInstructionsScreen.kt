@@ -53,6 +53,8 @@ import org.example.hit.heal.core.presentation.Sizes.widthLg
 import org.example.hit.heal.core.presentation.Sizes.widthXl
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -67,12 +69,13 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
 
        //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            BaseTabletScreen(
+            BaseScreen(
                 title = stringResource(Resources.String.room_title),
-                page = pageNumber,
-                totalPages = 6,
-                modifier = Modifier.Companion.fillMaxSize().background(color = backgroundColor)
-            ) {
+                topRightText = "$pageNumber/6",
+                config = ScreenConfig.TabletConfig,
+                modifier = Modifier.Companion.fillMaxSize().background(color = backgroundColor),
+                content =
+             {
 
                 Row(
                     modifier = Modifier.Companion
@@ -110,7 +113,7 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
                         Spacer(modifier = Modifier.Companion.weight(0.3f))
                         Row(
                             modifier = Modifier.Companion.fillMaxWidth().padding(top =paddingMd)
-                                .weight(0.4f),
+                                .weight(0.4f) .padding(8.dp),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             //can change images with buttons
@@ -122,7 +125,7 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
                                         backgroundColor = if (isSelected) Color.Companion.Gray else primaryColor
                                     ),
                                     shape = androidx.compose.foundation.shape.RoundedCornerShape(30),
-                                    modifier = Modifier.Companion.height(buttonHeightMd).width(widthLg)
+                                    modifier = Modifier.Companion.height(buttonHeightMd).width(widthLg).padding(4.dp)
                                 ) {
                                     Text(
                                         text = stringResource(room.displayName),
@@ -186,7 +189,7 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
                     }
 
                 }
-            }
+            })
         }
         RegisterBackHandler(this)
         {

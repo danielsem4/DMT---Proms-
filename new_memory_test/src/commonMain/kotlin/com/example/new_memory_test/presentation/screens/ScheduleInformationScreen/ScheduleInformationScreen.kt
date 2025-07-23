@@ -40,6 +40,8 @@ import org.example.hit.heal.core.presentation.Sizes.spacing8Xl
 import org.example.hit.heal.core.presentation.Sizes.spacingLg
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.widthXl
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -52,7 +54,7 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
 
         //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
-        BaseTabletScreen(title = stringResource(Resources.String.build_schedule), page = pageNumber, totalPages = 6) {
+        BaseScreen(title = stringResource(Resources.String.build_schedule),  config = ScreenConfig.TabletConfig,topRightText = "$pageNumber/6" , content =  {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -126,7 +128,7 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
                     )
                 }
             }
-        }
+        })
             RegisterBackHandler(this)
             {
                 navigator.popUntilRoot()

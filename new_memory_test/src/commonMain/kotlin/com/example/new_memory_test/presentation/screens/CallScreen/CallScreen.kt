@@ -54,6 +54,8 @@ import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.widthMd
 import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -82,7 +84,9 @@ class CallScreen(val pageNumber: Int )  : Screen {
 
         //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
-        BaseTabletScreen(title = stringResource(Resources.String.incoming_call_title), page = pageNumber, totalPages = 6) {
+        BaseScreen(title = stringResource(Resources.String.incoming_call_title),  config = ScreenConfig.TabletConfig,  topRightText = "$pageNumber/6", content =
+
+           {
 
             Column(
                 modifier = Modifier.Companion
@@ -181,7 +185,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
                     }
                 }
             }
-        }
+        })
 
             //Dialog after accept
         if (showAcceptDialog) {

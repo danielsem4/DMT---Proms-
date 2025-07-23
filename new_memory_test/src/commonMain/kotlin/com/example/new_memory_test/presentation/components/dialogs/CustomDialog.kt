@@ -1,5 +1,4 @@
 package com.example.new_memory_test.presentation.components.dialogs
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,8 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
@@ -37,14 +34,13 @@ import org.example.hit.heal.core.presentation.Sizes.spacing3Xl
 import org.example.hit.heal.core.presentation.Sizes.spacingLg
 import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.Sizes.spacingXl
-
 import org.example.hit.heal.core.presentation.Sizes.widthSm
 import org.example.hit.heal.core.presentation.primaryColor
 
 @Composable
 fun CustomDialog(
     onDismiss: () -> Unit,
-    icon: @Composable () -> Unit,
+    icon: () -> Unit,
     title: String,
     description: String,
     buttons: List<Pair<String, () -> Unit>> // Pair of button text and action
