@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
@@ -46,7 +47,8 @@ fun CustomDialog(
     text: String,
     description: String = "",
     onSubmit: (() -> Unit)? = null,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    buttons: List<Pair<String, () -> Unit>> = emptyList()
 ){
     Dialog(onDismissRequest = onDismiss) {
         Dialog(onDismissRequest =  onDismiss) {
@@ -89,13 +91,27 @@ fun CustomDialog(
                             lineHeight = 50.sp
                         )
                         Spacer(modifier = Modifier.height(paddingLg))
-                        Button(
-                            onClick =onDismiss,
-                            shape = RoundedCornerShape(radiusMd),
-                            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-
+                        if (buttons.isEmpty()) {
+                            Button(
+                                onClick = onDismiss,
+                                shape = RoundedCornerShape(radiusMd),
+                                colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                             ) {
-                            Text(stringResource(secondQuestionHitberUnderstand), color = Color.White, fontSize = EXTRA_MEDIUM)
+                                Text(stringResource(secondQuestionHitberUnderstand), color = Color.White, fontSize = EXTRA_MEDIUM)
+                            }
+                        } else {
+                            buttons.forEach { (label, action) ->
+                                Button(
+                                    onClick = action,
+                                    shape = RoundedCornerShape(radiusMd),
+                                    colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = 4.dp)
+                                ) {
+                                    Text(text = label, color = Color.White, fontSize = EXTRA_MEDIUM)
+                                }
+                            }
                         }
                     }
                 }

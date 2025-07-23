@@ -45,14 +45,11 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
-import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
-import com.example.new_memory_test.presentation.screens.BaseTabletScreen
-import com.example.new_memory_test.presentation.screens.FinalScreenMemoryTest
+
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.DraggableCirclesPalet
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.TimeSlotBox
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.data.DraggableCircle
-
 import com.mohamedrejeb.compose.dnd.DragAndDropContainer
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
 import core.utils.CapturableWrapper
@@ -68,8 +65,6 @@ import org.example.hit.heal.core.presentation.Sizes.elevationSm
 import org.example.hit.heal.core.presentation.Sizes.heightLg
 import org.example.hit.heal.core.presentation.Sizes.heightMd
 import org.example.hit.heal.core.presentation.Sizes.heightXl
-import org.example.hit.heal.core.presentation.Sizes.iconSize3Xl
-import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXs
@@ -82,6 +77,7 @@ import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.Sizes.widthXl
 import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.CustomDialog
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
@@ -168,21 +164,12 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
         var showAcceptDialog by remember { mutableStateOf(false) }
         if (showAcceptDialog) {
             CustomDialog(
-                onDismiss = { showAcceptDialog = false },
-                icon = {
-                    Icon(
-                        Icons.Default.ThumbUp,
-                        contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(iconSizeXl)
-                    )
-                },
+                icon = Resources.Icon.warningIcon,
                 title = stringResource(Resources.String.build_schedule),
-                description = stringResource(Resources.String.please_place_all_activities_memory),
+                text = stringResource(Resources.String.please_place_all_activities_memory),
+                onDismiss = { showAcceptDialog = false },
                 buttons = listOf(
-                    stringResource(Resources.String.next) to {
-                        showAcceptDialog = false
-                    }
+                    stringResource(Resources.String.next) to { showAcceptDialog = false }
                 )
             )
         }

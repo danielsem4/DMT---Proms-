@@ -208,7 +208,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         //If end time (4 minutes)
         if (showDialogEndTime) {
             CustomDialog(
-                icon =  Resources.Icon.appIcon , // или замени на painterResource если требуется DrawableResource
+                icon = Resources.Icon.appIcon,
                 title = stringResource(Resources.String.time_ended),
                 text = stringResource(Resources.String.time_ended_for_this_question_memory),
                 onDismiss = {
@@ -216,9 +216,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                     when (pageNumber) {
                         2 -> navigator.push(CallScreen(pageNumber = 3))
                         4 -> navigator.push(ScheduleScreen(pageNumber = 5))
-                        6 -> {
-                            showDialog = true
-                        }
+                        6 -> showDialog = true
                     }
                 }
             )
@@ -226,7 +224,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         //Dialog for inactives user
         if (showInactivityDialog) {
             CustomDialog(
-                icon =Resources.Icon.appIcon , // или DrawableResource, если ты используешь painterResource
+                icon = Resources.Icon.appIcon, // или другой DrawableResource
                 title = "",
                 text = if (inactivityCount < 2) {
                     stringResource(Resources.String.first_one_minute_end_body_memory)
