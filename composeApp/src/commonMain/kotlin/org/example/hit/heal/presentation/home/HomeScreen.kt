@@ -74,7 +74,7 @@ import org.example.hit.heal.core.presentation.TextPrimary
 import org.example.hit.heal.core.presentation.TextWhite
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
-import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
+import org.example.hit.heal.core.presentation.components.dialogs.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.components.cards.SimpleIconCard
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.entry.HitBerEntryScreen

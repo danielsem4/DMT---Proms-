@@ -1,4 +1,4 @@
-package org.example.hit.heal.core.presentation.components
+package org.example.hit.heal.core.presentation.components.dialogs
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
