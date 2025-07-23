@@ -40,7 +40,7 @@ import org.example.hit.heal.core.presentation.primaryColor
 @Composable
 fun CustomDialog(
     onDismiss: () -> Unit,
-    icon: () -> Unit,
+    icon: @Composable () -> Unit,
     title: String,
     description: String,
     buttons: List<Pair<String, () -> Unit>> // Pair of button text and action

@@ -19,7 +19,7 @@ import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun Loading( ) {
+fun Loading() {
 
     Row(
         modifier = Modifier.fillMaxSize(),

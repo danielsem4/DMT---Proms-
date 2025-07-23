@@ -28,6 +28,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
+import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.FontSize.REGULAR
+import org.example.hit.heal.core.presentation.Sizes.heightSm
+import org.example.hit.heal.core.presentation.Sizes.iconSize2Xl
+import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
+import org.example.hit.heal.core.presentation.Sizes.radiusMd2
+import org.example.hit.heal.core.presentation.Sizes.radiusXl
+import org.example.hit.heal.core.presentation.Sizes.spacing3Xl
+import org.example.hit.heal.core.presentation.Sizes.spacingLg
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
+import org.example.hit.heal.core.presentation.Sizes.spacingXl
+import org.example.hit.heal.core.presentation.Sizes.spacingXxl
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
 import org.example.hit.heal.core.presentation.FontSize.REGULAR
@@ -43,15 +57,15 @@ import org.example.hit.heal.core.presentation.Sizes.widthSm
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
- 
+
 
 
 @Composable
 fun CustomDialog(
     icon: DrawableResource,
     title: String,
-    text: String = "",
-    description: String = "",
+    text: String? = "",
+    description: String? = "",
     onSubmit: (() -> Unit)? = null,
     onDismiss: () -> Unit,
     buttons: List<Pair<String, () -> Unit>> = emptyList()
@@ -75,7 +89,7 @@ fun CustomDialog(
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(
-                        top = spacing3Xl,
+                        top = spacingXxl,
                         start = spacingLg,
                         end = spacingLg,
                         bottom = spacingLg
@@ -84,28 +98,19 @@ fun CustomDialog(
                     Text(
                         text = title,
                         fontWeight = FontWeight.Bold,
-                        fontSize = EXTRA_MEDIUM,
+                        fontSize = LARGE,
                         color = primaryColor,
                         textAlign = TextAlign.Center
                     )
 
                     Spacer(modifier = Modifier.height(spacingSm))
 
-                    if (text!= null){
-                        Text(
-                            text = text,
-                            textAlign = TextAlign.Center,
-                            color = primaryColor,
-                            fontSize = EXTRA_REGULAR
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(spacingLg))
-                    if (description!=null) {
+                    if (description != null) {
                         Text(
                             text = description,
                             textAlign = TextAlign.Center,
                             color = primaryColor,
-                            fontSize = EXTRA_REGULAR
+                            fontSize = EXTRA_MEDIUM_LARGE
                         )
                     }
 
@@ -143,7 +148,7 @@ fun CustomDialog(
             // Icon (painter from resource)
             Box(
                 modifier = Modifier
-                    .size(widthSm)
+                    .size(iconSize2Xl)
                     .zIndex(1f)
                     .clip(CircleShape)
                     .background(primaryColor),
@@ -159,3 +164,5 @@ fun CustomDialog(
         }
     }
 }
+
+

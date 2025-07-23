@@ -46,7 +46,6 @@ fun GenericSlotBox(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .background(backgroundColor, RoundedCornerShape(12.dp))
-
             .border(
                 width = 2.dp,
                 color = borderColor?:backgroundColor,

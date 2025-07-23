@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,15 +36,16 @@ import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHit
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTaskRetryInstructions
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTitle
+import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberUnderstand
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.components.dialogs.CustomDialog
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
-import org.example.hit.heal.hitber.presentation.shapes.components.DialogTask
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -159,11 +159,15 @@ class ActionShapesScreen(private val question: Int) : Screen {
 
         // Retry dialog shown when user needs to retry the task
         if (showDialog) {
-            DialogTask(
+            CustomDialog(
                 icon = errorIcon,
                 title = stringResource(secondQuestionHitberDialogTitle),
-                text = stringResource(secondQuestionHitberTaskRetryInstructions),
-                onDismiss = { showDialog = false })
+                description = stringResource(secondQuestionHitberTaskRetryInstructions),
+                onDismiss = { showDialog = false },
+                buttons = listOf(
+                    stringResource(secondQuestionHitberUnderstand) to { showDialog = false },
+                )
+            )
         }
 
     }

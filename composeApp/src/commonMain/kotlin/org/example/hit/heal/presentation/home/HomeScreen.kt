@@ -103,16 +103,6 @@ class HomeScreen : Screen {
         val isLoading by viewModel.isLoading.collectAsState()
 
 
-        val staticFeatures = listOf(
-            ModulesResponse(module_name = "pass", active = true)
-        )
-
-        val allFeatures = if (features.isNotEmpty()) {
-            (features + staticFeatures).filter { it.active }
-        } else {
-            emptyList()
-        }
-
         LaunchedEffect(Unit) {
             viewModel.loadFeatures()
         }
@@ -181,7 +171,7 @@ class HomeScreen : Screen {
                             verticalArrangement = Arrangement.spacedBy(paddingMd),
                             modifier = Modifier.padding(horizontal = paddingLg)
                         ) {
-                            items(allFeatures) { feature ->
+                            items(features) { feature ->
                                 AnimatedFeatureTile(
                                     feature = feature,
                                     onClick = {

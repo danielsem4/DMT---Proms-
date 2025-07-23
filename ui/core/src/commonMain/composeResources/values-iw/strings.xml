@@ -23,6 +23,7 @@
     <string name="exit">יציאה</string>
     <string name="continue">המשך</string>
     <string name="start">התחל</string>
+    <string name="search_hint">חפש...</string>
 
 
     <string name="dont_forget">• לא לשכוח לעשות את המבחן</string>
@@ -165,21 +166,6 @@
     <string name="second_question_hitber_task_retry_instructions">אנא בחר את 5 הצורות שראית לפני מספר שאלות.</string>
     <string name="second_question_hitber_dialog_icon">profile icon</string>
     <string name="second_question_hitber_dialog_understand">הבנתי</string>
-    <string name="second_question_hitber_ellipse">אליפסה</string>
-    <string name="second_question_hitber_rectangle">מלבן</string>
-    <string name="second_question_hitber_pentagon">מחומש</string>
-    <string name="second_question_hitber_star">כוכב</string>
-    <string name="second_question_hitber_hash_tag">סולמית</string>
-    <string name="second_question_hitber_rhomb">מעוין</string>
-    <string name="second_question_hitber_cone">חרוט</string>
-    <string name="second_question_hitber_plus">פלוס</string>
-    <string name="second_question_hitber_hexagon">משושה</string>
-    <string name="second_question_hitber_right_triangle">משולש ישר</string>
-    <string name="second_question_hitber_asterisk">כוכבית</string>
-    <string name="second_question_hitber_check">וי</string>
-    <string name="second_question_hitber_trapezoid">טרפז</string>
-    <string name="second_question_hitber_triangle">משולש</string>
-    <string name="second_question_hitber_close">איקס</string>
 
     <string name="third_question_hitber_title">ריכוז</string>
     <string name="third_question_hitber_instructions">בדקה הקרובה יופיעו במרכז המסך מספרים, בכל פעם שתראה את הספרה 7 עליך ללחוץ על המסך. להתחלת המטלה יש ללחוץ על התחל. בסיום המטלה תופיע ההודעה תודה. לחץ על המשך</string>

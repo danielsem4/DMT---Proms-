@@ -28,7 +28,7 @@ import core.data.model.Medications.Medication
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
-import org.example.hit.heal.presentation.medication.presentaion.components.SearchBar
+import org.example.hit.heal.core.presentation.components.SearchBar
 import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
 import org.example.hit.heal.presentation.medication.presentaion.screens.medicationAlarm.MedicationAlarmScreen
 import org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.components.ReportMedicationDialog

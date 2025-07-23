@@ -203,21 +203,6 @@
     <string name="second_question_hitber_task_retry_instructions">Please select the 5 shapes you saw a few questions ago.</string>
     <string name="second_question_hitber_dialog_icon">profile icon</string>
     <string name="second_question_hitber_dialog_understand">I understand</string>
-    <string name="second_question_hitber_ellipse">Ellipse</string>
-    <string name="second_question_hitber_rectangle">Rectangle</string>
-    <string name="second_question_hitber_pentagon">Pentagon</string>
-    <string name="second_question_hitber_star">Star</string>
-    <string name="second_question_hitber_hash_tag">Hashtag</string>
-    <string name="second_question_hitber_rhomb">Rhombus</string>
-    <string name="second_question_hitber_cone">Cone</string>
-    <string name="second_question_hitber_plus">Plus</string>
-    <string name="second_question_hitber_hexagon">Hexagon</string>
-    <string name="second_question_hitber_right_triangle">Right Triangle</string>
-    <string name="second_question_hitber_asterisk">Asterisk</string>
-    <string name="second_question_hitber_check">Check</string>
-    <string name="second_question_hitber_trapezoid">Trapezoid</string>
-    <string name="second_question_hitber_triangle">Triangle</string>
-    <string name="second_question_hitber_close">Close</string>
 
     <string name="third_question_hitber_title">Concentration</string>
     <string name="third_question_hitber_instructions">In the next minute, numbers will appear in the center of the screen. Each time you see the number 7, you should tap the screen. To start the task, click Start. At the end of the task, the message "Thank you" will appear. Click Continue.</string>

@@ -77,7 +77,7 @@ class EndScreen : Screen {
                             text = stringResource(exit),
                             modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
                             onClick = {
-                                navigator?.popUntilRoot()
+                                navigator?.pop()
                             }
                         )
 

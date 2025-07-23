@@ -227,32 +227,11 @@ import dmt_proms.ui.core.generated.resources.hana_cohen
 import dmt_proms.ui.core.generated.resources.hash
 import dmt_proms.ui.core.generated.resources.here_persons_number
 import dmt_proms.ui.core.generated.resources.hexagon
-import dmt_proms.ui.core.generated.resources.chat
-import dmt_proms.ui.core.generated.resources.circle_outlined
-import dmt_proms.ui.core.generated.resources.clock_test
-import dmt_proms.ui.core.generated.resources.default_name
-import dmt_proms.ui.core.generated.resources.default_phone
-import dmt_proms.ui.core.generated.resources.disk_full
 import dmt_proms.ui.core.generated.resources.day_monday
 import dmt_proms.ui.core.generated.resources.day_sunday
 import dmt_proms.ui.core.generated.resources.day_thursday
 import dmt_proms.ui.core.generated.resources.day_tuesday
 import dmt_proms.ui.core.generated.resources.day_wednesday
-import dmt_proms.ui.core.generated.resources.document_share
-import dmt_proms.ui.core.generated.resources.done
-import dmt_proms.ui.core.generated.resources.dont_forget
-import dmt_proms.ui.core.generated.resources.elipsa_outlined
-import dmt_proms.ui.core.generated.resources.empty_pass
-import dmt_proms.ui.core.generated.resources.evaluation
-import dmt_proms.ui.core.generated.resources.exercise
-import dmt_proms.ui.core.generated.resources.exit
-import dmt_proms.ui.core.generated.resources.eye
-import dmt_proms.ui.core.generated.resources.file_upload
-import dmt_proms.ui.core.generated.resources.fill_fields
-import dmt_proms.ui.core.generated.resources.filled_circle
-import dmt_proms.ui.core.generated.resources.football
-import dmt_proms.ui.core.generated.resources.graphs
-import dmt_proms.ui.core.generated.resources.hash
 import dmt_proms.ui.core.generated.resources.hide_eye
 import dmt_proms.ui.core.generated.resources.hitbear
 import dmt_proms.ui.core.generated.resources.hitber
@@ -348,7 +327,6 @@ import dmt_proms.ui.core.generated.resources.pencil
 import dmt_proms.ui.core.generated.resources.pentagon
 import dmt_proms.ui.core.generated.resources.person_names
 import dmt_proms.ui.core.generated.resources.phone
-import dmt_proms.ui.core.generated.resources.phone_number
 import dmt_proms.ui.core.generated.resources.pill
 import dmt_proms.ui.core.generated.resources.plus
 import dmt_proms.ui.core.generated.resources.press_the_dial_button_that_showen_down_pass
@@ -402,12 +380,10 @@ import dmt_proms.ui.core.generated.resources.living_room
 import dmt_proms.ui.core.generated.resources.kitchen
 import dmt_proms.ui.core.generated.resources.drag_and_place_instruction
 import dmt_proms.ui.core.generated.resources.delete
-
 import dmt_proms.ui.core.generated.resources.rate
 import dmt_proms.ui.core.generated.resources.app
 import dmt_proms.ui.core.generated.resources.audioMemory
 import dmt_proms.ui.core.generated.resources.backpack
-import dmt_proms.ui.core.generated.resources.bedroom
 import dmt_proms.ui.core.generated.resources.bedroom_block
 import dmt_proms.ui.core.generated.resources.book_icon
 import dmt_proms.ui.core.generated.resources.book
@@ -427,7 +403,6 @@ import dmt_proms.ui.core.generated.resources.keys
 import dmt_proms.ui.core.generated.resources.kitchen_block
 import dmt_proms.ui.core.generated.resources.move_agenda
 import dmt_proms.ui.core.generated.resources.move_icon
-import dmt_proms.ui.core.generated.resources.phone
 import dmt_proms.ui.core.generated.resources.records
 import dmt_proms.ui.core.generated.resources.salon_block
 import dmt_proms.ui.core.generated.resources.shoes
@@ -460,7 +435,6 @@ import dmt_proms.ui.core.generated.resources.daily
 import dmt_proms.ui.core.generated.resources.weekly
 import dmt_proms.ui.core.generated.resources.start_date_empty
 import dmt_proms.ui.core.generated.resources.end_before_start
-import dmt_proms.ui.core.generated.resources.back
 import dmt_proms.ui.core.generated.resources.when_notification
 import dmt_proms.ui.core.generated.resources.how_many_times_per_day
 import dmt_proms.ui.core.generated.resources.select_week_days
@@ -471,14 +445,6 @@ import dmt_proms.ui.core.generated.resources.end_date
 import dmt_proms.ui.core.generated.resources.first_one_minute_end_body_memory
 import dmt_proms.ui.core.generated.resources.leave_end_date_empty
 import dmt_proms.ui.core.generated.resources.place_instructions_in_calendar_memory
-
-
-
-import dmt_proms.ui.core.generated.resources.profile
-import dmt_proms.ui.core.generated.resources.psychiatrist_pass
-import dmt_proms.ui.core.generated.resources.purse
-import dmt_proms.ui.core.generated.resources.return_button_on_top_left_pass
-import dmt_proms.ui.core.generated.resources.rotate_star
 import dmt_proms.ui.core.generated.resources.search
 import dmt_proms.ui.core.generated.resources.search_at_latter_h_pass
 import dmt_proms.ui.core.generated.resources.search_contacts_list_in_the_phone_pass
@@ -490,33 +456,14 @@ import dmt_proms.ui.core.generated.resources.sec_question_instraction
 import dmt_proms.ui.core.generated.resources.sec_question_number
 import dmt_proms.ui.core.generated.resources.sec_question_title
 import dmt_proms.ui.core.generated.resources.second_part_of_test_instructions_pass
-import dmt_proms.ui.core.generated.resources.second_question_hitber_asterisk
-import dmt_proms.ui.core.generated.resources.second_question_hitber_check
-import dmt_proms.ui.core.generated.resources.second_question_hitber_close
-import dmt_proms.ui.core.generated.resources.second_question_hitber_cone
 import dmt_proms.ui.core.generated.resources.second_question_hitber_dialog_icon
 import dmt_proms.ui.core.generated.resources.second_question_hitber_dialog_instructions
 import dmt_proms.ui.core.generated.resources.second_question_hitber_dialog_title
 import dmt_proms.ui.core.generated.resources.second_question_hitber_dialog_understand
-import dmt_proms.ui.core.generated.resources.second_question_hitber_ellipse
-import dmt_proms.ui.core.generated.resources.second_question_hitber_hash_tag
-import dmt_proms.ui.core.generated.resources.second_question_hitber_hexagon
-import dmt_proms.ui.core.generated.resources.second_question_hitber_pentagon
-import dmt_proms.ui.core.generated.resources.second_question_hitber_plus
-import dmt_proms.ui.core.generated.resources.second_question_hitber_rectangle
-import dmt_proms.ui.core.generated.resources.second_question_hitber_rhomb
-import dmt_proms.ui.core.generated.resources.second_question_hitber_right_triangle
-import dmt_proms.ui.core.generated.resources.second_question_hitber_star
 import dmt_proms.ui.core.generated.resources.second_question_hitber_task
 import dmt_proms.ui.core.generated.resources.second_question_hitber_task_instructions
 import dmt_proms.ui.core.generated.resources.second_question_hitber_task_retry_instructions
 import dmt_proms.ui.core.generated.resources.second_question_hitber_title
-import dmt_proms.ui.core.generated.resources.second_question_hitber_trapezoid
-import dmt_proms.ui.core.generated.resources.second_question_hitber_triangle
-import dmt_proms.ui.core.generated.resources.send
-import dmt_proms.ui.core.generated.resources.sent_successfully
-import dmt_proms.ui.core.generated.resources.serialization_error
-import dmt_proms.ui.core.generated.resources.server_error
 import dmt_proms.ui.core.generated.resources.set_health_rate
 import dmt_proms.ui.core.generated.resources.settings
 import dmt_proms.ui.core.generated.resources.seventh_question_hitber_black_circle
@@ -538,16 +485,12 @@ import dmt_proms.ui.core.generated.resources.sixth_question_hitber_table
 import dmt_proms.ui.core.generated.resources.sixth_question_hitber_title
 import dmt_proms.ui.core.generated.resources.sixth_question_hitber_volume_icon
 import dmt_proms.ui.core.generated.resources.speaker
-import dmt_proms.ui.core.generated.resources.spin_360
-import dmt_proms.ui.core.generated.resources.stand_from_chair
-import dmt_proms.ui.core.generated.resources.star_outlined
 import dmt_proms.ui.core.generated.resources.start
 import dmt_proms.ui.core.generated.resources.store
 import dmt_proms.ui.core.generated.resources.summary_hitber_instructions1
 import dmt_proms.ui.core.generated.resources.summary_hitber_instructions2
 import dmt_proms.ui.core.generated.resources.summary_hitber_title
 import dmt_proms.ui.core.generated.resources.table
-import dmt_proms.ui.core.generated.resources.take_pills
 import dmt_proms.ui.core.generated.resources.tenth_question_hitber_instructions
 import dmt_proms.ui.core.generated.resources.tenth_question_hitber_shape_image
 import dmt_proms.ui.core.generated.resources.tenth_question_hitber_shape_model
@@ -560,8 +503,6 @@ import dmt_proms.ui.core.generated.resources.the_pass_test
 import dmt_proms.ui.core.generated.resources.third_question_hitber_finish_task
 import dmt_proms.ui.core.generated.resources.third_question_hitber_instructions
 import dmt_proms.ui.core.generated.resources.third_question_hitber_title
-import dmt_proms.ui.core.generated.resources.too_many_requests
-import dmt_proms.ui.core.generated.resources.trapeze
 import dmt_proms.ui.core.generated.resources.trial_drag_instructions
 import dmt_proms.ui.core.generated.resources.trial_drag_title
 import dmt_proms.ui.core.generated.resources.trial_draw_instructions
@@ -569,16 +510,9 @@ import dmt_proms.ui.core.generated.resources.trial_draw_title
 import dmt_proms.ui.core.generated.resources.trial_end_test_instructions
 import dmt_proms.ui.core.generated.resources.trial_pinch_instructions
 import dmt_proms.ui.core.generated.resources.trial_pinch_title
-import dmt_proms.ui.core.generated.resources.triangle
-import dmt_proms.ui.core.generated.resources.triangle_90
-import dmt_proms.ui.core.generated.resources.unexpected_error
-import dmt_proms.ui.core.generated.resources.uploading
-import dmt_proms.ui.core.generated.resources.vertical_stroke
 import dmt_proms.ui.core.generated.resources.video
 import dmt_proms.ui.core.generated.resources.vocal_instructions
-import dmt_proms.ui.core.generated.resources.warning
 import dmt_proms.ui.core.generated.resources.weather
-import dmt_proms.ui.core.generated.resources.welcome
 import dmt_proms.ui.core.generated.resources.welcome_pass
 import dmt_proms.ui.core.generated.resources.what_do_you_need_to_do_pass
 import dmt_proms.ui.core.generated.resources.what_you_need_to_do
@@ -591,9 +525,7 @@ import dmt_proms.ui.core.generated.resources.wrong_app_second_assist
 import dmt_proms.ui.core.generated.resources.wrong_app_thired_assist
 import dmt_proms.ui.core.generated.resources.wrong_app_title
 import dmt_proms.ui.core.generated.resources.wrong_number_dialed_please_try_again_pass
-import dmt_proms.ui.core.generated.resources.x
 import dmt_proms.ui.core.generated.resources.yes
-import dmt_proms.ui.core.generated.resources.yoga
 import dmt_proms.ui.core.generated.resources.yogurt
 import dmt_proms.ui.core.generated.resources.how_well_do_you_feel_memory
 import dmt_proms.ui.core.generated.resources.old_phone_ring
@@ -945,21 +877,6 @@ object Resources {
             Res.string.second_question_hitber_task_retry_instructions
         val secondQuestionHitberDialogIcon = Res.string.second_question_hitber_dialog_icon
         val secondQuestionHitberUnderstand = Res.string.second_question_hitber_dialog_understand
-        val secondQuestionHitberEllipse = Res.string.second_question_hitber_ellipse
-        val secondQuestionHitberRectangle = Res.string.second_question_hitber_rectangle
-        val secondQuestionHitberPentagon = Res.string.second_question_hitber_pentagon
-        val secondQuestionHitberStar = Res.string.second_question_hitber_star
-        val secondQuestionHitberHashTag = Res.string.second_question_hitber_hash_tag
-        val secondQuestionHitberRhomb = Res.string.second_question_hitber_rhomb
-        val secondQuestionHitberCone = Res.string.second_question_hitber_cone
-        val secondQuestionHitberPlus = Res.string.second_question_hitber_plus
-        val secondQuestionHitberHexagon = Res.string.second_question_hitber_hexagon
-        val secondQuestionHitberRightTriangle = Res.string.second_question_hitber_right_triangle
-        val secondQuestionHitberAsterisk = Res.string.second_question_hitber_asterisk
-        val secondQuestionHitberCheck = Res.string.second_question_hitber_check
-        val secondQuestionHitberTrapezoid = Res.string.second_question_hitber_trapezoid
-        val secondQuestionHitberTriangle = Res.string.second_question_hitber_triangle
-        val secondQuestionHitberClose = Res.string.second_question_hitber_close
 
         val thirdQuestionHitberTitle = Res.string.third_question_hitber_title
         val thirdQuestionHitberInstructions = Res.string.third_question_hitber_instructions

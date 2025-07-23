@@ -39,6 +39,7 @@ import org.example.hit.heal.core.presentation.Sizes.paddingXl
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.Loading
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
@@ -106,23 +107,7 @@ class SummaryScreen : Screen {
                         SuccessAnimation(modifier = Modifier.size(100.dp))
 
                         if (isLoading) {
-                            Row(
-                                modifier = Modifier.padding(paddingXl),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Text(
-                                    text = stringResource(Resources.String.loading),
-                                    fontSize = FontSize.EXTRA_LARGE,
-                                    color = primaryColor
-                                )
-                                Spacer(modifier = Modifier.width(spacingMd))
-                                CircularProgressIndicator(
-                                    strokeWidth = 2.dp,
-                                    color = primaryColor,
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            }
+                            Loading()
                         }
                     }
 
