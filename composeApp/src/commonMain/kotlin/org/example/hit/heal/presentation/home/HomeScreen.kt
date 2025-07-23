@@ -88,10 +88,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.entryScreen.PassEntryScreen
 
-/**
- *
- */
-
 class HomeScreen : Screen {
     @Composable
     override fun Content() {
@@ -101,7 +97,6 @@ class HomeScreen : Screen {
         var showDialog by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
         val isLoading by viewModel.isLoading.collectAsState()
-
 
         LaunchedEffect(Unit) {
             viewModel.loadFeatures()
@@ -122,6 +117,8 @@ class HomeScreen : Screen {
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val minMsgHeight = maxHeight / 2
+                val isPhone = maxWidth < 600.dp
+                val columns = if (isPhone) 2 else 4
 
                 Column(Modifier.fillMaxSize()) {
                     MessagesSection(
@@ -165,13 +162,13 @@ class HomeScreen : Screen {
                         }
                     } else {
                         LazyVerticalGrid(
-                            columns = GridCells.FixedSize(200.dp),
+                            columns = GridCells.Fixed(columns), // Use the dynamic columns
                             contentPadding = PaddingValues(vertical = paddingMd),
                             horizontalArrangement = Arrangement.spacedBy(paddingMd),
                             verticalArrangement = Arrangement.spacedBy(paddingMd),
                             modifier = Modifier.padding(horizontal = paddingLg)
                         ) {
-                            items(features) { feature ->
+                            items(features.filter { it.active }) { feature ->
                                 AnimatedFeatureTile(
                                     feature = feature,
                                     onClick = {
@@ -288,10 +285,10 @@ class HomeScreen : Screen {
             "measurements" -> navigator.push(AllEvaluationsScreen())
             "activities" -> navigator.push(ActivitiesScreen())
             "hitber" -> navigator.push(HitBerEntryScreen())
-            "pass" -> navigator.push(PassEntryScreen())
             "orientation" -> navigator.push(OriantationWelcomeScreen())
             "memory" -> navigator.push(MemoryScreen())
             "medications" -> navigator.push(MainMedicationScreen())
+            "pass" -> navigator.push(PassEntryScreen())
             else -> {  }
         }
     }

@@ -4,13 +4,9 @@ import ToastMessage
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,9 +22,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
-import org.example.hit.heal.core.presentation.FontSize
 import org.example.hit.heal.core.presentation.FontSize.LARGE
-import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.sentSuccessfully
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInstructions1
@@ -36,13 +30,11 @@ import org.example.hit.heal.core.presentation.Resources.String.summaryHitberInst
 import org.example.hit.heal.core.presentation.Resources.String.summaryHitberTitle
 import org.example.hit.heal.core.presentation.Resources.String.unexpectedError
 import org.example.hit.heal.core.presentation.Sizes.paddingXl
-import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.Loading
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
-import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.core.presentation.utils.animations.SuccessAnimation
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.jetbrains.compose.resources.stringResource

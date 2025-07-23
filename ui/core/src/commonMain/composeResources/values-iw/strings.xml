@@ -25,7 +25,7 @@
     <string name="start">התחל</string>
     <string name="search_hint">חפש...</string>
 
-
+    <!--    Errors-->
     <string name="dont_forget">• לא לשכוח לעשות את המבחן</string>
     <string name="take_pills">• לקחת 2 כדורים ב-12:00</string>
     <string name="messages">הודעות</string>
@@ -67,6 +67,7 @@
     <string name="no_evaluation_object_to_display">אין אובייקט הערכה להצגה.</string>
     <string name="uploading">שולח</string>
     <string name="loading">עולה</string>
+    <string name="selected_point">הנקודה שבחרת</string>
 
 
     <!--    CDT Module  -->

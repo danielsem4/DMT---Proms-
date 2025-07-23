@@ -50,7 +50,7 @@ class ThirdQuestionViewModel: ViewModel() {
     fun startRandomNumberGeneration() {
         viewModelScope.launch {
 
-            while (elapsedTime < 60) {
+            while (elapsedTime < 3) {
                 numberAppearedAt = Clock.System.now().toEpochMilliseconds()
                 _number.value = (0..9).random()
                 _isNumberClickable.value = true
