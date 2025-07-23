@@ -98,7 +98,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         val coroutineScope = rememberCoroutineScope()
 
         //Dialogs and raiting
-        var showDialog by remember { mutableStateOf(false) }
+
         var showDialogEndTime by remember { mutableStateOf(false) }
         var showInactivityDialog by remember { mutableStateOf(false) }
         var rating by remember { mutableStateOf(0f) }
@@ -112,6 +112,10 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         //Screnschot photo
         var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
         var autoSwitchingRooms by remember { mutableStateOf(false) }
+
+
+        var showDialog by remember { mutableStateOf(false) }
+        var triggerNavigation by remember { mutableStateOf(false) }
 
         //Items
         val allItems : List<Pair<Int, DrawableResource>> = listOf(
@@ -241,28 +245,31 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                             4 -> autoSwitchingRooms = true
                             6 -> {
                                 autoSwitchingRooms = true
-                                showDialog = true
+
                             }
                         }
                     }
                 }
             )
         }
+
         //Rating dialog (in the end)
         if (showDialog) {
             RatingDialog(
                 rating = rating,
                 onRatingChanged = { newRating -> rating = newRating },
-                onDismiss = { showDialog = false },
-                onSubmit = {
+                onDismiss = {
                     showDialog = false
-                    coroutineScope.launch {
-                        viewModel.rawUserRating = rating
-                        navigator.replace(FinalScreenMemoryTest())
-                    }
+
+                },
+                onSubmit = {
+                    viewModel.rawUserRating = rating
+                    navigator.push(FinalScreenMemoryTest())
                 }
             )
         }
+
+
 
 
         fun formatTime(seconds: Int): String {
@@ -593,15 +600,8 @@ class RoomsScreens(val pageNumber: Int) : Screen {
             navigator.popUntilRoot()
         }
     }
-    //Here check if  position   inside the room or outside
-   // private fun isWithinRoom(position: Offset, roomPosition: Offset, roomSize: IntSize): Boolean {
-   //     val leftPadding = 40f
-            //     return position.x >= roomPosition.x - leftPadding &&
-   //             position.x <= roomPosition.x + roomSize.width &&
-   //             position.y >= roomPosition.y &&
-   //             position.y <= roomPosition.y + roomSize.height
-                // }
-//
+
+
     fun isObjectInsideTargetArea(
         targetPosition: Offset,
         draggablePosition: Offset,

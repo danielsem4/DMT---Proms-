@@ -44,6 +44,7 @@ import org.example.hit.heal.core.presentation.Sizes.radiusLg
 import org.example.hit.heal.core.presentation.Sizes.spacing4Xl
 import org.example.hit.heal.core.presentation.Sizes.spacingLg
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingXl
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 
@@ -57,9 +58,6 @@ fun RatingDialog(
     onDismiss: () -> Unit,
     onSubmit: () -> Unit
 ) {
-
-    // Set the layout direction to RTL (Right-to-Left)
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
     Dialog(onDismissRequest = onDismiss) {
         Box(
             modifier = Modifier
@@ -71,6 +69,7 @@ fun RatingDialog(
                     .clip(RoundedCornerShape(radiusLg))
                     .background(Color.White)
             ) {
+                // Заголовок и рейтинг
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -81,35 +80,23 @@ fun RatingDialog(
                         ),
                     contentAlignment = Alignment.BottomCenter
                 ) {
-
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(heightMd_Lg)
-                            .background(
-                                color = primaryColor,
-                                shape = RoundedCornerShape(topStart = spacingMd, topEnd =spacingMd)
-                            ),
-                        contentAlignment = Alignment.BottomCenter
+                            .offset(y = spacingLg)
+                            .size(spacing4Xl)
+                            .clip(CircleShape)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
                     ) {
-
-                        Box(
-                            modifier = Modifier
-                                .offset(y = spacingLg)
-                                .size(spacing4Xl)
-                                .clip(CircleShape)
-                                .background(Color.White),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = rating.toString(),
-                                fontSize = EXTRA_MEDIUM_LARGE,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                        Text(
+                            text = rating.toString(),
+                            fontSize = EXTRA_MEDIUM_LARGE,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
-                Spacer(modifier = Modifier.height(heightSm))
+
+                Spacer(modifier = Modifier.height(spacingXl))
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -127,35 +114,36 @@ fun RatingDialog(
                         fontSize = EXTRA_MEDIUM,
                         color = Color.Gray
                     )
+
                     Spacer(modifier = Modifier.height(paddingMd))
 
-                    //Icons of starts
+                    // Звёздочки
                     Row(horizontalArrangement = Arrangement.Center) {
-                        for (i in 1..5) {
+                        (1..5).forEach { i ->
                             val icon = when {
                                 rating >= i -> Icons.Filled.Star
                                 rating >= i - 0.5f -> Icons.Filled.StarHalf
                                 else -> Icons.Outlined.Star
                             }
+
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(iconSizeLg)
                                     .clickable {
-                                        val newRating =
-                                            if (rating == i.toFloat()) i - 0.5f else i.toFloat()
+                                        val newRating = if (rating == i.toFloat()) i - 0.5f else i.toFloat()
                                         onRatingChanged(newRating.coerceIn(0f, 5f))
                                     },
                                 tint = if (rating >= i - 0.5f) primaryColor else Color.LightGray
                             )
                         }
                     }
+
                     Spacer(modifier = Modifier.height(spacingLg))
+
                     Button(
-                        onClick = {
-                            onSubmit()
-                        },
+                        onClick = onSubmit,
                         shape = RoundedCornerShape(50),
                         colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                         modifier = Modifier
@@ -174,8 +162,5 @@ fun RatingDialog(
                 }
             }
         }
-
-        }
     }
 }
-

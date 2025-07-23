@@ -34,11 +34,15 @@ import com.example.new_memory_test.presentation.screens.ScheduleScreen.screen.Sc
 import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Sizes.buttonHeightMd
+import org.example.hit.heal.core.presentation.Sizes.spacing5Xl
+import org.example.hit.heal.core.presentation.Sizes.spacing6Xl
 import org.example.hit.heal.core.presentation.Sizes.spacing8Xl
 import org.example.hit.heal.core.presentation.Sizes.spacingLg
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.Sizes.widthXl
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -63,14 +67,12 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
             ) {
                 Text(
                     text = stringResource(Resources.String.build_schedule),
-                    fontSize = EXTRA_MEDIUM_LARGE,
+                    fontSize = EXTRA_MEDIUM,
                     fontWeight = FontWeight.Bold,
                     color = primaryColor,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(spacingMd)
+                    modifier = Modifier.padding(spacingSm)
                 )
-
-                Spacer(modifier = Modifier.height(spacingMd))
 
                 //Only text + image (instruction)
                 Box(
@@ -107,7 +109,7 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(spacingLg))
+                Spacer(modifier = Modifier.height(spacingMd))
 
                 Button(
                     onClick = {
@@ -116,13 +118,13 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
                     colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                     shape = RoundedCornerShape(30),
                     modifier = Modifier
-                        .defaultMinSize(minWidth = spacing8Xl)
+                        .defaultMinSize(minWidth = spacing5Xl)
                         .width(widthXl)
                         .height(buttonHeightMd)
                 ) {
                     Text(
                         stringResource(Resources.String.start),
-                        fontSize = EXTRA_MEDIUM,
+                        fontSize = LARGE,
                         fontWeight = FontWeight.Companion.Bold,
                         color = Color.Companion.White
                     )

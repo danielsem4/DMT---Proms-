@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -42,42 +43,41 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
-import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.DraggableCirclesPalet
-import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.TimeSlotBox
-import com.example.new_memory_test.presentation.screens.ScheduleScreen.data.DraggableCircle
+
 import com.mohamedrejeb.compose.dnd.DragAndDropContainer
+
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
 import core.utils.CapturableWrapper
 import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import core.utils.platformCapturable
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
-import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
+
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources
-import org.example.hit.heal.core.presentation.Sizes.elevationMd
-import org.example.hit.heal.core.presentation.Sizes.elevationSm
-import org.example.hit.heal.core.presentation.Sizes.heightLg
-import org.example.hit.heal.core.presentation.Sizes.heightMd
-import org.example.hit.heal.core.presentation.Sizes.heightXl
-import org.example.hit.heal.core.presentation.Sizes.paddingMd
-import org.example.hit.heal.core.presentation.Sizes.paddingSm
-import org.example.hit.heal.core.presentation.Sizes.paddingXs
-import org.example.hit.heal.core.presentation.Sizes.radiusLg
-import org.example.hit.heal.core.presentation.Sizes.radiusMd
-import org.example.hit.heal.core.presentation.Sizes.radiusMd2
-import org.example.hit.heal.core.presentation.Sizes.spacing8Xl
-import org.example.hit.heal.core.presentation.Sizes.spacingLg
-import org.example.hit.heal.core.presentation.Sizes.spacingMd
-import org.example.hit.heal.core.presentation.Sizes.spacingSm
-import org.example.hit.heal.core.presentation.Sizes.widthXl
-import org.example.hit.heal.core.presentation.components.BaseScreen
-import org.example.hit.heal.core.presentation.components.dialogs.CustomDialog
-import org.example.hit.heal.core.presentation.components.ScreenConfig
+
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+
+
+import androidx.compose.material.Icon
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.runtime.collectAsState
+
+import androidx.compose.ui.unit.sp
+
+import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
+import com.example.new_memory_test.presentation.screens.BaseTabletScreen
+import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.DraggableSlotPalet
+import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.components.GenericSlotBox
+import org.example.hit.heal.core.presentation.components.SlotState
+
+import kotlin.collections.mapValues
 
 class ScheduleScreen(val pageNumber: Int ) : Screen {
     @Composable
@@ -103,36 +103,35 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
             stringResource(Resources.String.hour_16_00)
         )
 
-        val dragAndDropState = rememberDragAndDropState<DraggableCircle>()
-        val droppedState = remember {
-            mutableStateOf<Map<String, DraggableCircle>>(emptyMap())
-        }
-        val circlesPalletFirst = listOf(
-            DraggableCircle(
-                stringResource(Resources.String.book_circle),
-                painterResource(Resources.Icon.bookIcon)
-            ),
-            DraggableCircle(
-                stringResource(Resources.String.dumbbell_circle),
-                painterResource(Resources.Icon.dumblertIcon)),
+        val dragAndDropState = rememberDragAndDropState<SlotState>()
+        val droppedState by viewModel.droppedState.collectAsState()
 
-            DraggableCircle(
-                stringResource(Resources.String.move_circle),
-                painterResource(Resources.Icon.moveIcon))
+        val circlesPalletFirst = listOf(
+            SlotState(
+                id =stringResource(Resources.String.book_circle),
+               painter=  painterResource(Resources.Icon.bookIcon)
+            ),
+            SlotState(
+                id =stringResource(Resources.String.dumbbell_circle),
+                painter=painterResource(Resources.Icon.dumblertIcon)),
+
+            SlotState(
+                id =stringResource(Resources.String.move_circle),
+                painter=painterResource(Resources.Icon.moveIcon))
 
         )
         val circlesPalletSecond = listOf(
-            DraggableCircle(
-                stringResource(Resources.String.lecturer_circle),
-                painterResource(Resources.Icon.teachIcon)
+            SlotState(
+                id= stringResource(Resources.String.lecturer_circle),
+                painter=painterResource(Resources.Icon.teachIcon)
             ),
-            DraggableCircle(
-                stringResource(Resources.String.coffee_circle),
-                painterResource(Resources.Icon.coffeIcon)
+            SlotState(
+                id =stringResource(Resources.String.coffee_circle),
+                painter=painterResource(Resources.Icon.coffeIcon)
             ),
-            DraggableCircle(
-                stringResource(Resources.String.stethoscope_circle),
-                painterResource(Resources.Icon.stethoscopeImage)
+            SlotState(
+                id =stringResource(Resources.String.stethoscope_circle),
+                painter=painterResource(Resources.Icon.stethoscopeImage)
             )
         )
         val idToTextMap = mapOf(
@@ -143,7 +142,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
             stringResource(Resources.String.coffee_circle)  to stringResource(Resources.String.coffee_circle_text),
             stringResource(Resources.String.stethoscope_circle) to stringResource(Resources.String.stethoscope_circle_text)
         ) // information depend of witch circle use
-        val usedCircleIds = remember { mutableStateListOf<String>() }
+        val usedSlotIds = remember { mutableStateListOf<String>() }
         val selectedItemText = remember { mutableStateOf<String?>(null) }
 
         //Create Image
@@ -159,324 +158,328 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
         var showAcceptDialog by remember { mutableStateOf(false) }
         if (showAcceptDialog) {
             CustomDialog(
-                icon = Resources.Icon.warningIcon,
-                title = stringResource(Resources.String.build_schedule),
-                text = stringResource(Resources.String.please_place_all_activities_memory),
                 onDismiss = { showAcceptDialog = false },
+                icon = {
+                   // Icon(
+                   //     Icons.Default.ThumbUp,
+                   //     contentDescription = null,
+                   //     tint = Color.White,
+                   //     modifier = Modifier.size(40.dp)
+                   // )
+                },
+                title = stringResource(Resources.String.build_schedule),
+                description = stringResource(Resources.String.please_place_all_activities_memory),
                 buttons = listOf(
-                    stringResource(Resources.String.next) to { showAcceptDialog = false }
+                    stringResource(Resources.String.next) to {
+                        showAcceptDialog = false
+                    }
                 )
             )
         }
 
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
-        BaseScreen( stringResource(Resources.String.build_schedule),  topRightText = "$pageNumber/6",  config = ScreenConfig.TabletConfig, content = {
-            DragAndDropContainer(state = dragAndDropState) {
-                capturable = platformCapturable(
-                    //Save Screen like Image
-                    onCaptured = { imageBitmap ->
-                        val timestamp = getCurrentFormattedDateTime()
-                        viewModel.imageUrl.value = viewModel.imageUrl.value.plus(imageBitmap)
-                        viewModel.timeUrl.value = timestamp
-                        viewModel.pageNumForUrl.value = pageNumber
-                    }
-                )
-                {
+            BaseTabletScreen( stringResource(Resources.String.build_schedule), page = pageNumber, totalPages = 6) {
+                DragAndDropContainer(state = dragAndDropState) {
+                    capturable = platformCapturable(
+                        //Save Screen like Image
+                        onCaptured = { imageBitmap ->
+                            val timestamp = getCurrentFormattedDateTime()
+                            viewModel.imageUrl.value = viewModel.imageUrl.value.plus(imageBitmap)
+                            viewModel.timeUrl.value = timestamp
+                            viewModel.pageNumForUrl.value =pageNumber
+                        }
+                    )
+                    {
 
-                    Column {
+                        Column {
 
-                        //-------------------Days in the Top
-                        Row(
-                            modifier = Modifier
-                                .weight(0.08f)
-                                .padding(horizontal = paddingXs)
-                                .background(Color.Transparent),
-                            horizontalArrangement = Arrangement.spacedBy(paddingSm)
-                        ) {
+                            //-------------------Days in the Top
                             Row(
                                 modifier = Modifier
-                                    .weight(0.7f)
-                                    .clip(RoundedCornerShape(paddingSm))
-                                    .border(elevationSm, Color.Black, RoundedCornerShape(paddingSm))
-                                    .background(Color.White),
-                                horizontalArrangement = Arrangement.spacedBy(paddingXs)
-                            ) {
-
-                                days.reversed().forEach { day ->
-                                    Box(
-                                        modifier = Modifier
-                                            .weight(0.6f)
-                                            .padding(paddingXs)
-                                            .fillMaxHeight()
-                                            .clip(RoundedCornerShape(radiusLg))
-                                            .background(Color.Gray),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            text = day,
-                                            color = Color.White,
-                                            textAlign = TextAlign.Center,
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = EXTRA_MEDIUM
-                                        )
-                                    }
-                                }
-                            }
-                            Spacer(modifier = Modifier.weight(0.4f))
-                        }
-
-                        //-------------------Schedule box with 40 Items
-                        Row(
-                            modifier = Modifier
-                                .weight(0.7f)
-                        ) {
-
-                            Column(
-                                modifier = Modifier
-                                    .weight(0.7f)
-                                    .padding(horizontal = paddingXs, vertical = paddingXs)
-                                    .clip(RoundedCornerShape(radiusMd2))
-                                    .background(Color.Transparent)
+                                    .weight(0.08f)
+                                    .padding(horizontal = 5.dp)
+                                    .background(Color.Transparent),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
                                 Row(
                                     modifier = Modifier
-                                        .background(Color.White, RoundedCornerShape(radiusMd))
-                                        .border(
-                                            elevationSm,
-                                            Color.Black,
-                                            RoundedCornerShape(radiusMd)
-                                        )
-                                        .fillMaxSize()
-                                        .padding(vertical = paddingMd)
+                                        .weight(0.7f)
+                                        .clip(RoundedCornerShape(8.dp))
+                                        .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
+                                        .background(Color.White),
+                                    horizontalArrangement = Arrangement.spacedBy(5.dp)
                                 ) {
-                                    Column {
-                                        //Create Id for box , that depends on day and hour (for 40 boxes)
-                                        for (hour in listOf(
-                                            stringResource(Resources.String.hour_09_00),
-                                            stringResource(Resources.String.hour_10_00),
-                                            stringResource(Resources.String.hour_11_00),
-                                            stringResource(Resources.String.hour_12_00),
-                                            stringResource(Resources.String.hour_13_00),
-                                            stringResource(Resources.String.hour_14_00),
-                                            stringResource(Resources.String.hour_15_00),
-                                            stringResource(Resources.String.hour_16_00),
-                                        )) {
-                                            Row(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .height(70.dp),
-                                                horizontalArrangement = Arrangement.spacedBy(
-                                                    elevationSm
-                                                )
-                                            ) {
-                                                for (day in 1..5) {
-                                                    TimeSlotBox(
-                                                        slotId = "day_${day}_hour_$hour",
-                                                        droppedState = droppedState,
-                                                        dragAndDropState = dragAndDropState,
-                                                        usedCircleIds = usedCircleIds,
-                                                        modifier = Modifier
-                                                            .weight(1f)
-                                                            .fillMaxHeight()
-                                                    )
-                                                }
-                                            }
-                                        }
-                                    }
 
-                                }
-                            }
-                            Spacer(modifier = Modifier.size(spacingSm))
-
-                            //--------------------- Instructions of exam
-                            Column(
-                                modifier = Modifier
-                                    .weight(0.1f)
-                                    .fillMaxHeight()
-                                    .background(Color.White, RoundedCornerShape(radiusMd))
-                                    .border(elevationSm, Color.Black, RoundedCornerShape(radiusMd))
-                                    .padding(horizontal = paddingXs, vertical = paddingXs)
-                            ) {
-                                hours.forEach { hour ->
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(heightLg)
-                                            .padding(vertical = paddingMd)
-                                    ) {
+                                    days.reversed().forEach { day ->
                                         Box(
                                             modifier = Modifier
-                                                .weight(1f)
-                                                .padding(
-                                                    vertical = elevationSm,
-                                                    horizontal = elevationMd
-                                                )
+                                                .weight(0.6f)
+                                                .padding(3.dp)
                                                 .fillMaxHeight()
-                                                .clip(RoundedCornerShape(radiusMd))
-                                                .background(Color.White),
+                                                .clip(RoundedCornerShape(15.dp))
+                                                .background(Color.Gray),
                                             contentAlignment = Alignment.Center
                                         ) {
                                             Text(
-                                                text = hour,
-                                                color = primaryColor,
+                                                text = day,
+                                                color = Color.White,
                                                 textAlign = TextAlign.Center,
-                                                fontSize = LARGE,
-                                                fontWeight = FontWeight.Bold
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = EXTRA_MEDIUM
                                             )
                                         }
                                     }
                                 }
-                                Spacer(modifier = Modifier.size(spacingSm))
+                                Spacer(modifier = Modifier.weight(0.4f))
                             }
-                            //
-                            Column(
-                                modifier = Modifier
-                                    .weight(0.3f)
 
-                                    .padding(spacingSm)
+                            //-------------------Schedule box with 40 Items
+                            Row(
+                                modifier = Modifier
+                                    .weight(0.7f)
                             ) {
 
-                                Box(
-                                    modifier = Modifier
-
-                                        .background(Color.White, RoundedCornerShape(radiusMd))
-                                        .border(
-                                            elevationSm,
-                                            Color.Black,
-                                            RoundedCornerShape(radiusMd)
-                                        )
-                                        .padding(vertical = spacingSm, horizontal = spacingSm)
-                                ) {
-
-                                    Text(
-                                        text = stringResource(Resources.String.place_instructions_in_calendar_memory),
-                                        fontSize = EXTRA_MEDIUM_LARGE,
-                                        textAlign = TextAlign.Center,
-                                        fontWeight = FontWeight.Bold,
-                                        color = primaryColor,
-                                        modifier = Modifier.padding(bottom = spacingMd)
-                                    )
-                                }
-
-                                //-----------------Instructions only for item
-                                Spacer(modifier = Modifier.height(spacingLg))
-                                Box(
-                                    modifier = Modifier
-                                        .background(
-                                            if (selectedItemText.value.isNullOrBlank()) Color.Transparent else Color.White,
-                                            RoundedCornerShape(radiusMd)
-                                        )
-                                        .border(
-                                            1.dp,
-                                            if (selectedItemText.value.isNullOrBlank()) Color.Transparent else Color.Black,
-                                            RoundedCornerShape(radiusMd)
-                                        )
-                                        .padding(vertical = paddingSm, horizontal = paddingSm)
-                                        .fillMaxWidth()
-                                        .height(heightXl)///
-                                ) {
-                                    if (!selectedItemText.value.isNullOrBlank()) {
-                                        Text(
-                                            text = selectedItemText.value!!,
-                                            fontSize = EXTRA_MEDIUM,
-                                            color = primaryColor,
-                                            fontWeight = FontWeight.Bold,
-                                            textAlign = TextAlign.Center,
-                                            modifier = Modifier.fillMaxWidth().fillMaxHeight()
-                                        )
-                                    }
-                                }
-
-                                //-----------------Two rows of draggable circle (palet)
-                                Row(
-                                    modifier = Modifier
-                                        .align(Alignment.CenterHorizontally)
-                                        .fillMaxWidth()
-                                        .padding(bottom = paddingSm, top = paddingSm),
-                                    horizontalArrangement = Arrangement.spacedBy(spacingLg)
-                                ) {
-                                    DraggableCirclesPalet(
-                                        circles = circlesPalletFirst,
-                                        dragAndDropState = dragAndDropState,
-                                        onCircleClicked = { circle ->
-                                            selectedItemText.value = idToTextMap[circle.id]
-                                        }
-                                    )
-                                }
-
-                                Row(
-                                    modifier = Modifier
-                                        .align(Alignment.CenterHorizontally)
-                                        .fillMaxWidth()
-                                        .padding(bottom = paddingSm),
-                                    horizontalArrangement = Arrangement.spacedBy(spacingLg)
-                                ) {
-                                    DraggableCirclesPalet(
-                                        circles = circlesPalletSecond,
-                                        dragAndDropState = dragAndDropState,
-                                        onCircleClicked = { circle ->
-                                            selectedItemText.value = idToTextMap[circle.id]
-                                        }
-                                    )
-                                }
-
-                                //-----------------Button next
                                 Column(
                                     modifier = Modifier
-                                        .fillMaxSize()
-                                        .padding(bottom = paddingMd),
-                                    verticalArrangement = Arrangement.Bottom,
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                                        .weight(0.7f)
+                                        .padding(horizontal = 5.dp, vertical = 5.dp)
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .background(Color.Transparent)
                                 ) {
-                                    Button(
-                                        onClick = {
-                                            val allCircleIds =
-                                                (circlesPalletFirst + circlesPalletSecond).map { it.id }
-                                            val unused =
-                                                allCircleIds.filterNot { it in usedCircleIds }
-                                            if (unused.isNotEmpty()) { //if there is unused circles
-                                                showAcceptDialog = true
-                                            } else {
-                                                //Screenshot and save in view model
-                                                capturable?.capture?.invoke()
-                                                val agenda =
-                                                    droppedState.value.mapValues { it.value.id }
-                                                viewModel.agendaMap.value = agenda
-                                                viewModel.setPage(viewModel.txtMemoryPage + 1)
-                                                navigator.push(RoomsScreens(pageNumber = 6))
-                                            }
-                                        },
-                                        colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                                        shape = RoundedCornerShape(30),
+                                    Row(
                                         modifier = Modifier
-                                            .fillMaxWidth(0.7f)
-                                            .defaultMinSize(minWidth = spacing8Xl)
-                                            .width(widthXl)
-                                            .height(heightMd)
+                                            .background(Color.White, RoundedCornerShape(8.dp))
+                                            .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
+                                            .fillMaxSize()
+                                            .padding(vertical = 10.dp)
                                     ) {
-                                        Text(
-                                            text = stringResource(Resources.String.next),
-                                            fontSize = EXTRA_MEDIUM,
-                                            fontWeight = FontWeight.Companion.Bold,
-                                            color = Color.Companion.White
-                                        )
+                                        Column( modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(4.dp)
+                                            )
+                                             {
+                                            //Create Id for box , that depends on day and hour (for 40 boxes)
+                                            for (hour in listOf(
+                                                stringResource(Resources.String.hour_09_00),
+                                                stringResource(Resources.String.hour_10_00),
+                                                stringResource(Resources.String.hour_11_00),
+                                                stringResource(Resources.String.hour_12_00),
+                                                stringResource(Resources.String.hour_13_00),
+                                                stringResource(Resources.String.hour_14_00),
+                                                stringResource(Resources.String.hour_15_00),
+                                                stringResource(Resources.String.hour_16_00),
+                                            )) {
+                                                Row(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .weight(1f)
+                                                        .heightIn(min = 30.dp)
+                                                        .padding(4.dp),
+
+                                                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                                                ) {
+                                                    for (day in 1..5) {
+                                                        GenericSlotBox(
+                                                            slotId = "day_${day}_hour_$hour",
+                                                            droppedState = droppedState,
+                                                            dragAndDropState = dragAndDropState,
+                                                            usedDraggableIds = usedSlotIds,
+                                                            modifier = Modifier
+                                                                .weight(1f)
+                                                                .fillMaxHeight(),
+                                                            onUpdateDroppedState = { slotId, slotState ->
+                                                                viewModel.updateDroppedState(slotId,slotState)},
+                                                            defaultBackgroundColor = Color.Gray,
+                                                            activeBackgroundColor = primaryColor,
+                                                            borderColor = Color.Transparent
+
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+
                                     }
                                 }
+                                Spacer(modifier = Modifier.size(7.dp))
 
+                                //--------------------- Instructions of exam
+                                Column(
+                                    modifier = Modifier
+                                        .weight(0.1f)
+                                        .fillMaxHeight()
+                                        .background(Color.White, RoundedCornerShape(8.dp))
+                                        .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
+                                        .padding(horizontal = 5.dp, vertical = 5.dp)
+                                ) {
+                                    hours.forEach { hour ->
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(70.dp)
+                                                .padding(vertical = 15.dp)
+                                        ) {
+                                            Box(
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .padding(vertical = 1.dp, horizontal = 3.dp)
+                                                    .fillMaxHeight()
+                                                    .clip(RoundedCornerShape(8.dp))
+                                                    .background(Color.White),
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                Text(
+                                                    text = hour,
+                                                    color = primaryColor,
+                                                    textAlign = TextAlign.Center,
+                                                    fontSize = LARGE,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+                                            }
+                                        }
+                                    }
+                                    Spacer(modifier = Modifier.size(5.dp))
+                                }
+                                //
+                                Column(
+                                    modifier = Modifier
+                                        .weight(0.3f)
+
+                                        .padding(10.dp)
+                                ) {
+
+                                    Box(
+                                        modifier = Modifier
+
+                                            .background(Color.White, RoundedCornerShape(8.dp))
+                                            .border(1.dp, Color.Black, RoundedCornerShape(8.dp))
+                                            .padding(vertical = 7.dp, horizontal = 7.dp)
+                                    ) {
+
+                                        Text(
+                                            text = stringResource(Resources.String.place_instructions_in_calendar_memory),
+                                            fontSize = 25.sp,
+                                            textAlign = TextAlign.Center,
+                                            fontWeight = FontWeight.Bold,
+                                            color = primaryColor,
+                                            modifier = Modifier.padding(bottom = 16.dp)
+                                        )
+                                    }
+
+                                    //-----------------Instructions only for item
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                    Box(
+                                        modifier = Modifier
+                                            .background(
+                                                if (selectedItemText.value.isNullOrBlank()) Color.Transparent else Color.White,
+                                                RoundedCornerShape(8.dp)
+                                            )
+                                            .border(
+                                                1.dp,
+                                                if (selectedItemText.value.isNullOrBlank()) Color.Transparent else Color.Black,
+                                                RoundedCornerShape(8.dp)
+                                            )
+                                            .padding(vertical = 7.dp, horizontal = 7.dp)
+                                            .fillMaxWidth()
+                                            .height(110.dp)
+                                    ) {
+                                        if (!selectedItemText.value.isNullOrBlank()) {
+                                            Text(
+                                                text = selectedItemText.value!!,
+                                                fontSize = EXTRA_MEDIUM,
+                                                color = primaryColor,
+                                                fontWeight = FontWeight.Bold,
+                                                textAlign = TextAlign.Center,
+                                                modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                                            )
+                                        }
+                                    }
+
+                                    //-----------------Two rows of draggable circle (palet)
+                                    Row(
+                                        modifier = Modifier
+                                            .align(Alignment.CenterHorizontally)
+                                            .fillMaxWidth()
+                                            .padding(bottom = 10.dp, top = 10.dp),
+                                        horizontalArrangement = Arrangement.spacedBy(25.dp)
+                                    ) {
+                                        DraggableSlotPalet(
+                                            slot = circlesPalletFirst,
+                                            dragAndDropState = dragAndDropState,
+                                            onCircleClicked = { slot ->
+                                                selectedItemText.value = idToTextMap[slot.id]
+                                            }
+                                        )
+                                    }
+
+                                    Row(
+                                        modifier = Modifier
+                                            .align(Alignment.CenterHorizontally)
+                                            .fillMaxWidth()
+                                            .padding(bottom = 10.dp),
+                                        horizontalArrangement = Arrangement.spacedBy(25.dp)
+                                    ) {
+                                        DraggableSlotPalet(
+                                            slot = circlesPalletSecond,
+                                            dragAndDropState = dragAndDropState,
+                                            onCircleClicked = { slot ->
+                                                selectedItemText.value = idToTextMap[slot.id]
+                                            }
+                                        )
+                                    }
+
+                                    //-----------------Button next
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(bottom = 16.dp),
+                                        verticalArrangement = Arrangement.Bottom,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Button(
+                                            onClick = {
+                                                val allCircleIds =
+                                                    (circlesPalletFirst + circlesPalletSecond).map { it.id }
+                                                val unused = allCircleIds.filterNot { it in usedSlotIds }
+                                                if (unused.isNotEmpty()) { //if there is unused circles
+                                                    showAcceptDialog = true
+                                                } else {
+                                                    //Screenshot and save in view model
+                                                    capturable?.capture?.invoke()
+                                                    val agenda =
+                                                        droppedState.mapValues { it.value.id }
+                                                    viewModel.agendaMap.value = agenda
+                                                    viewModel.setPage(viewModel.txtMemoryPage + 1)
+                                                    navigator.push(RoomsScreens(pageNumber = 6))
+                                                }
+                                            },
+                                            colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
+                                            shape = RoundedCornerShape(30),
+                                            modifier = Modifier
+                                                .fillMaxWidth(0.7f)
+                                                .defaultMinSize(minWidth = 100.dp)
+                                                .width(250.dp)
+                                                .height(50.dp)
+                                        ) {
+                                            Text(
+                                                text = stringResource(Resources.String.next),
+                                                fontSize = EXTRA_MEDIUM,
+                                                fontWeight = FontWeight.Companion.Bold,
+                                                color = Color.Companion.White
+                                            )
+                                        }
+                                    }
+
+                                }
                             }
                         }
                     }
                 }
             }
-        },)
-            RegisterBackHandler(this)
-            {
-                navigator?.popUntilRoot()
-            }
-
         }
-
+        RegisterBackHandler(this)
+        {
+            navigator.popUntilRoot()
+        }
     }
 }
-
-

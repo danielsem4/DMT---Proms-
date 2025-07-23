@@ -10,9 +10,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,11 +42,11 @@ fun SearchBar(
         ),
         placeholder = { Text(stringResource(Resources.String.searchHint)) },
         leadingIcon = {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "Search Icon",
-                tint = Color.Black
-            )
+           // Icon(
+           //     imageVector =  Resources.Icon.clockIcon,
+           //     contentDescription = "Search Icon",
+           //     tint = Color.Black
+            // )
 
         },
         singleLine = true,
@@ -72,11 +69,11 @@ fun SearchBar(
                         onSearchQueryChanged("")
                     }
                 ){
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = "Clear Icon",
-                        tint = Color.Black
-                    )
+                   // Icon(
+                   //     imageVector = Resources.Icon.searchIcon,
+                   //     contentDescription = "Clear Icon",
+                   //     tint = Color.Black
+                   // )
                 }
             }
         }

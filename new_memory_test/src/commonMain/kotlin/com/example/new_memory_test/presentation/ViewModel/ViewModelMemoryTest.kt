@@ -37,8 +37,10 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import org.example.hit.heal.core.presentation.components.SlotState
 import org.jetbrains.compose.resources.DrawableResource
 import kotlin.collections.ArrayList
 import kotlin.io.println
@@ -59,6 +61,10 @@ class ViewModelMemoryTest(
     val placedItems: List<DataItem> get() = _placedItems.toList()
     private val _initialItemIds = mutableListOf<Int>()
     private var result: MemoryData = MemoryData()
+
+
+    private val _isLoading = MutableStateFlow(false)
+    var isLoading: StateFlow<Boolean> = _isLoading
 
     private val _uploadStatus = MutableStateFlow<Result<Unit>?>(null) // Need check
     private val _memoryTest = MutableStateFlow<Evaluation?>(null)
@@ -96,12 +102,12 @@ class ViewModelMemoryTest(
     var pageNumForImage3 = mutableStateOf<Int?>(null)
     var pageNumForUrl = mutableStateOf<Int?>(null)
 
-
-
+    private val _droppedState = MutableStateFlow<Map<String, SlotState>>(emptyMap())
+    val droppedState = _droppedState.asStateFlow()
     var imagesCounter = mutableStateOf(0)
 
     //roomSize
-    private val _roomSize = MutableStateFlow(Offset.Zero)
+
 
 
     //user raiting
@@ -333,7 +339,7 @@ class ViewModelMemoryTest(
 
    //load results
    fun uploadEvaluationResults(
-    ){
+    ){  _isLoading.value = true
         uploadScope.launch {
             try {
                 recordInactivity()
@@ -347,13 +353,15 @@ class ViewModelMemoryTest(
 
                 val uploadResult = uploadTestResultsUseCase.execute(result, MemoryData.serializer())
                 println("results object: $result")
+
                 uploadResult.onSuccess {
                     println(" העלאה של הכל הצליחה")
+                    _isLoading.value = false
                     _uploadStatus.value = Result.success(Unit)
                    // onSuccess?.invoke()
                 }.onError { error ->
                     println(" שגיאה העלאה: $error")
-
+                    _isLoading.value = false
                     _uploadStatus.value = Result.failure(Exception(error.toString()))
                     //onFailure?.invoke(error)
                 }
@@ -565,8 +573,21 @@ class ViewModelMemoryTest(
         pageNumForImage2.value = null
         pageNumForImage3.value = null
         pageNumForUrl.value = null
-
+        imagesCounter.value = 0
+        rawUserRating = null
+        _isLoading.value = false
+        _droppedState.value = emptyMap()
         shuffledItems = null
+    }
+
+    fun updateDroppedState(slotId: String, slotState: SlotState?) {
+        val current = _droppedState.value.toMutableMap()
+        if (slotState == null) {
+            current.remove(slotId)
+        } else {
+            current[slotId] = slotState
+        }
+        _droppedState.value = current
     }
 
 }

@@ -1,5 +1,4 @@
 package org.example.hit.heal.core.presentation.components
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,7 +35,7 @@ fun GenericSlotBox(
     dragAndDropState: DragAndDropState<SlotState>,
     usedDraggableIds: SnapshotStateList<String>,
     modifier: Modifier = Modifier,
-    borderColor: Color = Color.Gray,
+    borderColor: Color? = null,
     defaultBackgroundColor: Color = Color.Gray,
     activeBackgroundColor: Color = primaryColor,
 ) {
@@ -47,9 +46,10 @@ fun GenericSlotBox(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .background(backgroundColor, RoundedCornerShape(12.dp))
+
             .border(
                 width = 2.dp,
-                color = borderColor,
+                color = borderColor?:backgroundColor,
             )
             .clickable {
                 onUpdateDroppedState(slotId, null)
@@ -69,7 +69,7 @@ fun GenericSlotBox(
                 Image(
                     painter = painter,
                     contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize().padding(5.dp)
                 )
             }
             item.word?.let { word ->
