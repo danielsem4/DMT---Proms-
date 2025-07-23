@@ -88,10 +88,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.entryScreen.PassEntryScreen
 
-/**
- *
- */
-
 class HomeScreen : Screen {
     @Composable
     override fun Content() {
@@ -105,11 +101,6 @@ class HomeScreen : Screen {
         LaunchedEffect(Unit) {
             viewModel.loadFeatures()
         }
-
-        LaunchedEffect(features) {
-            println("All features: ${features.toString().replace(",","\n")}")
-        }
-
 
         BaseScreen(
             title = stringResource(Resources.String.home),
@@ -126,6 +117,8 @@ class HomeScreen : Screen {
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val minMsgHeight = maxHeight / 2
+                val isPhone = maxWidth < 600.dp
+                val columns = if (isPhone) 2 else 4
 
                 Column(Modifier.fillMaxSize()) {
                     MessagesSection(
@@ -169,7 +162,7 @@ class HomeScreen : Screen {
                         }
                     } else {
                         LazyVerticalGrid(
-                            columns = GridCells.FixedSize(200.dp),
+                            columns = GridCells.Fixed(columns), // Use the dynamic columns
                             contentPadding = PaddingValues(vertical = paddingMd),
                             horizontalArrangement = Arrangement.spacedBy(paddingMd),
                             verticalArrangement = Arrangement.spacedBy(paddingMd),

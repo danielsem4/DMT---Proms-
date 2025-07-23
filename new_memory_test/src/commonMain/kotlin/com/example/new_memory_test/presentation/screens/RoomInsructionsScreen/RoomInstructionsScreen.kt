@@ -43,9 +43,18 @@ import com.example.new_memory_test.presentation.screens.RoomScreen.components.en
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes.buttonHeightMd
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.radiusMd
+import org.example.hit.heal.core.presentation.Sizes.widthLg
+import org.example.hit.heal.core.presentation.Sizes.widthXl
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -60,12 +69,13 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
 
        //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            BaseTabletScreen(
+            BaseScreen(
                 title = stringResource(Resources.String.room_title),
-                page = pageNumber,
-                totalPages = 6,
-                modifier = Modifier.Companion.fillMaxSize().background(color = backgroundColor)
-            ) {
+                topRightText = "$pageNumber/6",
+                config = ScreenConfig.TabletConfig,
+                modifier = Modifier.Companion.fillMaxSize().background(color = backgroundColor),
+                content =
+             {
 
                 Row(
                     modifier = Modifier.Companion
@@ -77,18 +87,18 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
                             .weight(0.4f)
                             .zIndex(1f)
                             .background(color = backgroundColor)
-                            .padding(12.dp)
+                            .padding(paddingSm)
                     ) {
                         Box(
                             modifier = Modifier.Companion
                                 .weight(0.4f)
-                                .background(Color.Companion.White, RoundedCornerShape(8.dp))
+                                .background(Color.Companion.White, RoundedCornerShape(radiusMd))
                                 .border(
                                     1.dp,
                                     Color.Companion.Black,
-                                    androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
+                                    androidx.compose.foundation.shape.RoundedCornerShape(radiusMd)
                                 )
-                                .padding(vertical = 7.dp, horizontal = 7.dp)
+                                .padding(vertical = radiusMd, horizontal = radiusMd)
                         ) {
                             Text(
                                 text = stringResource(Resources.String.instructions_text_memory_question_trial),
@@ -96,14 +106,14 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
                                 textAlign = TextAlign.Companion.Center,
                                 fontWeight = FontWeight.Companion.Bold,
                                 color = primaryColor,
-                                modifier = Modifier.Companion.padding(bottom = 16.dp)
+                                modifier = Modifier.Companion.padding(paddingMd)
                             )
                         }
 
                         Spacer(modifier = Modifier.Companion.weight(0.3f))
                         Row(
-                            modifier = Modifier.Companion.fillMaxWidth().padding(top = 16.dp)
-                                .weight(0.4f),
+                            modifier = Modifier.Companion.fillMaxWidth().padding(top =paddingMd)
+                                .weight(0.4f) .padding(8.dp),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
                             //can change images with buttons
@@ -115,12 +125,12 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
                                         backgroundColor = if (isSelected) Color.Companion.Gray else primaryColor
                                     ),
                                     shape = androidx.compose.foundation.shape.RoundedCornerShape(30),
-                                    modifier = Modifier.Companion.height(50.dp).width(150.dp)
+                                    modifier = Modifier.Companion.height(buttonHeightMd).width(widthLg).padding(4.dp)
                                 ) {
                                     Text(
                                         text = stringResource(room.displayName),
                                         color = if (isSelected) Color.Companion.Black else White,
-                                        fontSize = 16.sp
+                                        fontSize = EXTRA_REGULAR
                                     )
                                 }
                             }
@@ -147,8 +157,8 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
                                     shape = RoundedCornerShape(30),
                                     modifier = Modifier
                                         .defaultMinSize(minWidth = 100.dp)
-                                        .width(250.dp)
-                                        .height(50.dp)
+                                        .width(widthXl)
+                                        .height(buttonHeightMd)
                                 ) {
                                     Text(
                                         text = stringResource(Resources.String.next),
@@ -179,7 +189,7 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
                     }
 
                 }
-            }
+            })
         }
         RegisterBackHandler(this)
         {

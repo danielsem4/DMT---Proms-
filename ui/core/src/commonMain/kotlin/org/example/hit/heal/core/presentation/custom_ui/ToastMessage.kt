@@ -36,11 +36,13 @@ fun ToastMessage(
 ) {
     val visible = remember { mutableStateOf(false) }
 
+    val delayBeforeOnDismiss: Long = 200
+
     LaunchedEffect(message) {
         visible.value = true
         delay(duration.millis)
         visible.value = false
-        delay(300) // let animation finish
+        delay(delayBeforeOnDismiss) // let animation finish
         onDismiss()
     }
 
@@ -56,7 +58,7 @@ fun ToastMessage(
                     }
                 visible.value = false
                 GlobalScope.launch {
-                    delay(300)
+                    delay(delayBeforeOnDismiss)
                         onDismiss()
                     }
             }, contentAlignment = if (alignUp) Alignment.TopCenter else Alignment.BottomCenter

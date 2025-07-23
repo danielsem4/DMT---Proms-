@@ -14,10 +14,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,12 +32,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import core.data.model.evaluation.EvaluationValue
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.body_back
 import dmt_proms.composeapp.generated.resources.body_front
 import dmt_proms.composeapp.generated.resources.flip_button_label
+import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -44,18 +53,25 @@ fun HumanBodyModelSelector(
     backPoints: Set<Offset>,
     isFrontView: Boolean,
     onSelectionChanged: (front: Set<Offset>, back: Set<Offset>) -> Unit,
-    onToggleView: () -> Unit
+    onToggleView: () -> Unit,
+    availableValues: List<EvaluationValue>
 ) {
-    val points = listOf(
-        Offset(0.45f, 0.08f),  // Head
-        Offset(0.45f, 0.26f),  // Chest
-        Offset(0.45f, 0.4f),  // Belly
-        Offset(0.095f, 0.51f),  // Left Palm
-        Offset(0.78f, 0.51f),  // Right Palm
-        Offset(0.30f, 0.68f),  // Left Knee
-        Offset(0.6f, 0.68f)   // Right Knee
+    val alertMessage = remember { mutableStateOf<String?>(null) }
+
+    val frontPointsWithValues = listOf(
+        Offset(0.45f, 0.08f) to availableValues[0],  // Head
+        Offset(0.45f, 0.26f) to availableValues[1],  // Chest
+        Offset(0.45f, 0.4f) to availableValues[4],  // Belly
+        Offset(0.78f, 0.51f) to availableValues[3]   // Right Arm
     )
+
+    val backPointsWithValues = listOf(
+        Offset(0.45f, 0.4f) to availableValues[2]   // Lower Back
+    )
+
+    val currentPointsWithValues = if (isFrontView) frontPointsWithValues else backPointsWithValues
     val selectedPoints = if (isFrontView) frontPoints else backPoints
+
     val imagePainter =
         painterResource(if (isFrontView) Res.drawable.body_front else Res.drawable.body_back)
 
@@ -67,14 +83,12 @@ fun HumanBodyModelSelector(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Keep image's original aspect ratio (based on actual image)
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(32.dp))
                 .background(Color.White)
                 .aspectRatio(0.5f)
-
         ) {
             val containerWidth = constraints.maxWidth.toFloat()
             val containerHeight = constraints.maxHeight.toFloat()
@@ -83,11 +97,9 @@ fun HumanBodyModelSelector(
             val imageHeight: Float
 
             if (containerWidth / containerHeight > aspectRatio) {
-                // Container is wider → fit by height
                 imageHeight = containerHeight
                 imageWidth = imageHeight * aspectRatio
             } else {
-                // Container is taller → fit by width
                 imageWidth = containerWidth
                 imageHeight = imageWidth / aspectRatio
             }
@@ -102,7 +114,7 @@ fun HumanBodyModelSelector(
                 modifier = Modifier.fillMaxSize()
             )
 
-            points.forEach { offset ->
+            currentPointsWithValues.forEach { (offset, evalValue) ->
                 val x = offset.x * imageWidth + offsetX
                 val y = offset.y * imageHeight + offsetY
 
@@ -115,14 +127,20 @@ fun HumanBodyModelSelector(
                             shape = CircleShape
                         )
                         .clickable {
+                            val wasSelected = selectedPoints.contains(offset)
+
+                            if (!wasSelected) {
+                                alertMessage.value = evalValue.available_value
+                            }
+
                             if (isFrontView) {
                                 val updated = frontPoints.toMutableSet().apply {
-                                    if (contains(offset)) remove(offset) else add(offset)
+                                    if (wasSelected) remove(offset) else add(offset)
                                 }
                                 onSelectionChanged(updated, backPoints)
                             } else {
                                 val updated = backPoints.toMutableSet().apply {
-                                    if (contains(offset)) remove(offset) else add(offset)
+                                    if (wasSelected) remove(offset) else add(offset)
                                 }
                                 onSelectionChanged(frontPoints, updated)
                             }
@@ -145,28 +163,80 @@ fun HumanBodyModelSelector(
                     tint = Color.White
                 )
             }
-
         }
+    }
+
+    alertMessage.value?.let { selectedText ->
+        AlertDialog(
+            onDismissRequest = { alertMessage.value = null },
+            title = {
+                Text(
+                    text = stringResource(Resources.String.selected_point),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = primaryColor
+                )
+            },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = selectedText,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.DarkGray
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = { alertMessage.value = null },
+                    colors = ButtonDefaults.buttonColors(containerColor = primaryColor),
+                    modifier = Modifier.padding(Sizes.paddingSm),
+                    shape = RoundedCornerShape(Sizes.radiusLg)
+                ) {
+                    Text(
+                        text = stringResource(Resources.String.`continue`),
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            shape = RoundedCornerShape(Sizes.radiusLg),
+            containerColor = Color.White,
+            textContentColor = primaryColor
+        )
     }
 }
 
-@Preview
 @Composable
-fun Preview_HumanBodyModelSelector() {
+@Preview
+fun HumanBodyModelSelectorPreview() {
     val frontPoints = remember { mutableStateOf(setOf<Offset>()) }
     val backPoints = remember { mutableStateOf(setOf<Offset>()) }
     val isFrontView = remember { mutableStateOf(true) }
+
+    val mockValues = listOf(
+        EvaluationValue(473, "Head (?) ראש, עיניים, לסת", false, "", 256),
+        EvaluationValue(474, "Chest (?) בית החזה, הצלעות", false, "", 256),
+        EvaluationValue(475, "Lower Back (?) גב תחתון, גב ח", false, "", 256),
+        EvaluationValue(476, "Right Arm (?) פרק כף יד, אצבעות, גב יד", false, "", 256),
+        EvaluationValue(477, "Belly (?) בטן, קיבה, כבד", false, "", 256)
+    )
 
     HumanBodyModelSelector(
         frontPoints = frontPoints.value,
         backPoints = backPoints.value,
         isFrontView = isFrontView.value,
-        onSelectionChanged = { front, back ->
-            frontPoints.value = front
-            backPoints.value = back
+        onSelectionChanged = { f, b ->
+            frontPoints.value = f
+            backPoints.value = b
         },
         onToggleView = {
             isFrontView.value = !isFrontView.value
-        }
+        },
+        availableValues = mockValues
     )
 }
