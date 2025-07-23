@@ -38,8 +38,15 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+
+
 @Composable
-fun DialogTask(icon: DrawableResource, title: String,text: String, onDismiss: () -> Unit) {
+fun DialogTask(
+    icon: DrawableResource,
+    title: String,
+    text: String,
+    onDismiss: () -> Unit){
+
     Dialog(onDismissRequest =  onDismiss) {
         Box(modifier = Modifier.fillMaxWidth()) {
             Image(
@@ -91,4 +98,4 @@ fun DialogTask(icon: DrawableResource, title: String,text: String, onDismiss: ()
                 }
             }
         }
-}}
+    }}

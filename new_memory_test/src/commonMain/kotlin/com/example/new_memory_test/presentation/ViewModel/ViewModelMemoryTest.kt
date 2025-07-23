@@ -97,6 +97,13 @@ class ViewModelMemoryTest(
     var pageNumForUrl = mutableStateOf<Int?>(null)
 
 
+
+    var imagesCounter = mutableStateOf(0)
+
+    //roomSize
+    private val _roomSize = MutableStateFlow(Offset.Zero)
+
+
     //user raiting
     var rawUserRating: Float? = null
     val userRating = mutableListOf<MeasureObjectString>()
@@ -335,17 +342,18 @@ class ViewModelMemoryTest(
                 result.measurement = _memoryTest.value?.id ?: 20
                 resultUpload()
 
-                println("result: $result")
+
                 val json = Json.encodeToString(MemoryData.serializer(), result)
-                println("JSON sent: $json")
+
                 val uploadResult = uploadTestResultsUseCase.execute(result, MemoryData.serializer())
-                //println("results object: $result")
+                println("results object: $result")
                 uploadResult.onSuccess {
                     println(" העלאה של הכל הצליחה")
                     _uploadStatus.value = Result.success(Unit)
                    // onSuccess?.invoke()
                 }.onError { error ->
                     println(" שגיאה העלאה: $error")
+
                     _uploadStatus.value = Result.failure(Exception(error.toString()))
                     //onFailure?.invoke(error)
                 }
@@ -383,7 +391,7 @@ class ViewModelMemoryTest(
                         measurementId = measurement,
                         pathDate = date
                     )
-                    //println(" Path: $imagePath")
+                    println(" Path: $imagePath")
                     val result = uploadImageUseCase.execute(
                         imagePath = imagePath,
                         bytes = imageByteArray,
@@ -393,9 +401,13 @@ class ViewModelMemoryTest(
                     result.onSuccess {
                         println(" העלאה הצליחה")
                         saveUploadedImageUrl(currentQuestion, imagePath, date)
+                        if( imagesCounter.value == 10){
+                            uploadEvaluationResults()
+                        }
 
-                    }.onError {
-                        println(" שגיאה בהעלאה: $it")
+                    }.onError {error ->
+                        println("  העלאה לא הצליחה: $error")
+                        _uploadStatus.value = Result.failure(Exception(error.toString()))
 
                     }
                 } catch (e: Exception) {
@@ -428,6 +440,7 @@ class ViewModelMemoryTest(
                 }
 
         }
+
     }
 
     //load evaluation (clinickId and patientId)
@@ -459,8 +472,11 @@ class ViewModelMemoryTest(
                         date = timeForImage1.value ?: getCurrentFormattedDateTime(),
                         currentQuestion = pageNumForImage1.value
                     )
-                    println(" Path1: $image")
+                    //println(" Path1: $image")
+
                 }
+                imagesCounter.value++
+                println(" PathUrl: ${imagesCounter.value}")
             }
 
             // Image 2
@@ -472,7 +488,9 @@ class ViewModelMemoryTest(
                         currentQuestion = pageNumForImage2.value
                     )
                 }
-                println(" Path2: $image")
+                //println(" Path2: $image")
+                imagesCounter.value++
+                println(" PathUrl: ${imagesCounter.value}")
             }
 
             // Image 3
@@ -484,7 +502,9 @@ class ViewModelMemoryTest(
                         currentQuestion = pageNumForImage3.value
                     )
                 }
-                println(" Path3: $image")
+               // println(" Path3: $image")
+                imagesCounter.value++
+                println(" PathUrl: ${imagesCounter.value}")
             }
 
             imageUrl.value.forEach { image ->
@@ -494,12 +514,16 @@ class ViewModelMemoryTest(
                         date = timeUrl.value ?: getCurrentFormattedDateTime(),
                         currentQuestion = pageNumForUrl.value
                     )
-                    println(" PathUrl: $image")
+                    //println(" PathUrl: $image")
+                    imagesCounter.value++
+                    println(" PathUrl: ${imagesCounter.value}")
                 }
+
             }
 
         }
-        uploadEvaluationResults()
+
+
 
     }
 

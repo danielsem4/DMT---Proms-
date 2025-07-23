@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.data.DraggableCircle
 import com.mohamedrejeb.compose.dnd.DragAndDropState
 import com.mohamedrejeb.compose.dnd.drag.DraggableItem
+import org.example.hit.heal.core.presentation.Sizes.buttonHeightLg
 
 @Composable
 fun DraggableCirclesPalet(
@@ -34,7 +35,7 @@ fun DraggableCirclesPalet(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(60.dp)
+                        .size(buttonHeightLg)
                         .clickable {
                             onCircleClicked(circle)
                         }

@@ -15,20 +15,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
 
 
 //Text in the start of modules (MemoryScreen)
 @Composable
 fun BulletPointText(
     text: String,
-    fontSize: TextUnit = 26.sp,
+    fontSize: TextUnit = EXTRA_MEDIUM_LARGE ,
     fontWeight: FontWeight = FontWeight.Bold,
     color: Color = Color.Gray
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = paddingMd, vertical = paddingSm),
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.Top
     ) {
@@ -49,7 +52,7 @@ fun BulletPointText(
             fontSize = fontSize,
             fontWeight = fontWeight,
             color = color,
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(start = paddingSm)
         )
     }
 }
