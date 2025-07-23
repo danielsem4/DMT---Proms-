@@ -307,6 +307,7 @@ class ActivityViewModel(
 
                     if (isUploadAllImagesFinished == 3) {
                         uploadEvaluationResults()
+                        isUploadAllImagesFinished = 0
                     }
 
                 }.onError { error ->
