@@ -116,5 +116,6 @@ fun CustomDialog(
                     }
                 }
             }
-        }}
+        }
+    }
 }
