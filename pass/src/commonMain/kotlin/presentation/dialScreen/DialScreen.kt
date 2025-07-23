@@ -136,7 +136,7 @@ class DialScreen : Screen {
         LaunchedEffect(nextScreen) {
             if (isNextScreen) {
                 nextScreen?.let { screen ->
-                    navigator?.push(screen)
+                    navigator?.replace(screen)
                     viewModel.clearNextScreen()
                 }
             }
@@ -189,7 +189,7 @@ class DialScreen : Screen {
                     onPlayAudio = { viewModel.onPlayAudioRequested(audioString) },
                     onDismiss = {
                         if (nextScreen != null) {
-                            navigator?.push(nextScreen!!)
+                            navigator?.replace(nextScreen!!)
                             viewModel.clearNextScreen()
                         } else {
                             viewModel.hideReminderDialog()
