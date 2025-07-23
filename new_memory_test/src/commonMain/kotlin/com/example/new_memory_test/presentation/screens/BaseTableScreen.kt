@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.primaryColor
 
@@ -39,35 +41,35 @@ fun BaseTabletScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(primaryColor)
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = paddingMd, vertical = paddingMd),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = title,
-                fontSize = 32.sp,
+                fontSize = LARGE,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .weight(1f)
                     .wrapContentHeight()
-                    .padding(16.dp),
+                    .padding(paddingMd),
                 textAlign = TextAlign.Center
             )
             Text(
                 text = "$page/$totalPages",
-                fontSize = 32.sp,
+                fontSize = LARGE,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(paddingMd)
             )
         }
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(paddingMd),
             content = content
         )
     }

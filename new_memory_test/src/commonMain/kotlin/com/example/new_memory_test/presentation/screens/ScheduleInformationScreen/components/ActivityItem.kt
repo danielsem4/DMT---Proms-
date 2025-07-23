@@ -19,6 +19,7 @@ import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
 import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingSm
+import org.example.hit.heal.core.presentation.Sizes.spacingXs
 
 
 //Only for Image and Item in 1 row
@@ -36,9 +37,9 @@ fun ActivityItem(text: String, icon: Painter) {
             textAlign = TextAlign.Right,
             fontSize = EXTRA_REGULAR ,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(5.dp)
+            modifier = Modifier.padding(spacingSm)
         )
-        Spacer(modifier = Modifier.size(3.dp))
+        Spacer(modifier = Modifier.size(spacingXs))
         Icon(
             painter = icon,
             contentDescription = null,

@@ -34,10 +34,19 @@ import com.example.new_memory_test.presentation.screens.RoomInsructionsScreen.Ro
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 
 
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes.buttonHeightMd
+import org.example.hit.heal.core.presentation.Sizes.heightSm
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingXl
 import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -49,6 +58,8 @@ class MemoryScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = koinViewModel()
         viewModel.reset()
+        viewModel.txtMemoryPage =1
+
 
         //create at evaluetion memory
         LaunchedEffect(Unit){
@@ -57,7 +68,8 @@ class MemoryScreen : Screen {
 
         //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
-        BaseTabletScreen(title = stringResource(Resources.String.memory_title), page = 1, totalPages =6 ){
+        BaseScreen(title = stringResource(Resources.String.memory_title),  config = ScreenConfig.TabletConfig, topRightText ="1/6" ,content ={
+
 
             Column(
                 modifier = Modifier
@@ -66,14 +78,14 @@ class MemoryScreen : Screen {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(spacingXl))
                 Text(
                     text = stringResource(Resources.String.instructions),
-                    fontSize = 32.sp,
+                    fontSize =LARGE,
                     color = Color.Black,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(spacingMd))
                 BulletPointText(text = stringResource(Resources.String.task_duration ))
                 BulletPointText(text =  stringResource(Resources.String.task_continuity ))
                 BulletPointText(text = stringResource(Resources.String.read_instructions ))
@@ -83,19 +95,19 @@ class MemoryScreen : Screen {
 
                 Text(
                     text = stringResource(Resources.String.good_luck ),
-                    fontSize = 32.sp,
+                    fontSize =LARGE,
                     color = Color.Black,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(spacingXl))
 
                 Text(
                     text = stringResource(Resources.String.press_start_to_begin ),
-                    fontSize = 16.sp,
+                    fontSize = EXTRA_REGULAR,
                     color = Color.Black,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(spacingMd))
 
                 Button(
                     onClick = {
@@ -106,13 +118,13 @@ class MemoryScreen : Screen {
                     shape = RoundedCornerShape(30),
                     modifier = Modifier
                         .fillMaxWidth(0.2f)
-                        .height(50.dp)
+                        .height(buttonHeightMd)
                 ) {
-                    Text( stringResource(Resources.String.start), fontSize = 24.sp,  color = Color.White)
+                    Text( stringResource(Resources.String.start), fontSize = EXTRA_MEDIUM_LARGE,  color = Color.White)
                 }
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(heightSm))
             }
-            }
+            })
         }
         RegisterBackHandler(this)
         {

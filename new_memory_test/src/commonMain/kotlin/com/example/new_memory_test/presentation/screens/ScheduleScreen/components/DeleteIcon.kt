@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -21,8 +23,8 @@ fun DeleteIcon(
         painter = painterResource(Resources.Icon.deleteIcon),
         contentDescription = stringResource(Resources.String.delete),
         modifier = modifier
-            .size(30.dp)
-            .padding(10.dp)
+            .size(iconSizeLg)
+            .padding(paddingSm)
             .clickable(onClick = onClick)
     )
 }
