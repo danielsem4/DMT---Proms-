@@ -109,6 +109,11 @@
     <string name="timeMedications">שעה: </string>
     <string name="error_start_date_empty">תאריך התחלה לא יכול להיות ריק</string>
     <string name="error_end_before_start">תאריך סיום לא יכול להיות לפני תאריך ההתחלה</string>
+
+    <string name ="one">1</string>
+    <string name ="two">2</string>
+    <string name ="three">3</string>
+    <string name ="four">4</string>
     <!--    CDT Module  -->
 
 

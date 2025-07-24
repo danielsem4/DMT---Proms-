@@ -97,6 +97,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         val viewModel: ViewModelMemoryTest = koinViewModel()
         val coroutineScope = rememberCoroutineScope()
 
+        viewModel.txtMemoryPage = pageNumber
         //Dialogs and raiting
 
         var showDialogEndTime by remember { mutableStateOf(false) }
@@ -141,7 +142,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         var inactivityCount by remember { mutableStateOf(0) }
         var timeLeft by remember { mutableStateOf(4 * 60) }
 
-  // например
+
         val draggableSize = rememberItemSizePx()
 
 
@@ -259,12 +260,13 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                 rating = rating,
                 onRatingChanged = { newRating -> rating = newRating },
                 onDismiss = {
-                    showDialog = false
-
+                    showDialog = true
                 },
                 onSubmit = {
                     viewModel.rawUserRating = rating
+                    showDialog = false
                     navigator.push(FinalScreenMemoryTest())
+
                 }
             )
         }

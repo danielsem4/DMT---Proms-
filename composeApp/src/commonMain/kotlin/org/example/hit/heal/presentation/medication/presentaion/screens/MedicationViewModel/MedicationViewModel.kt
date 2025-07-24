@@ -1,12 +1,12 @@
 package org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import core.data.model.Medications.Medication
 import core.data.model.Medications.MedicationReport
-import core.data.model.evaluation.Evaluation
 import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.api.AppApi
@@ -22,6 +22,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import org.example.hit.heal.core.presentation.ToastType
 import kotlin.math.abs
 
 class MedicationViewModel
@@ -55,12 +56,26 @@ class MedicationViewModel
     private val _selectedEndDate = MutableStateFlow("")
     val selectedEndDate: StateFlow<String> = _selectedEndDate
 
-    private val _medicationEvaluation = MutableStateFlow<Evaluation?>(null)
+    private val _isSaveSuccessful = MutableStateFlow(false)
+    val isSaveSuccessful: StateFlow<Boolean> = _isSaveSuccessful
+
+    fun getSaveSuccessful(): Boolean {
+        return _isSaveSuccessful.value
+    }
+
+    fun resetSaveSuccess() {
+        _isSaveSuccessful.value = false
+    }
+
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
     var _isReport by mutableStateOf<Boolean>(false)
         private set
+
+
+    var errorAlarmMessage by mutableStateOf<String?>(null)
+    private set
 
     fun getMedication(): Medication? {
         return _medication.value
@@ -161,11 +176,13 @@ class MedicationViewModel
 
         if (medication == null) {
             errorMessage = "No medication selected"
+            _isSaveSuccessful.value = false
             return
         }
 
         if (date.isBlank() || time.isBlank()) {
             errorMessage = "Please select both date and time"
+            _isSaveSuccessful.value = false
             return
         }
 
@@ -182,6 +199,7 @@ class MedicationViewModel
         if (!initUserIds()) {
             errorMessage = "We couldn't get userId/clinicId"
             isLoading.value = false
+            _isSaveSuccessful.value = false
             return
         }
         val report = MedicationReport(
@@ -194,8 +212,10 @@ class MedicationViewModel
 
         result.onSuccess {
             errorMessage = null
+            _isSaveSuccessful.value = true
         }.onError { error ->
             println("Error: $error")
+            _isSaveSuccessful.value = false
         }
         isLoading.value = false
     }
@@ -295,13 +315,14 @@ class MedicationViewModel
     ) {
         viewModelScope.launch {
             if (!initUserIds()) {
-                errorMessage = "Error: missing patient or clinic data"
+                errorAlarmMessage = "Error: missing patient or clinic data"
+                println("Error set: $errorAlarmMessage")
                 return@launch
             }
             val newMedication = Medication(
                 id = clinicId!!,
                 patient = patientId!!,
-                medicine = medication?.medicine.toString() ?: "" ,
+                medicine = medication?.medicine.toString() ?: "",
                 name = medicationName,
                 form = medication?.form ?: "",
                 unit = medication?.unit ?: "",
@@ -316,10 +337,10 @@ class MedicationViewModel
             val result = remoteDataSource.setMedicationNotifications(newMedication)
 
             result.onSuccess {
-                errorMessage = null
+                errorAlarmMessage = null
                 println("Medication notification saved!")
             }.onError { error ->
-                errorMessage = "Error while saving: $error"
+                errorAlarmMessage = "Error while saving: $error"
                 println("Medication save error: $error")
             }
         }

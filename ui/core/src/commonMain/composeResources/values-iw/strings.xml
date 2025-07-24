@@ -68,6 +68,10 @@
     <string name="uploading">שולח</string>
     <string name="loading">עולה</string>
     <string name="selected_point">הנקודה שבחרת</string>
+    <string name ="one">1</string>
+    <string name ="two">2</string>
+    <string name ="three">3</string>
+    <string name ="four">4</string>
 
 
     <!--    CDT Module  -->

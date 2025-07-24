@@ -2,6 +2,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,9 +13,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +29,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.Medications.Medication
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.components.SearchBar
@@ -55,8 +59,6 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
         val keyboardController = LocalSoftwareKeyboardController.current
         var searchQuery by remember { mutableStateOf("") }
 
-
-        val userInf = remember { mutableStateOf<Pair<Int, Int>?>(null) }
         val medications: List<Medication> = viewModel.medications.value
 
         LaunchedEffect(Unit) {
@@ -92,39 +94,43 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
 
                 )
                 Spacer(modifier = Modifier.height(25.dp))
-
                 LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(40.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(35.dp),
+                    contentPadding = PaddingValues(bottom = 32.dp)
                 ) {
+
                     items(filteredMedications) { medication ->
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .shadow(
+                                    shape = RoundedCornerShape(20.dp),
+                                    elevation = 4.dp,
+                                    clip = false
+                                )
                                 .clickable {
-                                    try {
-                                        viewModel.chooseMedication(medication)
-                                        if (isReport) {
-                                            selectedMedication = medication
-                                            showDialog = true
-                                            viewModel.setMedicationName(medication.name)
-                                        } else {
-                                            navigator.push(MedicationAlarmScreen(medication))
-                                        }
-                                    } catch (e: Exception) {
-                                        println("Crash on medication click: ${e.message}")
-                                        e.printStackTrace()
+                                    viewModel.chooseMedication(medication)
+                                    if (isReport) {
+                                        selectedMedication = medication
+                                        showDialog = true
+                                        viewModel.setMedicationName(medication.name)
+                                    } else {
+                                        navigator.push(MedicationAlarmScreen(medication))
                                     }
                                 }
-
-                                .clip(RoundedCornerShape(15.dp))
+                                .clip(RoundedCornerShape(20))
                                 .height(70.dp),
                             backgroundColor = Color.White,
-                            elevation = 0.dp
+                            elevation = 15.dp
                         ) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(start = 16.dp),
+
                                 contentAlignment = Alignment.CenterStart
                             ) {
                                 Text(
@@ -135,10 +141,10 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
                                 )
                             }
                         }
-
-
                     }
                 }
+                Spacer(modifier = Modifier.height(25.dp))
+
             }
         }
 

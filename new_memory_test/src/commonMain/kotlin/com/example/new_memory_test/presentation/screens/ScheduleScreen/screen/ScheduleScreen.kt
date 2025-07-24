@@ -1,5 +1,4 @@
 package com.example.new_memory_test.presentation.screens.ScheduleScreen.screen
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -41,49 +40,36 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
-
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
-
 import com.mohamedrejeb.compose.dnd.DragAndDropContainer
-
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
 import core.utils.CapturableWrapper
 import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import core.utils.platformCapturable
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
-
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources
-
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-
-
-import androidx.compose.material.Icon
-
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.collectAsState
-
 import androidx.compose.ui.unit.sp
-
 import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
-import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.DraggableSlotPalet
 import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.GenericSlotBox
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.components.SlotState
-
 import kotlin.collections.mapValues
-
 class ScheduleScreen(val pageNumber: Int ) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = koinViewModel()
+        viewModel.txtMemoryPage = pageNumber
         //Schedule
         val days = listOf(
             stringResource(Resources.String.day_sunday),
@@ -178,7 +164,12 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
         }
 
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
-            BaseTabletScreen( stringResource(Resources.String.build_schedule), page = pageNumber, totalPages = 6) {
+            BaseScreen(
+                title =stringResource(Resources.String.build_schedule),
+                topRightText = "$pageNumber/6",
+                config = ScreenConfig.TabletConfig,
+                modifier = Modifier.Companion.fillMaxSize().background(color = backgroundColor),
+                content = {
                 DragAndDropContainer(state = dragAndDropState) {
                     capturable = platformCapturable(
                         //Save Screen like Image
@@ -475,11 +466,13 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                         }
                     }
                 }
-            }
+            })
         }
+
         RegisterBackHandler(this)
-        {
+        {   viewModel.reset()
             navigator.popUntilRoot()
         }
     }
+
 }

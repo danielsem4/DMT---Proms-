@@ -25,9 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import com.example.new_memory_test.presentation.screens.ScheduleInformationScreen.components.ActivityItem
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.screen.ScheduleScreen
@@ -43,12 +45,14 @@ import org.example.hit.heal.core.presentation.Sizes.spacing8Xl
 import org.example.hit.heal.core.presentation.Sizes.spacingLg
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingSm
+import org.example.hit.heal.core.presentation.Sizes.spacingXs
 import org.example.hit.heal.core.presentation.Sizes.widthXl
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 
 class ScheduleInformationScreen(val pageNumber: Int) : Screen {
@@ -56,6 +60,9 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
+        val viewModel: ViewModelMemoryTest = koinViewModel()
+
+        viewModel.txtMemoryPage = pageNumber
         //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
         BaseScreen(title = stringResource(Resources.String.build_schedule),  config = ScreenConfig.TabletConfig,topRightText = "$pageNumber/6" , content =  {
@@ -81,7 +88,7 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
                         .background(Color.White)
                         .padding(spacingMd)
                 ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(spacingMd)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(spacingXs)) {
                         ActivityItem(
                             text = stringResource(Resources.String.dumbbell_circle_text),
                             icon = painterResource(Resources.Icon.dumbbellScheduleIcon)
@@ -132,7 +139,7 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
             }
         })
             RegisterBackHandler(this)
-            {
+            {   viewModel.reset()
                 navigator.popUntilRoot()
             }
 
