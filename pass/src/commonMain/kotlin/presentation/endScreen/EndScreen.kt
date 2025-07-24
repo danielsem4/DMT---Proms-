@@ -68,27 +68,6 @@ class EndScreen : Screen {
                         .fillMaxSize(),
                     contentAlignment = Alignment.BottomCenter
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(80.dp),
-                        modifier = Modifier.align(Alignment.BottomCenter)
-                    ) {
-                        RoundedButton(
-                            text = stringResource(exit),
-                            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
-                            onClick = {
-                                navigator?.pop()
-                            }
-                        )
-
-                        toastMessage?.let { msg ->
-                            ToastMessage(
-                                message = msg,
-                                type = toastType,
-                                alignUp = false,
-                                onDismiss = { toastMessage = null }
-                            )
-                        }
 
 
                         Column(
@@ -133,6 +112,28 @@ class EndScreen : Screen {
                                 SuccessAnimation(modifier = Modifier.size(100.dp))
                             }
                         }
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(80.dp),
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                    ) {
+                        RoundedButton(
+                            text = stringResource(exit),
+                            modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
+                            onClick = {
+                                navigator?.pop()
+                            }
+                        )
+
+                        toastMessage?.let { msg ->
+                            ToastMessage(
+                                message = msg,
+                                type = toastType,
+                                alignUp = false,
+                                onDismiss = { toastMessage = null }
+                            )
+                        }
+
                     }
 
                 }
