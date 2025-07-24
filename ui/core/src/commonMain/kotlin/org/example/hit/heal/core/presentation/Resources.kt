@@ -552,6 +552,10 @@ import dmt_proms.ui.core.generated.resources.you_in_the_autumn
 import dmt_proms.ui.core.generated.resources.you_in_the_spring
 import dmt_proms.ui.core.generated.resources.you_in_the_summer
 import dmt_proms.ui.core.generated.resources.you_in_the_winter
+import dmt_proms.ui.core.generated.resources.one
+import dmt_proms.ui.core.generated.resources.two
+import dmt_proms.ui.core.generated.resources.three
+import dmt_proms.ui.core.generated.resources.four
 import dmt_proms.ui.core.generated.resources.Res.string as rs
 
 /**
@@ -1104,6 +1108,11 @@ object Resources {
         val startDate = rs.start_date
         val endDate = rs.end_date
         val leaveEndDateEmpty = rs.leave_end_date_empty
+        val one = rs.one
+        val two = rs.two
+        val three = rs.three
+        val four = rs.four
+
 
         //MemoryTestModule
         val day_sunday = rs.day_sunday

@@ -38,7 +38,8 @@ import androidx.compose.ui.zIndex
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.example.new_memory_test.presentation.screens.BaseTabletScreen
+import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
+
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import core.utils.RegisterBackHandler
@@ -58,12 +59,14 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 class RoomInstructionsScreen(val pageNumber: Int) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-
+        val viewModel: ViewModelMemoryTest = koinViewModel()
+        viewModel.txtMemoryPage = pageNumber
         var selectedRoom by remember { mutableStateOf(Room.Bedroom) }
         val roomButtons = Room.values().toList()
 
@@ -192,7 +195,7 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
             })
         }
         RegisterBackHandler(this)
-        {
+        {   viewModel.reset()
             navigator.popUntilRoot()
         }
     }

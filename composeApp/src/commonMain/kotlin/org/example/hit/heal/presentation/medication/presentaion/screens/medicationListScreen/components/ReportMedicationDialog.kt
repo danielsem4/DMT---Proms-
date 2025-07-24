@@ -1,11 +1,14 @@
 package org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.components
 
+import ToastMessage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,6 +19,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +36,7 @@ import core.data.model.Medications.Medication
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.pills
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -52,6 +57,13 @@ fun ReportMedicationDialog(
     var showTimePicker by remember { mutableStateOf(false) }
 
 
+    var toastMessage by remember { mutableStateOf<String?>(null) }
+    var toastType by remember { mutableStateOf(ToastType.Normal) }
+    var buttonPressed by remember { mutableStateOf(false) }
+
+
+
+
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(16.dp),
@@ -61,7 +73,6 @@ fun ReportMedicationDialog(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
                 Text(
                     text = stringResource(Resources.String.reportMedicationTaken),
                     fontWeight = FontWeight.Bold,
@@ -74,7 +85,7 @@ fun ReportMedicationDialog(
                     contentDescription = null,
                     modifier = Modifier
                         .size(70.dp)
-                        .padding(bottom = 8.dp,top=12.dp),
+                        .padding(bottom = 8.dp, top = 12.dp),
                     contentScale = ContentScale.Fit
                 )
 
@@ -99,7 +110,8 @@ fun ReportMedicationDialog(
             ) {
                 Button(
                     onClick = { viewModel.validateAndSave(medication, medication.id)
-                        onDismiss() },
+                        buttonPressed=true
+                        },
                     colors = ButtonDefaults.buttonColors(primaryColor),
                     shape = RoundedCornerShape(50)
                 ) {
@@ -119,6 +131,7 @@ fun ReportMedicationDialog(
                 ) {
                     Text(stringResource(Resources.String.time), fontWeight = FontWeight.Bold, color = Color.White, fontSize = 18.sp)
                 }
+
             }
         }
     )
@@ -137,11 +150,13 @@ fun ReportMedicationDialog(
             onDismiss = { showTimePicker = false }
         )
     }
+
+
+
+
+
+
 }
-
-
-
-
 
 
 

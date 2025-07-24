@@ -15,8 +15,11 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
+import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.Sizes.spacingXs
@@ -35,7 +38,7 @@ fun ActivityItem(text: String, icon: Painter) {
         Text(
             text = text,
             textAlign = TextAlign.Right,
-            fontSize = EXTRA_REGULAR ,
+            fontSize = EXTRA_MEDIUM ,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(spacingSm)
         )
@@ -44,7 +47,7 @@ fun ActivityItem(text: String, icon: Painter) {
             painter = icon,
             contentDescription = null,
             tint = Color.Unspecified,
-            modifier = Modifier.size(iconSizeLg) //need check
+            modifier = Modifier.size(iconSizeXl) //need check
         )
     }
 }
