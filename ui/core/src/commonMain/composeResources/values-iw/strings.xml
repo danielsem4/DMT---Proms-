@@ -23,6 +23,7 @@
     <string name="exit">יציאה</string>
     <string name="continue">המשך</string>
     <string name="start">התחל</string>
+    <string name="search_hint">חפש...</string>
 
     <!--    Errors-->
     <string name="dont_forget">• לא לשכוח לעשות את המבחן</string>
@@ -67,13 +68,17 @@
     <string name="uploading">שולח</string>
     <string name="loading">עולה</string>
     <string name="selected_point">הנקודה שבחרת</string>
+    <string name ="one">1</string>
+    <string name ="two">2</string>
+    <string name ="three">3</string>
+    <string name ="four">4</string>
 
 
     <!--    CDT Module  -->
 
 
     <!--    Hitber Module  -->
-    <string name="entry_hitber_title">HITBER</string>
+    <string name="entry_hitber_title">התבר</string>
     <string name="entry_hitber_note">הערה</string>
     <string name="entry_hitber_instructions1">• המשימה אורכת כ-20 דקות.</string>
     <string name="entry_hitber_instructions2">• יש להשלים את המשימה ברצף, ללא הפסקות.</string>
@@ -166,21 +171,6 @@
     <string name="second_question_hitber_task_retry_instructions">אנא בחר את 5 הצורות שראית לפני מספר שאלות.</string>
     <string name="second_question_hitber_dialog_icon">profile icon</string>
     <string name="second_question_hitber_dialog_understand">הבנתי</string>
-    <string name="second_question_hitber_ellipse">אליפסה</string>
-    <string name="second_question_hitber_rectangle">מלבן</string>
-    <string name="second_question_hitber_pentagon">מחומש</string>
-    <string name="second_question_hitber_star">כוכב</string>
-    <string name="second_question_hitber_hash_tag">סולמית</string>
-    <string name="second_question_hitber_rhomb">מעוין</string>
-    <string name="second_question_hitber_cone">חרוט</string>
-    <string name="second_question_hitber_plus">פלוס</string>
-    <string name="second_question_hitber_hexagon">משושה</string>
-    <string name="second_question_hitber_right_triangle">משולש ישר</string>
-    <string name="second_question_hitber_asterisk">כוכבית</string>
-    <string name="second_question_hitber_check">וי</string>
-    <string name="second_question_hitber_trapezoid">טרפז</string>
-    <string name="second_question_hitber_triangle">משולש</string>
-    <string name="second_question_hitber_close">איקס</string>
 
     <string name="third_question_hitber_title">ריכוז</string>
     <string name="third_question_hitber_instructions">בדקה הקרובה יופיעו במרכז המסך מספרים, בכל פעם שתראה את הספרה 7 עליך ללחוץ על המסך. להתחלת המטלה יש ללחוץ על התחל. בסיום המטלה תופיע ההודעה תודה. לחץ על המשך</string>
@@ -197,6 +187,10 @@
     <string name="fourth_question_hitber_ball">כדור</string>
     <string name="fourth_question_hitber_balloon">בלון</string>
     <string name="fourth_question_hitber_lemon">לימון</string>
+
+    <string name="fifth_question_hitber_title">חזרה על משפט</string>
+    <string name="fifth_question_hitber_speak_button">דבר</string>
+    <string name="fifth_question_hitber_instruction">יש ללחוץ על כפתור ההקשב ולהקשיב למשפט, לאחר מכן יש ללחוץ על כפתור הדבר ולחזור על המשפט הנאמר.</string>
 
     <string name="sixth_question_hitber_title">הבנת הוראות</string>
     <string name="sixth_question_hitber_instructions">בחלק זה תתבקש לבצע מטלה. לשמיעת המטלה לחץ על הקשב. בסיום לחץ על המשך.</string>
@@ -228,10 +222,10 @@
     <string name="eighth_question_word_hitber_dinner">ערב</string>
     <string name="eighth_question_word_hitber_with">עם</string>
     <string name="eighth_question_word_hitber_grandma">סבתא</string>
-    <string name="eighth_question_answer_hitber_version_1">סבתא עם ערב ארוחת אכלתי אתמול</string>
-    <string name="eighth_question_answer_hitber_version_2">ערב ארוחת סבתא עם אכלתי אתמול</string>
-    <string name="eighth_question_answer_hitber_version_3">אתמול ערב ארוחת סבתא עם אכלתי</string>
-    <string name="eighth_question_answer_hitber_version_4">אתמול סבתא עם ערב ארוחת אכלתי</string>
+    <string name="eighth_question_answer_hitber_version_1">אתמול אכלתי ארוחת ערב עם סבתא</string>
+    <string name="eighth_question_answer_hitber_version_2">אתמול אכלתי עם סבתא ארוחת ערב</string>
+    <string name="eighth_question_answer_hitber_version_3">אכלתי עם סבתא ארוחת ערב אתמול</string>
+    <string name="eighth_question_answer_hitber_version_4">אכלתי ארוחת ערב עם סבתא אתמול</string>
 
     <string name="tenth_question_hitber_title">בנה צורה</string>
     <string name="tenth_question_hitber_instructions">עליך להעתיק את התמונה שמוצגת בצד שמאל, למרכז המסך. את התמונה יש להעתיק באמצעות הצורות המופיעות בצד ימין. את הצורות צריך לגרור ולסדר במרכז המסך. בסיום לחץ על המשך</string>

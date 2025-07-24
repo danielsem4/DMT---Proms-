@@ -368,7 +368,6 @@ import dmt_proms.ui.core.generated.resources.pencil
 import dmt_proms.ui.core.generated.resources.pentagon
 import dmt_proms.ui.core.generated.resources.person_names
 import dmt_proms.ui.core.generated.resources.phone
-import dmt_proms.ui.core.generated.resources.phone_number
 import dmt_proms.ui.core.generated.resources.pill
 import dmt_proms.ui.core.generated.resources.place_activities
 import dmt_proms.ui.core.generated.resources.place_instructions_in_calendar_memory
@@ -398,14 +397,49 @@ import dmt_proms.ui.core.generated.resources.rhombus
 import dmt_proms.ui.core.generated.resources.room_title
 import dmt_proms.ui.core.generated.resources.rotate_star
 import dmt_proms.ui.core.generated.resources.ruler
+import dmt_proms.ui.core.generated.resources.remember_all
+import dmt_proms.ui.core.generated.resources.send
+import dmt_proms.ui.core.generated.resources.sent_successfully
+import dmt_proms.ui.core.generated.resources.serialization_error
+import dmt_proms.ui.core.generated.resources.server_error
+import dmt_proms.ui.core.generated.resources.spin_360
+import dmt_proms.ui.core.generated.resources.stand_from_chair
+import dmt_proms.ui.core.generated.resources.star_outlined
+import dmt_proms.ui.core.generated.resources.take_pills
+import dmt_proms.ui.core.generated.resources.too_many_requests
+import dmt_proms.ui.core.generated.resources.trapeze
+import dmt_proms.ui.core.generated.resources.triangle
+import dmt_proms.ui.core.generated.resources.triangle_90
+import dmt_proms.ui.core.generated.resources.talk_to_family
+import dmt_proms.ui.core.generated.resources.unexpected_error
+import dmt_proms.ui.core.generated.resources.uploading
+import dmt_proms.ui.core.generated.resources.vertical_stroke
+import dmt_proms.ui.core.generated.resources.warning
+import dmt_proms.ui.core.generated.resources.use_diary
+import dmt_proms.ui.core.generated.resources.welcome
+import dmt_proms.ui.core.generated.resources.x
+import dmt_proms.ui.core.generated.resources.yoga
+import dmt_proms.ui.core.generated.resources.what_will_you_do
+import dmt_proms.ui.core.generated.resources.task_duration
+import dmt_proms.ui.core.generated.resources.task_continuity
 import dmt_proms.ui.core.generated.resources.salon_block
 import dmt_proms.ui.core.generated.resources.save
+import dmt_proms.ui.core.generated.resources.time
+import dmt_proms.ui.core.generated.resources.select_date_label
+import dmt_proms.ui.core.generated.resources.select_time_label
+import dmt_proms.ui.core.generated.resources.search_hint
+import dmt_proms.ui.core.generated.resources.set_medication_alarm
+import dmt_proms.ui.core.generated.resources.weekly
+import dmt_proms.ui.core.generated.resources.start_date_empty
+import dmt_proms.ui.core.generated.resources.when_notification
+import dmt_proms.ui.core.generated.resources.select_week_days
+import dmt_proms.ui.core.generated.resources.start_time
+import dmt_proms.ui.core.generated.resources.start_date
 import dmt_proms.ui.core.generated.resources.search
 import dmt_proms.ui.core.generated.resources.search_at_latter_h_pass
 import dmt_proms.ui.core.generated.resources.search_contacts_list_in_the_phone_pass
 import dmt_proms.ui.core.generated.resources.search_dentist_number_pass
 import dmt_proms.ui.core.generated.resources.search_for_hana_choen_in_contacts_pass
-import dmt_proms.ui.core.generated.resources.search_hint
 import dmt_proms.ui.core.generated.resources.seasons_instructions_app_trial
 import dmt_proms.ui.core.generated.resources.seasons_instructions_app_trial2
 import dmt_proms.ui.core.generated.resources.sec_question_instraction
@@ -413,40 +447,17 @@ import dmt_proms.ui.core.generated.resources.sec_question_number
 import dmt_proms.ui.core.generated.resources.sec_question_title
 import dmt_proms.ui.core.generated.resources.second_one_minute_end_body_memory
 import dmt_proms.ui.core.generated.resources.second_part_of_test_instructions_pass
-import dmt_proms.ui.core.generated.resources.second_question_hitber_asterisk
-import dmt_proms.ui.core.generated.resources.second_question_hitber_check
-import dmt_proms.ui.core.generated.resources.second_question_hitber_close
-import dmt_proms.ui.core.generated.resources.second_question_hitber_cone
 import dmt_proms.ui.core.generated.resources.second_question_hitber_dialog_icon
 import dmt_proms.ui.core.generated.resources.second_question_hitber_dialog_instructions
 import dmt_proms.ui.core.generated.resources.second_question_hitber_dialog_title
 import dmt_proms.ui.core.generated.resources.second_question_hitber_dialog_understand
-import dmt_proms.ui.core.generated.resources.second_question_hitber_ellipse
-import dmt_proms.ui.core.generated.resources.second_question_hitber_hash_tag
-import dmt_proms.ui.core.generated.resources.second_question_hitber_hexagon
-import dmt_proms.ui.core.generated.resources.second_question_hitber_pentagon
-import dmt_proms.ui.core.generated.resources.second_question_hitber_plus
-import dmt_proms.ui.core.generated.resources.second_question_hitber_rectangle
-import dmt_proms.ui.core.generated.resources.second_question_hitber_rhomb
-import dmt_proms.ui.core.generated.resources.second_question_hitber_right_triangle
-import dmt_proms.ui.core.generated.resources.second_question_hitber_star
 import dmt_proms.ui.core.generated.resources.second_question_hitber_task
 import dmt_proms.ui.core.generated.resources.second_question_hitber_task_instructions
 import dmt_proms.ui.core.generated.resources.second_question_hitber_task_retry_instructions
 import dmt_proms.ui.core.generated.resources.second_question_hitber_title
-import dmt_proms.ui.core.generated.resources.second_question_hitber_trapezoid
-import dmt_proms.ui.core.generated.resources.second_question_hitber_triangle
 import dmt_proms.ui.core.generated.resources.select_date
-import dmt_proms.ui.core.generated.resources.select_date_label
-import dmt_proms.ui.core.generated.resources.select_time_label
-import dmt_proms.ui.core.generated.resources.select_week_days
 import dmt_proms.ui.core.generated.resources.selected_point
-import dmt_proms.ui.core.generated.resources.send
-import dmt_proms.ui.core.generated.resources.sent_successfully
-import dmt_proms.ui.core.generated.resources.serialization_error
-import dmt_proms.ui.core.generated.resources.server_error
 import dmt_proms.ui.core.generated.resources.set_health_rate
-import dmt_proms.ui.core.generated.resources.set_medication_alarm
 import dmt_proms.ui.core.generated.resources.settings
 import dmt_proms.ui.core.generated.resources.seventh_question_hitber_black_circle
 import dmt_proms.ui.core.generated.resources.seventh_question_hitber_blue_circle
@@ -468,14 +479,8 @@ import dmt_proms.ui.core.generated.resources.sixth_question_hitber_table
 import dmt_proms.ui.core.generated.resources.sixth_question_hitber_title
 import dmt_proms.ui.core.generated.resources.sixth_question_hitber_volume_icon
 import dmt_proms.ui.core.generated.resources.speaker
-import dmt_proms.ui.core.generated.resources.spin_360
-import dmt_proms.ui.core.generated.resources.stand_from_chair
-import dmt_proms.ui.core.generated.resources.star_outlined
 import dmt_proms.ui.core.generated.resources.start
 import dmt_proms.ui.core.generated.resources.start_button
-import dmt_proms.ui.core.generated.resources.start_date
-import dmt_proms.ui.core.generated.resources.start_date_empty
-import dmt_proms.ui.core.generated.resources.start_time
 import dmt_proms.ui.core.generated.resources.stethoscope_agenda
 import dmt_proms.ui.core.generated.resources.stethoscope_circle
 import dmt_proms.ui.core.generated.resources.stethoscope_circle_text
@@ -485,10 +490,6 @@ import dmt_proms.ui.core.generated.resources.summary_hitber_instructions1
 import dmt_proms.ui.core.generated.resources.summary_hitber_instructions2
 import dmt_proms.ui.core.generated.resources.summary_hitber_title
 import dmt_proms.ui.core.generated.resources.table
-import dmt_proms.ui.core.generated.resources.take_pills
-import dmt_proms.ui.core.generated.resources.talk_to_family
-import dmt_proms.ui.core.generated.resources.task_continuity
-import dmt_proms.ui.core.generated.resources.task_duration
 import dmt_proms.ui.core.generated.resources.teach_agenda
 import dmt_proms.ui.core.generated.resources.teach_icon
 import dmt_proms.ui.core.generated.resources.tenth_question_hitber_instructions
@@ -507,13 +508,10 @@ import dmt_proms.ui.core.generated.resources.the_rate_is
 import dmt_proms.ui.core.generated.resources.third_question_hitber_finish_task
 import dmt_proms.ui.core.generated.resources.third_question_hitber_instructions
 import dmt_proms.ui.core.generated.resources.third_question_hitber_title
-import dmt_proms.ui.core.generated.resources.time
 import dmt_proms.ui.core.generated.resources.timeMedications
 import dmt_proms.ui.core.generated.resources.time_ended
 import dmt_proms.ui.core.generated.resources.time_ended_for_this_question_memory
-import dmt_proms.ui.core.generated.resources.too_many_requests
 import dmt_proms.ui.core.generated.resources.took
-import dmt_proms.ui.core.generated.resources.trapeze
 import dmt_proms.ui.core.generated.resources.trial_drag_instructions
 import dmt_proms.ui.core.generated.resources.trial_drag_title
 import dmt_proms.ui.core.generated.resources.trial_draw_instructions
@@ -521,16 +519,9 @@ import dmt_proms.ui.core.generated.resources.trial_draw_title
 import dmt_proms.ui.core.generated.resources.trial_end_test_instructions
 import dmt_proms.ui.core.generated.resources.trial_pinch_instructions
 import dmt_proms.ui.core.generated.resources.trial_pinch_title
-import dmt_proms.ui.core.generated.resources.triangle
-import dmt_proms.ui.core.generated.resources.triangle_90
-import dmt_proms.ui.core.generated.resources.unexpected_error
-import dmt_proms.ui.core.generated.resources.uploading
-import dmt_proms.ui.core.generated.resources.use_diary
-import dmt_proms.ui.core.generated.resources.vertical_stroke
 import dmt_proms.ui.core.generated.resources.video
 import dmt_proms.ui.core.generated.resources.vocal_instructions
 import dmt_proms.ui.core.generated.resources.wallet
-import dmt_proms.ui.core.generated.resources.warning
 import dmt_proms.ui.core.generated.resources.weather
 import dmt_proms.ui.core.generated.resources.week_day_f
 import dmt_proms.ui.core.generated.resources.week_day_m
@@ -539,14 +530,10 @@ import dmt_proms.ui.core.generated.resources.week_day_sa
 import dmt_proms.ui.core.generated.resources.week_day_th
 import dmt_proms.ui.core.generated.resources.week_day_tu
 import dmt_proms.ui.core.generated.resources.week_day_w
-import dmt_proms.ui.core.generated.resources.weekly
-import dmt_proms.ui.core.generated.resources.welcome
 import dmt_proms.ui.core.generated.resources.welcome_pass
 import dmt_proms.ui.core.generated.resources.what_do_you_need_to_do_pass
-import dmt_proms.ui.core.generated.resources.what_will_you_do
 import dmt_proms.ui.core.generated.resources.what_you_need_to_do
 import dmt_proms.ui.core.generated.resources.whatsapp
-import dmt_proms.ui.core.generated.resources.when_notification
 import dmt_proms.ui.core.generated.resources.white_messages
 import dmt_proms.ui.core.generated.resources.white_phone
 import dmt_proms.ui.core.generated.resources.white_video
@@ -555,14 +542,20 @@ import dmt_proms.ui.core.generated.resources.wrong_app_second_assist
 import dmt_proms.ui.core.generated.resources.wrong_app_thired_assist
 import dmt_proms.ui.core.generated.resources.wrong_app_title
 import dmt_proms.ui.core.generated.resources.wrong_number_dialed_please_try_again_pass
-import dmt_proms.ui.core.generated.resources.x
 import dmt_proms.ui.core.generated.resources.yes
-import dmt_proms.ui.core.generated.resources.yoga
 import dmt_proms.ui.core.generated.resources.yogurt
+import dmt_proms.ui.core.generated.resources.fifth_question_hitber_instruction
+import dmt_proms.ui.core.generated.resources.fifth_question_hitber_speak_button
+import dmt_proms.ui.core.generated.resources.fifth_question_hitber_title
+import dmt_proms.ui.core.generated.resources.phone_number
 import dmt_proms.ui.core.generated.resources.you_in_the_autumn
 import dmt_proms.ui.core.generated.resources.you_in_the_spring
 import dmt_proms.ui.core.generated.resources.you_in_the_summer
 import dmt_proms.ui.core.generated.resources.you_in_the_winter
+import dmt_proms.ui.core.generated.resources.one
+import dmt_proms.ui.core.generated.resources.two
+import dmt_proms.ui.core.generated.resources.three
+import dmt_proms.ui.core.generated.resources.four
 import dmt_proms.ui.core.generated.resources.Res.string as rs
 
 /**
@@ -890,21 +883,6 @@ object Resources {
             Res.string.second_question_hitber_task_retry_instructions
         val secondQuestionHitberDialogIcon = Res.string.second_question_hitber_dialog_icon
         val secondQuestionHitberUnderstand = Res.string.second_question_hitber_dialog_understand
-        val secondQuestionHitberEllipse = Res.string.second_question_hitber_ellipse
-        val secondQuestionHitberRectangle = Res.string.second_question_hitber_rectangle
-        val secondQuestionHitberPentagon = Res.string.second_question_hitber_pentagon
-        val secondQuestionHitberStar = Res.string.second_question_hitber_star
-        val secondQuestionHitberHashTag = Res.string.second_question_hitber_hash_tag
-        val secondQuestionHitberRhomb = Res.string.second_question_hitber_rhomb
-        val secondQuestionHitberCone = Res.string.second_question_hitber_cone
-        val secondQuestionHitberPlus = Res.string.second_question_hitber_plus
-        val secondQuestionHitberHexagon = Res.string.second_question_hitber_hexagon
-        val secondQuestionHitberRightTriangle = Res.string.second_question_hitber_right_triangle
-        val secondQuestionHitberAsterisk = Res.string.second_question_hitber_asterisk
-        val secondQuestionHitberCheck = Res.string.second_question_hitber_check
-        val secondQuestionHitberTrapezoid = Res.string.second_question_hitber_trapezoid
-        val secondQuestionHitberTriangle = Res.string.second_question_hitber_triangle
-        val secondQuestionHitberClose = Res.string.second_question_hitber_close
 
         val thirdQuestionHitberTitle = Res.string.third_question_hitber_title
         val thirdQuestionHitberInstructions = Res.string.third_question_hitber_instructions
@@ -921,6 +899,10 @@ object Resources {
         val fourthQuestionHitberBall = Res.string.fourth_question_hitber_ball
         val fourthQuestionHitberBalloon = Res.string.fourth_question_hitber_balloon
         val fourthQuestionHitberLemon = Res.string.fourth_question_hitber_lemon
+
+        val fifthQuestionHitberTitle = Res.string.fifth_question_hitber_title
+        val fifthQuestionHitberSpeakButton = Res.string.fifth_question_hitber_speak_button
+        val fifthQuestionHitberInstructions = Res.string.fifth_question_hitber_instruction
 
         val sixthQuestionHitberTitle = Res.string.sixth_question_hitber_title
         val sixthQuestionHitberInstructions = Res.string.sixth_question_hitber_instructions
@@ -949,7 +931,6 @@ object Resources {
 
         val eighthQuestionHitberTitle = Res.string.eighth_question_hitber_title
         val eighthQuestionHitberInstructions = Res.string.eighth_question_hitber_instructions
-        val eighthQuestionHitberCloseIcon = Res.string.eighth_question_hitber_close_icon
         val eighthQuestionHitberWordYesterday = Res.string.eighth_question_word_hitber_yesterday
         val eighthQuestionHitberWordI = Res.string.eighth_question_word_hitber_I
         val eighthQuestionHitberWordHad = Res.string.eighth_question_word_hitber_had
@@ -979,9 +960,6 @@ object Resources {
         val thanksCoffe = Res.string.thanks_coffe
         val fmpt = Res.string.fmpt
         val fmptMeaning = Res.string.fmpt_meaning
-
-        val defaultName = Res.string.default_name
-        val defaultPhone = Res.string.default_phone
 
         val key1 = Res.string.key_1
         val key2 = Res.string.key_2
@@ -1130,6 +1108,11 @@ object Resources {
         val startDate = rs.start_date
         val endDate = rs.end_date
         val leaveEndDateEmpty = rs.leave_end_date_empty
+        val one = rs.one
+        val two = rs.two
+        val three = rs.three
+        val four = rs.four
+
 
         //MemoryTestModule
         val day_sunday = rs.day_sunday

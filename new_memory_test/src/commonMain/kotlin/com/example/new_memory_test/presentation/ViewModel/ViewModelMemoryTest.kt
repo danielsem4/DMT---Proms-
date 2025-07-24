@@ -28,17 +28,21 @@ import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.util.PrefKeys
 import core.util.PrefKeys.clinicId
+import core.util.PrefKeys.userId
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
+import org.example.hit.heal.core.presentation.components.SlotState
 import org.jetbrains.compose.resources.DrawableResource
 import kotlin.collections.ArrayList
 import kotlin.io.println
@@ -59,6 +63,10 @@ class ViewModelMemoryTest(
     val placedItems: List<DataItem> get() = _placedItems.toList()
     private val _initialItemIds = mutableListOf<Int>()
     private var result: MemoryData = MemoryData()
+
+
+    private val _isLoading = MutableStateFlow(false)
+    var isLoading: StateFlow<Boolean> = _isLoading
 
     private val _uploadStatus = MutableStateFlow<Result<Unit>?>(null) // Need check
     private val _memoryTest = MutableStateFlow<Evaluation?>(null)
@@ -96,12 +104,12 @@ class ViewModelMemoryTest(
     var pageNumForImage3 = mutableStateOf<Int?>(null)
     var pageNumForUrl = mutableStateOf<Int?>(null)
 
-
-
+    private val _droppedState = MutableStateFlow<Map<String, SlotState>>(emptyMap())
+    val droppedState = _droppedState.asStateFlow()
     var imagesCounter = mutableStateOf(0)
 
     //roomSize
-    private val _roomSize = MutableStateFlow(Offset.Zero)
+
 
 
     //user raiting
@@ -319,10 +327,10 @@ class ViewModelMemoryTest(
         rawUserRating?.let {
             setSuccessRateAfter(it.toString()) // add rating to userRating
         }
+
         result.successRateAfter = userRating.toList()
         result.date = getCurrentFormattedDateTime()
         result.PhoneCallResult = listOf(callResult)
-
         result.MemoryQuestionPart1 =ArrayList(part1List)
         result.MemoryQuestionPart2=ArrayList(part2List)
         result.MemoryQuestionPart3=ArrayList (part3List)
@@ -334,26 +342,30 @@ class ViewModelMemoryTest(
    //load results
    fun uploadEvaluationResults(
     ){
+       _isLoading.value = true
         uploadScope.launch {
             try {
                 recordInactivity()
-                result.patient_id = storage.get(PrefKeys.userId)!!.toInt()
-                result.clinicId = storage.get(clinicId)!!
+                val clinicId = storage.get(PrefKeys.clinicId)
+                val patientId = storage.get(PrefKeys.userId)?.toIntOrNull()
+                result.patient_id = patientId!!
+                result.clinicId = clinicId!!
+                //println("ClinicId: ${storage.get(clinicId)}; PatientId: ${storage.get(PrefKeys.userId)}")
                 result.measurement = _memoryTest.value?.id ?: 20
                 resultUpload()
 
 
-                val json = Json.encodeToString(MemoryData.serializer(), result)
-
                 val uploadResult = uploadTestResultsUseCase.execute(result, MemoryData.serializer())
                 println("results object: $result")
+
                 uploadResult.onSuccess {
                     println(" העלאה של הכל הצליחה")
+                    _isLoading.value = false
                     _uploadStatus.value = Result.success(Unit)
                    // onSuccess?.invoke()
                 }.onError { error ->
                     println(" שגיאה העלאה: $error")
-
+                    _isLoading.value = false
                     _uploadStatus.value = Result.failure(Exception(error.toString()))
                     //onFailure?.invoke(error)
                 }
@@ -366,56 +378,8 @@ class ViewModelMemoryTest(
         }
     }
 
-    //For all async ( crate coroutine scope for async func and server)
-    private val uploadScope= CoroutineScope(Dispatchers.IO + SupervisorJob())
-    fun uploadImage(
-        bitmap: ImageBitmap,
-        date: String,
-        currentQuestion:Int?,
-    ) {
-        if (bitmap.width <= 1 || bitmap.height <= 1) {
-            println("❌ תמונה לא תקינה")
-            return
-        }
-        val imageByteArray = bitmap.toByteArray()
-        println(" התחלת העלאה, image size: ${imageByteArray.size}")
-        uploadScope.launch {
-                try {
-                    val userId = storage.get(PrefKeys.userId)!!
-                    val clinicId = storage.get(PrefKeys.clinicId)!!
-                    val measurement = _memoryTest.value?.id ?: 20  /// Need to check what a number
 
-                    val imagePath = bitmapToUploadUseCase.buildPath(
-                        clinicId = clinicId,
-                        patientId = userId,
-                        measurementId = measurement,
-                        pathDate = date
-                    )
-                    println(" Path: $imagePath")
-                    val result = uploadImageUseCase.execute(
-                        imagePath = imagePath,
-                        bytes = imageByteArray,
-                        clinicId = clinicId,
-                        userId = userId
-                    )
-                    result.onSuccess {
-                        println(" העלאה הצליחה")
-                        saveUploadedImageUrl(currentQuestion, imagePath, date)
-                        if( imagesCounter.value == 10){
-                            uploadEvaluationResults()
-                        }
 
-                    }.onError {error ->
-                        println("  העלאה לא הצליחה: $error")
-                        _uploadStatus.value = Result.failure(Exception(error.toString()))
-
-                    }
-                } catch (e: Exception) {
-                    println(" שגיאה חריגה: ${e.message}")
-
-                }
-        }
-    }
 
    //Loaded Image with depend on image number and page
     private fun saveUploadedImageUrl(currentQuestion: Int?, uploadedUrl: String, date: String) {
@@ -461,10 +425,63 @@ class ViewModelMemoryTest(
         }
     }
 
+
+
     //Only upload and add  start a part of loading to server(another fun)
+    private val uploadScope= CoroutineScope(Dispatchers.IO + SupervisorJob())
+    fun uploadImage(
+        bitmap: ImageBitmap,
+        date: String,
+        currentQuestion:Int?,
+    ) {
+        if (bitmap.width <= 1 || bitmap.height <= 1) {
+            println("❌ תמונה לא תקינה")
+            return
+        }
+        val imageByteArray = bitmap.toByteArray()
+        println(" התחלת העלאה, image size: ${imageByteArray.size}")
+        uploadScope.launch {
+            try {
+                val userId = storage.get(PrefKeys.userId)!!
+                val clinicId = storage.get(PrefKeys.clinicId)!!
+                val measurement = _memoryTest.value?.id ?: 20  /// Need to check what a number
+
+                val imagePath = bitmapToUploadUseCase.buildPath(
+                    clinicId = clinicId,
+                    patientId = userId,
+                    measurementId = measurement,
+                    pathDate = date
+                )
+                println(" Path: $imagePath")
+                val result = uploadImageUseCase.execute(
+                    imagePath = imagePath,
+                    bytes = imageByteArray,
+                    clinicId = clinicId,
+                    userId = userId
+                )
+                result.onSuccess {
+                    println(" העלאה הצליחה")
+                    saveUploadedImageUrl(currentQuestion, imagePath, date)
+                    if( imagesCounter.value >= 10){
+                        uploadEvaluationResults()
+                    }
+
+                }.onError {error ->
+                    println("  העלאה לא הצליחה: $error")
+                    _uploadStatus.value = Result.failure(Exception(error.toString()))
+
+                }
+            } catch (e: Exception) {
+                println(" שגיאה חריגה: ${e.message}")
+
+            }
+        }
+    }
+
+
     fun uploadAllImages() {
         // Image 1
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             image1.value.forEach { image ->
                 if (image != null) {
                     uploadImage(
@@ -502,7 +519,7 @@ class ViewModelMemoryTest(
                         currentQuestion = pageNumForImage3.value
                     )
                 }
-               // println(" Path3: $image")
+                // println(" Path3: $image")
                 imagesCounter.value++
                 println(" PathUrl: ${imagesCounter.value}")
             }
@@ -518,55 +535,59 @@ class ViewModelMemoryTest(
                     imagesCounter.value++
                     println(" PathUrl: ${imagesCounter.value}")
                 }
-
             }
-
         }
-
-
-
     }
+
+
 
     //reset all variables
     fun reset() {
+        println("Resetting ViewModel state")
         txtMemoryPage = 1
-
         _placedItems.clear()
         _initialItemIds.clear()
-
         result = MemoryData()
+        println("Reset result: $result")
         _uploadStatus.value = null
         _memoryTest.value = null
-
         part1List.clear()
         part2List.clear()
         part3List.clear()
-
         firstRoundItems.clear()
         secondRoundItems.clear()
         thirdRoundItems.clear()
-
         callResult = MeasureObjectBoolean()
         userRating.clear()
-
         agendaMap.value = emptyMap()
-
         image1.value = emptyArray()
         image2.value = emptyArray()
         image3.value = emptyArray()
         imageUrl.value = emptyArray()
-
         timeForImage1.value = null
         timeForImage2.value = null
         timeForImage3.value = null
         timeUrl.value = null
-
         pageNumForImage1.value = null
         pageNumForImage2.value = null
         pageNumForImage3.value = null
         pageNumForUrl.value = null
+        imagesCounter.value = 0
 
+        rawUserRating = null
+        _isLoading.value = false
+        _droppedState.value = emptyMap()
         shuffledItems = null
+    }
+
+    fun updateDroppedState(slotId: String, slotState: SlotState?) {
+        val current = _droppedState.value.toMutableMap()
+        if (slotState == null) {
+            current.remove(slotId)
+        } else {
+            current[slotId] = slotState
+        }
+        _droppedState.value = current
     }
 
 }

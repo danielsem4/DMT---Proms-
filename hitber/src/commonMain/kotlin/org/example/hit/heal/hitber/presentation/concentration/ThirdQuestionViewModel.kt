@@ -22,8 +22,8 @@ class ThirdQuestionViewModel: ViewModel() {
     private var numberAppearedAt: Long  = 0
     private var elapsedTime = 0.0
 
-    private val _number = MutableStateFlow((0..9).random())
-    val number: StateFlow<Int> = _number.asStateFlow()
+    private val _number = MutableStateFlow<Int?>(null)
+    val number: StateFlow<Int?> = _number
 
     private val _isNumberClickable = MutableStateFlow(true)
     val isNumberClickable: StateFlow<Boolean> = _isNumberClickable.asStateFlow()
@@ -49,29 +49,22 @@ class ThirdQuestionViewModel: ViewModel() {
     // Starts the number generation loop, shows new number every 2.5 seconds for 60 seconds total
     fun startRandomNumberGeneration() {
         viewModelScope.launch {
-            val now = Clock.System.now().toEpochMilliseconds()
-            numberAppearedAt = now
-
-            withContext(Dispatchers.Main) {
-                _number.value = (0..9).random()
-                _isNumberClickable.value = true
-            }
 
             while (elapsedTime < 60) {
+                numberAppearedAt = Clock.System.now().toEpochMilliseconds()
+                _number.value = (0..9).random()
+                _isNumberClickable.value = true
+
                 delay(2500)
 
-                val nowLoop = Clock.System.now().toEpochMilliseconds()
-                numberAppearedAt = nowLoop
+                _number.value = null
+                _isNumberClickable.value = false
 
-                withContext(Dispatchers.Main) {
-                    _number.value = (0..9).random()
-                    _isNumberClickable.value = true
-                }
+                delay(500)
 
-                elapsedTime += 2.5
+                elapsedTime += 3
             }
             _isFinished.value = true
         }
     }
-
 }

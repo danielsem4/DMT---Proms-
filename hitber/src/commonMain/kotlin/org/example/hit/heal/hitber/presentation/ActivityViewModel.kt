@@ -34,7 +34,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.serialization.json.Json
 import org.example.hit.heal.hitber.data.model.SeventhQuestionItem
 import org.example.hit.heal.hitber.data.model.SixthQuestionItem
 import org.example.hit.heal.hitber.data.model.TenthQuestionItem
@@ -66,6 +65,8 @@ class ActivityViewModel(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private var isUploadAllImagesFinished = 0
 
     fun saveBitmap1(bitmap: ImageBitmap) {
         _capturedBitmap1.value = bitmap
@@ -130,6 +131,7 @@ class ActivityViewModel(
         }
 
         result.thirdQuestion = ArrayList(thirdQuestionList)
+        println("thirdQuestion: ${result.thirdQuestion}")
     }
 
     fun setFourthQuestion(answers: List<String>, date: String) {
@@ -251,7 +253,6 @@ class ActivityViewModel(
         result.tenthQuestion = ArrayList(tenthQuestionList)
     }
 
-
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     fun loadEvaluation(evaluationName: String) {
@@ -303,6 +304,12 @@ class ActivityViewModel(
 
                 result.onSuccess {
                     saveUploadedImageUrl(currentQuestion, imagePath, date)
+
+                    if (isUploadAllImagesFinished == 3) {
+                        uploadEvaluationResults()
+                        isUploadAllImagesFinished = 0
+                    }
+
                 }.onError { error ->
                     _uploadStatus.value = Result.failure(Exception(error.toString()))
                 }
@@ -344,9 +351,9 @@ class ActivityViewModel(
                     createItem = { TenthQuestionItem(imageUrl = image) },
                     updateItem = { it.copy(imageUrl = image) },
                 )
-                uploadEvaluationResults()
             }
         }
+        isUploadAllImagesFinished++
     }
 
     private fun <T> updateImageInQuestionList(
@@ -362,7 +369,6 @@ class ActivityViewModel(
         }
     }
 
-
     private fun uploadEvaluationResults() {
         uploadScope.launch {
             try {
@@ -371,14 +377,13 @@ class ActivityViewModel(
                 result.measurement = hitBerTest.value?.id ?: 19
                 result.date = getCurrentFormattedDateTime()
 
-
                 val uploadResult = uploadTestResultsUseCase.execute(result, CogData.serializer())
 
                 uploadResult.onSuccess {
                     _uploadStatus.value = Result.success(Unit)
 
                 }.onError { error ->
-                    _uploadStatus.value = Result.failure(Exception(error.toString()))
+                   _uploadStatus.value = Result.failure(Exception(error.toString()))
                 }
 
             } catch (e: Exception) {

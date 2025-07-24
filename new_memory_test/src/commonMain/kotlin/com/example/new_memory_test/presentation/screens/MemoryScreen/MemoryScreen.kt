@@ -26,10 +26,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.components.BulletPointText
-import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import com.example.new_memory_test.presentation.screens.RoomInsructionsScreen.RoomInstructionsScreen
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
@@ -59,6 +57,8 @@ class MemoryScreen : Screen {
         val viewModel: ViewModelMemoryTest = koinViewModel()
         viewModel.reset()
         viewModel.txtMemoryPage =1
+
+
 
 
         //create at evaluetion memory
@@ -127,7 +127,7 @@ class MemoryScreen : Screen {
             })
         }
         RegisterBackHandler(this)
-        {
+        {   viewModel.reset()
             navigator.popUntilRoot()
         }
     }

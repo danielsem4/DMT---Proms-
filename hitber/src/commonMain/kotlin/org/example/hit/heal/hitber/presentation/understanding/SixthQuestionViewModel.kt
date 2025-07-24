@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.example.hit.heal.hitber.presentation.understanding.model.audioList
-import org.example.hit.heal.hitber.utils.isObjectInsideTargetArea
+import org.example.hit.heal.core.presentation.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
 

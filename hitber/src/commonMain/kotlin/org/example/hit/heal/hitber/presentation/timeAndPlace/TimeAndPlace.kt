@@ -44,7 +44,6 @@ class TimeAndPlace : Screen {
             config = ScreenConfig.TabletConfig,
             topRightText = "1/10",
             content = {
-
                 InstructionText(
                     stringResource(firstQuestionHitberInstructions ),
                 )

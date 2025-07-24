@@ -18,10 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Timer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -83,7 +80,7 @@ import org.example.hit.heal.core.presentation.Sizes.widthMd_Lg
 import org.example.hit.heal.core.presentation.Sizes.widthXl
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.components.BaseScreen
-import org.example.hit.heal.core.presentation.components.CustomDialog
+import org.example.hit.heal.core.presentation.components.dialogs.CustomDialog
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
@@ -100,8 +97,9 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         val viewModel: ViewModelMemoryTest = koinViewModel()
         val coroutineScope = rememberCoroutineScope()
 
+        viewModel.txtMemoryPage = pageNumber
         //Dialogs and raiting
-        var showDialog by remember { mutableStateOf(false) }
+
         var showDialogEndTime by remember { mutableStateOf(false) }
         var showInactivityDialog by remember { mutableStateOf(false) }
         var rating by remember { mutableStateOf(0f) }
@@ -115,6 +113,10 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         //Screnschot photo
         var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
         var autoSwitchingRooms by remember { mutableStateOf(false) }
+
+
+        var showDialog by remember { mutableStateOf(false) }
+        var triggerNavigation by remember { mutableStateOf(false) }
 
         //Items
         val allItems : List<Pair<Int, DrawableResource>> = listOf(
@@ -140,7 +142,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         var inactivityCount by remember { mutableStateOf(0) }
         var timeLeft by remember { mutableStateOf(4 * 60) }
 
-  // например
+
         val draggableSize = rememberItemSizePx()
 
 
@@ -244,28 +246,32 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                             4 -> autoSwitchingRooms = true
                             6 -> {
                                 autoSwitchingRooms = true
-                                showDialog = true
+
                             }
                         }
                     }
                 }
             )
         }
+
         //Rating dialog (in the end)
         if (showDialog) {
             RatingDialog(
                 rating = rating,
                 onRatingChanged = { newRating -> rating = newRating },
-                onDismiss = { showDialog = false },
+                onDismiss = {
+                    showDialog = true
+                },
                 onSubmit = {
+                    viewModel.rawUserRating = rating
                     showDialog = false
-                    coroutineScope.launch {
-                        viewModel.rawUserRating = rating
-                        navigator.replace(FinalScreenMemoryTest())
-                    }
+                    navigator.push(FinalScreenMemoryTest())
+
                 }
             )
         }
+
+
 
 
         fun formatTime(seconds: Int): String {
@@ -596,15 +602,8 @@ class RoomsScreens(val pageNumber: Int) : Screen {
             navigator.popUntilRoot()
         }
     }
-    //Here check if  position   inside the room or outside
-   // private fun isWithinRoom(position: Offset, roomPosition: Offset, roomSize: IntSize): Boolean {
-   //     val leftPadding = 40f
-            //     return position.x >= roomPosition.x - leftPadding &&
-   //             position.x <= roomPosition.x + roomSize.width &&
-   //             position.y >= roomPosition.y &&
-   //             position.y <= roomPosition.y + roomSize.height
-                // }
-//
+
+
     fun isObjectInsideTargetArea(
         targetPosition: Offset,
         draggablePosition: Offset,

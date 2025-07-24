@@ -42,6 +42,8 @@ kotlin {
             implementation (libs.navigator.transitions)
             implementation(compose.materialIconsExtended)
             implementation(compose.material3)
+            implementation(libs.compose.dnd)
+
             configurations.getByName("debugImplementation").dependencies.add(
                 libs.androidx.ui.tooling.get()
             )

@@ -10,7 +10,7 @@ import org.example.hit.heal.core.presentation.Resources.String.areYouSure
 import org.example.hit.heal.core.presentation.Resources.String.backConfirmationMessage
 import org.example.hit.heal.core.presentation.Resources.String.no
 import org.example.hit.heal.core.presentation.Resources.String.yes
-import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
+import org.example.hit.heal.core.presentation.components.dialogs.BaseYesNoDialog
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

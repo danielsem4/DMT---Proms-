@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.ObserveLifecycle
@@ -31,6 +32,7 @@ import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.components.SearchBar
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -38,7 +40,6 @@ import presentation.appsDeviceScreen.AppDeviceProgressCache.resetAppDevice
 import presentation.appsDeviceScreen.AppProgressCache.resetWrongApp
 import presentation.components.MessageDialog
 import presentation.contatcts.components.ContactItem
-import presentation.contatcts.components.SearchTextField
 
 class ContactsScreen : Screen {
 
@@ -56,6 +57,7 @@ class ContactsScreen : Screen {
         val nextScreen by viewModel.nextScreen.collectAsState()
         val isNextScreen by viewModel.isNextScreen.collectAsState()
         val isScrolled by viewModel.isScrolled.collectAsState()
+        val keyboardController = LocalSoftwareKeyboardController.current
 
         val correctContact = stringResource(hanaCohen)
         val phoneNumber = stringResource(phoneNumber)
@@ -81,9 +83,12 @@ class ContactsScreen : Screen {
                 ) {
 
                     // Display a searchable list of contacts
-                    SearchTextField(
-                        value = searchQuery,
-                        onValueChange = { viewModel.onSearchQueryChanged(it) }
+                    SearchBar(
+                        searchQuery = searchQuery,
+                        onSearchQueryChanged = { viewModel.onSearchQueryChanged(it) },
+                        onItemClicked = { keyboardController?.hide() },
+                        modifier = Modifier
+                            .fillMaxWidth()
                     )
 
                     Spacer(modifier = Modifier.height(paddingMd))
