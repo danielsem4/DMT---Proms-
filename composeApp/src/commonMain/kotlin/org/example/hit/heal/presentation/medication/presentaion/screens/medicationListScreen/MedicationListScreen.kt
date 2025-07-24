@@ -101,15 +101,21 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    viewModel.chooseMedication(medication)
-                                    if (isReport) {
-                                        selectedMedication = medication
-                                        showDialog = true
-                                        viewModel.setMedicationName(medication.name)
-                                    } else {
-                                        navigator.push(MedicationAlarmScreen(medication))
+                                    try {
+                                        viewModel.chooseMedication(medication)
+                                        if (isReport) {
+                                            selectedMedication = medication
+                                            showDialog = true
+                                            viewModel.setMedicationName(medication.name)
+                                        } else {
+                                            navigator.push(MedicationAlarmScreen(medication))
+                                        }
+                                    } catch (e: Exception) {
+                                        println("Crash on medication click: ${e.message}")
+                                        e.printStackTrace()
                                     }
                                 }
+
                                 .clip(RoundedCornerShape(15.dp))
                                 .height(70.dp),
                             backgroundColor = Color.White,
