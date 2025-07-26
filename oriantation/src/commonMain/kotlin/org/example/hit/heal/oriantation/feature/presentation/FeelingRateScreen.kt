@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -63,6 +65,7 @@ import org.example.hit.heal.core.presentation.Resources.String.vocalInstructions
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
+import org.example.hit.heal.core.presentation.components.RoundedFilledSlider
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -75,7 +78,6 @@ class FeedbackScreen(
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         var progress by remember { mutableStateOf(0f) }
-        var barWidth by remember { mutableStateOf(0f) }
         var isButtonEnabled by remember { mutableStateOf(true) }
 
         val snackbarHostState = remember { SnackbarHostState() }
@@ -136,64 +138,21 @@ class FeedbackScreen(
                         // This will be called when audio playback completes
                         println("Audio playback completed")
 
-
-
                         Spacer(modifier = Modifier.height(100.dp))
 
-                        // Progress bar with numbers, and make it interactive
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 24.dp)
-                        ) {
-                            Text(
-                                text = "0",
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black
-                            )
-                            Box(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(48.dp)
-                                    .padding(horizontal = 8.dp)
-                                    .clip(RoundedCornerShape(16.dp))
-                                    .background(Color.White)
-                                    .border(1.dp, Color.White, RoundedCornerShape(16.dp))
-                                    .pointerInput(Unit) {
-                                        detectTapGestures { offset: Offset ->
-                                            val value = (offset.x / barWidth * 10f)
-                                                .coerceIn(0f, 10f)
-                                            progress = value
-                                        }
-                                    }
-                                    .onSizeChanged { barWidth = it.width.toFloat() }
-                            ) {
-                                if (progress > 0f) {
-                                    Box(
-                                        modifier = Modifier
-                                            .fillMaxHeight()
-                                            .fillMaxWidth(fraction = progress / 10f)
-                                            .clip(RoundedCornerShape(16.dp))
-                                            .background(
-                                                Brush.horizontalGradient(
-                                                    colors = listOf(
-                                                        Color(0xFFB6F055),
-                                                        Color(0xFFFFA726)
-                                                    )
-                                                )
-                                            )
-                                    )
-                                }
+                        // Use RoundedFilledSlider from core
+                        val availableValues = (0..10).map { it.toFloat() }
+                        RoundedFilledSlider(
+                            start = 0f,
+                            end = 10f,
+                            value = progress,
+                            availableValues = availableValues,
+                            startText = "0",
+                            endText = "10",
+                            onValueChanged = { newValue ->
+                                progress = newValue
                             }
-                            Text(
-                                text = "10",
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black
-                            )
-                        }
+                        )
 
                         // Show value and label if progress > 0
                         Spacer(modifier = Modifier.height(15.dp))
@@ -223,7 +182,6 @@ class FeedbackScreen(
                             )
                         }
 
-
                         Spacer(modifier = Modifier.height(16.dp))
 
 //                         Dynamic icon based on progress value
@@ -242,7 +200,7 @@ class FeedbackScreen(
 
                             ),
                             contentDescription = "Pain Icon",
-                            modifier = Modifier.size(100.dp)
+                            modifier = Modifier.size(150.dp)
 
                         )
 
@@ -309,6 +267,7 @@ class FeedbackScreen(
                         snackbarHostState.showSnackbar(successMessage)
                         println("Sent successfully")
                         // Navigate back to home screen after successful upload
+                        navigator?.popUntilRoot()
                     }
                 },
                 onFailure = { error ->

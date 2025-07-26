@@ -24,24 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class OrientationResults(
-    val xDrawing: String = "",
-    val selected_number: String = "",
-    val selected_seasons: String = "",
-    val isTriangleSizeChanged: Boolean = false,
-    val isTriangleDragged: Boolean = false,
-    val healthLevel: String = ""
-)
 
-@Serializable
-data class OrientationRequestBody(
-    val measurement: Int,
-    val patient_id: String,
-    val date: String,
-    val clinicId: Int,
-    val test: OrientationResults
-)
 
 class OrientationTestViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
