@@ -45,12 +45,11 @@ data class OrientationRequestBody(
 
 class OrientationTestViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
-    private val uploadCDTResultsUseCase: UploadTestResultsUseCase,
+    private val uploadResultsUseCase: UploadTestResultsUseCase,
     private val api: AppApi,
     private val storage: Storage,
 ): ViewModel() {
-    var trialData by mutableStateOf(TrialData())
-        private set
+    private var trialData by mutableStateOf(TrialData())
     var drawnShape: ByteArray? = null
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -108,25 +107,14 @@ class OrientationTestViewModel(
                 uploadImageUseCase.execute(imagePath, drawnShape!!, clinicId, userId)
                     .onSuccess {
                         println("Successfully uploaded Image")
+                        // Set trialData fields before upload
+                        trialData.measurement = measurement
+                        trialData.patientId = userId.toIntOrNull() ?: 0
+                        trialData.date = date
+                        trialData.clinicId = clinicId ?: 0
+                        trialData.response.xDrawing.value = imagePath
 
-                        val results = OrientationResults(
-                            xDrawing = imagePath,
-                            selected_number = trialData.response.selectedNumber.value ,
-                            selected_seasons = trialData.response.selectedSeasons.value.firstOrNull() ?: "",
-                            isTriangleSizeChanged = trialData.response.isTriangleSizeChanged.value,
-                            isTriangleDragged = trialData.response.isTriangleDragged.value,
-                            healthLevel = trialData.response.healthLevel.value
-                        )
-
-                        val body = OrientationRequestBody(
-                            measurement = measurement,
-                            patient_id = userId,
-                            date = date,
-                            clinicId = clinicId,
-                            test = results
-                        )
-
-                        uploadCDTResultsUseCase.execute(body, OrientationRequestBody.serializer())
+                        uploadResultsUseCase.execute(trialData, TrialData.serializer())
                             .onSuccess {
                                 withContext(Dispatchers.Main) {
                                     onSuccess?.invoke()
