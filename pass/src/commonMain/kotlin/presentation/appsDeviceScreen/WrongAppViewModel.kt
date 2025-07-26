@@ -14,6 +14,11 @@ import org.example.hit.heal.core.presentation.Resources.String.whatDoYouNeedToDo
 import org.example.hit.heal.core.presentation.Resources.String.whatYouNeedToDo
 import org.example.hit.heal.core.presentation.Resources.String.wrongAppSecondAssist
 import org.example.hit.heal.core.presentation.Resources.String.wrongAppThirdAssist
+import presentation.appsDeviceScreen.AppDeviceProgressCache.resetAppDevice
+import presentation.appsDeviceScreen.AppProgressCache.didNothing
+import presentation.appsDeviceScreen.AppProgressCache.didNothingSecondTime
+import presentation.appsDeviceScreen.AppProgressCache.isSecondTimeWrongApp
+import presentation.appsDeviceScreen.AppProgressCache.resetWrongApp
 import utils.CountdownDialogHandler
 
 class WrongAppViewModel(
@@ -31,12 +36,9 @@ class WrongAppViewModel(
 
     private var reminderJob: Job? = null
 
-    private var didNothing = 0
-    private var didNothingSecondTime = 0
-    private var isSecondTimeWrongApp = false
-
     val isPlaying = playAudioUseCase.isPlaying
 
+    // Starts an inactivity timer – triggers a reminder after 15 seconds of no user interaction.
     fun startCheckingIfUserDidSomething() {
         reminderJob?.cancel()
 
@@ -48,7 +50,7 @@ class WrongAppViewModel(
         }
     }
 
-
+    // Display the dialogs with the correct message and audio
     private fun getReminderDidNothingText() {
         val didNothingCount = if (isSecondTimeWrongApp) ++didNothingSecondTime else ++didNothing
 
@@ -77,13 +79,17 @@ class WrongAppViewModel(
     fun onPlayAudioRequested(audioText: String) {
         viewModelScope.launch {
             playAudioUseCase.playAudio(audioText)
-        }    }
+        }
+    }
 
+    // close dialog and restarts the 15-second timer
     fun hideReminderDialog() {
         countdownDialogHandler.hideDialog()
         startCheckingIfUserDidSomething()
     }
 
+
+    // Marks that this is the second time the user selected the wrong app
     fun setSecondTimeWrongApp() {
         isSecondTimeWrongApp = true
     }
@@ -93,18 +99,14 @@ class WrongAppViewModel(
     }
 
     fun stopAll() {
-        println("didNothing: $didNothing")
-        println("didNothingSecondTime: $didNothingSecondTime")
         playAudioUseCase.stopAudio()
         countdownDialogHandler.hideDialog()
         reminderJob?.cancel()
         reminderJob = null
     }
 
-    fun resetAppProgress() {
-        didNothing = 0
-        didNothingSecondTime = 0
-        isSecondTimeWrongApp = false
+    fun resetAll() {
+        resetAppDevice()
+        resetWrongApp()
     }
-
 }

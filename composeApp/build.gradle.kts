@@ -33,19 +33,21 @@ kotlin {
         val desktopMain by getting
 
         androidMain.dependencies {
-            implementation(compose.preview)
+            // Pin ALL androidx.compose.* to the version that matches Compose MP 1.8.2
+            implementation(platform("androidx.compose:compose-bom:2025.07.00"))
+
+            implementation("androidx.compose.ui:ui-tooling")
+            implementation("androidx.compose.runtime:runtime-livedata")
+
             implementation(libs.androidx.activity.compose)
-            implementation(libs.koin.compose)
-            implementation(libs.kmp.capturable.compose)
-            // Koin dependencies
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
 
-            // Ktor dependencies
             implementation(libs.ktor.client.okhttp)
 
         }
         commonMain.dependencies {
+            // internal feature modules
             implementation(projects.hitber)
             implementation(projects.ui.core)
             implementation(projects.core)
@@ -54,78 +56,45 @@ kotlin {
             implementation(projects.pass)
             implementation(projects.newMemoryTest)
 
+            // Kotlin
             implementation(libs.kotlinx.coroutines.core)
-
             implementation(libs.kotlinx.serialization)
             implementation(libs.kotlinx.datetime)
-            implementation(compose.material3)
 
-
+            // Compose multiplatform (org.jetbrains.compose.* comes from the plugin)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
-            implementation(compose.ui)
+            implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
 
-            // Voyager Navigator
+            // DI + navigation + images
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.transitions)
             implementation(libs.voyager.tabNavigator)
-            // Basic Navigation
-
-//            implementation (libs.navigator)
-//            implementation (libs.navigator.tabs)
-//            implementation (libs.navigator.transitions)
-
-            // Koin dependencies
-            api(libs.koin.core)
-            implementation(libs.bundles.koin.compose)
-            implementation(libs.lifecycle.viewmodel)
-
-            implementation(compose.materialIconsExtended)
-            implementation(libs.font.awesome)
-            implementation(libs.navigation.compose)
-            implementation(libs.kotlinx.serialization) // for data serialization
-            implementation(compose.materialIconsExtended)
-            implementation(libs.font.awesome)
-            implementation(libs.datastore.preferences)
-            implementation(libs.datastore)
-            implementation(libs.kmp.date.time.picker)
-            implementation(libs.voyager.tabNavigator)
-            implementation(libs.bundles.ktor)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-
 
             implementation(libs.coil.compose)
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
-           // implementation(libs.voyager.navigator.v110beta02)
-            //implementation(libs.voyager.transitions.v110beta02)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.serialization.json)
-            implementation(libs.kotlinx.serialization)
+            implementation(libs.font.awesome)
 
-            //implementation("io.github.moonggae:kmedia:0.0.3")
+            // Networking
+            implementation(libs.bundles.ktor)
 
-
-
+            implementation(libs.kmp.date.time.picker)
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
-            implementation(libs.kmp.capturable.compose)
 
         }
 
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
-            implementation(compose.desktop.common)
             implementation(libs.ktor.client.okhttp)
         }
     }

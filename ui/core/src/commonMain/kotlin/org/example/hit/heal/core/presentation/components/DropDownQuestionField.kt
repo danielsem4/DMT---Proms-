@@ -40,7 +40,7 @@ data class DropDownItem(val text: String)
 
 @Composable
 fun DropDownQuestionField(
-    question: String,
+    question: String?,
     dropDownItems: List<DropDownItem>,
     modifier: Modifier = Modifier,
     onItemClick: (DropDownItem) -> Unit
@@ -61,14 +61,16 @@ fun DropDownQuestionField(
         val dropdownWidth = maxWidth
 
         if (shouldFloatLabel) {
-            Text(
-                text = question,
-                color = if (expanded) primaryColor else Color.Gray,
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(start = paddingSm, bottom = paddingSm),
-                style = MaterialTheme.typography.caption
-            )
+            if (question != null) {
+                Text(
+                    text = question,
+                    color = if (expanded) primaryColor else Color.Gray,
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(start = paddingSm, bottom = paddingSm),
+                    style = MaterialTheme.typography.caption
+                )
+            }
         }
 
         Box(
@@ -80,7 +82,7 @@ fun DropDownQuestionField(
                 .padding(horizontal = paddingMd)
         ) {
             Text(
-                text = if (selectedText.isNotEmpty() || shouldFloatLabel.not()) selectedText.ifEmpty { question } else "",
+                text = if (selectedText.isNotEmpty() || shouldFloatLabel.not()) selectedText.ifEmpty { question.orEmpty() } else "",
                 color = if (selectedText.isNotEmpty() || shouldFloatLabel) Color.Black else Color.Gray,
                 modifier = Modifier.align(Alignment.CenterStart)
             )

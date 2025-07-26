@@ -12,10 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material.Icon
+
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ThumbUp
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -31,23 +30,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.components.CircleWithPipeImage
-import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
-import com.example.new_memory_test.presentation.screens.BaseTabletScreen
+
+
 import com.example.new_memory_test.presentation.screens.CallScreen.effects.RipplePulseEffect
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.example.hit.heal.core.presentation.Resources
-import org.example.hit.heal.core.presentation.Resources.String.audioMemory
+
 import org.example.hit.heal.core.presentation.Resources.String.old_phone_ring
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.widthMd
 import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.components.dialogs.CustomDialog
 import org.example.hit.heal.core.presentation.primaryColor
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -76,46 +84,48 @@ class CallScreen(val pageNumber: Int )  : Screen {
 
         //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
-        BaseTabletScreen(title = stringResource(Resources.String.incoming_call_title), page = pageNumber, totalPages = 6) {
+        BaseScreen(title = stringResource(Resources.String.incoming_call_title),  config = ScreenConfig.TabletConfig,  topRightText = "$pageNumber/6", content =
+
+           {
 
             Column(
                 modifier = Modifier.Companion
                     .background(color = backgroundColor)
-                    .padding(16.dp),
+                    .padding(paddingMd),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.Companion.CenterHorizontally
             ) {
                 Text(
                     text = stringResource(Resources.String.incoming_call_text),
-                    fontSize = 32.sp,
+                    fontSize = LARGE ,
                     color = primaryColor,
                     fontWeight = FontWeight.Companion.Bold,
                     modifier = Modifier.Companion
 
                         .wrapContentHeight()
-                        .padding(16.dp),
+                        .padding(paddingMd),
                     textAlign = TextAlign.Companion.Center
                 )
 
                 Text(
                     text = stringResource(Resources.String.call_from),
-                    fontSize = 24.sp,
+                    fontSize = EXTRA_MEDIUM_LARGE,
                     color = primaryColor,
                     fontWeight = FontWeight.Companion.Bold,
                     modifier = Modifier.Companion
                         .wrapContentHeight()
-                        .padding(16.dp),
+                        .padding(paddingMd),
                     textAlign = TextAlign.Companion.Center
                 )
 
                 Text(
                     text = stringResource(Resources.String.phone_number),
-                    fontSize = 24.sp,
+                    fontSize =EXTRA_MEDIUM_LARGE,
                     color = primaryColor,
                     fontWeight = FontWeight.Companion.Bold,
                     modifier = Modifier.Companion
                         .wrapContentHeight()
-                        .padding(24.dp),
+                        .padding(paddingLg),
                     textAlign = TextAlign.Companion.Center
                 )
 
@@ -123,15 +133,15 @@ class CallScreen(val pageNumber: Int )  : Screen {
                     modifier = Modifier.Companion
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .padding(24.dp),
+                        .padding(paddingLg),
                     horizontalArrangement = Arrangement.spacedBy(
-                        16.dp,
+                        spacingMd,
                         Alignment.Companion.CenterHorizontally
                     ),
                     verticalAlignment = Alignment.Companion.CenterVertically
                 ) {
                     Box(
-                        modifier = Modifier.Companion.size(120.dp),
+                        modifier = Modifier.Companion.size(widthMd),
                         contentAlignment = Alignment.Companion.Center
                     ) {
 
@@ -153,7 +163,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
                     }
                     Spacer(modifier = Modifier.Companion.width(200.dp))
                     Box(
-                        modifier = Modifier.Companion.size(120.dp),
+                        modifier = Modifier.Companion.size(widthMd ),
                         contentAlignment = Alignment.Companion.Center
                     ) {
 
@@ -175,31 +185,26 @@ class CallScreen(val pageNumber: Int )  : Screen {
                     }
                 }
             }
-        }
+        })
 
             //Dialog after accept
-        if (showAcceptDialog) {
-            CustomDialog(
-                onDismiss = { showAcceptDialog = false },
-                icon = {
-                    Icon(
-                        Icons.Default.ThumbUp,
-                        contentDescription = null,
-                        tint = Color.Companion.White,
-                        modifier = Modifier.Companion.size(40.dp)
+            if (showAcceptDialog) {
+                CustomDialog(
+                    onDismiss = { showAcceptDialog = false },
+                    icon = Resources.Icon.callAccept,
+                    title = stringResource(Resources.String.thank_you_title),
+                    text = "",
+                    description = stringResource(Resources.String.thank_you_description),
+                    buttons = listOf(
+                        stringResource(Resources.String.next) to {
+                            showAcceptDialog = false
+                            viewModel.setPage(viewModel.txtMemoryPage + 1)
+                            navigator.push(RoomsScreens(pageNumber = 4))
+                        }
                     )
-                },
-                title = stringResource(Resources.String.thank_you_title),
-                description = stringResource(Resources.String.thank_you_description),
-                buttons = listOf(
-                    stringResource(Resources.String.next) to {
-                        showAcceptDialog = false
-                        viewModel.setPage(viewModel.txtMemoryPage + 1)
-                        navigator.push(RoomsScreens(pageNumber = 4))
-                    }
                 )
-            )
-        }
+            }
+
         RegisterBackHandler(this)
         {
             navigator.popUntilRoot()

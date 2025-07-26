@@ -34,7 +34,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes.heightMd_Lg
+import org.example.hit.heal.core.presentation.Sizes.heightSm
+import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.Sizes.radiusLg
+import org.example.hit.heal.core.presentation.Sizes.spacing4Xl
+import org.example.hit.heal.core.presentation.Sizes.spacingLg
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingXl
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 
@@ -48,9 +58,6 @@ fun RatingDialog(
     onDismiss: () -> Unit,
     onSubmit: () -> Unit
 ) {
-
-    // Set the layout direction to RTL (Right-to-Left)
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
     Dialog(onDismissRequest = onDismiss) {
         Box(
             modifier = Modifier
@@ -59,54 +66,43 @@ fun RatingDialog(
         ) {
             Column(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(radiusLg))
                     .background(Color.White)
             ) {
+                // Заголовок и рейтинг
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(80.dp)
+                        .height(heightMd_Lg)
                         .background(
                             color = primaryColor,
-                            shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                            shape = RoundedCornerShape(topStart = spacingMd, topEnd = spacingMd)
                         ),
                     contentAlignment = Alignment.BottomCenter
                 ) {
-
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(80.dp)
-                            .background(
-                                color = primaryColor,
-                                shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
-                            ),
-                        contentAlignment = Alignment.BottomCenter
+                            .offset(y = spacingLg)
+                            .size(spacing4Xl)
+                            .clip(CircleShape)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
                     ) {
-
-                        Box(
-                            modifier = Modifier
-                                .offset(y = 24.dp)
-                                .size(64.dp)
-                                .clip(CircleShape)
-                                .background(Color.White),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = rating.toString(),
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
+                        Text(
+                            text = rating.toString(),
+                            fontSize = EXTRA_MEDIUM_LARGE,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
-                Spacer(modifier = Modifier.height(40.dp))
+
+                Spacer(modifier = Modifier.height(spacingXl))
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = paddingMd)
                 ) {
                     Text(
                         text = stringResource(Resources.String.place_rate_memory),
@@ -118,40 +114,41 @@ fun RatingDialog(
                         fontSize = EXTRA_MEDIUM,
                         color = Color.Gray
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
 
-                    //Icons of starts
+                    Spacer(modifier = Modifier.height(paddingMd))
+
+                    // Звёздочки
                     Row(horizontalArrangement = Arrangement.Center) {
-                        for (i in 1..5) {
+                        (1..5).forEach { i ->
                             val icon = when {
                                 rating >= i -> Icons.Filled.Star
                                 rating >= i - 0.5f -> Icons.Filled.StarHalf
                                 else -> Icons.Outlined.Star
                             }
+
                             Icon(
                                 imageVector = icon,
                                 contentDescription = null,
                                 modifier = Modifier
-                                    .size(32.dp)
+                                    .size(iconSizeLg)
                                     .clickable {
-                                        val newRating =
-                                            if (rating == i.toFloat()) i - 0.5f else i.toFloat()
+                                        val newRating = if (rating == i.toFloat()) i - 0.5f else i.toFloat()
                                         onRatingChanged(newRating.coerceIn(0f, 5f))
                                     },
                                 tint = if (rating >= i - 0.5f) primaryColor else Color.LightGray
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Spacer(modifier = Modifier.height(spacingLg))
+
                     Button(
-                        onClick = {
-                            onSubmit()
-                        },
+                        onClick = onSubmit,
                         shape = RoundedCornerShape(50),
                         colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                         modifier = Modifier
                             .fillMaxWidth(0.3f)
-                            .height(40.dp)
+                            .height(heightSm)
                     ) {
                         Text(
                             text = stringResource(Resources.String.rate),
@@ -161,12 +158,9 @@ fun RatingDialog(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(spacingMd))
                 }
             }
         }
-
-        }
     }
 }
-

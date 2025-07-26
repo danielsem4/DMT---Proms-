@@ -6,7 +6,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -22,16 +21,16 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,7 +44,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -62,20 +60,22 @@ import org.example.hit.heal.core.presentation.Green
 import org.example.hit.heal.core.presentation.Red
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Resources.String.logout
+import org.example.hit.heal.core.presentation.Resources.String.logoutConfirmation
+import org.example.hit.heal.core.presentation.Resources.String.no
+import org.example.hit.heal.core.presentation.Resources.String.yes
 import org.example.hit.heal.core.presentation.Sizes.elevationMd
-import org.example.hit.heal.core.presentation.Sizes.elevationSm
-import org.example.hit.heal.core.presentation.Sizes.iconSizeLg
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
-import org.example.hit.heal.core.presentation.Sizes.radiusLg
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingSm
+import org.example.hit.heal.core.presentation.TextPrimary
 import org.example.hit.heal.core.presentation.TextWhite
 import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.components.BaseScreen
-import org.example.hit.heal.core.presentation.components.BaseYesNoDialog
+import org.example.hit.heal.core.presentation.components.dialogs.BaseYesNoDialog
+import org.example.hit.heal.core.presentation.components.cards.SimpleIconCard
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.entry.HitBerEntryScreen
 import org.example.hit.heal.oriantation.feature.presentation.OriantationWelcomeScreen
@@ -86,10 +86,7 @@ import org.example.hit.heal.presentation.medication.presentaion.screens.mainMedi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-
-/**
- *
- */
+import presentation.entryScreen.PassEntryScreen
 
 class HomeScreen : Screen {
     @Composable
@@ -101,15 +98,9 @@ class HomeScreen : Screen {
         val scope = rememberCoroutineScope()
         val isLoading by viewModel.isLoading.collectAsState()
 
-
         LaunchedEffect(Unit) {
             viewModel.loadFeatures()
         }
-
-        LaunchedEffect(features) {
-            println("All features: ${features.toString().replace(",","\n")}")
-        }
-
 
         BaseScreen(
             title = stringResource(Resources.String.home),
@@ -126,6 +117,8 @@ class HomeScreen : Screen {
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val minMsgHeight = maxHeight / 2
+                val isPhone = maxWidth < 600.dp
+                val columns = if (isPhone) 2 else 4
 
                 Column(Modifier.fillMaxSize()) {
                     MessagesSection(
@@ -137,14 +130,14 @@ class HomeScreen : Screen {
                         Text(
                             stringResource(Resources.String.dont_forget),
                             fontSize = MEDIUM,
-                            color = MaterialTheme.colors.onSurface,
+                            color = TextPrimary,
                             modifier = Modifier.padding(bottom = paddingSm)
                         )
                         Spacer(Modifier.height(spacingSm))
                         Text(
                             stringResource(Resources.String.take_pills),
                             fontSize = MEDIUM,
-                            color = MaterialTheme.colors.onSurface,
+                            color = TextPrimary,
                             modifier = Modifier.padding(bottom = paddingSm)
                         )
                     }
@@ -169,7 +162,7 @@ class HomeScreen : Screen {
                         }
                     } else {
                         LazyVerticalGrid(
-                            columns = GridCells.FixedSize(200.dp),
+                            columns = GridCells.Fixed(columns), // Use the dynamic columns
                             contentPadding = PaddingValues(vertical = paddingMd),
                             horizontalArrangement = Arrangement.spacedBy(paddingMd),
                             verticalArrangement = Arrangement.spacedBy(paddingMd),
@@ -195,8 +188,8 @@ class HomeScreen : Screen {
                 onDismissRequest = { showDialog = false },
                 title = stringResource(logout),
                 icon = Resources.Icon.logoutIcon,
-                message = "Are you sure you want to logout?",
-                confirmButtonText = "Yes",
+                message = stringResource(logoutConfirmation),
+                confirmButtonText = stringResource(yes),
                 confirmButtonColor = Green,
                 onConfirm = {
 
@@ -206,7 +199,7 @@ class HomeScreen : Screen {
                         navigator.replace(LoginScreen())
                     }
                 },
-                dismissButtonText = "No",
+                dismissButtonText = stringResource(no),
                 dismissButtonColor = Red,
                 onDismissButtonClick = { showDialog = false }
             )
@@ -220,9 +213,9 @@ class HomeScreen : Screen {
     ) {
         Card(
             shape = RoundedCornerShape(radiusMd),
-            elevation = elevationMd,
-            backgroundColor = MaterialTheme.colors.surface,
-            modifier = modifier
+            elevation = CardDefaults.cardElevation(elevationMd),
+            modifier = modifier,
+            colors =  CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
         ) {
             Column {
                 // Header chip
@@ -233,7 +226,7 @@ class HomeScreen : Screen {
                 ) {
                     Text(
                         text = stringResource(Resources.String.messages),
-                        style = MaterialTheme.typography.subtitle1,
+                        style = MaterialTheme.typography.titleMedium,
                         fontSize = EXTRA_MEDIUM,
                         color = TextWhite,
                         modifier = Modifier
@@ -248,47 +241,6 @@ class HomeScreen : Screen {
                 ) {
                     content()
                 }
-            }
-        }
-    }
-
-    @Composable
-    private fun FeatureTile(
-        feature: ModulesResponse,
-        onClick: () -> Unit
-    ) {
-        Card(
-            shape = RoundedCornerShape(radiusLg),
-            elevation = elevationSm,
-            modifier = Modifier
-                .clickable { onClick() }
-                .fillMaxWidth()
-                .wrapContentWidth()
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(paddingMd)
-                    .fillMaxWidth()
-                    .wrapContentWidth(), // also let Column adjust
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    painter = painterResource(iconFor(feature.module_name)),
-                    contentDescription = null,
-                    modifier = Modifier.size(iconSizeLg),
-                    tint = primaryColor
-                )
-                Spacer(Modifier.height(spacingSm))
-                Text(
-                    text = labelFor(feature.module_name),
-                    fontSize = MEDIUM,
-                    color = MaterialTheme.colors.onSurface,
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    overflow = TextOverflow.Visible,
-                    modifier = Modifier
-                )
             }
         }
     }
@@ -309,7 +261,20 @@ class HomeScreen : Screen {
             enter = fadeIn() + scaleIn(),
             exit = fadeOut() + scaleOut()
         ) {
-            FeatureTile(feature, onClick)
+            SimpleIconCard(
+                title = feature.module_name,
+                icon = {
+                    Icon(
+                        painter = painterResource(iconFor(feature.module_name)),
+                        contentDescription = feature.module_name,
+                        modifier = Modifier
+                            .size(48.dp)
+                            .padding(end = paddingSm),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                },
+                onClick = onClick
+            )
         }
     }
 
@@ -323,6 +288,7 @@ class HomeScreen : Screen {
             "orientation" -> navigator.push(OriantationWelcomeScreen())
             "memory" -> navigator.push(MemoryScreen())
             "medications" -> navigator.push(MainMedicationScreen())
+            "pass" -> navigator.push(PassEntryScreen())
             else -> {  }
         }
     }
@@ -339,6 +305,7 @@ class HomeScreen : Screen {
         "hitber" -> Resources.Icon.hitbearModuleIcon
         "cdt" -> Resources.Icon.clockIcon
         "orientation" -> Resources.Icon.memoryModuleIcon
+        "pass" -> Resources.Icon.hitbearModuleIcon
         else -> Resources.Icon.binIcon
     }
 
@@ -353,6 +320,7 @@ class HomeScreen : Screen {
         "hitber" -> stringResource(Resources.String.hitber)
         "cdt" -> stringResource(Resources.String.clockTest)
         "orientation" -> "Orientation"
+        "pass" -> stringResource(Resources.String.pass)
         else -> moduleName
     }
 }

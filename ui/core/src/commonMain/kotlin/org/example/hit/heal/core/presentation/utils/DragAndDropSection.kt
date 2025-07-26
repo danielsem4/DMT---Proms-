@@ -1,6 +1,11 @@
-package org.example.hit.heal.hitber.utils
+package org.example.hit.heal.core.presentation.utils
 
 import androidx.compose.ui.geometry.Offset
+
+/**
+ * Determines if a draggable object, which can be either circular or rectangular, is entirely within a specified target area.
+ * Takes into account the size and position of both objects, as well as an optional threshold margin around the target.
+ */
 
 fun isObjectInsideTargetArea(
     targetPosition: Offset,

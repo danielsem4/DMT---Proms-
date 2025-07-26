@@ -38,9 +38,7 @@ import org.example.hit.heal.core.presentation.Resources.String.next
 import org.example.hit.heal.core.presentation.Resources.String.thePassTest
 import org.example.hit.heal.core.presentation.Resources.String.welcomePass
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
-import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
-import org.example.hit.heal.core.presentation.Sizes.paddingXl
 import org.example.hit.heal.core.presentation.Sizes.paddingXs
 import org.example.hit.heal.core.presentation.Sizes.radiusMd
 import org.example.hit.heal.core.presentation.Sizes.spacingLg
@@ -68,6 +66,8 @@ class PassEntryScreen : Screen {
             title = stringResource(welcomePass),
             config = ScreenConfig.TabletConfig,
             content = {
+
+                // Animated visualization when audio is playing
                 AudioPlayingAnimation(isPlaying = isPlaying)
 
                 Spacer(modifier = Modifier.height(paddingLg))
@@ -145,16 +145,12 @@ class PassEntryScreen : Screen {
             }
         )
 
-        ObserveLifecycle(
-            onStop = {
-                viewModel.stopAudio()
-            },
-            onStart = {
-                viewModel.onPlayAudioRequested(audioString)
-            }
-        )
+        // Lifecycle observers to stop/play internal timers or checks
+        LaunchedEffect(Unit) {
+            viewModel.onPlayAudioRequested(audioString)
+        }
 
-
+        // Shows a subtle dark overlay when audio is playing
         if (isOverlayVisible) {
             Box(
                 modifier = Modifier
@@ -170,7 +166,7 @@ class PassEntryScreen : Screen {
         }
 
         RegisterBackHandler(this) {
-            navigator?.popUntilRoot()
+            navigator?.pop()
         }
     }
 }

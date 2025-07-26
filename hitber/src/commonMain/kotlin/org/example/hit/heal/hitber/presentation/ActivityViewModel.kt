@@ -1,8 +1,5 @@
 package org.example.hit.heal.hitber.presentation
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -37,7 +34,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.serialization.json.Json
 import org.example.hit.heal.hitber.data.model.SeventhQuestionItem
 import org.example.hit.heal.hitber.data.model.SixthQuestionItem
 import org.example.hit.heal.hitber.data.model.TenthQuestionItem
@@ -58,7 +54,6 @@ class ActivityViewModel(
     private val _hitBerTest = MutableStateFlow<Evaluation?>(null)
     val hitBerTest: StateFlow<Evaluation?> = _hitBerTest.asStateFlow()
 
-
     private val _capturedBitmap1 = MutableStateFlow<ImageBitmap?>(null)
     val capturedBitmap1: StateFlow<ImageBitmap?> = _capturedBitmap1.asStateFlow()
 
@@ -70,6 +65,8 @@ class ActivityViewModel(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private var isUploadAllImagesFinished = 0
 
     fun saveBitmap1(bitmap: ImageBitmap) {
         _capturedBitmap1.value = bitmap
@@ -83,10 +80,8 @@ class ActivityViewModel(
         _capturedBitmap3.value = bitmap
     }
 
-
     fun setFirstQuestion(firstQuestion: FirstQuestion) {
         result.firstQuestion = firstQuestion
-        println("FirstQuestion answer: (${result.firstQuestion})")
     }
 
     fun setSecondQuestion(
@@ -111,7 +106,6 @@ class ActivityViewModel(
         }
 
         result.secondQuestion = ArrayList(secondQuestionList)
-        println("FirstQuestion answer: (${result.secondQuestion})")
     }
 
     fun setThirdQuestion(thirdQuestionAnswers: MutableList<Pair<Int, Int>>, date: String) {
@@ -137,7 +131,7 @@ class ActivityViewModel(
         }
 
         result.thirdQuestion = ArrayList(thirdQuestionList)
-        println("thirdQuestion answer: (${result.thirdQuestion})")
+        println("thirdQuestion: ${result.thirdQuestion}")
     }
 
     fun setFourthQuestion(answers: List<String>, date: String) {
@@ -151,7 +145,6 @@ class ActivityViewModel(
         }
 
         result.fourthQuestion = ArrayList(measureObjects)
-        println("FourthQuestion answer: (${result.fourthQuestion})")
     }
 
     fun setSixthQuestion(
@@ -179,7 +172,6 @@ class ActivityViewModel(
         )
 
         result.sixthQuestion = arrayListOf(sixthQuestionItem)
-        println("FirstQuestion answer: (${result.sixthQuestion})")
     }
 
     fun setSeventhQuestion(answer: Boolean, date: String) {
@@ -193,7 +185,6 @@ class ActivityViewModel(
         )
 
         result.seventhQuestion = arrayListOf(seventhQuestionItem)
-        println("FirstQuestion answer: (${result.seventhQuestion})")
     }
 
     fun setEighthQuestion(
@@ -210,7 +201,6 @@ class ActivityViewModel(
         )
 
         result.eighthQuestion = arrayListOf(eighthQuestionItem)
-        println("FirstQuestion answer: (${result.eighthQuestion})")
     }
 
     fun setNinthQuestion(
@@ -235,7 +225,6 @@ class ActivityViewModel(
         }
 
         result.ninthQuestion = ArrayList(ninthQuestionList)
-        println("FirstQuestion answer: (${result.ninthQuestion})")
     }
 
 
@@ -262,9 +251,7 @@ class ActivityViewModel(
         }
 
         result.tenthQuestion = ArrayList(tenthQuestionList)
-        println("FirstQuestion answer: (${result.tenthQuestion})")
     }
-
 
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
@@ -276,10 +263,8 @@ class ActivityViewModel(
             api.getSpecificEvaluation(clinicId, patientId, evaluationName)
                 .onSuccess { fetched ->
                     _hitBerTest.value = fetched
-                    println("fetched evaluation: $fetched")
                 }
                 .onError { error ->
-                    // post an error to a MessageBarState here todo
                     println("Error fetching evaluation: $error")
                 }
         }
@@ -295,7 +280,6 @@ class ActivityViewModel(
         }
 
         val imageByteArray = bitmap.toByteArray()
-        println("📤 התחלת העלאה, image size: ${imageByteArray.size}")
 
         uploadScope.launch {
             _isLoading.value = true
@@ -319,15 +303,18 @@ class ActivityViewModel(
                 )
 
                 result.onSuccess {
-                    println("✅ העלאה הצליחה")
                     saveUploadedImageUrl(currentQuestion, imagePath, date)
+
+                    if (isUploadAllImagesFinished == 3) {
+                        uploadEvaluationResults()
+                        isUploadAllImagesFinished = 0
+                    }
+
                 }.onError { error ->
                     _uploadStatus.value = Result.failure(Exception(error.toString()))
-                    println("❌ שגיאה בהעלאה: ")
                 }
             } catch (e: Exception) {
                 _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
-                println("🚨 שגיאה חריגה: ${e.message}")
             }
         }
     }
@@ -364,9 +351,9 @@ class ActivityViewModel(
                     createItem = { TenthQuestionItem(imageUrl = image) },
                     updateItem = { it.copy(imageUrl = image) },
                 )
-                uploadEvaluationResults()
             }
         }
+        isUploadAllImagesFinished++
     }
 
     private fun <T> updateImageInQuestionList(
@@ -382,7 +369,6 @@ class ActivityViewModel(
         }
     }
 
-
     private fun uploadEvaluationResults() {
         uploadScope.launch {
             try {
@@ -391,22 +377,16 @@ class ActivityViewModel(
                 result.measurement = hitBerTest.value?.id ?: 19
                 result.date = getCurrentFormattedDateTime()
 
-                val json = Json.encodeToString(CogData.serializer(), result)
-                println("JSON sent: $json")
-
                 val uploadResult = uploadTestResultsUseCase.execute(result, CogData.serializer())
 
                 uploadResult.onSuccess {
-                    println("✅ העלאה של הכל הצליחה")
                     _uploadStatus.value = Result.success(Unit)
 
                 }.onError { error ->
-                    println("❌ שגיאה העלאה: $error")
-                    _uploadStatus.value = Result.failure(Exception(error.toString()))
+                   _uploadStatus.value = Result.failure(Exception(error.toString()))
                 }
 
             } catch (e: Exception) {
-                println("🚨 שגיאה לא צפויה: ${e.message}")
                 _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
             } finally {
                 _isLoading.value = false

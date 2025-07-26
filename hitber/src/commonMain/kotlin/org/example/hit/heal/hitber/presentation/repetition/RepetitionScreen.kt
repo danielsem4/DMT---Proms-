@@ -20,10 +20,15 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
+import org.example.hit.heal.core.presentation.Resources.String.fifthQuestionHitberInstructions
+import org.example.hit.heal.core.presentation.Resources.String.fifthQuestionHitberSpeakButton
+import org.example.hit.heal.core.presentation.Resources.String.fifthQuestionHitberTitle
+import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitberListen
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScreen
 import org.jetbrains.compose.resources.stringResource
 
@@ -33,7 +38,7 @@ class RepetitionScreen : Screen {
 
         val navigator = LocalNavigator.current
 
-        BaseScreen(title = "חזרה על משפט",
+        BaseScreen(title = stringResource(fifthQuestionHitberTitle),
             config = ScreenConfig.TabletConfig,
             topRightText = "5/10",
             content = {
@@ -44,20 +49,13 @@ class RepetitionScreen : Screen {
                     modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        "יש ללחוץ על כפתור ההקשב ולהקשיב למשפט, לאחר מכן יש ללחוץ על כפתור הדבר ולחזור על המשפט הנאמר.",
-                        color = Color.Black,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                            .padding(bottom = 50.dp)
-                    )
+                 InstructionText(stringResource(fifthQuestionHitberInstructions))
 
                     Button(onClick = {}, modifier = Modifier.padding(bottom = 30.dp),
                         colors = ButtonDefaults.buttonColors(primaryColor),
                         shape = RoundedCornerShape(50)){
                         Text(
-                            "הקשב", color = Color.White, fontSize = 20.sp,
+                            stringResource(sixthQuestionHitberListen), color = Color.White, fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -66,7 +64,7 @@ class RepetitionScreen : Screen {
                         colors = ButtonDefaults.buttonColors(primaryColor),
                         shape = RoundedCornerShape(50)){
                         Text(
-                            "דבר", color = Color.White, fontSize = 20.sp,
+                            stringResource(fifthQuestionHitberSpeakButton), color = Color.White, fontSize = 20.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }

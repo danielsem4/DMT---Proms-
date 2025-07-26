@@ -10,40 +10,40 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.example.new_memory_test.presentation.screens.ScheduleScreen.data.DraggableCircle
 import com.mohamedrejeb.compose.dnd.DragAndDropState
 import com.mohamedrejeb.compose.dnd.drag.DraggableItem
+import org.example.hit.heal.core.presentation.Sizes.buttonHeightLg
+import org.example.hit.heal.core.presentation.components.SlotState
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun DraggableCirclesPalet(
-    circles: List<DraggableCircle>,
-    dragAndDropState: DragAndDropState<DraggableCircle>,
-    onCircleClicked: (DraggableCircle) -> Unit,
+fun DraggableSlotPalet(
+    slot: List<SlotState>,
+    dragAndDropState: DragAndDropState<SlotState>,
+    onCircleClicked: (SlotState) -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceAround,
         modifier = Modifier.fillMaxWidth()
     ) {
-        //circle that need to dragable
-        circles.forEach { circle ->
+        slot.forEach { slot ->
             DraggableItem(
                 state = dragAndDropState,
-                key = circle.id,
-                data = circle
+                key = slot.id,
+                data = slot
             ) {
                 Box(
                     modifier = Modifier
-                        .size(60.dp)
-                        .clickable {
-                            onCircleClicked(circle)
-                        }
+                        .size(buttonHeightLg)
+                        .clickable { onCircleClicked(slot) }
                 ) {
-                    Image(
-                        painter = circle.painter,
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize()
-                    )
+                    slot.painter?.let { painter ->
+                        Image(
+                            painter = painter,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
             }
         }

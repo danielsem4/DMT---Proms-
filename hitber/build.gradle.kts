@@ -45,10 +45,13 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.ui.core)
             implementation(projects.core)
+            implementation(libs.compose.dnd)
 
             implementation(libs.kotlinx.serialization)
             implementation(libs.kotlinx.datetime)
             implementation(compose.material)
+            implementation(compose.material3)
+            implementation(libs.font.awesome)
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)
             implementation(libs.voyager.transitions)

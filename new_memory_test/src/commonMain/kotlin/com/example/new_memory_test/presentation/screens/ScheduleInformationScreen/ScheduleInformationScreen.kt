@@ -25,18 +25,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.screens.BaseTabletScreen
 import com.example.new_memory_test.presentation.screens.ScheduleInformationScreen.components.ActivityItem
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.screen.ScheduleScreen
 import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Sizes.buttonHeightMd
+import org.example.hit.heal.core.presentation.Sizes.spacing5Xl
+import org.example.hit.heal.core.presentation.Sizes.spacing6Xl
+import org.example.hit.heal.core.presentation.Sizes.spacing8Xl
+import org.example.hit.heal.core.presentation.Sizes.spacingLg
+import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
+import org.example.hit.heal.core.presentation.Sizes.spacingXs
+import org.example.hit.heal.core.presentation.Sizes.widthXl
+import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 
 class ScheduleInformationScreen(val pageNumber: Int) : Screen {
@@ -44,34 +60,35 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
+        val viewModel: ViewModelMemoryTest = koinViewModel()
+
+        viewModel.txtMemoryPage = pageNumber
         //Save in one side and don't depend on language
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
-        BaseTabletScreen(title = stringResource(Resources.String.build_schedule), page = pageNumber, totalPages = 6) {
+        BaseScreen(title = stringResource(Resources.String.build_schedule),  config = ScreenConfig.TabletConfig,topRightText = "$pageNumber/6" , content =  {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(24.dp),
+                    .padding(spacingLg),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = stringResource(Resources.String.build_schedule),
-                    fontSize = 24.sp,
+                    fontSize = EXTRA_MEDIUM,
                     fontWeight = FontWeight.Bold,
                     color = primaryColor,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(spacingSm)
                 )
-
-                Spacer(modifier = Modifier.height(16.dp))
 
                 //Only text + image (instruction)
                 Box(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(16.dp))
+                        .clip(RoundedCornerShape(spacingMd))
                         .background(Color.White)
-                        .padding(16.dp)
+                        .padding(spacingMd)
                 ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(spacingXs)) {
                         ActivityItem(
                             text = stringResource(Resources.String.dumbbell_circle_text),
                             icon = painterResource(Resources.Icon.dumbbellScheduleIcon)
@@ -99,7 +116,7 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(spacingMd))
 
                 Button(
                     onClick = {
@@ -108,21 +125,21 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
                     colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                     shape = RoundedCornerShape(30),
                     modifier = Modifier
-                        .defaultMinSize(minWidth = 100.dp)
-                        .width(250.dp)
-                        .height(50.dp)
+                        .defaultMinSize(minWidth = spacing5Xl)
+                        .width(widthXl)
+                        .height(buttonHeightMd)
                 ) {
                     Text(
                         stringResource(Resources.String.start),
-                        fontSize = EXTRA_MEDIUM,
+                        fontSize = LARGE,
                         fontWeight = FontWeight.Companion.Bold,
                         color = Color.Companion.White
                     )
                 }
             }
-        }
+        })
             RegisterBackHandler(this)
-            {
+            {   viewModel.reset()
                 navigator.popUntilRoot()
             }
 

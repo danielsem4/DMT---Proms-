@@ -14,7 +14,6 @@ class EntryViewModel(private val playAudioUseCase: PlayAudioUseCase) : ViewModel
     private val _isOverlayVisible = MutableStateFlow(true)
     val isOverlayVisible: StateFlow<Boolean> = _isOverlayVisible
 
-
     fun onPlayAudioRequested(audioText: String) {
         _isOverlayVisible.value = true
 

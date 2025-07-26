@@ -35,6 +35,7 @@
     <string name="serialization_error">There was a problem processing the server response</string>
     <string name="remote_unknown">An unknown server error occurred</string>
     <string name="unexpected_error">An unexpected error occurred</string>
+    <string name="server_error">A server error occurred</string>
 
 
     <string name="login_success">Logged in successfully</string>
@@ -61,6 +62,7 @@
 
     <string name="uploading">Uploading</string>
     <string name="loading">loading</string>
+    <string name="selected_point">Selected point</string>
 
     <string name="select_date">Select a date</string>
     <string name="empty_string"> </string>
@@ -100,6 +102,10 @@
     <string name="start_date">Start date</string>
     <string name="end_date">End date</string>
     <string name="leave_end_date_empty">Leave empty to not set end date</string>
+    <string name ="one">1</string>
+    <string name ="two">2</string>
+    <string name ="three">3</string>
+    <string name ="four">4</string>
 
 
 
@@ -203,21 +209,6 @@
     <string name="second_question_hitber_task_retry_instructions">Please select the 5 shapes you saw a few questions ago.</string>
     <string name="second_question_hitber_dialog_icon">profile icon</string>
     <string name="second_question_hitber_dialog_understand">I understand</string>
-    <string name="second_question_hitber_ellipse">Ellipse</string>
-    <string name="second_question_hitber_rectangle">Rectangle</string>
-    <string name="second_question_hitber_pentagon">Pentagon</string>
-    <string name="second_question_hitber_star">Star</string>
-    <string name="second_question_hitber_hash_tag">Hashtag</string>
-    <string name="second_question_hitber_rhomb">Rhombus</string>
-    <string name="second_question_hitber_cone">Cone</string>
-    <string name="second_question_hitber_plus">Plus</string>
-    <string name="second_question_hitber_hexagon">Hexagon</string>
-    <string name="second_question_hitber_right_triangle">Right Triangle</string>
-    <string name="second_question_hitber_asterisk">Asterisk</string>
-    <string name="second_question_hitber_check">Check</string>
-    <string name="second_question_hitber_trapezoid">Trapezoid</string>
-    <string name="second_question_hitber_triangle">Triangle</string>
-    <string name="second_question_hitber_close">Close</string>
 
     <string name="third_question_hitber_title">Concentration</string>
     <string name="third_question_hitber_instructions">In the next minute, numbers will appear in the center of the screen. Each time you see the number 7, you should tap the screen. To start the task, click Start. At the end of the task, the message "Thank you" will appear. Click Continue.</string>
@@ -234,6 +225,11 @@
     <string name="fourth_question_hitber_ball">Ball</string>
     <string name="fourth_question_hitber_balloon">Balloon</string>
     <string name="fourth_question_hitber_lemon">Lemon</string>
+
+    <string name="fifth_question_hitber_title">Sentence Repetition</string>
+    <string name="fifth_question_hitber_speak_button">Speak</string>
+    <string name="fifth_question_hitber_instruction">Press the Listen button and listen to the sentence, then press the Speak button and repeat the spoken sentence.</string>
+
 
     <string name="sixth_question_hitber_title">Instructions Understanding</string>
     <string name="sixth_question_hitber_instructions">In this part, you will be asked to perform a task. To listen to the task, press the listen button. When finished, press continue.</string>

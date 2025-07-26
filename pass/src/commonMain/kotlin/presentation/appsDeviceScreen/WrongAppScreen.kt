@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,7 +33,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import presentation.components.AppData
-import presentation.components.InstructionsDialog
+import presentation.components.MessageDialog
 
 class WrongAppScreen(private val app: AppData) : Screen {
 
@@ -40,7 +41,6 @@ class WrongAppScreen(private val app: AppData) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.current
         val viewModel: WrongAppViewModel = koinViewModel()
-        val appDeviceViewModel : AppDeviceViewModel = koinViewModel()
         val showDialog by viewModel.showDialog.collectAsState()
         val dialogAudioText by viewModel.dialogAudioText.collectAsState()
         val isPlaying by viewModel.isPlaying.collectAsState()
@@ -48,6 +48,7 @@ class WrongAppScreen(private val app: AppData) : Screen {
         val backToApps by viewModel.backToApps.collectAsState()
         val isCountdownActive by viewModel.isCountdownActive.collectAsState()
 
+        // Screen shown when the user selects the wrong app. Displays a message and offers navigation back to the app list.
         BaseScreen(
             title = stringResource(deviceAppTitle),
             config = ScreenConfig.TabletConfig,
@@ -61,7 +62,7 @@ class WrongAppScreen(private val app: AppData) : Screen {
                             .align(Alignment.TopEnd)
                             .clickable {
                                 viewModel.setSecondTimeWrongApp()
-                                navigator?.push (AppDeviceScreen())
+                                navigator?.replace(AppDeviceScreen())
                             }
                     )
 
@@ -76,25 +77,24 @@ class WrongAppScreen(private val app: AppData) : Screen {
                 }
             }
         )
-        DisposableEffect(Unit) {
-            onDispose {
-                viewModel.stopAll()
-            }
+
+        LaunchedEffect(Unit) {
+            viewModel.startCheckingIfUserDidSomething()
         }
+
+        // Lifecycle observers to stop/play internal timers or checks
         ObserveLifecycle(
             onStop = {
                 viewModel.stopAll()
             },
-            onStart = {
-                viewModel.startCheckingIfUserDidSomething()
-            }
         )
 
+        // Show dialog with instructions or the helpers dialog
         if (showDialog) {
             dialogAudioText?.let { (text, audio) ->
                 val dialogText = stringResource(text)
                 val dialogAudio = stringResource(audio)
-                InstructionsDialog(
+                MessageDialog(
                     text = dialogText,
                     secondsLeft = countdown,
                     isPlaying = isPlaying,
@@ -105,7 +105,7 @@ class WrongAppScreen(private val app: AppData) : Screen {
                         viewModel.hideReminderDialog()
                         if (backToApps) {
                             viewModel.setBackToApps()
-                            navigator?.push (AppDeviceScreen())
+                            navigator?.replace(AppDeviceScreen())
                         }
                     }
                 )
@@ -113,10 +113,8 @@ class WrongAppScreen(private val app: AppData) : Screen {
         }
 
         RegisterBackHandler(this) {
-            viewModel.resetAppProgress()
-            appDeviceViewModel.resetAppDeviceProgress()
-            navigator?.popUntilRoot()
-        }
+            viewModel.resetAll()
+            navigator?.pop()        }
     }
 }
 

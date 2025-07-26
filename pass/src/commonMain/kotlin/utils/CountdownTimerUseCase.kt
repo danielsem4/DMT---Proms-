@@ -6,6 +6,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * CountdownTimerUseCase starts a countdown timer for 10 seconds.
+ * * The countdown is shown if audio is currently not playing.
+ */
+
 class CountdownTimerUseCase(private val scope: CoroutineScope) {
 
     private var dialogJob: Job? = null

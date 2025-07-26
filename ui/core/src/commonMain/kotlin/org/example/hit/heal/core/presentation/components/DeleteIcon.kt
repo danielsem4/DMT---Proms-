@@ -1,4 +1,5 @@
-package com.example.new_memory_test.presentation.screens.ScheduleScreen.components
+package org.example.hit.heal.core.presentation.components
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -9,8 +10,6 @@ import androidx.compose.ui.unit.dp
 import org.example.hit.heal.core.presentation.Resources
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-
-
 
 @Composable
 fun DeleteIcon(

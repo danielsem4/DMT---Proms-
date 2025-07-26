@@ -5,11 +5,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -30,7 +32,6 @@ import org.example.hit.heal.core.presentation.components.InstructionBox
 import org.example.hit.heal.core.presentation.components.OnOffToggle
 import org.example.hit.heal.core.presentation.components.OptionStyle
 import org.example.hit.heal.core.presentation.components.PillSelectionGroup
-import org.example.hit.heal.core.presentation.components.ReportInputBox
 import org.example.hit.heal.core.presentation.components.RoundedFilledSlider
 import org.example.hit.heal.core.presentation.components.SelectionMode
 import org.example.hit.heal.core.presentation.formatLabel
@@ -41,9 +42,10 @@ import org.jetbrains.compose.resources.stringResource
 fun EvaluationObjectContent(
     obj: EvaluationObject,
     answers: Map<Int, EvaluationAnswer>,
+    showLabel: Boolean,
+    modifier: Modifier = Modifier,
     onSaveAnswer: (Int, EvaluationAnswer) -> Unit,
-    onDrawingControllerReady: ((DrawingCanvasController) -> Unit)? = null,
-    modifier: Modifier = Modifier
+    onDrawingControllerReady: ((DrawingCanvasController) -> Unit)? = null
 ) {
     Column(
         modifier = modifier.padding(horizontal = 16.dp),
@@ -54,7 +56,7 @@ fun EvaluationObjectContent(
         val options = availableValues.map { it.available_value }
         val type = EvaluationObjectType.fromInt(obj.object_type)
 
-        if (type != EvaluationObjectType.INSTRUCTION)
+        if (showLabel && obj.object_label.isNotEmpty() && type != EvaluationObjectType.INSTRUCTION)
             Text(
                 text = obj.object_label,
                 fontSize = 20.sp,
@@ -147,7 +149,7 @@ fun EvaluationObjectContent(
                 }
             }
 
-            EvaluationObjectType.INSTRUCTION -> {
+            EvaluationObjectType.INSTRUCTION, EvaluationObjectType.REPORT -> {
                 InstructionBox(
                     text = obj.object_label,
                     modifier = Modifier
@@ -155,16 +157,6 @@ fun EvaluationObjectContent(
                         .align(Alignment.CenterHorizontally)
                 )
                 onSaveAnswer(obj.id, EvaluationAnswer.Answered)
-            }
-
-            EvaluationObjectType.REPORT -> {
-                ReportInputBox(
-                    value = (answers[obj.id] as? EvaluationAnswer.Text)?.value ?: "",
-                    placeholder = obj.object_label,
-                    onValueChange = { newValue ->
-                        onSaveAnswer(obj.id, EvaluationAnswer.Text(newValue))
-                    }
-                )
             }
 
             EvaluationObjectType.DRAWING -> {
@@ -176,44 +168,7 @@ fun EvaluationObjectContent(
                     onSaveAnswer(obj.id, EvaluationAnswer.Unanswered)
             }
 
-            EvaluationObjectType.SLIDER -> {
-                if (obj.style == "scale" || obj.style == "slider") {
-                    val currentValue = (answers[obj.id] as? EvaluationAnswer.Number)?.value
-                        ?: availableValues.firstOrNull()?.available_value?.toFloatOrNull()
-                        ?: 0f
-
-                    val numericValues = availableValues
-                        .mapNotNull { it.available_value.toFloatOrNull() }
-
-                    val startValue = numericValues.minOrNull() ?: 0f
-                    val endValue = numericValues.maxOrNull() ?: 5f
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        RoundedFilledSlider(
-                            start = startValue,
-                            end = endValue,
-                            value = currentValue,
-                            onValueChanged = { newValue ->
-                                onSaveAnswer(obj.id, EvaluationAnswer.Number(newValue))
-                            }
-                        )
-
-                        Text(
-                            text = stringResource(Res.string.slider_value_prefix) + currentValue.formatLabel(),
-                            style = MaterialTheme.typography.h6,
-                            fontWeight = FontWeight.Bold,
-                            color = primaryColor,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(top = 4.dp)
-                                .fillMaxWidth()
-                        )
-                    }
-                }
-            }
+            EvaluationObjectType.SLIDER -> CreateSlider(obj, availableValues, onSaveAnswer)
 
             EvaluationObjectType.HUMAN_BODY -> {
                 val frontPoints = remember { mutableStateOf(setOf<Offset>()) }
@@ -232,6 +187,7 @@ fun EvaluationObjectContent(
                             EvaluationAnswer.HumanModelPoints(updatedFront, updatedBack)
                         )
                     },
+                    availableValues = availableValues,
                     onToggleView = {
                         isFrontView.value = !isFrontView.value
                     }
@@ -246,4 +202,76 @@ fun EvaluationObjectContent(
             }
         }
     }
+}
+
+@Composable
+private fun CreateSlider(
+    obj: EvaluationObject,
+    availableValues: List<EvaluationValue>,
+    onSaveAnswer: (Int, EvaluationAnswer) -> Unit
+) {
+    if (obj.style == "scale" || obj.style == "slider") {
+
+        val regex = Regex("""(\d+)(?:\(\?\))?(.*)""")
+        val (startValue, startText) = regex.find(availableValues[0].available_value)!!
+            .destructured
+            .let { it.component1().toFloat() to it.component2().trim() }
+
+        val (endValue, endText) = regex.find(availableValues[1].available_value)!!
+            .destructured
+            .let { it.component1().toFloat() to it.component2().trim() }
+
+        val step: Float = availableValues.getOrNull(2)
+            ?.available_value
+            ?.toFloatOrNull()
+            ?.coerceAtLeast(0f) ?: 0f
+
+
+        var currentValue by remember { mutableStateOf(0f) }
+
+
+        println("Slider $obj")
+
+        val numbers = floatRange(startValue, endValue, step)
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            RoundedFilledSlider(
+                start = startValue,
+                end = endValue,
+                value = currentValue.coerceIn(startValue, endValue),
+                availableValues = numbers,
+                startText = startText.ifBlank { startValue.formatLabel() },
+                endText = endText.ifBlank { endValue.formatLabel() },
+                onValueChanged = { newValue ->
+                    currentValue = newValue
+                    onSaveAnswer(obj.id, EvaluationAnswer.Number(newValue))
+                }
+            )
+
+            Text(
+                text = stringResource(Res.string.slider_value_prefix) + currentValue.formatLabel(),
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.Bold,
+                color = primaryColor,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .fillMaxWidth()
+            )
+        }
+    }
+}
+
+fun floatRange(start: Float, end: Float, step: Float): List<Float> {
+    val list = mutableListOf<Float>()
+    var current = start
+    while (current <= end) {
+        list.add(current)
+        current += step
+    }
+    return list
 }
