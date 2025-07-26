@@ -537,6 +537,7 @@ import dmt_proms.ui.core.generated.resources.whatsapp
 import dmt_proms.ui.core.generated.resources.white_messages
 import dmt_proms.ui.core.generated.resources.white_phone
 import dmt_proms.ui.core.generated.resources.white_video
+import dmt_proms.ui.core.generated.resources.winter
 import dmt_proms.ui.core.generated.resources.witch_contact_are_we_looking_for_pass
 import dmt_proms.ui.core.generated.resources.wrong_app_second_assist
 import dmt_proms.ui.core.generated.resources.wrong_app_thired_assist
@@ -549,6 +550,7 @@ import dmt_proms.ui.core.generated.resources.fifth_question_hitber_speak_button
 import dmt_proms.ui.core.generated.resources.fifth_question_hitber_title
 import dmt_proms.ui.core.generated.resources.phone_number
 import dmt_proms.ui.core.generated.resources.you_in_the_autumn
+import dmt_proms.ui.core.generated.resources.you_in_the_season
 import dmt_proms.ui.core.generated.resources.you_in_the_spring
 import dmt_proms.ui.core.generated.resources.you_in_the_summer
 import dmt_proms.ui.core.generated.resources.you_in_the_winter
@@ -1200,8 +1202,8 @@ object Resources {
         val first_one_minute_end_body_memory = rs.first_one_minute_end_body_memory
         val please_place_all_activities_memory =rs.please_place_all_activities_memory
 
-// orientation string
-    val entryOrientationTitle = Res.string.entry_Oriantation_title
+        // orientation string
+        val entryOrientationTitle = Res.string.entry_Oriantation_title
         val entryOrientationWelcomeNote = Res.string.entry_Oriantation_welcome_note
         val entryOrientationInstructions = Res.string.entry_Oriantation_instructions
         val NextText = Res.string.next_text
@@ -1210,12 +1212,12 @@ object Resources {
         val secQuestionTitle = Res.string.sec_question_title
         val secQuestionInstruction = Res.string.sec_question_instraction
         val secQuestionNumber = Res.string.sec_question_number
-
+        val Winter = Res.string.winter
         val entryInstructionsAppTrial = Res.string.entry_instructions_app_trial
         val dropdownInstructionsAppTrial = Res.string.dropdown_instructions_app_trial
         val seasonsInstructionsAppTrial = Res.string.seasons_instructions_app_trial
         val orientationSeasonTitle = Res.string.oriantation_season_title
-
+        val YouInTheSeasons = Res.string.you_in_the_season
 
         val trialPinchTitle = Res.string.trial_pinch_title
         val trialPinchInstructions = Res.string.trial_pinch_instructions
@@ -1238,8 +1240,7 @@ object Resources {
         val dropdownSelectedNumber = Res.string.dropdown_selected_number
 
         val trialDrawTitle = Res.string.trial_draw_title
-
-        val setHealthRate = Res.string.set_health_rate
+        val SetHealthRate = Res.string.set_health_rate
 
 
     }
