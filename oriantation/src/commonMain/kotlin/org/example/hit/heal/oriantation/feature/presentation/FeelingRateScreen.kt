@@ -47,6 +47,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.domain.use_case.PlayAudioUseCase
 import core.utils.AudioPlayer
+import core.utils.RegisterBackHandler
 import dmt_proms.oriantation.generated.resources.Res
 import dmt_proms.oriantation.generated.resources.mid_pain_icon
 import dmt_proms.oriantation.generated.resources.no_pain_icon
@@ -110,147 +111,155 @@ class FeedbackScreen(
 //                )
             },
             content = {
-                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
 
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Spacer(modifier = Modifier.height(32.dp))
-
-                        // Listen button
-                        RoundedButton(
-                            text = stringResource(listening),
-                            modifier = Modifier
-                                .width(180.dp)
-                                .height(56.dp),
-                            onClick = { // Play the audio when button is clicked
-                                coroutineScope.launch {
-                                    playAudioUseCase.playAudio(audioUrl)
-                                }
-                            },
-                            enabled = !isPlaying
-                        )
-                        Text(if (isPlaying) "מנגן..." else "נגן")
-
-
-                        // This will be called when audio playback completes
-                        println("Audio playback completed")
-
-                        Spacer(modifier = Modifier.height(100.dp))
-
-                        // Use RoundedFilledSlider from core
-                        val availableValues = (0..10).map { it.toFloat() }
-                        RoundedFilledSlider(
-                            start = 0f,
-                            end = 10f,
-                            value = progress,
-                            availableValues = availableValues,
-                            startText = "0",
-                            endText = "10",
-                            onValueChanged = { newValue ->
-                                progress = newValue
-                            },
-                            trackBrush = androidx.compose.ui.graphics.Brush.horizontalGradient(
-                                colors = listOf(
-                                    androidx.compose.ui.graphics.Color(0xFFB6F055), // green
-                                    androidx.compose.ui.graphics.Color(0xFFF7D155), // yellow
-                                    androidx.compose.ui.graphics.Color(0xFFF7A155)  // orange
-                                )
-                            ),
-                            trackHeight = 48.dp,
-                            cornerRadius = 16.dp,
-                            showEdgeLabels = true
-                        )
-
-                        // Show value and label if progress > 0
-                        Spacer(modifier = Modifier.height(15.dp))
                         Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                text = when {
-                                    progress <= 3f -> stringResource(feelingRatePain)
-                                    progress <= 6f -> stringResource(feelingRateMid)
-                                    else -> stringResource(feelingRateNoPain)
-                                },
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                            Text(
-                                text = progress.toInt().toString(),
-                                fontSize = 22.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
+                            Spacer(modifier = Modifier.height(32.dp))
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                            // Listen button
+                            RoundedButton(
+                                text = stringResource(listening),
+                                modifier = Modifier
+                                    .width(180.dp)
+                                    .height(56.dp),
+                                onClick = { // Play the audio when button is clicked
+                                    coroutineScope.launch {
+                                        playAudioUseCase.playAudio(audioUrl)
+                                    }
+                                },
+                                enabled = !isPlaying
+                            )
+                            Text(if (isPlaying) "מנגן..." else "נגן")
+
+
+                            // This will be called when audio playback completes
+                            println("Audio playback completed")
+
+                            Spacer(modifier = Modifier.height(100.dp))
+
+                            // Use RoundedFilledSlider from core
+                            val availableValues = (0..10).map { it.toFloat() }
+                            RoundedFilledSlider(
+                                start = 0f,
+                                end = 10f,
+                                value = progress,
+                                availableValues = availableValues,
+                                startText = "0",
+                                endText = "10",
+                                onValueChanged = { newValue ->
+                                    progress = newValue
+                                },
+                                trackBrush = androidx.compose.ui.graphics.Brush.horizontalGradient(
+                                    colors = listOf(
+                                        androidx.compose.ui.graphics.Color(0xFFB6F055), // green
+                                        androidx.compose.ui.graphics.Color(0xFFF7D155), // yellow
+                                        androidx.compose.ui.graphics.Color(0xFFF7A155)  // orange
+                                    )
+                                ),
+                                trackHeight = 48.dp,
+                                cornerRadius = 16.dp,
+                                showEdgeLabels = true
+                            )
+
+                            // Show value and label if progress > 0
+                            Spacer(modifier = Modifier.height(15.dp))
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    text = when {
+                                        progress <= 3f -> stringResource(feelingRatePain)
+                                        progress <= 6f -> stringResource(feelingRateMid)
+                                        else -> stringResource(feelingRateNoPain)
+                                    },
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Text(
+                                    text = progress.toInt().toString(),
+                                    fontSize = 22.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(16.dp))
 
 //                         Dynamic icon based on progress value
-                        Image(
-                            painter = painterResource(
-                                when {
-                                    progress <= 3f -> Res.drawable.pain_icon
+                            Image(
+                                painter = painterResource(
+                                    when {
+                                        progress <= 3f -> Res.drawable.pain_icon
 
-                                    progress <= 5f -> Res.drawable.mid_pain_icon
+                                        progress <= 5f -> Res.drawable.mid_pain_icon
 
-                                    progress <= 8f -> Res.drawable.small_pain_icon
+                                        progress <= 8f -> Res.drawable.small_pain_icon
 
-                                    else -> Res.drawable.no_pain_icon
+                                        else -> Res.drawable.no_pain_icon
 
-                                }
+                                    }
 
-                            ),
-                            contentDescription = "Pain Icon",
-                            modifier = Modifier.size(150.dp)
+                                ),
+                                contentDescription = "Pain Icon",
+                                modifier = Modifier.size(150.dp)
 
-                        )
-
-                        Spacer(modifier = Modifier.weight(1f))
-                        // Navigation buttons
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly
-                        ) {
-                            RoundedButton(
-                                text = stringResource(NextText),
-                                modifier = Modifier
-                                    .width(200.dp)
-                                    .height(50.dp),
-                                onClick = {
-                                    if (!isButtonEnabled) return@RoundedButton
-                                    isButtonEnabled = false
-
-                                    // Update the feeling rate in the view model
-                                    viewModel.updateFeelingRate(progress.toInt())
-
-                                    // Send data to server and navigate back to home
-                                    sendToServerAndNavigate(
-                                        viewModel = viewModel,
-                                        snackbarHostState = snackbarHostState,
-                                        coroutineScope = coroutineScope,
-                                        successMessage = successMessage,
-                                        navigator = navigator
-                                    )
-                                }
                             )
+
+                            Spacer(modifier = Modifier.weight(1f))
+                            // Navigation buttons
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly
+                            ) {
+                                RoundedButton(
+                                    text = stringResource(NextText),
+                                    modifier = Modifier
+                                        .width(200.dp)
+                                        .height(50.dp),
+                                    onClick = {
+                                        if (!isButtonEnabled) return@RoundedButton
+                                        isButtonEnabled = false
+
+                                        // Update the feeling rate in the view model
+                                        viewModel.updateFeelingRate(progress.toInt())
+
+                                        // Send data to server and navigate back to home
+                                        sendToServerAndNavigate(
+                                            viewModel = viewModel,
+                                            snackbarHostState = snackbarHostState,
+                                            coroutineScope = coroutineScope,
+                                            successMessage = successMessage,
+                                            navigator = navigator
+                                        )
+                                    }
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(32.dp))
                         }
-
-                        Spacer(modifier = Modifier.height(32.dp))
                     }
-
+                    SnackbarHost(
+                        hostState = snackbarHostState,
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                    )
                 }
-//
             })
+        RegisterBackHandler(this)
+        {
+            navigator?.popUntilRoot()
+        }
     }
 
     private fun sendToServerAndNavigate(
@@ -282,5 +291,6 @@ class FeedbackScreen(
                 snackbarHostState.showSnackbar(error.toString())
             }
         }
+
     }
 }

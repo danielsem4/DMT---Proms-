@@ -191,7 +191,7 @@ class SeasonsSelectScreen(
         )
         RegisterBackHandler(this)
         {
-            navigator?.pop()
+            navigator?.popUntilRoot()
         }
     }
 }

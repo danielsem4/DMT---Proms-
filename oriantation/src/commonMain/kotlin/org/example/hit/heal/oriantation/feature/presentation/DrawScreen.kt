@@ -171,7 +171,7 @@ class DrawScreen(
         )
         RegisterBackHandler(this)
         {
-            navigator?.pop()
+            navigator?.popUntilRoot()
         }
     }
 

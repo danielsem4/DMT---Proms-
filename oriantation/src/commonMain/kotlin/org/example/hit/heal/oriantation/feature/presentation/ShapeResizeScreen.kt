@@ -144,7 +144,7 @@ class ShapeResizeScreen(
         )
         RegisterBackHandler(this)
         {
-            navigator?.pop()
+            navigator?.popUntilRoot()
         }
     }
 }

@@ -158,7 +158,7 @@ class ShapesDragScreen(
         )
         RegisterBackHandler(this)
         {
-            navigator?.pop()
+            navigator?.popUntilRoot()
         }
     }
 }

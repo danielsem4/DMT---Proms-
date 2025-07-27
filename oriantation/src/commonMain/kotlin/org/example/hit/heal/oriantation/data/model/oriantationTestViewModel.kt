@@ -101,6 +101,7 @@ class OrientationTestViewModel(
                             .onSuccess {
                                 withContext(Dispatchers.Main) {
                                     onSuccess?.invoke()
+
                                 }
                             }
                             .onError { error ->

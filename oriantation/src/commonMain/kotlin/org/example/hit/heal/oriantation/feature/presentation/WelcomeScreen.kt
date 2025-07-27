@@ -90,7 +90,7 @@ class OriantationWelcomeScreen: Screen {
         )
         RegisterBackHandler(this)
         {
-            navigator?.pop()
+            navigator?.popUntilRoot()
         }
     }
 }
