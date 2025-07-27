@@ -73,7 +73,7 @@ fun TabletBaseScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 32.dp),
             ) {
 
                 if (onNextClick != null) {
@@ -85,7 +85,7 @@ fun TabletBaseScreen(
                     ) {
                         Text("הבא", color = Color.White, fontSize = 25.sp)
                     }
-                    Spacer(modifier = Modifier.height(32.dp))
+
                 }
 
 
