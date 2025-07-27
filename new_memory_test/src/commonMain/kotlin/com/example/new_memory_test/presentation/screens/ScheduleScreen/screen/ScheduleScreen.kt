@@ -56,13 +56,13 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.sp
-import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.DraggableSlotPalet
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.GenericSlotBox
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.components.SlotState
+import org.example.hit.heal.core.presentation.components.dialogs.CustomDialog
 import kotlin.collections.mapValues
 class ScheduleScreen(val pageNumber: Int ) : Screen {
     @Composable
@@ -144,17 +144,10 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
         var showAcceptDialog by remember { mutableStateOf(false) }
         if (showAcceptDialog) {
             CustomDialog(
-                onDismiss = { showAcceptDialog = false },
-                icon = {
-                   // Icon(
-                   //     Icons.Default.ThumbUp,
-                   //     contentDescription = null,
-                   //     tint = Color.White,
-                   //     modifier = Modifier.size(40.dp)
-                   // )
-                },
+                icon = Resources.Icon.warningIcon,
                 title = stringResource(Resources.String.build_schedule),
                 description = stringResource(Resources.String.please_place_all_activities_memory),
+                onDismiss = { showAcceptDialog = false },
                 buttons = listOf(
                     stringResource(Resources.String.next) to {
                         showAcceptDialog = false

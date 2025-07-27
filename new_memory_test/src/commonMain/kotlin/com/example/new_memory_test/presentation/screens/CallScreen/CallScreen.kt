@@ -193,7 +193,6 @@ class CallScreen(val pageNumber: Int )  : Screen {
                     onDismiss = { showAcceptDialog = false },
                     icon = Resources.Icon.callAccept,
                     title = stringResource(Resources.String.thank_you_title),
-                    text = "",
                     description = stringResource(Resources.String.thank_you_description),
                     buttons = listOf(
                         stringResource(Resources.String.next) to {

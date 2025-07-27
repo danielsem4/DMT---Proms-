@@ -1,6 +1,7 @@
 package com.example.new_memory_test.presentation.screens.MemoryScreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -41,6 +42,7 @@ import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Sizes.buttonHeightMd
 import org.example.hit.heal.core.presentation.Sizes.heightSm
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
+import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.Sizes.spacingXl
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.components.BaseScreen
@@ -55,7 +57,7 @@ class MemoryScreen : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = koinViewModel()
-        viewModel.reset()
+
         viewModel.txtMemoryPage =1
 
 
@@ -70,60 +72,73 @@ class MemoryScreen : Screen {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
         BaseScreen(title = stringResource(Resources.String.memory_title),  config = ScreenConfig.TabletConfig, topRightText ="1/6" ,content ={
 
+            BoxWithConstraints {
+                val screenWidth = maxWidth
+                val screenHeight = maxHeight
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = backgroundColor),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
 
-                Spacer(modifier = Modifier.height(spacingXl))
-                Text(
-                    text = stringResource(Resources.String.instructions),
-                    fontSize =LARGE,
-                    color = Color.Black,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(spacingMd))
-                BulletPointText(text = stringResource(Resources.String.task_duration ))
-                BulletPointText(text =  stringResource(Resources.String.task_continuity ))
-                BulletPointText(text = stringResource(Resources.String.read_instructions ))
-                BulletPointText(text = stringResource(Resources.String.complete_all_tasks ))
-                BulletPointText(text = stringResource(Resources.String.quiet_room_tip ))
-                Spacer(modifier = Modifier.weight(1f))
 
-                Text(
-                    text = stringResource(Resources.String.good_luck ),
-                    fontSize =LARGE,
-                    color = Color.Black,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(spacingXl))
-
-                Text(
-                    text = stringResource(Resources.String.press_start_to_begin ),
-                    fontSize = EXTRA_REGULAR,
-                    color = Color.Black,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(spacingMd))
-
-                Button(
-                    onClick = {
-                        viewModel.setPage(viewModel.txtMemoryPage + 1)
-                        navigator.push(RoomInstructionsScreen(pageNumber = 1))
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                    shape = RoundedCornerShape(30),
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth(0.2f)
-                        .height(buttonHeightMd)
+                        .fillMaxSize()
+                        .background(color = backgroundColor),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text( stringResource(Resources.String.start), fontSize = EXTRA_MEDIUM_LARGE,  color = Color.White)
+
+                    Spacer(modifier = Modifier.height(spacingXl))
+                    Text(
+                        text = stringResource(Resources.String.instructions),
+                        fontSize = LARGE,
+                        color = Color.Black,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(spacingSm))
+                    BulletPointText(text = stringResource(Resources.String.task_duration))
+                    BulletPointText(text = stringResource(Resources.String.task_continuity))
+                    BulletPointText(text = stringResource(Resources.String.read_instructions))
+                    BulletPointText(text = stringResource(Resources.String.complete_all_tasks))
+                    BulletPointText(text = stringResource(Resources.String.quiet_room_tip))
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Text(
+                        text = stringResource(Resources.String.good_luck),
+                        fontSize = EXTRA_REGULAR,
+                        color = Color.Black,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(spacingXl))
+
+                    Text(
+                        text = stringResource(Resources.String.press_start_to_begin),
+                        fontSize = EXTRA_REGULAR,
+                        color = Color.Black,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(spacingMd))
+
+                    Button(
+                        onClick = {
+                            viewModel.setPage(viewModel.txtMemoryPage + 1)
+                            navigator.push(RoomInstructionsScreen(pageNumber = 1))
+                        },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
+                        shape = RoundedCornerShape(30),
+                        modifier = Modifier
+                            .fillMaxWidth(0.2f)
+                            .height(buttonHeightMd)
+                    ) {
+                        Text(
+                            stringResource(Resources.String.start),
+                            fontSize = EXTRA_REGULAR,
+                            color = Color.White
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(heightSm))
                 }
-                Spacer(modifier = Modifier.height(heightSm))
             }
+
+
+
             })
         }
         RegisterBackHandler(this)

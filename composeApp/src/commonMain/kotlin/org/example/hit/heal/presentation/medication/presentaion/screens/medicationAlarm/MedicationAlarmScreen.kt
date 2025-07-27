@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import core.data.model.Medications.Medication
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.ToastType
@@ -24,6 +25,7 @@ import org.example.hit.heal.presentation.medication.presentaion.components.Custo
 import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
 import org.example.hit.heal.presentation.medication.presentaion.screens.mainMedication.MainMedicationScreen
 import org.example.hit.heal.presentation.medication.presentaion.screens.medicationAlarm.components.generateTimeSlots
+import org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.components.Toast
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -57,9 +59,27 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
         var toastMessage by remember { mutableStateOf<String?>(null) }
         var toastType by remember { mutableStateOf(ToastType.Normal) }
 
+
+        val isLoading = viewModel.isLoading.value
+        val isSaveSuccessful = viewModel.isSaveSuccessful.collectAsState().value
+        val viewModelError = viewModel.errorMessage
+        val save = stringResource(Resources.String.save)
         val startDateError = stringResource(Resources.String.error_start_date_empty)
         val endDateError = stringResource(Resources.String.error_end_before_start)
 
+
+        LaunchedEffect(isLoading, isSaveSuccessful, viewModelError) {
+            if (!isLoading) {
+                if (isSaveSuccessful) {
+                    toastType = ToastType.Success
+                    toastMessage = save
+                    viewModel.resetSaveSuccess()
+                } else if (!viewModelError.isNullOrBlank()) {
+                    toastType = ToastType.Error
+                    toastMessage = viewModelError
+                }
+            }
+        }
         fun validateInput() {
             if (selectedStartDate.isBlank()) {
                 errorMessage = startDateError
@@ -75,10 +95,10 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
             isError = false
             errorMessage = ""
             viewModel.buildAndSendMedication(medicationchoose, medicationName)
+            viewModel.isLoading
 
 
         }
-
         BaseScreen(
             title = medicationName,
             config = ScreenConfig.PhoneConfig,
@@ -178,17 +198,19 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
                         color = Color.Gray,
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
 
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                }
                 toastMessage?.let { msg ->
-                    ToastMessage(
+                    ToastMessage  (
                         message = msg,
                         type = toastType,
                         alignUp = false,
-                        onDismiss = { toastMessage = null }
+                        onDismiss = {   navigator.push(MainMedicationScreen()) }
                     )
                 }
+
             }
         }
     }

@@ -99,7 +99,7 @@ class FinalScreenMemoryTest : Screen {
                         RoundedButton(
                             text = stringResource(exit),
                             modifier = Modifier.width(200.dp),
-                            onClick = {
+                            onClick = { viewModel.reset()
                                 navigator?.popUntilRoot()
                                  },
                             enabled = isUploadFinished
@@ -141,7 +141,7 @@ class FinalScreenMemoryTest : Screen {
         )
 
         RegisterBackHandler(this) {
-
+            viewModel.reset()
             navigator?.popUntilRoot()
         }
     }
