@@ -55,6 +55,8 @@
     <string name="document_share">שיתוף מסמכים</string>
     <string name="chat">צ׳אט</string>
     <string name="memory">זיכרון</string>
+    <string name="cancel">ביטול</string>
+    <string name="ok">אישור</string>
 
     <string name="pass">פס</string>
     <string name="on">כן</string>

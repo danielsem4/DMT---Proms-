@@ -14,7 +14,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -34,6 +33,7 @@ import org.example.hit.heal.core.presentation.components.OptionStyle
 import org.example.hit.heal.core.presentation.components.PillSelectionGroup
 import org.example.hit.heal.core.presentation.components.RoundedFilledSlider
 import org.example.hit.heal.core.presentation.components.SelectionMode
+import org.example.hit.heal.core.presentation.components.dialogs.MultiSelectPillDialog
 import org.example.hit.heal.core.presentation.formatLabel
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
@@ -47,6 +47,10 @@ fun EvaluationObjectContent(
     onSaveAnswer: (Int, EvaluationAnswer) -> Unit,
     onDrawingControllerReady: ((DrawingCanvasController) -> Unit)? = null
 ) {
+
+    // State to control the MultiSelectPillDialog visibility for Human Body Model
+    var showDialogForBodyPart by remember { mutableStateOf<EvaluationValue?>(null) }
+
     Column(
         modifier = modifier.padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -171,25 +175,16 @@ fun EvaluationObjectContent(
             EvaluationObjectType.SLIDER -> CreateSlider(obj, availableValues, onSaveAnswer)
 
             EvaluationObjectType.HUMAN_BODY -> {
-                val frontPoints = remember { mutableStateOf(setOf<Offset>()) }
-                val backPoints = remember { mutableStateOf(setOf<Offset>()) }
-                val isFrontView = remember { mutableStateOf(true) }
+                val currentSelectedHumanBodyParts =
+                    (answers[obj.id] as? EvaluationAnswer.MultiChoice)?.values?.toList()
+                        ?: emptyList()
 
                 HumanBodyModelSelector(
-                    frontPoints = frontPoints.value,
-                    backPoints = backPoints.value,
-                    isFrontView = isFrontView.value,
-                    onSelectionChanged = { updatedFront, updatedBack ->
-                        frontPoints.value = updatedFront
-                        backPoints.value = updatedBack
-                        onSaveAnswer(
-                            obj.id,
-                            EvaluationAnswer.HumanModelPoints(updatedFront, updatedBack)
-                        )
-                    },
                     availableValues = availableValues,
-                    onToggleView = {
-                        isFrontView.value = !isFrontView.value
+                    selectedValues = currentSelectedHumanBodyParts,
+                    onBodyPartClicked = { clickedPart ->
+                        // Set the state to show the dialog for the clicked body part
+                        showDialogForBodyPart = clickedPart
                     }
                 )
             }
@@ -201,6 +196,47 @@ fun EvaluationObjectContent(
                 }
             }
         }
+    }
+
+    // MultiSelectPillDialog for Human Body Model
+    showDialogForBodyPart?.let { clickedPart ->
+        val dialogTitle = parseBodyPartTitle(clickedPart.available_value)
+        val dialogOptions = parseBodyPartSubOptions(clickedPart.available_value)
+
+        // Get current overall selections to set initial selection for this specific dialog
+        val currentOverallSelectedParts =
+            (answers[obj.id] as? EvaluationAnswer.MultiChoice)?.values?.toSet() ?: emptySet()
+        val initialDialogSelection =
+            dialogOptions.filter { currentOverallSelectedParts.contains(it) }
+
+        MultiSelectPillDialog(
+            dialogTitle = dialogTitle,
+            options = dialogOptions, // Pass granular sub-options
+            initialSelection = initialDialogSelection,
+            onDismiss = { showDialogForBodyPart = null },
+            onSelectionConfirmed = { newlySelectedSubOptions ->
+                // Get the current overall selected parts (mutable copy)
+                val updatedOverallSelectedParts =
+                    (answers[obj.id] as? EvaluationAnswer.MultiChoice)?.values?.toMutableSet()
+                        ?: mutableSetOf()
+
+                // Get the sub-options that belong to the clicked main body part's group
+                val clickedPartSubOptions = parseBodyPartSubOptions(clickedPart.available_value)
+
+                // Remove all old selections that belong to this clicked main body part's group
+                updatedOverallSelectedParts.removeAll(clickedPartSubOptions.toSet())
+
+                // Add the newly selected sub-options for this main body part
+                updatedOverallSelectedParts.addAll(newlySelectedSubOptions)
+
+                // Save the updated list of all granular selections
+                onSaveAnswer(
+                    obj.id,
+                    EvaluationAnswer.MultiChoice(updatedOverallSelectedParts.toList())
+                )
+                showDialogForBodyPart = null
+            }
+        )
     }
 }
 
