@@ -61,6 +61,7 @@ import org.example.hit.heal.core.presentation.Resources.String.feelingRateMid
 import org.example.hit.heal.core.presentation.Resources.String.feelingRateNoPain
 import org.example.hit.heal.core.presentation.Resources.String.feelingRatePain
 import org.example.hit.heal.core.presentation.Resources.String.listening
+import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe
 import org.example.hit.heal.core.presentation.Resources.String.vocalInstructions
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.components.BaseScreen
@@ -151,7 +152,17 @@ class FeedbackScreen(
                             endText = "10",
                             onValueChanged = { newValue ->
                                 progress = newValue
-                            }
+                            },
+                            trackBrush = androidx.compose.ui.graphics.Brush.horizontalGradient(
+                                colors = listOf(
+                                    androidx.compose.ui.graphics.Color(0xFFB6F055), // green
+                                    androidx.compose.ui.graphics.Color(0xFFF7D155), // yellow
+                                    androidx.compose.ui.graphics.Color(0xFFF7A155)  // orange
+                                )
+                            ),
+                            trackHeight = 48.dp,
+                            cornerRadius = 16.dp,
+                            showEdgeLabels = true
                         )
 
                         // Show value and label if progress > 0
@@ -238,18 +249,7 @@ class FeedbackScreen(
                     }
 
                 }
-//            snackbarHost = {
-//                SnackbarHost(hostState = snackbarHostState) { data ->
-//                    Snackbar(
-//                        modifier = Modifier.padding(8.dp)
-//                    ) {
-//                        Text(
-//                            text = data.message,
-//                            fontSize = 32.sp
-//                        )
-//                    }
-//                }
-//            }
+//
             })
     }
 
