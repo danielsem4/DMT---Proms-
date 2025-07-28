@@ -23,9 +23,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import org.example.hit.heal.core.presentation.Resources
-import org.example.hit.heal.core.presentation.ToastType
-import org.jetbrains.compose.resources.stringResource
 import kotlin.math.abs
 
 class MedicationViewModel
@@ -61,6 +58,9 @@ class MedicationViewModel
 
     private val _isSaveSuccessful = MutableStateFlow(false)
     val isSaveSuccessful: StateFlow<Boolean> = _isSaveSuccessful
+
+    var successMessageAlarm by mutableStateOf<Boolean?>(null)
+    var successMessageReport by mutableStateOf<Boolean?>(null)
 
 
 
@@ -216,10 +216,12 @@ class MedicationViewModel
         val result = remoteDataSource.reportMedicationTook(report)
 
         result.onSuccess {
+            successMessageReport = true
             errorMessage = null
             _isSaveSuccessful.value = true
         }.onError { error ->
             println("Error: $error")
+            successMessageReport = false
             _isSaveSuccessful.value = false
         }
         isLoading.value = false
@@ -300,11 +302,13 @@ class MedicationViewModel
         medicationName: String
     ) {
         viewModelScope.launch {
+            isLoading.value = true
             if (!initUserIds()) {
                 errorAlarmMessage = errorMessage
-
+                isLoading.value = false
                 return@launch
             }
+
             val newMedication = Medication(
                 id = clinicId!!,
                 patient = patientId!!,
@@ -324,9 +328,13 @@ class MedicationViewModel
 
             result.onSuccess {
                 errorAlarmMessage = null
+                successMessageAlarm = true
+                isLoading.value = false
 
             }.onError { error ->
                 errorAlarmMessage = "$error"
+                successMessageAlarm = false
+                isLoading.value = false
 
             }
         }

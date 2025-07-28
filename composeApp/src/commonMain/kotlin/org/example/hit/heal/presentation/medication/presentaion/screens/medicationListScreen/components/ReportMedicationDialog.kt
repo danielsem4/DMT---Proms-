@@ -1,6 +1,7 @@
 package org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.components
 
 
+import ToastMessage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -59,7 +60,7 @@ fun ReportMedicationDialog(
     var toastType by remember { mutableStateOf(ToastType.Normal) }
     var buttonPressed by remember { mutableStateOf(false) }
 
-    // Показываем Toast, когда завершена загрузка после кнопки
+
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -162,11 +163,12 @@ fun ReportMedicationDialog(
     }
 
     if (showToast && toastMessage != null) {
-        Toast(
+        ToastMessage(
             message = toastMessage!!,
-            type = toastType
+            type = toastType,
+            onDismiss = { showToast = false }
         )
-        // Автоматически скрываем Toast после отображения
+
         LaunchedEffect(Unit) {
             delay(2500)
             showToast = false
@@ -174,13 +176,23 @@ fun ReportMedicationDialog(
     }
     LaunchedEffect(viewModel.isLoading.value) {
         if (!viewModel.isLoading.value && buttonPressed) {
-            toastMessage = viewModel.errorMessage ?: "Error"
-            toastType = if (viewModel.errorMessage == null) ToastType.Success else ToastType.Error
+            toastMessage = viewModel.errorMessage?: "Error"
+            toastType = if (viewModel.successMessageReport == true) ToastType.Success else ToastType.Error
             showToast = true
             buttonPressed = false
             viewModel.resetSaveSuccess()
+
         }
     }
+   // LaunchedEffect(viewModel.isLoading.value) {
+   //     if (!viewModel.isLoading.value && buttonPressed) {
+   //         toastMessage = viewModel.errorMessage ?: "Error"
+   //         toastType = if (viewModel.errorMessage == null) ToastType.Success else ToastType.Error
+   //         showToast = true
+   //         buttonPressed = false
+   //         viewModel.resetSaveSuccess()
+   //     }
+   // }
 
 }
 

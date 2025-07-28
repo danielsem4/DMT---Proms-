@@ -15,6 +15,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import core.data.model.Medications.Medication
+import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
@@ -25,8 +26,7 @@ import org.example.hit.heal.presentation.medication.presentaion.components.Custo
 import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
 import org.example.hit.heal.presentation.medication.presentaion.screens.mainMedication.MainMedicationScreen
 import org.example.hit.heal.presentation.medication.presentaion.screens.medicationAlarm.components.generateTimeSlots
-import org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.components.Toast
-import org.jetbrains.compose.resources.stringResource
+ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import kotlin.String
@@ -56,9 +56,6 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
             stringResource(Resources.String.three),
             stringResource(Resources.String.four)
         )
-        var toastMessage by remember { mutableStateOf<String?>(null) }
-        var toastType by remember { mutableStateOf(ToastType.Normal) }
-
 
         val isLoading = viewModel.isLoading.value
         val isSaveSuccessful = viewModel.isSaveSuccessful.collectAsState().value
@@ -66,20 +63,12 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
         val save = stringResource(Resources.String.save)
         val startDateError = stringResource(Resources.String.error_start_date_empty)
         val endDateError = stringResource(Resources.String.error_end_before_start)
+        var showToast by remember { mutableStateOf(false) }
+        var toastMessage by remember { mutableStateOf<String?>(null) }
+        var toastType by remember { mutableStateOf(ToastType.Normal) }
+        var buttonPressed by remember { mutableStateOf(false) }
 
 
-        LaunchedEffect(isLoading, isSaveSuccessful, viewModelError) {
-            if (!isLoading) {
-                if (isSaveSuccessful) {
-                    toastType = ToastType.Success
-                    toastMessage = save
-                    viewModel.resetSaveSuccess()
-                } else if (!viewModelError.isNullOrBlank()) {
-                    toastType = ToastType.Error
-                    toastMessage = viewModelError
-                }
-            }
-        }
         fun validateInput() {
             if (selectedStartDate.isBlank()) {
                 errorMessage = startDateError
@@ -202,13 +191,26 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
                     Spacer(modifier = Modifier.height(8.dp))
 
                 }
-                toastMessage?.let { msg ->
-                    ToastMessage  (
-                        message = msg,
+                if (showToast && toastMessage != null) {
+                    ToastMessage(
+                        message = toastMessage!!,
                         type = toastType,
-                        alignUp = false,
-                        onDismiss = {   navigator.push(MainMedicationScreen()) }
+                        onDismiss = { showToast = false }
                     )
+
+                    LaunchedEffect(Unit) {
+                        delay(2500)
+                        showToast = false
+                    }
+                }
+                LaunchedEffect(viewModel.isLoading.value) {
+                    if (viewModel.isLoading.value ) {
+                        toastMessage = viewModel.errorMessage?: "Error"
+                        toastType = if (viewModel.successMessageAlarm == true) ToastType.Success else ToastType.Error
+                        showToast = true
+                        viewModel.resetSaveSuccess()
+
+                    }
                 }
 
             }

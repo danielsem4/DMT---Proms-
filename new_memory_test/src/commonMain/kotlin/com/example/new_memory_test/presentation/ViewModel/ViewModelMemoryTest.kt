@@ -1,5 +1,4 @@
 package com.example.new_memory_test.presentation.ViewModel
-
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -29,14 +28,19 @@ import core.util.PrefKeys
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import org.example.hit.heal.core.presentation.components.SlotState
 import org.jetbrains.compose.resources.DrawableResource
 import kotlin.collections.ArrayList
@@ -104,9 +108,7 @@ class ViewModelMemoryTest(
     var imagesCounter = mutableStateOf(0)
 
 
-    private var currentUserId: String? = null
-    private var currentClinicId: String? = null
-    private var currentPatientIdInt: Int? = null
+
 
     //user raiting
     var rawUserRating: Float? = null
@@ -333,37 +335,30 @@ class ViewModelMemoryTest(
         txtMemoryPage = page
     }
 
-    //Add all thinks to result
-    fun resultUpload() {
-        rawUserRating?.let {
-            setSuccessRateAfter(it.toString()) // add rating to userRating
-        }
-        result.successRateAfter = userRating.toList()
-        result.date = getCurrentFormattedDateTime()
-        result.PhoneCallResult = listOf(callResult)
-        result.MemoryQuestionPart1 = ArrayList(part1List)
-        result.MemoryQuestionPart2 = ArrayList(part2List)
-        result.MemoryQuestionPart3 = ArrayList(part3List)
-        result.activitiesPlaced = collectPlannedActivities() as ArrayList<ActivityPlacement>
-        println("Result ready: $result")
-        println("MemoryQuestionPart1 inside result: ${result.MemoryQuestionPart1}")
-    }
-
     //load results
     fun uploadEvaluationResults(
     ) {
         _isLoading.value = true
-        uploadScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 recordInactivity()
                 val clinicId = storage.get(PrefKeys.clinicId)
                 val patientId = storage.get(PrefKeys.userId)?.toIntOrNull()
                 result.patient_id = patientId!!
                 result.clinicId = clinicId!!
-
+                rawUserRating?.let {
+                    setSuccessRateAfter(it.toString()) // add rating to userRating
+                }
+                result.successRateAfter = userRating.toList()
+                result.date = getCurrentFormattedDateTime()
+                result.PhoneCallResult = listOf(callResult)
+                result.MemoryQuestionPart1 = ArrayList(part1List)
+                result.MemoryQuestionPart2 = ArrayList(part2List)
+                result.MemoryQuestionPart3 = ArrayList(part3List)
+                result.activitiesPlaced = collectPlannedActivities() as ArrayList<ActivityPlacement>
+                println("Result ready: $result")
+                println("MemoryQuestionPart1 inside result: ${result.MemoryQuestionPart1}")
                 result.measurement = _memoryTest.value?.id ?: 20
-                resultUpload()
-
                 delay(200)
 
                 val uploadResult = uploadTestResultsUseCase.execute(result, MemoryData.serializer())
@@ -373,18 +368,18 @@ class ViewModelMemoryTest(
                     println(" העלאה של הכל הצליחה")
                     _isLoading.value = false
                     _uploadStatus.value = Result.success(Unit)
-                    // onSuccess?.invoke()
+
                 }.onError { error ->
                     println(" שגיאה העלאה: $error")
                     _isLoading.value = false
                     _uploadStatus.value = Result.failure(Exception(error.toString()))
-                    //onFailure?.invoke(error)
+
                 }
 
             } catch (e: Exception) {
                 println(" שגיאה לא צפויה: ${e.message}")
                 _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
-                //onFailure?.invoke(DataError.Remote.UNKNOWN)
+
             }
         }
     }
@@ -408,8 +403,8 @@ class ViewModelMemoryTest(
             2 -> result.images1.add(image)
             4 -> result.images2.add(image)
             5 -> result.imageUrl.add(image)
-            6 -> { result.images3.add(image)
-            }
+            6 ->  result.images3.add(image)
+
         }
     }
 
@@ -420,12 +415,12 @@ class ViewModelMemoryTest(
         viewModelScope.launch {
             val clinicId = storage.get(PrefKeys.clinicId) ?: return@launch
             val patientId = storage.get(PrefKeys.userId)?.toIntOrNull() ?: return@launch
-
             api.getSpecificEvaluation(clinicId, patientId, evaluationName)
                 .onSuccess { fetched ->
                     _memoryTest.value = fetched
                     println("fetched evaluation: $fetched")
                 }
+
                 .onError { error ->
                     // post an error to a MessageBarState here todo
                     println("Error fetching evaluation: $error")
@@ -435,8 +430,8 @@ class ViewModelMemoryTest(
 
 
     //Only upload and add  start a part of loading to server(another fun)
-    private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    fun uploadImage(
+   // private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+    suspend fun uploadImage(
         bitmap: ImageBitmap,
         date: String,
         currentQuestion: Int?,
@@ -447,104 +442,101 @@ class ViewModelMemoryTest(
         }
         val imageByteArray = bitmap.toByteArray()
         println(" התחלת העלאה, image size: ${imageByteArray.size}")
-        uploadScope.launch(Dispatchers.IO) {
-            try {
-                val userId = storage.get(PrefKeys.userId)!!
-                val clinicId = storage.get(PrefKeys.clinicId)!!
-                val measurement = _memoryTest.value?.id ?: 20  /// Need to check what a number
-
-                val imagePath = bitmapToUploadUseCase.buildPath(
-                    clinicId = clinicId,
-                    patientId = userId,
-                    measurementId = measurement,
-                    pathDate = date
-                )
-                println(" Path: $imagePath")
-                val result = uploadImageUseCase.execute(
-                    imagePath = imagePath ,
-                    bytes = imageByteArray,
-                    clinicId = clinicId,
-                    userId = userId
-                )
-                result.onSuccess {
-                    println(" העלאה הצליחה")
-                    saveUploadedImageUrl(currentQuestion, imagePath, date)
-                    imagesCounter.value++
-                    if (imagesCounter.value >= 10) {
-                        uploadEvaluationResults()
-                    }
-                }.onError { error ->
-                    println("  העלאה לא הצליחה: $error")
-                    _uploadStatus.value = Result.failure(Exception(error.toString()))
-                }
-            } catch (e: Exception) {
-                println(" שגיאה חריגה: ${e.message}")
-
+        try {
+            val userId = storage.get(PrefKeys.userId)!!
+            val clinicId = storage.get(PrefKeys.clinicId)!!
+            val measurement = _memoryTest.value?.id ?: 20
+            val imagePath = bitmapToUploadUseCase.buildPath(
+                clinicId = clinicId,
+                patientId = userId,
+                measurementId = measurement,
+                pathDate = date
+            )
+            println(" Path: $imagePath")
+            val result = uploadImageUseCase.execute(
+                imagePath = imagePath,
+                bytes = imageByteArray,
+                clinicId = clinicId,
+                userId = userId
+            )
+            imagesCounter.value++
+            result.onSuccess {
+                println(" העלאה הצליחה")
+                saveUploadedImageUrl(currentQuestion, imagePath, date)
+            }.onError { error ->
+                println("  העלאה לא הצליחה: $error")
+                _uploadStatus.value = Result.failure(Exception(error.toString()))
             }
+            if (imagesCounter.value == 10) {
+                uploadEvaluationResults()
+            }
+        } catch (e: Exception) {
+            println(" שגיאה חריגה: ${e.message}")
         }
     }
-
 
     fun uploadAllImages() {
-        // Image 1
         viewModelScope.launch(Dispatchers.IO) {
-            image1.value.forEach { image ->
-                if (image != null) {
-                    uploadImage(
-                        bitmap = image,
-                        date = timeForImage1.value ?: getCurrentFormattedDateTime(),
-                        currentQuestion = pageNumForImage1.value
-                    )
-                    //println(" Path1: $image")
+            supervisorScope {
+                val jobs = mutableListOf<Deferred<Unit>>()
 
+                // Image 1
+                image1.value.forEach { image ->
+                    image?.let {
+                        jobs.add(async {
+                            uploadImage(
+                                bitmap = it,
+                                date = timeForImage1.value ?: getCurrentFormattedDateTime(),
+                                currentQuestion = pageNumForImage1.value
+                            )
+                        })
+                    }
                 }
 
-                println(" PathUrl: ${imagesCounter.value}")
-            }
-
-            // Image 2
-            image2.value.forEach { image ->
-                if (image != null) {
-                    uploadImage(
-                        bitmap = image,
-                        date = timeForImage2.value ?: getCurrentFormattedDateTime(),
-                        currentQuestion = pageNumForImage2.value
-                    )
+                // Image 2
+                image2.value.forEach { image ->
+                    image?.let {
+                        jobs.add(async {
+                            uploadImage(
+                                bitmap = it,
+                                date = timeForImage2.value ?: getCurrentFormattedDateTime(),
+                                currentQuestion = pageNumForImage2.value
+                            )
+                        })
+                    }
                 }
-                //println(" Path2: $image")
 
-                println(" PathUrl: ${imagesCounter.value}")
-            }
-
-            // Image 3
-            image3.value.forEach { image ->
-                if (image != null) {
-                    uploadImage(
-                        bitmap = image,
-                        date = timeForImage3.value ?: getCurrentFormattedDateTime(),
-                        currentQuestion = pageNumForImage3.value
-                    )
+                // Image 3
+                image3.value.forEach { image ->
+                    image?.let {
+                        jobs.add(async {
+                            uploadImage(
+                                bitmap = it,
+                                date = timeForImage3.value ?: getCurrentFormattedDateTime(),
+                                currentQuestion = pageNumForImage3.value
+                            )
+                        })
+                    }
                 }
-                // println(" Path3: $image")
 
-                println(" PathUrl: ${imagesCounter.value}")
-            }
-
-            imageUrl.value.forEach { image ->
-                if (image != null) {
-                    uploadImage(
-                        bitmap = image,
-                        date = timeUrl.value ?: getCurrentFormattedDateTime(),
-                        currentQuestion = pageNumForUrl.value
-                    )
-                    //println(" PathUrl: $image")
-
-                    println(" PathUrl: ${imagesCounter.value}")
+                // imageUrl
+                imageUrl.value.forEach { image ->
+                    image?.let {
+                        jobs.add(async {
+                            uploadImage(
+                                bitmap = it,
+                                date = timeUrl.value ?: getCurrentFormattedDateTime(),
+                                currentQuestion = pageNumForUrl.value
+                            )
+                        })
+                    }
                 }
+                jobs.awaitAll()
+                uploadEvaluationResults()
+
             }
         }
     }
-
 
     //reset all variables
     fun reset() {
