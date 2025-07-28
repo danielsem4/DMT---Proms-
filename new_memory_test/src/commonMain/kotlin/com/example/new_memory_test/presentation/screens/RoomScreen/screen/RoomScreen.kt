@@ -26,7 +26,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,7 +56,6 @@ import com.example.new_memory_test.presentation.screens.RoomScreen.components.en
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.zonePosition.getZoneForPosition
 import com.example.new_memory_test.presentation.screens.RoomScreen.data.DataItem
 import com.example.new_memory_test.presentation.screens.ScheduleInformationScreen.ScheduleInformationScreen
-import com.example.new_memory_test.presentation.screens.ScheduleScreen.screen.ScheduleScreen
 import core.utils.CapturableWrapper
 import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
@@ -84,6 +82,7 @@ import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.dialogs.CustomDialog
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.core.presentation.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -96,14 +95,14 @@ class RoomsScreens(val pageNumber: Int) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = koinViewModel()
-        val coroutineScope = rememberCoroutineScope()
-
         viewModel.txtMemoryPage = pageNumber
-        //Dialogs and raiting
 
+
+        //Dialogs and raiting
         var showDialogEndTime by remember { mutableStateOf(false) }
         var showInactivityDialog by remember { mutableStateOf(false) }
         var rating by remember { mutableStateOf(0f) }
+        var showDialog by remember { mutableStateOf(false) }
 
         //Rooms
         var selectedRoom by remember { mutableStateOf(Room.Bedroom) }
@@ -116,8 +115,6 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         var autoSwitchingRooms by remember { mutableStateOf(false) }
 
 
-        var showDialog by remember { mutableStateOf(false) }
-        var triggerNavigation by remember { mutableStateOf(false) }
 
         //Items
         val allItems : List<Pair<Int, DrawableResource>> = listOf(
@@ -261,7 +258,6 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                 }
             )
         }
-
         //Rating dialog (in the end)
         if (showDialog) {
             RatingDialog(
@@ -615,48 +611,6 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         {
             navigator.popUntilRoot()
         }
-    }
-
-
-
-    fun isObjectInsideTargetArea(
-        targetPosition: Offset,
-        draggablePosition: Offset,
-        targetSize: Pair<Float, Float>,
-        draggableSize: Pair<Float, Float> = 0f to 0f,
-        isCircle: Boolean,
-        threshold: Float = 0f
-    ): Boolean {
-        val (targetWidth, targetHeight) = targetSize
-        val (draggableWidth, draggableHeight) = draggableSize
-
-        val targetLeft = targetPosition.x - threshold
-        val targetTop = targetPosition.y - threshold
-        val targetRight = targetPosition.x + targetWidth + threshold
-        val targetBottom = targetPosition.y + targetHeight + threshold
-
-        val draggableLeft: Float
-        val draggableTop: Float
-        val draggableRight: Float
-        val draggableBottom: Float
-
-        if (isCircle) {
-            val draggableRadius = draggableWidth / 2
-            draggableLeft = draggablePosition.x - draggableRadius
-            draggableTop = draggablePosition.y - draggableRadius
-            draggableRight = draggablePosition.x + draggableRadius
-            draggableBottom = draggablePosition.y + draggableRadius
-        } else {
-            draggableLeft = draggablePosition.x
-            draggableTop = draggablePosition.y
-            draggableRight = draggableLeft + draggableWidth
-            draggableBottom = draggableTop + draggableHeight
-        }
-
-        val isInside = draggableLeft >= targetLeft && draggableRight <= targetRight &&
-                draggableTop >= targetTop && draggableBottom <= targetBottom
-
-        return isInside
     }
 
     @Composable

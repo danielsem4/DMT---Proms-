@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -21,23 +20,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.components.BulletPointText
 import com.example.new_memory_test.presentation.screens.RoomInsructionsScreen.RoomInstructionsScreen
-import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
-import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import core.utils.RegisterBackHandler
-import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
 import org.example.hit.heal.core.presentation.FontSize.LARGE
-
-
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Sizes.buttonHeightMd
 import org.example.hit.heal.core.presentation.Sizes.heightSm
@@ -50,7 +41,6 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-
 class MemoryScreen : Screen {
 
     @Composable
@@ -59,8 +49,6 @@ class MemoryScreen : Screen {
         val viewModel: ViewModelMemoryTest = koinViewModel()
 
         viewModel.txtMemoryPage =1
-
-
 
 
         //create at evaluetion memory

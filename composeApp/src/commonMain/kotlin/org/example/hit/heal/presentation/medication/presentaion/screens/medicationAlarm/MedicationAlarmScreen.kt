@@ -57,17 +57,13 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
             stringResource(Resources.String.four)
         )
 
-        val isLoading = viewModel.isLoading.value
-        val isSaveSuccessful = viewModel.isSaveSuccessful.collectAsState().value
-        val viewModelError = viewModel.errorMessage
-        val save = stringResource(Resources.String.save)
         val startDateError = stringResource(Resources.String.error_start_date_empty)
         val endDateError = stringResource(Resources.String.error_end_before_start)
         var showToast by remember { mutableStateOf(false) }
         var toastMessage by remember { mutableStateOf<String?>(null) }
         var toastType by remember { mutableStateOf(ToastType.Normal) }
         var buttonPressed by remember { mutableStateOf(false) }
-
+        var navigateAfterToast by remember { mutableStateOf(false) }
 
         fun validateInput() {
             if (selectedStartDate.isBlank()) {
@@ -92,9 +88,13 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
             title = medicationName,
             config = ScreenConfig.PhoneConfig,
             onPrevClick = { navigator.pop() },
-            onNextClick = { validateInput() },
+            onNextClick = { validateInput()
+                           buttonPressed =true
+                navigateAfterToast = true
+                          },
             prevButtonText = stringResource(Resources.String.back),
-            nextButtonText = stringResource(Resources.String.save),
+            nextButtonText = stringResource(Resources.String.save)
+                    ,
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
                 Column(
@@ -195,17 +195,22 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
                     ToastMessage(
                         message = toastMessage!!,
                         type = toastType,
-                        onDismiss = { showToast = false }
+                        onDismiss = { showToast = false
+                            navigator.push(MainMedicationScreen())}
+
+
                     )
 
                     LaunchedEffect(Unit) {
                         delay(2500)
                         showToast = false
+                        navigateAfterToast = false
+                        navigator.push(MainMedicationScreen())
                     }
                 }
                 LaunchedEffect(viewModel.isLoading.value) {
-                    if (viewModel.isLoading.value ) {
-                        toastMessage = viewModel.errorMessage?: "Error"
+                    if (!viewModel.isLoading.value && buttonPressed) {
+                        toastMessage = viewModel.errorMessage?: "Success"
                         toastType = if (viewModel.successMessageAlarm == true) ToastType.Success else ToastType.Error
                         showToast = true
                         viewModel.resetSaveSuccess()

@@ -184,15 +184,7 @@ fun ReportMedicationDialog(
 
         }
     }
-   // LaunchedEffect(viewModel.isLoading.value) {
-   //     if (!viewModel.isLoading.value && buttonPressed) {
-   //         toastMessage = viewModel.errorMessage ?: "Error"
-   //         toastType = if (viewModel.errorMessage == null) ToastType.Success else ToastType.Error
-   //         showToast = true
-   //         buttonPressed = false
-   //         viewModel.resetSaveSuccess()
-   //     }
-   // }
+
 
 }
 

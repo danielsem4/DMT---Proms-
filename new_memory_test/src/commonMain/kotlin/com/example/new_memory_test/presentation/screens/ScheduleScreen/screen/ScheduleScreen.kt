@@ -64,6 +64,8 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.components.SlotState
 import org.example.hit.heal.core.presentation.components.dialogs.CustomDialog
 import kotlin.collections.mapValues
+
+
 class ScheduleScreen(val pageNumber: Int ) : Screen {
     @Composable
     override fun Content() {
@@ -120,6 +122,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                 painter=painterResource(Resources.Icon.stethoscopeImage)
             )
         )
+
         val idToTextMap = mapOf(
             stringResource(Resources.String.book_circle) to stringResource(Resources.String.book_circle_text) ,
             stringResource(Resources.String.dumbbell_circle) to stringResource(Resources.String.dumbbell_circle_text),
@@ -128,6 +131,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
             stringResource(Resources.String.coffee_circle)  to stringResource(Resources.String.coffee_circle_text),
             stringResource(Resources.String.stethoscope_circle) to stringResource(Resources.String.stethoscope_circle_text)
         ) // information depend of witch circle use
+
         val usedSlotIds = remember { mutableStateListOf<String>() }
         val selectedItemText = remember { mutableStateOf<String?>(null) }
 
@@ -165,6 +169,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                 content = {
                 DragAndDropContainer(state = dragAndDropState) {
                     capturable = platformCapturable(
+
                         //Save Screen like Image
                         onCaptured = { imageBitmap ->
                             val timestamp = getCurrentFormattedDateTime()

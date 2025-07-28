@@ -27,14 +27,11 @@ import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.util.PrefKeys
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -108,13 +105,9 @@ class ViewModelMemoryTest(
     var imagesCounter = mutableStateOf(0)
 
 
-
-
     //user raiting
     var rawUserRating: Float? = null
     val userRating = mutableListOf<MeasureObjectString>()
-
-    //private var result: EvaluationResult = EvaluationResult()
 
 
     //audio

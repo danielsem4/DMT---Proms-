@@ -14,15 +14,18 @@ import core.domain.api.AppApi
 import core.domain.onError
 import core.domain.onSuccess
 import core.util.PrefKeys
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import org.example.hit.heal.core.presentation.ToastType
 import kotlin.math.abs
 
 class MedicationViewModel
@@ -57,16 +60,11 @@ class MedicationViewModel
     val selectedEndDate: StateFlow<String> = _selectedEndDate
 
     private val _isSaveSuccessful = MutableStateFlow(false)
-    val isSaveSuccessful: StateFlow<Boolean> = _isSaveSuccessful
+
 
     var successMessageAlarm by mutableStateOf<Boolean?>(null)
     var successMessageReport by mutableStateOf<Boolean?>(null)
 
-
-
-    fun getSaveSuccessful(): Boolean {
-        return _isSaveSuccessful.value
-    }
 
     fun resetSaveSuccess() {
         _isSaveSuccessful.value = false
@@ -127,8 +125,6 @@ class MedicationViewModel
 
     var isLoading = mutableStateOf(false)
         private set
-
-
 
     //--------------Date
     //or date now
@@ -276,6 +272,7 @@ class MedicationViewModel
         viewModelScope.launch {
             isLoading.value = true
 
+
             if (!initUserIds()) {
                 errorMessage = errorMessage
                 isLoading.value = false
@@ -311,7 +308,10 @@ class MedicationViewModel
 
             val newMedication = Medication(
                 id = clinicId!!,
+                clinicId = clinicId!!,
                 patient = patientId!!,
+                patientId = patientId!!,
+                medicationId = medication?.id ?: 0,
                 medicine = medication?.medicine.toString() ?: "",
                 name = medicationName,
                 form = medication?.form ?: "",
@@ -326,16 +326,18 @@ class MedicationViewModel
 
             val result = remoteDataSource.setMedicationNotifications(newMedication)
 
-            result.onSuccess {
-                errorAlarmMessage = null
-                successMessageAlarm = true
-                isLoading.value = false
+            withContext(Dispatchers.Main) {
+                result.onSuccess {
+                    errorAlarmMessage = null
+                    successMessageAlarm = true
+                    isLoading.value = false
 
-            }.onError { error ->
-                errorAlarmMessage = "$error"
-                successMessageAlarm = false
-                isLoading.value = false
+                }.onError { error ->
+                    errorAlarmMessage = "$error"
+                    successMessageAlarm = false
+                    isLoading.value = false
 
+                }
             }
         }
     }

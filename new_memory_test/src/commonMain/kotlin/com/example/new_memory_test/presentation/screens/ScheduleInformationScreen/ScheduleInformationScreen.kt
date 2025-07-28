@@ -52,7 +52,6 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-
         val viewModel: ViewModelMemoryTest = koinViewModel()
 
         viewModel.txtMemoryPage = pageNumber
