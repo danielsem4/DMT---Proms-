@@ -52,7 +52,7 @@ class NumberSelectScreen(
 
         TabletBaseScreen(
             title = (stringResource(secQuestionTitle)),
-            question = 2, // For "2/8"
+            question = 2,
             onNextClick = { navigator?.push(SeasonsSelectScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(32.dp))
@@ -164,7 +164,7 @@ class NumberSelectScreen(
         )
     RegisterBackHandler(this)
     {
-        navigator?.pop()
+        navigator?.popUntilRoot()
     }
     }
 }

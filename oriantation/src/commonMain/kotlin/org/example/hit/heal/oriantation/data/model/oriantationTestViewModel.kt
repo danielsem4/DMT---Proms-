@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import core.data.storage.Storage
 import core.domain.DataError
@@ -34,6 +35,7 @@ class OrientationTestViewModel(
 ): ViewModel() {
     private var trialData by mutableStateOf(TrialData())
     var drawnShape: ByteArray? = null
+    var triangleOffset by mutableStateOf<Offset?>(null)
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     fun updateNumber(number: Int) {
@@ -62,6 +64,10 @@ class OrientationTestViewModel(
 
     fun getTestResults() = trialData.also {
         println("Test results: $it")
+    }
+
+    fun setTriangleOffset(offset: Offset) {
+        triangleOffset = offset
     }
 
     fun sendToServer(
@@ -101,6 +107,7 @@ class OrientationTestViewModel(
                             .onSuccess {
                                 withContext(Dispatchers.Main) {
                                     onSuccess?.invoke()
+
                                 }
                             }
                             .onError { error ->

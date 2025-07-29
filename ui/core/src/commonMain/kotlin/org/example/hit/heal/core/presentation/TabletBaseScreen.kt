@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -72,7 +73,7 @@ fun TabletBaseScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 32.dp),
             ) {
 
                 if (onNextClick != null) {
@@ -84,6 +85,7 @@ fun TabletBaseScreen(
                     ) {
                         Text("הבא", color = Color.White, fontSize = 25.sp)
                     }
+
                 }
 
 

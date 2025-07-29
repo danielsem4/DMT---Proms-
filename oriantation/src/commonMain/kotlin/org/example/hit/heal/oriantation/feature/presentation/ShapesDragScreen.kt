@@ -146,6 +146,8 @@ class ShapesDragScreen(
                                             if (shape.id == 0) {
                                                 viewModel.updateShapesDrag(true)
                                                 println("triangle dropped")
+                                                // Save the offset relative to the red square
+                                                viewModel.setTriangleOffset(Offset(dropX, dropY))
                                             }
                                         }
                                     }
@@ -158,7 +160,7 @@ class ShapesDragScreen(
         )
         RegisterBackHandler(this)
         {
-            navigator?.pop()
+            navigator?.popUntilRoot()
         }
     }
 }
