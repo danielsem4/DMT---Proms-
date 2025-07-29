@@ -52,6 +52,8 @@
     <string name="memory">Memory</string>
     <string name="hitber">HitBer</string>
     <string name="pass">Pass</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
 
     <string name="on">On</string>
     <string name="off">Off</string>
