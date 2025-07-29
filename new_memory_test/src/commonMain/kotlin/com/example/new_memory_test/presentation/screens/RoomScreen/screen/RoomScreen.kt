@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,7 +26,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +38,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -55,13 +56,11 @@ import com.example.new_memory_test.presentation.screens.RoomScreen.components.en
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.zonePosition.getZoneForPosition
 import com.example.new_memory_test.presentation.screens.RoomScreen.data.DataItem
 import com.example.new_memory_test.presentation.screens.ScheduleInformationScreen.ScheduleInformationScreen
-import com.example.new_memory_test.presentation.screens.ScheduleScreen.screen.ScheduleScreen
 import core.utils.CapturableWrapper
 import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import core.utils.platformCapturable
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
@@ -83,6 +82,7 @@ import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.dialogs.CustomDialog
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.primaryColor
+import org.example.hit.heal.core.presentation.utils.isObjectInsideTargetArea
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -95,14 +95,14 @@ class RoomsScreens(val pageNumber: Int) : Screen {
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = koinViewModel()
-        val coroutineScope = rememberCoroutineScope()
-
         viewModel.txtMemoryPage = pageNumber
-        //Dialogs and raiting
 
+
+        //Dialogs and raiting
         var showDialogEndTime by remember { mutableStateOf(false) }
         var showInactivityDialog by remember { mutableStateOf(false) }
         var rating by remember { mutableStateOf(0f) }
+        var showDialog by remember { mutableStateOf(false) }
 
         //Rooms
         var selectedRoom by remember { mutableStateOf(Room.Bedroom) }
@@ -115,8 +115,6 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         var autoSwitchingRooms by remember { mutableStateOf(false) }
 
 
-        var showDialog by remember { mutableStateOf(false) }
-        var triggerNavigation by remember { mutableStateOf(false) }
 
         //Items
         val allItems : List<Pair<Int, DrawableResource>> = listOf(
@@ -149,9 +147,14 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         //---------------LaunchedEffect
         //if person don't do  something for 1 minutes and less than 3 times  - async
         LaunchedEffect(Unit) {
-            while (timeLeft > 0 && inactivityCount < 3) {
-                delay(1000L)
-                timeLeft -= 1
+            while (inactivityCount < 3) {
+                if (!showInactivityDialog && timeLeft > 0) {
+                    delay(1000L)
+                    timeLeft -= 1
+                } else {
+                    delay(100L)
+                }
+
                 val nowMillis = Clock.System.now().toEpochMilliseconds()
                 val lastMillis = lastInteractionTime.toEpochMilliseconds()
                 val secondsSinceLastInteraction = (nowMillis - lastMillis) / 1000
@@ -159,10 +162,11 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                 if (!showInactivityDialog && secondsSinceLastInteraction >= 60) {
                     showInactivityDialog = true
                 }
-            }
-            if (timeLeft == 0 && inactivityCount < 3 ) {
-                 showInactivityDialog =true
 
+                if (timeLeft == 0 && inactivityCount < 3) {
+                    showDialogEndTime = true
+                    break
+                }
             }
         }
         //If came to screen - create items for dragging
@@ -210,50 +214,50 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         //If end time (4 minutes)
         if (showDialogEndTime) {
             CustomDialog(
-                icon = Resources.Icon.appIcon,
+                icon = Resources.Icon.clockIcon,
                 title = stringResource(Resources.String.time_ended),
-                text = stringResource(Resources.String.time_ended_for_this_question_memory),
-                onDismiss = {
-                    showDialogEndTime = false
-                    when (pageNumber) {
-                        2 -> navigator.push(CallScreen(pageNumber = 3))
-                        4 -> navigator.push(ScheduleScreen(pageNumber = 5))
-                        6 -> showDialog = true
+                description = stringResource(Resources.String.time_ended_for_this_question_memory),
+                buttons = listOf(
+                    stringResource(Resources.String.next) to {
+                        showDialogEndTime = false
+                        autoSwitchingRooms = true
+
                     }
+                ),
+                onDismiss = {
+                    showDialogEndTime = true
                 }
             )
         }
         //Dialog for inactives user
         if (showInactivityDialog) {
             CustomDialog(
-                icon = Resources.Icon.appIcon, // или другой DrawableResource
-                title = "",
-                text = if (inactivityCount < 2) {
+                icon = Resources.Icon.clockIcon,
+                title = stringResource(Resources.String.time),
+                description = if (inactivityCount < 2) {
                     stringResource(Resources.String.first_one_minute_end_body_memory)
                 } else {
                     stringResource(Resources.String.second_one_minute_end_body_memory)
                 },
-                onDismiss = {
-                    showInactivityDialog = false
-                    lastInteractionTime = Clock.System.now()
-                    inactivityCount++
-                    viewModel.recordInactivity()
-                    if (inactivityCount < 3) {
-                        timeLeft = 4 * 60
-                    } else {
-                        when (pageNumber) {
-                            2 -> autoSwitchingRooms = true
-                            4 -> autoSwitchingRooms = true
-                            6 -> {
-                                autoSwitchingRooms = true
-
-                            }
+                buttons = listOf(
+                    stringResource(Resources.String.yes) to {
+                        showInactivityDialog = false
+                        lastInteractionTime = Clock.System.now()
+                        inactivityCount++
+                        viewModel.recordInactivity()
+                        if (inactivityCount < 3) {
+                            timeLeft = 4 * 60
+                        } else {
+                            autoSwitchingRooms = true
                         }
+
                     }
+                ),
+                onDismiss = {
+                    showInactivityDialog = true
                 }
             )
         }
-
         //Rating dialog (in the end)
         if (showDialog) {
             RatingDialog(
@@ -332,7 +336,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                     //--------------------Buttons of changing rooms
                     Row(
                         modifier = Modifier.Companion.fillMaxWidth().padding(top = paddingMd),
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
                     ) {//Change room and color of Button (if choose)
                         roomButtons.forEach { room ->
                             val isSelected = selectedRoom == room
@@ -370,14 +374,18 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                             .weight(1f),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Box(
-                            modifier = Modifier.Companion
-                                .background(Color.Companion.White)
+                        BoxWithConstraints(
+                            modifier = Modifier
+                                .background(Color.White)
                                 .zIndex(1f)
-                                .border(elevationSm, Color.Companion.Black)
+                                .border(elevationSm, Color.Black)
                                 .fillMaxWidth()
                                 .height(height7Xl)
                         ) {
+                            val itemCountPerRow = 4
+                            val itemSpacing = 16.dp
+                            val itemSize = (maxWidth - itemSpacing * (itemCountPerRow + 1)) / itemCountPerRow
+
                             Column(
                                 modifier = Modifier.Companion
                                     .padding(8.dp)
@@ -440,7 +448,8 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                                         }
                                                     },
                                                     selectedRoom = selectedRoom,
-                                                    placedItems = viewModel.placedItems
+                                                    placedItems = viewModel.placedItems,
+                                                    size = calculateItemSize(roomSize)
                                                 )
                                             } else {
                                                 Spacer(modifier = Modifier.Companion.size(spacing6Xl))
@@ -553,6 +562,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                 .forEach { item ->
                                     DraggableItem(
                                         id = item.id,
+                                        size = calculateItemSize(roomSize),
                                         imageRes = item.resId,
                                         onDrop = { id, globalOffset ->
                                             val relativeOffset = globalOffset - roomPosition
@@ -603,52 +613,18 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         }
     }
 
-
-    fun isObjectInsideTargetArea(
-        targetPosition: Offset,
-        draggablePosition: Offset,
-        targetSize: Pair<Float, Float>,
-        draggableSize: Pair<Float, Float> = 0f to 0f,
-        isCircle: Boolean,
-        threshold: Float = 0f
-    ): Boolean {
-        val (targetWidth, targetHeight) = targetSize
-        val (draggableWidth, draggableHeight) = draggableSize
-
-        val targetLeft = targetPosition.x - threshold
-        val targetTop = targetPosition.y - threshold
-        val targetRight = targetPosition.x + targetWidth + threshold
-        val targetBottom = targetPosition.y + targetHeight + threshold
-
-        val draggableLeft: Float
-        val draggableTop: Float
-        val draggableRight: Float
-        val draggableBottom: Float
-
-        if (isCircle) {
-            val draggableRadius = draggableWidth / 2
-            draggableLeft = draggablePosition.x - draggableRadius
-            draggableTop = draggablePosition.y - draggableRadius
-            draggableRight = draggablePosition.x + draggableRadius
-            draggableBottom = draggablePosition.y + draggableRadius
-        } else {
-            draggableLeft = draggablePosition.x
-            draggableTop = draggablePosition.y
-            draggableRight = draggableLeft + draggableWidth
-            draggableBottom = draggableTop + draggableHeight
-        }
-
-        val isInside = draggableLeft >= targetLeft && draggableRight <= targetRight &&
-                draggableTop >= targetTop && draggableBottom <= targetBottom
-
-        return isInside
-    }
-
     @Composable
     fun rememberItemSizePx(): Pair<Float, Float> {
         val density = LocalDensity.current
         val sizePx = with(density) { 40.dp.toPx() }
         return sizePx to sizePx
+    }
+
+    @Composable
+    fun calculateItemSize(roomSize: IntSize): Dp {
+        val minDimension = minOf(roomSize.width, roomSize.height)
+        val itemPx = minDimension / 6
+        return with(LocalDensity.current) { itemPx.toDp() }
     }
 
 }

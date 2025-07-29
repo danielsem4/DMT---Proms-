@@ -56,14 +56,16 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.sp
-import com.example.new_memory_test.presentation.components.dialogs.CustomDialog
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.components.DraggableSlotPalet
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.GenericSlotBox
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.components.SlotState
+import org.example.hit.heal.core.presentation.components.dialogs.CustomDialog
 import kotlin.collections.mapValues
+
+
 class ScheduleScreen(val pageNumber: Int ) : Screen {
     @Composable
     override fun Content() {
@@ -120,6 +122,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                 painter=painterResource(Resources.Icon.stethoscopeImage)
             )
         )
+
         val idToTextMap = mapOf(
             stringResource(Resources.String.book_circle) to stringResource(Resources.String.book_circle_text) ,
             stringResource(Resources.String.dumbbell_circle) to stringResource(Resources.String.dumbbell_circle_text),
@@ -128,6 +131,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
             stringResource(Resources.String.coffee_circle)  to stringResource(Resources.String.coffee_circle_text),
             stringResource(Resources.String.stethoscope_circle) to stringResource(Resources.String.stethoscope_circle_text)
         ) // information depend of witch circle use
+
         val usedSlotIds = remember { mutableStateListOf<String>() }
         val selectedItemText = remember { mutableStateOf<String?>(null) }
 
@@ -144,17 +148,10 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
         var showAcceptDialog by remember { mutableStateOf(false) }
         if (showAcceptDialog) {
             CustomDialog(
-                onDismiss = { showAcceptDialog = false },
-                icon = {
-                   // Icon(
-                   //     Icons.Default.ThumbUp,
-                   //     contentDescription = null,
-                   //     tint = Color.White,
-                   //     modifier = Modifier.size(40.dp)
-                   // )
-                },
+                icon = Resources.Icon.warningIcon,
                 title = stringResource(Resources.String.build_schedule),
                 description = stringResource(Resources.String.please_place_all_activities_memory),
+                onDismiss = { showAcceptDialog = false },
                 buttons = listOf(
                     stringResource(Resources.String.next) to {
                         showAcceptDialog = false
@@ -172,6 +169,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                 content = {
                 DragAndDropContainer(state = dragAndDropState) {
                     capturable = platformCapturable(
+
                         //Save Screen like Image
                         onCaptured = { imageBitmap ->
                             val timestamp = getCurrentFormattedDateTime()

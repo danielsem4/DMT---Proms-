@@ -13,8 +13,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
@@ -24,7 +22,8 @@ import org.example.hit.heal.core.presentation.Sizes.paddingSm
 @Composable
 fun BulletPointText(
     text: String,
-    fontSize: TextUnit = EXTRA_MEDIUM_LARGE ,
+    fontSize: TextUnit = EXTRA_MEDIUM_LARGE
+    ,
     fontWeight: FontWeight = FontWeight.Bold,
     color: Color = Color.Gray
 ) {
