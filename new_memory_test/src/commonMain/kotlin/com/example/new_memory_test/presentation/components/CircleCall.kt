@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.dp
 import org.example.hit.heal.core.presentation.Sizes.iconSize3Xl
 import org.example.hit.heal.core.presentation.Sizes.widthLg
 

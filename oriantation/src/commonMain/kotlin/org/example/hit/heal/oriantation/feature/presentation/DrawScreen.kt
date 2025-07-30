@@ -32,18 +32,14 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import dmt_proms.oriantation.generated.resources.Res
-
-import org.example.hit.heal.core.presentation.TabletBaseScreen
-import org.jetbrains.compose.resources.stringResource
-import dmt_proms.oriantation.generated.resources.Res.string
-import dmt_proms.oriantation.generated.resources.trial_drag_instructions
-import dmt_proms.oriantation.generated.resources.trial_draw_instructions
-import dmt_proms.oriantation.generated.resources.trial_draw_title
+import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.trialDrawInstructions
 import org.example.hit.heal.core.presentation.Resources.String.trialDrawTitle
+import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
+import org.jetbrains.compose.resources.stringResource
 
 class DrawScreen(
     private val viewModel: OrientationTestViewModel
@@ -100,6 +96,7 @@ class DrawScreen(
                 Text(
                     text = (stringResource(trialDrawInstructions)),
                     color = primaryColor,
+                    fontSize = LARGE,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
@@ -172,7 +169,10 @@ class DrawScreen(
 
             }
         )
-
+        RegisterBackHandler(this)
+        {
+            navigator?.popUntilRoot()
+        }
     }
 
 }

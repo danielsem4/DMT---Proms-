@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import core.data.storage.Storage
 import core.domain.DataError
@@ -16,7 +17,6 @@ import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.util.PrefKeys
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
-import dmt_proms.oriantation.generated.resources.Res
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -25,34 +25,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class OrientationResults(
-    val xDrawing: String = "",
-    val selected_number: String = "",
-    val selected_seasons: String = "",
-    val isTriangleSizeChanged: Boolean = false,
-    val isTriangleDragged: Boolean = false,
-    val healthLevel: String = ""
-)
 
-@Serializable
-data class OrientationRequestBody(
-    val measurement: Int,
-    val patient_id: String,
-    val date: String,
-    val clinicId: Int,
-    val test: OrientationResults
-)
 
 class OrientationTestViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
-    private val uploadCDTResultsUseCase: UploadTestResultsUseCase,
+    private val uploadResultsUseCase: UploadTestResultsUseCase,
     private val api: AppApi,
     private val storage: Storage,
 ): ViewModel() {
-    var trialData by mutableStateOf(TrialData())
-        private set
+    private var trialData by mutableStateOf(TrialData())
     var drawnShape: ByteArray? = null
+    var triangleOffset by mutableStateOf<Offset?>(null)
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     fun updateNumber(number: Int) {
@@ -83,6 +66,10 @@ class OrientationTestViewModel(
         println("Test results: $it")
     }
 
+    fun setTriangleOffset(offset: Offset) {
+        triangleOffset = offset
+    }
+
     fun sendToServer(
         onSuccess: (() -> Unit)? = null,
         onFailure: ((message: Error) -> Unit)? = null
@@ -109,28 +96,18 @@ class OrientationTestViewModel(
                 uploadImageUseCase.execute(imagePath, drawnShape!!, clinicId, userId)
                     .onSuccess {
                         println("Successfully uploaded Image")
+                        // Set trialData fields before upload
+                        trialData.measurement = measurement
+                        trialData.patientId = userId.toIntOrNull() ?: 0
+                        trialData.date = date
+                        trialData.clinicId = clinicId ?: 0
+                        trialData.response.xDrawing.value = imagePath
 
-                        val results = OrientationResults(
-                            xDrawing = imagePath,
-                            selected_number = trialData.response.selectedNumber.value ,
-                            selected_seasons = trialData.response.selectedSeasons.value.firstOrNull() ?: "",
-                            isTriangleSizeChanged = trialData.response.isTriangleSizeChanged.value,
-                            isTriangleDragged = trialData.response.isTriangleDragged.value,
-                            healthLevel = trialData.response.healthLevel.value
-                        )
-
-                        val body = OrientationRequestBody(
-                            measurement = measurement,
-                            patient_id = userId,
-                            date = date,
-                            clinicId = clinicId,
-                            test = results
-                        )
-
-                        uploadCDTResultsUseCase.execute(body, OrientationRequestBody.serializer())
+                        uploadResultsUseCase.execute(trialData, TrialData.serializer())
                             .onSuccess {
                                 withContext(Dispatchers.Main) {
                                     onSuccess?.invoke()
+
                                 }
                             }
                             .onError { error ->

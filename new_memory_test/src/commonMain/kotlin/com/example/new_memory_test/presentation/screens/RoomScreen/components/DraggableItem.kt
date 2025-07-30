@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -35,7 +36,8 @@ fun DraggableItem(
     selectedRoom: Room,
     placedItems: List<DataItem>,
     isOnRoom: Boolean = false,
-    roomPosition: Offset = Offset.Zero
+    roomPosition: Offset = Offset.Zero,
+    size: Dp
 ) {
     var offset by remember { mutableStateOf(Offset.Zero) }// drag in position 0
     var dragging by remember { mutableStateOf(false) }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import core.data.model.Medications.Medication
 import core.data.model.Medications.MedicationReport
 import core.data.storage.Storage
@@ -13,9 +14,11 @@ import core.domain.api.AppApi
 import core.domain.onError
 import core.domain.onSuccess
 import core.util.PrefKeys
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
@@ -38,7 +41,7 @@ class MedicationViewModel
     private val _medicationName = MutableStateFlow("")
     val medicationName: StateFlow<String> = _medicationName
 
-    private val _selectedFrequency = MutableStateFlow( "Daily")
+    private val _selectedFrequency = MutableStateFlow( " ")
     val selectedFrequency: StateFlow<String> = _selectedFrequency
 
     private val _selectedTimeBetweenDoses = MutableStateFlow("1")
@@ -57,11 +60,11 @@ class MedicationViewModel
     val selectedEndDate: StateFlow<String> = _selectedEndDate
 
     private val _isSaveSuccessful = MutableStateFlow(false)
-    val isSaveSuccessful: StateFlow<Boolean> = _isSaveSuccessful
 
-    fun getSaveSuccessful(): Boolean {
-        return _isSaveSuccessful.value
-    }
+
+    var successMessageAlarm by mutableStateOf<Boolean?>(null)
+    var successMessageReport by mutableStateOf<Boolean?>(null)
+
 
     fun resetSaveSuccess() {
         _isSaveSuccessful.value = false
@@ -123,8 +126,6 @@ class MedicationViewModel
     var isLoading = mutableStateOf(false)
         private set
 
-
-
     //--------------Date
     //or date now
     var selectedDate by mutableStateOf(
@@ -175,13 +176,13 @@ class MedicationViewModel
         val time = selectedTime
 
         if (medication == null) {
-            errorMessage = "No medication selected"
+            errorMessage = errorMessage
             _isSaveSuccessful.value = false
             return
         }
 
         if (date.isBlank() || time.isBlank()) {
-            errorMessage = "Please select both date and time"
+            errorMessage = errorMessage
             _isSaveSuccessful.value = false
             return
         }
@@ -197,7 +198,7 @@ class MedicationViewModel
     suspend fun reportMedication(medication: Medication, timestamp: String, medicationId: Int?) {
         isLoading.value = true
         if (!initUserIds()) {
-            errorMessage = "We couldn't get userId/clinicId"
+            errorMessage = errorMessage
             isLoading.value = false
             _isSaveSuccessful.value = false
             return
@@ -211,10 +212,12 @@ class MedicationViewModel
         val result = remoteDataSource.reportMedicationTook(report)
 
         result.onSuccess {
+            successMessageReport = true
             errorMessage = null
             _isSaveSuccessful.value = true
         }.onError { error ->
             println("Error: $error")
+            successMessageReport = false
             _isSaveSuccessful.value = false
         }
         isLoading.value = false
@@ -269,41 +272,23 @@ class MedicationViewModel
         viewModelScope.launch {
             isLoading.value = true
 
+
             if (!initUserIds()) {
-                errorMessage = "We couldn't get userId/clinicId"
+                errorMessage = errorMessage
                 isLoading.value = false
-                println(errorMessage)
+
                 return@launch
             }
 
             remoteDataSource.getAllPatientMedicines(3, 243)
                 .onSuccess {
                     medications.value = it
-                    errorMessage = "We could load medications"
-                    println(medications)
 
                 }
                 .onError { error ->
-                    when (error) {
-                        DataError.Remote.NO_INTERNET -> {
-                            errorMessage = "No internet connection"
-                        }
-                        DataError.Remote.REQUEST_TIMEOUT -> {
-                            errorMessage = "Request timed out"
-                        }
-                        DataError.Remote.SERVER -> {
-                            errorMessage = "Server error"
-                        }
-                        DataError.Remote.SERIALIZATION -> {
-                            errorMessage = "Data parsing error"
-                        }
-                        else -> {
-                            errorMessage = "Unknown error: $error"
-                        }
-                    }
+            errorMessage = " $error"
 
-                    println("Loading error: $error")
-                }
+        }
             println(errorMessage)
             isLoading.value = false
         }
@@ -314,14 +299,19 @@ class MedicationViewModel
         medicationName: String
     ) {
         viewModelScope.launch {
+            isLoading.value = true
             if (!initUserIds()) {
-                errorAlarmMessage = "Error: missing patient or clinic data"
-                println("Error set: $errorAlarmMessage")
+                errorAlarmMessage = errorMessage
+                isLoading.value = false
                 return@launch
             }
+
             val newMedication = Medication(
                 id = clinicId!!,
+                clinicId = clinicId!!,
                 patient = patientId!!,
+                patientId = patientId!!,
+                medicationId = medication?.id ?: 0,
                 medicine = medication?.medicine.toString() ?: "",
                 name = medicationName,
                 form = medication?.form ?: "",
@@ -336,12 +326,18 @@ class MedicationViewModel
 
             val result = remoteDataSource.setMedicationNotifications(newMedication)
 
-            result.onSuccess {
-                errorAlarmMessage = null
-                println("Medication notification saved!")
-            }.onError { error ->
-                errorAlarmMessage = "Error while saving: $error"
-                println("Medication save error: $error")
+            withContext(Dispatchers.Main) {
+                result.onSuccess {
+                    errorAlarmMessage = null
+                    successMessageAlarm = true
+                    isLoading.value = false
+
+                }.onError { error ->
+                    errorAlarmMessage = "$error"
+                    successMessageAlarm = false
+                    isLoading.value = false
+
+                }
             }
         }
     }

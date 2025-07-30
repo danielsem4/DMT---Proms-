@@ -1,5 +1,4 @@
 package com.example.new_memory_test.presentation.screens.ScheduleScreen.components
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +13,6 @@ import com.mohamedrejeb.compose.dnd.DragAndDropState
 import com.mohamedrejeb.compose.dnd.drag.DraggableItem
 import org.example.hit.heal.core.presentation.Sizes.buttonHeightLg
 import org.example.hit.heal.core.presentation.components.SlotState
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun DraggableSlotPalet(

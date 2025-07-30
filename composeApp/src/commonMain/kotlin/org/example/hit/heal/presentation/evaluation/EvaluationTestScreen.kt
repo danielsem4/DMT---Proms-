@@ -167,7 +167,7 @@ class EvaluationTestScreen(
                             showLabel = showLabel,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 8.dp),
+                                .padding(vertical = paddingSm),
                             onDrawingControllerReady = { controller ->
                                 drawingController = controller
                             }
@@ -201,7 +201,7 @@ class EvaluationTestScreen(
                         else currentScreen--
                     },
                     enabled = true,
-                    modifier = Modifier.weight(1f).padding(end = 8.dp)
+                    modifier = Modifier.weight(1f).padding(end = paddingSm)
                 )
 
                 RoundedButton(

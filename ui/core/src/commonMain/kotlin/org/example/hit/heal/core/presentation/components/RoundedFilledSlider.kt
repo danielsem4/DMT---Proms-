@@ -1,6 +1,7 @@
 package org.example.hit.heal.core.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -19,11 +21,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.Sizes.heightMd
+import org.example.hit.heal.core.presentation.Sizes.heightSm
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.paddingXs
+import org.example.hit.heal.core.presentation.Sizes.radiusMd2
 import org.example.hit.heal.core.presentation.formatLabel
 import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -34,54 +46,56 @@ fun RoundedFilledSlider(
     availableValues: List<Float>,
     startText: String = start.formatLabel(),
     endText: String = end.formatLabel(),
-    onValueChanged: ((Float) -> Unit)? = null
+    onValueChanged: ((Float) -> Unit)? = null,
+    trackBrush: Brush? = null,
+    trackHeight: Dp = heightMd,
+    cornerRadius: Dp = radiusMd2,
+    showEdgeLabels: Boolean = true
 ) {
     val range = end - start
     val fillFraction = ((value - start) / range).coerceIn(0f, 0.999f)
-
     val steps = (availableValues.size - 2).coerceAtLeast(0)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.padding(paddingSm)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(end = 8.dp)
-            ) {
+            if (showEdgeLabels) {
                 Text(
-                    text = start.formatLabel(),
-                    fontSize = 14.sp
-                )
-                Text(
-                    text = startText,
-                    fontSize = 12.sp
+                    text = start.toString(),
+                    fontSize = EXTRA_MEDIUM,
+                    modifier = Modifier.padding(end = paddingSm)
                 )
             }
 
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .height(36.dp)
+                    .height(trackHeight)
             ) {
+                // Background track
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
-                        .background(Color.LightGray, RoundedCornerShape(12.dp))
+                        .background(Color.LightGray, RoundedCornerShape(cornerRadius))
                 )
-
+                // Filled track (gradient or color)
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(fillFraction)
                         .fillMaxHeight()
-                        .background(primaryColor, RoundedCornerShape(12.dp))
+                        .background(
+                            trackBrush ?: Brush.horizontalGradient(listOf(primaryColor, primaryColor)),
+                            RoundedCornerShape(cornerRadius)
+                        )
                 )
-
+                // Slider (transparent)
                 Slider(
                     value = value,
                     onValueChange = { newValue ->
@@ -92,7 +106,7 @@ fun RoundedFilledSlider(
                     valueRange = start..end,
                     steps = steps,
                     colors = SliderDefaults.colors(
-                        thumbColor = Color.Transparent, // Set thumbColor to Transparent
+                        thumbColor = Color.Transparent,
                         activeTrackColor = Color.Transparent,
                         inactiveTrackColor = Color.Transparent,
                         activeTickColor = Color.Transparent,
@@ -102,19 +116,40 @@ fun RoundedFilledSlider(
                 )
             }
 
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(start = 8.dp)
-            ) {
+            if (showEdgeLabels) {
                 Text(
-                    text = end.formatLabel(),
-                    fontSize = 14.sp
-                )
-                Text(
-                    text = endText,
-                    fontSize = 12.sp
+                    text = end.toString(),
+                    fontSize = EXTRA_MEDIUM,
+                    modifier = Modifier.padding(start = paddingSm)
                 )
             }
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = paddingXs),
+        ) {
+            Text(
+                text = startText,
+                fontSize = EXTRA_MEDIUM,
+                modifier = Modifier.padding(end = paddingSm)
+            )
+
+            Text(
+                text = value.toString(),
+                fontSize = EXTRA_MEDIUM,
+                color = primaryColor,
+
+            )
+
+            Text(
+                text = endText,
+                fontSize = EXTRA_MEDIUM,
+                modifier = Modifier.padding(end = paddingSm)
+            )
         }
     }
 }
