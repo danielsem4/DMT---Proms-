@@ -1,6 +1,7 @@
 package org.example.hit.heal.core.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -21,11 +23,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.Sizes.heightMd
+import org.example.hit.heal.core.presentation.Sizes.heightSm
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
+import org.example.hit.heal.core.presentation.Sizes.paddingXs
+import org.example.hit.heal.core.presentation.Sizes.radiusMd2
 import org.example.hit.heal.core.presentation.formatLabel
 import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -37,10 +47,10 @@ fun RoundedFilledSlider(
     startText: String = start.formatLabel(),
     endText: String = end.formatLabel(),
     onValueChanged: ((Float) -> Unit)? = null,
-    trackBrush: Brush? = null, // NEW: for gradient or solid color
-    trackHeight: Dp = 36.dp,   // NEW: for custom height
-    cornerRadius: Dp = 12.dp,  // NEW: for custom roundness
-    showEdgeLabels: Boolean = true // NEW: show/hide numbers at ends
+    trackBrush: Brush? = null,
+    trackHeight: Dp = heightMd,
+    cornerRadius: Dp = radiusMd2,
+    showEdgeLabels: Boolean = true
 ) {
     val range = end - start
     val fillFraction = ((value - start) / range).coerceIn(0f, 0.999f)
@@ -48,17 +58,18 @@ fun RoundedFilledSlider(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.padding(paddingSm)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
         ) {
             if (showEdgeLabels) {
                 Text(
-                    text = startText,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(end = 8.dp)
+                    text = start.toString(),
+                    fontSize = EXTRA_MEDIUM,
+                    modifier = Modifier.padding(end = paddingSm)
                 )
             }
 
@@ -107,11 +118,38 @@ fun RoundedFilledSlider(
 
             if (showEdgeLabels) {
                 Text(
-                    text = endText,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(start = 8.dp)
+                    text = end.toString(),
+                    fontSize = EXTRA_MEDIUM,
+                    modifier = Modifier.padding(start = paddingSm)
                 )
             }
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = paddingXs),
+        ) {
+            Text(
+                text = startText,
+                fontSize = EXTRA_MEDIUM,
+                modifier = Modifier.padding(end = paddingSm)
+            )
+
+            Text(
+                text = value.toString(),
+                fontSize = EXTRA_MEDIUM,
+                color = primaryColor,
+
+            )
+
+            Text(
+                text = endText,
+                fontSize = EXTRA_MEDIUM,
+                modifier = Modifier.padding(end = paddingSm)
+            )
         }
     }
 }

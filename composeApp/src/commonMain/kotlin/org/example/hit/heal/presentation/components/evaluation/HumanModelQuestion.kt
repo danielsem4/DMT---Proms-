@@ -143,11 +143,9 @@ fun HumanBodyModelSelector(
     }
 }
 
-// Helper function to parse the main title (e.g., "Head")
 fun parseBodyPartTitle(availableValue: String) =
     availableValue.substringBefore(" (?)").trim()
 
-// Helper function to parse the list of sub-options (e.g., ["head", "eyes", "jaw"])
 fun parseBodyPartSubOptions(availableValue: String): List<String> {
     return availableValue.substringAfter(" (?)", "")
         .split(",").map { it.trim() }
@@ -187,6 +185,5 @@ fun HumanBodyModelSelectorPreview() {
         selectedValues = currentSelectedGranularParts,
         onBodyPartClicked = { clickedPart ->
             println("Human Body Part Clicked: ${clickedPart.available_value}")
-            // In a real app, this would trigger showing the dialog
         })
 }

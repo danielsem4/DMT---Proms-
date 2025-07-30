@@ -9,9 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,29 +44,29 @@ fun EvaluationItemCard(
             .background(OffWhite),
         shape = RoundedCornerShape(spacingMd),
         border = BorderStroke(1.dp, primaryColor),
-        elevation = elevationMd
+        elevation = CardDefaults.cardElevation(elevationMd)
     ) {
         Column(
             modifier = Modifier.padding(spacingMd),
-            horizontalAlignment = Alignment.Start // Align content to the start
+            horizontalAlignment = Alignment.Start
         ) {
-            Text(text = item.measurement_name, style = MaterialTheme.typography.subtitle1)
+            Text(text = item.measurement_name, style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(spacingXs))
             Text(
                 text = if (item.is_active) "Status: Active" else "Status: Inactive",
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.bodyMedium
             )
             Spacer(Modifier.height(spacingXs))
 
             if (item.measurement_settings.is_repetitive) {
                 Text(
                     text = "Repetitive: Yes, every ${item.measurement_settings.measurement_repeat_times} ${item.measurement_settings.measurement_repeat_period}",
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyMedium
                 )
             } else {
                 Text(
                     text = "Repetitive: No",
-                    style = MaterialTheme.typography.body2
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }

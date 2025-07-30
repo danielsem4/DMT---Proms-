@@ -1,6 +1,8 @@
 package org.example.hit.heal.presentation.components.evaluation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +26,9 @@ import core.data.model.evaluation.EvaluationValue
 import core.data.model.evaluation.toRawString
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.slider_value_prefix
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
+import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.components.CustomMultilineTextField
 import org.example.hit.heal.core.presentation.components.DropDownItem
 import org.example.hit.heal.core.presentation.components.DropDownQuestionField
@@ -48,7 +53,6 @@ fun EvaluationObjectContent(
     onDrawingControllerReady: ((DrawingCanvasController) -> Unit)? = null
 ) {
 
-    // State to control the MultiSelectPillDialog visibility for Human Body Model
     var showDialogForBodyPart by remember { mutableStateOf<EvaluationValue?>(null) }
 
     Column(
@@ -63,8 +67,8 @@ fun EvaluationObjectContent(
         if (showLabel && obj.object_label.isNotEmpty() && type != EvaluationObjectType.INSTRUCTION)
             Text(
                 text = obj.object_label,
-                fontSize = 20.sp,
-                modifier = Modifier.padding(bottom = 8.dp).align(Alignment.Start)
+                fontSize = EXTRA_MEDIUM_LARGE,
+                modifier = Modifier.padding(bottom = paddingSm).align(Alignment.CenterHorizontally)
             )
 
         when (type) {
@@ -183,7 +187,6 @@ fun EvaluationObjectContent(
                     availableValues = availableValues,
                     selectedValues = currentSelectedHumanBodyParts,
                     onBodyPartClicked = { clickedPart ->
-                        // Set the state to show the dialog for the clicked body part
                         showDialogForBodyPart = clickedPart
                     }
                 )
@@ -288,16 +291,6 @@ private fun CreateSlider(
                 }
             )
 
-            Text(
-                text = stringResource(Res.string.slider_value_prefix) + currentValue.formatLabel(),
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = primaryColor,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(top = 4.dp)
-                    .fillMaxWidth()
-            )
         }
     }
 }
