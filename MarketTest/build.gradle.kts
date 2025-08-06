@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlin.serialization)
@@ -22,16 +22,13 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "marketTest"
             isStatic = true
         }
     }
 
-    jvm("desktop")
 
     sourceSets {
-        val desktopMain by getting
-
         androidMain.dependencies {
 
             implementation("androidx.compose.ui:ui-tooling")
@@ -46,14 +43,8 @@ kotlin {
         }
         commonMain.dependencies {
             // internal feature modules
-            implementation(projects.hitber)
             implementation(projects.ui.core)
             implementation(projects.core)
-            implementation(projects.oriantation)
-            implementation(projects.clockTest)
-            implementation(projects.pass)
-            implementation(projects.newMemoryTest)
-            implementation(projects.marketTest)
 
             // Kotlin
             implementation(libs.kotlinx.coroutines.core)
@@ -90,26 +81,13 @@ kotlin {
             implementation(libs.ktor.client.darwin)
 
         }
-
-        desktopMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.ktor.client.okhttp)
-        }
     }
 }
 
 android {
-    namespace = "org.example.hit.heal"
-    compileSdk = 35
+    namespace = "com.generic.marketTest"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
-    defaultConfig {
-        applicationId = "org.example.hit.heal"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -127,20 +105,16 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.runtime.livedata)
-    implementation(libs.play.services.cast.framework)
     debugImplementation(compose.uiTooling)
-
-
 }
 
 compose.desktop {
     application {
-        mainClass = "org.example.hit.heal.MainKt"
+        mainClass = "main"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.hit.heal"
+            packageName = "com.generic.marketTest"
             packageVersion = "1.0.0"
         }
     }

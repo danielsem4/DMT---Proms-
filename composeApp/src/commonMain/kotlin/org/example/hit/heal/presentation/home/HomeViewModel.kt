@@ -42,6 +42,9 @@ class HomeViewModel(
                     result.add(
                         ModulesResponse(module_name = "pass", active = true)
                     )
+                    result.add(
+                        ModulesResponse(module_name = "market", active = true)
+                    )
                     result.forEach {
                         it.module_name = it.module_name.lowercase()
                     }

@@ -78,6 +78,7 @@ import org.example.hit.heal.core.presentation.components.dialogs.BaseYesNoDialog
 import org.example.hit.heal.core.presentation.components.cards.SimpleIconCard
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.entry.HitBerEntryScreen
+import com.generic.marketTest.presentation.entry.MarketTestEntryScreen
 import org.example.hit.heal.oriantation.feature.presentation.OriantationWelcomeScreen
 import org.example.hit.heal.presentation.activities.ActivitiesScreen
 import org.example.hit.heal.presentation.evaluation.AllEvaluationsScreen
@@ -289,10 +290,10 @@ class HomeScreen : Screen {
             "memory" -> navigator.push(MemoryScreen())
             "medications" -> navigator.push(MainMedicationScreen())
             "pass" -> navigator.push(PassEntryScreen())
+            "market" -> navigator.push(MarketTestEntryScreen())
             else -> {  }
         }
     }
-
 
     @Composable
     private fun iconFor(moduleName: String) = when (moduleName.lowercase()) {
@@ -306,6 +307,7 @@ class HomeScreen : Screen {
         "cdt" -> Resources.Icon.clockIcon
         "orientation" -> Resources.Icon.memoryModuleIcon
         "pass" -> Resources.Icon.hitbearModuleIcon
+        "market" -> Resources.Icon.marketIcon
         else -> Resources.Icon.binIcon
     }
 
@@ -321,6 +323,7 @@ class HomeScreen : Screen {
         "cdt" -> stringResource(Resources.String.clockTest)
         "orientation" -> "Orientation"
         "pass" -> stringResource(Resources.String.pass)
+        "market" -> "Market"
         else -> moduleName
     }
 }

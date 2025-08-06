@@ -331,6 +331,8 @@ import dmt_proms.ui.core.generated.resources.login
 import dmt_proms.ui.core.generated.resources.login_success
 import dmt_proms.ui.core.generated.resources.logout
 import dmt_proms.ui.core.generated.resources.logout_confirmation
+import dmt_proms.ui.core.generated.resources.market
+import dmt_proms.ui.core.generated.resources.market_icon
 import dmt_proms.ui.core.generated.resources.measurements
 import dmt_proms.ui.core.generated.resources.med_icon
 import dmt_proms.ui.core.generated.resources.medications
@@ -712,8 +714,7 @@ object Resources {
         val teachIcon = Res.drawable.teach_icon
         val walletImage = Res.drawable.wallet
 
-
-
+        val marketIcon = Res.drawable.market_icon
     }
 
     object String {
@@ -1242,7 +1243,7 @@ object Resources {
         val trialDrawTitle = Res.string.trial_draw_title
         val SetHealthRate = Res.string.set_health_rate
 
-
+        val marketText = Res.string.market
     }
 
 
