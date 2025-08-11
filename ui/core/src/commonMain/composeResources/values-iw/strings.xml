@@ -75,6 +75,8 @@
     <string name ="three">3</string>
     <string name ="four">4</string>
 
+    <!--    market texts-->
+    <string name="market">Market</string>
 
     <!--    CDT Module  -->
 

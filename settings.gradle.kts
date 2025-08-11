@@ -29,6 +29,7 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":marketTest")
 include(":hitber")
 include(":ui:core")
 include(":core")

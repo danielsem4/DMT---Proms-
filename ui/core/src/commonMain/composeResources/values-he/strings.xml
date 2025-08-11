@@ -71,6 +71,9 @@
     <string name="selected_point">הנקודה שבחרת</string>
 
 
+    <!--    market texts-->
+    <string name="market">חנות</string>
+
     <!--    Medications-->
     <string name="select_date">בחר תאריך</string>
     <string name="empty_string"></string>
