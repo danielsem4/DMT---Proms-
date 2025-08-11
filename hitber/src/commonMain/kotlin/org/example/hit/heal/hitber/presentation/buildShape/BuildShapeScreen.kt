@@ -29,10 +29,10 @@ import org.example.hit.heal.hitber.presentation.buildShape.components.TenthQuest
 import org.example.hit.heal.hitber.presentation.buildShape.model.draggableShapesItem
 import org.example.hit.heal.hitber.presentation.buildShape.model.staticShapesItem
 import org.example.hit.heal.hitber.presentation.summary.SummaryScreen
-import core.utils.CapturableWrapper
+import org.example.hit.heal.core.presentation.utils.CapturableWrapper
 import org.example.hit.heal.hitber.presentation.components.InstructionText
-import core.utils.RegisterBackHandler
-import core.utils.platformCapturable
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.platformCapturable
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig

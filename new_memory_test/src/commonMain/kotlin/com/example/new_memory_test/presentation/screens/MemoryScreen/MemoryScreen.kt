@@ -26,7 +26,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.components.BulletPointText
 import com.example.new_memory_test.presentation.screens.RoomInsructionsScreen.RoomInstructionsScreen
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources

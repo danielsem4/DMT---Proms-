@@ -37,11 +37,11 @@ import org.example.hit.heal.hitber.presentation.understanding.components.AudioPl
 import org.example.hit.heal.hitber.presentation.understanding.components.TableWithNapkinsBox
 import org.example.hit.heal.hitber.presentation.understanding.components.FridgeWithItemsBox
 import org.example.hit.heal.hitber.presentation.understanding.model.fridgeItems
-import core.utils.CapturableWrapper
-import core.utils.ObserveLifecycle
+import org.example.hit.heal.core.presentation.utils.CapturableWrapper
+import org.example.hit.heal.core.presentation.utils.ObserveLifecycle
 import org.example.hit.heal.hitber.presentation.components.InstructionText
-import core.utils.RegisterBackHandler
-import core.utils.platformCapturable
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.platformCapturable
 import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen

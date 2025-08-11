@@ -29,8 +29,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.style.TextAlign
-import core.utils.ObserveLifecycle
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.ObserveLifecycle
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.Resources.String.end
 import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe

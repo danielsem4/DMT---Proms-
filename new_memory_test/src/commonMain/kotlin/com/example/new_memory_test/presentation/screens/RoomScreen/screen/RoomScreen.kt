@@ -56,10 +56,10 @@ import com.example.new_memory_test.presentation.screens.RoomScreen.components.en
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.zonePosition.getZoneForPosition
 import com.example.new_memory_test.presentation.screens.RoomScreen.data.DataItem
 import com.example.new_memory_test.presentation.screens.ScheduleInformationScreen.ScheduleInformationScreen
-import core.utils.CapturableWrapper
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.CapturableWrapper
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
-import core.utils.platformCapturable
+import org.example.hit.heal.core.presentation.utils.platformCapturable
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM

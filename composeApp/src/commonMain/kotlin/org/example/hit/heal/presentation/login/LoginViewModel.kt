@@ -10,7 +10,7 @@ import core.domain.onError
 import core.domain.onSuccess
 import core.domain.use_case.LoginUseCase
 import core.util.PrefKeys
-import core.utils.toUiText
+import org.example.hit.heal.core.presentation.utils.toUiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch

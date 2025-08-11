@@ -1,4 +1,4 @@
-package core.utils
+package org.example.hit.heal.core.presentation.utils
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver

@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,7 +47,6 @@ import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.buildShape.BuildShapeScreen
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.example.hit.heal.hitber.presentation.concentration.ConcentrationScreen
-import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel

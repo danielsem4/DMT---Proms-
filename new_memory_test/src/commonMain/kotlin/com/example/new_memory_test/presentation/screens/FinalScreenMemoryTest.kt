@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.end

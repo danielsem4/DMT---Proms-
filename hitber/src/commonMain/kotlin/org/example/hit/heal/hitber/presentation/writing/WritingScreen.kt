@@ -18,7 +18,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import com.mohamedrejeb.compose.dnd.DragAndDropContainer
 import com.mohamedrejeb.compose.dnd.DragAndDropState
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.eighthQuestionHitberInstructions

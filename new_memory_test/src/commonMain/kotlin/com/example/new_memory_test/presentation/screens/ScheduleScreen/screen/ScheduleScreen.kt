@@ -43,10 +43,10 @@ import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import com.mohamedrejeb.compose.dnd.DragAndDropContainer
 import com.mohamedrejeb.compose.dnd.rememberDragAndDropState
-import core.utils.CapturableWrapper
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.CapturableWrapper
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
-import core.utils.platformCapturable
+import org.example.hit.heal.core.presentation.utils.platformCapturable
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources

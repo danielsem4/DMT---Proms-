@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import getImageName
 import org.example.hit.heal.core.presentation.Resources.String.`continue`

@@ -1,9 +1,8 @@
-package core.utils
+package org.example.hit.heal.core.presentation.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
-import core.utils.CapturableWrapper
 import io.github.suwasto.capturablecompose.Capturable
 import io.github.suwasto.capturablecompose.rememberCaptureController
 

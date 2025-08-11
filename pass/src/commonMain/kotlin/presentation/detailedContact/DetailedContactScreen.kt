@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import core.utils.ObserveLifecycle
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.ObserveLifecycle
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.Resources.String.contact
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd

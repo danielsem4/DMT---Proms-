@@ -29,7 +29,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.screens.ScheduleInformationScreen.components.ActivityItem
 import com.example.new_memory_test.presentation.screens.ScheduleScreen.screen.ScheduleScreen
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources

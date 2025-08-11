@@ -19,8 +19,8 @@ import androidx.compose.runtime.getValue
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import androidx.compose.ui.graphics.Color
-import core.utils.ObserveLifecycle
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.ObserveLifecycle
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.Icon.dialKeysIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.likeIcon

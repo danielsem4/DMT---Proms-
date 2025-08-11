@@ -35,7 +35,7 @@ import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.components.CircleWithPipeImage
 import com.example.new_memory_test.presentation.screens.CallScreen.effects.RipplePulseEffect
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.jetbrains.compose.resources.painterResource

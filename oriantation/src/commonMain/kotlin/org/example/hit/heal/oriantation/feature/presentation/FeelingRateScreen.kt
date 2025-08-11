@@ -1,22 +1,16 @@
 package org.example.hit.heal.oriantation.feature.presentation
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
@@ -30,12 +24,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,7 +36,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.domain.use_case.PlayAudioUseCase
 import core.utils.AudioPlayer
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import dmt_proms.oriantation.generated.resources.Res
 import dmt_proms.oriantation.generated.resources.mid_pain_icon
 import dmt_proms.oriantation.generated.resources.no_pain_icon
@@ -62,9 +51,7 @@ import org.example.hit.heal.core.presentation.Resources.String.feelingRateMid
 import org.example.hit.heal.core.presentation.Resources.String.feelingRateNoPain
 import org.example.hit.heal.core.presentation.Resources.String.feelingRatePain
 import org.example.hit.heal.core.presentation.Resources.String.listening
-import org.example.hit.heal.core.presentation.Resources.String.thanksCoffe
 import org.example.hit.heal.core.presentation.Resources.String.vocalInstructions
-import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.RoundedFilledSlider

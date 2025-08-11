@@ -27,10 +27,10 @@ import org.example.hit.heal.hitber.presentation.dragAndDrop.components.Draggable
 import org.example.hit.heal.hitber.presentation.dragAndDrop.model.circleColors
 import org.example.hit.heal.hitber.presentation.dragAndDrop.model.circlesPositions
 import org.example.hit.heal.hitber.presentation.writing.WritingScreen
-import core.utils.CapturableWrapper
+import org.example.hit.heal.core.presentation.utils.CapturableWrapper
 import org.example.hit.heal.hitber.presentation.components.InstructionText
-import core.utils.RegisterBackHandler
-import core.utils.platformCapturable
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.platformCapturable
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton

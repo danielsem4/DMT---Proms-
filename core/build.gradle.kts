@@ -43,7 +43,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
         commonMain.dependencies {
-            implementation(projects.ui.core)
+//            implementation(projects.ui.core)
 
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -75,6 +75,15 @@ kotlin {
             implementation(libs.datastore)
             // DateTime
             implementation(libs.kotlinx.datetime)
+
+            implementation(libs.vico.mpp)
+            implementation(libs.vico.mpp.m3)
+            implementation(libs.vico.core)
+
+            implementation("com.patrykandpatryk.vico:multiplatform:2.1.3")
+// Pick one theming module (or both if needed):
+            implementation("com.patrykandpatryk.vico:multiplatform-m3:2.1.3")
+// implementation("com.patrykandpatryk.vico:multiplatform-m2:$vico")
 
         }
         nativeMain.dependencies {

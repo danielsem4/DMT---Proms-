@@ -1,4 +1,5 @@
-package core.utils
+package org.example.hit.heal.core.presentation.utils
+
 
 import core.domain.DataError
 import org.example.hit.heal.core.presentation.Resources.String.diskFull

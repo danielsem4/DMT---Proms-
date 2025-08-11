@@ -40,7 +40,7 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.new_memory_test.presentation.ViewModel.ViewModelMemoryTest
 import com.example.new_memory_test.presentation.screens.RoomScreen.components.enum_room.Room
 import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
-import core.utils.RegisterBackHandler
+import org.example.hit.heal.core.presentation.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
 import org.example.hit.heal.core.presentation.Resources

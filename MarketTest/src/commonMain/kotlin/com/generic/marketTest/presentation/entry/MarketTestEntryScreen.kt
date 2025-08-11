@@ -49,6 +49,7 @@ class MarketTestEntryScreen: Screen {
                         modifier = Modifier
                             .fillMaxWidth()
                             .align(Alignment.TopCenter)
+                            .padding(Sizes.spacingMd)
                     ) {
                         Column(
                             modifier = Modifier
@@ -71,10 +72,10 @@ class MarketTestEntryScreen: Screen {
                                 horizontalAlignment = Alignment.Start,
                                 verticalArrangement = Arrangement.spacedBy(Sizes.spacingMd)
                             ) {
-                                Text("You will be presented with a series of market-related questions.", fontSize = FontSize.REGULAR, color = TextPrimary)
-                                Text("Read each question carefully and answer to the best of your ability.", fontSize = FontSize.REGULAR, color = TextPrimary)
-                                Text("There is no time limit, but try to answer promptly.", fontSize = FontSize.REGULAR, color = TextPrimary)
-                                Text("Your progress will be shown at the top right.", fontSize = FontSize.REGULAR, color = TextPrimary)
+                                Text("You will be presented with a series of market-related questions.", fontSize = FontSize.EXTRA_REGULAR, color = TextPrimary)
+                                Text("Read each question carefully and answer to the best of your ability.", fontSize = FontSize.EXTRA_REGULAR, color = TextPrimary)
+                                Text("There is no time limit, but try to answer promptly.", fontSize = FontSize.EXTRA_REGULAR, color = TextPrimary)
+                                Text("Your progress will be shown at the top right.", fontSize = FontSize.EXTRA_REGULAR, color = TextPrimary)
                             }
                             Text("Good luck!", fontSize = FontSize.EXTRA_MEDIUM, color = primaryColor)
                         }

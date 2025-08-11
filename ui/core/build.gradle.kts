@@ -29,7 +29,19 @@ kotlin {
     jvm("desktop")
 
     sourceSets {
+
+        androidMain.dependencies {
+            implementation(compose.preview)
+            implementation(libs.androidx.activity.compose)
+
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+            implementation(libs.kmp.capturable.compose)
+        }
+
         commonMain.dependencies {
+            implementation(projects.core)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -43,6 +55,10 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(compose.material3)
             implementation(libs.compose.dnd)
+
+            implementation(libs.vico.mpp)
+            implementation(libs.vico.mpp.m3)
+            implementation(libs.vico.core)
 
             configurations.getByName("debugImplementation").dependencies.add(
                 libs.androidx.ui.tooling.get()
