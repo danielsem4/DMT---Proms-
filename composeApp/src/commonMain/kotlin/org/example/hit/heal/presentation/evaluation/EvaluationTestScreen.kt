@@ -20,7 +20,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -42,6 +41,11 @@ import org.example.hit.heal.presentation.components.evaluation.EvaluationObjectC
 import org.example.hit.heal.presentation.components.evaluation.EvaluationObjectType
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+
+/**
+ * EvaluationTestScreen is a screen that displays a series of evaluation objects
+ * loads dynamically based on the provided evaluation.
+ */
 
 class EvaluationTestScreen(
     private val evaluation: Evaluation

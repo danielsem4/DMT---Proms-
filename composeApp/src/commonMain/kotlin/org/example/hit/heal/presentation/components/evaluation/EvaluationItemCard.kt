@@ -23,6 +23,7 @@ import org.example.hit.heal.core.presentation.Sizes.elevationMd
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.Sizes.spacingXs
+import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.primaryColor
 
 /**
@@ -40,8 +41,8 @@ fun EvaluationItemCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = spacingSm)
-            .clickable(onClick = onClick)
-            .background(OffWhite),
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = White),
         shape = RoundedCornerShape(spacingMd),
         border = BorderStroke(1.dp, primaryColor),
         elevation = CardDefaults.cardElevation(elevationMd)
