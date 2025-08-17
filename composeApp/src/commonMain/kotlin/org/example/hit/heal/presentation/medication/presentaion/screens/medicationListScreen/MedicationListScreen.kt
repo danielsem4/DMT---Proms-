@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -123,8 +123,10 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
                                 }
                                 .clip(RoundedCornerShape(20))
                                 .height(70.dp),
-                            backgroundColor = Color.White,
-                            elevation = 15.dp
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color.White
+                            ),
+                            elevation = CardDefaults.cardElevation(15.dp)
                         ) {
                             Box(
                                 modifier = Modifier

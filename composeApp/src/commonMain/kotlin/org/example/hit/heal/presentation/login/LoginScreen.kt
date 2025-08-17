@@ -13,12 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -196,7 +196,7 @@ class LoginScreen : Screen {
                             .fillMaxWidth(0.8f)
                             .height(50.dp),
                         shape = RoundedCornerShape(33.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = ButtonPrimary),
+                        colors = ButtonDefaults.buttonColors(containerColor = ButtonPrimary),
                         enabled = !isLoading
                     ) {
                         if (isLoading) {

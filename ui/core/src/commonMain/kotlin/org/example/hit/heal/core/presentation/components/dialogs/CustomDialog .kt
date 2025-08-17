@@ -14,9 +14,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,38 +27,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
-import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.FontSize.REGULAR
 import org.example.hit.heal.core.presentation.Sizes.heightSm
 import org.example.hit.heal.core.presentation.Sizes.iconSize2Xl
-import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
 import org.example.hit.heal.core.presentation.Sizes.radiusMd2
 import org.example.hit.heal.core.presentation.Sizes.radiusXl
-import org.example.hit.heal.core.presentation.Sizes.spacing3Xl
 import org.example.hit.heal.core.presentation.Sizes.spacingLg
 import org.example.hit.heal.core.presentation.Sizes.spacingSm
 import org.example.hit.heal.core.presentation.Sizes.spacingXl
 import org.example.hit.heal.core.presentation.Sizes.spacingXxl
-import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
-import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
-import org.example.hit.heal.core.presentation.FontSize.REGULAR
-import org.example.hit.heal.core.presentation.Red
-import org.example.hit.heal.core.presentation.Sizes.heightSm
-import org.example.hit.heal.core.presentation.Sizes.radiusMd2
-import org.example.hit.heal.core.presentation.Sizes.radiusXl
-import org.example.hit.heal.core.presentation.Sizes.spacing3Xl
-import org.example.hit.heal.core.presentation.Sizes.spacingLg
-import org.example.hit.heal.core.presentation.Sizes.spacingSm
-import org.example.hit.heal.core.presentation.Sizes.spacingXl
-import org.example.hit.heal.core.presentation.Sizes.widthSm
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 
-
+/**
+ *
+ */
 
 @Composable
 fun CustomDialog(
@@ -68,14 +56,23 @@ fun CustomDialog(
     description: String? = "",
     onSubmit: (() -> Unit)? = null,
     onDismiss: () -> Unit,
-    buttons: List<Pair<String, () -> Unit>> = emptyList()
+    buttons: List<Pair<String, () -> Unit>> = emptyList(),
+    content: (@Composable (() -> Unit))? = null
 ){
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true,
+            usePlatformDefaultWidth = false
+        )
+    ) {
         Box(
             contentAlignment = Alignment.TopCenter,
             modifier = Modifier
                 .padding(horizontal = spacingXl)
                 .wrapContentHeight()
+                .fillMaxWidth()
         ) {
             // Card Body
             Box(
@@ -114,9 +111,13 @@ fun CustomDialog(
                         )
                     }
 
+                    if (content != null) {
+                        Spacer(modifier = Modifier.height(spacingLg))
+                        content()
+                    }
+
                     Spacer(modifier = Modifier.height(spacingLg))
 
-                    // Buttons
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(radiusMd2),
                         modifier = Modifier.fillMaxWidth(),
@@ -126,7 +127,7 @@ fun CustomDialog(
                             Button(
                                 onClick = action,
                                 colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = primaryColor,
+                                    containerColor = primaryColor,
                                     contentColor = Color.White
                                 ),
                                 shape = RoundedCornerShape(radiusMd2),
@@ -145,7 +146,7 @@ fun CustomDialog(
                 }
             }
 
-            // Icon (painter from resource)
+            // Icon
             Box(
                 modifier = Modifier
                     .size(iconSize2Xl)
@@ -164,5 +165,3 @@ fun CustomDialog(
         }
     }
 }
-
-

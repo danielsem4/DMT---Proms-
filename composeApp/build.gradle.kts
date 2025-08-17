@@ -54,6 +54,7 @@ kotlin {
             implementation(projects.pass)
             implementation(projects.newMemoryTest)
             implementation(projects.marketTest)
+            implementation(libs.navigation.compose)
 
             // Kotlin
             implementation(libs.kotlinx.coroutines.core)

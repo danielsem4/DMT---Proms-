@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import core.data.model.evaluation.EvaluationAnswer
@@ -62,7 +63,8 @@ fun EvaluationObjectContent(
             Text(
                 text = obj.object_label,
                 fontSize = EXTRA_MEDIUM_LARGE,
-                modifier = Modifier.padding(bottom = paddingSm).align(Alignment.CenterHorizontally)
+                modifier = Modifier.padding(bottom = paddingSm).align(Alignment.CenterHorizontally),
+                textAlign = TextAlign.Center
             )
 
         when (type) {

@@ -110,6 +110,7 @@
     <string name ="four">4</string>
 
 
+    <string name="select_activity">Please press the activity you did</string>
 
     <string name="exit">Exit</string>
     <string name="continue">Continue</string>

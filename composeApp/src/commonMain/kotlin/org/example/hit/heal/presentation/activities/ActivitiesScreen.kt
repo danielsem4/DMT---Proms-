@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -24,20 +26,18 @@ import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.ActivityItem
 import org.example.hit.heal.core.presentation.Resources.Icon.joggingIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.yogaIcon
-import org.example.hit.heal.core.presentation.Resources.String.login
+import org.example.hit.heal.core.presentation.Resources.String.activitiesText
+import org.example.hit.heal.core.presentation.Resources.String.selectActivityText
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.spacingMd
 import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.cards.SimpleIconCard
+import org.example.hit.heal.core.presentation.components.dialogs.CustomDialog // <-- add this import
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
-
-/**
- *
- */
 
 class ActivitiesScreen : Screen {
 
@@ -50,7 +50,11 @@ class ActivitiesScreen : Screen {
         var toastMessage by remember { mutableStateOf<String?>(null) }
         var toastType by remember { mutableStateOf(ToastType.Normal) }
 
-        BaseScreen(title = stringResource(login)) {
+        // dialog state
+        var showDialog by remember { mutableStateOf(false) }
+        var selectedItem by remember { mutableStateOf<ActivityItem?>(null) }
+
+        BaseScreen(title = stringResource(activitiesText)) {
             toastMessage?.let {
                 ToastMessage(
                     message = it,
@@ -59,6 +63,34 @@ class ActivitiesScreen : Screen {
                     onDismiss = { toastMessage = null }
                 )
             }
+
+            // Render dialog when needed
+            if (showDialog && selectedItem != null) {
+                CustomDialog(
+                    icon = setActivityIcon(selectedItem!!.name),
+                    title = selectedItem!!.name,
+                    description = "Start ${selectedItem!!.name} session?",
+                    onDismiss = { showDialog = false },
+                    buttons = listOf(
+                        "Start" to {
+                            toastType = ToastType.Success
+                            toastMessage = "${selectedItem!!.name} started!"
+                            showDialog = false
+                        },
+                        "Cancel" to {
+                            showDialog = false
+                        }
+                    )
+                )
+            }
+
+            Text(
+                text = stringResource(selectActivityText),
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier.padding(paddingSm),
+                textAlign = TextAlign.Center
+            )
+
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 modifier = Modifier
@@ -74,14 +106,13 @@ class ActivitiesScreen : Screen {
                             Icon(
                                 painter = painterResource(setActivityIcon(item.name)),
                                 contentDescription = item.name,
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .padding(end = paddingSm),
+                                modifier = Modifier.size(48.dp).padding(end = paddingSm),
                                 tint = MaterialTheme.colorScheme.primary
                             )
                         },
                         onClick = {
-
+                            selectedItem = item
+                            showDialog = true
                         },
                     )
                 }
@@ -93,7 +124,7 @@ class ActivitiesScreen : Screen {
         return when (name) {
             "Walk" -> yogaIcon
             "Yoga" -> yogaIcon
-            "run" -> joggingIcon
+            "run", "Run" -> joggingIcon
             else -> yogaIcon
         }
     }
