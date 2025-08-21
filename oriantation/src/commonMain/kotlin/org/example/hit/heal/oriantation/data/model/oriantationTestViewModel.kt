@@ -6,12 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.Error
 import core.domain.api.AppApi
 import core.domain.onError
 import core.domain.onSuccess
+import core.domain.use_case.PlayAudioUseCase
 import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.util.PrefKeys
@@ -30,6 +32,7 @@ import kotlinx.serialization.Serializable
 class OrientationTestViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
     private val uploadResultsUseCase: UploadTestResultsUseCase,
+    private val playAudioUseCase: PlayAudioUseCase,
     private val api: AppApi,
     private val storage: Storage,
 ): ViewModel() {
@@ -38,6 +41,17 @@ class OrientationTestViewModel(
     var triangleOffset by mutableStateOf<Offset?>(null)
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
+    val isPlayingAudio = playAudioUseCase.isPlaying
+
+    fun onPlayAudio(audioText: String) {
+        viewModelScope.launch {
+            playAudioUseCase.playAudio(audioText)
+        }
+    }
+
+    fun stopAudio() {
+        playAudioUseCase.stopAudio()
+    }
     fun updateNumber(number: Int) {
         trialData.response.selectedNumber.value = number.toString()
     }
