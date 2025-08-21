@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.components
+package org.example.hit.heal.core.presentation.components.dateAndTiem
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,7 +12,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import network.chaintech.kmp_date_time_picker.ui.datepicker.WheelDatePickerView
+import network.chaintech.kmp_date_time_picker.ui.timepicker.WheelTimePickerView
 import network.chaintech.kmp_date_time_picker.utils.DateTimePickerView
 import network.chaintech.kmp_date_time_picker.utils.WheelPickerDefaults
 import org.example.hit.heal.core.presentation.Resources
@@ -20,13 +20,12 @@ import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun DatePicker(onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
+fun TimePicker(onTimeSelected: (String) -> Unit, onDismiss: () -> Unit) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-
-        WheelDatePickerView(
+        WheelTimePickerView(
             modifier = Modifier.padding(10.dp),
-            title = stringResource(Resources.String.selectDate),
-            showDatePicker = true,
+            title = stringResource(Resources.String.selectTimeLabel),
+            showTimePicker = true,
             height = 200.dp,
             titleStyle = TextStyle(
                 fontSize = 18.sp,
@@ -38,17 +37,15 @@ fun DatePicker(onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
                 fontWeight = FontWeight(600),
                 color = primaryColor,
             ),
-            dateTextColor = Color.Black,
+            textColor = Color.Black,
             selectorProperties = WheelPickerDefaults.selectorProperties(
                 borderColor = Color.LightGray,
             ),
             shape = RoundedCornerShape(18.dp),
             dateTimePickerView = DateTimePickerView.DIALOG_VIEW,
             rowCount = 3,
-            showShortMonths = false,
-            onDoneClick = { selectedDate ->
-                onDateSelected(normalizeDateString(selectedDate.toString()))
-
+            onDoneClick = { selectedTime ->
+                onTimeSelected(selectedTime.toString())
                 onDismiss()
             },
             onDismiss = { onDismiss() }

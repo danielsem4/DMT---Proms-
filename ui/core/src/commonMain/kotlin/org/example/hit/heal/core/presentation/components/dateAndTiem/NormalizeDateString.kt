@@ -1,4 +1,4 @@
-package org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.components
+package org.example.hit.heal.core.presentation.components.dateAndTiem
 
 fun normalizeDateString(dateString: String): String {
     return if (dateString.contains("-")) {

@@ -88,7 +88,7 @@ class DrawScreen(
             onNextClick = {
                 val bitmap = drawPathsToBitmap()
                 viewModel.updateDrawnShape(bitmap)
-                navigator?.push(FeedbackScreen(viewModel)) },
+                navigator?.push(FeedbackScreen()) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
 

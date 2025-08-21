@@ -427,6 +427,7 @@ import dmt_proms.ui.core.generated.resources.second_question_hitber_task
 import dmt_proms.ui.core.generated.resources.second_question_hitber_task_instructions
 import dmt_proms.ui.core.generated.resources.second_question_hitber_task_retry_instructions
 import dmt_proms.ui.core.generated.resources.second_question_hitber_title
+import dmt_proms.ui.core.generated.resources.select_activity
 import dmt_proms.ui.core.generated.resources.select_date
 import dmt_proms.ui.core.generated.resources.select_date_label
 import dmt_proms.ui.core.generated.resources.select_time_label
@@ -1244,6 +1245,8 @@ object Resources {
         val SetHealthRate = Res.string.set_health_rate
 
         val marketText = Res.string.market
+        val selectActivityText = Res.string.select_activity
+        val activitiesText = Res.string.activities
     }
 
 

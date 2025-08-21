@@ -1,6 +1,5 @@
 package org.example.hit.heal.presentation.evaluation
 
-import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import core.data.model.MeasureObjectString
 import core.data.model.evaluation.EvaluationAnswer
@@ -94,7 +93,7 @@ class EvaluationTestViewModel(
                 when (val uploadResult = uploadDrawingImage(objId)) {
                     is Result.Error -> {
                         println("Failed to upload drawing for object $objId: ${uploadResult.error}")
-                        return uploadResult.map { "" } // map to the expected Result<String, DataError>
+                        return uploadResult.map { "" }
                     }
 
                     is Result.Success -> {
