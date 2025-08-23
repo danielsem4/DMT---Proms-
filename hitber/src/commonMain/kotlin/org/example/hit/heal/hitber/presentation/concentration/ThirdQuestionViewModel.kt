@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class ThirdQuestionViewModel: ViewModel() {
 
@@ -35,6 +35,7 @@ class ThirdQuestionViewModel: ViewModel() {
         _startButtonIsVisible.value = visible
     }
 
+    @OptIn(ExperimentalTime::class)
     fun thirdQuestionAnswer(answer: Int) {
         if (_isNumberClickable.value) {
             val reactionTime: Int = ((Clock.System.now().toEpochMilliseconds() - numberAppearedAt) / 1000).toInt()
@@ -47,6 +48,7 @@ class ThirdQuestionViewModel: ViewModel() {
     }
 
     // Starts the number generation loop, shows new number every 2.5 seconds for 60 seconds total
+    @OptIn(ExperimentalTime::class)
     fun startRandomNumberGeneration() {
         viewModelScope.launch {
 

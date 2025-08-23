@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.offsetAt
@@ -27,7 +27,9 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.example.hit.heal.core.presentation.ToastType
 import kotlin.math.abs
+import kotlin.time.ExperimentalTime
 
+@OptIn(ExperimentalTime::class)
 class MedicationViewModel
     (private val remoteDataSource: AppApi,
      private val storage: Storage,
@@ -224,6 +226,7 @@ class MedicationViewModel
     }
 
     //convertor (it could be without too)
+    @OptIn(ExperimentalTime::class)
     fun convertToIso8601(
         date: String,
         time: String,

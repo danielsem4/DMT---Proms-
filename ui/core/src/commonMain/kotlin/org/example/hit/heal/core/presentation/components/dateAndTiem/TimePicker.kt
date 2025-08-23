@@ -37,7 +37,7 @@ fun TimePicker(onTimeSelected: (String) -> Unit, onDismiss: () -> Unit) {
                 fontWeight = FontWeight(600),
                 color = primaryColor,
             ),
-            textColor = Color.Black,
+
             selectorProperties = WheelPickerDefaults.selectorProperties(
                 borderColor = Color.LightGray,
             ),

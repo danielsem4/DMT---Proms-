@@ -14,6 +14,7 @@ import core.domain.Result
 import core.domain.api.AppApi
 import core.domain.map
 import core.network.AppConfig.BASE_URL
+import core.network.AppConfig.BASE_URL_DEV
 import core.network.getWithAuth
 import core.network.postWithAuth
 import core.network.safeCall

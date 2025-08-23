@@ -43,9 +43,9 @@ kotlin {
             implementation(compose.materialIconsExtended)
             implementation(compose.material3)
             implementation(libs.compose.dnd)
+            implementation(libs.kotlinx.datetime)
 
             implementation(libs.kmp.date.time.picker)
-            implementation(libs.kotlinx.datetime)
 
             configurations.getByName("debugImplementation").dependencies.add(
                 libs.androidx.ui.tooling.get()
