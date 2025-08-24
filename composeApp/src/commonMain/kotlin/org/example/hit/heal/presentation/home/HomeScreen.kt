@@ -163,23 +163,24 @@ class HomeScreen : Screen {
                         }
                     } else {
                         LazyVerticalGrid(
-                            columns = GridCells.Fixed(columns), // Use the dynamic columns
+                            columns = GridCells.Fixed(columns),
                             contentPadding = PaddingValues(vertical = paddingMd),
                             horizontalArrangement = Arrangement.spacedBy(paddingMd),
                             verticalArrangement = Arrangement.spacedBy(paddingMd),
                             modifier = Modifier.padding(horizontal = paddingLg)
                         ) {
-                            items(features.filter { it.active }) { feature ->
+                            items(
+                                items = features,
+                                key = { it.module_id }
+                            ) { feature ->
                                 AnimatedFeatureTile(
                                     feature = feature,
-                                    onClick = {
-                                        navigateTo(feature.module_name, navigator)
-                                    }
+                                    onClick = { navigateTo(feature.module_name, navigator) }
                                 )
                             }
                         }
-                    }
 
+                    }
                 }
             }
         }

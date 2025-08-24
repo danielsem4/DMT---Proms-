@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import core.data.model.Medications.Medication
+import core.data.model.Medications.MedicationNotificationData
 import core.data.model.Medications.MedicationReport
 import core.data.storage.Storage
 import core.domain.DataError
@@ -22,6 +23,7 @@ import kotlinx.coroutines.withContext
 import kotlin.time.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -132,7 +134,7 @@ class MedicationViewModel
     //or date now
     var selectedDate by mutableStateOf(
         Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault()).run {
-            "$dayOfMonth/$monthNumber/$year"
+            "$day/${month.number}/$year"
         }
     )
         private set
@@ -173,7 +175,7 @@ class MedicationViewModel
         }
     }
 
-    fun validateAndSave(medication: Medication? , medicationId: Int? ) {
+    fun validateAndSave(medication: Medication? , medicationId: String? ) {
         val date = selectedDate
         val time = selectedTime
 
@@ -197,7 +199,7 @@ class MedicationViewModel
     }
 
     //report of taking medication
-    suspend fun reportMedication(medication: Medication, timestamp: String, medicationId: Int?) {
+    suspend fun reportMedication(medication: Medication, timestamp: String, medicationId: String?) {
         isLoading.value = true
         if (!initUserIds()) {
             errorMessage = errorMessage
@@ -208,7 +210,7 @@ class MedicationViewModel
         val report = MedicationReport(
             clinicId = clinicId!!,
             patientId = patientId!!,
-            medicationId = medication.medicine,
+            medicationId = medication.medicationId!!.toLong(),
             timestamp = timestamp
         )
         val result = remoteDataSource.reportMedicationTook(report)
@@ -283,7 +285,7 @@ class MedicationViewModel
                 return@launch
             }
 
-            remoteDataSource.getAllPatientMedicines(3, 243)
+            remoteDataSource.getAllPatientMedicines(clinicId!!, patientId!!)
                 .onSuccess {
                     medications.value = it
 
@@ -309,22 +311,15 @@ class MedicationViewModel
                 return@launch
             }
 
-            val newMedication = Medication(
-                id = clinicId!!,
+            val newMedication = MedicationNotificationData(
                 clinicId = clinicId!!,
-                patient = patientId!!,
                 patientId = patientId!!,
-                medicationId = medication?.id ?: 0,
-                medicine = medication?.medicine.toString() ?: "",
-                name = medicationName,
-                form = medication?.form ?: "",
-                unit = medication?.unit ?: "",
-                frequency = selectedFrequency.value,
-                frequencyData = if (selectedFrequency.value == "Weekly")
-                    selectedDays.value.joinToString(",") else selectedTimeBetweenDoses.value,
-                startDate = selectedStartDate.value,
-                endDate = selectedEndDate.value.takeIf { it.isNotBlank() },
-                dosage = medication?.dosage ?: ""
+                medicationId = medication?.medicationId?.toLongOrNull() ?: 0,
+                frequency = _selectedFrequency.value,
+                interval = _selectedTimeBetweenDoses.value.toIntOrNull() ?: 1,
+                startTime = _selectedStartTime.value,
+                startDate = _selectedStartDate.value,
+                endDate = _selectedEndDate.value
             )
 
             val result = remoteDataSource.setMedicationNotifications(newMedication)

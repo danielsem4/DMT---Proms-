@@ -32,7 +32,7 @@ fun ReportDialog(
     name: String,
     selectedDate: String,
     selectedTime: String,
-    isLoading: Boolean,
+    isLoading: Boolean = false,
     errorMessage: String?,
     isSuccess: Boolean?,
     onDismiss: () -> Unit,

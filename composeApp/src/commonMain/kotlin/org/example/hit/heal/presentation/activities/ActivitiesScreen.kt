@@ -24,6 +24,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.ActivityItem
+import dmt_proms.composeapp.generated.resources.Res
+import dmt_proms.composeapp.generated.resources.pills
 import org.example.hit.heal.core.presentation.Resources.Icon.joggingIcon
 import org.example.hit.heal.core.presentation.Resources.Icon.yogaIcon
 import org.example.hit.heal.core.presentation.Resources.String.activitiesText
@@ -34,6 +36,7 @@ import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.cards.SimpleIconCard
 import org.example.hit.heal.core.presentation.components.dialogs.CustomDialog // <-- add this import
+import org.example.hit.heal.core.presentation.components.dialogs.ReportDialog
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -117,6 +120,24 @@ class ActivitiesScreen : Screen {
                     )
                 }
             }
+        }
+
+        if(showDialog && selectedItem != null) {
+            ReportDialog(
+                icon = setActivityIcon(selectedItem!!.name),
+                name = selectedItem!!.name,
+                selectedDate = viewModel.selectedDate,
+                selectedTime = viewModel.selectedTime,
+                errorMessage = "hgghjgj",
+                isSuccess = true,
+                onDismiss = { showDialog = false },
+                onSave = {
+                    showDialog = false
+                },
+                onDateUpdate = { date -> viewModel.updateDate(date) },
+                onTimeUpdate = { time -> viewModel.updateTime(time) },
+                onResetSuccess = {  }
+            )
         }
     }
 

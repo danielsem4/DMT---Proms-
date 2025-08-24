@@ -4,6 +4,7 @@ import core.data.model.ActivityItem
 import core.data.model.ActivityItemReport
 import core.data.model.LoginRequest
 import core.data.model.Medications.Medication
+import core.data.model.Medications.MedicationNotificationData
 import core.data.model.Medications.MedicationReport
 import core.data.model.ModulesResponse
 import core.data.model.SuccessfulLoginResponse
@@ -45,7 +46,7 @@ class KtorAppRemoteDataSource(
 ) : AppApi {
 
     // Base URL for all endpoints
-    private val baseUrl = BASE_URL
+    private val baseUrl = BASE_URL_DEV
 
     override suspend fun login(email: String, password: String):
             Result<SuccessfulLoginResponse, DataError.Remote> = safeCall {
@@ -144,7 +145,7 @@ class KtorAppRemoteDataSource(
 
 
     override suspend fun setMedicationNotifications(
-        results: Medication
+        results: MedicationNotificationData
     ): Result<Unit, DataError.Remote> =
         httpClient.postWithAuth<Unit>(
             url = "${baseUrl}patientNotificationData/",

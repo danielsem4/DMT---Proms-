@@ -109,7 +109,7 @@ fun ReportMedicationDialog(
             ) {
                 Button(
                     onClick = {
-                        viewModel.validateAndSave(medication, medication.id)
+                        viewModel.validateAndSave(medication, medication.medicationId)
                         buttonPressed = true
                     },
                     colors = ButtonDefaults.buttonColors(primaryColor),

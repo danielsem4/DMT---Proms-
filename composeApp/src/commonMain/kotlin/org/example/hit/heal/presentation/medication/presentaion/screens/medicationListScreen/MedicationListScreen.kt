@@ -59,7 +59,7 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
         var selectedMedication by remember { mutableStateOf<Medication?>(null) }
         var showDialog by remember { mutableStateOf(false) }
 
-        val keyboardController = androidx.compose.ui.platform.LocalSoftwareKeyboardController.current
+        val keyboardController = LocalSoftwareKeyboardController.current
         var searchQuery by remember { mutableStateOf("") }
 
         val medications: List<Medication> = viewModel.medications.value
@@ -154,7 +154,7 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
                 onDismiss = { showDialog = false },
                 onSave = {
                     // your existing save flow:
-                    viewModel.validateAndSave(selectedMedication!!, selectedMedication!!.id)
+                    viewModel.validateAndSave(selectedMedication!!, selectedMedication!!.medicationId)
                 },
                 icon = Res.drawable.pills,
                 onDateUpdate = { date -> viewModel.updateDate(date) },
