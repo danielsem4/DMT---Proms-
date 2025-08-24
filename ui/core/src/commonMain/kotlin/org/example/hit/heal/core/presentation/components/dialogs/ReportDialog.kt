@@ -50,7 +50,7 @@ fun ReportDialog(
     var buttonPressed by remember { mutableStateOf(false) }
 
     AlertDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = { onDismiss() },
         shape = RoundedCornerShape(Sizes.radiusLg),
         modifier = Modifier.border(Sizes.elevationSm, Black, RoundedCornerShape(Sizes.radiusLg)),
         text = {
@@ -93,9 +93,10 @@ fun ReportDialog(
             ) {
                 Button(
                     onClick = {
-                        onSave()
                         buttonPressed = true
+                        onSave()
                     },
+                    enabled = !isLoading,
                     colors = ButtonDefaults.buttonColors(ButtonPrimary),
                     shape = RoundedCornerShape(Sizes.radiusXl),
                     modifier = Modifier.height(Sizes.buttonHeightMd)
@@ -109,6 +110,7 @@ fun ReportDialog(
                 }
                 Button(
                     onClick = { showDatePicker = true },
+                    enabled = !isLoading,
                     colors = ButtonDefaults.buttonColors(ButtonPrimary),
                     shape = RoundedCornerShape(Sizes.radiusXl),
                     modifier = Modifier.height(Sizes.buttonHeightMd)
@@ -149,22 +151,34 @@ fun ReportDialog(
         ToastMessage(
             message = toastMessage!!,
             type = toastType,
-            onDismiss = { showToast = false }
+            onDismiss = {
+                showToast = false
+                onDismiss() // close the dialog when the toast is dismissed
+            }
         )
 
         LaunchedEffect(Unit) {
             delay(2500)
             showToast = false
+            onDismiss()   // auto-close after a short delay too
         }
     }
 
-    LaunchedEffect(isLoading) {
+    // When upload finishes (isLoading becomes false) AFTER user pressed save,
+    // decide which toast to show and reset flags.
+    LaunchedEffect(isLoading, isSuccess, errorMessage, buttonPressed) {
         if (!isLoading && buttonPressed) {
-            toastMessage = errorMessage ?: "Error"
-            toastType = if (isSuccess == true) ToastType.Success else ToastType.Error
+            // Choose message based on success vs error
+            if (isSuccess == true) {
+                toastMessage = "Saved" // or a localized string if you have one
+                toastType = ToastType.Success
+            } else {
+                toastMessage = errorMessage ?: "Error"
+                toastType = ToastType.Error
+            }
             showToast = true
             buttonPressed = false
-            onResetSuccess()
+            onResetSuccess() // clear VM flags so this doesn't re-fire
         }
     }
 }

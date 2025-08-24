@@ -1,3 +1,5 @@
+package org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,8 +24,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -38,17 +38,15 @@ import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.components.SearchBar
 import org.example.hit.heal.core.presentation.components.dialogs.ReportDialog
-import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
 import org.example.hit.heal.presentation.medication.presentaion.screens.medicationAlarm.MedicationAlarmScreen
-import org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.components.ReportMedicationDialog
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-
-
-
+/**
+ * Screen that shows the list of medications
+ */
 class MedicationListScreen (private val isReport: Boolean) : Screen {
     @OptIn(KoinExperimentalAPI::class)
     @Composable
@@ -153,8 +151,8 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
                 isSuccess = viewModel.successMessageReport,
                 onDismiss = { showDialog = false },
                 onSave = {
-                    // your existing save flow:
                     viewModel.validateAndSave(selectedMedication!!, selectedMedication!!.medicationId)
+
                 },
                 icon = Res.drawable.pills,
                 onDateUpdate = { date -> viewModel.updateDate(date) },

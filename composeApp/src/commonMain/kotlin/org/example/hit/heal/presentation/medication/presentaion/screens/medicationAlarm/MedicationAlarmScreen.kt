@@ -1,9 +1,10 @@
 package org.example.hit.heal.presentation.medication.presentaion.screens.medicationAlarm
+import MainMedicationScreen
 import ToastMessage
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,7 +14,6 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.example.new_memory_test.presentation.screens.RoomScreen.screen.RoomsScreens
 import core.data.model.Medications.Medication
 import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Resources
@@ -24,13 +24,16 @@ import org.example.hit.heal.presentation.medication.presentaion.components.Custo
 import org.example.hit.heal.presentation.medication.presentaion.components.CustomDropdownMenu
 import org.example.hit.heal.presentation.medication.presentaion.components.CustomWeeklySelector
 import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
-import org.example.hit.heal.presentation.medication.presentaion.screens.mainMedication.MainMedicationScreen
 import org.example.hit.heal.presentation.medication.presentaion.screens.medicationAlarm.components.generateTimeSlots
- import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import kotlin.String
 
+/**
+ *
+ */
 
 class MedicationAlarmScreen (private val medication: Medication) : Screen {
     @OptIn(KoinExperimentalAPI::class)
@@ -39,7 +42,7 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinViewModel<MedicationViewModel>()
         val medicationName = viewModel.medicationName.collectAsState().value
-        val medicationchoose = viewModel.getMedication()
+        val medicationChoose = viewModel.getMedication()
         val selectedFrequency by viewModel.selectedFrequency.collectAsState()
         val selectedTimeBetweenDoses by viewModel.selectedTimeBetweenDoses.collectAsState()
         val selectedStartTime by viewModel.selectedStartTime.collectAsState()
@@ -79,7 +82,7 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
 
             isError = false
             errorMessage = ""
-            viewModel.buildAndSendMedication(medicationchoose, medicationName)
+            viewModel.buildAndSendMedication(medicationChoose, medicationName)
             viewModel.isLoading
 
 
@@ -197,26 +200,28 @@ class MedicationAlarmScreen (private val medication: Medication) : Screen {
                         type = toastType,
                         onDismiss = { showToast = false
                             navigator.push(MainMedicationScreen())}
-
-
                     )
 
                     LaunchedEffect(Unit) {
                         delay(2500)
                         showToast = false
-                        navigateAfterToast = false
-                        navigator.push(MainMedicationScreen())
                     }
                 }
                 LaunchedEffect(viewModel.isLoading.value) {
                     if (!viewModel.isLoading.value && buttonPressed) {
-                        toastMessage = viewModel.errorMessage?: "Success"
-                        toastType = if (viewModel.successMessageAlarm == true) ToastType.Success else ToastType.Error
-                        showToast = true
-                        viewModel.resetSaveSuccess()
+                        toastMessage =
+                            if (viewModel.successMessageAlarm == true) getString(Resources.String.save)
+                            else viewModel.errorAlarmMessage ?: getString(Resources.String.serverError)
 
+                        toastType =
+                            if (viewModel.successMessageAlarm == true) ToastType.Success
+                            else ToastType.Error
+
+                        showToast = true
+                        buttonPressed = false
                     }
                 }
+
 
             }
         }

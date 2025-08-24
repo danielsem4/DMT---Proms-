@@ -1,35 +1,36 @@
 package org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import core.data.model.Medications.Medication
 import core.data.model.Medications.MedicationNotificationData
 import core.data.model.Medications.MedicationReport
 import core.data.storage.Storage
-import core.domain.DataError
 import core.domain.api.AppApi
 import core.domain.onError
 import core.domain.onSuccess
 import core.util.PrefKeys
+import core.utils.getCurrentDate
+import core.utils.getCurrentTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.time.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.number
 import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
-import org.example.hit.heal.core.presentation.ToastType
 import kotlin.math.abs
 import kotlin.time.ExperimentalTime
+
+/**
+ * ViewModel for managing medication data and operations.
+ * Handles fetching, reporting, and setting medication notifications.
+ */
 
 @OptIn(ExperimentalTime::class)
 class MedicationViewModel
@@ -41,7 +42,6 @@ class MedicationViewModel
     private var patientId: Int? = null
 
     private val _medication = MutableStateFlow<Medication?>(null)
-
     private val _medicationName = MutableStateFlow("")
     val medicationName: StateFlow<String> = _medicationName
 
@@ -132,36 +132,23 @@ class MedicationViewModel
 
     //--------------Date
     //or date now
-    var selectedDate by mutableStateOf(
-        Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault()).run {
-            "$day/${month.number}/$year"
-        }
-    )
-        private set
 
-    //or selected time
-    var selectedTime by mutableStateOf(
-        Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault()).run {
-            "$hour:$minute"
-        }
+    var selectedDate by mutableStateOf(
+        getCurrentDate()
     )
-        private set
+
+    var selectedTime by mutableStateOf(
+        getCurrentTime()
+    )
 
     fun updateDate(newDate: String) {
         selectedDate = newDate
-        errorMessage = null
     }
 
     fun updateTime(newTime: String) {
         selectedTime = newTime
-        errorMessage = null
     }
 
-    //----------------Server
-    //load medication evaluation
-
-
-    //Take clinickId and patientId from storage
     suspend fun initUserIds(): Boolean {
         val clinic = storage.get(PrefKeys.clinicId)
         val patient = storage.get(PrefKeys.userId)?.toIntOrNull()

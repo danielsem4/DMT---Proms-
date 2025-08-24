@@ -1,5 +1,6 @@
 package org.example.hit.heal.presentation.home
 
+import MainMedicationScreen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -83,7 +84,6 @@ import org.example.hit.heal.oriantation.feature.presentation.OriantationWelcomeS
 import org.example.hit.heal.presentation.activities.ActivitiesScreen
 import org.example.hit.heal.presentation.evaluation.AllEvaluationsScreen
 import org.example.hit.heal.presentation.login.LoginScreen
-import org.example.hit.heal.presentation.medication.presentaion.screens.mainMedication.MainMedicationScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
