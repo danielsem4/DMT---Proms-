@@ -9,7 +9,6 @@ data class Evaluation(
     val display_as_module: Boolean,
     val is_multilingual: Boolean,
     val is_active: Boolean,
-    val measurement_type: String? = null,
     val measurement_settings: EvaluationSettings,
     val measurement_objects: List<EvaluationObject>,
 )

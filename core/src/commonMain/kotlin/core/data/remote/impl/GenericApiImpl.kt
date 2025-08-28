@@ -46,7 +46,7 @@ class KtorAppRemoteDataSource(
 ) : AppApi {
 
     // Base URL for all endpoints
-    private val baseUrl = BASE_URL_DEV
+    private val baseUrl = BASE_URL
 
     override suspend fun login(email: String, password: String):
             Result<SuccessfulLoginResponse, DataError.Remote> = safeCall {
@@ -200,6 +200,4 @@ class KtorAppRemoteDataSource(
         ) {
             parameter("clinic_id", clinicId)
         }
-
-
 }

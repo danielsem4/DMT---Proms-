@@ -80,6 +80,7 @@ import org.example.hit.heal.core.presentation.components.cards.SimpleIconCard
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.entry.HitBerEntryScreen
 import com.generic.marketTest.presentation.entry.MarketTestEntryScreen
+import org.example.hit.heal.core.presentation.Resources.String.activities
 import org.example.hit.heal.oriantation.feature.presentation.OriantationWelcomeScreen
 import org.example.hit.heal.presentation.activities.ActivitiesScreen
 import org.example.hit.heal.presentation.evaluation.AllEvaluationsScreen
@@ -264,7 +265,7 @@ class HomeScreen : Screen {
             exit = fadeOut() + scaleOut()
         ) {
             SimpleIconCard(
-                title = feature.module_name,
+                title = labelFor(feature.module_name),
                 icon = {
                     Icon(
                         painter = painterResource(iconFor(feature.module_name)),
@@ -318,7 +319,7 @@ class HomeScreen : Screen {
         "measurements" -> stringResource(Resources.String.measurements)
         "chat" -> stringResource(Resources.String.chat)
         "medications" -> stringResource(Resources.String.medications)
-        "activities" -> stringResource(Resources.String.activities)
+        "activities" -> stringResource(activities)
         "memory" -> stringResource(Resources.String.memory)
         "hitber" -> stringResource(Resources.String.hitber)
         "cdt" -> stringResource(Resources.String.clockTest)

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -23,20 +22,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
-import org.example.hit.heal.core.presentation.Sizes.heightMd
 import org.example.hit.heal.core.presentation.Sizes.heightSm
+import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXs
 import org.example.hit.heal.core.presentation.Sizes.radiusMd2
+import org.example.hit.heal.core.presentation.White
 import org.example.hit.heal.core.presentation.formatLabel
 import org.example.hit.heal.core.presentation.primaryColor
-import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+/**
+ * A custom slider component with a rounded filled track.
+ */
 
 @Composable
 fun RoundedFilledSlider(
@@ -48,7 +48,7 @@ fun RoundedFilledSlider(
     endText: String = end.formatLabel(),
     onValueChanged: ((Float) -> Unit)? = null,
     trackBrush: Brush? = null,
-    trackHeight: Dp = heightMd,
+    trackHeight: Dp = heightSm,
     cornerRadius: Dp = radiusMd2,
     showEdgeLabels: Boolean = true
 ) {
@@ -56,102 +56,111 @@ fun RoundedFilledSlider(
     val fillFraction = ((value - start) / range).coerceIn(0f, 0.999f)
     val steps = (availableValues.size - 2).coerceAtLeast(0)
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(paddingSm)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+    Box (
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = White, shape = RoundedCornerShape(cornerRadius))
+    ){
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(paddingMd)
         ) {
-            if (showEdgeLabels) {
-                Text(
-                    text = start.toString(),
-                    fontSize = EXTRA_MEDIUM,
-                    modifier = Modifier.padding(end = paddingSm)
-                )
-            }
-
-            Box(
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .weight(1f)
-                    .height(trackHeight)
+                    .fillMaxWidth()
             ) {
-                // Background track
+                if (showEdgeLabels) {
+                    Text(
+                        text = start.toString(),
+                        fontSize = EXTRA_MEDIUM,
+                        modifier = Modifier.padding(end = paddingSm)
+                    )
+                }
+
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .background(Color.LightGray, RoundedCornerShape(cornerRadius))
-                )
-                // Filled track (gradient or color)
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(fillFraction)
-                        .fillMaxHeight()
-                        .background(
-                            trackBrush ?: Brush.horizontalGradient(listOf(primaryColor, primaryColor)),
-                            RoundedCornerShape(cornerRadius)
-                        )
-                )
-                // Slider (transparent)
-                Slider(
-                    value = value,
-                    onValueChange = { newValue ->
-                        val snapped = availableValues.minByOrNull { kotlin.math.abs(it - newValue) }
-                            ?: newValue
-                        onValueChanged?.invoke(snapped)
-                    },
-                    valueRange = start..end,
-                    steps = steps,
-                    colors = SliderDefaults.colors(
-                        thumbColor = Color.Transparent,
-                        activeTrackColor = Color.Transparent,
-                        inactiveTrackColor = Color.Transparent,
-                        activeTickColor = Color.Transparent,
-                        inactiveTickColor = Color.Transparent
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
+                        .weight(1f)
+                        .height(trackHeight)
+                ) {
+                    // Background track
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                            .background(Color.LightGray, RoundedCornerShape(cornerRadius))
+                    )
+                    // Filled track (gradient or color)
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(fillFraction)
+                            .fillMaxHeight()
+                            .background(
+                                trackBrush ?: Brush.horizontalGradient(listOf(primaryColor, primaryColor)),
+                                RoundedCornerShape(cornerRadius)
+                            )
+                    )
+                    // Slider (transparent)
+                    Slider(
+                        value = value,
+                        onValueChange = { newValue ->
+                            val snapped = availableValues.minByOrNull { kotlin.math.abs(it - newValue) }
+                                ?: newValue
+                            onValueChanged?.invoke(snapped)
+                        },
+                        valueRange = start..end,
+                        steps = steps,
+                        colors = SliderDefaults.colors(
+                            thumbColor = Color.Transparent,
+                            activeTrackColor = Color.Transparent,
+                            inactiveTrackColor = Color.Transparent,
+                            activeTickColor = Color.Transparent,
+                            inactiveTickColor = Color.Transparent
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+
+                if (showEdgeLabels) {
+                    Text(
+                        text = end.toString(),
+                        fontSize = EXTRA_MEDIUM,
+                        modifier = Modifier.padding(start = paddingSm)
+                    )
+                }
             }
 
-            if (showEdgeLabels) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = paddingXs),
+            ) {
                 Text(
-                    text = end.toString(),
+                    text = startText,
                     fontSize = EXTRA_MEDIUM,
-                    modifier = Modifier.padding(start = paddingSm)
-                )
+
+                    )
+
+                Text(
+                    text = value.toString(),
+                    fontSize = EXTRA_MEDIUM,
+                    color = primaryColor,
+
+                    )
+
+                Text(
+                    text = endText,
+                    fontSize = EXTRA_MEDIUM,
+
+                    )
             }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = paddingXs),
-        ) {
-            Text(
-                text = startText,
-                fontSize = EXTRA_MEDIUM,
-                modifier = Modifier.padding(end = paddingSm)
-            )
-
-            Text(
-                text = value.toString(),
-                fontSize = EXTRA_MEDIUM,
-                color = primaryColor,
-
-            )
-
-            Text(
-                text = endText,
-                fontSize = EXTRA_MEDIUM,
-                modifier = Modifier.padding(end = paddingSm)
-            )
         }
     }
+
 }
 
 @Preview
@@ -161,7 +170,7 @@ fun RoundedFilledSliderPreview() {
 
     val availableValues = listOf(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 10f)
 
-    Box(modifier = Modifier.background(Color.White)) {
+
 
         RoundedFilledSlider(
             start = 1f,
@@ -172,5 +181,5 @@ fun RoundedFilledSliderPreview() {
             endText = "Terrible",
             onValueChanged = { sliderValue = it }
         )
-    }
+
 }
