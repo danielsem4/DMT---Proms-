@@ -68,11 +68,11 @@ import org.example.hit.heal.core.presentation.components.DropDownQuestionField
 import org.example.hit.heal.hitber.presentation.timeAndPlace.FirstQuestionViewModel
 import org.jetbrains.compose.resources.stringResource
 
-@Composable
-fun Questions(viewModel: FirstQuestionViewModel) {
 
+@Composable
+fun provideQuestions(): List<QuestionData> {
     // List of question data with their keys and localized answers from resources
-    val questionsData = listOf(
+   return listOf(
         QuestionData(
             question = stringResource(firstQuestionHitberQuestion1),
             questionKey = "day",
@@ -171,14 +171,16 @@ fun Questions(viewModel: FirstQuestionViewModel) {
             )
         )
     )
+}
 
-    // For each question, display a dropdown menu with the possible answers
-    questionsData.forEach { questionData ->
+@Composable
+fun Questions(viewModel: FirstQuestionViewModel, questionList: List<QuestionData>) {
+    questionList.forEach { questionData ->
         DropDownQuestionField(
             question = questionData.question,
             dropDownItems = questionData.answers.map { DropDownItem(it) },
-            onItemClick = { selectedAnswer ->
-                viewModel.firstQuestionAnswer(questionData.questionKey, selectedAnswer)
+            onItemClick = { selected ->
+                viewModel.firstQuestionAnswer(questionData.questionKey, selected)
             }
         )
     }
