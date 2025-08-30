@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,6 +35,11 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * Memorize screen:
+ * Shows 5 target shapes to memorize, then continues to the action screen.
+ */
+
 class ShapeScreen : Screen {
     @Composable
     override fun Content() {
@@ -50,13 +55,14 @@ class ShapeScreen : Screen {
             topRightText = "2/10",
             content = {
                 Row(
-                    modifier = Modifier.fillMaxWidth().weight(1f)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
                         .background(color = Color.White),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly,
-                )
-                {
-                    // Display each shape icon from the selected set
+                ) {
+                    // Display each shape icon from the selected set (5)
                     shapeSet.forEach { shapeRes ->
                         Icon(
                             painter = painterResource(shapeRes.drawable),
@@ -74,10 +80,10 @@ class ShapeScreen : Screen {
                         navigator?.replace(ActionShapesScreen(2))
                     }
                 )
+            }
+        )
 
-            })
-
-        //Load a random shape set for the task
+        // Load a random 5-shape target set for the task
         LaunchedEffect(Unit) {
             secondQuestionViewModel.setRandomShapeSet()
         }
@@ -95,12 +101,9 @@ class ShapeScreen : Screen {
                 description = stringResource(secondQuestionHitberDialogInstructions),
                 onDismiss = { showDialog = false },
                 buttons = listOf(
-                    stringResource(secondQuestionHitberUnderstand) to {showDialog = false},
+                    stringResource(secondQuestionHitberUnderstand) to { showDialog = false },
                 )
             )
         }
     }
 }
-
-
-
