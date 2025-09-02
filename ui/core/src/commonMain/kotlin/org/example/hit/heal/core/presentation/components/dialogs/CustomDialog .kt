@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.zIndex
+import dmt_proms.ui.core.generated.resources.Res
+import dmt_proms.ui.core.generated.resources.pill
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.FontSize.REGULAR
@@ -43,6 +45,7 @@ import org.example.hit.heal.core.presentation.Sizes.spacingXxl
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  *
@@ -64,7 +67,7 @@ fun CustomDialog(
         properties = DialogProperties(
             dismissOnBackPress = true,
             dismissOnClickOutside = true,
-            usePlatformDefaultWidth = false
+            usePlatformDefaultWidth = true
         )
     ) {
         Box(
@@ -164,4 +167,19 @@ fun CustomDialog(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewDialog() {
+
+    CustomDialog(
+        icon = Res.drawable.pill,
+        title = "Dialog Title",
+        description = "This is a sample description for the custom dialog fjsdfi fsaidfjisa fsdif jisdf sidjf isadf jsfij asdf.",
+        onDismiss = {},
+        buttons = listOf(
+            "OK" to {}
+        )
+    )
 }

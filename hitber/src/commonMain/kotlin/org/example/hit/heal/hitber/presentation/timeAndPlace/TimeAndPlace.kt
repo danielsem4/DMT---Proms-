@@ -27,7 +27,6 @@ import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
 import org.example.hit.heal.hitber.presentation.timeAndPlace.components.Questions
-import org.example.hit.heal.hitber.presentation.timeAndPlace.components.provideQuestions
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 

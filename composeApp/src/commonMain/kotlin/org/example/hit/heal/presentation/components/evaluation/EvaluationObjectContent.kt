@@ -112,7 +112,8 @@ fun EvaluationObjectContent(
                 DropDownQuestionField(
                     question = obj.object_label,
                     dropDownItems = dropDownItems,
-                    onItemClick = onItemClicked
+                    onItemClick = onItemClicked,
+                    selectedText = (answers[obj.id] as? EvaluationAnswer.Text)?.value ?: ""
                 )
             }
 
