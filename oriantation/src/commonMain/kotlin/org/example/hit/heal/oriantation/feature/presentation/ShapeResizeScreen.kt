@@ -3,7 +3,6 @@ package org.example.hit.heal.oriantation.feature.presentation
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -44,15 +43,11 @@ import org.example.hit.heal.core.presentation.Resources.String.trialPinchTitle
 import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
 
-data class Item(
-    val id: Int,
-    val resId: DrawableResource,
-    var isPlaced: Boolean = false,
-    var position: Offset = Offset.Zero
-)
+/**
+ * Screen where user can resize a triangle shape using pinch gesture
+ */
 
 class ShapeResizeScreen(
     private val viewModel: OrientationTestViewModel
@@ -61,7 +56,6 @@ class ShapeResizeScreen(
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         var scale by remember { mutableStateOf(1f) }
-        // Use the triangleOffset from the viewModel, or default to Offset(100f, 100f)
         var triangleOffset by remember { mutableStateOf(viewModel.triangleOffset ?: Offset(100f, 100f)) }
         
         // Debug information

@@ -1217,9 +1217,9 @@ object Resources {
         val Winter = Res.string.winter
         val entryInstructionsAppTrial = Res.string.entry_instructions_app_trial
         val dropdownInstructionsAppTrial = Res.string.dropdown_instructions_app_trial
-        val seasonsInstructionsAppTrial = Res.string.seasons_instructions_app_trial
-        val orientationSeasonTitle = Res.string.oriantation_season_title
-        val YouInTheSeasons = Res.string.you_in_the_season
+        val seasonsInstructionsAppTrial = rs.seasons_instructions_app_trial
+        val orientationSeasonTitle = rs.oriantation_season_title
+        val YouInTheSeasons = rs.you_in_the_season
 
         val trialPinchTitle = Res.string.trial_pinch_title
         val trialPinchInstructions = Res.string.trial_pinch_instructions

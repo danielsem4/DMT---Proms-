@@ -17,79 +17,85 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
-import org.example.hit.heal.core.presentation.FontSize.LARGE
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.Resources.String.entryOrientationInstructions
 import org.example.hit.heal.core.presentation.Resources.String.entryOrientationTitle
 import org.example.hit.heal.core.presentation.Resources.String.entryOrientationWelcomeNote
+import org.example.hit.heal.core.presentation.Sizes.elevationMd
+import org.example.hit.heal.core.presentation.Sizes.paddingLg
+import org.example.hit.heal.core.presentation.Sizes.radiusLg
+import org.example.hit.heal.core.presentation.Sizes.radiusMd2
 import org.example.hit.heal.core.presentation.TabletBaseScreen
+import org.example.hit.heal.core.presentation.backgroundColor
+import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-class OriantationWelcomeScreen: Screen {
+/**
+ * Welcome screen for the orientation test
+ */
+
+class OriantationWelcomeScreen : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
         val viewModel: OrientationTestViewModel = koinViewModel()
+
         TabletBaseScreen(
-            title =stringResource(entryOrientationTitle) ,
+            title = stringResource(entryOrientationTitle),
             question = 1,
             onNextClick = { navigator?.push(NumberSelectScreen(viewModel)) },
             content = {
-
-
-                // Main greeting + card
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 24.dp),
+                        .padding(horizontal = paddingLg),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = (stringResource(entryOrientationWelcomeNote)),
-                        fontSize = LARGE,
-                        style = MaterialTheme.typography.h4.copy(fontSize = 32.sp),
-                        color = Color(0xFF4EC3AF) // Use your primary color
+                        text = stringResource(entryOrientationWelcomeNote),
+                        fontSize = EXTRA_LARGE,
+                        style = MaterialTheme.typography.h4,
+                        color = primaryColor
                     )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
+                    Spacer(modifier = Modifier.height(paddingLg))
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(min = 120.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        elevation = 4.dp,
-                        backgroundColor = Color.White,
-                        border = BorderStroke(1.dp, Color(0xFF4EC3AF)) // Add green border
+                        shape = RoundedCornerShape(radiusMd2),
+                        elevation = elevationMd,
+                        backgroundColor = backgroundColor,
+                        border = BorderStroke(1.dp, primaryColor)
                     ) {
                         Box(
                             modifier = Modifier
-                                .padding(16.dp)
+                                .padding(radiusLg)
                                 .fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = (stringResource(entryOrientationInstructions)),
-                                color = Color(0xFF4EC3AF), // Green text
+                                text = stringResource(entryOrientationInstructions),
+                                color = primaryColor,
                                 textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.body1.copy(fontSize = 24.sp)
+                                fontSize = EXTRA_MEDIUM,
+                                style = MaterialTheme.typography.body1
                             )
                         }
                     }
                 }
             }
         )
-        RegisterBackHandler(this)
-        {
+
+        RegisterBackHandler(this) {
             navigator?.popUntilRoot()
         }
     }

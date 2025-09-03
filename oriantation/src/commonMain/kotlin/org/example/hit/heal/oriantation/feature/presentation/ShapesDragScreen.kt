@@ -48,6 +48,9 @@ import org.example.hit.heal.oriantation.feature.presentation.components.Draggabl
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+/**
+ * Screen where user can drag and drop shapes into a red square
+ */
 class ShapesDragScreen(
     private val viewModel: OrientationTestViewModel
 ) : Screen {

@@ -60,6 +60,10 @@ class OrientationTestViewModel(
         trialData.response.selectedSeasons.value = listOf(season)
     }
 
+    fun updateSeasons(seasons: List<String>) {
+        trialData.response.selectedSeasons.value = seasons
+    }
+
     fun updateDrawnShape(bitmap: ImageBitmap) {
         drawnShape = bitmap.toByteArray()
     }

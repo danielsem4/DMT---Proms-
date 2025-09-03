@@ -41,6 +41,10 @@ import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.stringResource
 
+/**
+ * Base screen where user can draw a shape
+ */
+
 class DrawScreen(
     private val viewModel: OrientationTestViewModel
 ) : Screen {
@@ -79,7 +83,6 @@ class DrawScreen(
                     )
                 }
             }
-
             return bitmap
         }
         TabletBaseScreen(
@@ -163,14 +166,10 @@ class DrawScreen(
                         )
                     }
                 }
-
                 Spacer(modifier = Modifier.height(16.dp))
-
-
             }
         )
-        RegisterBackHandler(this)
-        {
+        RegisterBackHandler(this) {
             navigator?.popUntilRoot()
         }
     }

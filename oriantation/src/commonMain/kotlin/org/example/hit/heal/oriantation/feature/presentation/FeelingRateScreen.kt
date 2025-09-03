@@ -37,6 +37,11 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * Screen where user can rate their feeling on a scale from 0 to 10
+ * with a slider and an image that changes according to the selected value
+ */
+
 class FeedbackScreen : Screen {
     @Composable
     override fun Content() {
