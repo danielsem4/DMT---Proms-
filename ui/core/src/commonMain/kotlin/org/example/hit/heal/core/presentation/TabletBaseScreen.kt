@@ -15,11 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.colors
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,14 +31,13 @@ import androidx.compose.ui.unit.sp
 fun TabletBaseScreen(
     title: String,
     onNextClick: (() -> Unit)? = null,
-    buttonText: String?=null,
+    buttonText: String? = null,
     question: Int,
     navigationIcon: @Composable (() -> Unit)? = null,
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
     MaterialTheme {
-
-        val statusBarValues = WindowInsets.safeDrawing.asPaddingValues()
+        val safePadding = WindowInsets.safeDrawing.asPaddingValues()
 
         Column(
             modifier = Modifier
@@ -57,14 +55,16 @@ fun TabletBaseScreen(
                 Text(
                     text = title,
                     color = Color.White,
-                    style = MaterialTheme.typography.h6,
-                    modifier = Modifier.padding(top = statusBarValues.calculateTopPadding())
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.padding(top = safePadding.calculateTopPadding())
                 )
             }
 
             // Dynamic Content
             Column(
-                modifier = Modifier.padding(8.dp).weight(0.85f)
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f) // take remaining space
             ) {
                 content()
             }
@@ -73,31 +73,28 @@ fun TabletBaseScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 32.dp),
+                    .padding(
+                        bottom = safePadding.calculateBottomPadding() + 16.dp // extra spacing
+                    ),
+                contentAlignment = Alignment.Center
             ) {
-
                 if (onNextClick != null) {
                     Button(
-                        onClick = onNextClick ,
+                        onClick = onNextClick,
                         colors = ButtonDefaults.buttonColors(primaryColor),
                         shape = RoundedCornerShape(30),
-                        modifier = Modifier.width(300.dp).height(50.dp).align(Alignment.Center)
+                        modifier = Modifier
+                            .width(300.dp)
+                            .height(50.dp)
                     ) {
-                        Text("הבא", color = Color.White, fontSize = 25.sp)
+                        Text(
+                            text = buttonText ?: "הבא",
+                            color = Color.White,
+                            fontSize = 25.sp
+                        )
                     }
-
                 }
-
-
-//                Text(
-//                    text = "${question}/10",
-//                    fontSize = 40.sp,dt
-//                    fontWeight = FontWeight.Bold,
-//                    color = primaryColor,
-//                    modifier = Modifier.padding(end = 16.dp).align(Alignment.BottomEnd)
-//                )
-
-            }}
-
+            }
+        }
     }
 }

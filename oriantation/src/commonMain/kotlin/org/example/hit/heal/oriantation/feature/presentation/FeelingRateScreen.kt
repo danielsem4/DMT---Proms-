@@ -3,6 +3,9 @@ package org.example.hit.heal.oriantation.feature.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Speaker
+import androidx.compose.material.icons.rounded.Speaker
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +31,9 @@ import org.example.hit.heal.core.presentation.Resources.String.feelingRateNoPain
 import org.example.hit.heal.core.presentation.Resources.String.feelingRatePain
 import org.example.hit.heal.core.presentation.Resources.String.listening
 import org.example.hit.heal.core.presentation.Resources.String.vocalInstructions
+import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.GenericButton
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.RoundedFilledSlider
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -66,10 +71,10 @@ class FeedbackScreen : Screen {
             onDispose { viewModel.stopAudio() }
         }
 
-        BaseScreen(
-            config = ScreenConfig.TabletConfig,
+        TabletBaseScreen(
             title = stringResource(vocalInstructions),
-            onNextClick = { goNextOnce() }, // top-right Next: only navigate
+            question = 7,
+            onNextClick = { goNextOnce() },
             content = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -81,18 +86,32 @@ class FeedbackScreen : Screen {
                         ) {
                             Spacer(modifier = Modifier.height(32.dp))
 
-                            // Listen button (plays via ViewModel)
-                            RoundedButton(
+                            GenericButton(
                                 text = stringResource(listening),
+                                onClick = { viewModel.onPlayAudio(audioText) },
+                                enabled = !isPlaying,
+                                icon = Icons.Rounded.Speaker,
                                 modifier = Modifier
                                     .width(180.dp)
                                     .height(56.dp),
-                                onClick = { viewModel.onPlayAudio(audioText) },
-                                enabled = !isPlaying
                             )
-                            Text(if (isPlaying) "מנגן..." else "נגן")
 
-                            Spacer(modifier = Modifier.height(100.dp))
+                            Spacer(
+                                modifier = Modifier.height(32.dp)
+                            )
+
+                            Image(
+                                painter = painterResource(
+                                    when {
+                                        progress <= 3f -> Res.drawable.pain_icon
+                                        progress <= 5f -> Res.drawable.mid_pain_icon
+                                        progress <= 8f -> Res.drawable.small_pain_icon
+                                        else -> Res.drawable.no_pain_icon
+                                    }
+                                ),
+                                contentDescription = "Pain Icon",
+                                modifier = Modifier.size(150.dp)
+                            )
 
                             // Slider
                             val availableValues = (0..10).map { it.toFloat() }
@@ -108,65 +127,6 @@ class FeedbackScreen : Screen {
                                 cornerRadius = 16.dp,
                                 showEdgeLabels = true
                             )
-
-                            Spacer(modifier = Modifier.height(15.dp))
-
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Text(
-                                    text = when {
-                                        progress <= 3f -> stringResource(feelingRatePain)
-                                        progress <= 6f -> stringResource(feelingRateMid)
-                                        else -> stringResource(feelingRateNoPain)
-                                    },
-                                    fontSize = 22.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                                Text(
-                                    text = progress.toInt().toString(),
-                                    fontSize = 22.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            Image(
-                                painter = painterResource(
-                                    when {
-                                        progress <= 3f -> Res.drawable.pain_icon
-                                        progress <= 5f -> Res.drawable.mid_pain_icon
-                                        progress <= 8f -> Res.drawable.small_pain_icon
-                                        else -> Res.drawable.no_pain_icon
-                                    }
-                                ),
-                                contentDescription = "Pain Icon",
-                                modifier = Modifier.size(150.dp)
-                            )
-
-                            Spacer(modifier = Modifier.weight(1f))
-
-                            // Bottom Next button: only navigate
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                RoundedButton(
-                                    text = stringResource(NextText),
-                                    modifier = Modifier
-                                        .width(200.dp)
-                                        .height(50.dp),
-                                    onClick = { goNextOnce() },
-                                    enabled = !navigating
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(32.dp))
                         }
                     }
                 }

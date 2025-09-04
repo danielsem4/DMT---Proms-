@@ -79,7 +79,7 @@ class ShapeResizeScreen(
             onNextClick = {
                 if (scale > 1f) {
                     viewModel.updateShapeResize(true)}
-                navigator?.push(DrawScreen(viewModel)) },
+                navigator.push(DrawScreen(viewModel)) },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
