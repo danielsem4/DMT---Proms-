@@ -6,11 +6,8 @@ import kotlinx.serialization.SerialName
 @Serializable
 data class Medication(
     val id: Int,
-    @SerialName("clinic_id") val clinicId: Int? = null,
-    @SerialName("patient") val patient: Int,
     @SerialName("patient_id") val patientId: Int? = null,
-    @SerialName("medication_id") val medicationId: Int? = null,
-    val medicine: String,
+    @SerialName("medicine_id") val medicationId: String? = null,
     val name: String,
     val form: String,
     val unit: String,

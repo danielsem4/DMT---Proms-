@@ -45,7 +45,7 @@ fun TenthQuestionShapesLayout(
                 .align(Alignment.CenterEnd)
                 .fillMaxWidth(0.7f)
                 .fillMaxHeight()
-                .background(color = Color(0xFFB2FFFF), shape = RoundedCornerShape(radiusSm))
+                .background(color = Color.LightGray, shape = RoundedCornerShape(radiusSm))
         )
 
         TopRowLabels()

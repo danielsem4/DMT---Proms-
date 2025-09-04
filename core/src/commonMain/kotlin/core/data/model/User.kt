@@ -1,6 +1,8 @@
 package core.data.model
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 @Serializable
 data class User(
@@ -23,7 +25,7 @@ data class User(
     val user_permissions: List<String> = emptyList(),
     val clinicId: Int = 1,
     val clinicName: String? = "null",
-    val modules: List<ModulesResponse> = emptyList(),
+    val modules: List<List<JsonElement>> = emptyList(),
     val research_patient: Boolean? = false,
     val status: String? = "null",
     val server_url: String? = "null",
@@ -34,5 +36,4 @@ data class User(
 data class ModulesResponse(
     var module_name: String = "",
     val module_id: Int = 0,
-    val active:Boolean = false
 )

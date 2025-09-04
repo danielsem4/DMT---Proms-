@@ -1,26 +1,13 @@
-package org.example.hit.heal.presentation.medication.presentaion.screens.mainMedication
+import org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.MedicationListScreen
 
-import MedicationListScreen
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -31,14 +18,18 @@ import org.example.hit.heal.core.presentation.FontSize.MEDIUM
 import org.example.hit.heal.core.presentation.Resources
 import org.example.hit.heal.core.presentation.Sizes.heightLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
-import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.components.cards.SimpleRowCard
 import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * Main screen for Medication feature
+ * Allows to navigate to Report Medication or Set Medication Alarm
+ */
 
 class MainMedicationScreen : Screen {
     @Composable
@@ -46,81 +37,52 @@ class MainMedicationScreen : Screen {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinViewModel<MedicationViewModel>()
 
-
         BaseScreen(
             title = stringResource(Resources.String.medications),
             config = ScreenConfig.PhoneConfig,
-
-            ) {
+        ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(55.dp))
 
-                Button(
+                SimpleRowCard(
                     onClick = {
                         viewModel.setReport(true)
                         navigator.push(MedicationListScreen(isReport = true))
                     },
-                    colors = ButtonDefaults.buttonColors(Color.White),
+                    leading = painterResource(Res.drawable.pills),
+                    title = stringResource(Resources.String.reportMedication),
+                    containerColor = Color.White,
                     shape = RoundedCornerShape(20),
+                    textStyle = TextStyle(fontSize = MEDIUM),
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .padding(paddingMd)
-                        .height(heightLg),
-
-
-                    ) {
-                    Image(
-                        painter = painterResource(Res.drawable.pills),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(70.dp)
-                            .padding(bottom = 3.dp, top = 3.dp),
-                        contentScale = ContentScale.Fit
-                    )
-                    Text(
-                        text = stringResource(Resources.String.reportMedication),
-                        fontSize = MEDIUM,
-                        modifier = Modifier.padding(horizontal = paddingSm)
-                    )
-
-                }
+                        .height(heightLg)
+                )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(
+                SimpleRowCard(
                     onClick = {
                         viewModel.setReport(false)
                         navigator.push(MedicationListScreen(isReport = false))
                     },
-                    colors = ButtonDefaults.buttonColors(Color.White),
+                    leading = painterResource(Res.drawable.medication_alarm),
+                    title = stringResource(Resources.String.setMedicationAlarm),
+                    containerColor = Color.White,
                     shape = RoundedCornerShape(20),
+                    textStyle = TextStyle(fontSize = MEDIUM),
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .padding(paddingMd)
-                        .height(heightLg),
-                    ) {
-                    Image(
-                        painter = painterResource(Res.drawable.medication_alarm),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(70.dp)
-                            .padding(bottom = 3.dp, top = 3.dp),
-                        contentScale = ContentScale.Fit
-                    )
-                    Text(
-                        text = stringResource(Resources.String.setMedicationAlarm),
-                        fontSize = MEDIUM,
-                        modifier = Modifier.padding(horizontal = paddingSm)
-                    )
-                }
+                        .height(heightLg)
+                )
             }
         }
     }
-
 }
 

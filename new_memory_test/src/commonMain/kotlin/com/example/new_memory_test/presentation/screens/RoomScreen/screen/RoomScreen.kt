@@ -61,7 +61,7 @@ import core.utils.RegisterBackHandler
 import core.utils.getCurrentFormattedDateTime
 import core.utils.platformCapturable
 import kotlinx.coroutines.delay
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_REGULAR
 import org.example.hit.heal.core.presentation.FontSize.MEDIUM

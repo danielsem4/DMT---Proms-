@@ -40,10 +40,10 @@ class HomeViewModel(
             api.getModules(clinicId)
                 .onSuccess { result ->
                     result.add(
-                        ModulesResponse(module_name = "pass", active = true)
+                        ModulesResponse(module_name = "pass", module_id = 9999)
                     )
                     result.add(
-                        ModulesResponse(module_name = "market", active = true)
+                        ModulesResponse(module_name = "market", module_id = 9998)
                     )
                     result.forEach {
                         it.module_name = it.module_name.lowercase()

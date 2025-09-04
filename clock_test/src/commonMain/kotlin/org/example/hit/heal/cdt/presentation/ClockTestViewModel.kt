@@ -28,8 +28,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
+import kotlin.time.Clock
 import org.example.hit.heal.cdt.data.ClockTime
+import kotlin.time.ExperimentalTime
 
 
 class ClockTestViewModel(
@@ -183,31 +184,37 @@ class ClockTestViewModel(
     }
 
     /** Starts the drawing timer */
+    @OptIn(ExperimentalTime::class)
     fun startDrawingTimer() {
         startTime = Clock.System.now().epochSeconds
     }
 
     /** Stops the drawing timer and updates the total time spent */
+    @OptIn(ExperimentalTime::class)
     fun stopDrawingTimer() {
         timeSpentDrawing += (Clock.System.now().epochSeconds - startTime)
     }
 
     /** Starts the timer for setting the first clock */
+    @OptIn(ExperimentalTime::class)
     fun startSettingFirstClockTimer() {
         startTime = Clock.System.now().epochSeconds
     }
 
     /** Stops the timer for setting the first clock */
+    @OptIn(ExperimentalTime::class)
     fun stopSettingFirstClockTimer() {
         timeSpentSettingFirstClock += (Clock.System.now().epochSeconds - startTime)
     }
 
     /** Starts the timer for setting the second clock */
+    @OptIn(ExperimentalTime::class)
     fun startSettingSecondClockTimer() {
         startTime = Clock.System.now().epochSeconds
     }
 
     /** Stops the timer for setting the second clock */
+    @OptIn(ExperimentalTime::class)
     fun stopSettingSecondClockTimer() {
         timeSpentSettingSecondClock += (Clock.System.now().epochSeconds - startTime)
     }

@@ -1,9 +1,12 @@
 package core.utils
 
-import kotlinx.datetime.Clock
+import kotlinx.datetime.asClock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.number
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 /**
  * Returns the current date and time formatted as a string in the format "yyyy-MM-dd HH:mm:ss.S".
@@ -11,11 +14,12 @@ import kotlinx.datetime.toLocalDateTime
  *
  * @return A string representing the current date and time in the specified format.
  */
-fun getCurrentFormattedDateTime( now:LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())): String {
+@OptIn(ExperimentalTime::class)
+fun getCurrentFormattedDateTime(now:LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())): String {
 
 
-    val day = now.dayOfMonth.toString().padStart(2, '0')
-    val month = now.monthNumber.toString().padStart(2, '0')
+    val day = now.day.toString().padStart(2, '0')
+    val month = now.month.number.toString().padStart(2, '0')
     val year = now.year.toString()
     val hour = now.hour.toString().padStart(2, '0')
     val minute = now.minute.toString().padStart(2, '0')
@@ -24,4 +28,23 @@ fun getCurrentFormattedDateTime( now:LocalDateTime = Clock.System.now().toLocalD
     // yyyy-MM-dd HH-mm-ss
     // "2030-12-12-12-12-12"
     return "$year-$month-$day $hour:$minute:$second"
+}
+
+@OptIn(ExperimentalTime::class)
+fun getCurrentDate(
+    now: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+): String {
+    val day = now.day.toString().padStart(2, '0')
+    val month = now.month.number.toString().padStart(2, '0')
+    val year = now.year.toString()
+    return "$day/$month/$year"
+}
+
+@OptIn(ExperimentalTime::class)
+fun getCurrentTime(
+    now: LocalDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+): String {
+    val hour = now.hour.toString().padStart(2, '0')
+    val minute = now.minute.toString().padStart(2, '0')
+    return "$hour:$minute"
 }

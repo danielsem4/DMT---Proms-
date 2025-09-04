@@ -38,7 +38,7 @@ fun DatePicker(onDateSelected: (String) -> Unit, onDismiss: () -> Unit) {
                 fontWeight = FontWeight(600),
                 color = primaryColor,
             ),
-            dateTextColor = Color.Black,
+
             selectorProperties = WheelPickerDefaults.selectorProperties(
                 borderColor = Color.LightGray,
             ),

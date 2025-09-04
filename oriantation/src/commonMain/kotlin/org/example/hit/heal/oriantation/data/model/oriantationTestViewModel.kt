@@ -43,6 +43,13 @@ class OrientationTestViewModel(
 
     val isPlayingAudio = playAudioUseCase.isPlaying
 
+    var droppedShapeId: Int? = null
+        private set
+
+    fun setDroppedShapeId(id: Int?) {
+        droppedShapeId = id
+    }
+
     fun onPlayAudio(audioText: String) {
         viewModelScope.launch {
             playAudioUseCase.playAudio(audioText)
@@ -56,8 +63,9 @@ class OrientationTestViewModel(
         trialData.response.selectedNumber.value = number.toString()
     }
 
-    fun updateSeason(season: String) {
-        trialData.response.selectedSeasons.value = listOf(season)
+
+    fun updateSeasons(seasons: List<String>) {
+        trialData.response.selectedSeasons.value = seasons
     }
 
     fun updateDrawnShape(bitmap: ImageBitmap) {
@@ -101,42 +109,42 @@ class OrientationTestViewModel(
 
         uploadScope.launch {
             try {
-                val userId = storage.get(PrefKeys.userId)!!
-                val clinicId = storage.get(PrefKeys.clinicId)!!
+                val userId: String = storage.get(PrefKeys.userId)!!  // String
+                // Ensure clinicId is Int
+                val clinicId: Int = when (val raw = storage.get(PrefKeys.clinicId)) {
+                    is Int -> raw
+                    is String -> raw.toIntOrNull() ?: 0
+                    else -> 0
+                }
 
-                val imagePath = "clinics/$clinicId/patients/$userId/measurements/$measurement/" +
-                        "$date/$version/$imgName"
+                val imagePath = "clinics/$clinicId/patients/${userId}/measurements/$measurement/$date/$version/$imgName"
 
                 uploadImageUseCase.execute(imagePath, drawnShape!!, clinicId, userId)
                     .onSuccess {
                         println("Successfully uploaded Image")
-                        // Set trialData fields before upload
+
+                        // Fill trial data
                         trialData.measurement = measurement
                         trialData.patientId = userId.toIntOrNull() ?: 0
                         trialData.date = date
-                        trialData.clinicId = clinicId ?: 0
+                        trialData.clinicId = clinicId
                         trialData.response.xDrawing.value = imagePath
 
                         uploadResultsUseCase.execute(trialData, TrialData.serializer())
                             .onSuccess {
-                                withContext(Dispatchers.Main) {
-                                    onSuccess?.invoke()
-
-                                }
+                                withContext(Dispatchers.Main) { onSuccess?.invoke() }
                             }
                             .onError { error ->
-                                withContext(Dispatchers.Main) {
-                                    onFailure?.invoke(error)
-                                }
+                                withContext(Dispatchers.Main) { onFailure?.invoke(error) }
                             }
                     }
                     .onError { error ->
                         println("Upload failed before sending orientation results: $error")
-                        onFailure?.invoke(error)
+                        withContext(Dispatchers.Main) { onFailure?.invoke(error) }
                     }
             } catch (e: Exception) {
                 println("🚨Unexpected error: ${e.message}")
-                onFailure?.invoke(DataError.Remote.UNKNOWN)
+                withContext(Dispatchers.Main) { onFailure?.invoke(DataError.Remote.UNKNOWN) }
             }
         }
     }

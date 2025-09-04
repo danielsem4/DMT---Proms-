@@ -44,7 +44,7 @@ fun DateTimePickerButton(
 
     val displayText = remember(pickedDate, pickedTime) {
         val dt = pickedDate?.let { d -> pickedTime?.let { t ->
-            LocalDateTime(d.year, d.monthNumber, d.dayOfMonth, t.hour, t.minute)
+            LocalDateTime(d.year, d.month, d.day, t.hour, t.minute)
         } }
         dt?.let { formatDdMmYyyyHhMm(it) } ?: "בחר/י תאריך ושעה"
     }
@@ -68,7 +68,7 @@ fun DateTimePickerButton(
                     color = primaryColor
                 ),
                 doneLabelStyle = TextStyle(fontSize = 16.sp, fontWeight = FontWeight(600), color = primaryColor),
-                dateTextColor = Color.Black,
+
                 selectorProperties = WheelPickerDefaults.selectorProperties(borderColor = Color.LightGray),
                 shape = RoundedCornerShape(18.dp),
                 dateTimePickerView = DateTimePickerView.DIALOG_VIEW,
@@ -94,7 +94,7 @@ fun DateTimePickerButton(
                 height = 200.dp,
                 titleStyle = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold, color = primaryColor),
                 doneLabelStyle = TextStyle(fontSize = 16.sp, fontWeight = FontWeight(600), color = primaryColor),
-                textColor = Color.Black,
+
                 selectorProperties = WheelPickerDefaults.selectorProperties(borderColor = Color.LightGray),
                 shape = RoundedCornerShape(18.dp),
                 dateTimePickerView = DateTimePickerView.DIALOG_VIEW,

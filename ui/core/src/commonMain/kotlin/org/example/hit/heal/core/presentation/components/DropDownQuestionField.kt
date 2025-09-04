@@ -12,10 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,15 +38,21 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 data class DropDownItem(val text: String)
 
+/**
+ * Controlled version:
+ * - The selected value comes from [selectedText] (external state).
+ * - This composable only manages [expanded] locally.
+ * - To clear the text, set [selectedText]="" from your ViewModel/parent.
+ */
 @Composable
 fun DropDownQuestionField(
     question: String?,
     dropDownItems: List<DropDownItem>,
+    selectedText: String,
     modifier: Modifier = Modifier,
     onItemClick: (DropDownItem) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("") }
 
     val shouldFloatLabel = expanded || selectedText.isNotEmpty()
 
@@ -68,7 +74,7 @@ fun DropDownQuestionField(
                     modifier = Modifier
                         .align(Alignment.TopStart)
                         .padding(start = paddingSm, bottom = paddingSm),
-                    style = MaterialTheme.typography.caption
+                    style = MaterialTheme.typography.labelMedium
                 )
             }
         }
@@ -81,8 +87,12 @@ fun DropDownQuestionField(
                 .align(Alignment.Center)
                 .padding(horizontal = paddingMd)
         ) {
+            val displayText =
+                if (selectedText.isNotEmpty() || !shouldFloatLabel) selectedText.ifEmpty { question.orEmpty() }
+                else ""
+
             Text(
-                text = if (selectedText.isNotEmpty() || shouldFloatLabel.not()) selectedText.ifEmpty { question.orEmpty() } else "",
+                text = displayText,
                 color = if (selectedText.isNotEmpty() || shouldFloatLabel) Color.Black else Color.Gray,
                 modifier = Modifier.align(Alignment.CenterStart)
             )
@@ -102,13 +112,13 @@ fun DropDownQuestionField(
             offset = DpOffset(x = 0.dp, y = (-40).dp)
         ) {
             dropDownItems.forEach { item ->
-                DropdownMenuItem(onClick = {
-                    selectedText = item.text
-                    onItemClick(item)
-                    expanded = false
-                }) {
-                    Text(item.text)
-                }
+                DropdownMenuItem(
+                    text = { Text(item.text) },
+                    onClick = {
+                        expanded = false
+                        onItemClick(item)
+                    }
+                )
             }
         }
     }
@@ -117,6 +127,7 @@ fun DropDownQuestionField(
 @Preview
 @Composable
 fun PreviewDropDownQuestionField() {
+    var sel by remember { mutableStateOf("") }
     val question = "What is your favorite color?"
     val items = listOf(
         DropDownItem("Red"),
@@ -128,8 +139,7 @@ fun PreviewDropDownQuestionField() {
     DropDownQuestionField(
         question = question,
         dropDownItems = items,
-        onItemClick = { selected ->
-            println("Selected item: ${selected.text}")
-        }
+        selectedText = sel,              // controlled value
+        onItemClick = { selected -> sel = selected.text }
     )
 }

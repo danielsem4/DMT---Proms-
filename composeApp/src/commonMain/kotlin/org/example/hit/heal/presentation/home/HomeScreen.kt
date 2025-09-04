@@ -1,5 +1,6 @@
 package org.example.hit.heal.presentation.home
 
+import MainMedicationScreen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -79,11 +80,11 @@ import org.example.hit.heal.core.presentation.components.cards.SimpleIconCard
 import org.example.hit.heal.core.presentation.primaryColor
 import org.example.hit.heal.hitber.presentation.entry.HitBerEntryScreen
 import com.generic.marketTest.presentation.entry.MarketTestEntryScreen
+import org.example.hit.heal.core.presentation.Resources.String.activities
 import org.example.hit.heal.oriantation.feature.presentation.OriantationWelcomeScreen
 import org.example.hit.heal.presentation.activities.ActivitiesScreen
 import org.example.hit.heal.presentation.evaluation.AllEvaluationsScreen
 import org.example.hit.heal.presentation.login.LoginScreen
-import org.example.hit.heal.presentation.medication.presentaion.screens.mainMedication.MainMedicationScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -163,23 +164,24 @@ class HomeScreen : Screen {
                         }
                     } else {
                         LazyVerticalGrid(
-                            columns = GridCells.Fixed(columns), // Use the dynamic columns
+                            columns = GridCells.Fixed(columns),
                             contentPadding = PaddingValues(vertical = paddingMd),
                             horizontalArrangement = Arrangement.spacedBy(paddingMd),
                             verticalArrangement = Arrangement.spacedBy(paddingMd),
                             modifier = Modifier.padding(horizontal = paddingLg)
                         ) {
-                            items(features.filter { it.active }) { feature ->
+                            items(
+                                items = features,
+                                key = { it.module_id }
+                            ) { feature ->
                                 AnimatedFeatureTile(
                                     feature = feature,
-                                    onClick = {
-                                        navigateTo(feature.module_name, navigator)
-                                    }
+                                    onClick = { navigateTo(feature.module_name, navigator) }
                                 )
                             }
                         }
-                    }
 
+                    }
                 }
             }
         }
@@ -263,7 +265,7 @@ class HomeScreen : Screen {
             exit = fadeOut() + scaleOut()
         ) {
             SimpleIconCard(
-                title = feature.module_name,
+                title = labelFor(feature.module_name),
                 icon = {
                     Icon(
                         painter = painterResource(iconFor(feature.module_name)),
@@ -317,7 +319,7 @@ class HomeScreen : Screen {
         "measurements" -> stringResource(Resources.String.measurements)
         "chat" -> stringResource(Resources.String.chat)
         "medications" -> stringResource(Resources.String.medications)
-        "activities" -> stringResource(Resources.String.activities)
+        "activities" -> stringResource(activities)
         "memory" -> stringResource(Resources.String.memory)
         "hitber" -> stringResource(Resources.String.hitber)
         "cdt" -> stringResource(Resources.String.clockTest)

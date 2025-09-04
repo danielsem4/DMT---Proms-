@@ -1,33 +1,38 @@
 package org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import core.data.model.Medications.Medication
+import core.data.model.Medications.MedicationNotificationData
 import core.data.model.Medications.MedicationReport
 import core.data.storage.Storage
-import core.domain.DataError
 import core.domain.api.AppApi
 import core.domain.onError
 import core.domain.onSuccess
 import core.util.PrefKeys
+import core.utils.getCurrentDate
+import core.utils.getCurrentTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
-import org.example.hit.heal.core.presentation.ToastType
 import kotlin.math.abs
+import kotlin.time.ExperimentalTime
 
+/**
+ * ViewModel for managing medication data and operations.
+ * Handles fetching, reporting, and setting medication notifications.
+ */
+
+@OptIn(ExperimentalTime::class)
 class MedicationViewModel
     (private val remoteDataSource: AppApi,
      private val storage: Storage,
@@ -37,7 +42,6 @@ class MedicationViewModel
     private var patientId: Int? = null
 
     private val _medication = MutableStateFlow<Medication?>(null)
-
     private val _medicationName = MutableStateFlow("")
     val medicationName: StateFlow<String> = _medicationName
 
@@ -128,36 +132,23 @@ class MedicationViewModel
 
     //--------------Date
     //or date now
-    var selectedDate by mutableStateOf(
-        Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault()).run {
-            "$dayOfMonth/$monthNumber/$year"
-        }
-    )
-        private set
 
-    //or selected time
-    var selectedTime by mutableStateOf(
-        Clock.System.now().toLocalDateTime(TimeZone.Companion.currentSystemDefault()).run {
-            "$hour:$minute"
-        }
+    var selectedDate by mutableStateOf(
+        getCurrentDate()
     )
-        private set
+
+    var selectedTime by mutableStateOf(
+        getCurrentTime()
+    )
 
     fun updateDate(newDate: String) {
         selectedDate = newDate
-        errorMessage = null
     }
 
     fun updateTime(newTime: String) {
         selectedTime = newTime
-        errorMessage = null
     }
 
-    //----------------Server
-    //load medication evaluation
-
-
-    //Take clinickId and patientId from storage
     suspend fun initUserIds(): Boolean {
         val clinic = storage.get(PrefKeys.clinicId)
         val patient = storage.get(PrefKeys.userId)?.toIntOrNull()
@@ -171,7 +162,7 @@ class MedicationViewModel
         }
     }
 
-    fun validateAndSave(medication: Medication? , medicationId: Int? ) {
+    fun validateAndSave(medication: Medication? , medicationId: String? ) {
         val date = selectedDate
         val time = selectedTime
 
@@ -195,7 +186,7 @@ class MedicationViewModel
     }
 
     //report of taking medication
-    suspend fun reportMedication(medication: Medication, timestamp: String, medicationId: Int?) {
+    suspend fun reportMedication(medication: Medication, timestamp: String, medicationId: String?) {
         isLoading.value = true
         if (!initUserIds()) {
             errorMessage = errorMessage
@@ -206,7 +197,7 @@ class MedicationViewModel
         val report = MedicationReport(
             clinicId = clinicId!!,
             patientId = patientId!!,
-            medicationId = medication.medicine,
+            medicationId = medication.medicationId!!.toLong(),
             timestamp = timestamp
         )
         val result = remoteDataSource.reportMedicationTook(report)
@@ -224,6 +215,7 @@ class MedicationViewModel
     }
 
     //convertor (it could be without too)
+    @OptIn(ExperimentalTime::class)
     fun convertToIso8601(
         date: String,
         time: String,
@@ -280,7 +272,7 @@ class MedicationViewModel
                 return@launch
             }
 
-            remoteDataSource.getAllPatientMedicines(3, 243)
+            remoteDataSource.getAllPatientMedicines(clinicId!!, patientId!!)
                 .onSuccess {
                     medications.value = it
 
@@ -306,22 +298,15 @@ class MedicationViewModel
                 return@launch
             }
 
-            val newMedication = Medication(
-                id = clinicId!!,
+            val newMedication = MedicationNotificationData(
                 clinicId = clinicId!!,
-                patient = patientId!!,
                 patientId = patientId!!,
-                medicationId = medication?.id ?: 0,
-                medicine = medication?.medicine.toString() ?: "",
-                name = medicationName,
-                form = medication?.form ?: "",
-                unit = medication?.unit ?: "",
-                frequency = selectedFrequency.value,
-                frequencyData = if (selectedFrequency.value == "Weekly")
-                    selectedDays.value.joinToString(",") else selectedTimeBetweenDoses.value,
-                startDate = selectedStartDate.value,
-                endDate = selectedEndDate.value.takeIf { it.isNotBlank() },
-                dosage = medication?.dosage ?: ""
+                medicationId = medication?.medicationId?.toLongOrNull() ?: 0,
+                frequency = _selectedFrequency.value,
+                interval = _selectedTimeBetweenDoses.value.toIntOrNull() ?: 1,
+                startTime = _selectedStartTime.value,
+                startDate = _selectedStartDate.value,
+                endDate = _selectedEndDate.value
             )
 
             val result = remoteDataSource.setMedicationNotifications(newMedication)

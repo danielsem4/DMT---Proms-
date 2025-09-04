@@ -3,6 +3,7 @@ package core.domain.api
 import core.data.model.ActivityItem
 import core.data.model.ActivityItemReport
 import core.data.model.Medications.Medication
+import core.data.model.Medications.MedicationNotificationData
 import core.data.model.Medications.MedicationReport
 import core.data.model.ModulesResponse
 import core.data.model.SuccessfulLoginResponse
@@ -43,7 +44,7 @@ interface AppApi {
     ): Result<Unit, DataError.Remote>
 
     suspend fun setMedicationNotifications(
-        results: Medication
+        results: MedicationNotificationData
     ): Result<Unit, DataError.Remote>
 
     suspend fun getPatientMeasureReport(

@@ -4,6 +4,7 @@ import core.data.model.ActivityItem
 import core.data.model.ActivityItemReport
 import core.data.model.LoginRequest
 import core.data.model.Medications.Medication
+import core.data.model.Medications.MedicationNotificationData
 import core.data.model.Medications.MedicationReport
 import core.data.model.ModulesResponse
 import core.data.model.SuccessfulLoginResponse
@@ -14,6 +15,7 @@ import core.domain.Result
 import core.domain.api.AppApi
 import core.domain.map
 import core.network.AppConfig.BASE_URL
+import core.network.AppConfig.BASE_URL_DEV
 import core.network.getWithAuth
 import core.network.postWithAuth
 import core.network.safeCall
@@ -143,7 +145,7 @@ class KtorAppRemoteDataSource(
 
 
     override suspend fun setMedicationNotifications(
-        results: Medication
+        results: MedicationNotificationData
     ): Result<Unit, DataError.Remote> =
         httpClient.postWithAuth<Unit>(
             url = "${baseUrl}patientNotificationData/",
@@ -198,6 +200,4 @@ class KtorAppRemoteDataSource(
         ) {
             parameter("clinic_id", clinicId)
         }
-
-
 }

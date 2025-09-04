@@ -1,3 +1,5 @@
+package org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,93 +24,84 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import core.data.model.Medications.Medication
+import dmt_proms.composeapp.generated.resources.Res
+import dmt_proms.composeapp.generated.resources.pills
+import org.example.hit.heal.core.presentation.FontSize
 import org.example.hit.heal.core.presentation.Resources
-import org.example.hit.heal.core.presentation.ToastType
+import org.example.hit.heal.core.presentation.Sizes
+import org.example.hit.heal.core.presentation.TextPrimary
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.core.presentation.components.SearchBar
+import org.example.hit.heal.core.presentation.components.dialogs.ReportDialog
 import org.example.hit.heal.presentation.medication.presentaion.screens.MedicationViewModel.MedicationViewModel
 import org.example.hit.heal.presentation.medication.presentaion.screens.medicationAlarm.MedicationAlarmScreen
-import org.example.hit.heal.presentation.medication.presentaion.screens.medicationListScreen.components.ReportMedicationDialog
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-
-
-
+/**
+ * Screen that shows the list of medications
+ */
 class MedicationListScreen (private val isReport: Boolean) : Screen {
     @OptIn(KoinExperimentalAPI::class)
     @Composable
     override fun Content() {
-
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinViewModel<MedicationViewModel>()
 
-
         var selectedMedication by remember { mutableStateOf<Medication?>(null) }
         var showDialog by remember { mutableStateOf(false) }
-
 
         val keyboardController = LocalSoftwareKeyboardController.current
         var searchQuery by remember { mutableStateOf("") }
 
         val medications: List<Medication> = viewModel.medications.value
 
-        LaunchedEffect(Unit) {
-            viewModel.loadMedications()
-        }
-
-
+        LaunchedEffect(Unit) { viewModel.loadMedications() }
 
         val filteredMedications: List<Medication> = remember(searchQuery, medications) {
-            medications.filter {
-                it.name.contains(searchQuery, ignoreCase = true)
-            }
+            medications.filter { it.name.contains(searchQuery, ignoreCase = true) }
         }
 
-
-       BaseScreen(
+        BaseScreen(
             title = stringResource(Resources.String.medications),
             config = ScreenConfig.PhoneConfig,
-            ) {
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = Sizes.paddingMd)
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(Modifier.height(Sizes.spacingMd))
 
                 SearchBar(
                     searchQuery = searchQuery,
                     onSearchQueryChanged = { searchQuery = it },
                     onItemClicked = { keyboardController?.hide() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-
+                    modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(modifier = Modifier.height(25.dp))
+
+                Spacer(Modifier.height(Sizes.spacingLg))
+
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 8.dp, bottom = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(35.dp),
-                    contentPadding = PaddingValues(bottom = 32.dp)
+                        .padding(top = Sizes.paddingSm, bottom = Sizes.paddingMd),
+                    verticalArrangement = Arrangement.spacedBy(Sizes.spacingXxl),
+                    contentPadding = PaddingValues(bottom = Sizes.paddingXl)
                 ) {
-
                     items(filteredMedications) { medication ->
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .shadow(
-                                    shape = RoundedCornerShape(20.dp),
-                                    elevation = 4.dp,
+                                    elevation = Sizes.elevationMd,
+                                    shape = RoundedCornerShape(Sizes.radiusXl),
                                     clip = false
                                 )
                                 .clickable {
@@ -121,40 +114,50 @@ class MedicationListScreen (private val isReport: Boolean) : Screen {
                                         navigator.push(MedicationAlarmScreen(medication))
                                     }
                                 }
-                                .clip(RoundedCornerShape(20))
-                                .height(70.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = Color.White
-                            ),
-                            elevation = CardDefaults.cardElevation(15.dp)
+                                .clip(RoundedCornerShape(Sizes.radiusXl))
+                                .height(Sizes.heightLg),
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            elevation = CardDefaults.cardElevation(Sizes.elevationLg)
                         ) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(start = 16.dp),
-
+                                    .padding(start = Sizes.paddingMd),
                                 contentAlignment = Alignment.CenterStart
                             ) {
                                 Text(
                                     text = medication.name,
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 18.sp,
+                                    fontSize = FontSize.EXTRA_MEDIUM,
+                                    color = TextPrimary,
                                     textAlign = TextAlign.Start
                                 )
                             }
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height(25.dp))
 
+                Spacer(Modifier.height(Sizes.spacingLg))
             }
         }
 
         if (showDialog && selectedMedication != null) {
-            ReportMedicationDialog(
-                medicationName = selectedMedication!!.name,
+            ReportDialog(
+                name = selectedMedication!!.name,
+                selectedDate = viewModel.selectedDate,
+                selectedTime = viewModel.selectedTime,
+                isLoading = viewModel.isLoading.value,
+                errorMessage = viewModel.errorMessage,
+                isSuccess = viewModel.successMessageReport,
                 onDismiss = { showDialog = false },
-                medication = selectedMedication!!
+                onSave = {
+                    viewModel.validateAndSave(selectedMedication!!, selectedMedication!!.medicationId)
+
+                },
+                icon = Res.drawable.pills,
+                onDateUpdate = { date -> viewModel.updateDate(date) },
+                onTimeUpdate = { time -> viewModel.updateTime(time) },
+                onResetSuccess = { viewModel.resetSaveSuccess() }
             )
         }
     }

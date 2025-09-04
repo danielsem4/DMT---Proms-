@@ -56,7 +56,6 @@ class OrientationEndScreen : Screen {
         val successMessage = stringResource(sentSuccessfully)
         val unexpectedErrorMessage = stringResource(unexpectedError)
 
-        // Kick off upload automatically once (when the screen appears)
         LaunchedEffect(Unit) {
             sendToServer(
                 viewModel = viewModel,
@@ -124,7 +123,6 @@ class OrientationEndScreen : Screen {
 
     /**
      * Helper that wraps the VM call and wires UI callbacks for start/success/failure.
-     * Replaces the old Snackbar-based flow with Toasts and proper loading state handling.
      */
     private fun sendToServer(
         viewModel: OrientationTestViewModel,
@@ -134,10 +132,8 @@ class OrientationEndScreen : Screen {
     ) {
         try {
             onStart()
-            viewModel.sendToServer(
-                onSuccess = { onSuccess() },
-                onFailure = { error -> onFailure(error?.toString()) }
-            )
+            viewModel.getTestResults()
+            println("check")
         } catch (e: Exception) {
             onFailure(e.message)
         }

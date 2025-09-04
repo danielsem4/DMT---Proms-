@@ -55,6 +55,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(compose.materialIconsExtended)
             implementation(libs.font.awesome)
+            implementation(libs.kotlin.date.time)
 
             implementation(libs.voyager.navigator)
             implementation(libs.voyager.screenModel)

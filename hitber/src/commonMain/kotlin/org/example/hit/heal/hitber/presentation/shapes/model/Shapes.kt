@@ -19,26 +19,21 @@ import org.jetbrains.compose.resources.DrawableResource
 
 // Predefined shape sets used for random selection
 val shapeSets = listOf(
-    listOf(ShapeType.Triangle, ShapeType.Check, ShapeType.Cone, ShapeType.Pentagon, ShapeType.Star),
-    listOf(ShapeType.Trapezoid, ShapeType.Plus, ShapeType.Hexagon, ShapeType.RightTriangle, ShapeType.Hashtag),
-    listOf(ShapeType.Triangle, ShapeType.Close, ShapeType.Ellipse, ShapeType.Rhomb, ShapeType.Star),
-    listOf(ShapeType.Rectangle, ShapeType.Check, ShapeType.Pentagon, ShapeType.Hexagon, ShapeType.Hashtag),
-    listOf(ShapeType.Rectangle, ShapeType.Plus, ShapeType.Ellipse, ShapeType.RightTriangle, ShapeType.Star)
+    listOf(ShapeType.Hashtag, ShapeType.Pentagon, ShapeType.Trapezoid, ShapeType.Close, ShapeType.Triangle),
+    listOf(ShapeType.Star, ShapeType.Hexagon, ShapeType.Rhomb, ShapeType.Check, ShapeType.Ellipse),
+    listOf(ShapeType.Hashtag, ShapeType.Hexagon, ShapeType.Close, ShapeType.Ellipse, ShapeType.Triangle),
+    listOf(ShapeType.Star, ShapeType.Pentagon, ShapeType.Rhomb, ShapeType.Check, ShapeType.Triangle),
+    listOf(ShapeType.Ellipse, ShapeType.Close, ShapeType.Trapezoid, ShapeType.Hexagon, ShapeType.Star)
 )
 
 //Represents the different types of shape
 enum class ShapeType {
     Ellipse,
-    Rectangle,
     Pentagon,
     Star,
     Hashtag,
     Rhomb,
-    Cone,
-    Plus,
     Hexagon,
-    RightTriangle,
-    Asterisk,
     Check,
     Trapezoid,
     Triangle,
@@ -51,16 +46,11 @@ data class Shape(val type: ShapeType, val drawable: DrawableResource)
 // List of all available shapes, each paired with its visual icon
 val shapeList = listOf(
     Shape(ShapeType.Ellipse, elipsaIcon),
-    Shape(ShapeType.Rectangle, rectangleIcon),
     Shape(ShapeType.Pentagon, pentagonIcon),
     Shape(ShapeType.Star, starOutlineIcon),
     Shape(ShapeType.Hashtag, hashMarkIcon),
     Shape(ShapeType.Rhomb, rhombusIcon),
-    Shape(ShapeType.Cone, cone),
-    Shape(ShapeType.Plus, plusIcon),
     Shape(ShapeType.Hexagon, hexagonIcon),
-    Shape(ShapeType.RightTriangle, triangle90Icon),
-    Shape(ShapeType.Asterisk, asteriskIcon),
     Shape(ShapeType.Check, checkIcon),
     Shape(ShapeType.Trapezoid, trapezeIcon),
     Shape(ShapeType.Triangle, triangleIcon),
