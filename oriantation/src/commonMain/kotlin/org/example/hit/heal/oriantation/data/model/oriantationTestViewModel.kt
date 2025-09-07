@@ -110,7 +110,6 @@ class OrientationTestViewModel(
         uploadScope.launch {
             try {
                 val userId: String = storage.get(PrefKeys.userId)!!  // String
-                // Ensure clinicId is Int
                 val clinicId: Int = when (val raw = storage.get(PrefKeys.clinicId)) {
                     is Int -> raw
                     is String -> raw.toIntOrNull() ?: 0
@@ -128,7 +127,7 @@ class OrientationTestViewModel(
                         trialData.patientId = userId.toIntOrNull() ?: 0
                         trialData.date = date
                         trialData.clinicId = clinicId
-                        trialData.response.xDrawing.value = imagePath
+                        trialData.response.imageUrl.value = imagePath
 
                         uploadResultsUseCase.execute(trialData, TrialData.serializer())
                             .onSuccess {

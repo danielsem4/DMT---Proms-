@@ -52,6 +52,8 @@ class OrientationEndScreen : Screen {
         var toastType by remember { mutableStateOf(ToastType.Normal) }
         var isUploading by remember { mutableStateOf(false) }
         var isUploaded by remember { mutableStateOf(false) }
+        var uploadError by remember { mutableStateOf<String?>(null) }
+
 
         val successMessage = stringResource(sentSuccessfully)
         val unexpectedErrorMessage = stringResource(unexpectedError)
@@ -132,6 +134,10 @@ class OrientationEndScreen : Screen {
     ) {
         try {
             onStart()
+            viewModel.sendToServer(
+                onSuccess = onSuccess,
+                onFailure = { onFailure("Upload failed:") }
+            )
             viewModel.getTestResults()
             println("check")
         } catch (e: Exception) {

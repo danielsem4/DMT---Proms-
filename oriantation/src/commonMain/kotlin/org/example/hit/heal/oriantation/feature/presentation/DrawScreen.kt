@@ -117,18 +117,7 @@ class DrawScreen(
 
                 val bitmap = drawPathsToBitmap()
                 viewModel.updateDrawnShape(bitmap)
-
-                isUploading = true
-                viewModel.sendToServer(
-                    onSuccess = {
-                        isUploading = false
-                        navigator?.push(FeedbackScreen())
-                    },
-                    onFailure = { error ->
-                        isUploading = false
-                        uploadError = "Upload failed: ${error.toString()}"
-                    }
-                )
+                navigator.push(FeedbackScreen())
             },
             content = {
                 Spacer(modifier = Modifier.height(16.dp))

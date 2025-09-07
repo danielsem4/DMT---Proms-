@@ -123,7 +123,10 @@ class FeedbackScreen : Screen {
                                 availableValues = availableValues,
                                 startText = "0",
                                 endText = "10",
-                                onValueChanged = { newValue -> progress = newValue },
+                                onValueChanged = {
+                                    newValue -> progress = newValue
+                                    viewModel.updateFeelingRate(newValue.toInt())
+                                                 },
                                 trackHeight = 48.dp,
                                 cornerRadius = 16.dp,
                                 showEdgeLabels = true
