@@ -7,6 +7,8 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import core.data.model.evaluation.Evaluation
+import core.data.model.evaluation.EvaluationObject
 import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.Error
@@ -17,17 +19,26 @@ import core.domain.use_case.PlayAudioUseCase
 import core.domain.use_case.cdt.UploadFileUseCase
 import core.domain.use_case.cdt.UploadTestResultsUseCase
 import core.util.PrefKeys
+import core.util.PrefKeys.clinicId
+import core.util.PrefKeys.userId
 import core.utils.getCurrentFormattedDateTime
 import core.utils.toByteArray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
 
-
+/**
+ * ViewModel for the Orientation Test.
+ * Manages state and handles business logic for the Orientation Test feature.
+ */
 
 class OrientationTestViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
@@ -35,7 +46,10 @@ class OrientationTestViewModel(
     private val playAudioUseCase: PlayAudioUseCase,
     private val api: AppApi,
     private val storage: Storage,
-): ViewModel() {
+) : ViewModel() {
+
+    private val _trialTest = MutableStateFlow<Evaluation?>(null)
+    val trialTest: StateFlow<Evaluation?> = _trialTest.asStateFlow()
     private var trialData by mutableStateOf(TrialData())
     var drawnShape: ByteArray? = null
     var triangleOffset by mutableStateOf<Offset?>(null)
@@ -45,6 +59,37 @@ class OrientationTestViewModel(
 
     var droppedShapeId: Int? = null
         private set
+
+    fun loadEvaluation(evaluationName: String) {
+        viewModelScope.launch {
+            val clinicId = storage.get(clinicId) ?: return@launch
+            val patientId = storage.get(userId)?.toIntOrNull() ?: return@launch
+
+            api.getSpecificEvaluation(clinicId, patientId, evaluationName)
+                .onSuccess { fetched ->
+                    _trialTest.value = fetched
+                    setDynamicIds(fetched.measurement_objects)
+                }
+                .onError { error ->
+                    println("Error fetching evaluation: $error")
+                }
+        }
+    }
+
+    /**
+     * Updates the measureObject IDs in trialData based on the fetched evaluation data.
+     */
+    private fun setDynamicIds(measurementObjects: List<EvaluationObject>) {
+        val idMap = measurementObjects.associateBy { it.object_label }
+
+        trialData.response.selectedNumber.measureObject = idMap["selected_number"]?.id ?: 0
+        trialData.response.selectedSeasons.measureObject = idMap["selected_seasons"]?.id ?: 0
+        trialData.response.isTriangleDragged.measureObject = idMap["isTriangleDragged"]?.id ?: 0
+        trialData.response.isTriangleSizeChanged.measureObject = idMap["isTriangleSizeChanged"]?.id ?: 0
+        trialData.response.xDrawing.measureObject = idMap["xDrawing"]?.id ?: 0
+        trialData.response.imageUrl.measureObject = idMap["imageUrl"]?.id ?: 0
+        trialData.response.healthLevel.measureObject = idMap["healthLevel"]?.id ?: 0
+    }
 
     fun setDroppedShapeId(id: Int?) {
         droppedShapeId = id
@@ -59,10 +104,10 @@ class OrientationTestViewModel(
     fun stopAudio() {
         playAudioUseCase.stopAudio()
     }
+
     fun updateNumber(number: Int) {
         trialData.response.selectedNumber.value = number.toString()
     }
-
 
     fun updateSeasons(seasons: List<String>) {
         trialData.response.selectedSeasons.value = seasons
@@ -103,13 +148,13 @@ class OrientationTestViewModel(
         }
 
         val version = 1
-        val measurement = 20
+        val measurement = _trialTest.value?.id  ?: 20
         val date = getCurrentFormattedDateTime()
         val imgName = "orientation_shape.png"
 
         uploadScope.launch {
             try {
-                val userId: String = storage.get(PrefKeys.userId)!!  // String
+                val userId: String = storage.get(PrefKeys.userId)!!
                 val clinicId: Int = when (val raw = storage.get(PrefKeys.clinicId)) {
                     is Int -> raw
                     is String -> raw.toIntOrNull() ?: 0
@@ -142,7 +187,7 @@ class OrientationTestViewModel(
                         withContext(Dispatchers.Main) { onFailure?.invoke(error) }
                     }
             } catch (e: Exception) {
-                println("🚨Unexpected error: ${e.message}")
+                println("Unexpected error: ${e.message}")
                 withContext(Dispatchers.Main) { onFailure?.invoke(DataError.Remote.UNKNOWN) }
             }
         }
