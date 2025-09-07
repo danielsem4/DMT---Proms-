@@ -65,7 +65,7 @@ class SplashScreen : Screen {
                 )
             } else {
                 Text(
-                    text = stringResource(Resources.String.welcome),
+                    text = stringResource(Resources.String.home),
                     fontSize = 24.sp
                 )
             }

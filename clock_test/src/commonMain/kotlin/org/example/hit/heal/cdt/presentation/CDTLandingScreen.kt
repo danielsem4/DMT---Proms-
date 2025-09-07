@@ -76,10 +76,9 @@ fun CDTLandingScreenContent() {
     val navigator = LocalNavigator.currentOrThrow
     val viewModel = koinViewModel<ClockTestViewModel>()
 
-    // ── Auto-start animation after initial display ──────────────────────
     LaunchedEffect(Unit) {
         delay(500) // Show initial state for 0.5 seconds
-        viewModel.loadEvaluation("CDT")
+        viewModel.loadEvaluation("cdt")
         state = ScreenState.Animating
         println("LandingScreen: Auto-starting animation")
     }

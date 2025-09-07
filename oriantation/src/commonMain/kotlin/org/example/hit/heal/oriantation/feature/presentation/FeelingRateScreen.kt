@@ -37,6 +37,7 @@ import org.example.hit.heal.core.presentation.components.GenericButton
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.RoundedFilledSlider
 import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.components.dialogs.AudioPlayingDialog
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -129,6 +130,10 @@ class FeedbackScreen : Screen {
                             )
                         }
                     }
+                }
+                // Show dialog while audio is playing
+                if (isPlaying) {
+                    AudioPlayingDialog()
                 }
             }
         )

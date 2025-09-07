@@ -127,7 +127,7 @@ class ShapesDragScreen(
                     // ------------------ PHASE 1: DRAG ------------------
                     Text(
                         text = stringResource(trialDragInstructions),
-                        color = Color(0xFF4EC3AF),
+                        color = primaryColor,
                         textAlign = TextAlign.Center,
                         fontSize = LARGE,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),

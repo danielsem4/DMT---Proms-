@@ -33,7 +33,6 @@ import org.example.hit.heal.core.presentation.Resources.String.sixthQuestionHitb
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.dragAndDrop.DragAndDropScreen
 import org.example.hit.heal.hitber.presentation.understanding.components.AudioButton
-import org.example.hit.heal.hitber.presentation.understanding.components.AudioPlayingDialog
 import org.example.hit.heal.hitber.presentation.understanding.components.TableWithNapkinsBox
 import org.example.hit.heal.hitber.presentation.understanding.components.FridgeWithItemsBox
 import org.example.hit.heal.hitber.presentation.understanding.model.fridgeItems
@@ -47,6 +46,7 @@ import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.components.dialogs.AudioPlayingDialog
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
