@@ -60,7 +60,9 @@ import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-import org.jetbrains.compose.resources.painterResource
+/**
+ *
+ */
 
 class DrawClockScreen : Screen {
     @Composable

@@ -60,8 +60,11 @@ import dmt_proms.ui.core.generated.resources.cancel
 import dmt_proms.ui.core.generated.resources.chat
 import dmt_proms.ui.core.generated.resources.check
 import dmt_proms.ui.core.generated.resources.chicken
+import dmt_proms.ui.core.generated.resources.circle_completeness_title
+import dmt_proms.ui.core.generated.resources.circle_grades
 import dmt_proms.ui.core.generated.resources.circle_outlined
 import dmt_proms.ui.core.generated.resources.clock
+import dmt_proms.ui.core.generated.resources.clock_grade
 import dmt_proms.ui.core.generated.resources.clock_test
 import dmt_proms.ui.core.generated.resources.close_fridge
 import dmt_proms.ui.core.generated.resources.close_icon
@@ -273,6 +276,8 @@ import dmt_proms.ui.core.generated.resources.good_luck
 import dmt_proms.ui.core.generated.resources.grapes
 import dmt_proms.ui.core.generated.resources.graphs
 import dmt_proms.ui.core.generated.resources.hana_cohen
+import dmt_proms.ui.core.generated.resources.hands_grades
+import dmt_proms.ui.core.generated.resources.hands_position_title
 import dmt_proms.ui.core.generated.resources.hash
 import dmt_proms.ui.core.generated.resources.here_persons_number
 import dmt_proms.ui.core.generated.resources.hexagon
@@ -355,6 +360,8 @@ import dmt_proms.ui.core.generated.resources.no_evaluation_object_to_display
 import dmt_proms.ui.core.generated.resources.no_internet
 import dmt_proms.ui.core.generated.resources.notification_start_question
 import dmt_proms.ui.core.generated.resources.now_the_contacts_list_will_be_opened_pass
+import dmt_proms.ui.core.generated.resources.numbers_grades
+import dmt_proms.ui.core.generated.resources.numbers_presence_title
 import dmt_proms.ui.core.generated.resources.off
 import dmt_proms.ui.core.generated.resources.ok
 import dmt_proms.ui.core.generated.resources.old_phone_ring
@@ -1247,6 +1254,16 @@ object Resources {
         val marketText = Res.string.market
         val selectActivityText = Res.string.select_activity
         val activitiesText = Res.string.activities
+
+        val circleCompletenessTitle = Res.string.circle_completeness_title
+        val numbersPresenceTitle = Res.string.numbers_presence_title
+        val handsPositionTitle = Res.string.hands_position_title
+        val clockGrade = Res.string.clock_grade
+
+        // Arrays
+        val circleGrades = Res.array.circle_grades
+        val numbersGrades = Res.array.numbers_grades
+        val handsGrades = Res.array.hands_grades
     }
 
 

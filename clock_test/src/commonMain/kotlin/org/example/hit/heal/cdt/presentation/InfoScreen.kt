@@ -29,15 +29,16 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ *
+ */
+
+
 class InfoScreen : Screen {
     @Composable
     override fun Content() {
-        var isFirstMessage by remember { mutableStateOf(true) }
         val navigator = LocalNavigator.currentOrThrow
         val viewModel = koinViewModel<ClockTestViewModel>()
-
-        // Reset the state of the clock step before use
-        viewModel.setSecondStep(false)
 
         BaseScreen(
             config = ScreenConfig.TabletConfig,
@@ -51,9 +52,7 @@ class InfoScreen : Screen {
                     Spacer(modifier = Modifier.weight(1f))
 
                     InstructionBox(
-                        textResource = if (isFirstMessage)
-                            Res.string.completion_screen_message
-                        else Res.string.completion_screen_message_next
+                        textResource = Res.string.completion_screen_message
                     )
 
                     Spacer(modifier = Modifier.weight(1f))
@@ -66,16 +65,8 @@ class InfoScreen : Screen {
                             .fillMaxWidth(0.3f)
                             .height(60.dp),
                         onClick = {
-                            if (!isButtonEnabled) return@RoundedButton
-                            isButtonEnabled = false
-                            if (isFirstMessage) {
-                                isFirstMessage = false
-                                isButtonEnabled = true
-                            } else {
-                                // Reset the time to 12:0 before navigating to the clock screen
-                                viewModel.updateFirstTime(ClockTime(12, 0))
-                                navigator.replace(SetTimeClockScreen())
-                            }
+                            viewModel.updateFirstTime(ClockTime(12, 0))
+                            navigator.replace(SetTimeClockScreen())
                         }
                     )
 

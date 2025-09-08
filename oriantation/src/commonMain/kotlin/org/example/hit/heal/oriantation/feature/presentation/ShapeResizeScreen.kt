@@ -62,8 +62,7 @@ class ShapeResizeScreen(
         LaunchedEffect(scale) {
             println("Scale changed to: $scale")
         }
-        
-        // Add a debug text to show current scale
+
         Text(
             text = "Current scale: $scale",
             modifier = Modifier.padding(8.dp)

@@ -79,7 +79,32 @@
     <string name="market">Market</string>
 
     <!--    CDT Module  -->
+    <string name="clock_grade">ציון שעון</string>
 
+    <string name="circle_completeness_title">שלמות העיגול של השעון</string>
+    <string name="numbers_presence_title">נוכחות ורצף המספרים</string>
+    <string name="hands_position_title">נוכחות ומיקום המחוגים</string>
+    <string-array name="circle_grades">
+        <item>2 - צורה שלמה</item>
+        <item>1 - צורה לא שלמה או עם המשך קו</item>
+        <item>0 - אין עיגול או עיוות קיצוני</item>
+        </string-array>
+
+    <string-array name="numbers_grades">
+    <item>4 - כל המספרים בסדר נכון ורווחים עקביים</item>
+    <item>3 - שגיאות קלות</item>
+    <item>2 - מספרים חסרים/מיותרים/מסודרים נגד כיוון השעון</item>
+    <item>1 - חסרים כמחצית מהמספרים</item>
+    <item>0 - חסרים רוב המספרים</item>
+    </string-array>
+
+    <string-array name="hands_grades">
+    <item>4 - מחוגים במיקום וגודל נכון</item>
+    <item>3 - סטייה קלה או ללא הבדל בגודל</item>
+    <item>2 - שגיאות משמעותיות</item>
+    <item>1 - רק מחוג אחד או תצוגה דלה</item>
+    <item>0 - אין מחוגים</item>
+    </string-array>
 
     <!--    Hitber Module  -->
     <string name="entry_hitber_title">התבר</string>

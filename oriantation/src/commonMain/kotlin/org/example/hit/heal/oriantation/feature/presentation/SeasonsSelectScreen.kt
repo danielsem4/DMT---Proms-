@@ -237,12 +237,7 @@ class SeasonsSelectScreen(
         )
 
         RegisterBackHandler(this) {
-            if (phase == 2) {
-                phase = 1
-                // keep phase 1 selection as-is; user can change again
-            } else {
-                navigator?.popUntilRoot()
-            }
+            navigator?.popUntilRoot()
         }
     }
 }

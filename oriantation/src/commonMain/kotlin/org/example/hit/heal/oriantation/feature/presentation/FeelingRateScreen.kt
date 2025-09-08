@@ -37,6 +37,7 @@ import org.example.hit.heal.core.presentation.components.GenericButton
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.RoundedFilledSlider
 import org.example.hit.heal.core.presentation.components.ScreenConfig
+import org.example.hit.heal.core.presentation.components.dialogs.AudioPlayingDialog
 import org.example.hit.heal.oriantation.data.model.OrientationTestViewModel
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -54,7 +55,7 @@ class FeedbackScreen : Screen {
         val viewModel: OrientationTestViewModel = koinViewModel()
 
         var progress by remember { mutableStateOf(0f) }
-        var navigating by remember { mutableStateOf(false) } // prevent double pushes
+        var navigating by remember { mutableStateOf(false) }
 
         // Play state from VM (Flow/StateFlow)
         val isPlaying by viewModel.isPlayingAudio.collectAsState(initial = false)
@@ -122,7 +123,10 @@ class FeedbackScreen : Screen {
                                 availableValues = availableValues,
                                 startText = "0",
                                 endText = "10",
-                                onValueChanged = { newValue -> progress = newValue },
+                                onValueChanged = {
+                                    newValue -> progress = newValue
+                                    viewModel.updateFeelingRate(newValue.toInt())
+                                                 },
                                 trackHeight = 48.dp,
                                 cornerRadius = 16.dp,
                                 showEdgeLabels = true
@@ -130,7 +134,14 @@ class FeedbackScreen : Screen {
                         }
                     }
                 }
+                // Show dialog while audio is playing
+                if (isPlaying) {
+                    AudioPlayingDialog()
+                }
             }
         )
+        RegisterBackHandler(this) {
+            navigator?.popUntilRoot()
+        }
     }
 }

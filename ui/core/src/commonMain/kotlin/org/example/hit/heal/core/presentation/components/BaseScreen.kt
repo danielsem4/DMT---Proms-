@@ -16,11 +16,11 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +31,6 @@ import dmt_proms.ui.core.generated.resources.how_do_you_feel
 import dmt_proms.ui.core.generated.resources.next
 import dmt_proms.ui.core.generated.resources.previous
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM
-import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Sizes.paddingSm
 import org.example.hit.heal.core.presentation.Sizes.paddingXs
 import org.example.hit.heal.core.presentation.backgroundColor
@@ -49,7 +48,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun BaseScreen(
     title: String,
-    config: ScreenConfig = ScreenConfig.PhoneConfig, // Use ScreenConfig to define layout
+    config: ScreenConfig = ScreenConfig.PhoneConfig,
     onPrevClick: (() -> Unit)? = null,
     onNextClick: (() -> Unit)? = null,
     prevButtonText: String = stringResource(Res.string.previous),
@@ -89,7 +88,7 @@ fun BaseScreen(
                     text = title,
                     color = Color.White,
                     fontSize = EXTRA_MEDIUM,
-                    style = MaterialTheme.typography.h2,
+                    style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.align(Alignment.Center)
                         .padding(top = statusBarValues.calculateTopPadding())
                 )
@@ -99,7 +98,7 @@ fun BaseScreen(
                         Text(
                             text = it,
                             color = Color.White,
-                            style = MaterialTheme.typography.h5,
+                            style = MaterialTheme.typography.headlineLarge,
                             modifier = Modifier.align(Alignment.TopEnd)
                                 .padding(end = 16.dp, top = statusBarValues.calculateTopPadding())
                         )
