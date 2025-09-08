@@ -1,4 +1,5 @@
 package com.example.new_memory_test.presentation.screens.RoomScreen.screen
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,9 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -88,17 +89,22 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.time.ExperimentalTime
 
+/**
+ * Rooms question - screen with 3 rooms and draggable items
+ * 3 times - page 2,4,6
+ */
 
 class RoomsScreens(val pageNumber: Int) : Screen {
+
     @OptIn(ExperimentalTime::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val viewModel: ViewModelMemoryTest = koinViewModel()
         viewModel.txtMemoryPage = pageNumber
+        val roomsViewModel: RoomsViewModel = koinViewModel()
 
 
-        //Dialogs and raiting
         var showDialogEndTime by remember { mutableStateOf(false) }
         var showInactivityDialog by remember { mutableStateOf(false) }
         var rating by remember { mutableStateOf(0f) }
@@ -106,18 +112,16 @@ class RoomsScreens(val pageNumber: Int) : Screen {
 
         //Rooms
         var selectedRoom by remember { mutableStateOf(Room.Bedroom) }
-        val roomButtons = Room.values().toList()
+        val roomButtons = Room.entries
         var roomPosition by remember { mutableStateOf(Offset.Companion.Zero) }
         var roomSize by remember { mutableStateOf(IntSize.Zero) }
 
-        //Screnschot photo
+
         var capturable by remember { mutableStateOf<CapturableWrapper?>(null) }
         var autoSwitchingRooms by remember { mutableStateOf(false) }
 
-
-
         //Items
-        val allItems : List<Pair<Int, DrawableResource>> = listOf(
+        val allItems: List<Pair<Int, DrawableResource>> = listOf(
             Resources.Icon.glassesImage,
             Resources.Icon.bookImage,
             Resources.Icon.dressImage,
@@ -131,8 +135,9 @@ class RoomsScreens(val pageNumber: Int) : Screen {
             Resources.Icon.recordsIcon,
             Resources.Icon.bottleImage
         ).mapIndexed { index, res -> index to res }
-        var allItemsPlaced =false//if all items placed (page 2)
-        val itemsToShowWithIds = viewModel.getItemsForPage(pageNumber, allItems)   //Doing random schake of items
+        var allItemsPlaced = false//if all items placed (page 2)
+        val itemsToShowWithIds =
+            viewModel.getItemsForPage(pageNumber, allItems)   //Doing random schake of items
 
 
         //Time and inactivity  places
@@ -275,145 +280,326 @@ class RoomsScreens(val pageNumber: Int) : Screen {
             )
         }
 
-
-
-
-        fun formatTime(seconds: Int): String {
-            val minutesPart = (seconds / 60).toString().padStart(2, '0')
-            val secondsPart = (seconds % 60).toString().padStart(2, '0')
-            return "$minutesPart:$secondsPart"
-        }
-
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr){
-        BaseScreen(
-            title =stringResource(Resources.String.room_title),
-            topRightText = "$pageNumber/6",
-            config = ScreenConfig.TabletConfig,
-            modifier = Modifier.Companion.fillMaxSize().background(color = backgroundColor).pointerInput(Unit) {
-                while (true) {
-                    awaitPointerEventScope {
-                        awaitPointerEvent() // await for some event (drag, touch)
-                        lastInteractionTime = Clock.System.now()// the last time of interaction (for dialog interaction)
-                    }
-                }
-
-            },
-            content =
-         {
-            Row(
-                modifier = Modifier.Companion
-                    .fillMaxSize()
-                    .background(color = backgroundColor)
-
-
-            ) {
-                Column(
-                    modifier = Modifier.Companion
-                        .weight(0.4f)
-                        .zIndex(1f)
-                        .background(color = backgroundColor)
-                        .padding(paddingMd)
-                ) {
-
-                    //-------------------Text of instruction
-                    Box(
-                        modifier = Modifier
-                            .background(Color.White, RoundedCornerShape(paddingSm))
-                            .border(elevationSm, Color.Black, RoundedCornerShape(paddingSm))
-                            .padding(vertical =paddingSm, horizontal =paddingSm)
-                    ) {
-                        Text(
-                            //Change  a text because it depend of number of page
-                            text = if(pageNumber==2){stringResource(Resources.String.drag_and_place_instruction)}else{stringResource(Resources.String.drag_and_place_instruction)},
-                            fontSize = MEDIUM,
-                            textAlign = TextAlign.Companion.Center,
-                            fontWeight = FontWeight.Companion.Bold,
-                            color = primaryColor,
-                            modifier = Modifier.Companion.padding(bottom = paddingMd)
-                        )
-                    }
-
-                    //--------------------Buttons of changing rooms
-                    Row(
-                        modifier = Modifier.Companion.fillMaxWidth().padding(top = paddingMd),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
-                    ) {//Change room and color of Button (if choose)
-                        roomButtons.forEach { room ->
-                            val isSelected = selectedRoom == room
-                            Button(
-                                onClick = { selectedRoom = room },
-                                colors = ButtonDefaults.buttonColors(
-                                    backgroundColor = if (isSelected) Color.Companion.Gray else primaryColor
-                                ),
-                                shape = androidx.compose.foundation.shape.RoundedCornerShape(30),
-                                modifier = Modifier.Companion.height(buttonHeightMd).width(widthMd_Lg)
-                            ) {
-                                Text(
-                                    text = stringResource(room.displayName),
-                                    color = Color.Companion.White,
-                                    fontSize =EXTRA_REGULAR
-                                )
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            BaseScreen(
+                title = stringResource(Resources.String.room_title),
+                topRightText = "$pageNumber/6",
+                config = ScreenConfig.TabletConfig,
+                modifier = Modifier.Companion.fillMaxSize().background(color = backgroundColor)
+                    .pointerInput(Unit) {
+                        while (true) {
+                            awaitPointerEventScope {
+                                awaitPointerEvent() // await for some event (drag, touch)
+                                lastInteractionTime =
+                                    Clock.System.now()// the last time of interaction (for dialog interaction)
                             }
                         }
-                    }
-                    Spacer(modifier = Modifier.Companion.height(20.dp))
-                    //If use page number 2 ->only 8 Items , in other case - all items (12)
-                    if (pageNumber == 2 ){
-                        if( viewModel.placedItems.size == 7) {
-                            allItemsPlaced = true
-                        }
-                    }
-                    else{
-                        allItemsPlaced = true
-                    }
+                    },
+                content =
+                    {
+                        Row(
+                            modifier = Modifier.Companion
+                                .fillMaxSize()
+                                .background(color = backgroundColor)
 
-                    //----------------Place Items in Box (2 rows or 3 rows)
-                    Row(
-                        modifier = Modifier.Companion
-                            .fillMaxSize()
-                            .weight(1f),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        BoxWithConstraints(
-                            modifier = Modifier
-                                .background(Color.White)
-                                .zIndex(1f)
-                                .border(elevationSm, Color.Black)
-                                .fillMaxWidth()
-                                .height(height7Xl)
+
                         ) {
-                            val itemCountPerRow = 4
-                            val itemSpacing = 16.dp
-                            val itemSize = (maxWidth - itemSpacing * (itemCountPerRow + 1)) / itemCountPerRow
-
                             Column(
                                 modifier = Modifier.Companion
-                                    .padding(8.dp)
+                                    .weight(0.4f)
                                     .zIndex(1f)
+                                    .background(color = backgroundColor)
+                                    .padding(paddingMd)
                             ) {
-                                itemsToShowWithIds.chunked(4).forEachIndexed { rowIndex, rowItems -> //seporate items to 2 rows (4 items in row) - question 2
-                                    Row(
-                                        modifier = Modifier.Companion
-                                            .padding(8.dp)
-                                            .zIndex(1f)
-                                    ) {
-                                        rowItems.forEach { (itemId, res) ->
 
-                                            //if page= 2 - we don't use it (only 8 items) - 4 is invisible
-                                            val shouldShowOnPalette = when (pageNumber) {
-                                                2 -> viewModel.placedItems.none { it.id == itemId }
-                                                4, 6 -> true
-                                                else -> true
+                                //-------------------Text of instruction
+                                Box(
+                                    modifier = Modifier
+                                        .background(Color.White, RoundedCornerShape(paddingSm))
+                                        .border(
+                                            elevationSm,
+                                            Color.Black,
+                                            RoundedCornerShape(paddingSm)
+                                        )
+                                        .padding(vertical = paddingSm, horizontal = paddingSm)
+                                ) {
+                                    Text(
+                                        //Change  a text because it depend of number of page
+                                        text = if (pageNumber == 2) {
+                                            stringResource(Resources.String.drag_and_place_instruction)
+                                        } else {
+                                            stringResource(Resources.String.drag_and_place_instruction)
+                                        },
+                                        fontSize = MEDIUM,
+                                        textAlign = TextAlign.Companion.Center,
+                                        fontWeight = FontWeight.Companion.Bold,
+                                        color = primaryColor,
+                                        modifier = Modifier.Companion.padding(bottom = paddingMd)
+                                    )
+                                }
+
+                                //--------------------Buttons of changing rooms
+                                Row(
+                                    modifier = Modifier.Companion.fillMaxWidth()
+                                        .padding(top = paddingMd),
+                                    horizontalArrangement = Arrangement.spacedBy(
+                                        12.dp,
+                                        Alignment.CenterHorizontally
+                                    )
+                                ) {//Change room and color of Button (if choose)
+                                    roomButtons.forEach { room ->
+                                        val isSelected = selectedRoom == room
+                                        Button(
+                                            onClick = { selectedRoom = room },
+                                            colors = ButtonDefaults.buttonColors(
+                                                if (isSelected) Color.Companion.Gray else primaryColor
+                                            ),
+                                            shape = androidx.compose.foundation.shape.RoundedCornerShape(
+                                                30
+                                            ),
+                                            modifier = Modifier.Companion.height(buttonHeightMd)
+                                                .width(widthMd_Lg)
+                                        ) {
+                                            Text(
+                                                text = stringResource(room.displayName),
+                                                color = Color.Companion.White,
+                                                fontSize = EXTRA_REGULAR
+                                            )
+                                        }
+                                    }
+                                }
+                                Spacer(modifier = Modifier.Companion.height(20.dp))
+                                //If use page number 2 ->only 8 Items , in other case - all items (12)
+                                if (pageNumber == 2) {
+                                    if (viewModel.placedItems.size == 7) {
+                                        allItemsPlaced = true
+                                    }
+                                } else {
+                                    allItemsPlaced = true
+                                }
+
+                                //----------------Place Items in Box (2 rows or 3 rows)
+                                Row(
+                                    modifier = Modifier.Companion
+                                        .fillMaxSize()
+                                        .weight(1f),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    BoxWithConstraints(
+                                        modifier = Modifier
+                                            .background(Color.White)
+                                            .zIndex(1f)
+                                            .border(elevationSm, Color.Black)
+                                            .fillMaxWidth()
+                                            .height(height7Xl)
+                                    ) {
+                                        val itemCountPerRow = 4
+                                        val itemSpacing = 16.dp
+                                        val itemSize =
+                                            (maxWidth - itemSpacing * (itemCountPerRow + 1)) / itemCountPerRow
+
+                                        Column(
+                                            modifier = Modifier.Companion
+                                                .padding(8.dp)
+                                                .zIndex(1f)
+                                        ) {
+                                            itemsToShowWithIds.chunked(4)
+                                                .forEachIndexed { rowIndex, rowItems -> //seporate items to 2 rows (4 items in row) - question 2
+                                                    Row(
+                                                        modifier = Modifier.Companion
+                                                            .padding(8.dp)
+                                                            .zIndex(1f)
+                                                    ) {
+                                                        rowItems.forEach { (itemId, res) ->
+
+                                                            //if page= 2 - we don't use it (only 8 items) - 4 is invisible
+                                                            val shouldShowOnPalette =
+                                                                when (pageNumber) {
+                                                                    2 -> viewModel.placedItems.none { it.id == itemId }
+                                                                    4, 6 -> true
+                                                                    else -> true
+                                                                }
+
+                                                            if (shouldShowOnPalette) {
+                                                                DraggableItem(
+                                                                    id = itemId,
+                                                                    imageRes = res,
+                                                                    onDrop = { id, globalOffset ->
+                                                                        //where need be  Item  = globalOffset - roomPosition(from left top corner)
+                                                                        val relativeOffset =
+                                                                            globalOffset - roomPosition
+                                                                        val targetSize =
+                                                                            roomSize.width.toFloat() to roomSize.height.toFloat()
+                                                                        if (isObjectInsideTargetArea(
+                                                                                targetPosition = roomPosition,
+                                                                                draggablePosition = globalOffset,
+                                                                                targetSize = targetSize,
+                                                                                draggableSize = draggableSize,
+                                                                                isCircle = false,
+                                                                                threshold = 50f
+                                                                            )
+                                                                        ) {
+                                                                            //check the room and create item for save in viewModel
+                                                                            val newZone =
+                                                                                getZoneForPosition(
+                                                                                    globalOffset,
+                                                                                    roomPosition,
+                                                                                    roomSize,
+                                                                                    selectedRoom
+                                                                                )
+                                                                            val newItem = DataItem(
+                                                                                id = id,
+                                                                                resId = res,
+                                                                                isPlaced = true,
+                                                                                position = relativeOffset,
+                                                                                room = selectedRoom,
+                                                                                zone = newZone
+                                                                            )
+                                                                            viewModel.saveItemForRound(
+                                                                                newItem,
+                                                                                pageNumber
+                                                                            )
+
+                                                                        } else { // it is not in the room (in a box )
+                                                                            viewModel.removeItem(id)
+                                                                        }
+                                                                    },
+                                                                    selectedRoom = selectedRoom,
+                                                                    placedItems = viewModel.placedItems,
+                                                                    size = calculateItemSize(
+                                                                        roomSize
+                                                                    )
+                                                                )
+                                                            } else {
+                                                                Spacer(
+                                                                    modifier = Modifier.Companion.size(
+                                                                        spacing6Xl
+                                                                    )
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                        }
+                                    }
+                                }
+                                Spacer(modifier = Modifier.Companion.height(spacingMd))
+
+                                //--------------------Timer and button to next page
+                                Row(
+                                    modifier = Modifier.Companion.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.Companion.CenterVertically
+                                ) {
+                                    Text(
+                                        text = roomsViewModel.formatTime(timeLeft),
+                                        fontSize = EXTRA_MEDIUM,
+                                        color = primaryColor,
+                                        fontWeight = FontWeight.Companion.Bold
+                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(top = spacingMd),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Button(
+                                            onClick = {
+                                                autoSwitchingRooms =
+                                                    true//in the end switch room and photo
+                                            },
+                                            colors = ButtonDefaults.buttonColors(primaryColor),
+                                            shape = RoundedCornerShape(30),
+                                            modifier = Modifier
+                                                .defaultMinSize(minWidth = heightXl)
+                                                .width(widthXl)
+                                                .height(heightMd),
+                                            enabled = allItemsPlaced, //if all items placed -> (we see a button) - only for page 2
+
+                                        ) {
+                                            Text(
+                                                text = stringResource(Resources.String.next),
+                                                fontSize = EXTRA_MEDIUM,
+                                                fontWeight = FontWeight.Companion.Bold,
+                                                color = Color.Companion.White
+                                            )
+                                        }
+                                    }
+
+                                }
+                            }
+                            //-----------------------Image of Rooms and Items on Images
+                            Column(
+                                modifier = Modifier.Companion
+                                    .weight(0.6f)
+                                    .fillMaxHeight()
+                            ) {
+                                //Area of screenshot of the picture
+                                capturable = platformCapturable(
+                                    modifier = Modifier.weight(1f),
+                                    onCaptured = { imageBitmap ->
+                                        //Save image in viewModel and all we need for Image (depends of page number)
+                                        val timestamp = getCurrentFormattedDateTime()
+                                        when (pageNumber) {
+                                            2 -> {
+                                                viewModel.image1.value =
+                                                    viewModel.image1.value.plus(imageBitmap)
+                                                viewModel.timeForImage1.value = timestamp
+                                                viewModel.pageNumForImage1.value = 2
+                                                println("Image captured: $imageBitmap")
                                             }
 
-                                            if (shouldShowOnPalette) {
+                                            4 -> {
+                                                viewModel.image2.value =
+                                                    viewModel.image2.value.plus(imageBitmap)
+                                                viewModel.timeForImage2.value = timestamp
+                                                viewModel.pageNumForImage2.value = 4
+                                                println("Image captured: $imageBitmap")
+                                            }
+
+                                            6 -> {
+                                                viewModel.image3.value =
+                                                    viewModel.image3.value.plus(imageBitmap)
+                                                viewModel.timeForImage3.value = timestamp
+                                                viewModel.pageNumForImage3.value = 6
+                                                println("Image captured: $imageBitmap")
+
+                                            }
+                                        }
+                                    }
+                                )
+                                {
+                                    Box(
+                                        modifier = Modifier.Companion
+                                            .weight(0.7f)
+                                            .onGloballyPositioned { coordinates -> //global size and pixel
+                                                roomPosition =
+                                                    coordinates.localToScreen(Offset.Companion.Zero)
+                                                roomSize = coordinates.size
+                                            }
+                                    ) {
+                                        //Big Image-Room
+                                        Image(
+                                            painter = painterResource(selectedRoom.imageRes),
+                                            contentDescription = null,
+                                            modifier = Modifier.Companion
+                                                .fillMaxSize()
+                                                .zIndex(0f),
+                                            contentScale = ContentScale.Companion.Crop
+                                        )
+                                        //Placed only Items in Image that now in specific room
+                                        viewModel.placedItems.filter { it.room == selectedRoom }
+                                            .forEach { item ->
                                                 DraggableItem(
-                                                    id = itemId,
-                                                    imageRes = res,
+                                                    id = item.id,
+                                                    size = calculateItemSize(roomSize),
+                                                    imageRes = item.resId,
                                                     onDrop = { id, globalOffset ->
-                                                        //where need be  Item  = globalOffset - roomPosition(from left top corner)
-                                                        val relativeOffset = globalOffset - roomPosition
-                                                        val targetSize = roomSize.width.toFloat() to roomSize.height.toFloat()
+                                                        val relativeOffset =
+                                                            globalOffset - roomPosition
+                                                        val targetSize =
+                                                            roomSize.width.toFloat() to roomSize.height.toFloat()
+
                                                         if (isObjectInsideTargetArea(
                                                                 targetPosition = roomPosition,
                                                                 draggablePosition = globalOffset,
@@ -423,187 +609,37 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                                                 threshold = 50f
                                                             )
                                                         ) {
-                                                            //check the room and create item for save in viewModel
                                                             val newZone = getZoneForPosition(
                                                                 globalOffset,
                                                                 roomPosition,
                                                                 roomSize,
                                                                 selectedRoom
                                                             )
-                                                            val newItem = DataItem(
-                                                                id = id,
-                                                                resId = res,
-                                                                isPlaced = true,
+                                                            val updatedItem = item.copy(
                                                                 position = relativeOffset,
                                                                 room = selectedRoom,
                                                                 zone = newZone
                                                             )
                                                             viewModel.saveItemForRound(
-                                                                newItem,
+                                                                updatedItem,
                                                                 pageNumber
                                                             )
-
-                                                        } else { // it is not in the room (in a box )
+                                                        } else {
                                                             viewModel.removeItem(id)
                                                         }
+
                                                     },
                                                     selectedRoom = selectedRoom,
                                                     placedItems = viewModel.placedItems,
-                                                    size = calculateItemSize(roomSize)
+                                                    isOnRoom = true,
+                                                    roomPosition = roomPosition
                                                 )
-                                            } else {
-                                                Spacer(modifier = Modifier.Companion.size(spacing6Xl))
                                             }
-                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    Spacer(modifier = Modifier.Companion.height(spacingMd))
-
-                    //--------------------Timer and button to next page
-                    Row(
-                        modifier = Modifier.Companion.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.Companion.CenterVertically
-                    ) {
-                        Text(
-                            text = formatTime(timeLeft),
-                            fontSize = EXTRA_MEDIUM,
-                            color = primaryColor,
-                            fontWeight = FontWeight.Companion.Bold
-                        )
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = spacingMd),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Button(
-                                onClick = {
-                                    autoSwitchingRooms = true//in the end switch room and photo
-                                },
-                                colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-                                shape = RoundedCornerShape(30),
-                                modifier = Modifier
-                                    .defaultMinSize(minWidth = heightXl)
-                                    .width(widthXl)
-                                    .height(heightMd) ,
-                                enabled = allItemsPlaced, //if all items placed -> (we see a button) - only for page 2
-
-                            ) {
-                                Text(
-                                    text = stringResource(Resources.String.next),
-                                    fontSize = EXTRA_MEDIUM,
-                                    fontWeight = FontWeight.Companion.Bold,
-                                    color = Color.Companion.White
-                                )
-                            }
-                        }
-
-                    }
-                }
-                //-----------------------Image of Rooms and Items on Images
-                Column(
-                    modifier = Modifier.Companion
-                        .weight(0.6f)
-                        .fillMaxHeight()
-                ) {
-                    //Area of screenshot of the picture
-                    capturable = platformCapturable(
-                        modifier = Modifier.weight(1f),
-                        onCaptured = { imageBitmap ->
-                            //Save image in viewModel and all we need for Image (depends of page number)
-                            val timestamp = getCurrentFormattedDateTime()
-                            when (pageNumber) {
-                                2 -> {
-                                    viewModel.image1.value = viewModel.image1.value.plus(imageBitmap)
-                                    viewModel.timeForImage1.value = timestamp
-                                    viewModel.pageNumForImage1.value =  2
-                                    println("Image captured: $imageBitmap")
-                                }
-                                4 -> {
-                                    viewModel.image2.value = viewModel.image2.value.plus(imageBitmap)
-                                    viewModel.timeForImage2.value = timestamp
-                                    viewModel.pageNumForImage2.value =  4
-                                    println("Image captured: $imageBitmap")
-                                }
-                                6 -> {
-                                    viewModel.image3.value = viewModel.image3.value.plus(imageBitmap)
-                                    viewModel.timeForImage3.value = timestamp
-                                    viewModel.pageNumForImage3.value =  6
-                                    println("Image captured: $imageBitmap")
-
-                                }
-                            }
-                        }
-                    )
-                    {
-                        Box(
-                            modifier = Modifier.Companion
-                                .weight(0.7f)
-                                .onGloballyPositioned { coordinates -> //global size and pixel
-                                    roomPosition = coordinates.localToScreen(Offset.Companion.Zero)
-                                    roomSize = coordinates.size
-                                }
-                        ) {
-                            //Big Image-Room
-                            Image(
-                                painter = painterResource(selectedRoom.imageRes),
-                                contentDescription = null,
-                                modifier = Modifier.Companion
-                                    .fillMaxSize()
-                                    .zIndex(0f),
-                                contentScale = ContentScale.Companion.Crop
-                            )
-                            //Placed only Items in Image that now in specific room
-                            viewModel.placedItems.filter { it.room == selectedRoom }
-                                .forEach { item ->
-                                    DraggableItem(
-                                        id = item.id,
-                                        size = calculateItemSize(roomSize),
-                                        imageRes = item.resId,
-                                        onDrop = { id, globalOffset ->
-                                            val relativeOffset = globalOffset - roomPosition
-                                            val targetSize = roomSize.width.toFloat() to roomSize.height.toFloat()
-
-                                            if (isObjectInsideTargetArea(
-                                                    targetPosition = roomPosition,
-                                                    draggablePosition = globalOffset,
-                                                    targetSize = targetSize,
-                                                    draggableSize = draggableSize,
-                                                    isCircle = false,
-                                                    threshold = 50f
-                                                )
-                                            ) {
-                                                val newZone = getZoneForPosition(
-                                                    globalOffset,
-                                                    roomPosition,
-                                                    roomSize,
-                                                    selectedRoom
-                                                )
-                                                val updatedItem = item.copy(
-                                                    position = relativeOffset,
-                                                    room = selectedRoom,
-                                                    zone = newZone
-                                                )
-                                                viewModel.saveItemForRound(updatedItem, pageNumber)
-                                            } else {
-                                                viewModel.removeItem(id)
-                                            }
-
-                                        },
-                                        selectedRoom = selectedRoom,
-                                        placedItems = viewModel.placedItems,
-                                        isOnRoom = true,
-                                        roomPosition = roomPosition
-                                    )
-                                }   }
-                        }
-                    }
-                }
-            })
+                    })
         }
 
         //For unposible go to back screen

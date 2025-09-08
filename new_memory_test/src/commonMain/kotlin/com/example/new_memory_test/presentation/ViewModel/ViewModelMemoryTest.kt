@@ -1,4 +1,5 @@
 package com.example.new_memory_test.presentation.ViewModel
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -430,7 +431,6 @@ class ViewModelMemoryTest(
         currentQuestion: Int?,
     ) {
         if (bitmap.width <= 1 || bitmap.height <= 1) {
-            println("❌ תמונה לא תקינה")
             return
         }
         val imageByteArray = bitmap.toByteArray()
