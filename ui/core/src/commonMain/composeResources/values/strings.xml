@@ -109,6 +109,33 @@
     <string name ="three">3</string>
     <string name ="four">4</string>
 
+    <string name="clock_grade">Grade</string>
+
+    <string name="circle_completeness_title">Clock Circle Completeness</string>
+    <string name="numbers_presence_title">Number Presence and Sequence</string>
+    <string name="hands_position_title">Hands Presence and Position</string>
+
+    <string-array name="circle_grades">
+        <item>2 - Complete shape</item>
+        <item>1 - Incomplete shape or with a line extension</item>
+        <item>0 - No circle or extreme distortion</item>
+    </string-array>
+
+    <string-array name="numbers_grades">
+        <item>4 - All numbers in correct order and consistent spacing</item>
+        <item>3 - Minor errors</item>
+        <item>2 - Missing/superfluous numbers or arranged counter-clockwise</item>
+        <item>1 - Approximately half the numbers are missing</item>
+        <item>0 - Most numbers are missing</item>
+    </string-array>
+
+    <string-array name="hands_grades">
+        <item>4 - Hands are in the correct position and size</item>
+        <item>3 - Slight deviation or no size difference</item>
+        <item>2 - Significant errors</item>
+        <item>1 - Only one hand or poor display</item>
+        <item>0 - No hands</item>
+    </string-array>
 
     <string name="select_activity">Please press the activity you did</string>
 

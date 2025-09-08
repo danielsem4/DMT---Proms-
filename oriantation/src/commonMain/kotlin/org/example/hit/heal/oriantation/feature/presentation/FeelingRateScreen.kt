@@ -55,7 +55,7 @@ class FeedbackScreen : Screen {
         val viewModel: OrientationTestViewModel = koinViewModel()
 
         var progress by remember { mutableStateOf(0f) }
-        var navigating by remember { mutableStateOf(false) } // prevent double pushes
+        var navigating by remember { mutableStateOf(false) }
 
         // Play state from VM (Flow/StateFlow)
         val isPlaying by viewModel.isPlayingAudio.collectAsState(initial = false)
@@ -140,5 +140,8 @@ class FeedbackScreen : Screen {
                 }
             }
         )
+        RegisterBackHandler(this) {
+            navigator?.popUntilRoot()
+        }
     }
 }

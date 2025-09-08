@@ -11,10 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,7 +36,10 @@ import dmt_proms.clock_test.generated.resources.final_screen_message
 import dmt_proms.clock_test.generated.resources.final_screen_title
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.example.hit.heal.cdt.presentation.grade.ClockGrade
 import org.example.hit.heal.core.presentation.Resources
+import org.example.hit.heal.core.presentation.Resources.String.clockGrade
+import org.example.hit.heal.core.presentation.Resources.String.exit
 import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.InstructionBox
@@ -60,6 +64,26 @@ class FinalScreen : Screen {
 
         // Get the string resources in the composable context
         val successMessage = stringResource(Resources.String.sentSuccessfully)
+
+        // upload the test data when this screen is first composed
+        LaunchedEffect(Unit) {
+            if (viewModel.circlePerfection.value != "" && viewModel.numbersSequence.value != "" && viewModel.handsPosition.value != "") {
+                send(
+                    viewModel,
+                    coroutineScope,
+                    onSuccess = {
+                        toastMessage = successMessage
+                        toastType = ToastType.Success
+                        navigator.pop()
+                    },
+                    onFailure = { error ->
+                        toastMessage = error.toString()
+                        toastType = ToastType.Error
+                        navigator.pop()
+                    }
+                )
+            }
+        }
 
         BaseScreen(
             config = ScreenConfig.TabletConfig,
@@ -88,7 +112,6 @@ class FinalScreen : Screen {
                     )
                     Spacer(modifier = Modifier.weight(0.5f))
 
-                    // Conditionally show "Uploading..." message
                     if (isSendingData) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
@@ -102,7 +125,7 @@ class FinalScreen : Screen {
                             Spacer(modifier = Modifier.size(8.dp))
                             Text(
                                 text = stringResource(Resources.String.uploading) + "...",
-                                fontSize = MaterialTheme.typography.h4.fontSize,
+                                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                                 color = primaryColor
                             )
                         }
@@ -112,17 +135,7 @@ class FinalScreen : Screen {
 
                     Row {
                         RoundedButton(
-                            text = stringResource(Res.string.exit_button_text),
-                            modifier = Modifier
-                                .fillMaxWidth(0.3f)
-                                .height(60.dp),
-                            onClick = {
-                                navigator.pop()
-                            }
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        RoundedButton(
-                            text = Resources.String.send,
+                            text = stringResource(exit),
                             modifier = Modifier
                                 .fillMaxWidth(0.3f)
                                 .height(60.dp),
@@ -131,16 +144,27 @@ class FinalScreen : Screen {
                                     viewModel,
                                     coroutineScope,
                                     onSuccess = {
+                                        navigator.pop()
                                         toastMessage = successMessage
                                         toastType = ToastType.Success
                                     },
                                     onFailure = { error ->
+                                        navigator.pop()
                                         toastMessage = error.toString()
                                         toastType = ToastType.Error
                                     }
                                 )
+                            }
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        RoundedButton(
+                            text = clockGrade,
+                            modifier = Modifier
+                                .fillMaxWidth(0.3f)
+                                .height(60.dp),
+                            onClick = {
+                                navigator.push(ClockGrade())
                             },
-                            enabled = !isSendingData // Button is enabled only when not sending data
                         )
                     }
                     Spacer(modifier = Modifier.height(32.dp))

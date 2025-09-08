@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.NoTransfer
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
@@ -90,7 +91,7 @@ fun PreviewGenericButton() {
         GenericButton(
             onClick = { /* Handle click */ },
             text = "Send Message",
-            icon = Icons.Default.Send,
+            icon = Icons.Default.NoTransfer,
             backgroundColor = Color.Black,
             contentColor = Color.Yellow,
             shape = RoundedCornerShape(50)

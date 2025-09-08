@@ -47,9 +47,11 @@ import dmt_proms.clock_test.generated.resources.hit_logo_description
 import dmt_proms.clock_test.generated.resources.start_button_text
 import kotlinx.coroutines.delay
 import org.example.hit.heal.core.presentation.Resources.Icon.clockIcon
+import org.example.hit.heal.core.presentation.Sizes.iconSize2Xl
 import org.example.hit.heal.core.presentation.Sizes.iconSizeXl
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.Sizes.spacingXxl
+import org.example.hit.heal.core.presentation.TabletBaseScreen
 import org.example.hit.heal.core.presentation.backgroundColor
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
@@ -77,43 +79,36 @@ fun CDTLandingScreenContent() {
     val viewModel = koinViewModel<ClockTestViewModel>()
 
     LaunchedEffect(Unit) {
-        delay(500) // Show initial state for 0.5 seconds
+        delay(500)
         viewModel.loadEvaluation("cdt")
         state = ScreenState.Animating
-        println("LandingScreen: Auto-starting animation")
     }
 
-    // ── State change handler ─────────────────────────────────────────────
     LaunchedEffect(state) {
-        println("LandingScreen: state -> $state")
         if (state == ScreenState.Animating) {
-            delay(1200) // Allow logo animation to complete
+            delay(1200)
             state = ScreenState.ShowContent
-            println("LandingScreen: state -> ShowContent (after delay)")
         } else if (state == ScreenState.ShowContent) {
-            // Trigger button animation first
             buttonState = ButtonState.Visible
-            // Wait for a short moment after the button animation starts before starting text animation
-            delay(100) // Reduced delay to start text earlier
-            // Then trigger text animation
+            delay(100)
             textState = TextState.Visible
         }
     }
-
-
-    BaseScreen(
+    TabletBaseScreen(
         title = stringResource(Res.string.clock_test_title),
+        onNextClick = {
+            navigator.replace(DrawClockScreen())
+        },
+        question = 1,
+        buttonText = stringResource(Res.string.start_button_text),
         content = {
             if (state != ScreenState.ShowContent) {
-                // Initial animation sequence (without BaseScreen)
                 InitialStep(state)
             } else {
-                // Final content using TabletBaseScreen
-                SecondState(navigator, buttonState, textState)
+                SecondState(buttonState, textState)
             }
         }
     )
-
 }
 
 @Composable
@@ -169,7 +164,7 @@ private fun InitialStep(state: ScreenState) {
 }
 
 @Composable
-private fun SecondState(navigator: Navigator, buttonState: ButtonState, textState: TextState) {
+private fun SecondState( buttonState: ButtonState, textState: TextState) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -189,7 +184,7 @@ private fun SecondState(navigator: Navigator, buttonState: ButtonState, textStat
         Image(
             painter = painterResource(clockIcon),
             contentDescription = stringResource(Res.string.clock_icon_description),
-            modifier = Modifier.size(iconSizeXl)
+            modifier = Modifier.size(iconSize2Xl)
         )
 
         Spacer(modifier = Modifier.height(spacingXxl))
@@ -200,21 +195,6 @@ private fun SecondState(navigator: Navigator, buttonState: ButtonState, textStat
             animationSpec = spring(dampingRatio = 0.7f, stiffness = 120f),
             label = "button_slide_animation"
         )
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .offset(y = buttonOffsetY),
-            contentAlignment = Alignment.Center
-        ) {
-            RoundedButton(
-                text = Res.string.start_button_text,
-                onClick = {
-                    navigator.replace(DrawClockScreen())
-                },
-                fontSize = 40.sp,
-            )
-        }
 
         Spacer(modifier = Modifier.height(20.dp))
 
