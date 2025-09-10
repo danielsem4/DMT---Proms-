@@ -1,5 +1,18 @@
 package com.example.new_memory_test.presentation.ViewModel
 
+import ActivityPlacementJson
+import ActivityPlacementValue
+import MemoryData
+import MemoryQuestionPart1Json
+import MemoryQuestionPart1Value
+import MemoryQuestionPartNJson
+import MemoryQuestionPartNValue
+import SimpleMeasureBoolean
+import SimpleMeasureString
+import WrappedActivityPlacement
+import WrappedMemoryQuestionPart1
+import WrappedMemoryQuestionPart2
+import WrappedMemoryQuestionPart3
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -8,13 +21,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.new_memory_test.data.model.ActivityPlacement
-import com.example.new_memory_test.data.model.MemoryData
-import com.example.new_memory_test.data.model.MemoryQuestionPart1
-import com.example.new_memory_test.data.model.MemoryQuestionPart2
 import com.example.new_memory_test.presentation.screens.RoomScreen.data.DataItem
-import core.data.model.MeasureObjectBoolean
-import core.data.model.MeasureObjectString
 import core.data.model.evaluation.Evaluation
 import core.data.storage.Storage
 import core.domain.DataError
@@ -33,7 +40,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,10 +47,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import org.example.hit.heal.core.presentation.components.SlotState
 import org.jetbrains.compose.resources.DrawableResource
-import kotlin.collections.ArrayList
-import kotlin.io.println
 import kotlin.math.absoluteValue
-
 
 class ViewModelMemoryTest(
     private val playAudioUseCase: PlayAudioUseCase,
@@ -58,34 +61,23 @@ class ViewModelMemoryTest(
     var txtMemoryPage by mutableStateOf(1)
     private val _placedItems = mutableStateListOf<DataItem>()
     val placedItems: List<DataItem> get() = _placedItems.toList()
-    private val _initialItemIds = mutableListOf<Int>()
-    private var result: MemoryData = MemoryData()
-
+    private var result by mutableStateOf(MemoryData())
 
     private val _isLoading = MutableStateFlow(false)
-    var isLoading: StateFlow<Boolean> = _isLoading
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val _uploadStatus = MutableStateFlow<Result<Unit>?>(null) // Need check
-    private val _memoryTest = MutableStateFlow<Evaluation?>(null)
-    private var shuffledItems: List<Pair<Int, DrawableResource>>? = null
+    private val _uploadStatus = MutableStateFlow<Result<Unit>?>(null)
+    val uploadStatus: StateFlow<Result<Unit>?> = _uploadStatus.asStateFlow()
 
-    val uploadStatus: StateFlow<Result<Unit>?> = _uploadStatus
+    private var shuffledItems: List<Triple<Int, DrawableResource, String>>? = null
     val agendaMap = mutableStateOf<Map<String, String>>(emptyMap())
 
-    //lists of rooms and parts (for server after converting to Memory1 and Memory2 (check fun //Convert 175 ))
-    private val part1List = arrayListOf<MemoryQuestionPart1>()
-    private val part2List = arrayListOf<MemoryQuestionPart2>()
-    private val part3List = arrayListOf<MemoryQuestionPart2>()
-
     private val firstRoundItems = arrayListOf<DataItem>()
-    private val secondRoundItems = arrayListOf<DataItem>()
-    private val thirdRoundItems = arrayListOf<DataItem>()
 
-    //Call
-    var callResult = MeasureObjectBoolean()
+    private val _memoryTest = MutableStateFlow<Evaluation?>(null)
+    val memoryTest: StateFlow<Evaluation?> = _memoryTest.asStateFlow()
 
-
-    //Save all Images
+    // State for images captured during the test.
     var image1 = mutableStateOf<Array<ImageBitmap?>>(emptyArray())
     var image2 = mutableStateOf<Array<ImageBitmap?>>(emptyArray())
     var image3 = mutableStateOf<Array<ImageBitmap?>>(emptyArray())
@@ -104,14 +96,39 @@ class ViewModelMemoryTest(
     private val _droppedState = MutableStateFlow<Map<String, SlotState>>(emptyMap())
     val droppedState = _droppedState.asStateFlow()
     var imagesCounter = mutableStateOf(0)
-
-
-    //user raiting
     var rawUserRating: Float? = null
-    val userRating = mutableListOf<MeasureObjectString>()
 
 
-    //audio
+    /**
+     * Fetches the evaluation details from the server, which includes the all-important measurement object IDs.
+     */
+    fun loadEvaluation(evaluationName: String) {
+        viewModelScope.launch {
+            val clinicId = storage.get(PrefKeys.clinicId) ?: return@launch
+            val patientId = storage.get(PrefKeys.userId)?.toIntOrNull() ?: return@launch
+
+            api.getSpecificEvaluation(clinicId, patientId, evaluationName)
+                .onSuccess { fetched ->
+                    _memoryTest.value = fetched
+                    println("Evaluation data loaded successfully.")
+                }
+                .onError { error ->
+                    println("Error fetching evaluation: $error")
+                }
+        }
+    }
+
+    /**
+     * Finds the measurement object ID for a given label from the loaded evaluation data.
+     */
+    private fun findEvaluationObjectId(label: String): Int? {
+        val id = _memoryTest.value?.measurement_objects?.find { it.object_label == label }?.id
+        if (id == null) {
+            println("Warning: Could not find dynamic ID for label: '$label'")
+        }
+        return id
+    }
+
     suspend fun onPlayAudio(audioText: String) {
         playAudioUseCase.playAudio(audioText)
     }
@@ -120,127 +137,120 @@ class ViewModelMemoryTest(
         playAudioUseCase.stopAudio()
     }
 
-
-    //If user inactive
     fun recordInactivity() {
-        var notificationResult = MeasureObjectString(
-            measureObject = 165,
-            value = "User inactive for 1 minute",
-            dateTime = getCurrentFormattedDateTime()
-        )
-        result.notificationsCount = listOf(notificationResult)
-    }
-
-    //What user answered to raiting
-    fun setSuccessRateAfter(answer: String) {
-        userRating.add(
-            MeasureObjectString(
-                measureObject = 166,
-                value = answer,
-                dateTime = getCurrentFormattedDateTime()
+        val id = findEvaluationObjectId("notificationsCount") ?: 165
+        result.notificationsCount.add(
+            SimpleMeasureString(
+                dateTime = getCurrentFormattedDateTime(),
+                measureObject = id,
+                value = "User inactive for 1 minute"
             )
         )
     }
 
-    //Call result
-    fun setPhoneResult(answer: Boolean) {
-        callResult = MeasureObjectBoolean(
-            measureObject = 170,
-            value = answer,
-            dateTime = getCurrentFormattedDateTime()
+    fun setSuccessRateAfter(answer: String, date: String) {
+        val id = findEvaluationObjectId("successRateAfter") ?: 166
+        result.successRateAfter.add(
+            SimpleMeasureString(
+                dateTime = date,
+                measureObject = id,
+                value = answer
+            )
         )
-
-        println("results object: $result")
     }
 
-    //ScheduleScreen
-    fun collectPlannedActivities(): List<ActivityPlacement> {
-        return agendaMap.value.map { (slotId, activityId) ->
+    fun setPhoneResult(answer: Boolean) {
+        val id = findEvaluationObjectId("PhoneCallResult") ?: 170
+        result.PhoneCallResult.add(
+            SimpleMeasureBoolean(
+                dateTime = getCurrentFormattedDateTime(),
+                measureObject = id,
+                value = answer
+            )
+        )
+    }
+
+    private fun collectPlannedActivities(date: String): List<WrappedActivityPlacement> {
+        val activityId = findEvaluationObjectId("activitiesPlaced") ?: 570
+        return agendaMap.value.map { (slotId, activityIdValue) ->
             val parts = slotId.split("_")
             val day = parts.getOrNull(1) ?: "unknown"
             val hour = parts.getOrNull(3) ?: "unknown"
-
-            ActivityPlacement(
-                activity = MeasureObjectString(
-
-                    measureObject = 150,
-                    value = activityId
-                ),
-                day = MeasureObjectString(
-                    measureObject = 151,
-                    value = day
-                ),
-                time = MeasureObjectString(
-                    measureObject = 216,
-                    value = hour
+            WrappedActivityPlacement(
+                ActivityPlacementJson(
+                    dateTime = date,
+                    measureObject = activityId,
+                    value = ActivityPlacementValue(
+                        activity = activityIdValue,
+                        day = day,
+                        time = hour
+                    )
                 )
             )
         }
     }
 
+    private fun updateMemoryTestResults(item: DataItem, pageNumber: Int, date: String) {
+        when (pageNumber) {
+            2 -> { // Corresponds to Stage 1
+                firstRoundItems.add(item)
+                val measureObjectId = findEvaluationObjectId("MemoryQuestionPart1") ?: 571
+                result.MemoryQuestionPart1.add(
+                    WrappedMemoryQuestionPart1(
+                        MemoryQuestionPart1Json(
+                            dateTime = date,
+                            measureObject = measureObjectId,
+                            value = MemoryQuestionPart1Value(
+                                item = item.name,
+                                place = item.zone?.displayName ?: "unknown",
+                                room = item.room?.displayName?.key ?: "unknown"
+                            )
+                        )
+                    )
+                )
+            }
 
-    //Convert to MemoryQuestionPart1
-    fun DataItem.toMemoryQuestionPart1(): MemoryQuestionPart1 {
-        return MemoryQuestionPart1(
-            item = MeasureObjectString(
-                measureObject = 157,
-                value = id.toString()
-            ),
-            place = MeasureObjectString(
-                measureObject = 158,
-                value = zone?.displayName ?: "unknown"
-            )
-        )
-    }
+            4, 6 -> { // Corresponds to Stages 2 and 3
+                val isStage2 = pageNumber == 4
+                val label = "MemoryQuestionPart${if (isStage2) "2" else "3"}"
+                val fallbackId = if (isStage2) 572 else 573
+                val measureObjectId = findEvaluationObjectId(label) ?: fallbackId
+                val original = firstRoundItems.find { it.id == item.id }
 
-    //Convert to MemoryQuestionPart2 and score
-    fun convertToMemoryQuestionPart2List(
-        currentRound: List<DataItem>,
-        originalRound: List<DataItem>,
-        part: Int
-    ): List<MemoryQuestionPart2> {
-        val tolerance = 70f
-        return currentRound.map { current ->
-            val original = originalRound.find { it.id == current.id }
-            current.toMemoryQuestionPart2(original, tolerance, part)
+                val score =
+                    if (original != null && item.room == original.room && item.zone == original.zone && positionsAreClose(
+                            item.position,
+                            original.position,
+                            70f
+                        )
+                    ) {
+                        "1"
+                    } else {
+                        "0"
+                    }
+
+                val value = MemoryQuestionPartNValue(
+                    item = item.name,
+                    place = item.zone?.displayName ?: "unknown",
+                    placeGrade = score,
+                    room = item.room?.displayName?.key ?: "unknown"
+                )
+
+                val json = MemoryQuestionPartNJson(
+                    dateTime = date,
+                    measureObject = measureObjectId,
+                    value = value
+                )
+
+                if (isStage2) {
+                    result.MemoryQuestionPart2.add(WrappedMemoryQuestionPart2(json))
+                } else {
+                    result.MemoryQuestionPart3.add(WrappedMemoryQuestionPart3(json))
+                }
+            }
         }
     }
 
-
-    //Convert to MemoryQuestionPart2 and give a grade
-    fun DataItem.toMemoryQuestionPart2(
-        original: DataItem?,
-        tolerance: Float = 70f,
-        part: Int
-    ): MemoryQuestionPart2 {
-        val score = if (
-            original != null &&
-            room == original.room &&
-            zone == original.zone &&
-            positionsAreClose(position, original.position, tolerance)
-        ) "1" else "0"
-        //Create MemoryQuestionPart2
-        return MemoryQuestionPart2(
-            item = MeasureObjectString(
-                measureObject = 161,
-                value = id.toString()
-            ),
-            place = MeasureObjectString(
-                measureObject = 162,
-                value = zone?.displayName ?: "unknown"
-            ),
-            placeGrade = MeasureObjectString(
-                measureObject = 163,
-                value = score
-            ),
-            room = MeasureObjectString(
-                measureObject = 164,
-                value = room?.displayName?.key ?: "unknown"
-            )
-        )
-    }
-
-    //Check if items in one erea or no :(
     private fun positionsAreClose(pos1: Offset?, pos2: Offset?, tolerance: Float): Boolean {
         if (pos1 == null || pos2 == null) return false
         val dx = (pos1.x - pos2.x).absoluteValue
@@ -248,13 +258,12 @@ class ViewModelMemoryTest(
         return dx <= tolerance && dy <= tolerance
     }
 
-    //Take all images from map(rooms) in RoomScreen
     fun getItemsForPage(
         page: Int,
-        allItems: List<Pair<Int, DrawableResource>>
-    ): List<Pair<Int, DrawableResource>> {
+        allItems: List<Triple<Int, DrawableResource, String>>
+    ): List<Triple<Int, DrawableResource, String>> {
         return when (page) {
-            2 -> allItems.take(8)
+            2 -> allItems.take(7)
             4 -> {
                 if (shuffledItems == null) {
                     shuffledItems = allItems.shuffled().take(12)
@@ -262,54 +271,18 @@ class ViewModelMemoryTest(
                 shuffledItems!!
             }
 
-            6 -> shuffledItems ?: allItems.take(12) // fallback
+            6 -> shuffledItems ?: allItems.take(12)
             else -> allItems
         }
     }
 
-
-    //Saved and conaverrt itam with depends on pageNumber
     fun saveItemForRound(item: DataItem, pageNumber: Int) {
-        println("Saving item for page $pageNumber: $item")
-        when (pageNumber) {
-            2 -> {
-                firstRoundItems.add(item)
-                val part1 = item.toMemoryQuestionPart1()
-                part1List.add(part1)
-            }
-
-            4 -> {
-                secondRoundItems.add(item)
-                val converted =
-                    convertToMemoryQuestionPart2List(listOf(item), firstRoundItems, 2).first()
-                part2List.add(converted)
-                println("Added to part2List: $converted")
-            }
-
-            6 -> {
-                thirdRoundItems.add(item)
-                val converted =
-                    convertToMemoryQuestionPart2List(listOf(item), firstRoundItems, 3).first()
-                part3List.add(converted)
-                println("Added to part3List: $converted")
-            }
-        }
+        val date = getCurrentFormattedDateTime()
+        updateMemoryTestResults(item, pageNumber, date)
         saveItem(item)
-        println("Current result state: part1=${result.MemoryQuestionPart1}, part2=${result.MemoryQuestionPart2}, part3=${result.MemoryQuestionPart3}")
     }
 
-    fun clearPlacedItems() {
-        _placedItems.clear()
-    }
-
-    fun initializeItemIdsIfNeeded(items: List<Int>) {
-        if (_initialItemIds.isEmpty()) {
-            _initialItemIds.addAll(items.indices)
-        }
-    }
-
-    fun saveItem(item: DataItem) {
-        println("Saving item: $item")
+    private fun saveItem(item: DataItem) {
         val index = _placedItems.indexOfFirst { it.id == item.id }
         if (index != -1) {
             _placedItems[index] = item
@@ -318,237 +291,161 @@ class ViewModelMemoryTest(
         }
     }
 
-    //If i want to remove something
     fun removeItem(itemId: Int) {
-        println("Removing item with id: $itemId")
         _placedItems.removeAll { it.id == itemId }
     }
 
-    //page number
+    fun clearPlacedItems() {
+        _placedItems.clear()
+    }
+
     fun setPage(page: Int) {
         txtMemoryPage = page
     }
 
-    //load results
-    fun uploadEvaluationResults(
-    ) {
+    fun uploadEvaluationResults() {
+        if (_isLoading.value) return
         _isLoading.value = true
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                recordInactivity()
-                val clinicId = storage.get(PrefKeys.clinicId)
-                val patientId = storage.get(PrefKeys.userId)?.toIntOrNull()
-                result.patient_id = patientId!!
-                result.clinicId = clinicId!!
-                rawUserRating?.let {
-                    setSuccessRateAfter(it.toString()) // add rating to userRating
-                }
-                result.successRateAfter = userRating.toList()
-                result.date = getCurrentFormattedDateTime()
-                result.PhoneCallResult = listOf(callResult)
-                result.MemoryQuestionPart1 = ArrayList(part1List)
-                result.MemoryQuestionPart2 = ArrayList(part2List)
-                result.MemoryQuestionPart3 = ArrayList(part3List)
-                result.activitiesPlaced = collectPlannedActivities() as ArrayList<ActivityPlacement>
-                println("Result ready: $result")
-                println("MemoryQuestionPart1 inside result: ${result.MemoryQuestionPart1}")
+                val date = getCurrentFormattedDateTime()
+                result.clinicId = storage.get(PrefKeys.clinicId) ?: 0
+                result.patientId = storage.get(PrefKeys.userId)?.toIntOrNull() ?: 0
+                result.date = date
                 result.measurement = _memoryTest.value?.id ?: 20
-                delay(200)
+                result.activitiesPlaced = ArrayList(collectPlannedActivities(date))
+
+                rawUserRating?.let { setSuccessRateAfter(it.toString(), date) }
 
                 val uploadResult = uploadTestResultsUseCase.execute(result, MemoryData.serializer())
-                println("results object: $result")
 
                 uploadResult.onSuccess {
-                    println(" העלאה של הכל הצליחה")
-                    _isLoading.value = false
                     _uploadStatus.value = Result.success(Unit)
-
                 }.onError { error ->
-                    println(" שגיאה העלאה: $error")
-                    _isLoading.value = false
                     _uploadStatus.value = Result.failure(Exception(error.toString()))
-
                 }
-
             } catch (e: Exception) {
-                println(" שגיאה לא צפויה: ${e.message}")
                 _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
-
+            } finally {
+                _isLoading.value = false
             }
         }
     }
 
+    private fun saveUploadedImageUrl(page: Int?, uploadedUrl: String, date: String) {
+        val (label, fallbackId) = when (page) {
+            2 -> "images1" to 195
+            4 -> "images2" to 197
+            6 -> "images3" to 199
+            5 -> "imageUrl" to 153
+            else -> return
+        }
 
-    //Loaded Image with depend on image number and page
-    private fun saveUploadedImageUrl(currentQuestion: Int?, uploadedUrl: String, date: String) {
-        val idImage = mapOf(
-            2 to 228,
-            4 to 229,
-            5 to 197,
-            6 to 231
-        )
-        val image = MeasureObjectString(
-            measureObject = idImage[currentQuestion] ?: 0,
-            value = uploadedUrl,
-            dateTime = date
+        val measureObjectId = findEvaluationObjectId(label) ?: fallbackId
+        val imageEntry = SimpleMeasureString(date, measureObjectId, uploadedUrl)
 
-        )
-        when (currentQuestion) {
-            2 -> result.images1.add(image)
-            4 -> result.images2.add(image)
-            5 -> result.imageUrl.add(image)
-            6 ->  result.images3.add(image)
-
+        when (page) {
+            2 -> result.images1.add(imageEntry)
+            4 -> result.images2.add(imageEntry)
+            6 -> result.images3.add(imageEntry)
+            5 -> result.imageUrl.add(imageEntry)
         }
     }
 
-
-
-    //load evaluation (clinickId and patientId)
-    fun loadEvaluation(evaluationName: String) {
-        viewModelScope.launch {
-            val clinicId = storage.get(PrefKeys.clinicId) ?: return@launch
-            val patientId = storage.get(PrefKeys.userId)?.toIntOrNull() ?: return@launch
-            api.getSpecificEvaluation(clinicId, patientId, evaluationName)
-                .onSuccess { fetched ->
-                    _memoryTest.value = fetched
-                    println("fetched evaluation: $fetched")
-                }
-
-                .onError { error ->
-                    // post an error to a MessageBarState here todo
-                    println("Error fetching evaluation: $error")
-                }
-        }
-    }
-
-
-    //Only upload and add  start a part of loading to server(another fun)
-   // private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-    suspend fun uploadImage(
+    private suspend fun uploadImage(
         bitmap: ImageBitmap,
         date: String,
-        currentQuestion: Int?,
+        page: Int?,
+        imageNum: String
     ) {
-        if (bitmap.width <= 1 || bitmap.height <= 1) {
-            return
-        }
+        if (bitmap.width <= 1 || bitmap.height <= 1) return
+
         val imageByteArray = bitmap.toByteArray()
-        println(" התחלת העלאה, image size: ${imageByteArray.size}")
         try {
             val userId = storage.get(PrefKeys.userId)!!
             val clinicId = storage.get(PrefKeys.clinicId)!!
             val measurement = _memoryTest.value?.id ?: 20
-            val imagePath = bitmapToUploadUseCase.buildPath(
-                clinicId = clinicId,
-                patientId = userId,
-                measurementId = measurement,
-                pathDate = date
-            )
-            println(" Path: $imagePath")
-            val result = uploadImageUseCase.execute(
-                imagePath = imagePath,
-                bytes = imageByteArray,
-                clinicId = clinicId,
-                userId = userId
-            )
-            imagesCounter.value++
-            result.onSuccess {
-                println(" העלאה הצליחה")
-                saveUploadedImageUrl(currentQuestion, imagePath, date)
+            val imagePath =
+                bitmapToUploadUseCase.buildPath(clinicId, userId, measurement, date, imageNum)
+
+            val uploadResult =
+                uploadImageUseCase.execute(imagePath, imageByteArray, clinicId, userId)
+
+            uploadResult.onSuccess {
+                imagesCounter.value++
+                saveUploadedImageUrl(page, imagePath, date)
             }.onError { error ->
-                println("  העלאה לא הצליחה: $error")
                 _uploadStatus.value = Result.failure(Exception(error.toString()))
             }
-            if (imagesCounter.value == 10) {
-                uploadEvaluationResults()
-            }
         } catch (e: Exception) {
-            println(" שגיאה חריגה: ${e.message}")
+            println("Exception during image upload: ${e.message}")
         }
     }
 
     fun uploadAllImages() {
         viewModelScope.launch(Dispatchers.IO) {
+            var imageNum = 1
             supervisorScope {
                 val jobs = mutableListOf<Deferred<Unit>>()
-
-                // Image 1
-                image1.value.forEach { image ->
-                    image?.let {
-                        jobs.add(async {
-                            uploadImage(
-                                bitmap = it,
-                                date = timeForImage1.value ?: getCurrentFormattedDateTime(),
-                                currentQuestion = pageNumForImage1.value
-                            )
-                        })
-                    }
+                image1.value.filterNotNull().forEach {
+                    jobs.add(async {
+                        uploadImage(
+                            it,
+                            timeForImage1.value!!,
+                            pageNumForImage1.value,
+                            imageNum.toString()
+                        )
+                    })
+                    imageNum++
                 }
-
-                // Image 2
-                image2.value.forEach { image ->
-                    image?.let {
-                        jobs.add(async {
-                            uploadImage(
-                                bitmap = it,
-                                date = timeForImage2.value ?: getCurrentFormattedDateTime(),
-                                currentQuestion = pageNumForImage2.value
-                            )
-                        })
-                    }
+                image2.value.filterNotNull().forEach {
+                    jobs.add(async {
+                        uploadImage(
+                            it,
+                            timeForImage2.value!!,
+                            pageNumForImage2.value,
+                            imageNum.toString()
+                        )
+                    })
+                    imageNum++
                 }
-
-                // Image 3
-                image3.value.forEach { image ->
-                    image?.let {
-                        jobs.add(async {
-                            uploadImage(
-                                bitmap = it,
-                                date = timeForImage3.value ?: getCurrentFormattedDateTime(),
-                                currentQuestion = pageNumForImage3.value
-                            )
-                        })
-                    }
+                image3.value.filterNotNull().forEach {
+                    jobs.add(async {
+                        uploadImage(
+                            it,
+                            timeForImage3.value!!,
+                            pageNumForImage3.value,
+                            imageNum.toString()
+                        )
+                    })
+                    imageNum++
                 }
-
-                // imageUrl
-                imageUrl.value.forEach { image ->
-                    image?.let {
-                        jobs.add(async {
-                            uploadImage(
-                                bitmap = it,
-                                date = timeUrl.value ?: getCurrentFormattedDateTime(),
-                                currentQuestion = pageNumForUrl.value
-                            )
-                        })
-                    }
+                imageUrl.value.filterNotNull().forEach {
+                    jobs.add(async {
+                        uploadImage(
+                            it,
+                            timeUrl.value!!,
+                            pageNumForUrl.value,
+                            imageNum.toString()
+                        )
+                    })
+                    imageNum++
                 }
                 jobs.awaitAll()
                 uploadEvaluationResults()
-
             }
         }
     }
 
-    //reset all variables
     fun reset() {
-        println("Resetting ViewModel state")
         txtMemoryPage = 1
         _placedItems.clear()
-        _initialItemIds.clear()
         result = MemoryData()
-        println("Reset result: $result")
         _uploadStatus.value = null
         _memoryTest.value = null
-        part1List.clear()
-        part2List.clear()
-        part3List.clear()
         firstRoundItems.clear()
-        secondRoundItems.clear()
-        thirdRoundItems.clear()
-        callResult = MeasureObjectBoolean()
-        userRating.clear()
+        rawUserRating = null
         agendaMap.value = emptyMap()
         image1.value = emptyArray()
         image2.value = emptyArray()
@@ -563,8 +460,6 @@ class ViewModelMemoryTest(
         pageNumForImage3.value = null
         pageNumForUrl.value = null
         imagesCounter.value = 0
-
-        rawUserRating = null
         _isLoading.value = false
         _droppedState.value = emptyMap()
         shuffledItems = null
@@ -579,5 +474,4 @@ class ViewModelMemoryTest(
         }
         _droppedState.value = current
     }
-
 }

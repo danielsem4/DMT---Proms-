@@ -6,6 +6,7 @@ import org.jetbrains.compose.resources.DrawableResource
 
 data class DataItem(
     val id: Int,
+    val name: String,
     val resId: DrawableResource,
     val isPlaced: Boolean = false,
     val position: Offset = Offset.Zero,

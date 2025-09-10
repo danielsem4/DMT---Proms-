@@ -121,7 +121,11 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         var autoSwitchingRooms by remember { mutableStateOf(false) }
 
         //Items
-        val allItems: List<Pair<Int, DrawableResource>> = listOf(
+        val itemNames = listOf(
+            "Glasses","Book","Dress","Phone","Keys","Wallet",
+            "Coffee","Backpack","App","Shoes","Records","Bottle"
+        )
+        val allItems: List<Triple<Int, DrawableResource, String>> = listOf(
             Resources.Icon.glassesImage,
             Resources.Icon.bookImage,
             Resources.Icon.dressImage,
@@ -134,10 +138,11 @@ class RoomsScreens(val pageNumber: Int) : Screen {
             Resources.Icon.shoesImages,
             Resources.Icon.recordsIcon,
             Resources.Icon.bottleImage
-        ).mapIndexed { index, res -> index to res }
+        ).mapIndexed { index, res ->
+            Triple(index, res, itemNames[index]) }
         var allItemsPlaced = false//if all items placed (page 2)
         val itemsToShowWithIds =
-            viewModel.getItemsForPage(pageNumber, allItems)   //Doing random schake of items
+            viewModel.getItemsForPage(pageNumber, allItems)
 
 
         //Time and inactivity  places
@@ -174,10 +179,10 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                 }
             }
         }
-        //If came to screen - create items for dragging
-        LaunchedEffect(Unit) {
-            viewModel.initializeItemIdsIfNeeded(allItems.indices.toList())
-        }
+//        //If came to screen - create items for dragging
+//        LaunchedEffect(Unit) {
+//            viewModel.initializeItemIdsIfNeeded(allItems.indices.toList())
+//        }
         //Clean Items in image when come back to screen (only 4 and 6 )
         LaunchedEffect(Unit) {
             if (pageNumber == 4 || pageNumber == 6) {
@@ -404,15 +409,13 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                                 .zIndex(1f)
                                         ) {
                                             itemsToShowWithIds.chunked(4)
-                                                .forEachIndexed { rowIndex, rowItems -> //seporate items to 2 rows (4 items in row) - question 2
+                                                .forEachIndexed { rowIndex, rowItems ->
                                                     Row(
                                                         modifier = Modifier.Companion
                                                             .padding(8.dp)
                                                             .zIndex(1f)
                                                     ) {
-                                                        rowItems.forEach { (itemId, res) ->
-
-                                                            //if page= 2 - we don't use it (only 8 items) - 4 is invisible
+                                                        rowItems.forEach { (itemId, res, name) ->
                                                             val shouldShowOnPalette =
                                                                 when (pageNumber) {
                                                                     2 -> viewModel.placedItems.none { it.id == itemId }
@@ -450,6 +453,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                                                             val newItem = DataItem(
                                                                                 id = id,
                                                                                 resId = res,
+                                                                                name = name,
                                                                                 isPlaced = true,
                                                                                 position = relativeOffset,
                                                                                 room = selectedRoom,
@@ -514,7 +518,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                                                 .defaultMinSize(minWidth = heightXl)
                                                 .width(widthXl)
                                                 .height(heightMd),
-                                            enabled = allItemsPlaced, //if all items placed -> (we see a button) - only for page 2
+                                            enabled = allItemsPlaced,
 
                                         ) {
                                             Text(
