@@ -14,6 +14,7 @@ import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 
 import androidx.compose.ui.text.style.TextAlign
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_MEDIUM_LARGE
 
 @Composable
 fun InstructionText(text: String) {
@@ -26,7 +27,7 @@ fun InstructionText(text: String) {
         Text(
             text = text,
             color = Color.Black,
-            fontSize = LARGE,
+            fontSize = EXTRA_MEDIUM_LARGE,
             lineHeight = EXTRA_LARGE,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center

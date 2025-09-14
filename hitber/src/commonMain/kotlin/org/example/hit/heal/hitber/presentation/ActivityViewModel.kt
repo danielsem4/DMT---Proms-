@@ -8,6 +8,7 @@ import core.data.model.MeasureObjectDouble
 import core.data.model.MeasureObjectInt
 import core.data.model.MeasureObjectString
 import core.data.model.evaluation.Evaluation
+import core.data.model.evaluation.EvaluationObject // <-- REQUIRED IMPORT
 import core.data.storage.Storage
 import core.domain.DataError
 import core.domain.api.AppApi
@@ -37,6 +38,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import org.example.hit.heal.hitber.data.model.SeventhQuestionItem
 import org.example.hit.heal.hitber.data.model.SixthQuestionItem
 import org.example.hit.heal.hitber.data.model.TenthQuestionItem
+
+/**
+ *
+ */
 
 class ActivityViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
@@ -68,6 +73,51 @@ class ActivityViewModel(
 
     private var isUploadAllImagesFinished = 0
 
+    /**
+     * This map will store your server configuration, mapping labels like "city"
+     * to the complete EvaluationObject which contains the dynamic ID.
+     */
+    private var dynamicObjectMap: Map<String, EvaluationObject> = emptyMap()
+
+    /**
+     * Helper function to safely get the dynamic ID from the map.
+     * If the label isn't found, it returns the hardcoded fallback ID and logs a warning.
+     */
+    private fun getId(label: String, fallback: Int): Int {
+        return dynamicObjectMap[label]?.id ?: run {
+            println("Warning: Dynamic ID for label '$label' not found. Using fallback $fallback.")
+            fallback
+        }
+    }
+
+    /**
+     * Fetches the evaluation and populates the dynamic ID map.
+     */
+    fun loadEvaluation(evaluationName: String) {
+        viewModelScope.launch {
+            val clinicId = storage.get(clinicId) ?: return@launch
+            val patientId = storage.get(userId)?.toIntOrNull() ?: return@launch
+
+            api.getSpecificEvaluation(clinicId, patientId, evaluationName)
+                .onSuccess { fetched ->
+                    _hitBerTest.value = fetched
+                    // This is the crucial step: populate the map on success
+                    fetched.measurement_objects?.let { setDynamicIds(it) }
+                }
+                .onError { error ->
+                    println("Error fetching evaluation: $error")
+                }
+        }
+    }
+
+    /**
+     * Stores the fetched list of objects into our ViewModel's map, indexed by label.
+     */
+    private fun setDynamicIds(measurementObjects: List<EvaluationObject>) {
+        dynamicObjectMap = measurementObjects.associateBy { it.object_label }
+        println("Dynamic Object Map successfully loaded.")
+    }
+
     fun saveBitmap1(bitmap: ImageBitmap) {
         _capturedBitmap1.value = bitmap
     }
@@ -80,10 +130,27 @@ class ActivityViewModel(
         _capturedBitmap3.value = bitmap
     }
 
+    /**
+     * REFACTORED: This function now overrides the default IDs in the FirstQuestion object
+     * with the dynamic IDs loaded from the server.
+     */
     fun setFirstQuestion(firstQuestion: FirstQuestion) {
+        // Override the default IDs with the dynamic ones
+        firstQuestion.day.measureObject = getId("Day of the week", 101)
+        firstQuestion.month.measureObject = getId("month-of-year", 102)
+        firstQuestion.year.measureObject = getId("Year", 109)
+        firstQuestion.country.measureObject = getId("country", 104)
+        firstQuestion.city.measureObject = getId("city", 105)
+        firstQuestion.place.measureObject = getId("Hospital", 106)
+        firstQuestion.survey.measureObject = getId("survey-reason", 108)
+
+        // Save the corrected object to the result
         result.firstQuestion = firstQuestion
     }
 
+    /**
+     * REFACTORED: Uses dynamic IDs.
+     */
     fun setSecondQuestion(
         answers: List<Pair<Map<Int, String>, Int>>,
         date: String
@@ -93,12 +160,14 @@ class ActivityViewModel(
 
             SecondQuestionItem(
                 selectedShapes = SelectedShapesStringList(
-                    measureObject = 110,
+                    measureObject = getId("Second-Question-Shape", 110), // Refactored
                     value = shapesList,
                     dateTime = date
                 ),
                 wrongShapes = MeasureObjectInt(
-                    measureObject = 182,
+                    // Note: Your data dump did not provide a label for ID 182.
+                    // Please update "Second-Question-Wrong" if you have the correct server label.
+                    measureObject = getId("Second-Question-Wrong", 182), // Refactored
                     value = 5 - correctShapesCount,
                     dateTime = date
                 )
@@ -108,22 +177,25 @@ class ActivityViewModel(
         result.secondQuestion = ArrayList(secondQuestionList)
     }
 
+    /**
+     * REFACTORED: Uses dynamic IDs.
+     */
     fun setThirdQuestion(thirdQuestionAnswers: MutableList<Pair<Int, Int>>, date: String) {
 
         val thirdQuestionList = thirdQuestionAnswers.map { (answer, reactionTime) ->
             ThirdQuestionItem(
                 number = MeasureObjectInt(
-                    measureObject = 111,
+                    measureObject = getId("Third-Question-number", 111), // Refactored
                     value = answer,
                     dateTime = date
                 ),
                 time = MeasureObjectInt(
-                    measureObject = 112,
+                    measureObject = getId("Third-Question-time", 112), // Refactored
                     value = reactionTime,
                     dateTime = date
                 ),
                 isPressed = MeasureObjectBoolean(
-                    measureObject = 113,
+                    measureObject = getId("Third-Question-pressed", 113), // Refactored
                     value = true,
                     dateTime = date
                 )
@@ -134,11 +206,18 @@ class ActivityViewModel(
         println("thirdQuestion: ${result.thirdQuestion}")
     }
 
+    /**
+     * REFACTORED: Uses dynamic IDs and dynamic label logic.
+     */
     fun setFourthQuestion(answers: List<String>, date: String) {
-
+        // This assumes 'answers' is a flat list of user answers corresponding to
+        // "Fourth-Question-item-1-answer", "Fourth-Question-item-2-answer", etc.
         val measureObjects = answers.mapIndexed { index, answer ->
+            val label = "Fourth-Question-item-${index + 1}-answer"
+            val fallbackId = 133 + (index * 2) // Fallback logic skips "original" IDs (132, 134)
+
             MeasureObjectString(
-                measureObject = (132 + index),
+                measureObject = getId(label, fallbackId), // Refactored
                 value = answer,
                 dateTime = date
             )
@@ -147,6 +226,9 @@ class ActivityViewModel(
         result.fourthQuestion = ArrayList(measureObjects)
     }
 
+    /**
+     * REFACTORED: Uses dynamic IDs.
+     */
     fun setSixthQuestion(
         fridgeOpened: Boolean,
         itemMovedCorrectly: Boolean,
@@ -155,17 +237,17 @@ class ActivityViewModel(
     ) {
         val sixthQuestionItem = SixthQuestionItem(
             fridgeOpened = MeasureObjectBoolean(
-                measureObject = 138,
+                measureObject = getId("Six-Question-FridgeOpen", 138), // Refactored
                 value = fridgeOpened,
                 dateTime = date
             ),
             correctProductDragged = MeasureObjectBoolean(
-                measureObject = 139,
+                measureObject = getId("Six-Question-Product-dragged", 139), // Refactored
                 value = itemMovedCorrectly,
                 dateTime = date
             ),
             placedOnCorrectNap = MeasureObjectBoolean(
-                measureObject = 140,
+                measureObject = getId("Six-Question-Product-nap", 140), // Refactored
                 value = napkinPlacedCorrectly,
                 dateTime = date
             )
@@ -174,11 +256,14 @@ class ActivityViewModel(
         result.sixthQuestion = arrayListOf(sixthQuestionItem)
     }
 
+    /**
+     * REFACTORED: Uses dynamic IDs.
+     */
     fun setSeventhQuestion(answer: Boolean, date: String) {
 
         val seventhQuestionItem = SeventhQuestionItem(
             isCorrect = MeasureObjectBoolean(
-                measureObject = 141,
+                measureObject = getId("Seven-Question-drag-and-drop", 141), // Refactored
                 value = answer,
                 dateTime = date
             )
@@ -187,6 +272,9 @@ class ActivityViewModel(
         result.seventhQuestion = arrayListOf(seventhQuestionItem)
     }
 
+    /**
+     * REFACTORED: Uses dynamic IDs.
+     */
     fun setEighthQuestion(
         answer: Boolean,
         date: String
@@ -194,7 +282,7 @@ class ActivityViewModel(
 
         val eighthQuestionItem = EighthQuestionItem(
             writtenSentence = MeasureObjectBoolean(
-                measureObject = 142,
+                measureObject = getId("Eight-Question-phrase", 142), // Refactored
                 value = answer,
                 dateTime = date
             )
@@ -203,6 +291,9 @@ class ActivityViewModel(
         result.eighthQuestion = arrayListOf(eighthQuestionItem)
     }
 
+    /**
+     * REFACTORED: Uses dynamic IDs.
+     */
     fun setNinthQuestion(
         answers: List<Pair<Map<Int, String>, Int>>,
         date: String
@@ -212,12 +303,12 @@ class ActivityViewModel(
             val shapesList = map.values.toList()
             SecondQuestionItem(
                 selectedShapes = SelectedShapesStringList(
-                    measureObject = 143,
+                    measureObject = getId("Nine-Question", 143), // Refactored
                     value = shapesList,
                     dateTime = date
                 ),
                 wrongShapes = MeasureObjectInt(
-                    measureObject = 183,
+                    measureObject = getId("wrong_shapes", 183), // Refactored
                     value = 5 - correctShapesCount,
                     dateTime = date
                 )
@@ -227,7 +318,9 @@ class ActivityViewModel(
         result.ninthQuestion = ArrayList(ninthQuestionList)
     }
 
-
+    /**
+     * REFACTORED: Uses dynamic IDs.
+     */
     fun setTenthQuestion(
         answer: ArrayList<Map<String, Double>>,
         date: String
@@ -237,12 +330,12 @@ class ActivityViewModel(
             val (shape, grade) = mapEntry.entries.first()
             TenthQuestionItem(
                 shape = MeasureObjectString(
-                    measureObject = 144,
+                    measureObject = getId("Tenth-Question-shape", 144), // Refactored
                     value = shape,
                     dateTime = date
                 ),
                 grade = MeasureObjectDouble(
-                    measureObject = 145,
+                    measureObject = getId("Tenth-Question-grade", 145), // Refactored
                     value = grade,
                     dateTime = date
                 ),
@@ -254,21 +347,6 @@ class ActivityViewModel(
     }
 
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-
-    fun loadEvaluation(evaluationName: String) {
-        viewModelScope.launch {
-            val clinicId = storage.get(clinicId) ?: return@launch
-            val patientId = storage.get(userId)?.toIntOrNull() ?: return@launch
-
-            api.getSpecificEvaluation(clinicId, patientId, evaluationName)
-                .onSuccess { fetched ->
-                    _hitBerTest.value = fetched
-                }
-                .onError { error ->
-                    println("Error fetching evaluation: $error")
-                }
-        }
-    }
 
     fun uploadImage(
         bitmap: ImageBitmap,
@@ -303,6 +381,7 @@ class ActivityViewModel(
                 )
 
                 result.onSuccess {
+                    // This function call is now refactored
                     saveUploadedImageUrl(currentQuestion, imagePath, date)
 
                     if (isUploadAllImagesFinished == 3) {
@@ -319,15 +398,32 @@ class ActivityViewModel(
         }
     }
 
+    /**
+     * REFACTORED: This logic now maps question numbers to server LABELS, then looks up the ID.
+     */
     private fun saveUploadedImageUrl(currentQuestion: Int?, uploadedUrl: String, date: String) {
-        val imageIds = mapOf(
+        // Map of Question Number -> Server Label
+        // Your dump provided "image" for ID 204. I have ASSUMED the labels for 200 & 202.
+        // Please update these labels if they are incorrect.
+        val imageLabels = mapOf(
+            6 to "Six-Question-image",   // Assumed label for ID 200
+            7 to "Seven-Question-image", // Assumed label for ID 202
+            10 to "image"                // Confirmed label for ID 204
+        )
+
+        // Map of Question Number -> Fallback ID
+        val fallbackIds = mapOf(
             6 to 200,
             7 to 202,
             10 to 204
         )
 
+        // Get the correct label and fallback ID for the current question
+        val label = imageLabels[currentQuestion] ?: "unknown_image"
+        val fallback = fallbackIds[currentQuestion] ?: 0
+
         val image = MeasureObjectString(
-            measureObject = imageIds[currentQuestion] ?: 0,
+            measureObject = getId(label, fallback), // Refactored logic
             value = uploadedUrl,
             dateTime = date
         )
@@ -356,6 +452,9 @@ class ActivityViewModel(
         isUploadAllImagesFinished++
     }
 
+    /**
+     * This helper function logic does not need to change.
+     */
     private fun <T> updateImageInQuestionList(
         list: MutableList<T>,
         createItem: () -> T,
@@ -369,6 +468,9 @@ class ActivityViewModel(
         }
     }
 
+    /**
+     * This function logic does not need to change.
+     */
     private fun uploadEvaluationResults() {
         uploadScope.launch {
             try {
@@ -383,7 +485,7 @@ class ActivityViewModel(
                     _uploadStatus.value = Result.success(Unit)
 
                 }.onError { error ->
-                   _uploadStatus.value = Result.failure(Exception(error.toString()))
+                    _uploadStatus.value = Result.failure(Exception(error.toString()))
                 }
 
             } catch (e: Exception) {
@@ -394,7 +496,3 @@ class ActivityViewModel(
         }
     }
 }
-
-
-
-
