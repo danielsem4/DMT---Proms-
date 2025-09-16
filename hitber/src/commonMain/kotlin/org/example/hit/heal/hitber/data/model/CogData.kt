@@ -9,7 +9,7 @@ data class CogData(
     @SerialName("patient_id") var patientId: Int = 0,
     @SerialName("date") var date: String = "2030-12-12 12:12:12.6",
     @SerialName("clinicId") var clinicId: Int = 0,
-    @SerialName("firstQuestion") var firstQuestion: FirstQuestion = FirstQuestion(),
+    @SerialName("firstQuestion") var firstQuestion: ArrayList<MeasureObjectString> = arrayListOf(),
     @SerialName("secondQuestion") var secondQuestion: ArrayList<SecondQuestionItem> = arrayListOf(),
     @SerialName("thirdQuestion") var thirdQuestion: ArrayList<ThirdQuestionItem> = arrayListOf(),
     @SerialName("fourthQuestion") var fourthQuestion: ArrayList<MeasureObjectString> = arrayListOf(),

@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -21,12 +18,13 @@ import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitb
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
 import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.DropDownItem
+import org.example.hit.heal.core.presentation.components.DropDownQuestionField
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
-import org.example.hit.heal.hitber.presentation.timeAndPlace.components.Questions
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -37,24 +35,28 @@ class TimeAndPlace : Screen {
         val firstQuestionViewModel: FirstQuestionViewModel = koinViewModel()
         val activityViewModel: ActivityViewModel = koinViewModel()
 
-        // Collect both index and answers to trigger recomposition appropriately
+        LaunchedEffect(Unit) {
+            activityViewModel.setFirstQuestion()?.let { list ->
+                firstQuestionViewModel.initializeQuestions(list)
+            }
+        }
+
+        val questions by firstQuestionViewModel.questions.collectAsState()
+        val answers by firstQuestionViewModel.answers.collectAsState()
         val currentGroupIndex by firstQuestionViewModel.currentGroupIndex.collectAsState()
-        val firstQuestionSnapshot by firstQuestionViewModel.firstQuestion.collectAsState()
 
-        val allQuestions = provideQuestions()
-        val groups = remember(allQuestions) { allQuestions.chunked(3) }
+        val groups = remember(questions) { questions.chunked(3) }
         val totalGroups = groups.size
-        val clampedIndex = currentGroupIndex.coerceIn(0, totalGroups - 1)
-        val currentGroup = groups[clampedIndex]
+        val clampedIndex = currentGroupIndex.coerceIn(0, maxOf(totalGroups - 1, 0))
+        val currentGroup = if (totalGroups == 0) emptyList() else groups[clampedIndex]
 
-        // Enable Next only if currently shown questions are all answered
-        val currentGroupKeys = remember(clampedIndex, currentGroup) { currentGroup.map { it.questionKey } }
-        val canGoNext = firstQuestionViewModel.isGroupCompleted(currentGroupKeys, firstQuestionSnapshot)
+        val currentGroupKeys = remember(clampedIndex, currentGroup) { currentGroup.map { it.second } }
+        val canGoNext = firstQuestionViewModel.isGroupCompleted(currentGroupKeys)
 
-        // Progress text like "1-3/7"
         val startIdx = clampedIndex * 3 + 1
         val endIdx = (clampedIndex + 1) * 3
-        val headerProgress = "${startIdx}-${minOf(endIdx, allQuestions.size)}/${allQuestions.size}"
+        val headerProgress = if (questions.isEmpty()) "0/0"
+        else "${startIdx}-${minOf(endIdx, questions.size)}/${questions.size}"
 
         BaseScreen(
             title = stringResource(firstQuestionHitberTitle),
@@ -72,28 +74,36 @@ class TimeAndPlace : Screen {
                     verticalArrangement = Arrangement.spacedBy(paddingLg),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Render only the current chunk of 3
-                    Questions(
-                        viewModel = firstQuestionViewModel,
-                        questionList = currentGroup
-                    )
+                    currentGroup.forEach { (answersList, label) ->
+                        if (answersList.isNotEmpty()) {
+                            val selectedText = answers[label].orEmpty()
+
+                            DropDownQuestionField(
+                                question = label,
+                                dropDownItems = answersList.map(::DropDownItem),
+                                selectedText = selectedText,
+                                onItemClick = { item: DropDownItem ->
+                                    firstQuestionViewModel.firstQuestionAnswer(label, item)
+                                }
+                            )
+                        }
+                    }
                 }
 
-                // Single Next button (enabled only when current group answered)
                 RoundedButton(
-                    text = "Next",
+                    text = if (clampedIndex < totalGroups - 1) "Next" else "Continue",
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    enabled = canGoNext,
                     onClick = {
                         val advanced = firstQuestionViewModel.nextGroup(totalGroups)
                         if (!advanced) {
-                            // No more groups -> save & navigate
-                            activityViewModel.setFirstQuestion(firstQuestionViewModel.firstQuestion.value)
+                            val result = firstQuestionViewModel.buildResult()
+                            activityViewModel.setFirstQuestionResults(result)
                             navigator?.replace(ShapeScreen())
                         }
-                    },
-                    enabled = canGoNext
+                    }
                 )
             }
         )

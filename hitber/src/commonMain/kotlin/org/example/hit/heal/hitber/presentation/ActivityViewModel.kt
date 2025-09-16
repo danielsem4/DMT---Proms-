@@ -110,6 +110,28 @@ class ActivityViewModel(
         }
     }
 
+    fun setFirstQuestion(): ArrayList<Pair<ArrayList<String>, String>>? =
+        hitBerTest.value?.measurement_objects
+            ?.asSequence()
+            ?.filter { it.measurement_screen == 1 }
+            ?.map { mo ->
+                val values: ArrayList<String> =
+                    mo.available_values
+                        ?.map { it.available_value ?: "" }
+                        ?.toCollection(ArrayList()) ?: ArrayList()
+                values to mo.object_label
+            }
+            ?.toCollection(arrayListOf())
+
+    fun setFirstQuestionResults(value: ArrayList<core.data.model.MeasureObjectString>) {
+        val firstScreenObjects = hitBerTest.value?.measurement_objects
+            ?.filter { it.measurement_screen == 1 }
+        value.forEachIndexed { index, measureObjStr ->
+            measureObjStr.measureObject = firstScreenObjects?.get(index)?.id ?: 0
+        }
+        result.firstQuestion = value
+    }
+
     /**
      * Stores the fetched list of objects into our ViewModel's map, indexed by label.
      */
@@ -130,27 +152,6 @@ class ActivityViewModel(
         _capturedBitmap3.value = bitmap
     }
 
-    /**
-     * REFACTORED: This function now overrides the default IDs in the FirstQuestion object
-     * with the dynamic IDs loaded from the server.
-     */
-    fun setFirstQuestion(firstQuestion: FirstQuestion) {
-        // Override the default IDs with the dynamic ones
-        firstQuestion.day.measureObject = getId("Day of the week", 101)
-        firstQuestion.month.measureObject = getId("month-of-year", 102)
-        firstQuestion.year.measureObject = getId("Year", 109)
-        firstQuestion.country.measureObject = getId("country", 104)
-        firstQuestion.city.measureObject = getId("city", 105)
-        firstQuestion.place.measureObject = getId("Hospital", 106)
-        firstQuestion.survey.measureObject = getId("survey-reason", 108)
-
-        // Save the corrected object to the result
-        result.firstQuestion = firstQuestion
-    }
-
-    /**
-     * REFACTORED: Uses dynamic IDs.
-     */
     fun setSecondQuestion(
         answers: List<Pair<Map<Int, String>, Int>>,
         date: String
@@ -160,14 +161,12 @@ class ActivityViewModel(
 
             SecondQuestionItem(
                 selectedShapes = SelectedShapesStringList(
-                    measureObject = getId("Second-Question-Shape", 110), // Refactored
+                    measureObject = getId("Second-Question-Shape", 110),
                     value = shapesList,
                     dateTime = date
                 ),
                 wrongShapes = MeasureObjectInt(
-                    // Note: Your data dump did not provide a label for ID 182.
-                    // Please update "Second-Question-Wrong" if you have the correct server label.
-                    measureObject = getId("Second-Question-Wrong", 182), // Refactored
+                    measureObject = getId("Second-Question-Wrong", 182),
                     value = 5 - correctShapesCount,
                     dateTime = date
                 )
@@ -177,25 +176,23 @@ class ActivityViewModel(
         result.secondQuestion = ArrayList(secondQuestionList)
     }
 
-    /**
-     * REFACTORED: Uses dynamic IDs.
-     */
+
     fun setThirdQuestion(thirdQuestionAnswers: MutableList<Pair<Int, Int>>, date: String) {
 
         val thirdQuestionList = thirdQuestionAnswers.map { (answer, reactionTime) ->
             ThirdQuestionItem(
                 number = MeasureObjectInt(
-                    measureObject = getId("Third-Question-number", 111), // Refactored
+                    measureObject = getId("Third-Question-number", 111),
                     value = answer,
                     dateTime = date
                 ),
                 time = MeasureObjectInt(
-                    measureObject = getId("Third-Question-time", 112), // Refactored
+                    measureObject = getId("Third-Question-time", 112),
                     value = reactionTime,
                     dateTime = date
                 ),
                 isPressed = MeasureObjectBoolean(
-                    measureObject = getId("Third-Question-pressed", 113), // Refactored
+                    measureObject = getId("Third-Question-pressed", 113),
                     value = true,
                     dateTime = date
                 )
@@ -206,18 +203,13 @@ class ActivityViewModel(
         println("thirdQuestion: ${result.thirdQuestion}")
     }
 
-    /**
-     * REFACTORED: Uses dynamic IDs and dynamic label logic.
-     */
     fun setFourthQuestion(answers: List<String>, date: String) {
-        // This assumes 'answers' is a flat list of user answers corresponding to
-        // "Fourth-Question-item-1-answer", "Fourth-Question-item-2-answer", etc.
         val measureObjects = answers.mapIndexed { index, answer ->
             val label = "Fourth-Question-item-${index + 1}-answer"
-            val fallbackId = 133 + (index * 2) // Fallback logic skips "original" IDs (132, 134)
+            val fallbackId = 133 + (index * 2)
 
             MeasureObjectString(
-                measureObject = getId(label, fallbackId), // Refactored
+                measureObject = getId(label, fallbackId),
                 value = answer,
                 dateTime = date
             )
@@ -226,9 +218,6 @@ class ActivityViewModel(
         result.fourthQuestion = ArrayList(measureObjects)
     }
 
-    /**
-     * REFACTORED: Uses dynamic IDs.
-     */
     fun setSixthQuestion(
         fridgeOpened: Boolean,
         itemMovedCorrectly: Boolean,
@@ -237,17 +226,17 @@ class ActivityViewModel(
     ) {
         val sixthQuestionItem = SixthQuestionItem(
             fridgeOpened = MeasureObjectBoolean(
-                measureObject = getId("Six-Question-FridgeOpen", 138), // Refactored
+                measureObject = getId("Six-Question-FridgeOpen", 138),
                 value = fridgeOpened,
                 dateTime = date
             ),
             correctProductDragged = MeasureObjectBoolean(
-                measureObject = getId("Six-Question-Product-dragged", 139), // Refactored
+                measureObject = getId("Six-Question-Product-dragged", 139),
                 value = itemMovedCorrectly,
                 dateTime = date
             ),
             placedOnCorrectNap = MeasureObjectBoolean(
-                measureObject = getId("Six-Question-Product-nap", 140), // Refactored
+                measureObject = getId("Six-Question-Product-nap", 140),
                 value = napkinPlacedCorrectly,
                 dateTime = date
             )
@@ -256,14 +245,12 @@ class ActivityViewModel(
         result.sixthQuestion = arrayListOf(sixthQuestionItem)
     }
 
-    /**
-     * REFACTORED: Uses dynamic IDs.
-     */
+
     fun setSeventhQuestion(answer: Boolean, date: String) {
 
         val seventhQuestionItem = SeventhQuestionItem(
             isCorrect = MeasureObjectBoolean(
-                measureObject = getId("Seven-Question-drag-and-drop", 141), // Refactored
+                measureObject = getId("Seven-Question-drag-and-drop", 141),
                 value = answer,
                 dateTime = date
             )
@@ -272,9 +259,7 @@ class ActivityViewModel(
         result.seventhQuestion = arrayListOf(seventhQuestionItem)
     }
 
-    /**
-     * REFACTORED: Uses dynamic IDs.
-     */
+
     fun setEighthQuestion(
         answer: Boolean,
         date: String
@@ -282,7 +267,7 @@ class ActivityViewModel(
 
         val eighthQuestionItem = EighthQuestionItem(
             writtenSentence = MeasureObjectBoolean(
-                measureObject = getId("Eight-Question-phrase", 142), // Refactored
+                measureObject = getId("Eight-Question-phrase", 142),
                 value = answer,
                 dateTime = date
             )
@@ -291,9 +276,7 @@ class ActivityViewModel(
         result.eighthQuestion = arrayListOf(eighthQuestionItem)
     }
 
-    /**
-     * REFACTORED: Uses dynamic IDs.
-     */
+
     fun setNinthQuestion(
         answers: List<Pair<Map<Int, String>, Int>>,
         date: String
@@ -303,12 +286,12 @@ class ActivityViewModel(
             val shapesList = map.values.toList()
             SecondQuestionItem(
                 selectedShapes = SelectedShapesStringList(
-                    measureObject = getId("Nine-Question", 143), // Refactored
+                    measureObject = getId("Nine-Question", 143),
                     value = shapesList,
                     dateTime = date
                 ),
                 wrongShapes = MeasureObjectInt(
-                    measureObject = getId("wrong_shapes", 183), // Refactored
+                    measureObject = getId("wrong_shapes", 183),
                     value = 5 - correctShapesCount,
                     dateTime = date
                 )
@@ -318,9 +301,7 @@ class ActivityViewModel(
         result.ninthQuestion = ArrayList(ninthQuestionList)
     }
 
-    /**
-     * REFACTORED: Uses dynamic IDs.
-     */
+
     fun setTenthQuestion(
         answer: ArrayList<Map<String, Double>>,
         date: String
@@ -330,12 +311,12 @@ class ActivityViewModel(
             val (shape, grade) = mapEntry.entries.first()
             TenthQuestionItem(
                 shape = MeasureObjectString(
-                    measureObject = getId("Tenth-Question-shape", 144), // Refactored
+                    measureObject = getId("Tenth-Question-shape", 144),
                     value = shape,
                     dateTime = date
                 ),
                 grade = MeasureObjectDouble(
-                    measureObject = getId("Tenth-Question-grade", 145), // Refactored
+                    measureObject = getId("Tenth-Question-grade", 145),
                     value = grade,
                     dateTime = date
                 ),
