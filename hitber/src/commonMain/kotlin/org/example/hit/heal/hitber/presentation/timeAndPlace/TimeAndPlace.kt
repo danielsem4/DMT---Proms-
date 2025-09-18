@@ -1,6 +1,8 @@
 package org.example.hit.heal.hitber.presentation.timeAndPlace
 
+import ToastMessage
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,8 +17,11 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberTitle
+import org.example.hit.heal.core.presentation.Resources.String.fill_fields
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.TabletBaseScreen
+import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.DropDownItem
 import org.example.hit.heal.core.presentation.components.DropDownQuestionField
@@ -28,12 +33,21 @@ import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
+/**
+ * Time and place screen Hitber
+ * Drop downs
+ */
+
 class TimeAndPlace : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.current
         val firstQuestionViewModel: FirstQuestionViewModel = koinViewModel()
         val activityViewModel: ActivityViewModel = koinViewModel()
+
+        var toastMessage by remember { mutableStateOf<String?>(null) }
+        var toastType by remember { mutableStateOf(ToastType.Normal) }
+        val fillFieldsMsg = stringResource(fill_fields)
 
         LaunchedEffect(Unit) {
             activityViewModel.setFirstQuestion()?.let { list ->
@@ -51,60 +65,69 @@ class TimeAndPlace : Screen {
         val currentGroup = if (totalGroups == 0) emptyList() else groups[clampedIndex]
 
         val currentGroupKeys = remember(clampedIndex, currentGroup) { currentGroup.map { it.second } }
-        val canGoNext = firstQuestionViewModel.isGroupCompleted(currentGroupKeys)
 
         val startIdx = clampedIndex * 3 + 1
         val endIdx = (clampedIndex + 1) * 3
         val headerProgress = if (questions.isEmpty()) "0/0"
         else "${startIdx}-${minOf(endIdx, questions.size)}/${questions.size}"
 
-        BaseScreen(
+        TabletBaseScreen(
             title = stringResource(firstQuestionHitberTitle),
-            config = ScreenConfig.TabletConfig,
-            topRightText = headerProgress,
+            onNextClick = {
+                    val isCompleted = firstQuestionViewModel.isGroupCompleted(currentGroupKeys)
+                    if (!isCompleted) {
+                        toastMessage = fillFieldsMsg
+                        toastType = ToastType.Warning
+                    }
+
+                    // Otherwise proceed (advance page or finish)
+                    val advanced = firstQuestionViewModel.nextGroup(totalGroups)
+                    if (!advanced) {
+                        val result = firstQuestionViewModel.buildResult()
+                        activityViewModel.setFirstQuestionResults(result)
+                        navigator?.replace(ShapeScreen())
+                    }
+
+            },
+            question = 1,
             content = {
-                InstructionText(stringResource(firstQuestionHitberInstructions))
+                // Wrap content in a Box so we can show Toast overlayed
+                Box {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = paddingMd)
+                            .verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(paddingLg),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        InstructionText(stringResource(firstQuestionHitberInstructions))
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(horizontal = paddingMd)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(paddingLg),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    currentGroup.forEach { (answersList, label) ->
-                        if (answersList.isNotEmpty()) {
-                            val selectedText = answers[label].orEmpty()
+                        currentGroup.forEach { (answersList, label) ->
+                            if (answersList.isNotEmpty()) {
+                                val selectedText = answers[label].orEmpty()
 
-                            DropDownQuestionField(
-                                question = label,
-                                dropDownItems = answersList.map(::DropDownItem),
-                                selectedText = selectedText,
-                                onItemClick = { item: DropDownItem ->
-                                    firstQuestionViewModel.firstQuestionAnswer(label, item)
-                                }
-                            )
+                                DropDownQuestionField(
+                                    question = label,
+                                    dropDownItems = answersList.map(::DropDownItem),
+                                    selectedText = selectedText,
+                                    onItemClick = { item: DropDownItem ->
+                                        firstQuestionViewModel.firstQuestionAnswer(label, item)
+                                    }
+                                )
+                            }
                         }
+                    }
+
+                    toastMessage?.let { msg ->
+                        ToastMessage(
+                            message = msg,
+                            type = toastType,
+                            alignUp = false,
+                            onDismiss = { toastMessage = null }
+                        )
                     }
                 }
-
-                RoundedButton(
-                    text = if (clampedIndex < totalGroups - 1) "Next" else "Continue",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    enabled = canGoNext,
-                    onClick = {
-                        val advanced = firstQuestionViewModel.nextGroup(totalGroups)
-                        if (!advanced) {
-                            val result = firstQuestionViewModel.buildResult()
-                            activityViewModel.setFirstQuestionResults(result)
-                            navigator?.replace(ShapeScreen())
-                        }
-                    }
-                )
             }
         )
 
