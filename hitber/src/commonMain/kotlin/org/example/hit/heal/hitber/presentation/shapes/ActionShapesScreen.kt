@@ -1,5 +1,6 @@
 package org.example.hit.heal.hitber.presentation.shapes
 
+import ToastMessage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -38,6 +39,7 @@ import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHit
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberTitle
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberUnderstand
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
@@ -70,7 +72,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
         val selectedShapes by secondQuestionViewModel.selectedShapes.collectAsState()
         val listShapes by secondQuestionViewModel.listShapes.collectAsState()
         var showDialog by remember { mutableStateOf(false) }
-
+        val showToast by secondQuestionViewModel.showMaxSelectionToast.collectAsState()
         val shapeNames = selectedShapes.map { it.type.name }
         val canSubmit = selectedShapes.size == 5 // optional: require 5 picks
 
@@ -92,7 +94,6 @@ class ActionShapesScreen(private val question: Int) : Screen {
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.spacedBy(40.dp)
                     ) {
-                        // Show shapes in rows of up to 5
                         val chunkedShapes = listShapes.chunked(5)
                         chunkedShapes.forEach { rowShapes ->
                             Row(
@@ -138,31 +139,21 @@ class ActionShapesScreen(private val question: Int) : Screen {
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .width(200.dp),
-                    enabled = canSubmit, // prevent accidental submits with < 5 picks
+                    enabled = canSubmit,
                     onClick = {
                         CoroutineScope(Dispatchers.Main).launch {
-                            // 1) compute correctness
                             secondQuestionViewModel.calculateCorrectShapesCount()
-
-                            // 2) update attempt based on result
                             secondQuestionViewModel.updateTask()
-
-                            // 3) save this attempt (always)
                             secondQuestionViewModel.secondQuestionAnswer(question, shapeNames)
-
-                            // 4) use the UPDATED value, not a stale collected one
                             val newAttempt = secondQuestionViewModel.attempt.value
 
                             when (newAttempt) {
                                 2 -> {
-                                    // First attempt was wrong -> stay here.
-                                    // Clear picks + remove two distractors + show retry dialog.
                                     secondQuestionViewModel.setNewAttempt()
                                     showDialog = true
-                                    return@launch // do NOT navigate
+                                    return@launch
                                 }
                                 3 -> {
-                                    // Done (either 5/5 on first try OR second attempt ended) -> proceed
                                     proceedAndNavigate(
                                         question,
                                         activityViewModel,
@@ -171,7 +162,6 @@ class ActionShapesScreen(private val question: Int) : Screen {
                                     )
                                 }
                                 else -> {
-                                    // newAttempt == 1 should not happen here; ignore.
                                 }
                             }
                         }
@@ -185,7 +175,6 @@ class ActionShapesScreen(private val question: Int) : Screen {
             navigator?.pop()
         }
 
-        // Retry dialog for the 2nd attempt
         if (showDialog) {
             CustomDialog(
                 icon = errorIcon,
@@ -195,6 +184,17 @@ class ActionShapesScreen(private val question: Int) : Screen {
                 buttons = listOf(
                     stringResource(secondQuestionHitberUnderstand) to { showDialog = false },
                 )
+            )
+        }
+
+        if (showToast) {
+            ToastMessage(
+                message = "You can only select up to 5 shapes",
+                type = ToastType.Warning,
+                alignUp = false,
+                onDismiss = {
+                    secondQuestionViewModel.onToastShown()
+                }
             )
         }
     }
@@ -211,6 +211,7 @@ class ActionShapesScreen(private val question: Int) : Screen {
                 getCurrentFormattedDateTime()
             )
             secondQuestionViewModel.resetSelectedShapes()
+            secondQuestionViewModel.resetAll()
             navigator?.replace(ConcentrationScreen())
         } else {
             activityViewModel.setNinthQuestion(

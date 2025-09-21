@@ -48,6 +48,7 @@ class TimeAndPlace : Screen {
         var toastMessage by remember { mutableStateOf<String?>(null) }
         var toastType by remember { mutableStateOf(ToastType.Normal) }
         val fillFieldsMsg = stringResource(fill_fields)
+        val goodJob = "Good job"
 
         LaunchedEffect(Unit) {
             activityViewModel.setFirstQuestion()?.let { list ->
@@ -64,34 +65,29 @@ class TimeAndPlace : Screen {
         val clampedIndex = currentGroupIndex.coerceIn(0, maxOf(totalGroups - 1, 0))
         val currentGroup = if (totalGroups == 0) emptyList() else groups[clampedIndex]
 
-        val currentGroupKeys = remember(clampedIndex, currentGroup) { currentGroup.map { it.second } }
-
-        val startIdx = clampedIndex * 3 + 1
-        val endIdx = (clampedIndex + 1) * 3
-        val headerProgress = if (questions.isEmpty()) "0/0"
-        else "${startIdx}-${minOf(endIdx, questions.size)}/${questions.size}"
+        val currentGroupKeys =
+            remember(clampedIndex, currentGroup) { currentGroup.map { it.second } }
 
         TabletBaseScreen(
             title = stringResource(firstQuestionHitberTitle),
             onNextClick = {
-                    val isCompleted = firstQuestionViewModel.isGroupCompleted(currentGroupKeys)
-                    if (!isCompleted) {
-                        toastMessage = fillFieldsMsg
-                        toastType = ToastType.Warning
-                    }
-
-                    // Otherwise proceed (advance page or finish)
+                val isCompleted = firstQuestionViewModel.isGroupCompleted(currentGroupKeys)
+                if (!isCompleted) {
+                    toastMessage = fillFieldsMsg
+                    toastType = ToastType.Warning
+                } else {
+                    toastMessage = goodJob
+                    toastType = ToastType.Success
                     val advanced = firstQuestionViewModel.nextGroup(totalGroups)
                     if (!advanced) {
                         val result = firstQuestionViewModel.buildResult()
                         activityViewModel.setFirstQuestionResults(result)
                         navigator?.replace(ShapeScreen())
                     }
-
+                }
             },
             question = 1,
             content = {
-                // Wrap content in a Box so we can show Toast overlayed
                 Box {
                     Column(
                         modifier = Modifier

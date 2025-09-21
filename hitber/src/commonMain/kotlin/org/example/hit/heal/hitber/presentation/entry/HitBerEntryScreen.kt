@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
-import core.utils.lockOrientationLandscape
 import org.example.hit.heal.core.presentation.FontSize.EXTRA_LARGE
 import org.example.hit.heal.core.presentation.FontSize.LARGE
 import org.example.hit.heal.core.presentation.Resources.String.entryHitberGoodLuck

@@ -383,20 +383,17 @@ class ActivityViewModel(
      * REFACTORED: This logic now maps question numbers to server LABELS, then looks up the ID.
      */
     private fun saveUploadedImageUrl(currentQuestion: Int?, uploadedUrl: String, date: String) {
-        // Map of Question Number -> Server Label
-        // Your dump provided "image" for ID 204. I have ASSUMED the labels for 200 & 202.
-        // Please update these labels if they are incorrect.
         val imageLabels = mapOf(
-            6 to "Six-Question-image",   // Assumed label for ID 200
-            7 to "Seven-Question-image", // Assumed label for ID 202
-            10 to "image"                // Confirmed label for ID 204
+            6 to "Six-Question-image",
+            7 to "Seven-Question-image",
+            10 to "image"
         )
 
         // Map of Question Number -> Fallback ID
         val fallbackIds = mapOf(
-            6 to 200,
-            7 to 202,
-            10 to 204
+            6 to 201,
+            7 to 203,
+            10 to 205
         )
 
         // Get the correct label and fallback ID for the current question
