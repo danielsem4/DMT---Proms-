@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,6 +39,10 @@ import org.example.hit.heal.hitber.presentation.concentration.components.RandomN
 import org.example.hit.heal.hitber.presentation.naming.NamingScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+
+/**
+ *
+ */
 
 class ConcentrationScreen : Screen {
     @Composable
@@ -128,7 +132,6 @@ class ConcentrationScreen : Screen {
                 }
             }
         )
-
 
         RegisterBackHandler(this) {
             navigator?.pop()

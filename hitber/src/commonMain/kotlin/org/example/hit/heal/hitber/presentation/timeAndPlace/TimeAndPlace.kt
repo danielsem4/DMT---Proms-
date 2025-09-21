@@ -1,15 +1,14 @@
 package org.example.hit.heal.hitber.presentation.timeAndPlace
 
+import ToastMessage
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -18,17 +17,26 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberInstructions
 import org.example.hit.heal.core.presentation.Resources.String.firstQuestionHitberTitle
+import org.example.hit.heal.core.presentation.Resources.String.fill_fields
 import org.example.hit.heal.core.presentation.Sizes.paddingLg
 import org.example.hit.heal.core.presentation.Sizes.paddingMd
+import org.example.hit.heal.core.presentation.TabletBaseScreen
+import org.example.hit.heal.core.presentation.ToastType
 import org.example.hit.heal.core.presentation.components.BaseScreen
+import org.example.hit.heal.core.presentation.components.DropDownItem
+import org.example.hit.heal.core.presentation.components.DropDownQuestionField
 import org.example.hit.heal.core.presentation.components.RoundedButton
 import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.example.hit.heal.hitber.presentation.shapes.ShapeScreen
-import org.example.hit.heal.hitber.presentation.timeAndPlace.components.Questions
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+
+/**
+ * Time and place screen Hitber
+ * Drop downs
+ */
 
 class TimeAndPlace : Screen {
     @Composable
@@ -37,64 +45,89 @@ class TimeAndPlace : Screen {
         val firstQuestionViewModel: FirstQuestionViewModel = koinViewModel()
         val activityViewModel: ActivityViewModel = koinViewModel()
 
-        // Collect both index and answers to trigger recomposition appropriately
+        var toastMessage by remember { mutableStateOf<String?>(null) }
+        var toastType by remember { mutableStateOf(ToastType.Normal) }
+        val fillFieldsMsg = stringResource(fill_fields)
+
+        LaunchedEffect(Unit) {
+            activityViewModel.setFirstQuestion()?.let { list ->
+                firstQuestionViewModel.initializeQuestions(list)
+            }
+        }
+
+        val questions by firstQuestionViewModel.questions.collectAsState()
+        val answers by firstQuestionViewModel.answers.collectAsState()
         val currentGroupIndex by firstQuestionViewModel.currentGroupIndex.collectAsState()
-        val firstQuestionSnapshot by firstQuestionViewModel.firstQuestion.collectAsState()
 
-        val allQuestions = provideQuestions()
-        val groups = remember(allQuestions) { allQuestions.chunked(3) }
+        val groups = remember(questions) { questions.chunked(3) }
         val totalGroups = groups.size
-        val clampedIndex = currentGroupIndex.coerceIn(0, totalGroups - 1)
-        val currentGroup = groups[clampedIndex]
+        val clampedIndex = currentGroupIndex.coerceIn(0, maxOf(totalGroups - 1, 0))
+        val currentGroup = if (totalGroups == 0) emptyList() else groups[clampedIndex]
 
-        // Enable Next only if currently shown questions are all answered
-        val currentGroupKeys = remember(clampedIndex, currentGroup) { currentGroup.map { it.questionKey } }
-        val canGoNext = firstQuestionViewModel.isGroupCompleted(currentGroupKeys, firstQuestionSnapshot)
+        val currentGroupKeys = remember(clampedIndex, currentGroup) { currentGroup.map { it.second } }
 
-        // Progress text like "1-3/7"
         val startIdx = clampedIndex * 3 + 1
         val endIdx = (clampedIndex + 1) * 3
-        val headerProgress = "${startIdx}-${minOf(endIdx, allQuestions.size)}/${allQuestions.size}"
+        val headerProgress = if (questions.isEmpty()) "0/0"
+        else "${startIdx}-${minOf(endIdx, questions.size)}/${questions.size}"
 
-        BaseScreen(
+        TabletBaseScreen(
             title = stringResource(firstQuestionHitberTitle),
-            config = ScreenConfig.TabletConfig,
-            topRightText = headerProgress,
+            onNextClick = {
+                    val isCompleted = firstQuestionViewModel.isGroupCompleted(currentGroupKeys)
+                    if (!isCompleted) {
+                        toastMessage = fillFieldsMsg
+                        toastType = ToastType.Warning
+                    }
+
+                    // Otherwise proceed (advance page or finish)
+                    val advanced = firstQuestionViewModel.nextGroup(totalGroups)
+                    if (!advanced) {
+                        val result = firstQuestionViewModel.buildResult()
+                        activityViewModel.setFirstQuestionResults(result)
+                        navigator?.replace(ShapeScreen())
+                    }
+
+            },
+            question = 1,
             content = {
-                InstructionText(stringResource(firstQuestionHitberInstructions))
+                // Wrap content in a Box so we can show Toast overlayed
+                Box {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = paddingMd)
+                            .verticalScroll(rememberScrollState()),
+                        verticalArrangement = Arrangement.spacedBy(paddingLg),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        InstructionText(stringResource(firstQuestionHitberInstructions))
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(horizontal = paddingMd)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(paddingLg),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Render only the current chunk of 3
-                    Questions(
-                        viewModel = firstQuestionViewModel,
-                        questionList = currentGroup
-                    )
-                }
+                        currentGroup.forEach { (answersList, label) ->
+                            if (answersList.isNotEmpty()) {
+                                val selectedText = answers[label].orEmpty()
 
-                // Single Next button (enabled only when current group answered)
-                RoundedButton(
-                    text = "Next",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    onClick = {
-                        val advanced = firstQuestionViewModel.nextGroup(totalGroups)
-                        if (!advanced) {
-                            // No more groups -> save & navigate
-                            activityViewModel.setFirstQuestion(firstQuestionViewModel.firstQuestion.value)
-                            navigator?.replace(ShapeScreen())
+                                DropDownQuestionField(
+                                    question = label,
+                                    dropDownItems = answersList.map(::DropDownItem),
+                                    selectedText = selectedText,
+                                    onItemClick = { item: DropDownItem ->
+                                        firstQuestionViewModel.firstQuestionAnswer(label, item)
+                                    }
+                                )
+                            }
                         }
-                    },
-                    enabled = canGoNext
-                )
+                    }
+
+                    toastMessage?.let { msg ->
+                        ToastMessage(
+                            message = msg,
+                            type = toastType,
+                            alignUp = false,
+                            onDismiss = { toastMessage = null }
+                        )
+                    }
+                }
             }
         )
 

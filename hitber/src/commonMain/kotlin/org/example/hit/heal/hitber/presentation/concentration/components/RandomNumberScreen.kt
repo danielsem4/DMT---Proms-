@@ -3,7 +3,9 @@ package org.example.hit.heal.hitber.presentation.concentration.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,7 +19,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.example.hit.heal.core.presentation.FontSize.EXTRA_HUGE
 import org.example.hit.heal.core.presentation.primaryColor
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 // Displays a number that changes color momentarily on click and sends the selected number.
 @Composable
@@ -32,6 +36,7 @@ fun RandomNumberScreen(
 
     Box(
         modifier = modifier
+            .fillMaxSize()
             .background(if (isClicked) primaryColor else Color.White)
             .clickable(enabled = isClickable) {
                 isClicked = true
@@ -47,9 +52,20 @@ fun RandomNumberScreen(
     ) {
         Text(
             text = number?.toString() ?: "",
-            fontSize = 50.sp,
+            fontSize = EXTRA_HUGE,
             fontWeight = FontWeight.Bold,
             color = if (isClicked) Color.White else primaryColor
         )
     }
+}
+
+@Preview
+@Composable
+fun RandomNumberScreenPreview() {
+    RandomNumberScreen(
+        number = 42,
+        isClickable = true,
+        onNumberClicked = {},
+        modifier = Modifier
+    )
 }

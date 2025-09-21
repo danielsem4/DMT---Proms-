@@ -68,7 +68,6 @@ fun BaseScreen(
                 .fillMaxSize()
                 .background(backgroundColor)
                 .padding(bottom = statusBarValues.calculateBottomPadding())
-                .verticalScroll(rememberScrollState())
         ) {
             // Top Bar
             Box(

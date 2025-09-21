@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="evaluation_title">Evaluation</string>
-    <string name="flip_button_label">Flip</string>
-    <string name="slider_value_prefix">Value: </string>
-    <string name="unsupported_question_type">Unsupported question type:</string>
-    <string name="undo">Undo</string>
-    <string name="clear">Clear</string>
-</resources>

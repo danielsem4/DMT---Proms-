@@ -36,7 +36,6 @@ import core.data.model.evaluation.EvaluationValue
 import dmt_proms.composeapp.generated.resources.Res
 import dmt_proms.composeapp.generated.resources.body_back
 import dmt_proms.composeapp.generated.resources.body_front
-import dmt_proms.composeapp.generated.resources.flip_button_label
 import org.example.hit.heal.core.presentation.primaryColor
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -134,7 +133,7 @@ fun HumanBodyModelSelector(
             ) {
                 Icon(
                     imageVector = flipIcon,
-                    contentDescription = stringResource(Res.string.flip_button_label),
+                    contentDescription = "Button",
                     tint = Color.White,
                     modifier = Modifier.size(16.dp)
                 )
