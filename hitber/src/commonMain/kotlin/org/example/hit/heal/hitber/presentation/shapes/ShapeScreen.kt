@@ -3,24 +3,25 @@ package org.example.hit.heal.hitber.presentation.shapes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import core.utils.RegisterBackHandler
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.example.hit.heal.core.presentation.Resources.Icon.profileIcon
 import org.example.hit.heal.core.presentation.Resources.String.`continue`
 import org.example.hit.heal.core.presentation.Resources.String.secondQuestionHitberDialogInstructions
@@ -36,17 +37,20 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 /**
- * Memorize screen:
- * Shows 5 target shapes to memorize, then continues to the action screen.
+ * Show the 5 shapes for 30 seconds
  */
 
 class ShapeScreen : Screen {
+
     @Composable
     override fun Content() {
-
         val navigator = LocalNavigator.current
         val secondQuestionViewModel: SecondQuestionViewModel = koinViewModel()
         var showDialog by remember { mutableStateOf(true) }
+
+        var secondsLeft by remember { mutableStateOf(0) }
+        var timerJob by remember { mutableStateOf<Job?>(null) } // keep reference
+
         val shapeSet by secondQuestionViewModel.selectedSet.collectAsState()
 
         BaseScreen(
@@ -54,46 +58,67 @@ class ShapeScreen : Screen {
             config = ScreenConfig.TabletConfig,
             topRightText = "2/10",
             content = {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .background(color = Color.White),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly,
+                androidx.compose.foundation.layout.Box(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    // Display each shape icon from the selected set (5)
-                    shapeSet.forEach { shapeRes ->
-                        Icon(
-                            painter = painterResource(shapeRes.drawable),
-                            contentDescription = stringResource(secondQuestionHitberTitle),
-                            tint = Color.Unspecified,
-                            modifier = Modifier.size(150.dp)
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.Center)
+                            .background(color = Color.White),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                    ) {
+                        shapeSet.forEach { shapeRes ->
+                            Icon(
+                                painter = painterResource(shapeRes.drawable),
+                                contentDescription = stringResource(secondQuestionHitberTitle),
+                                tint = Color.Unspecified,
+                                modifier = Modifier.size(150.dp)
+                            )
+                        }
+                    }
+
+                    RoundedButton(
+                        text = stringResource(`continue`),
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 24.dp)
+                            .width(200.dp),
+                        onClick = {
+                            // cancel timer if active
+                            timerJob?.cancel()
+                            timerJob = null
+                            navigator?.replace(ActionShapesScreen(2))
+                        }
+                    )
+
+                    if (secondsLeft > 0) {
+                        Text(
+                            text = "${secondsLeft}s",
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(12.dp),
+                            fontSize = 14.sp,
+                            color = Color.DarkGray
                         )
                     }
                 }
-
-                RoundedButton(
-                    text = stringResource(`continue`),
-                    modifier = Modifier.align(Alignment.CenterHorizontally).width(200.dp),
-                    onClick = {
-                        navigator?.replace(ActionShapesScreen(2))
-                    }
-                )
             }
         )
 
-        // Load a random 5-shape target set for the task
+        // Load shapes
         LaunchedEffect(Unit) {
             secondQuestionViewModel.setRandomShapeSet()
         }
 
         RegisterBackHandler(this) {
+            timerJob?.cancel()
             secondQuestionViewModel.resetAll()
             navigator?.pop()
         }
 
-        // Show dialog with instructions initially
+        // Show dialog
         if (showDialog) {
             CustomDialog(
                 icon = profileIcon,
@@ -104,6 +129,21 @@ class ShapeScreen : Screen {
                     stringResource(secondQuestionHitberUnderstand) to { showDialog = false },
                 )
             )
+        }
+
+        // Start timer after dialog closes
+        LaunchedEffect(showDialog) {
+            if (!showDialog) {
+                secondsLeft = 30
+                timerJob?.cancel() // cancel previous if exists
+                timerJob = launch {
+                    while (secondsLeft > 0) {
+                        delay(1000)
+                        secondsLeft -= 1
+                    }
+                    navigator?.replace(ActionShapesScreen(2))
+                }
+            }
         }
     }
 }
