@@ -37,7 +37,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.example.hit.heal.hitber.data.model.SeventhQuestionItem
 import org.example.hit.heal.hitber.data.model.SixthQuestionItem
-import org.example.hit.heal.hitber.data.model.TenthQuestionItem
+import org.example.hit.heal.hitber.data.model.TenthQuestionImage
+import org.example.hit.heal.hitber.data.model.TenthQuestionShape
+import org.example.hit.heal.hitber.data.model.TenthQuestionShapeValue
 
 /**
  *
@@ -306,25 +308,26 @@ class ActivityViewModel(
         answer: ArrayList<Map<String, Double>>,
         date: String
     ) {
+        // 1. Separate shapes into correct and wrong lists based on their grade
+        val correctShapes = answer.filter { it.values.first() == 1.0 }.map { it.keys.first() }
+        val wrongShapes = answer.filter { it.values.first() == 0.0 }.map { it.keys.first() }
 
-        val tenthQuestionList = answer.map { mapEntry ->
-            val (shape, grade) = mapEntry.entries.first()
-            TenthQuestionItem(
-                shape = MeasureObjectString(
-                    measureObject = getId("Tenth-Question-shape", 144),
-                    value = shape,
-                    dateTime = date
-                ),
-                grade = MeasureObjectDouble(
-                    measureObject = getId("Tenth-Question-grade", 145),
-                    value = grade,
-                    dateTime = date
-                ),
-                imageUrl = null
-            )
-        }
+        // 2. Create the payload object with the two lists
+        val shapePayload = TenthQuestionShapeValue(
+            correct = correctShapes,
+            wrong = wrongShapes
+        )
 
-        result.tenthQuestion = ArrayList(tenthQuestionList)
+        // 3. Create the main TenthQuestionShape object
+        val tenthQuestionShape = TenthQuestionShape(
+            dateTime = date,
+            measureObject = getId("Tenth-Question-shape", 144), // The main object ID
+            value = shapePayload
+        )
+
+        // 4. Clear the old list and add the new, single shape object
+        result.tenthQuestion.clear()
+        result.tenthQuestion.add(tenthQuestionShape)
     }
 
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -386,22 +389,20 @@ class ActivityViewModel(
         val imageLabels = mapOf(
             6 to "Six-Question-image",
             7 to "Seven-Question-image",
-            10 to "image"
+            10 to "image" // The label for the 10th question image object
         )
 
-        // Map of Question Number -> Fallback ID
         val fallbackIds = mapOf(
             6 to 201,
             7 to 203,
-            10 to 205
+            10 to 205 // The fallback ID for the 10th question image object
         )
 
-        // Get the correct label and fallback ID for the current question
         val label = imageLabels[currentQuestion] ?: "unknown_image"
         val fallback = fallbackIds[currentQuestion] ?: 0
 
         val image = MeasureObjectString(
-            measureObject = getId(label, fallback), // Refactored logic
+            measureObject = getId(label, fallback),
             value = uploadedUrl,
             dateTime = date
         )
@@ -420,11 +421,9 @@ class ActivityViewModel(
             )
 
             10 -> {
-                updateImageInQuestionList(
-                    list = result.tenthQuestion,
-                    createItem = { TenthQuestionItem(imageUrl = image) },
-                    updateItem = { it.copy(imageUrl = image) },
-                )
+                // **REPLACED LOGIC**: Instead of updating, create and add a new object
+                val tenthQuestionImage = TenthQuestionImage(imageUrl = image)
+                result.tenthQuestion.add(tenthQuestionImage)
             }
         }
         isUploadAllImagesFinished++
