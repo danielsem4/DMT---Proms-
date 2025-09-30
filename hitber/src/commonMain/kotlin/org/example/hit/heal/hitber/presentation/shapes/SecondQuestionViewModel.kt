@@ -13,26 +13,43 @@ private const val MAX_SELECTIONS = 5
 /**
  * Shapes viewmodel
  */
-
 class SecondQuestionViewModel : ViewModel() {
     private val allShapes = shapeList
+
     private val _listShapes = MutableStateFlow<List<Shape>>(allShapes)
     val listShapes: StateFlow<List<Shape>> = _listShapes.asStateFlow()
+
     private val _selectedSet = MutableStateFlow<List<Shape>>(emptyList())
     val selectedSet: StateFlow<List<Shape>> = _selectedSet.asStateFlow()
+
     private val _selectedShapes = MutableStateFlow<List<Shape>>(emptyList())
     val selectedShapes: StateFlow<List<Shape>> = _selectedShapes.asStateFlow()
+
     private val _attempt = MutableStateFlow(1)
     val attempt: StateFlow<Int> = _attempt.asStateFlow()
+
     var secondQuestionAnswersList: ArrayList<Pair<Map<Int, String>, Int>> = arrayListOf()
+
     private val _showMaxSelectionToast = MutableStateFlow(false)
     val showMaxSelectionToast: StateFlow<Boolean> = _showMaxSelectionToast.asStateFlow()
+
     private var correctShapesCount = 0
 
-    fun setRandomShapeSet() {
+    /** Public: ensure we have a chosen target set; choose once. */
+    fun ensureShapeSet() {
+        if (_selectedSet.value.isEmpty()) {
+            setRandomShapeSet()
+        } else {
+            // whenever we revisit, just reset the attempt state but keep targets
+            resetSelectionsKeepSet()
+        }
+    }
+
+    /** Internal: choose a fresh random set and initialize state. */
+    private fun setRandomShapeSet() {
         val selectedTypes = shapeSets.random()
         _selectedSet.value = allShapes.filter { it.type in selectedTypes }
-        resetSelectedShapes()
+        resetSelectionsKeepSet()
         _listShapes.value = allShapes
     }
 
@@ -54,7 +71,6 @@ class SecondQuestionViewModel : ViewModel() {
     fun calculateCorrectShapesCount() {
         correctShapesCount = selectedShapes.value.count { it in selectedSet.value }
     }
-
 
     fun updateTask() {
         when {
@@ -84,16 +100,26 @@ class SecondQuestionViewModel : ViewModel() {
         removeTwoDistractors()
     }
 
-    fun resetSelectedShapes() {
+    /** Resets attempt/selection UI but keeps the chosen targets intact. */
+    fun resetSelectionsKeepSet() {
+        secondQuestionAnswersList.clear()
         _selectedShapes.value = emptyList()
         correctShapesCount = 0
         _attempt.value = 1
         _listShapes.value = allShapes
+        _showMaxSelectionToast.value = false
     }
 
-    fun resetAll() {
-        resetSelectedShapes()
+    /** Backwards-compat aliases so existing calls compile */
+    fun resetSelectedShapes() = resetSelectionsKeepSet()
+
+    /** Clears everything, including the chosen targets (use at end of test or abort). */
+    fun resetEverything() {
+        resetSelectionsKeepSet()
         _selectedSet.value = emptyList()
         secondQuestionAnswersList.clear()
     }
+
+    /** Old name kept in case other code calls it. */
+    fun resetAll() = resetEverything()
 }

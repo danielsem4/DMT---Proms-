@@ -17,6 +17,7 @@ class UploadTestResultsUseCase(
     suspend inline fun <reified T> execute(results: T): Result<String, DataError.Remote> {
         return try {
             val jsonBody = json.encodeToString(results)
+            println(jsonBody)
             api.sendResults(jsonBody)
         } catch (e: Exception) {
             Result.Error(DataError.Remote.UNKNOWN)

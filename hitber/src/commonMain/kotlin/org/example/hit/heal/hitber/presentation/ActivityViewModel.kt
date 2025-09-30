@@ -37,13 +37,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.example.hit.heal.hitber.data.model.SeventhQuestionItem
 import org.example.hit.heal.hitber.data.model.SixthQuestionItem
-import org.example.hit.heal.hitber.data.model.TenthQuestionEntry
 import org.example.hit.heal.hitber.data.model.TenthQuestionShape
 import org.example.hit.heal.hitber.data.model.TenthQuestionShapeValue
-
-/**
- *
- */
+import org.example.hit.heal.hitber.data.model.TenthQuestionType
 
 class ActivityViewModel(
     private val uploadImageUseCase: UploadFileUseCase,
@@ -75,16 +71,8 @@ class ActivityViewModel(
 
     private var isUploadAllImagesFinished = 0
 
-    /**
-     * This map will store your server configuration, mapping labels like "city"
-     * to the complete EvaluationObject which contains the dynamic ID.
-     */
     private var dynamicObjectMap: Map<String, EvaluationObject> = emptyMap()
 
-    /**
-     * Helper function to safely get the dynamic ID from the map.
-     * If the label isn't found, it returns the hardcoded fallback ID and logs a warning.
-     */
     private fun getId(label: String, fallback: Int): Int {
         return dynamicObjectMap[label]?.id ?: run {
             println("Warning: Dynamic ID for label '$label' not found. Using fallback $fallback.")
@@ -92,9 +80,6 @@ class ActivityViewModel(
         }
     }
 
-    /**
-     * Fetches the evaluation and populates the dynamic ID map.
-     */
     fun loadEvaluation(evaluationName: String) {
         viewModelScope.launch {
             val clinicId = storage.get(clinicId) ?: return@launch
@@ -103,7 +88,6 @@ class ActivityViewModel(
             api.getSpecificEvaluation(clinicId, patientId, evaluationName)
                 .onSuccess { fetched ->
                     _hitBerTest.value = fetched
-                    // This is the crucial step: populate the map on success
                     fetched.measurement_objects?.let { setDynamicIds(it) }
                 }
                 .onError { error ->
@@ -134,25 +118,14 @@ class ActivityViewModel(
         result.firstQuestion = value
     }
 
-    /**
-     * Stores the fetched list of objects into our ViewModel's map, indexed by label.
-     */
     private fun setDynamicIds(measurementObjects: List<EvaluationObject>) {
         dynamicObjectMap = measurementObjects.associateBy { it.object_label }
         println("Dynamic Object Map successfully loaded.")
     }
 
-    fun saveBitmap1(bitmap: ImageBitmap) {
-        _capturedBitmap1.value = bitmap
-    }
-
-    fun saveBitmap2(bitmap: ImageBitmap) {
-        _capturedBitmap2.value = bitmap
-    }
-
-    fun saveBitmap3(bitmap: ImageBitmap) {
-        _capturedBitmap3.value = bitmap
-    }
+    fun saveBitmap1(bitmap: ImageBitmap) { _capturedBitmap1.value = bitmap }
+    fun saveBitmap2(bitmap: ImageBitmap) { _capturedBitmap2.value = bitmap }
+    fun saveBitmap3(bitmap: ImageBitmap) { _capturedBitmap3.value = bitmap }
 
     fun setSecondQuestion(
         answers: List<Pair<Map<Int, String>, Int>>,
@@ -169,7 +142,7 @@ class ActivityViewModel(
                 ),
                 wrongShapes = MeasureObjectInt(
                     measureObject = getId("Second-Question-Wrong", 182),
-                    value = 5 - correctShapesCount,
+                    value = correctShapesCount,
                     dateTime = date
                 )
             )
@@ -178,9 +151,7 @@ class ActivityViewModel(
         result.secondQuestion = ArrayList(secondQuestionList)
     }
 
-
     fun setThirdQuestion(thirdQuestionAnswers: MutableList<Pair<Int, Int>>, date: String) {
-
         val thirdQuestionList = thirdQuestionAnswers.map { (answer, reactionTime) ->
             ThirdQuestionItem(
                 number = MeasureObjectInt(
@@ -200,9 +171,7 @@ class ActivityViewModel(
                 )
             )
         }
-
         result.thirdQuestion = ArrayList(thirdQuestionList)
-        println("thirdQuestion: ${result.thirdQuestion}")
     }
 
     fun setFourthQuestion(answers: List<String>, date: String) {
@@ -216,7 +185,6 @@ class ActivityViewModel(
                 dateTime = date
             )
         }
-
         result.fourthQuestion = ArrayList(measureObjects)
     }
 
@@ -243,13 +211,10 @@ class ActivityViewModel(
                 dateTime = date
             )
         )
-
         result.sixthQuestion = arrayListOf(sixthQuestionItem)
     }
 
-
     fun setSeventhQuestion(answer: Boolean, date: String) {
-
         val seventhQuestionItem = SeventhQuestionItem(
             isCorrect = MeasureObjectBoolean(
                 measureObject = getId("Seven-Question-drag-and-drop", 141),
@@ -257,16 +222,10 @@ class ActivityViewModel(
                 dateTime = date
             )
         )
-
         result.seventhQuestion = arrayListOf(seventhQuestionItem)
     }
 
-
-    fun setEighthQuestion(
-        answer: Boolean,
-        date: String
-    ) {
-
+    fun setEighthQuestion(answer: Boolean, date: String) {
         val eighthQuestionItem = EighthQuestionItem(
             writtenSentence = MeasureObjectBoolean(
                 measureObject = getId("Eight-Question-phrase", 142),
@@ -274,16 +233,13 @@ class ActivityViewModel(
                 dateTime = date
             )
         )
-
         result.eighthQuestion = arrayListOf(eighthQuestionItem)
     }
-
 
     fun setNinthQuestion(
         answers: List<Pair<Map<Int, String>, Int>>,
         date: String
     ) {
-
         val ninthQuestionList = answers.map { (map, correctShapesCount) ->
             val shapesList = map.values.toList()
             SecondQuestionItem(
@@ -294,15 +250,13 @@ class ActivityViewModel(
                 ),
                 wrongShapes = MeasureObjectInt(
                     measureObject = getId("wrong_shapes", 183),
-                    value = 5 - correctShapesCount,
+                    value = correctShapesCount,
                     dateTime = date
                 )
             )
         }
-
         result.ninthQuestion = ArrayList(ninthQuestionList)
     }
-
 
     fun setTenthQuestion(
         answer: ArrayList<Map<String, Float>>,
@@ -315,29 +269,18 @@ class ActivityViewModel(
             val e = it.entries.firstOrNull() ?: return@forEach
             val shape = e.key
             val grade = e.value
-
-            if (grade == 1f) {
-                correct += shape
-            } else{
-                wrong += shape
-            }
+            if (grade == 1f) correct += shape else wrong += shape
         }
 
-        val correctStr = if (correct.isEmpty()) "[]"
-        else correct.joinToString(prefix = "[\"", postfix = "\"]", separator = "\",\"")
-        val wrongStr = if (wrong.isEmpty()) "[]"
-        else wrong.joinToString(prefix = "[\"", postfix = "\"]", separator = "\",\"")
+        val correctStr = if (correct.isEmpty()) "[]" else correct.joinToString(prefix = "[\"", postfix = "\"]", separator = "\",\"")
+        val wrongStr = if (wrong.isEmpty()) "[]" else wrong.joinToString(prefix = "[\"", postfix = "\"]", separator = "\",\"")
 
-        // Add ONE aggregated item
         result.tenthQuestion.add(
-            TenthQuestionEntry(
-                shapePayload = TenthQuestionShape(
+            TenthQuestionType.TenthQuestionItem(
+                payload = TenthQuestionShape(
                     dateTime = date,
                     measureObject = 144,
-                    value = TenthQuestionShapeValue(
-                        correct = correctStr,
-                        wrong = wrongStr
-                    )
+                    value = TenthQuestionShapeValue(correctStr, wrongStr)
                 )
             )
         )
@@ -350,9 +293,7 @@ class ActivityViewModel(
         date: String,
         currentQuestion: Int,
     ) {
-        if (bitmap.width <= 1 || bitmap.height <= 1) {
-            return
-        }
+        if (bitmap.width <= 1 || bitmap.height <= 1) return
 
         val imageByteArray = bitmap.toByteArray()
 
@@ -379,12 +320,10 @@ class ActivityViewModel(
 
                 result.onSuccess {
                     saveUploadedImageUrl(currentQuestion, imagePath, date)
-
                     if (isUploadAllImagesFinished == 3) {
                         uploadEvaluationResults()
                         isUploadAllImagesFinished = 0
                     }
-
                 }.onError { error ->
                     _uploadStatus.value = Result.failure(Exception(error.toString()))
                 }
@@ -394,9 +333,6 @@ class ActivityViewModel(
         }
     }
 
-    /**
-     * REFACTORED: This logic now maps question numbers to server LABELS, then looks up the ID.
-     */
     private fun saveUploadedImageUrl(currentQuestion: Int?, uploadedUrl: String, date: String) {
         val imageLabels = mapOf(
             6 to "Six-Question-image",
@@ -425,21 +361,15 @@ class ActivityViewModel(
                 createItem = { SixthQuestionItem(imageUrl = image) },
                 updateItem = { it.copy(imageUrl = image) }
             )
-
             7 -> updateImageInQuestionList(
                 list = result.seventhQuestion,
                 createItem = { SeventhQuestionItem(imageUrl = image) },
                 updateItem = { it.copy(imageUrl = image) }
             )
-
             10 -> {
                 result.tenthQuestion.add(
-                    TenthQuestionEntry(
-                        imageUrl = MeasureObjectString(
-                            getId(label, fallback),
-                            uploadedUrl,
-                            date
-                        )
+                    TenthQuestionType.TenthQuestionImage(
+                        imageUrl = MeasureObjectString(getId(label, fallback), uploadedUrl, date)
                     )
                 )
             }
@@ -447,9 +377,6 @@ class ActivityViewModel(
         isUploadAllImagesFinished++
     }
 
-    /**
-     * This helper function logic does not need to change.
-     */
     private fun <T> updateImageInQuestionList(
         list: MutableList<T>,
         createItem: () -> T,
@@ -463,9 +390,6 @@ class ActivityViewModel(
         }
     }
 
-    /**
-     * This function logic does not need to change.
-     */
     private fun uploadEvaluationResults() {
         uploadScope.launch {
             try {
@@ -478,7 +402,6 @@ class ActivityViewModel(
 
                 uploadResult.onSuccess {
                     _uploadStatus.value = Result.success(Unit)
-
                 }.onError { error ->
                     _uploadStatus.value = Result.failure(Exception(error.toString()))
                 }
@@ -487,6 +410,7 @@ class ActivityViewModel(
                 _uploadStatus.value = Result.failure(Exception(DataError.Remote.UNKNOWN.toString()))
             } finally {
                 _isLoading.value = false
+                result = CogData()
             }
         }
     }

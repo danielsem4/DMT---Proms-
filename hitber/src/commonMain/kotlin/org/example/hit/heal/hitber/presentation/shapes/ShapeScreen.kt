@@ -39,7 +39,6 @@ import org.koin.compose.viewmodel.koinViewModel
 /**
  * Show the 5 shapes for 30 seconds
  */
-
 class ShapeScreen : Screen {
 
     @Composable
@@ -107,14 +106,14 @@ class ShapeScreen : Screen {
             }
         )
 
-        // Load shapes
+        // Load shapes only if not already set
         LaunchedEffect(Unit) {
-            secondQuestionViewModel.setRandomShapeSet()
+            secondQuestionViewModel.ensureShapeSet()
         }
 
         RegisterBackHandler(this) {
             timerJob?.cancel()
-            secondQuestionViewModel.resetAll()
+            secondQuestionViewModel.resetEverything()
             navigator?.pop()
         }
 

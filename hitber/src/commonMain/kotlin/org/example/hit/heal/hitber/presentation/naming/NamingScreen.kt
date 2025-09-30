@@ -37,6 +37,7 @@ import org.example.hit.heal.core.presentation.components.ScreenConfig
 import org.example.hit.heal.hitber.presentation.ActivityViewModel
 import org.example.hit.heal.hitber.presentation.components.InstructionText
 import org.example.hit.heal.hitber.presentation.repetition.RepetitionScreen
+import org.example.hit.heal.hitber.presentation.understanding.UnderstandingScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -81,7 +82,7 @@ class NamingScreen : Screen {
 
         // 4. Determine button text based on the step
         val buttonText = if (isFirstImage) {
-            "Next Image" // Or stringResource(next_image)
+            stringResource(next)
         } else {
             stringResource(next)
         }
@@ -146,7 +147,7 @@ class NamingScreen : Screen {
                                     fourthQuestionViewModel.fourthQuestionAnswers,
                                     getCurrentFormattedDateTime()
                                 )
-                                navigator?.replace(RepetitionScreen())
+                                navigator?.replace(UnderstandingScreen())
                             }
                         }
                     )

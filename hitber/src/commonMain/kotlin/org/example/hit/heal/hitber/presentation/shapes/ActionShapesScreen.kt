@@ -171,7 +171,8 @@ class ActionShapesScreen(private val question: Int) : Screen {
         )
 
         RegisterBackHandler(this) {
-            secondQuestionViewModel.resetAll()
+            // user aborts this flow entirely — wipe everything and go back
+            secondQuestionViewModel.resetEverything()
             navigator?.pop()
         }
 
@@ -210,15 +211,16 @@ class ActionShapesScreen(private val question: Int) : Screen {
                 secondQuestionViewModel.secondQuestionAnswersList,
                 getCurrentFormattedDateTime()
             )
-            secondQuestionViewModel.resetSelectedShapes()
-            secondQuestionViewModel.resetAll()
+            // keep the same targets for the later repetition (Q9)
+            secondQuestionViewModel.resetSelectionsKeepSet()
             navigator?.replace(ConcentrationScreen())
         } else {
             activityViewModel.setNinthQuestion(
                 secondQuestionViewModel.secondQuestionAnswersList,
                 getCurrentFormattedDateTime()
             )
-            secondQuestionViewModel.resetAll()
+            // after Q9 we can clear everything
+            secondQuestionViewModel.resetEverything()
             navigator?.replace(BuildShapeScreen())
         }
     }
