@@ -39,7 +39,6 @@ class ClockTestViewModel(
     private val storage: Storage,
 ) : ViewModel() {
 
-    // the clock test as we get it from the server
     private val _clockTest = MutableStateFlow<Evaluation?>(null)
     val clockTest: StateFlow<Evaluation?> = _clockTest.asStateFlow()
 
@@ -128,8 +127,8 @@ class ClockTestViewModel(
         uploadScope.launch {
             _isSendingData.value = true
             try {
-                val userId = storage.get(PrefKeys.userId)!!               // expected String
-                val clinicId = storage.get(PrefKeys.clinicId)!!           // expected Int
+                val userId = storage.get(PrefKeys.userId)!!
+                val clinicId = storage.get(PrefKeys.clinicId)!!
 
                 val imagePath =
                     "clinics/$clinicId/patients/$userId/measurements/$measurement/$date/$version/$imgName"
@@ -151,7 +150,7 @@ class ClockTestViewModel(
                         )
 
                         // Then upload CDT results
-                        uploadCDTResultsUseCase.execute(body, CDTRequestBody.serializer())
+                        uploadCDTResultsUseCase.execute(body)
                             .onSuccess {
                                 println("Successfully uploaded CDT results")
                                 withContext(Dispatchers.Main) { onSuccess?.invoke() }
@@ -244,29 +243,19 @@ class ClockTestViewModel(
     fun updateFirstClockTime(newTime: ClockTime) {
         val formattedDateTime = getCurrentFormattedDateTime()
         with(cdtResults) {
-            timeChange1.value = newTime.toString()
-            timeChange1.dateTime = formattedDateTime
 
-            hourChange1.value = newTime.hours
-            hourChange1.dateTime = formattedDateTime
+            val min = if (newTime.minutes < 10) "0${newTime.minutes}" else newTime.minutes.toString()
+            val hour = if (newTime.hours < 10) "0${newTime.hours}" else newTime.hours.toString()
+            val actualTime = "$hour:$min"
+            actual_time_1.value = actualTime
 
-            minuteChange1.value = newTime.minutes
-            minuteChange1.dateTime = formattedDateTime
         }
     }
 
     fun updateSecondClockTime(newTime: ClockTime) {
         val formattedDateTime = getCurrentFormattedDateTime()
         with(cdtResults) {
-            timeChange2.value = newTime.toString()
-            timeChange2.dateTime = formattedDateTime
 
-            hourChange2.value = newTime.hours
-            hourChange2.dateTime = formattedDateTime
-
-
-            minuteChangeUrl2.value = newTime.minutes
-            minuteChangeUrl2.dateTime = formattedDateTime
         }
     }
 }

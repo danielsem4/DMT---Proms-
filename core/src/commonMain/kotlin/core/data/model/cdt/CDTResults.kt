@@ -7,14 +7,20 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CDTResults(
-    @SerialName("imageUrl") var imageUrl: MeasureObjectString = MeasureObjectString(186),
-    @SerialName("circle_perfection") var circle_perfection: MeasureObjectString = MeasureObjectString(89),
-    @SerialName("numbers_sequence") var numbers_sequence: MeasureObjectString = MeasureObjectString(90),
-    @SerialName("hands_position") var hands_position: MeasureObjectString = MeasureObjectString(91),
-    @SerialName("timeChange1") var timeChange1: MeasureObjectString = MeasureObjectString(189),
-    @SerialName("hourChange1") var hourChange1: MeasureObjectInt = MeasureObjectInt(190),
-    @SerialName("minuteChange1") var minuteChange1: MeasureObjectInt = MeasureObjectInt(193),
-    @SerialName("timeChange2") var timeChange2: MeasureObjectString = MeasureObjectString(191),
-    @SerialName("hourChange2") var hourChange2: MeasureObjectInt = MeasureObjectInt(192),
-    @SerialName("minuteChangeUrl2") var minuteChangeUrl2: MeasureObjectInt = MeasureObjectInt(194)
+
+    var circle_perfection: MeasureObjectString = MeasureObjectString(measureObject = 89),
+    var imageUrl: MeasureObjectString = MeasureObjectString(measureObject = 186),
+    var numbers_sequence: MeasureObjectString = MeasureObjectString(measureObject = 90),
+    var hands_position: MeasureObjectString = MeasureObjectString(measureObject = 91),
+    var examiner_code: MeasureObjectString = MeasureObjectString(measureObject = 92),
+
+    // Screen 2: Set Time 1
+    var requested_time_1: MeasureObjectString = MeasureObjectString(measureObject = 190),
+    var time1_imageUrl: MeasureObjectString = MeasureObjectString(measureObject = 585),
+    var actual_time_1: MeasureObjectString = MeasureObjectString(measureObject = 193),
+
+    // Screen 3: Set Time 2
+    var requested_time_2: MeasureObjectString = MeasureObjectString(measureObject = 192),
+    var time2_imageUrl: MeasureObjectString = MeasureObjectString(measureObject = 586),
+    var actual_time_2: MeasureObjectString = MeasureObjectString(measureObject = 194)
 )

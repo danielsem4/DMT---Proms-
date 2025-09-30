@@ -20,9 +20,8 @@ interface AppApi {
         password: String
     ): Result<SuccessfulLoginResponse, DataError.Remote>
 
-    suspend fun <T> sendResults(
-        results: T,
-        serializer: KSerializer<T>
+    suspend fun sendResults(
+        jsonBody: String,
     ): Result<String, DataError.Remote>
 
     suspend fun uploadFileCog(

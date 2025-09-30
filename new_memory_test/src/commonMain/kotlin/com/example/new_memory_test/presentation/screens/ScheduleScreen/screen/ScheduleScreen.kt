@@ -439,7 +439,7 @@ class ScheduleScreen(val pageNumber: Int ) : Screen {
                                                         droppedState.mapValues { it.value.id }
                                                     viewModel.agendaMap.value = agenda
                                                     viewModel.setPage(viewModel.txtMemoryPage + 1)
-                                                    navigator.push(RoomsScreens(pageNumber = 6))
+                                                    navigator.replace(RoomsScreens(pageNumber = 6))
                                                 }
                                             },
                                             colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),

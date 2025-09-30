@@ -58,7 +58,7 @@ class ClockGrade() : Screen {
         val handsPosition by viewModel.handsPosition.collectAsState()
 
         val structureItems = stringArrayResource(circleGrades).map(::DropDownItem)
-        val digitsItems    = stringArrayResource(numbersGrades).map(::DropDownItem)
+        val digitsItems = stringArrayResource(numbersGrades).map(::DropDownItem)
         val placementItems = stringArrayResource(handsGrades).map(::DropDownItem)
 
 
@@ -66,7 +66,6 @@ class ClockGrade() : Screen {
             title = stringResource(clock),
             question = 7,
             onNextClick = {
-                // collect your selections here if you need to push them into the VM
                 navigator.pop()
             },
             content = {
@@ -93,7 +92,7 @@ class ClockGrade() : Screen {
                                 contentScale = ContentScale.Fit,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .aspectRatio(1f) // keep it nicely square
+                                    .aspectRatio(1f)
                                     .padding(paddingMd)
                             )
                         } else {

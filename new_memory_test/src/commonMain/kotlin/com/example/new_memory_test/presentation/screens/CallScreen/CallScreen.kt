@@ -192,7 +192,7 @@ class CallScreen(val pageNumber: Int )  : Screen {
                         stringResource(Resources.String.next) to {
                             showAcceptDialog = false
                             viewModel.setPage(viewModel.txtMemoryPage + 1)
-                            navigator.push(RoomsScreens(pageNumber = 4))
+                            navigator.replace(RoomsScreens(pageNumber = 4))
                         }
                     )
                 )

@@ -174,7 +174,7 @@ class OrientationTestViewModel(
                         trialData.clinicId = clinicId
                         trialData.response.imageUrl.value = imagePath
 
-                        uploadResultsUseCase.execute(trialData, TrialData.serializer())
+                        uploadResultsUseCase.execute(trialData)
                             .onSuccess {
                                 withContext(Dispatchers.Main) { onSuccess?.invoke() }
                             }

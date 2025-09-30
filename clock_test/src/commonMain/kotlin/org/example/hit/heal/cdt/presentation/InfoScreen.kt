@@ -65,7 +65,6 @@ class InfoScreen : Screen {
                             .fillMaxWidth(0.3f)
                             .height(60.dp),
                         onClick = {
-                            viewModel.updateFirstTime(ClockTime(12, 0))
                             navigator.replace(SetTimeClockScreen())
                         }
                     )

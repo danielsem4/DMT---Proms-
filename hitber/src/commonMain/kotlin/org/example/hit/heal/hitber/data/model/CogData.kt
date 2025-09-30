@@ -18,6 +18,7 @@ data class CogData(
     @SerialName("seventhQuestion") var seventhQuestion: ArrayList<SeventhQuestionItem> = arrayListOf(),
     @SerialName("eighthQuestion") var eighthQuestion: ArrayList<EighthQuestionItem> = arrayListOf(),
     @SerialName("ninthQuestion") var ninthQuestion: ArrayList<SecondQuestionItem> = arrayListOf(),
-    @SerialName("tenthQuestion") var tenthQuestion: ArrayList<TenthQuestionType> = arrayListOf()
+    @SerialName("tenthQuestion") var tenthQuestion: ArrayList<TenthQuestionEntry> = arrayListOf()
 )
+
 

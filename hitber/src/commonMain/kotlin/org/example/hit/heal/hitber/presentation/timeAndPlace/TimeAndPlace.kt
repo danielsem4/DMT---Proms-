@@ -72,7 +72,7 @@ class TimeAndPlace : Screen {
             title = stringResource(firstQuestionHitberTitle),
             onNextClick = {
                 val isCompleted = firstQuestionViewModel.isGroupCompleted(currentGroupKeys)
-                if (isCompleted) {
+                if (!isCompleted) {
                     toastMessage = fillFieldsMsg
                     toastType = ToastType.Warning
                 } else {

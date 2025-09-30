@@ -7,7 +7,7 @@ import kotlin.math.absoluteValue
 
 class TenthQuestionViewModel : ViewModel() {
 
-    val answer: ArrayList<Map<String, Double>> = ArrayList()
+    val answer: ArrayList<Map<String, Float>> = ArrayList()
 
     fun uploadTenthQuestionImageAnswer(
         itemPositions: List<Offset>,
@@ -25,7 +25,7 @@ class TenthQuestionViewModel : ViewModel() {
         )
 
         results.forEach { (shape, resultFlag) ->
-            tenthQuestionAnswer(shape.id, resultFlag.toDouble())
+            tenthQuestionAnswer(shape.id, resultFlag.toFloat())
         }
     }
 
@@ -63,7 +63,7 @@ class TenthQuestionViewModel : ViewModel() {
         return result
     }
 
-    private fun tenthQuestionAnswer(shape: String, grade: Double) {
+    private fun tenthQuestionAnswer(shape: String, grade: Float) {
         answer.add(mapOf(shape to grade))
     }
 }

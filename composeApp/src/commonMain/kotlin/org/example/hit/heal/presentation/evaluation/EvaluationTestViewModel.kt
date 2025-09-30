@@ -121,7 +121,7 @@ class EvaluationTestViewModel(
         println("EvaluationRequestBody")
         println(body)
 
-        return uploadTestResultsUseCase.execute(body, EvaluationRequestBody.serializer())
+        return uploadTestResultsUseCase.execute(body)
     }
 
 }

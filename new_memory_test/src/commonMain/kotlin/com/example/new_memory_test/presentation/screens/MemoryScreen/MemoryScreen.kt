@@ -59,7 +59,7 @@ class MemoryScreen : Screen {
                 title = stringResource(Resources.String.memory_title),
                 onNextClick = {
                     viewModel.setPage(viewModel.txtMemoryPage + 1)
-                    navigator.push(RoomInstructionsScreen(pageNumber = 1))
+                    navigator.replace(RoomInstructionsScreen(pageNumber = 1))
                 },
                 question = 1,
                 buttonText = stringResource(start),

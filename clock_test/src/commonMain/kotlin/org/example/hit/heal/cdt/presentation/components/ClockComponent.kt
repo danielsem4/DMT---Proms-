@@ -31,13 +31,16 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ *
+ */
+
 @Composable
 fun ClockComponent(
     modifier: Modifier = Modifier,
     initialTime: ClockTime = ClockTime(12, 0),
     onTimeChange: (ClockTime) -> Unit = {}
 ) {
-    // Compute initial angles: adjust so 12:00 corresponds to -PI/2 radians.
     val hoursForAngle = if (initialTime.hours % 12 == 0) 12f else initialTime.hours % 12f
     val initialHourAngle = (hoursForAngle / 12f) * (2 * PI.toFloat()) - (PI.toFloat() / 2)
     val initialMinuteAngle = (initialTime.minutes / 60f) * (2 * PI.toFloat()) - (PI.toFloat() / 2)

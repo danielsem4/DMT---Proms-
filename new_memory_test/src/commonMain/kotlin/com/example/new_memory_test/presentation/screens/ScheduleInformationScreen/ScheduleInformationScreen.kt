@@ -112,7 +112,7 @@ class ScheduleInformationScreen(val pageNumber: Int) : Screen {
 
                 Button(
                     onClick = {
-                        navigator.push(ScheduleScreen(pageNumber = 5))
+                        navigator.replace(ScheduleScreen(pageNumber = 5))
                     },
                     colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                     shape = RoundedCornerShape(30),

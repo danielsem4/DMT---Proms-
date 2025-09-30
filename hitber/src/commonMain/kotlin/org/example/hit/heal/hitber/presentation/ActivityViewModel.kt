@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.example.hit.heal.hitber.data.model.SeventhQuestionItem
 import org.example.hit.heal.hitber.data.model.SixthQuestionItem
-import org.example.hit.heal.hitber.data.model.TenthQuestionImage
+import org.example.hit.heal.hitber.data.model.TenthQuestionEntry
 import org.example.hit.heal.hitber.data.model.TenthQuestionShape
 import org.example.hit.heal.hitber.data.model.TenthQuestionShapeValue
 
@@ -305,29 +305,42 @@ class ActivityViewModel(
 
 
     fun setTenthQuestion(
-        answer: ArrayList<Map<String, Double>>,
+        answer: ArrayList<Map<String, Float>>,
         date: String
     ) {
-        // 1. Separate shapes into correct and wrong lists based on their grade
-        val correctShapes = answer.filter { it.values.first() == 1.0 }.map { it.keys.first() }
-        val wrongShapes = answer.filter { it.values.first() == 0.0 }.map { it.keys.first() }
+        val correct = mutableListOf<String>()
+        val wrong = mutableListOf<String>()
 
-        // 2. Create the payload object with the two lists
-        val shapePayload = TenthQuestionShapeValue(
-            correct = correctShapes,
-            wrong = wrongShapes
+        answer.forEach {
+            val e = it.entries.firstOrNull() ?: return@forEach
+            val shape = e.key
+            val grade = e.value
+
+            if (grade == 1f) {
+                correct += shape
+            } else{
+                wrong += shape
+            }
+        }
+
+        val correctStr = if (correct.isEmpty()) "[]"
+        else correct.joinToString(prefix = "[\"", postfix = "\"]", separator = "\",\"")
+        val wrongStr = if (wrong.isEmpty()) "[]"
+        else wrong.joinToString(prefix = "[\"", postfix = "\"]", separator = "\",\"")
+
+        // Add ONE aggregated item
+        result.tenthQuestion.add(
+            TenthQuestionEntry(
+                shapePayload = TenthQuestionShape(
+                    dateTime = date,
+                    measureObject = 144,
+                    value = TenthQuestionShapeValue(
+                        correct = correctStr,
+                        wrong = wrongStr
+                    )
+                )
+            )
         )
-
-        // 3. Create the main TenthQuestionShape object
-        val tenthQuestionShape = TenthQuestionShape(
-            dateTime = date,
-            measureObject = getId("Tenth-Question-shape", 144), // The main object ID
-            value = shapePayload
-        )
-
-        // 4. Clear the old list and add the new, single shape object
-        result.tenthQuestion.clear()
-        result.tenthQuestion.add(tenthQuestionShape)
     }
 
     private val uploadScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -365,7 +378,6 @@ class ActivityViewModel(
                 )
 
                 result.onSuccess {
-                    // This function call is now refactored
                     saveUploadedImageUrl(currentQuestion, imagePath, date)
 
                     if (isUploadAllImagesFinished == 3) {
@@ -389,13 +401,13 @@ class ActivityViewModel(
         val imageLabels = mapOf(
             6 to "Six-Question-image",
             7 to "Seven-Question-image",
-            10 to "image" // The label for the 10th question image object
+            10 to "image"
         )
 
         val fallbackIds = mapOf(
             6 to 201,
             7 to 203,
-            10 to 205 // The fallback ID for the 10th question image object
+            10 to 205
         )
 
         val label = imageLabels[currentQuestion] ?: "unknown_image"
@@ -421,9 +433,15 @@ class ActivityViewModel(
             )
 
             10 -> {
-                // **REPLACED LOGIC**: Instead of updating, create and add a new object
-                val tenthQuestionImage = TenthQuestionImage(imageUrl = image)
-                result.tenthQuestion.add(tenthQuestionImage)
+                result.tenthQuestion.add(
+                    TenthQuestionEntry(
+                        imageUrl = MeasureObjectString(
+                            getId(label, fallback),
+                            uploadedUrl,
+                            date
+                        )
+                    )
+                )
             }
         }
         isUploadAllImagesFinished++
@@ -456,7 +474,7 @@ class ActivityViewModel(
                 result.measurement = hitBerTest.value?.id ?: 19
                 result.date = getCurrentFormattedDateTime()
 
-                val uploadResult = uploadTestResultsUseCase.execute(result, CogData.serializer())
+                val uploadResult = uploadTestResultsUseCase.execute(result)
 
                 uploadResult.onSuccess {
                     _uploadStatus.value = Result.success(Unit)

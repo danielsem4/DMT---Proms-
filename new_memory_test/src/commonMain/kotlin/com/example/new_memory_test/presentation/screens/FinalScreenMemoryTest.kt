@@ -134,7 +134,7 @@ class FinalScreenMemoryTest : Screen {
 
         RegisterBackHandler(this) {
             viewModel.reset()
-            navigator?.popUntilRoot()
+            navigator?.pop()
         }
     }
 }

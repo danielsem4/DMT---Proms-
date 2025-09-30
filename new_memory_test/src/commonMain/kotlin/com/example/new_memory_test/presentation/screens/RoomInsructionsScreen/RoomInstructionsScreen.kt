@@ -152,7 +152,7 @@ class RoomInstructionsScreen(val pageNumber: Int) : Screen {
                             ) {
                                 Button(
                                     onClick = {
-                                        navigator.push(RoomsScreens(pageNumber = 2))
+                                        navigator.replace(RoomsScreens(pageNumber = 2))
                                     },
                                     colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
                                     shape = RoundedCornerShape(30),

@@ -318,7 +318,7 @@ class ViewModelMemoryTest(
 
                 rawUserRating?.let { setSuccessRateAfter(it.toString(), date) }
 
-                val uploadResult = uploadTestResultsUseCase.execute(result, MemoryData.serializer())
+                val uploadResult = uploadTestResultsUseCase.execute(result)
 
                 uploadResult.onSuccess {
                     _uploadStatus.value = Result.success(Unit)

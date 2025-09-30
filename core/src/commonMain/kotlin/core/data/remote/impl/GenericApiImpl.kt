@@ -46,7 +46,7 @@ class KtorAppRemoteDataSource(
 ) : AppApi {
 
     // Base URL for all endpoints
-    private val baseUrl = BASE_URL
+    private val baseUrl = BASE_URL_DEV
 
     override suspend fun login(email: String, password: String):
             Result<SuccessfulLoginResponse, DataError.Remote> = safeCall {
@@ -56,25 +56,17 @@ class KtorAppRemoteDataSource(
         }
     }
 
-    override suspend fun <T> sendResults(
-        results: T,
-        serializer: KSerializer<T>
+    override suspend fun sendResults(
+        jsonBody: String,
     ): Result<String, DataError.Remote> {
-        val json = Json {
-            ignoreUnknownKeys = true
-            isLenient = true
-            prettyPrint = true
-            encodeDefaults = true
-        }
         val url = "${baseUrl}patientMeasureResponse/"
-        val body = json.encodeToString(serializer, results)
-        println("the body is: $body")
+        println("the body is: $jsonBody")
 
         return httpClient.postWithAuth<String>(
             url = url,
             storage = storage
         ) {
-            setBody(body)
+            setBody(jsonBody)
         }
     }
 

@@ -4,10 +4,22 @@ import core.domain.DataError
 import core.domain.Result
 import core.domain.api.AppApi
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.json.Json
+
+val json = Json {
+    encodeDefaults = true
+    explicitNulls = true
+}
 
 class UploadTestResultsUseCase(
-    private val api: AppApi
+    val api: AppApi
 ) {
-    suspend fun <T> execute(results: T, serializer: KSerializer<T>): Result<String, DataError> =
-        api.sendResults(results, serializer)
+    suspend inline fun <reified T> execute(results: T): Result<String, DataError.Remote> {
+        return try {
+            val jsonBody = json.encodeToString(results)
+            api.sendResults(jsonBody)
+        } catch (e: Exception) {
+            Result.Error(DataError.Remote.UNKNOWN)
+        }
+    }
 }

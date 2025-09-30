@@ -206,10 +206,10 @@ class RoomsScreens(val pageNumber: Int) : Screen {
 
                 if (pageNumber == 2) {
                     viewModel.setPage(viewModel.txtMemoryPage + 1)
-                    navigator.push(CallScreen(pageNumber = 3))
+                    navigator.replace(CallScreen(pageNumber = 3))
                 } else if (pageNumber == 4) {
                     viewModel.setPage(viewModel.txtMemoryPage + 1)
-                    navigator.push(ScheduleInformationScreen(pageNumber = 5))
+                    navigator.replace(ScheduleInformationScreen(pageNumber = 5))
                 } else if (pageNumber == 6) {
                     //call a raiting in the end
                     showDialog = true
@@ -279,7 +279,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
                 onSubmit = {
                     viewModel.rawUserRating = rating
                     showDialog = false
-                    navigator.push(FinalScreenMemoryTest())
+                    navigator.replace(FinalScreenMemoryTest())
 
                 }
             )
@@ -649,7 +649,7 @@ class RoomsScreens(val pageNumber: Int) : Screen {
         //For unposible go to back screen
         RegisterBackHandler(this)
         {
-            navigator.popUntilRoot()
+            navigator.pop()
         }
     }
 
