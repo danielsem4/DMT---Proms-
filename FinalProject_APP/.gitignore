@@ -1,0 +1,13 @@
+*.iml
+.gradle/
+build/
+.local.properties
+.idea/
+**/build/
+**/out/
+
+# KMM / iOS (אם יש)
+**/*.xcworkspace/
+**/*.xcodeproj/
+**/*.xcuserdata/
+**/DerivedData/

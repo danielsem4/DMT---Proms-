@@ -1,0 +1,22 @@
+# Gradle
+.gradle/
+**/build/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+
+# Local configs & secrets
+local.properties
+*.keystore
+keystore.properties
+
+# Logs / OS
+*.log
+.DS_Store
+
+# iOS (KMM)
+iosApp/build/
+iosApp/DerivedData/
+iosApp/*.xcuserdata/
+iosApp/Pods/
