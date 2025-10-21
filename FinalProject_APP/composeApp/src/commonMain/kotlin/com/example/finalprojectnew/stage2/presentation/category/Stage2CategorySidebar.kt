@@ -18,25 +18,24 @@ import org.jetbrains.compose.resources.painterResource
 import finalprojectnew.composeapp.generated.resources.Res
 import finalprojectnew.composeapp.generated.resources.*
 
-private val FrameGreen = Color(0xFF0A4E2A)
-
+private val FrameGreen = Color(0xFF0A4E2A) //green color for button frames/text
 
 @Composable
 fun Stage2CategorySidebar(
-    current: String,
+    current: String, //the current category
     onSelect: (String) -> Unit,
     modifier: Modifier = Modifier,
     scale: Float = 1f
 ) {
     val items: List<Triple<String, String, DrawableResource>> = listOf(
-        Triple("milk",        "מוצרי חלב",        Res.drawable.stage2_category_milk),
-        Triple("meat",        "מוצרי בשר",        Res.drawable.stage2_category_meat),
-        Triple("vegetables",  "ירקות",            Res.drawable.stage2_category_vegetables),
-        Triple("fruits",      "פירות",            Res.drawable.stage2_category_fruits),
-        Triple("frozen",      "קפואים",           Res.drawable.stage2_category_frozen),
-        Triple("dry",         "יבשים ותבלינים",   Res.drawable.stage2_category_dry),
-        Triple("pastries",    "מאפים",            Res.drawable.stage2_category_pastries),
-        Triple("cleaning",    "ניקיון וחד''פ",     Res.drawable.stage2_category_cleaning)
+        Triple("milk", "מוצרי חלב", Res.drawable.stage2_category_milk),
+        Triple("meat", "מוצרי בשר", Res.drawable.stage2_category_meat),
+        Triple("vegetables", "ירקות", Res.drawable.stage2_category_vegetables),
+        Triple("fruits", "פירות", Res.drawable.stage2_category_fruits),
+        Triple("frozen", "קפואים", Res.drawable.stage2_category_frozen),
+        Triple("dry", "יבשים ותבלינים", Res.drawable.stage2_category_dry),
+        Triple("pastries", "מאפים", Res.drawable.stage2_category_pastries),
+        Triple("cleaning", "ניקיון וחד''פ", Res.drawable.stage2_category_cleaning)
     )
 
     Column(
@@ -44,16 +43,21 @@ fun Stage2CategorySidebar(
         verticalArrangement = Arrangement.spacedBy(12.dp * scale)
     ) {
         items.forEach { (id, title, iconRes) ->
+            // selected — Is this the button for the current category?
+            // If so, color the button background with light yellow. otherwise, a light mint background.
             val selected = id == current
             Button(
                 onClick = { onSelect(id) },
                 shape = RoundedCornerShape(14.dp * scale),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (selected) Color(0xFFFFE08A) else Color(0xFFF7FBF7),
-                    contentColor   = FrameGreen
+                    contentColor = FrameGreen
                 ),
                 elevation = ButtonDefaults.buttonElevation(0.dp),
-                contentPadding = PaddingValues(horizontal = 14.dp * scale, vertical = 10.dp * scale),
+                contentPadding = PaddingValues(
+                    horizontal = 14.dp * scale,
+                    vertical = 10.dp * scale
+                ),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(

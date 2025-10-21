@@ -7,7 +7,6 @@ plugins {
 }
 
 kotlin {
-    // יעד אנדרואיד (מומלץ לגרסאות Compose שונות)
     android()
 
     java {
@@ -17,7 +16,6 @@ kotlin {
     }
 
 
-    // יעדי iOS (ייבנו רק אם יש toolchain מתאים)
     listOf(iosX64(), iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
@@ -26,7 +24,6 @@ kotlin {
     }
 
     sourceSets {
-        // Opt-in גלובלי לניסיוני
         all {
             languageSettings {
                 optIn("org.jetbrains.compose.resources.ExperimentalResourceApi")
@@ -46,8 +43,6 @@ kotlin {
                 implementation(compose.ui)
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
-
-                // הערכה/שמירה ל-JSON + זמן
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
             }
@@ -84,7 +79,6 @@ android {
         getByName("release") { isMinifyEnabled = false }
     }
 
-    // Java על 11 (תואם ל-Kotlin)
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -103,17 +97,14 @@ compose {
     }
 }
 
-// תצוגות מקדימות בלבד
 dependencies {
     debugImplementation(compose.uiTooling)
 }
 
-// רשת ביטחון: מכוון את כל משימות ה-Kotlin ל-JVM 11
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     kotlinOptions.jvmTarget = "11"
 }
 
-// משימה לחידוש מחולל ה-Res
 tasks.register("regenImages") {
     dependsOn("clean", "generateResourceAccessorsForCommonMain")
 }

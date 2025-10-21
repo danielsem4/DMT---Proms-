@@ -29,14 +29,13 @@ import com.example.finalprojectnew.stage2.domain.model.donationListItems
 import com.example.finalprojectnew.stage2.presentation.Stage2Colors
 import com.example.finalprojectnew.stage2.presentation.components.PrimaryMenuButton
 
-/* ---------------------- PUBLIC SCREENS ---------------------- */
 
-@Composable
+@Composable // Creates a flat list- combines all categories into one list of texts.
 fun ShoppingListScreen(
     onCloseList: () -> Unit,
     onBack: (() -> Unit)? = null
 ) {
-    // הרשימה הרגילה – נשלפת מה-domain (מקוטלג), ומופחתת לרשימה שטוחה לתצוגה
+    // The regular list – is extracted from the domain (catalogized), and reduced to a flat list for display
     val allItems: List<String> = shoppingCategories.flatMap { it.items }
     GenericListScreen(
         title = "רשימת קניות",
@@ -50,15 +49,12 @@ fun DonationListScreen(
     onCloseList: () -> Unit,
     onBack: (() -> Unit)? = null
 ) {
-    // גם רשימת התרומה – מגיעה מה-domain (רשימה שטוחה מוכנה)
     GenericListScreen(
         title = "רשימת תרומה",
         items = donationListItems,
         onCloseList = onCloseList
     )
 }
-
-/* ---------------------- GENERIC UI ---------------------- */
 
 @Composable
 private fun GenericListScreen(
@@ -135,8 +131,6 @@ private fun GenericListScreen(
         }
     }
 }
-
-/* ---------------------- PRIMITIVES ---------------------- */
 
 @Composable
 private fun BigParchmentCard(

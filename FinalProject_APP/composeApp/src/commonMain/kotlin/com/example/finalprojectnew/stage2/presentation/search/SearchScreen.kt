@@ -1,4 +1,5 @@
-@file:OptIn(
+// search screen
+@file:OptIn( // "OptIn"= We use experimental Compose APIs (Material3 and Foundation)
     androidx.compose.material3.ExperimentalMaterial3Api::class,
     androidx.compose.foundation.ExperimentalFoundationApi::class
 )
@@ -35,17 +36,14 @@ import finalprojectnew.composeapp.generated.resources.stage2_cart
 import finalprojectnew.composeapp.generated.resources.stage2_donation
 import finalprojectnew.composeapp.generated.resources.stage2_magnifying_glass
 import org.jetbrains.compose.resources.painterResource as painterResourceRes
-
-// עגלה + מיפוי לדומיין/Ui
 import com.example.finalprojectnew.di.Stage2Locator
 import com.example.finalprojectnew.stage2.data.catalog.toDomain
 import com.example.finalprojectnew.stage2.presentation.category.generic.ProductUi
 import androidx.compose.runtime.collectAsState
 import kotlinx.coroutines.launch
-
-// זיהוי פריטי תרומה לפי IDs יציבים
 import com.example.finalprojectnew.stage2.domain.model.donationItemIds
 
+// for design
 private const val ACTION_BTN_WIDTH_FRACTION = 0.26f
 private val ACTION_BTN_HEIGHT = 84.dp
 private val ACTION_BTN_FONT = 22.sp
@@ -58,15 +56,15 @@ fun SearchScreen(
     onOpenDonation: () -> Unit,
     onOpenShoppingList: () -> Unit = {}
 ) {
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) { // right to left
         val vm = remember { SearchViewModel() }
         val scope = rememberCoroutineScope()
 
         DisposableEffect(Unit) { onDispose { vm.clear() } }
 
-        Scaffold(
+        Scaffold( // structure of the screen
             containerColor = Stage2Colors.ScreenBg,
-            topBar = {
+            topBar = { // top area of the screen
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -98,7 +96,7 @@ fun SearchScreen(
                     )
                 }
             },
-            bottomBar = {
+            bottomBar = { // bottom area of the screen
                 Surface(color = Stage2Colors.ScreenBg) {
                     Row(
                         modifier = Modifier
@@ -106,21 +104,19 @@ fun SearchScreen(
                             .padding(start = 22.dp, end = 22.dp, top = 10.dp, bottom = 30.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // שמאל: כפתור סל קניות
                         CartPillButtonMint(
-                            textLine1 = "לחצו לצפייה",
-                            textLine2 = "בסל הקניות",
-                            onClick   = onOpenCart,
-                            icon      = painterResourceRes(Res.drawable.stage2_cart),
-                            green     = Stage2Colors.FrameGreen,
-                            modifier  = Modifier
+                            textLine1 = "לחצו לצפייה\nבסל הקניות", // ← unified into a single string with newline
+                            textLine2 = "",                         // ← no second line
+                            onClick = onOpenCart,
+                            icon = painterResourceRes(Res.drawable.stage2_cart),
+                            green = Stage2Colors.FrameGreen,
+                            modifier = Modifier
                                 .weight(ACTION_BTN_WIDTH_FRACTION)
                                 .height(ACTION_BTN_HEIGHT)
                         )
 
                         Spacer(Modifier.width(12.dp))
 
-                        // ימין: שני כפתורי רשימות
                         Column(
                             modifier = Modifier
                                 .weight(ACTION_BTN_WIDTH_FRACTION),
@@ -152,7 +148,7 @@ fun SearchScreen(
                     .padding(horizontal = 20.dp, vertical = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                OutlinedTextField(
+                OutlinedTextField( // search field
                     value = vm.query,
                     onValueChange = vm::onQueryChange,
                     singleLine = true,
@@ -188,12 +184,13 @@ fun SearchScreen(
 
                 Spacer(Modifier.height(12.dp))
 
-                val results = vm.results
+                val results = vm.results //settings of display the results of items
                 val columns = if (results.size <= 1) 1 else 3
 
-                // כמות קיימת מהעגלה
+                // quantity of chart per card
                 val cartItems by Stage2Locator.cart.observe.collectAsState(initial = emptyList())
-                val qtyById = remember(cartItems) { cartItems.associate { it.product.id to it.quantity } }
+                val qtyById =
+                    remember(cartItems) { cartItems.associate { it.product.id to it.quantity } }
 
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(columns),
@@ -220,38 +217,38 @@ fun SearchScreen(
                         items = results,
                         key = { "${it.category.name}_${it.id}" }
                     ) { item: CatalogItem ->
-                        // CatalogItem -> ProductUi -> Product (דומיין)
+                        // CatalogItem -> ProductUi -> Product (domain)
                         val uiItem = ProductUi(
-                            id         = item.id,
-                            title      = item.title,
-                            subtitle   = item.subtitle,
-                            iconRes    = item.iconRes,
-                            outOfStock = item.outOfStock   // ← חשוב: שומר את מצב המלאי
+                            id = item.id,
+                            title = item.title,
+                            subtitle = item.subtitle,
+                            iconRes = item.iconRes,
+                            outOfStock = item.outOfStock   // save the stock
                         )
                         val product = uiItem.toDomain(category = item.category)
 
                         val currentQty = qtyById[product.id] ?: 0
 
-                        // זיהוי מוצר תרומה לפי ID יציב
+                        // identify donation item by ID
                         val isDonationItem = donationItemIds.contains(item.id)
 
                         com.example.finalprojectnew.stage2.presentation.category.generic.ProductCard(
-                            title            = item.title,
-                            subtitle         = item.subtitle,
-                            iconRes          = item.iconRes,
-                            scale            = 1f,
-                            outOfStock       = item.outOfStock,   // ← מציג "אזל מהמלאי" וחוסם הוספה
-                            initialQty       = currentQty,
+                            title = item.title,
+                            subtitle = item.subtitle,
+                            iconRes = item.iconRes,
+                            scale = 1f,
+                            outOfStock = item.outOfStock,   // Shows "Out of stock" and blocks adding
+                            initialQty = currentQty,
                             onQuantityChange = { qty ->
                                 if (!item.outOfStock) {
                                     scope.launch {
-                                        // qty==0 מוחק, אחרת מעדכן/מוסיף
+                                        // qty==0 deletes, otherwise updates/adds
                                         Stage2Locator.cart.update(product, qty)
                                     }
                                 }
                             },
-                            // רקע כחול שקוף לפריטי תרומה
-                            bgColor          = if (isDonationItem)
+                            // blue background for donation item
+                            bgColor = if (isDonationItem)
                                 Stage2Colors.DonationTint
                             else
                                 Stage2Colors.White
@@ -263,7 +260,6 @@ fun SearchScreen(
     }
 }
 
-/* ===== כפתורי המינט (ללא שינוי לוגי) ===== */
 @Composable
 private fun CartPillButtonMint(
     textLine1: String,
@@ -279,7 +275,7 @@ private fun CartPillButtonMint(
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color(0xFFEFF8F2),
-            contentColor   = labelColor
+            contentColor = labelColor
         ),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
@@ -325,9 +321,9 @@ private fun DonationPillButtonMint(
 ) = CartPillButtonMint(
     textLine1 = textLine1,
     textLine2 = textLine2,
-    onClick   = onClick,
-    icon      = icon,
-    green     = green,
+    onClick = onClick,
+    icon = icon,
+    green = green,
     labelColor = labelColor,
-    modifier  = modifier
+    modifier = modifier
 )

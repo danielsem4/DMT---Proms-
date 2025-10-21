@@ -1,3 +1,4 @@
+// buttons that the user goes to categories, the shopping cart, search, or lists.
 package com.example.finalprojectnew.stage2.presentation.components
 
 import androidx.compose.foundation.layout.*
@@ -24,8 +25,8 @@ fun PrimaryMenuButton(
     modifier: Modifier = Modifier,
     height: Dp = 72.dp,
     corner: Dp = 22.dp,
-    containerColor: Color = Color(0xFF046030),   // ירוק המותג
-    contentColor: Color = Color(0xFFF1FFF6),     // טקסט/אייקון בהיר
+    containerColor: Color = Color(0xFF046030),
+    contentColor: Color = Color(0xFFF1FFF6),
     textSizeSp: Float = 24f,
     iconSize: Dp = 28.dp,
     spacing: Dp = 10.dp

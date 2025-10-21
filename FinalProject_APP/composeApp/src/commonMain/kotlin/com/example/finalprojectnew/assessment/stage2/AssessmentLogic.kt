@@ -7,41 +7,42 @@ import kotlinx.serialization.json.Json
 
 object AssessmentLogic {
 
-    /** מחזיר את הטיפוס המשותף com.example.finalprojectnew.assessment.AssessmentResult  */
     fun assess(actual: Map<String, Int>): AssessmentResult {
+        // assess= a function that gets the actual shopping cart status
+        // AssessmentResult= and returns a summary result object
         val now = Clock.System.now().toString()
-        val results = mutableListOf<ItemResult>()
+        val results = mutableListOf<ItemResult>() // List of results items
 
-        // כל המזהים שמעניינים אותנו
-        val allIds = (GroundTruth.shoppingExpected.keys +
+        // the correct items
+                val allIds = (GroundTruth.shoppingExpected.keys +
                 GroundTruth.donationExpected.keys +
                 actual.keys).distinct()
 
+        // calculate result for each product ID
         for (id in allIds) {
-            val actualQty = actual[id] ?: 0
-            val expectedQty = GroundTruth.shoppingExpected[id]
+            val actualQty = actual[id] ?: 0 // how much the user actually added to the cart for the product (if none then 0)
+            val expectedQty = GroundTruth.shoppingExpected[id] // expectedQty: The quantity we expected according to the truth lists (shopping/donations)
                 ?: GroundTruth.donationExpected[id]
                 ?: 0
 
-            val status = when {
-                // ✅ כלל הבננות – בלי UNKNOWN:
+            val status = when { // highlights for the Banana Rule
                 id == "banana" && actualQty == 0 -> "MISSING"
                 id == "banana" && actualQty in 1..7 -> "CORRECT"
                 id == "banana" && actualQty > 7 -> "WRONG_QUANTITY"
 
-                // מוצר שלא אמור להיות: ציפייה = 0 וקיבלנו >0
+                // Product that shouldn't exist: expectation = 0 and we got >0 -> EXTRA
                 expectedQty == 0 && actualQty > 0 -> "EXTRA"
 
-                // היה אמור להיות וקיבלנו 0
+                // item that was supposed to be and didn't go into the cart -> MISSING
                 expectedQty > 0 && actualQty == 0 -> "MISSING"
 
-                // כמות שגויה
+                // wrong quantity
                 expectedQty > 0 && actualQty != expectedQty -> "WRONG_QUANTITY"
 
-                // תקין
+                // correct
                 expectedQty > 0 && actualQty == expectedQty -> "CORRECT"
 
-                else -> "WRONG_QUANTITY" // לא נגיע לכאן בפועל, רק הגנה
+                else -> "WRONG_QUANTITY" // only for backup
             }
 
             results += ItemResult(
@@ -51,13 +52,13 @@ object AssessmentLogic {
                 status = status
             )
         }
-
+//totals: summary by status – how many CORRECT,MISSING, etc.
         val totals: Map<String, Int> = results.groupingBy { it.status }.eachCount()
         return AssessmentResult(timestamp = now, items = results, totals = totals)
     }
 
-    /** המרת תוצאה (הטיפוס המשותף) ל־JSON */
+    // Convert result to JSON
     fun toJson(result: AssessmentResult): String =
-        Json { prettyPrint = true }
+        Json { prettyPrint = true } // pretty print
             .encodeToString(AssessmentResult.serializer(), result)
 }

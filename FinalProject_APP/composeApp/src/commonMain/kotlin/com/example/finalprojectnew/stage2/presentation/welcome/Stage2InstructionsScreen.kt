@@ -23,9 +23,9 @@ import androidx.compose.foundation.layout.safeDrawing
 fun Stage2InstructionsScreen(
     onStartShopping: () -> Unit
 ) {
-    val screenBg   = Stage2Colors.ScreenBg
+    val screenBg = Stage2Colors.ScreenBg
     val brandGreen = Stage2Colors.BrandGreen
-    val bodyText   = Stage2Colors.BodyText
+    val bodyText = Stage2Colors.BodyText
 
     val items = listOf(
         "עליך לבצע קנייה שבועית למשפחה לפי רשימת הקניות שמופיעה על המסך. יש לבחור רק את המצרכים המופיעים ברשימה.",
@@ -45,9 +45,9 @@ fun Stage2InstructionsScreen(
                 val scale =
                     when {
                         w >= 1000f -> 1.40f
-                        w >= 800f  -> 1.25f
-                        w >= 600f  -> 1.12f
-                        else       -> 1.00f
+                        w >= 800f -> 1.25f
+                        w >= 600f -> 1.12f
+                        else -> 1.00f
                     }
 
                 Column(

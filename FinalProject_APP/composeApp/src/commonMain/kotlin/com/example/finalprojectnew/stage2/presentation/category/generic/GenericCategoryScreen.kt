@@ -25,6 +25,7 @@ import androidx.compose.ui.window.Dialog
 import com.example.finalprojectnew.stage2.presentation.Stage2Colors
 import com.example.finalprojectnew.stage2.presentation.components.ListPillButton
 import com.example.finalprojectnew.stage2.presentation.components.Stage2CategorySidebar
+import com.example.finalprojectnew.stage2.presentation.components.CartPillButtonMint // ← added: use the reusable cart pill
 import com.example.finalprojectnew.stage2.domain.model.CategoryKey
 import finalprojectnew.composeapp.generated.resources.Res
 import finalprojectnew.composeapp.generated.resources.ic_list
@@ -32,7 +33,6 @@ import finalprojectnew.composeapp.generated.resources.stage2_cart
 import finalprojectnew.composeapp.generated.resources.stage2_donation
 import finalprojectnew.composeapp.generated.resources.stage2_bakery_cake
 import org.jetbrains.compose.resources.painterResource
-
 import com.example.finalprojectnew.di.Stage2Locator
 import com.example.finalprojectnew.stage2.data.catalog.toDomain
 import kotlinx.coroutines.launch
@@ -41,34 +41,35 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.runtime.collectAsState
-
-// ← שימוש ברשימת IDs יציבה
 import com.example.finalprojectnew.stage2.domain.model.donationItemIds
 
 @Composable
 fun GenericCategoryScreen(
-    currentKey: CategoryKey,
-    vm: CategoryViewModel,
+    currentKey: CategoryKey, // which category to show
+    vm: CategoryViewModel, // vm that gives the screen mode (title/products)
     onSelectCategory: (CategoryKey) -> Unit,
     onOpenCart: () -> Unit,
     onOpenSearch: () -> Unit = {},
     onOpenShoppingList: () -> Unit = {},
     onOpenDonation: () -> Unit = {}
 ) {
+
+    //CompositionLocalProvider = order from right to left
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        Surface(
+        Surface( // screen background
             color = Stage2Colors.ScreenBg,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(WindowInsets.safeDrawing.asPaddingValues())
         ) {
-            // טען סטייט לקטגוריה נוכחית
+            // every time the category changes - vm.select(...) is called to construct a new CategoryUiState
             LaunchedEffect(currentKey) { vm.select(currentKey) }
             val ui = vm.state.collectAsState().value ?: return@Surface
 
-            val scope = rememberCoroutineScope()
+            val scope =
+                rememberCoroutineScope() //Run asynchronous operations (such as updating a basket) from the UI.
 
-            // פרסומת למאפים
+            // POPUP - new cake ! (bakeryscreen)
             var showPastriesAd by remember { mutableStateOf(false) }
             LaunchedEffect(currentKey) {
                 if (currentKey.id == "pastries" &&
@@ -81,19 +82,19 @@ fun GenericCategoryScreen(
                 }
             }
 
-            // קורא את העגלה כדי להציג כמות קיימת בכל כרטיס
+            // // Reads the cart to display the existing quantity on each card
             val cartItems by Stage2Locator.cart.observe.collectAsState(initial = emptyList())
             val qtyById = remember(cartItems) {
                 cartItems.associate { it.product.id to it.quantity }
             }
-
+            // sizes-
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val w = maxWidth.value
                 val scale = when {
                     w >= 1100f -> 1.30f
-                    w >= 900f  -> 1.18f
-                    w >= 700f  -> 1.08f
-                    else       -> 1.00f
+                    w >= 900f -> 1.18f
+                    w >= 700f -> 1.08f
+                    else -> 1.00f
                 }
 
                 Row(
@@ -101,7 +102,7 @@ fun GenericCategoryScreen(
                         .fillMaxSize()
                         .padding(horizontal = 16.dp * scale)
                 ) {
-                    // סיידבר קטגוריות
+                    // sidebar
                     Stage2CategorySidebar(
                         current = ui.key.id,
                         onSelect = { id -> CategoryKey.fromId(id)?.let(onSelectCategory) },
@@ -113,6 +114,7 @@ fun GenericCategoryScreen(
 
                     Spacer(Modifier.width(16.dp * scale))
 
+                    //Title and description line + search button
                     Column(
                         modifier = Modifier
                             .weight(1f)
@@ -131,7 +133,6 @@ fun GenericCategoryScreen(
 
                         Spacer(Modifier.height(6.dp * scale))
 
-                        // שורת הסבר + חיפוש
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.fillMaxWidth()
@@ -159,16 +160,20 @@ fun GenericCategoryScreen(
                                     vertical = 10.dp * scale
                                 )
                             ) {
-                                Text("חיפוש", fontSize = (20.sp * scale), fontWeight = FontWeight.ExtraBold)
+                                Text(
+                                    "חיפוש",
+                                    fontSize = (20.sp * scale),
+                                    fontWeight = FontWeight.ExtraBold
+                                )
                             }
                         }
 
                         Spacer(Modifier.height(16.dp * scale))
 
-                        // גריד מוצרים
+                        // Product Grid
                         val gridState = rememberLazyGridState()
+                        //Keep scrolling+In each new category — scroll to the top
                         LaunchedEffect(currentKey) { gridState.scrollToItem(0) }
-
                         val columns = if (w >= 800f) 3 else 2
 
                         LazyVerticalGrid(
@@ -185,26 +190,26 @@ fun GenericCategoryScreen(
                                 val product = item.toDomain(ui.key)
                                 val currentQty = qtyById[product.id] ?: 0
 
-                                // זיהוי מוצר תרומה לפי ID יציב
+                                // identify donation product
                                 val isDonationItem = donationItemIds.contains(item.id)
 
                                 ProductCard(
-                                    title            = item.title,
-                                    subtitle         = item.subtitle,
-                                    iconRes          = item.iconRes,
-                                    scale            = scale,
-                                    outOfStock       = item.outOfStock,
-                                    initialQty       = currentQty,
+                                    title = item.title,
+                                    subtitle = item.subtitle,
+                                    iconRes = item.iconRes,
+                                    scale = scale,
+                                    outOfStock = item.outOfStock,
+                                    initialQty = currentQty,
                                     onQuantityChange = { qty ->
                                         if (!item.outOfStock) {
                                             scope.launch {
-                                                // qty==0 מוחק, אחרת מעדכן/מוסיף
+                                                // // qty==0 delete, otherwise update/add
                                                 Stage2Locator.cart.update(product, qty)
                                             }
                                         }
                                     },
-                                    // רקע כחול שקוף לפריטי תרומה
-                                    bgColor          = if (isDonationItem)
+                                    // blue background for donation item
+                                    bgColor = if (isDonationItem)
                                         Stage2Colors.DonationTint
                                     else
                                         Stage2Colors.White
@@ -212,7 +217,7 @@ fun GenericCategoryScreen(
                             }
                         }
 
-                        // תחתית: סל קניות (שמאל) + שני כפתורי רשימות (ימין)
+                        // At the bottom of the screen - cart button + cart/donation list buttons
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -220,51 +225,20 @@ fun GenericCategoryScreen(
                             verticalAlignment = Alignment.Bottom,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            // כפתור סל קניות
-                            Button(
+                            // shopping cart button (component)
+                            CartPillButtonMint(
+                                textLine1 = "לחצו לצפייה\nבסל הקניות",
+                                icon = painterResource(Res.drawable.stage2_cart),
                                 onClick = onOpenCart,
-                                shape = RoundedCornerShape(12.dp * scale),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Stage2Colors.Mint,
-                                    contentColor = Stage2Colors.FrameGreen
-                                ),
-                                elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp),
-                                contentPadding = PaddingValues(
-                                    horizontal = 16.dp * scale,
-                                    vertical = 12.dp * scale
-                                ),
                                 modifier = Modifier
                                     .shadow(
                                         6.dp * scale,
                                         RoundedCornerShape(12.dp * scale),
                                         clip = false
                                     )
-                            ) {
-                                Column(horizontalAlignment = Alignment.Start) {
-                                    Text(
-                                        "לחצו לצפייה",
-                                        fontSize = (20.sp * scale),
-                                        fontWeight = FontWeight.ExtraBold,
-                                        lineHeight = (22.sp * scale),
-                                        color = Stage2Colors.FrameGreen
-                                    )
-                                    Text(
-                                        "בסל הקניות",
-                                        fontSize = (20.sp * scale),
-                                        fontWeight = FontWeight.ExtraBold,
-                                        lineHeight = (22.sp * scale),
-                                        color = Stage2Colors.FrameGreen
-                                    )
-                                }
-                                Spacer(Modifier.width(10.dp * scale))
-                                Image(
-                                    painter = painterResource(Res.drawable.stage2_cart),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(28.dp * scale)
-                                )
-                            }
+                            )
 
-                            // שני כפתורי הרשימות – אחד ליד השני
+                            // cart/donation list button
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 ListPillButton(
                                     text = "לצפייה ברשימה",
@@ -291,8 +265,6 @@ fun GenericCategoryScreen(
     }
 }
 
-/* ---------------------- דיאלוג מעוצב משותף ---------------------- */
-
 @Composable
 fun StyledNoticeDialog(
     title: String,
@@ -315,7 +287,12 @@ fun StyledNoticeDialog(
                 .border(3.dp, frame, RoundedCornerShape(radius))
         ) {
             Column(
-                modifier = Modifier.padding(top = 18.dp, start = 22.dp, end = 22.dp, bottom = 22.dp),
+                modifier = Modifier.padding(
+                    top = 18.dp,
+                    start = 22.dp,
+                    end = 22.dp,
+                    bottom = 22.dp
+                ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -328,7 +305,11 @@ fun StyledNoticeDialog(
                 )
                 if (image != null) {
                     Spacer(Modifier.height(10.dp))
-                    Image(painter = image, contentDescription = null, modifier = Modifier.size(150.dp))
+                    Image(
+                        painter = image,
+                        contentDescription = null,
+                        modifier = Modifier.size(150.dp)
+                    )
                 }
                 if (!message.isNullOrBlank()) {
                     Spacer(Modifier.height(8.dp))
@@ -359,14 +340,12 @@ fun StyledNoticeDialog(
     }
 }
 
-/* ---------------------- דיאלוג המאפים משתמש בעיצוב המשותף ---------------------- */
-
 @Composable
 fun PastriesAdDialog(onClose: () -> Unit) {
     StyledNoticeDialog(
-        title   = "חדש במחלקת המאפים!",
+        title = "חדש במחלקת המאפים!",
         message = "עוגת שמרים טרייה",
-        image   = painterResource(Res.drawable.stage2_bakery_cake),
+        image = painterResource(Res.drawable.stage2_bakery_cake),
         primaryText = "סגור",
         onPrimary = onClose
     )

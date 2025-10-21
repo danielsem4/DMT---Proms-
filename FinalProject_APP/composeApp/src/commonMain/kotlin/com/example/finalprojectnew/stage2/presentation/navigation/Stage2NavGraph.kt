@@ -46,8 +46,13 @@ fun Stage2NavGraph(
     // Before entering the Shopping/Donation list screen-
     // save the current screen so that we can return to it when we close the list.
     var returnAfterList by remember { mutableStateOf<Stage2Route?>(null) }
-    fun openShoppingList() { returnAfterList = current; current = Stage2Route.ShoppingList }
-    fun openDonationList() { returnAfterList = current; current = Stage2Route.DonationList }
+    fun openShoppingList() {
+        returnAfterList = current; current = Stage2Route.ShoppingList
+    }
+
+    fun openDonationList() {
+        returnAfterList = current; current = Stage2Route.DonationList
+    }
 
     // make view model
     val categoryVm = remember { CategoryViewModel() }
@@ -58,8 +63,9 @@ fun Stage2NavGraph(
     var showAunt by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        Stage2Locator.resetStage2Alerts()
-        Stage2Locator.startStage2Monitors()
+        Stage2Locator.resetStage2Alerts() // clearing previous state
+        Stage2Locator.startStage2Monitors() // Enables internal monitors that send events to flow
+        // For each value received → showAunt = true (display the dialog)
         Stage2Locator.globalAuntAlert.collectLatest { showAunt = true }
     }
     DisposableEffect(Unit) { onDispose { Stage2Locator.stopStage2Monitors() } }
@@ -76,9 +82,9 @@ fun Stage2NavGraph(
             Stage2Route.Menu ->
                 Stage2MenuScreen(
                     onCategories = { current = Stage2Route.Categories },
-                    onCart       = { current = Stage2Route.Cart },
-                    onSearch     = { current = Stage2Route.Search },
-                    onViewList   = { openShoppingList() },
+                    onCart = { current = Stage2Route.Cart },
+                    onSearch = { current = Stage2Route.Search },
+                    onViewList = { openShoppingList() },
                     onViewDonationList = { openDonationList() }
                 )
 
@@ -87,27 +93,27 @@ fun Stage2NavGraph(
                     onCategorySelected = { cat: Category ->
                         current = Stage2Route.CategoryProducts(cat.id)
                     },
-                    onOpenCart         = { current = Stage2Route.Cart },
-                    onOpenSearch       = { current = Stage2Route.Search },
-                    onOpenDonation     = { openDonationList() },
+                    onOpenCart = { current = Stage2Route.Cart },
+                    onOpenSearch = { current = Stage2Route.Search },
+                    onOpenDonation = { openDonationList() },
                     onOpenShoppingList = { openShoppingList() }
                 )
 
             is Stage2Route.CategoryProducts -> {
-                val key = CategoryKey.fromId(route.categoryId)
-                if (key == null) {
+                val key = CategoryKey.fromId(route.categoryId) // converts categoryId to CategoryKey
+                if (key == null) { // if the ID is invalid → return to the categories screen (for backup)
                     current = Stage2Route.Categories
                 } else {
                     GenericCategoryScreen(
-                        currentKey         = key,
-                        vm                 = categoryVm,
-                        onSelectCategory   = { nextKey ->
+                        currentKey = key,
+                        vm = categoryVm,
+                        onSelectCategory = { nextKey ->
                             current = Stage2Route.CategoryProducts(nextKey.id)
                         },
-                        onOpenCart         = { current = Stage2Route.Cart },
-                        onOpenSearch       = { current = Stage2Route.Search },
+                        onOpenCart = { current = Stage2Route.Cart },
+                        onOpenSearch = { current = Stage2Route.Search },
                         onOpenShoppingList = { openShoppingList() },
-                        onOpenDonation     = { openDonationList() }
+                        onOpenDonation = { openDonationList() }
                     )
                 }
             }
@@ -115,16 +121,17 @@ fun Stage2NavGraph(
             Stage2Route.Cart ->
                 CartScreen(
                     vm = cartVm,
-                    onViewList         = { openShoppingList() },
+                    onViewList = { openShoppingList() },
                     onViewDonationList = { openDonationList() },
-                    onCheckout         = { current = Stage2Route.ThankYou },
-                    topButtonIcon      = Res.drawable.stage2_notebook,
-                    onBack             = { current = Stage2Route.Menu }
+                    onCheckout = { current = Stage2Route.ThankYou },
+                    topButtonIcon = Res.drawable.stage2_notebook,
+                    onBack = { current = Stage2Route.Menu }
                 )
 
             Stage2Route.ShoppingList ->
                 ShoppingListScreen(
                     onCloseList = {
+                        // When closing the list: Return to the screen we saved (if any), otherwise to the menu screen
                         current = returnAfterList ?: Stage2Route.Menu
                         returnAfterList = null
                     }
@@ -133,6 +140,7 @@ fun Stage2NavGraph(
             Stage2Route.DonationList ->
                 DonationListScreen(
                     onCloseList = {
+                        // When closing the list: Return to the screen we saved (if any), otherwise to the menu screen
                         current = returnAfterList ?: Stage2Route.Menu
                         returnAfterList = null
                     }
@@ -140,8 +148,8 @@ fun Stage2NavGraph(
 
             Stage2Route.Search ->
                 SearchScreen(
-                    onBack         = { current = Stage2Route.Menu },
-                    onOpenCart     = { current = Stage2Route.Cart },
+                    onBack = { current = Stage2Route.Menu },
+                    onOpenCart = { current = Stage2Route.Cart },
                     onOpenDonation = { openDonationList() },
                     onOpenShoppingList = { openShoppingList() }
                 )
@@ -154,12 +162,12 @@ fun Stage2NavGraph(
 
         if (showAunt) {
             StyledNoticeDialog(
-                title       = ":דודה יפה מבקשת לקנות",
-                message     = "יש להוסיף לרשימת הקניות \n\n" +
+                title = ":דודה יפה מבקשת לקנות",
+                message = "יש להוסיף לרשימת הקניות \n\n" +
                         " אקונומיקה ומנקה חלונות",
-                image       = null,
+                image = null,
                 primaryText = "OK",
-                onPrimary   = { showAunt = false }
+                onPrimary = { showAunt = false }
             )
         }
     }

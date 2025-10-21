@@ -1,3 +1,4 @@
+// all the categories screen
 package com.example.finalprojectnew.stage2.presentation.categories
 
 import androidx.compose.foundation.Image
@@ -46,10 +47,10 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.safeDrawing
 import com.example.finalprojectnew.stage2.presentation.Stage2Colors
 
-private val ScreenBg   = Color(0xFFFEFAF1)
+private val ScreenBg = Color(0xFFFEFAF1)
 private val BrandGreen = Color(0xFF046030)
 private val FrameGreen = Stage2Colors.FrameGreen
-private val TileWhite  = Stage2Colors.TileWhite
+private val TileWhite = Stage2Colors.TileWhite
 
 data class Category(
     val id: String,
@@ -59,35 +60,34 @@ data class Category(
 
 @Composable
 fun Stage2CategoriesScreen(
-    onCategorySelected: (Category) -> Unit,
+    onCategorySelected: (Category) -> Unit, // When a category is clicked, moves it to the next screen
     onOpenCart: () -> Unit,
     onOpenSearch: () -> Unit = {},
     onOpenDonation: () -> Unit = onOpenCart,
     onOpenShoppingList: () -> Unit = onOpenCart
 ) {
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        Surface(
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) { //right to left
+        Surface( // the background of the screen
             color = ScreenBg,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(WindowInsets.safeDrawing.asPaddingValues())
         ) {
-            BoxWithConstraints(Modifier.fillMaxSize()) {
+            BoxWithConstraints(Modifier.fillMaxSize()) { // Display settings of the screen
                 val w = maxWidth.value
                 val scale = when {
                     w >= 1100f -> 1.35f
-                    w >= 900f  -> 1.22f
-                    w >= 700f  -> 1.10f
-                    else       -> 1.00f
+                    w >= 900f -> 1.22f
+                    w >= 700f -> 1.10f
+                    else -> 1.00f
                 }
                 val columns = when {
                     w >= 900f -> 4
                     w >= 650f -> 3
-                    else      -> 2
+                    else -> 2
                 }
 
                 Box(Modifier.fillMaxSize().padding(16.dp * scale)) {
-                    // שמאל-עליון: שני כפתורים זהים אחד מתחת לשני
                     Column(
                         modifier = Modifier.align(Alignment.TopStart),
                         horizontalAlignment = Alignment.Start
@@ -105,8 +105,6 @@ fun Stage2CategoriesScreen(
                             edgeColor = Stage2Colors.FrameBlue
                         )
                     }
-
-                    // ימין-עליון: חיפוש
                     SearchMenuButton(
                         text = "חיפוש",
                         icon = painterResource(Res.drawable.stage2_magnifying_glass),
@@ -116,15 +114,47 @@ fun Stage2CategoriesScreen(
                     )
                 }
 
-                val categories = listOf(
-                    Category("frozen",     "קפואים",             painterResource(Res.drawable.stage2_category_frozen)),
-                    Category("fruits",     "פירות",              painterResource(Res.drawable.stage2_category_fruits)),
-                    Category("vegetables", "ירקות",              painterResource(Res.drawable.stage2_category_vegetables)),
-                    Category("meat",       "מוצרי בשר",          painterResource(Res.drawable.stage2_category_meat)),
-                    Category("milk",       "מוצרי חלב",          painterResource(Res.drawable.stage2_category_milk)),
-                    Category("dry",        "יבשים ותבלינים",     painterResource(Res.drawable.stage2_category_dry)),
-                    Category("pastries",   "מאפים",              painterResource(Res.drawable.stage2_category_pastries)),
-                    Category("cleaning",   "ניקיון וחד''פ",       painterResource(Res.drawable.stage2_category_cleaning))
+                val categories = listOf( // the categories grid
+                    Category(
+                        "frozen",
+                        "קפואים",
+                        painterResource(Res.drawable.stage2_category_frozen)
+                    ),
+                    Category(
+                        "fruits",
+                        "פירות",
+                        painterResource(Res.drawable.stage2_category_fruits)
+                    ),
+                    Category(
+                        "vegetables",
+                        "ירקות",
+                        painterResource(Res.drawable.stage2_category_vegetables)
+                    ),
+                    Category(
+                        "meat",
+                        "מוצרי בשר",
+                        painterResource(Res.drawable.stage2_category_meat)
+                    ),
+                    Category(
+                        "milk",
+                        "מוצרי חלב",
+                        painterResource(Res.drawable.stage2_category_milk)
+                    ),
+                    Category(
+                        "dry",
+                        "יבשים ותבלינים",
+                        painterResource(Res.drawable.stage2_category_dry)
+                    ),
+                    Category(
+                        "pastries",
+                        "מאפים",
+                        painterResource(Res.drawable.stage2_category_pastries)
+                    ),
+                    Category(
+                        "cleaning",
+                        "ניקיון וחד''פ",
+                        painterResource(Res.drawable.stage2_category_cleaning)
+                    )
                 )
 
                 Column(
@@ -155,7 +185,7 @@ fun Stage2CategoriesScreen(
 
                     Spacer(Modifier.height(18.dp * scale))
 
-                    LazyVerticalGrid(
+                    LazyVerticalGrid( // shows all the categories
                         columns = GridCells.Fixed(columns),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -167,14 +197,14 @@ fun Stage2CategoriesScreen(
                         items(categories, key = { it.id }) { cat ->
                             CategoryTile(
                                 title = cat.title,
-                                icon  = cat.icon,
+                                icon = cat.icon,
                                 scale = scale,
                                 onClick = { onCategorySelected(cat) }
                             )
                         }
                     }
 
-                    // למטה – נשאר רק כפתור סל הקניות. כפתור התרומה הוסר.
+                    // cart button
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -193,7 +223,7 @@ fun Stage2CategoriesScreen(
 }
 
 @Composable
-private fun CategoryTile(
+private fun CategoryTile( // one category card
     title: String,
     icon: Painter,
     scale: Float,
@@ -257,7 +287,7 @@ private fun SearchMenuButton(
             .clip(RoundedCornerShape(12.dp * scale)),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = TileWhite,
-            contentColor   = FrameGreen
+            contentColor = FrameGreen
         ),
         border = ButtonDefaults.outlinedButtonBorder.copy(
             width = 2.dp * scale,

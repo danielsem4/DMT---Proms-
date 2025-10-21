@@ -1,9 +1,7 @@
 package com.example.finalprojectnew.assessment.stage2
 
-/** רשימת האמת הקבועה: סל קניות + סל תרומה */
+// The ground truth list: shopping cart + donation cart
 object GroundTruth {
-
-    /** רשימת קניות רגילה */
     val shoppingExpected = mapOf(
         "tomato" to 2,
         "broccoliFrozen" to 1,
@@ -21,17 +19,14 @@ object GroundTruth {
         "canned_corn" to 3,
         "tuna" to 1,
         "legs4" to 1,
-        "banana" to -1,         // כלל מיוחד (1–7)
+        "banana" to -1,
         "melon" to 1,
         "creamCheese28" to 1,
         "bulgarian250" to 1,
 
-        // ✅ חדשים לפי הבקשה
-        "bleach" to 1,          // אקונומיקה
-        "window_cleaner" to 1   // מנקה חלונות
+        "bleach" to 1,
+        "window_cleaner" to 1
     )
-
-    /** רשימת תרומה */
     val donationExpected = mapOf(
         "milk3p" to 1,
         "challah" to 1,
@@ -43,13 +38,11 @@ object GroundTruth {
         "dish_soap" to 1
     )
 
-    /** בדיקה האם מוצר נחשב נכון לפי הכללים */
+    // Checking if item is considered correct according to the rules
     fun isCorrect(id: String, qty: Int, actual: Map<String, Int>): Boolean {
 
-        // בננות: 1–7 נחשב תקין
         if (id == "banana") return qty in 1..7
 
-        // שאר המוצרים: כמות מדויקת
         val expected = shoppingExpected[id] ?: donationExpected[id] ?: return false
         return qty == expected
     }

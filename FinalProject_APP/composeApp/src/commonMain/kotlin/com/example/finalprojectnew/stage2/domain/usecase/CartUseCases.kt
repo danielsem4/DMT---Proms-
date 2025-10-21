@@ -8,8 +8,8 @@ class CartUseCases(private val cart: CartRepository) {
     val observe = cart.cart
 
     suspend fun add(product: Product, qty: Int = 1) = cart.add(product, qty)
-    suspend fun update(productId: String, qty: Int)  = cart.update(productId, qty)
-    suspend fun update(product: Product, qty: Int)   = cart.update(product, qty)
-    suspend fun remove(productId: String)            = cart.remove(productId)
-    suspend fun clear()                              = cart.clear()
+    suspend fun update(productId: String, qty: Int) = cart.update(productId, qty)
+    suspend fun update(product: Product, qty: Int) = cart.update(product, qty)
+    suspend fun remove(productId: String) = cart.remove(productId)
+    suspend fun clear() = cart.clear()
 }

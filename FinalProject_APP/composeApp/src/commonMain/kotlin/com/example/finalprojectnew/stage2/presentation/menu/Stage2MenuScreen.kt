@@ -36,16 +36,16 @@ fun Stage2MenuScreen(
     onCart: () -> Unit,
     onSearch: () -> Unit,
     onViewList: () -> Unit,
-    onViewDonationList: () -> Unit,              // ← חדש: כפתור “רשימת תרומה”
+    onViewDonationList: () -> Unit,
 ) {
-    val screenBg   = Stage2Colors.ScreenBg
+    val screenBg = Stage2Colors.ScreenBg
     val brandGreen = Stage2Colors.BrandGreen
     val frameGreen = Stage2Colors.FrameGreen
-    val tileWhite  = Stage2Colors.TileWhite
-    val bodyText   = Stage2Colors.BodyText
+    val tileWhite = Stage2Colors.TileWhite
+    val bodyText = Stage2Colors.BodyText
 
     CompositionLocalProvider(androidx.compose.ui.platform.LocalLayoutDirection provides LayoutDirection.Rtl) {
-        Surface(
+        Surface( // background screen
             color = screenBg,
             modifier = Modifier
                 .fillMaxSize()
@@ -55,13 +55,13 @@ fun Stage2MenuScreen(
                 val w = maxWidth.value
                 val scale = when {
                     w >= 1000f -> 1.35f
-                    w >= 800f  -> 1.22f
-                    w >= 600f  -> 1.10f
-                    else       -> 1.00f
+                    w >= 800f -> 1.22f
+                    w >= 600f -> 1.10f
+                    else -> 1.00f
                 }
 
                 Box(Modifier.fillMaxSize()) {
-                    // שמאל-עליון: שתי גלולות – רשימה רגילה + רשימת תרומה
+                    // top area
                     Column(
                         modifier = Modifier
                             .align(Alignment.TopStart)
@@ -71,18 +71,18 @@ fun Stage2MenuScreen(
                         ListPillButtonMint(
                             textLine1 = "לצפייה",
                             textLine2 = "ברשימה",
-                            onClick   = onViewList,
-                            icon      = painterResource(Res.drawable.ic_list),
-                            green     = frameGreen,
-                            scale     = scale
+                            onClick = onViewList,
+                            icon = painterResource(Res.drawable.ic_list),
+                            green = frameGreen,
+                            scale = scale
                         )
                         ListPillButtonMint(
                             textLine1 = "לצפייה",
                             textLine2 = "ברשימת תרומה",
-                            onClick   = onViewDonationList,
-                            icon      = painterResource(Res.drawable.stage2_donation),
-                            green     = Stage2Colors.FrameBlue,
-                            scale     = scale
+                            onClick = onViewDonationList,
+                            icon = painterResource(Res.drawable.stage2_donation),
+                            green = Stage2Colors.FrameBlue,
+                            scale = scale
                         )
                     }
 
@@ -112,11 +112,11 @@ fun Stage2MenuScreen(
                         Spacer(Modifier.weight(1f))
 
                         InstructionsRow(
-                            right  = "לעיון בקטגוריות\nלחצו על \"קטגוריות\"",
+                            right = "לעיון בקטגוריות\nלחצו על \"קטגוריות\"",
                             center = "לעיון בסל הקניות\nלחצו על \"סל קניות\"",
-                            left   = "לחיפוש מוצר\nלחצו על \"חיפוש\"",
-                            color  = bodyText,
-                            scale  = scale
+                            left = "לחיפוש מוצר\nלחצו על \"חיפוש\"",
+                            color = bodyText,
+                            scale = scale
                         )
 
                         Spacer(Modifier.height(14.dp * scale))
@@ -172,6 +172,8 @@ fun Stage2MenuScreen(
     }
 }
 
+// InstructionsRow + InstructionText
+//Divides the three texts horizontally with spaces, large text, centered.
 @Composable
 private fun InstructionsRow(
     right: String,
@@ -184,9 +186,9 @@ private fun InstructionsRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(24.dp * scale)
     ) {
-        InstructionText(text = right,  color = color, scale = scale, modifier = Modifier.weight(1f))
+        InstructionText(text = right, color = color, scale = scale, modifier = Modifier.weight(1f))
         InstructionText(text = center, color = color, scale = scale, modifier = Modifier.weight(1f))
-        InstructionText(text = left,   color = color, scale = scale, modifier = Modifier.weight(1f))
+        InstructionText(text = left, color = color, scale = scale, modifier = Modifier.weight(1f))
     }
 }
 
@@ -225,7 +227,7 @@ private fun MenuOutlinedButton(
             .clip(RoundedCornerShape(16.dp * scale)),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = tileWhite,
-            contentColor   = frameGreen
+            contentColor = frameGreen
         ),
         border = ButtonDefaults.outlinedButtonBorder.copy(
             width = 2.dp * scale,

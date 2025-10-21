@@ -1,3 +1,4 @@
+// the cart screen
 package com.example.finalprojectnew.stage2.presentation.cart
 
 import com.example.finalprojectnew.stage2.data.catalog.ImageKeyMapper
@@ -36,10 +37,12 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.asPaddingValues
 import com.example.finalprojectnew.stage2.domain.model.donationItemIds
+import androidx.compose.material3.HorizontalDivider
 
+// Screen display
 private const val COL_PRODUCT = 0.60f
-private const val COL_QTY     = 0.28f
-private const val COL_REMOVE  = 0.08f
+private const val COL_QTY = 0.28f
+private const val COL_REMOVE = 0.08f
 
 @Composable
 fun CartScreen(
@@ -52,21 +55,20 @@ fun CartScreen(
     modifier: Modifier = Modifier
 ) {
     val state by vm.state.collectAsState()
-    var showSavedDialog by remember { mutableStateOf(false) }
 
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) { // direction - right to left
         Box(
             modifier
                 .fillMaxSize()
                 .background(Stage2Colors.ScreenBg)
                 .padding(WindowInsets.safeDrawing.asPaddingValues())
         ) {
-            // תוכן המסך
+
             Column(
                 Modifier
                     .matchParentSize()
                     .padding(horizontal = 28.dp, vertical = 16.dp)
-                    .padding(bottom = 96.dp) // מקום לכפתור הצף
+                    .padding(bottom = 96.dp)
             ) {
                 Row(
                     modifier = Modifier
@@ -138,9 +140,13 @@ fun CartScreen(
                         fontWeight = FontWeight.ExtraBold,
                     )
                 }
-                Divider(thickness = 1.dp, color = Stage2Colors.FrameGreen.copy(alpha = 0.25f))
 
-                if (state.isEmpty) {
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = Stage2Colors.FrameGreen.copy(alpha = 0.25f)
+                )
+
+                if (state.isEmpty) { // if empty cart
                     Box(
                         Modifier
                             .weight(1f)
@@ -149,7 +155,7 @@ fun CartScreen(
                     ) {
                         Text("הסל ריק", color = Stage2Colors.FrameGreen, fontSize = 50.sp)
                     }
-                } else {
+                } else { // the cart is not empty
                     LazyColumn(
                         modifier = Modifier
                             .weight(1f)
@@ -159,11 +165,11 @@ fun CartScreen(
                         items(state.items, key = { it.productId }) { row ->
                             CartRow(
                                 row = row,
-                                onRemove = { vm.remove(row.productId) },
-                                onInc   = { vm.inc(row.productId, row.quantity) },
-                                onDec   = { vm.dec(row.productId, row.quantity) }
+                                onRemove = { vm.remove(row.productId) }, // remove is from the VM
+                                onInc = { vm.inc(row.productId, row.quantity) }, // increase item "
+                                onDec = { vm.dec(row.productId, row.quantity) } // less item "
                             )
-                            Divider(
+                            HorizontalDivider(
                                 thickness = 1.dp,
                                 color = Stage2Colors.FrameGreen.copy(alpha = 0.15f)
                             )
@@ -172,16 +178,14 @@ fun CartScreen(
                 }
             }
 
-            // כפתור צף – בצד שמאל (ויזואלית) ב-RTL
             OutlinedButton(
                 onClick = {
-                    vm.saveFinalCart()
-                    showSavedDialog = true
+                    vm.saveFinalCart() // Ask the ViewModel to save a unified JSON.
                     onCheckout()
                 },
                 shape = MaterialTheme.shapes.large,
                 modifier = Modifier
-                    .align(Alignment.BottomEnd) // RTL ⇒ שמאל
+                    .align(Alignment.BottomEnd)
                     .padding(end = 28.dp, bottom = 16.dp)
                     .height(72.dp)
                     .width(300.dp),
@@ -201,16 +205,6 @@ fun CartScreen(
         }
     }
 
-    if (showSavedDialog) {
-        AlertDialog(
-            onDismissRequest = { showSavedDialog = false },
-            confirmButton = {
-                Button(onClick = { showSavedDialog = false }) { Text("OK") }
-            },
-            title = { Text("הצלחה") },
-            text  = { Text("✅ הנתונים נשמרו בהצלחה") }
-        )
-    }
 }
 
 @OptIn(ExperimentalResourceApi::class)
@@ -221,8 +215,9 @@ private fun CartRow(
     onInc: () -> Unit,
     onDec: () -> Unit
 ) {
-    val isDonation = remember(row.productId) { donationItemIds.contains(row.productId) }
-    val rowShape   = RoundedCornerShape(12.dp)
+    val isDonation =
+        remember(row.productId) { donationItemIds.contains(row.productId) } // checking if an item is donation
+    val rowShape = RoundedCornerShape(12.dp)
 
     Row(
         modifier = Modifier
@@ -230,7 +225,7 @@ private fun CartRow(
             .padding(horizontal = 8.dp, vertical = 12.dp)
             .clip(rowShape)
             .then(
-                if (isDonation) {
+                if (isDonation) { // if the item is donation - color blue
                     Modifier
                         .background(Stage2Colors.DonationTint)
                         .border(2.dp, Stage2Colors.FrameBlue, rowShape)
@@ -239,7 +234,7 @@ private fun CartRow(
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(
+        Box( // remove column
             modifier = Modifier
                 .weight(COL_REMOVE)
                 .widthIn(min = 50.dp),
@@ -254,7 +249,7 @@ private fun CartRow(
             }
         }
 
-        Box(
+        Box( // quantity column
             modifier = Modifier.weight(COL_QTY),
             contentAlignment = Alignment.Center
         ) {
@@ -265,7 +260,7 @@ private fun CartRow(
             )
         }
 
-        Row(
+        Row( // item name + image - column
             modifier = Modifier.weight(COL_PRODUCT),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -290,7 +285,7 @@ private fun CartRow(
 }
 
 @Composable
-private fun QuantityStepper(
+private fun QuantityStepper( // checking the quantity
     quantity: Int,
     onInc: () -> Unit,
     onDec: () -> Unit,
@@ -305,7 +300,10 @@ private fun QuantityStepper(
             modifier = Modifier.padding(horizontal = 12.dp),
             fontSize = 22.sp
         )
-        CircleStepperButton(onClick = onDec, enabled = quantity > min) {
+        CircleStepperButton(
+            onClick = onDec,
+            enabled = quantity > min
+        ) { // The − button is disabled if quantity>min
             Text("−", fontSize = 20.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
         }
     }
@@ -314,7 +312,7 @@ private fun QuantityStepper(
 @Composable
 private fun CircleStepperButton(
     onClick: () -> Unit,
-    enabled: Boolean = true,
+    enabled: Boolean = true, // If enabled=false – the button is visible and blocked.
     content: @Composable () -> Unit
 ) {
     FilledTonalIconButton(
@@ -326,7 +324,7 @@ private fun CircleStepperButton(
     ) { content() }
 }
 
-@Composable
+@Composable // Image mapping by key
 fun getDrawableForImageKey(imageKey: String): DrawableResource? {
     return ImageKeyMapper.map(imageKey)
 }

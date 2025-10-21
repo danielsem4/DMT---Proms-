@@ -1,3 +1,4 @@
+// generic component for donation/cart list
 package com.example.finalprojectnew.stage2.presentation.components
 
 import androidx.compose.foundation.BorderStroke
@@ -23,8 +24,8 @@ import com.example.finalprojectnew.stage2.presentation.Stage2Colors
 
 @Composable
 fun ListPillButton(
-    text: String,
-    iconPainter: Painter?,
+    text: String, // what written on the button - donation/cart list
+    iconPainter: Painter?, // the icon near the text on the button
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 
@@ -36,7 +37,6 @@ fun ListPillButton(
     horizontalPadding: Dp = 22.dp,
     verticalPadding: Dp = 12.dp,
 
-    // חדשים: מאפשר לצבוע גלולה בצבעים אחרים (למשל כחול לתרומה)
     edgeColor: Color = Stage2Colors.FrameGreen,
     fillColor: Color = Stage2Colors.TileWhite,
 ) {

@@ -28,30 +28,30 @@ fun ProductCard(
     outOfStock: Boolean = false,
     initialQty: Int = 0,
     onQuantityChange: (Int) -> Unit,
-    bgColor: Color = Stage2Colors.White     // ← חדש: צבע רקע לכרטיס
+    bgColor: Color = Stage2Colors.White
 ) {
     val radius = 16.dp * scale
-    val frame  = Stage2Colors.FrameGreen
+    val frame = Stage2Colors.FrameGreen
 
     var qty by remember { mutableStateOf(0) }
     LaunchedEffect(initialQty) { qty = initialQty }
 
-    val cardHeight     = 260.dp * scale
+    val cardHeight = 260.dp * scale
 
-    Surface(
+    Surface( // card design
         shape = RoundedCornerShape(radius),
-        color = bgColor,                                    // ← שימוש בצבע הרקע החדש
+        color = bgColor,
         tonalElevation = 0.dp,
         modifier = Modifier
             .fillMaxWidth()
             .height(cardHeight)
             .border(2.dp, frame, RoundedCornerShape(radius))
     ) {
-        Box(Modifier.fillMaxSize()) {
-            Column(
+        Box(Modifier.fillMaxSize()) { // option to display layer upon layer - for example, item that out of stock
+            Column( //
                 modifier = Modifier
                     .fillMaxSize()
-                    .alpha(if (outOfStock) 0.45f else 1f),
+                    .alpha(if (outOfStock) 0.45f else 1f), // when outofstock -> 0.45f of clearence
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
@@ -67,6 +67,7 @@ fun ProductCard(
                     )
                 }
 
+                //title of product
                 Spacer(Modifier.height(6.dp * scale))
 
                 Text(
@@ -78,7 +79,7 @@ fun ProductCard(
                     maxLines = 2,
                     modifier = Modifier.fillMaxWidth()
                 )
-
+                //subtitle
                 if (subtitle.isNotBlank()) {
                     Spacer(Modifier.height(2.dp * scale))
                     Text(
@@ -93,7 +94,10 @@ fun ProductCard(
 
                 Spacer(Modifier.height(4.dp * scale))
 
-                QuantityPicker(
+                //QuantityPicker — Internal composable that draws +/– and a number.
+                //Clicking on the +/- both updates the local state (qty) and reports to the parent (onQuantityChange).
+
+                QuantityPicker( //
                     qty = qty,
                     onInc = {
                         qty++
@@ -106,7 +110,7 @@ fun ProductCard(
                         }
                     },
                     scale = scale,
-                    enabled = !outOfStock
+                    enabled = !outOfStock //If outOfStock — enabled = false → prevents clicks.
                 ).let {
                     Box(
                         modifier = Modifier

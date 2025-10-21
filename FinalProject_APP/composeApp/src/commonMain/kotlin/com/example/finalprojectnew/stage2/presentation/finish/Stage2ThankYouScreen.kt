@@ -17,9 +17,9 @@ import com.example.finalprojectnew.stage2.presentation.Stage2Colors
 
 @Composable
 fun Stage2ThankYouScreen(
-    onBackToMenu: () -> Unit // נשאר לחתימה, לא בשימוש במסך
+    onBackToMenu: () -> Unit
 ) {
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) { // right to left
         Surface(
             color = Stage2Colors.ScreenBg,
             modifier = Modifier.fillMaxSize()
