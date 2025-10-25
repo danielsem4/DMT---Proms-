@@ -26,6 +26,7 @@ data class ItemResult(
     val actual: String,
     val status: String   // CORRECT / MISSING / WRONG_QUANTITY / EXTRA
 )
+
 @Serializable
 data class AssessmentResult(
     val timestamp: String,

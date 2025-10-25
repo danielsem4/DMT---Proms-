@@ -6,8 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlin.random.Random
-
-// ✅ ייבוא נכון של מודל/רישום של שלב 1
 import com.example.finalprojectnew.assessment.SessionRecorder
 import com.example.finalprojectnew.assessment.Stage1EndReason
 import com.example.finalprojectnew.assessment.Stage1Result
@@ -25,7 +23,7 @@ data class ConveyorUiState(
 
 class ConveyorGameViewModel(
     private val recipeId: String,
-    private val timeLimitSeconds: Int = 1
+    private val timeLimitSeconds: Int = 120
 ) {
 
     // coroutines help at the background - we have 2 - one for conveyor one for the timer
@@ -47,7 +45,7 @@ class ConveyorGameViewModel(
     // conveyor fixed settings:
     private val visibleCount = 6 // always 6 ingredient on conveyor
     private val speedPerTick = 2.2f // every tick the conveyor moves 2.2f
-    private val tickMillis = 24L // time of ticks: 24 millisec
+    private val tickMillis = 24L // time of ticks: 24 milliseconds
     private val minGapRecent = 7 // distance between identical items
 
 
@@ -69,7 +67,7 @@ class ConveyorGameViewModel(
 
     private val rng: Random = Random.Default // random choice
     private val correctPoolBase = catalog.filter { it.isCorrect } // correct items
-    private val wrongPoolBase   = catalog.filter { !it.isCorrect } // wrong items
+    private val wrongPoolBase = catalog.filter { !it.isCorrect } // wrong items
     private var consecutiveCorrect = 0 // Count how many consecutive correct answers
 
     // Outcome measures
@@ -83,7 +81,8 @@ class ConveyorGameViewModel(
         selected: Set<String> // items that already clicked
     ): ProductItem {
         val mustPickWrong = consecutiveCorrect >= 2 // if 2 correct in row - must have a distractor
-        val pickCorrect = if (mustPickWrong) false else rng.nextDouble() < 0.6 // 60% correct unless already 2 correct in a row → must pick wrong
+        val pickCorrect =
+            if (mustPickWrong) false else rng.nextDouble() < 0.6 // 60% correct unless already 2 correct in a row → must pick wrong
 
         // "poolBase" means the main list (or "pool") of items we choose from —
         // either the correct items or the wrong ones (distractors).
@@ -149,13 +148,14 @@ class ConveyorGameViewModel(
         if (item.isCorrect) correctClicks++ else wrongClicks++ // Count taps for assessment
 
         val newSelected = s.selectedNames + item.name // Add this name to the "already selected" set
-        val newChecked = s.checked.toMutableList().also { list ->  // If correct: mark it as collected in the 'checked' list (parallel to 'ingredients')
+        val newChecked = s.checked.toMutableList()
+            .also { list ->  // If correct: mark it as collected in the 'checked' list (parallel to 'ingredients')
 
-            if (item.isCorrect) {
-                val idx = ingredients.indexOf(item.name) // Find its position
-                if (idx >= 0) list[idx] = true // Mark as collected
+                if (item.isCorrect) {
+                    val idx = ingredients.indexOf(item.name) // Find its position
+                    if (idx >= 0) list[idx] = true // Mark as collected
+                }
             }
-        }
 
         // Finished if every required ingredient is collected
         val done = newChecked.all { it }
@@ -172,7 +172,9 @@ class ConveyorGameViewModel(
     }
 
     // Must be called when leaving the screen to stop background loops
-    fun clear() { scope.cancel() }
+    fun clear() {
+        scope.cancel()
+    }
 
     // conveyor loop: moves the belt every 'tickMillis', and when passing 'stride',
     // shifts items (remove the oldest, add a new one at the front)
@@ -211,7 +213,7 @@ class ConveyorGameViewModel(
 
     // Timer loop: decrease time every second; if it reaches zero and not finished,
     // mark finished and record TIME_UP.
-        private fun runTimerLoop() = scope.launch {
+    private fun runTimerLoop() = scope.launch {
         while (isActive && !_state.value.finished && _state.value.timeLeft > 0) {
             delay(1_000) // one second
             _state.value = _state.value.copy(timeLeft = _state.value.timeLeft - 1)
@@ -246,11 +248,14 @@ class ConveyorGameViewModel(
     }
 
     // Build the item catalog: correct items for this recipe + all other items as distractors.
-    private fun buildCatalogForRecipe(correct: List<String>, universe: Set<String>): List<ProductItem> {
+    private fun buildCatalogForRecipe(
+        correct: List<String>,
+        universe: Set<String>
+    ): List<ProductItem> {
         val correctSet = correct.toSet()
         val distractors = universe - correctSet
         val correctItems = correct.map { ProductItem(it, true) }
-        val wrongItems   = distractors.map { ProductItem(it, false) }
+        val wrongItems = distractors.map { ProductItem(it, false) }
         return correctItems + wrongItems
     }
 }

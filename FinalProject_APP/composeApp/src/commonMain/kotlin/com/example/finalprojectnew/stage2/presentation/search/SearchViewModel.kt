@@ -13,8 +13,6 @@ class SearchViewModel {
         private set
     var results by mutableStateOf<List<CatalogItem>>(emptyList()) // results= list of results for display
         private set
-    var isLoading by mutableStateOf(false) //for the future work with the server
-        private set
 
     fun onQueryChange(newValue: String) { // function that receive from the UI every type
         query = newValue // update the query

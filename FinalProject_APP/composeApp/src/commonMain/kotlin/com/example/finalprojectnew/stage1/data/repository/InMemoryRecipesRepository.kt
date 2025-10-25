@@ -40,7 +40,7 @@ class InMemoryRecipesRepository : RecipesRepository {
             "קמח",
             "סוכר",
             "ביצים",
-            "שמן",
+            "שמן קנולה",
             "אבקת אפיה",
             "תמצית וניל",
             "שוקולד"

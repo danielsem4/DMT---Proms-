@@ -1,4 +1,4 @@
-package com.example.finalprojectnew.stage2.presentation.components
+package com.example.finalprojectnew.stage2.presentation.category
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

@@ -202,7 +202,7 @@ private fun productPainter(name: String): Painter? {
             "באגט"                   -> painterResource(Res.drawable.baguette)
             "מלח"                    -> painterResource(Res.drawable.salt)
             "שמןזית"                 -> painterResource(Res.drawable.olive_oil)
-            "שמן"                     -> painterResource(Res.drawable.kanola_oil)
+            "שמןקנולה"               -> painterResource(Res.drawable.kanola_oil)
             "פלפלשחור"               -> painterResource(Res.drawable.black_pepper)
             "תמציתוניל", "וניל"      -> painterResource(Res.drawable.vanil)
             else -> null

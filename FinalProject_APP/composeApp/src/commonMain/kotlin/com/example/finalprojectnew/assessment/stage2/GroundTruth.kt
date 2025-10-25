@@ -23,7 +23,6 @@ object GroundTruth {
         "melon" to 1,
         "creamCheese28" to 1,
         "bulgarian250" to 1,
-
         "bleach" to 1,
         "window_cleaner" to 1
     )

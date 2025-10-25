@@ -14,16 +14,18 @@ object AssessmentLogic {
         val results = mutableListOf<ItemResult>() // List of results items
 
         // the correct items
-                val allIds = (GroundTruth.shoppingExpected.keys +
+        val allIds = (GroundTruth.shoppingExpected.keys +
                 GroundTruth.donationExpected.keys +
                 actual.keys).distinct()
 
         // calculate result for each product ID
         for (id in allIds) {
-            val actualQty = actual[id] ?: 0 // how much the user actually added to the cart for the product (if none then 0)
-            val expectedQty = GroundTruth.shoppingExpected[id] // expectedQty: The quantity we expected according to the truth lists (shopping/donations)
-                ?: GroundTruth.donationExpected[id]
-                ?: 0
+            val actualQty = actual[id]
+                ?: 0 // how much the user actually added to the cart for the product (if none then 0)
+            val expectedQty =
+                GroundTruth.shoppingExpected[id] // expectedQty: The quantity we expected according to the truth lists (shopping/donations)
+                    ?: GroundTruth.donationExpected[id]
+                    ?: 0
 
             val status = when { // highlights for the Banana Rule
                 id == "banana" && actualQty == 0 -> "MISSING"

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.finalprojectnew.stage2.presentation.Stage2Colors
 import com.example.finalprojectnew.stage2.presentation.components.ListPillButton
-import com.example.finalprojectnew.stage2.presentation.components.Stage2CategorySidebar
+import com.example.finalprojectnew.stage2.presentation.category.Stage2CategorySidebar
 import com.example.finalprojectnew.stage2.presentation.components.CartPillButtonMint // ← added: use the reusable cart pill
 import com.example.finalprojectnew.stage2.domain.model.CategoryKey
 import finalprojectnew.composeapp.generated.resources.Res

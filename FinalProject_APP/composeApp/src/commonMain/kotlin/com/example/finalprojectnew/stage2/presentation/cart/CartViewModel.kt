@@ -63,7 +63,6 @@ class CartViewModel(
             state.value.items.associate { it.productId to it.quantity }
         scope.launch {
             val path = AssessmentService.saveStage2AndFlush(currentCart)
-            println("✅ Combined JSON saved: $path")
         }
     }
 
