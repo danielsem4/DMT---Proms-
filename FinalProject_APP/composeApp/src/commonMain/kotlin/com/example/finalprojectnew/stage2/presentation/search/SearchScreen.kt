@@ -199,7 +199,7 @@ fun SearchScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     contentPadding = PaddingValues(bottom = 12.dp)
                 ) {
-                    if (results.isEmpty() && vm.query.isNotBlank() && !vm.isLoading) {
+                    if (results.isEmpty() && vm.query.isNotBlank() ) {
                         item(span = { GridItemSpan(columns) }) {
                             Text(
                                 text = "לא נמצאו תוצאות עבור \"${vm.query}\"",
