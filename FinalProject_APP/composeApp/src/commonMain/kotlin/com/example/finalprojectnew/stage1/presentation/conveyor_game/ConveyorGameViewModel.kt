@@ -46,7 +46,7 @@ class ConveyorGameViewModel(
     private val visibleCount = 6 // always 6 ingredient on conveyor
     private val speedPerTick = 2.2f // every tick the conveyor moves 2.2f
     private val tickMillis = 24L // time of ticks: 24 milliseconds
-    private val minGapRecent = 7 // distance between identical items
+    private val minGapRecent = 7 // distance between items
 
 
     // recipe data:
@@ -153,7 +153,7 @@ class ConveyorGameViewModel(
 
                 if (item.isCorrect) {
                     val idx = ingredients.indexOf(item.name) // Find its position
-                    if (idx >= 0) list[idx] = true // Mark as collected
+                    if (idx >= 0) list[idx] = true // Mark as collected (checkbox)
                 }
             }
 
@@ -176,7 +176,7 @@ class ConveyorGameViewModel(
         scope.cancel()
     }
 
-    // conveyor loop: moves the belt every 'tickMillis', and when passing 'stride',
+    // conveyor loop: moves the conveyor every 'tickMillis', and when passing 'stride',
     // shifts items (remove the oldest, add a new one at the front)
     private fun runBeltLoop() = scope.launch {
         while (isActive && !_state.value.finished && _state.value.timeLeft > 0) {
